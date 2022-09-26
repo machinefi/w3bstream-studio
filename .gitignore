@@ -1,0 +1,12 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+.vscode
+out
+.next
+yarn-error.log
+.env*
+package-lock.json
+yarn.lock
