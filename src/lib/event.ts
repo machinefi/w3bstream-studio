@@ -25,6 +25,7 @@ interface MessageEvents {
   'ScriptTemplateManager.addTemplate': (args: Partial<ScriptTemplateState>) => void;
   'ScriptTemplateManager.modifyTemplate': () => void;
   'user.login': () => void;
+  'project.list': (data: any[]) => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;

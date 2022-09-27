@@ -9,6 +9,7 @@ import { axios } from '../../../lib/axios';
 import { hooks } from '../../../lib/hooks';
 import { deployProjectSchema } from './schema/deployProject';
 import { appletListSchema } from './schema/appletList';
+import { eventBus } from '../../../lib/event';
 
 export class W3bStream {
   rootStore: RootStore;
@@ -28,6 +29,9 @@ export class W3bStream {
       const res = await axios.request({
         url: '/srv-applet-mgr/v0/project'
       });
+      if (res.data) {
+        eventBus.emit('project.list', res.data.data);
+      }
       return res.data;
     }
   });
@@ -53,9 +57,24 @@ export class W3bStream {
     };
   }
 
+  initEvent() {
+    eventBus.on('project.list', (projects) => {
+      const [project] = projects;
+      if (project) {
+        [this.deployProject.formData.info, this.appletList.formData].forEach((i) => {
+          if (!i.projectID) {
+            i.projectID = project.projectID;
+          }
+        });
+        this.applets.call({ projectID: project.projectID });
+      }
+    });
+  }
+
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+    this.initEvent();
   }
 
   get isLogin() {

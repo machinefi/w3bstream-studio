@@ -50,8 +50,8 @@ export const appletListSchema = new JSONSchemaState<SchemaType>({
       submitText: 'Submit'
     }
   },
-  onChange(e) {
-    if (!e.formData.projectID || e.formData.projectID == appletListSchema.formData.projectID) return;
+  afterChange(e) {
+    if (!e.formData.projectID) return;
     rootStore.w3s.applets.call({ projectID: e.formData.projectID });
   },
   reactive: true,
