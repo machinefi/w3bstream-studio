@@ -21,6 +21,7 @@ specifiers:
   '@mantine/prism': ^4.1.4
   '@mantine/spotlight': ^4.1.4
   '@metamask/jazzicon': ^2.0.0
+  '@monaco-editor/react': ^4.4.6
   '@rjsf/core': 5.0.0-beta.9
   '@rjsf/utils': 5.0.0-beta.9
   '@rjsf/validator-ajv6': 5.0.0-beta.9
@@ -41,6 +42,7 @@ specifiers:
   '@types/uuid': ^8.3.4
   '@web3-react/core': ^6.1.9
   '@web3-react/injected-connector': ^6.0.7
+  assemblyscript: ^0.21.4
   axios: ^0.21.1
   bignumber.js: ^9.0.1
   class-transformer: ^0.5.1
@@ -102,6 +104,7 @@ dependencies:
   '@mantine/prism': 4.2.11_5634dklglt6cysgne32ea7m3eu
   '@mantine/spotlight': 4.2.11_5634dklglt6cysgne32ea7m3eu
   '@metamask/jazzicon': 2.0.0
+  '@monaco-editor/react': 4.4.6_sfoxds7t5ydpegc3knd667wn6m
   '@rjsf/core': 5.0.0-beta.9_qyn2bqda6csoagge3hyysb7ab4
   '@rjsf/utils': 5.0.0-beta.9_react@17.0.2
   '@rjsf/validator-ajv6': 5.0.0-beta.9_@rjsf+utils@5.0.0-beta.9
@@ -118,6 +121,7 @@ dependencies:
   '@types/uuid': 8.3.4
   '@web3-react/core': 6.1.9_react@17.0.2
   '@web3-react/injected-connector': 6.0.7
+  assemblyscript: 0.21.4
   axios: 0.21.4
   bignumber.js: 9.0.2
   class-transformer: 0.5.1
@@ -2172,6 +2176,27 @@ packages:
     resolution: {integrity: sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==}
     dev: false
 
+  /@monaco-editor/loader/1.3.2:
+    resolution: {integrity: sha512-BTDbpHl3e47r3AAtpfVFTlAi7WXv4UQ/xZmz8atKl4q7epQV5e7+JbigFDViWF71VBi4IIBdcWP57Hj+OWuc9g==}
+    peerDependencies:
+      monaco-editor: '>= 0.21.0 < 1'
+    dependencies:
+      state-local: 1.0.7
+    dev: false
+
+  /@monaco-editor/react/4.4.6_sfoxds7t5ydpegc3knd667wn6m:
+    resolution: {integrity: sha512-Gr3uz3LYf33wlFE3eRnta4RxP5FSNxiIV9ENn2D2/rN8KgGAD8ecvcITRtsbbyuOuNkwbuHYxfeaz2Vr+CtyFA==}
+    peerDependencies:
+      monaco-editor: '>= 0.25.0 < 1'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@monaco-editor/loader': 1.3.2
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    dev: false
+
   /@next/env/12.1.6:
     resolution: {integrity: sha512-Te/OBDXFSodPU6jlXYPAXpmZr/AkG6DCATAxttQxqOWaq6eDFX25Db3dK0120GZrSZmv4QCe9KsZmJKDbWs4OA==}
 
@@ -3228,6 +3253,15 @@ packages:
       safer-buffer: 2.1.2
     dev: true
 
+  /assemblyscript/0.21.4:
+    resolution: {integrity: sha512-MGllYvPGFcxYy8R2k6dl7hTuDJ/ZodQBKv1cYwiAh6r4/K+xVVRJ8lzlfN3ajly6uYS4yKnx4X9cQn6DYCYBKw==}
+    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+    hasBin: true
+    dependencies:
+      binaryen: 110.0.0-nightly.20220924
+      long: 5.2.0
+    dev: false
+
   /assert-plus/1.0.0:
     resolution: {integrity: sha512-NfJ4UzBCcQGLDlQq7nHxH+tv3kyZ0hHQqF5BO6J7tNJeP5do1llPr8dZ8zHonfhAu0PHAdMkSo+8o0wxg9lZWw==}
     engines: {node: '>=0.8'}
@@ -3441,6 +3475,11 @@ packages:
     resolution: {integrity: sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /binaryen/110.0.0-nightly.20220924:
+    resolution: {integrity: sha512-zXHeJDpmBw4HNRUPTvdXo8p5U47ARb6nWbxmFk/R+HAeWLbd18UxtG1XWf2fQaOJzLYlrI7gURyjdAHz8x8IHw==}
+    hasBin: true
+    dev: false
 
   /bind-decorator/1.0.11:
     resolution: {integrity: sha512-yzkH0uog6Vv/vQ9+rhSKxecnqGUZHYncg7qS7voz3Q76+TAi1SGiOKk2mlOvusQnFz9Dc4BC/NMkeXu11YgjJg==}
@@ -6533,6 +6572,10 @@ packages:
       wrap-ansi: 3.0.1
     dev: true
 
+  /long/5.2.0:
+    resolution: {integrity: sha512-9RTUNjK60eJbx3uz+TEGF7fUr29ZDxR5QzXcyDpeSfeH28S9ycINflOgOlppit5U+4kNTe83KQnMEerw7GmE8w==}
+    dev: false
+
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
@@ -8122,6 +8165,10 @@ packages:
       safer-buffer: 2.1.2
       tweetnacl: 0.14.5
     dev: true
+
+  /state-local/1.0.7:
+    resolution: {integrity: sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==}
+    dev: false
 
   /static-extend/0.1.2:
     resolution: {integrity: sha512-72E9+uLc27Mt718pMHt9VMNiAL4LMsmDbBva8mxWUCkT07fSzEGMYUCk0XWY6lp0j6RBAG4cJ3mWuZv2OE3s0g==}

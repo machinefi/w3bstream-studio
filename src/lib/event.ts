@@ -1,4 +1,5 @@
 import { TransactionItem } from '@/store/history';
+import { ScriptTemplateState } from '@/store/IDE/ScriptTemplate';
 import { EventEmitter } from 'events';
 import TypedEmitter from 'typed-emitter';
 import { publicConfig } from '../config/public';
@@ -11,6 +12,7 @@ class MyEmitter extends EventEmitter {
 }
 
 interface MessageEvents {
+  // @ts-ignore
   '*': ({ type: string, args: [] }) => void;
   'wallet.onAccount': () => void;
   'wallet.logout': () => void;
@@ -19,6 +21,9 @@ interface MessageEvents {
   'history.insert': (transactionItem: TransactionItem) => void;
   'history.update': (transactionItem: TransactionItem) => void;
   'history.delete': (transactionItem: Pick<TransactionItem, 'uuid'>) => void;
+  'ScriptTemplateManager.removeTemplate': () => void;
+  'ScriptTemplateManager.addTemplate': (args: Partial<ScriptTemplateState>) => void;
+  'ScriptTemplateManager.modifyTemplate': () => void;
   signer: (signer: any) => void;
   provider: (signer: any) => void;
 }
