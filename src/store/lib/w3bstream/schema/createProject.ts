@@ -3,6 +3,8 @@ import { FromSchema } from 'json-schema-to-ts';
 import { JSONSchema7 } from 'json-schema';
 import { axios } from '../../../../lib/axios';
 import { JSONValue } from '../../../standard/JSONSchemaState';
+import { showNotification } from '@mantine/notifications';
+import { rootStore } from '../../../index';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -32,6 +34,10 @@ export const createProjectSchema = new JSONSchemaState<SchemaType>({
       url: '/srv-applet-mgr/v0/project',
       data: e.formData
     });
+    if (res.data) {
+      await showNotification({ message: 'create project successed' });
+    }
+    rootStore.w3s.projects.call();
   },
   value: new JSONValue<SchemaType>({
     value: {
