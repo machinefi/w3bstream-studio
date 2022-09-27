@@ -21,7 +21,7 @@ export const schema = {
 
 type ConfigType = FromSchema<typeof schema>;
 
-export const w3bstreamConfigSchema = new JSONSchemaState<ConfigType>({
+export const loginSchema = new JSONSchemaState<ConfigType>({
   schema,
   reactive: true,
   onSubmit(e): void {

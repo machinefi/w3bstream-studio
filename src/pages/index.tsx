@@ -10,8 +10,9 @@ const DEMO = observer(() => {
   const { w3s } = useStore();
   return (
     <Container>
-      <Form {...w3s.config} />
-      <div>{w3s.config.formData.w3bsream?.apiUrl}</div>
+      {w3s.forms.map((i, index) => (
+        <Form {...i} key={index} />
+      ))}
     </Container>
   );
 });

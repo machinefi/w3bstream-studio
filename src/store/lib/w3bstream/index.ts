@@ -1,7 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 import RootStore from '@/store/root';
 import { rootStore } from '../../index';
-import { w3bstreamConfig } from './config';
+import { w3bstreamConfigSchema } from './config';
+import { loginSchema } from './schema/login';
 
 export class W3bStream {
   rootStore: RootStore;
@@ -10,5 +11,8 @@ export class W3bStream {
     makeAutoObservable(this);
   }
 
-  config = w3bstreamConfig;
+  config = w3bstreamConfigSchema;
+  login = loginSchema;
+
+  forms = [this.config, this.login];
 }
