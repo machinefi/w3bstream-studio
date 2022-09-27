@@ -23,12 +23,12 @@ import { WrongNetworkDialog } from '@/components/NetworkCheckProvider';
 import { TransactionSubmitDialog } from '@/components/HistoryModal';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { lang, god, user } = useStore();
-  const store = useLocalObservable(() => ({
-    get colorScheme() {
-      return user.theme.value || ('dark' as ColorScheme);
-    }
-  }));
+  const { lang } = useStore();
+  // const store = useLocalObservable(() => ({
+  //   get colorScheme() {
+  //     return user.theme.value || ('dark' as ColorScheme);
+  //   }
+  // }));
 
   useEffect(() => {
     lang.init();
