@@ -29,6 +29,7 @@ export class EthNetworkState implements NetworkState {
   dataloader: Record<number, DataLoader<CallParams, any, any>> = {};
 
   // ui
+  //@ts-ignore
   connector = {
     latestProvider: new StorageState({ key: 'latestEthProvider' }),
     showConnector: false

@@ -45,7 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       {/* <ColorSchemeProvider colorScheme={store.colorScheme} toggleColorScheme={user.toggleTheme}> */}
-      <MantineProvider theme={{ fontFamily: 'Oxanium, sans-serif;', colorScheme: store.colorScheme }} withGlobalStyles withNormalizeCSS>
+      <MantineProvider theme={{ fontFamily: 'Oxanium, sans-serif;' }} withGlobalStyles withNormalizeCSS>
         <Global
           styles={(theme) => ({
             body: {}

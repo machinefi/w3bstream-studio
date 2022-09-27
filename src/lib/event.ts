@@ -1,5 +1,5 @@
 import { TransactionItem } from '@/store/history';
-import { ScriptTemplateState } from '@/store/IDE/ScriptTemplate';
+// import { ScriptTemplateState } from '@/store/IDE/ScriptTemplate';
 import { EventEmitter } from 'events';
 import TypedEmitter from 'typed-emitter';
 import { publicConfig } from '../config/public';
@@ -21,9 +21,9 @@ interface MessageEvents {
   'history.insert': (transactionItem: TransactionItem) => void;
   'history.update': (transactionItem: TransactionItem) => void;
   'history.delete': (transactionItem: Pick<TransactionItem, 'uuid'>) => void;
-  'ScriptTemplateManager.removeTemplate': () => void;
-  'ScriptTemplateManager.addTemplate': (args: Partial<ScriptTemplateState>) => void;
-  'ScriptTemplateManager.modifyTemplate': () => void;
+  // 'ScriptTemplateManager.removeTemplate': () => void;
+  // 'ScriptTemplateManager.addTemplate': (args: Partial<ScriptTemplateState>) => void;
+  // 'ScriptTemplateManager.modifyTemplate': () => void;
   'user.login': () => void;
   'project.list': (data: any[]) => void;
 
