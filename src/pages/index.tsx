@@ -5,9 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { useStore } from '../store';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import Form, { FormState, IChangeEvent } from '@rjsf/core';
+import { Code } from '@mantine/core';
 
 const DEMO = observer(() => {
   const { w3s } = useStore();
+
   return (
     <Container>
       {w3s.forms.map((i, index) => {
@@ -17,6 +19,7 @@ const DEMO = observer(() => {
           </Box>
         );
       })}
+      <Code block>{JSON.stringify(w3s.projects.value, null, 2)}</Code>
     </Container>
   );
 });

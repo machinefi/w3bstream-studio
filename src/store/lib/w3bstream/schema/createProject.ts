@@ -28,7 +28,7 @@ export const createProjectSchema = new JSONSchemaState<SchemaType>({
   reactive: true,
   afterSubmit: async (e) => {
     const res = await axios.request({
-      method: 'put',
+      method: 'post',
       url: '/srv-applet-mgr/v0/project',
       data: e.formData
     });

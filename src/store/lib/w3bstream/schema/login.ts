@@ -4,6 +4,7 @@ import { JSONSchema7 } from 'json-schema';
 import { axios } from '@/lib/axios';
 import { rootStore } from '../../../index';
 import { JSONValue } from '../../../standard/JSONSchemaState';
+import { eventBus } from '../../../../lib/event';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -35,6 +36,7 @@ export const loginSchema = new JSONSchemaState<SchemaType>({
     });
     if (res.data.token) {
       rootStore.w3s.config.setData({ token: res.data.token });
+      eventBus.emit('user.login');
     }
   },
   value: new JSONValue<SchemaType>({

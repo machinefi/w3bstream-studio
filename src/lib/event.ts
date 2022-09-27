@@ -24,6 +24,8 @@ interface MessageEvents {
   'ScriptTemplateManager.removeTemplate': () => void;
   'ScriptTemplateManager.addTemplate': (args: Partial<ScriptTemplateState>) => void;
   'ScriptTemplateManager.modifyTemplate': () => void;
+  'user.login': () => void;
+
   signer: (signer: any) => void;
   provider: (signer: any) => void;
 }
