@@ -1,20 +1,16 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { JSONSchema7 } from 'json-schema';
+import { observable } from 'mobx';
+import { LocalStorageValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
   title: 'Setting',
   type: 'object',
   properties: {
-    w3bsream: {
-      title: 'w3bsream',
-      type: 'object',
-      properties: {
-        apiUrl: { type: 'string' },
-        token: { type: 'string' }
-      }
-    }
+    apiUrl: { type: 'string' },
+    token: { type: 'string' }
   },
   require: ['w3bsream']
 } as const;
@@ -30,10 +26,5 @@ export const w3bstreamConfigSchema = new JSONSchemaState<ConfigType>({
     }
   },
   reactive: true,
-  onSubmit(e): void {
-    console.log(e.formData.w3bsream);
-  },
-  formData: {
-    w3bsream: { apiUrl: 'http://localhost:8888' }
-  }
+  value: new LocalStorageValue({ key: 'w3bstream-config', default: { apiUrl: 'http://localhost:8888' } })
 });

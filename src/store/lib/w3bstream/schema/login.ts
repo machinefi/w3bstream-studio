@@ -1,7 +1,8 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { JSONSchema7 } from 'json-schema';
-import axios from 'axios';
+import { axios } from '@/lib/axios';
+import { rootStore } from '../../../index';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -25,13 +26,17 @@ export const loginSchema = new JSONSchemaState<ConfigType>({
     }
   },
   reactive: true,
-  onSubmit(e): void {
-    console.log(e.formData);
-    axios.request({
+  afterSubmit: async (e) => {
+    const res = await axios.request({
       method: 'put',
       url: '/srv-applet-mgr/v0/login',
       data: e.formData
     });
+    if (res.data.token) {
+      rootStore.w3s.config.setData({ token: res.data.token });
+    }
   },
-  formData: {}
+  formData: {
+    username: 'admin'
+  }
 });

@@ -2,15 +2,15 @@ import Axios from 'axios';
 import { publicConfig } from '../config/public';
 import { rootStore } from '../store/index';
 
-export const api = Axios.create({});
+export const axios = Axios.create({});
 
-api.interceptors.request.use((req) => {
+axios.interceptors.request.use((req) => {
   // req.headers['Authorization'] = ""
-  req.baseURL = rootStore.w3s.config.formData.w3bsream.apiUrl;
+  req.baseURL = rootStore.w3s.config.formData.apiUrl;
   return req;
 });
 
-api.interceptors.response.use(
+axios.interceptors.response.use(
   (res) => {
     return res;
   },
