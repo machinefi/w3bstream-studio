@@ -10,13 +10,13 @@ export const schema = {
   properties: {
     apiUrl: { type: 'string' },
     token: { type: 'string' }
-  },
-  require: ['w3bsream']
+  }
 } as const;
 
 type ConfigType = FromSchema<typeof schema>;
 
 export const w3bstreamConfigSchema = new JSONSchemaState<ConfigType>({
+  //@ts-ignore
   schema,
   uiSchema: {
     'ui:submitButtonOptions': {

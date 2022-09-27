@@ -14,12 +14,13 @@ export const schema = {
     username: { type: 'string' },
     password: { type: 'string' }
   },
-  require: ['username', 'password']
+  required: ['username', 'password']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
 
 export const loginSchema = new JSONSchemaState<SchemaType>({
+  //@ts-ignore
   schema,
   uiSchema: {
     'ui:submitButtonOptions': {
@@ -40,8 +41,7 @@ export const loginSchema = new JSONSchemaState<SchemaType>({
     }
   },
   value: new JSONValue<SchemaType>({
-    value: {
-      username: 'admin'
-    }
+    username: 'admin',
+    password: ''
   })
 });

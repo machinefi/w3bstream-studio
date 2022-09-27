@@ -9,7 +9,7 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
   loading = new BooleanState();
   value?: Awaited<U> = null;
   function: T;
-  init: (i: this) => void;
+  init = (i: this) => {};
 
   autoAlert = true;
   context: any = undefined;
@@ -17,9 +17,11 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
   constructor(args: Partial<PromiseState<T, U>> = {}) {
     Object.assign(this, args);
     makeAutoObservable(this);
-    setTimeout(() => {
-      this.init(this);
-    }, 500);
+    if (this.init) {
+      setTimeout(() => {
+        this.init(this);
+      }, 500);
+    }
   }
 
   async call(...args: Parameters<T>): Promise<Awaited<U>> {

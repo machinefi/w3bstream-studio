@@ -72,8 +72,8 @@ export class JSONValue<T> {
   set(val) {
     this.value = { ...this.value, ...val };
   }
-  constructor(args: Partial<JSONValue<T>> = {}) {
-    Object.assign(this, args);
+  constructor(args: Partial<T> = {}) {
+    Object.assign(this.value, args);
     makeAutoObservable(this);
   }
 }

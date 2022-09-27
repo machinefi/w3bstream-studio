@@ -14,12 +14,13 @@ export const schema = {
     name: { type: 'string' },
     version: { type: 'string' }
   },
-  require: ['name', 'version']
+  required: ['name', 'version']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
 
 export const createProjectSchema = new JSONSchemaState<SchemaType>({
+  //@ts-ignore
   schema,
   uiSchema: {
     'ui:submitButtonOptions': {
@@ -40,9 +41,7 @@ export const createProjectSchema = new JSONSchemaState<SchemaType>({
     rootStore.w3s.projects.call();
   },
   value: new JSONValue<SchemaType>({
-    value: {
-      name: 'project_01',
-      version: '0.0.1'
-    }
+    name: 'project_01',
+    version: '0.0.1'
   })
 });

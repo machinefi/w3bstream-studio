@@ -12,14 +12,28 @@ const DEMO = observer(() => {
 
   return (
     <Container>
-      {w3s.forms.map((i, index) => {
+      {[w3s.config, w3s.login, w3s.createProject].map((i) => {
         return (
-          <Box key={index} mt="xl">
+          <Box key={i.schema.title} mt="xl">
             <Form formData={i.formData} uiSchema={i.uiSchema} schema={i.schema} onChange={i.onChange} onSubmit={i.onSubmit} validator={i.validator} />
           </Box>
         );
       })}
-      <Code block>{JSON.stringify(w3s.projects.value, null, 2)}</Code>
+      <Box mt="xl">
+        Projects:
+        <Code block>{w3s.projects.value?.data.map((i) => `${i.name}-${i.version}-${i.createdAt}\n`)}</Code>
+      </Box>
+      {[w3s.deployProject, w3s.appletList].map((i) => {
+        return (
+          <Box key={i.schema.title} mt="xl">
+            <Form formData={i.formData} uiSchema={i.uiSchema} schema={i.schema} onChange={i.onChange} onSubmit={i.onSubmit} validator={i.validator} />
+          </Box>
+        );
+      })}
+      <Box mt="xl">
+        Projects:
+        <Code block>{w3s.applets.value?.data.map((i) => `${i.name}-${i.createdAt}\n`)}</Code>
+      </Box>
     </Container>
   );
 });
