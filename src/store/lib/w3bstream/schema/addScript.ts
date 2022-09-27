@@ -33,6 +33,7 @@ export const createProjectSchema = new JSONSchemaState<SchemaType>({
       data: e.formData
     });
   },
+  extraData: { isOpen: false },
   value: new JSONValue<SchemaType>({
     value: {
       name: 'project_01',

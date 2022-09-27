@@ -7,6 +7,9 @@ export const axios = Axios.create({});
 axios.interceptors.request.use((req) => {
   // req.headers['Authorization'] = ""
   req.baseURL = rootStore.w3s.config.formData.apiUrl;
+  if (rootStore.w3s.config.formData.token) {
+    req.headers['authorizations'] = `Bearer ${rootStore.w3s.config.formData.token}`;
+  }
   return req;
 });
 

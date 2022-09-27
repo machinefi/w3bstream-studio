@@ -3,6 +3,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import { JSONSchema7 } from 'json-schema';
 import { axios } from '@/lib/axios';
 import { rootStore } from '../../../index';
+import { JSONValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -15,9 +16,9 @@ export const schema = {
   require: ['username', 'password']
 } as const;
 
-type ConfigType = FromSchema<typeof schema>;
+type SchemaType = FromSchema<typeof schema>;
 
-export const loginSchema = new JSONSchemaState<ConfigType>({
+export const loginSchema = new JSONSchemaState<SchemaType>({
   schema,
   uiSchema: {
     'ui:submitButtonOptions': {
@@ -36,7 +37,9 @@ export const loginSchema = new JSONSchemaState<ConfigType>({
       rootStore.w3s.config.setData({ token: res.data.token });
     }
   },
-  formData: {
-    username: 'admin'
-  }
+  value: new JSONValue<SchemaType>({
+    value: {
+      username: 'admin'
+    }
+  })
 });

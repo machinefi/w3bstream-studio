@@ -6,6 +6,7 @@ import { IChangeEvent, FormState, FormProps } from '@rjsf/core';
 import { helper } from '../../lib/helper';
 
 export class JSONSchemaState<T> {
+  extraData: { isOpen?: boolean } = {};
   value: JSONSchemaValue = new JSONValue();
   // formData: T = {} as T;
   get formData() {
@@ -63,15 +64,15 @@ export interface JSONSchemaValue {
   get: () => any;
 }
 
-class JSONValue {
-  value = {};
+export class JSONValue<T> {
+  value: T = {} as T;
   get() {
     return this.value;
   }
   set(val) {
     this.value = { ...this.value, ...val };
   }
-  constructor(args: Partial<JSONValue> = {}) {
+  constructor(args: Partial<JSONValue<T>> = {}) {
     Object.assign(this, args);
     makeAutoObservable(this);
   }
