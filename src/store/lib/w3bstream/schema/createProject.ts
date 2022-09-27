@@ -8,7 +8,7 @@ import { rootStore } from '../../../index';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
-  title: 'Create Project Test',
+  title: 'Create Project',
   type: 'object',
   properties: {
     name: { type: 'string' },

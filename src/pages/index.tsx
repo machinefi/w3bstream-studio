@@ -31,7 +31,7 @@ const DEMO = observer(() => {
         );
       })}
       <Box mt="xl">
-        Projects:
+        Applets:
         <Code block>{w3s.applets.value?.data.map((i) => `${i.name}-${i.createdAt}\n`)}</Code>
       </Box>
     </Container>

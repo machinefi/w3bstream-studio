@@ -20,7 +20,7 @@ export const schema = {
       }
     }
   },
-  title: 'Deploy Project Test',
+  title: 'Deploy Project',
   type: 'object',
   properties: {
     file: {

@@ -52,7 +52,7 @@ export class W3bStream {
         return rootStore.w3s.projects.value?.data?.map((i) => i.projectID) || [];
       },
       get enumNames() {
-        return rootStore.w3s.projects.value?.data?.map((i) => i.name) || [];
+        return rootStore.w3s.projects.value?.data?.map((i) => `${i.name}-${i.version}`) || [];
       }
     };
   }

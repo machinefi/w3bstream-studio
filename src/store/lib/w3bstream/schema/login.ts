@@ -8,7 +8,7 @@ import { eventBus } from '../../../../lib/event';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
-  title: 'Login Test',
+  title: 'Login',
   type: 'object',
   properties: {
     username: { type: 'string' },

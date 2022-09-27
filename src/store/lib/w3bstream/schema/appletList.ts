@@ -20,11 +20,10 @@ export const schema = {
       }
     }
   },
-  title: 'Applet List Test',
+  title: 'Applet List',
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects' },
-    test: { type: 'string' }
+    projectID: { $ref: '#/definitions/projects' }
   },
   required: ['projectID']
 } as const;
