@@ -1,15 +1,24 @@
 import BigNumber from 'bignumber.js';
 import { makeAutoObservable } from 'mobx';
 import { helper } from '@/lib/helper';
+import { JSONSchemaValue } from './JSONSchemaState';
 
-export class StorageState<T> {
+export class StorageState<T> implements JSONSchemaValue {
   key: string;
-  value: T | any = null;
-  default: T | any = null;
+  value: T = null as T;
+  default: T = null as T;
   constructor(args: Partial<StorageState<T>>) {
     Object.assign(this, args);
     makeAutoObservable(this);
     this.load();
+  }
+
+  get() {
+    return this.value;
+  }
+  set(val) {
+    this.value = { ...this.value, ...val };
+    localStorage.setItem(this.key, JSON.stringify(this.value));
   }
 
   load() {

@@ -32,6 +32,7 @@ specifiers:
   '@trpc/next': ^9.20.3
   '@trpc/react': ^9.20.3
   '@trpc/server': ^9.20.3
+  '@types/json-schema': ^7.0.11
   '@types/localforage': ^0.0.34
   '@types/node': ^14.14.31
   '@types/prop-types': ^15.7.5
@@ -59,6 +60,7 @@ specifiers:
   graphql: ^16.3.0
   graphql-request: ^4.2.0
   i18next: ^21.8.4
+  json-schema: ^0.4.0
   json-schema-to-ts: ^2.5.5
   localforage: ^1.10.0
   localforage-driver-memory: ^1.0.5
@@ -115,6 +117,7 @@ dependencies:
   '@trpc/next': 9.25.3_snjsjk4h5bqh6hhx7r3unpazki
   '@trpc/react': 9.25.3_d23geeuxqzd7qowex75di7wuzy
   '@trpc/server': 9.25.3
+  '@types/json-schema': 7.0.11
   '@types/localforage': 0.0.34
   '@types/prop-types': 15.7.5
   '@types/reflect-metadata': 0.1.0
@@ -136,6 +139,7 @@ dependencies:
   graphql: 16.5.0
   graphql-request: 4.3.0_graphql@16.5.0
   i18next: 21.8.11
+  json-schema: 0.4.0
   json-schema-to-ts: 2.5.5
   localforage: 1.10.0
   localforage-driver-memory: 1.0.5_localforage@1.10.0
@@ -6311,7 +6315,6 @@ packages:
 
   /json-schema/0.4.0:
     resolution: {integrity: sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==}
-    dev: true
 
   /json-stable-stringify/0.0.1:
     resolution: {integrity: sha512-nKtD/Qxm7tWdZqJoldEC7fF0S41v0mWbeaXG3637stOWfyGxTgWTYE2wtfKmjzpvxv2MA2xzxsXOIiwUpkX6Qw==}
