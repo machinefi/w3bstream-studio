@@ -25,5 +25,5 @@ export const w3bstreamConfigSchema = new JSONSchemaState<ConfigType>({
     }
   },
   reactive: true,
-  value: new StorageState({ key: 'w3bstream-config', default: { apiUrl: 'http://localhost:8888' } })
+  value: new StorageState<ConfigType>({ key: 'w3bstream-config', default: { apiUrl: 'http://localhost:8888' } })
 });
