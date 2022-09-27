@@ -11,18 +11,24 @@ export const schema = {
       title: 'w3bsream',
       type: 'object',
       properties: {
-        apiUrl: {
-          type: 'string'
-        }
+        apiUrl: { type: 'string' },
+        token: { type: 'string' }
       }
     }
-  }
+  },
+  require: ['w3bsream']
 } as const;
 
 type ConfigType = FromSchema<typeof schema>;
 
 export const w3bstreamConfigSchema = new JSONSchemaState<ConfigType>({
   schema,
+  uiSchema: {
+    'ui:submitButtonOptions': {
+      norender: true,
+      submitText: 'Update'
+    }
+  },
   reactive: true,
   onSubmit(e): void {
     console.log(e.formData.w3bsream);
