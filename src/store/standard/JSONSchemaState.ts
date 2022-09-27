@@ -76,28 +76,3 @@ class JSONValue {
     makeAutoObservable(this);
   }
 }
-
-export class LocalStorageValue {
-  key: string;
-  value: any = null;
-  default: any = {};
-  get() {
-    return this.value;
-  }
-  set(val) {
-    this.value = { ...this.value, ...val };
-    localStorage.setItem(this.key, JSON.stringify(this.value));
-  }
-  init() {
-    const value = global?.localStorage?.getItem(this.key);
-    this.value = helper.json.safeParse(value);
-    if (this.value == null) {
-      this.value = this.default;
-    }
-  }
-  constructor(args: Partial<LocalStorageValue> = {}) {
-    Object.assign(this, args);
-    makeAutoObservable(this);
-    this.init();
-  }
-}

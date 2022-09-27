@@ -1,8 +1,7 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { JSONSchema7 } from 'json-schema';
-import { observable } from 'mobx';
-import { LocalStorageValue } from '../../../standard/JSONSchemaState';
+import { StorageState } from '../../../standard/StorageState';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -26,5 +25,5 @@ export const w3bstreamConfigSchema = new JSONSchemaState<ConfigType>({
     }
   },
   reactive: true,
-  value: new LocalStorageValue({ key: 'w3bstream-config', default: { apiUrl: 'http://localhost:8888' } })
+  value: new StorageState({ key: 'w3bstream-config', default: { apiUrl: 'http://localhost:8888' } })
 });
