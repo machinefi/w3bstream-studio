@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { createStyles, Container, Text, Button, Group, useMantineTheme, Box } from '@mantine/core';
-import MainLayout from '@/components/Layout';
-import { useTranslation } from 'react-i18next';
 import { useStore } from '../store';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import Form, { FormState, IChangeEvent } from '@rjsf/core';
 import { Code } from '@mantine/core';
+import { JSONForm } from '../components/JSONForm/index';
 
 const DEMO = observer(() => {
   const { w3s } = useStore();
@@ -13,9 +11,10 @@ const DEMO = observer(() => {
   return (
     <Container>
       {[w3s.config, w3s.login, w3s.createProject].map((i) => {
+        console.log(i);
         return (
           <Box key={i.schema.title} mt="xl">
-            <Form formData={i.formData} uiSchema={i.uiSchema} schema={i.schema} onChange={i.onChange} onSubmit={i.onSubmit} validator={i.validator} />
+            <JSONForm jsonstate={i} />
           </Box>
         );
       })}
@@ -23,10 +22,10 @@ const DEMO = observer(() => {
         Projects:
         <Code block>{w3s.projects.value?.data.map((i) => `${i.name}-${i.version}-${i.createdAt}\n`)}</Code>
       </Box>
-      {[w3s.deployProject, w3s.appletList].map((i) => {
+      {[w3s.deployApplet, w3s.appletList].map((i) => {
         return (
           <Box key={i.schema.title} mt="xl">
-            <Form formData={i.formData} uiSchema={i.uiSchema} schema={i.schema} onChange={i.onChange} onSubmit={i.onSubmit} validator={i.validator} />
+            <JSONForm jsonstate={i} />
           </Box>
         );
       })}
@@ -34,6 +33,15 @@ const DEMO = observer(() => {
         Applets:
         <Code block>{w3s.applets.value?.data.map((i) => `${i.name}-${i.createdAt}\n`)}</Code>
       </Box>
+      {/* {w3s.projects.value &&
+        w3s.applets.value &&
+        [w3s.publishEvent].map((i) => {
+          return (
+            <Box key={i.schema.title} mt="xl">
+              <JSONForm jsonstate={i} />
+            </Box>
+          );
+        })} */}
     </Container>
   );
 });

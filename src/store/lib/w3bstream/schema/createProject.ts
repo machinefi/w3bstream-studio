@@ -19,29 +19,34 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-export const createProjectSchema = new JSONSchemaState<SchemaType>({
-  //@ts-ignore
-  schema,
-  uiSchema: {
-    'ui:submitButtonOptions': {
-      norender: false,
-      submitText: 'Submit'
-    }
-  },
-  reactive: true,
-  afterSubmit: async (e) => {
-    const res = await axios.request({
-      method: 'post',
-      url: '/srv-applet-mgr/v0/project',
-      data: e.formData
+export class CreateProjectSchema extends JSONSchemaState<SchemaType> {
+  constructor(args: Partial<CreateProjectSchema> = {}) {
+    super(args);
+    this.init({
+      //@ts-ignore
+      schema,
+      uiSchema: {
+        'ui:submitButtonOptions': {
+          norender: false,
+          submitText: 'Submit'
+        }
+      },
+      reactive: true,
+      afterSubmit: async (e) => {
+        const res = await axios.request({
+          method: 'post',
+          url: '/srv-applet-mgr/v0/project',
+          data: e.formData
+        });
+        if (res.data) {
+          await showNotification({ message: 'create project successed' });
+        }
+        rootStore.w3s.projects.call();
+      },
+      value: new JSONValue<SchemaType>({
+        name: 'project_01',
+        version: '0.0.1'
+      })
     });
-    if (res.data) {
-      await showNotification({ message: 'create project successed' });
-    }
-    rootStore.w3s.projects.call();
-  },
-  value: new JSONValue<SchemaType>({
-    name: 'project_01',
-    version: '0.0.1'
-  })
-});
+  }
+}

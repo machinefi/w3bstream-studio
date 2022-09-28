@@ -4,8 +4,10 @@ import { makeAutoObservable, observable, makeObservable, computed, action, react
 import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent, FormState, FormProps } from '@rjsf/core';
 import { helper } from '../../lib/helper';
+import { _ } from '../../lib/lodash';
 
 export class JSONSchemaState<T> {
+  extraData = new JSONValue();
   value: JSONSchemaValue = new JSONValue();
   // formData: T = {} as T;
   get formData() {
@@ -19,9 +21,17 @@ export class JSONSchemaState<T> {
   reactive: boolean;
   liveValidate: boolean = false;
   validator = validator;
+
+  get dynamicData() {
+    return this.getDymaicData();
+  }
+  getDymaicData = () => {
+    return { ready: true };
+  };
+
   onChange = (e: IChangeEvent<T, any>) => {
     if (!e.edit) return;
-    this.formData = e.formData;
+    this.value.set(e.formData);
     if (this.afterChange) {
       this.afterChange(e);
     }
@@ -36,6 +46,12 @@ export class JSONSchemaState<T> {
 
   setData(data: T) {
     this.value.set(data);
+  }
+  setKV(key, value) {
+    _.set(this, key, value);
+  }
+  init(data: Partial<JSONSchemaState<T>>) {
+    Object.assign(this, data);
   }
 
   constructor(args: Partial<JSONSchemaState<T>> = {}) {

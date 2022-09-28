@@ -6,18 +6,13 @@ import { JSONValue } from '../../../standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
 import { rootStore } from '../../../index';
 import { dataURItoBlob } from '@rjsf/utils';
+import { definitions } from './definitions';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
   definitions: {
     projects: {
-      type: 'string',
-      get enum() {
-        return rootStore.w3s.projects.value?.data?.map((i) => i.projectID) || [];
-      },
-      get enumNames() {
-        return rootStore.w3s.projects.value?.data?.map((i) => `${i.name}-${i.version}`) || [];
-      }
+      type: 'string'
     }
   },
   title: 'Applet List',
@@ -27,34 +22,34 @@ export const schema = {
   },
   required: ['projectID']
 } as const;
-//@ts-ignore
-// schema.definitions.projects = {
-//   type: 'string',
-//   get enum() {
-//     return rootStore.w3s.projects.value?.data?.map((i) => i.projectID) || [];
-//   },
-//   get enumNames() {
-//     return rootStore.w3s.projects.value?.data?.map((i) => i.name) || [];
-//   }
-// };
 
 type SchemaType = FromSchema<typeof schema>;
 
-export const appletListSchema = new JSONSchemaState<SchemaType>({
-  //@ts-ignore
-  schema,
-  uiSchema: {
-    'ui:submitButtonOptions': {
-      norender: true,
-      submitText: 'Submit'
-    }
-  },
-  afterChange(e) {
-    if (!e.formData.projectID) return;
-    rootStore.w3s.applets.call({ projectID: e.formData.projectID });
-  },
-  reactive: true,
-  value: new JSONValue<SchemaType>({
-    projectID: ''
-  })
-});
+//@ts-ignore
+schema.definitions = {
+  projects: definitions.projects
+};
+
+export class AppletListSchema extends JSONSchemaState<SchemaType> {
+  constructor(args: Partial<AppletListSchema> = {}) {
+    super(args);
+    this.init({
+      //@ts-ignore
+      schema,
+      uiSchema: {
+        'ui:submitButtonOptions': {
+          norender: true,
+          submitText: 'Submit'
+        }
+      },
+      afterChange(e) {
+        if (!e.formData.projectID) return;
+        rootStore.w3s.applets.call({ projectID: e.formData.projectID });
+      },
+      reactive: true,
+      value: new JSONValue<SchemaType>({
+        projectID: ''
+      })
+    });
+  }
+}

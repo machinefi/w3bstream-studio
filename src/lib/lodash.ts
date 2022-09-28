@@ -4,6 +4,8 @@ import each from 'lodash/each';
 import flattenDeep from 'lodash/flattenDeep';
 import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
+import get from 'lodash/get';
+import set from 'lodash/set';
 
 export const _ = {
   throttle,
@@ -11,5 +13,7 @@ export const _ = {
   each,
   flattenDeep,
   omitBy,
-  isNil
+  isNil,
+  get,
+  set
 };
