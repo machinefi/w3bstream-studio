@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { createStyles, Container, Text, Button, Group, useMantineTheme, Box, Select } from '@mantine/core';
+import { createStyles, Container, Text, Button, Group, useMantineTheme, Box, Select, Textarea } from '@mantine/core';
 import { useStore } from '../store';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Code } from '@mantine/core';
@@ -47,8 +47,13 @@ const DEMO = observer(() => {
                     <Group>
                       <Box sx={{ color: w3s.curAppletIndex == index ? 'black' : '#999' }} onClick={(e) => (w3s.curAppletIndex = index)}>{`${i.f_name}`}</Box>
                       <Box>({i.instances.length})</Box>
-                      <Button color="dark" size="xs" onClick={(e) => w3s.deployApplet.call({ appletID: i.f_applet_id })}>
+
+                      <Button disabled={i.instances.length > 0} color="dark" size="xs" onClick={(e) => w3s.deployApplet.call({ appletID: i.f_applet_id })}>
                         Deploy
+                      </Button>
+
+                      <Button color="blue" size="xs" onClick={(e) => w3s.publishEvent.call({ appletID: i.f_applet_id, projectID: i.f_project_id })}>
+                        Send Event
                       </Button>
                     </Group>
                   );
@@ -67,16 +72,17 @@ const DEMO = observer(() => {
                       <Box>{`${i.f_instance_id}`}</Box>
                       <Box>Status: {STATUS[i.f_state]}</Box>
                       <Group>
-                        <Button color="green" size="xs" mx="xs" onClick={(e) => w3s.publishEvent.call({ instaceID: i.f_instance_id, event: 'START' })}>
+                        <Button color="green" size="xs" mx="xs" onClick={(e) => w3s.handleInstance.call({ instaceID: i.f_instance_id, event: 'START' })}>
                           Start
                         </Button>
-                        <Button color="yellow" size="xs" mx="xs" onClick={(e) => w3s.publishEvent.call({ instaceID: i.f_instance_id, event: 'Restart' })}>
+                        <Button color="yellow" size="xs" mx="xs" onClick={(e) => w3s.handleInstance.call({ instaceID: i.f_instance_id, event: 'Restart' })}>
                           Restart
                         </Button>
-                        <Button color="red" size="xs" onClick={(e) => w3s.publishEvent.call({ instaceID: i.f_instance_id, event: 'STOP' })}>
+                        <Button color="red" size="xs" onClick={(e) => w3s.handleInstance.call({ instaceID: i.f_instance_id, event: 'STOP' })}>
                           Stop
                         </Button>
                       </Group>
+                      <Box mt="xl"></Box>
                     </Box>
                   );
                 })}

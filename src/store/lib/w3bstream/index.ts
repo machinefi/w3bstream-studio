@@ -88,11 +88,28 @@ export class W3bStream {
     }
   });
 
-  publishEvent = new PromiseState({
+  handleInstance = new PromiseState({
     function: async ({ instaceID, event }: { instaceID: string; event: string }) => {
       const res = await axios.request({
         method: 'put',
         url: `/srv-applet-mgr/v0/deploy/${instaceID}/${event}`
+      });
+      setTimeout(() => {
+        this.allProjects.call();
+      }, 500);
+      return res.data;
+    }
+  });
+
+  publishEvent = new PromiseState({
+    function: async ({ projectID, appletID, event = 'start', data = 'test msg' }: { projectID: string; appletID: string; event?: string; data?: string }) => {
+      const res = await axios.request({
+        method: 'post',
+        url: `srv-applet-mgr/v0/event/${projectID}/${appletID}/${event}`,
+        headers: {
+          publisher: ''
+        },
+        data
       });
       setTimeout(() => {
         this.allProjects.call();

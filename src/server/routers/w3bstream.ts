@@ -11,6 +11,7 @@ export const w3bstreamRouter = createRouter().query('projects', {
           select: {
             f_name: true,
             f_applet_id: true,
+            f_project_id: true,
             instances: {
               select: {
                 f_instance_id: true,
