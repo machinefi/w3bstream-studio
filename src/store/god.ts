@@ -22,36 +22,36 @@ export class GodStore {
     makeAutoObservable(this, {
       rootStore: false
     });
-    this.network = new EthNetworkState({
-      // allowChains: data.networks.map((i) => i.chainId),
-      god: this,
-      chain: new MappingState({
-        currentId: 4689,
-        map: defaultNetworks
-          .map(
-            (i) =>
-              new ChainState({
-                name: i.name,
-                chainId: i.chainId,
-                explorerName: i.explorerName,
-                explorerURL: i.explorerUrl,
-                info: { theme: { bgGradient: '' } },
-                logoUrl: i.logoUrl,
-                rpcUrl: i.rpcUrl,
-                //@ts-ignore
-                type: i.type,
-                Coin: new CoinState({
-                  symbol: i.nativeCoin,
-                  decimals: 18
-                })
-              })
-          )
-          .reduce((p, c) => {
-            p[c.chainId] = c;
-            return p;
-          }, {})
-      })
-    });
+    // this.network = new EthNetworkState({
+    //   // allowChains: data.networks.map((i) => i.chainId),
+    //   god: this,
+    //   chain: new MappingState({
+    //     currentId: 4689,
+    //     map: defaultNetworks
+    //       .map(
+    //         (i) =>
+    //           new ChainState({
+    //             name: i.name,
+    //             chainId: i.chainId,
+    //             explorerName: i.explorerName,
+    //             explorerURL: i.explorerUrl,
+    //             info: { theme: { bgGradient: '' } },
+    //             logoUrl: i.logoUrl,
+    //             rpcUrl: i.rpcUrl,
+    //             //@ts-ignore
+    //             type: i.type,
+    //             Coin: new CoinState({
+    //               symbol: i.nativeCoin,
+    //               decimals: 18
+    //             })
+    //           })
+    //       )
+    //       .reduce((p, c) => {
+    //         p[c.chainId] = c;
+    //         return p;
+    //       }, {})
+    //   })
+    // });
   }
 
   get eth(): EthNetworkState {

@@ -6,7 +6,6 @@ import { IChangeEvent, FormState, FormProps } from '@rjsf/core';
 import { helper } from '../../lib/helper';
 
 export class JSONSchemaState<T> {
-  extraData: { isOpen?: boolean } = {};
   value: JSONSchemaValue = new JSONValue();
   // formData: T = {} as T;
   get formData() {
@@ -21,7 +20,6 @@ export class JSONSchemaState<T> {
   liveValidate: boolean = false;
   validator = validator;
   onChange = (e: IChangeEvent<T, any>) => {
-    console.log(456, e);
     if (!e.edit) return;
     this.formData = e.formData;
     if (this.afterChange) {
@@ -44,10 +42,8 @@ export class JSONSchemaState<T> {
     Object.assign(this, args);
     if (this.reactive) {
       //@ts-ignore
-      makeAutoObservable(this, {
-        schema: false,
-        uiSchema: false,
-        validator: false
+      makeObservable(this, {
+        formData: computed
       });
       // makeAutoObservable(this, {
       //   formData: observable,

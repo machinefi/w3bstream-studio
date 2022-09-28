@@ -20,7 +20,7 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
     if (this.init) {
       setTimeout(() => {
         this.init(this);
-      }, 500);
+      }, 100);
     }
   }
 

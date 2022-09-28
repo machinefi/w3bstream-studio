@@ -5,6 +5,21 @@ import { showNotification } from '@mantine/notifications';
 
 export const axios = Axios.create({});
 
+function checkErr(err) {
+  console.error(err);
+  const data = err.response?.data;
+  if (data?.desc) {
+    if (data?.desc.includes('token')) {
+      rootStore.w3s.config.logout();
+      return;
+    }
+    showNotification({
+      color: 'red',
+      message: data.desc
+    });
+  }
+}
+
 axios.interceptors.request.use((req) => {
   req.baseURL = rootStore.w3s.config.formData.apiUrl;
   if (rootStore.w3s.config.formData.token) {
@@ -18,15 +33,7 @@ axios.interceptors.response.use(
     return res;
   },
   (err) => {
-    console.error(err);
-    const data = err.response.data;
-    if (data.desc) {
-      showNotification({
-        color: 'red',
-        message: data.desc
-      });
-      return;
-    }
+    checkErr(err);
     return Promise.reject(err);
   }
 );

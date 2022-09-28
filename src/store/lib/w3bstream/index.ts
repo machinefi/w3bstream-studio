@@ -21,43 +21,42 @@ export class W3bStream {
   appletList = appletListSchema;
 
   projects = new PromiseState({
-    init: async (i) => {
-      await hooks.waitLogin();
-      i.call();
-    },
     function: async () => {
-      const res = await axios.request({
+      const { data = [] } = await axios.request({
         url: '/srv-applet-mgr/v0/project'
       });
-      if (res.data) {
-        eventBus.emit('project.list', res.data.data);
+      if (data) {
+        eventBus.emit('project.list', data.data);
       }
-      return res.data;
+      return data;
     }
   });
 
   applets = new PromiseState({
     function: async ({ projectID }) => {
-      const res = await axios.request({
+      const { data = [] } = await axios.request({
         url: `/srv-applet-mgr/v0/applet/${projectID}`
       });
-      return res.data;
+      return data;
     }
   });
 
-  get projectsEnum() {
-    return {
-      type: 'string',
-      get enum() {
-        return rootStore.w3s.projects.value?.data?.map((i) => i.projectID) || [];
-      },
-      get enumNames() {
-        return rootStore.w3s.projects.value?.data?.map((i) => `${i.name}-${i.version}`) || [];
-      }
-    };
+  get isLogin() {
+    return !!this.config.formData.token;
   }
 
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+    makeAutoObservable(this);
+    this.initEvent();
+    setTimeout(() => {
+      this.initHook();
+    }, 100);
+  }
   initEvent() {
+    eventBus.on('user.login', () => {
+      this.projects.call();
+    });
     eventBus.on('project.list', (projects) => {
       const [project] = projects;
       if (project) {
@@ -71,17 +70,9 @@ export class W3bStream {
     });
   }
 
-  constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-    makeAutoObservable(this);
-    this.initEvent();
+  initHook() {
+    hooks.waitLogin().then(() => {
+      this.projects.call();
+    });
   }
-
-  get isLogin() {
-    return !!this.config.formData.token;
-  }
-
-  // get forms() {
-  //   return [this.config, this.login, this.createProject, this.deployProject];
-  // }
 }

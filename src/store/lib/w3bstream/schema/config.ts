@@ -15,7 +15,15 @@ export const schema = {
 
 type ConfigType = FromSchema<typeof schema>;
 
-export const w3bstreamConfigSchema = new JSONSchemaState<ConfigType>({
+export class W3bstreamConfigState<T> extends JSONSchemaState<ConfigType> {
+  logout() {
+    this.setData({
+      token: null
+    });
+  }
+}
+
+export const w3bstreamConfigSchema = new W3bstreamConfigState<ConfigType>({
   //@ts-ignore
   schema,
   uiSchema: {
