@@ -22,7 +22,7 @@ const DEMO = observer(() => {
         Projects:
         <Code block>{w3s.projects.value?.data.map((i) => `${i.name}-${i.version}-${i.createdAt}\n`)}</Code>
       </Box>
-      {[w3s.deployApplet, w3s.appletList].map((i) => {
+      {[w3s.uploadWASMScript, w3s.appletList].map((i) => {
         return (
           <Box key={i.schema.title} mt="xl">
             <JSONForm jsonstate={i} />
@@ -31,7 +31,24 @@ const DEMO = observer(() => {
       })}
       <Box mt="xl">
         Applets:
-        <Code block>{w3s.applets.value?.data.map((i) => `${i.name}-${i.createdAt}\n`)}</Code>
+        <pre>
+          {w3s.applets.value?.data.map((i) => {
+            return (
+              <Group>
+                <Box sx={{ width: '100px' }}>{`${i.name}\n`}</Box>
+                <Button color="dark" size="xs" onClick={(e) => w3s.deployApplet.call({ appletID: i.appletID })}>
+                  Deploy
+                </Button>
+                <Button size="xs" mx="xs" onClick={(e) => w3s.publishEvent.call({ projectID: i.projectID, appletID: i.appletID, event: 'start' })}>
+                  Start
+                </Button>
+                <Button color="red" size="xs" onClick={(e) => w3s.publishEvent.call({ projectID: i.projectID, appletID: i.appletID, event: 'stop' })}>
+                  Stop
+                </Button>
+              </Group>
+            );
+          })}
+        </pre>
       </Box>
       {/* {w3s.projects.value &&
         w3s.applets.value &&

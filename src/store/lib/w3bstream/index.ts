@@ -9,8 +9,9 @@ import { hooks } from '../../../lib/hooks';
 import { eventBus } from '../../../lib/event';
 import { publishEventSchema } from './schema/publishEvent';
 import { W3bstreamConfigState } from './schema/config';
-import { DeployAppletSchma } from './schema/deployApplet';
+import { UploadWASMSChema } from './schema/uploadWASM';
 import { AppletListSchema } from './schema/appletList';
+import { _ } from '../../../lib/lodash';
 
 export class W3bStream {
   rootStore: RootStore;
@@ -18,7 +19,7 @@ export class W3bStream {
   config = new W3bstreamConfigState({});
   login = loginSchema;
   createProject = new CreateProjectSchema({});
-  deployApplet = new DeployAppletSchma({
+  uploadWASMScript = new UploadWASMSChema({
     getDymaicData: () => {
       return {
         ready: this.projects.value
@@ -47,7 +48,7 @@ export class W3bStream {
   });
 
   applets = new PromiseState({
-    function: async ({ projectID }) => {
+    function: async ({ projectID = this.appletList.formData.projectID }) => {
       const { data = [] } = await axios.request({
         url: `/srv-applet-mgr/v0/applet/${projectID}`
       });
@@ -55,6 +56,16 @@ export class W3bStream {
         eventBus.emit('applet.list', data.data);
       }
       return data;
+    }
+  });
+
+  deployApplet = new PromiseState({
+    function: async ({ appletID }: { appletID: string }) => {
+      const res = await axios.request({
+        method: 'post',
+        url: `/srv-applet-mgr/v0/deploy/applet/${appletID}`
+      });
+      return res.data;
     }
   });
 
@@ -92,7 +103,7 @@ export class W3bStream {
     eventBus.on('project.list', (datas) => {
       const [data] = datas;
       if (data) {
-        [this.deployApplet.formData.info, this.appletList.formData].forEach((i) => {
+        [this.uploadWASMScript.formData.info, this.appletList.formData].forEach((i) => {
           if (!i.projectID) {
             i.projectID = data.projectID;
           }

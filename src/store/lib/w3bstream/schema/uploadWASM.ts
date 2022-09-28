@@ -15,7 +15,7 @@ export const schema = {
       type: 'string'
     }
   },
-  title: 'Deploy Applet',
+  title: 'Upload WASM',
   type: 'object',
   properties: {
     file: {
@@ -41,8 +41,8 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-export class DeployAppletSchma extends JSONSchemaState<SchemaType> {
-  constructor(args: Partial<DeployAppletSchma> = {}) {
+export class UploadWASMSChema extends JSONSchemaState<SchemaType> {
+  constructor(args: Partial<UploadWASMSChema> = {}) {
     super(args);
     this.init({
       //@ts-ignore
@@ -70,6 +70,7 @@ export class DeployAppletSchma extends JSONSchemaState<SchemaType> {
         });
         if (res.data) {
           await showNotification({ message: 'create applet successed' });
+          rootStore.w3s.applets.call({});
         }
         // rootStore.w3s.projects.call();
       },
