@@ -10,8 +10,9 @@ import { eventBus } from '../../../lib/event';
 import { publishEventSchema } from './schema/publishEvent';
 import { W3bstreamConfigState } from './schema/config';
 import { UploadWASMSChema } from './schema/uploadWASM';
-import { AppletListSchema } from './schema/appletList';
+import { ProjectListSchema } from './schema/projectList';
 import { _ } from '../../../lib/lodash';
+import { trpc } from '../../../lib/trpc';
 
 export class W3bStream {
   rootStore: RootStore;
@@ -22,42 +23,60 @@ export class W3bStream {
   uploadWASMScript = new UploadWASMSChema({
     getDymaicData: () => {
       return {
-        ready: this.projects.value
+        ready: this.allProjects.value.length > 0
       };
     }
   });
-  appletList = new AppletListSchema({
+  projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
-        ready: this.projects.value
+        ready: this.allProjects.value.length > 0
       };
     }
   });
   // publishEvent = publishEventSchema;
 
-  projects = new PromiseState({
+  allProjects = new PromiseState({
+    defaultValue: [],
     function: async () => {
-      const { data = [] } = await axios.request({
-        url: '/srv-applet-mgr/v0/project'
-      });
-      if (data) {
-        eventBus.emit('project.list', data.data);
-      }
-      return data;
+      const res = await trpc.query('api.projects');
+      return res;
     }
   });
 
-  applets = new PromiseState({
-    function: async ({ projectID = this.appletList.formData.projectID }) => {
-      const { data = [] } = await axios.request({
-        url: `/srv-applet-mgr/v0/applet/${projectID}`
-      });
-      if (data) {
-        eventBus.emit('applet.list', data.data);
-      }
-      return data;
-    }
-  });
+  curProjectIndex = 0;
+  get curProject() {
+    return this.allProjects.value ? this.allProjects.value[this.curProjectIndex] : null;
+  }
+
+  curAppletIndex = 0;
+  get curApplet() {
+    return this.curProject ? this.curProject.applets[this.curAppletIndex] : null;
+  }
+
+  // projects = new PromiseState({
+  //   function: async () => {
+  //     const { data = [] } = await axios.request({
+  //       url: '/srv-applet-mgr/v0/project'
+  //     });
+  //     if (data) {
+  //       eventBus.emit('project.list', data.data);
+  //     }
+  //     return data;
+  //   }
+  // });
+
+  // applets = new PromiseState({
+  //   function: async ({ projectID = this.appletList.formData.projectID }) => {
+  //     const { data = [] } = await axios.request({
+  //       url: `/srv-applet-mgr/v0/applet/${projectID}`
+  //     });
+  //     if (data) {
+  //       eventBus.emit('applet.list', data.data);
+  //     }
+  //     return data;
+  //   }
+  // });
 
   deployApplet = new PromiseState({
     function: async ({ appletID }: { appletID: string }) => {
@@ -70,16 +89,14 @@ export class W3bStream {
   });
 
   publishEvent = new PromiseState({
-    function: async ({ projectID, appletID, event, msg = 'input a test sentence', publisher = Math.random() }) => {
+    function: async ({ instaceID, event }: { instaceID: string; event: string }) => {
       const res = await axios.request({
-        method: 'post',
-        url: `/srv-applet-mgr/v0/event/${projectID}/${appletID}/${event}`,
-        headers: {
-          publisher,
-          'Content-Type': 'text/plain'
-        },
-        data: msg
+        method: 'put',
+        url: `/srv-applet-mgr/v0/deploy/${instaceID}/${event}`
       });
+      setTimeout(() => {
+        this.allProjects.call();
+      }, 500);
       return res.data;
     }
   });
@@ -98,24 +115,15 @@ export class W3bStream {
   }
   initEvent() {
     eventBus.on('user.login', () => {
-      this.projects.call();
-    });
-    eventBus.on('project.list', (datas) => {
-      const [data] = datas;
-      if (data) {
-        [this.uploadWASMScript.formData.info, this.appletList.formData].forEach((i) => {
-          if (!i.projectID) {
-            i.projectID = data.projectID;
-          }
-        });
-        this.applets.call({ projectID: data.projectID });
-      }
+      // this.projects.call();
+      this.allProjects.call();
     });
   }
 
   initHook() {
     hooks.waitLogin().then(() => {
-      this.projects.call();
+      // this.projects.call();
+      this.allProjects.call();
     });
   }
 }

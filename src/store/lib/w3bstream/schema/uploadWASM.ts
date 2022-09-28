@@ -15,7 +15,7 @@ export const schema = {
       type: 'string'
     }
   },
-  title: 'Upload WASM',
+  title: 'Create Applet',
   type: 'object',
   properties: {
     file: {

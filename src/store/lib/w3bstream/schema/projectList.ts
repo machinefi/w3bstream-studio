@@ -1,11 +1,6 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { JSONSchema7 } from 'json-schema';
-import { axios } from '../../../../lib/axios';
 import { JSONValue } from '../../../standard/JSONSchemaState';
-import { showNotification } from '@mantine/notifications';
-import { rootStore } from '../../../index';
-import { dataURItoBlob } from '@rjsf/utils';
 import { definitions } from './definitions';
 
 export const schema = {
@@ -15,7 +10,7 @@ export const schema = {
       type: 'string'
     }
   },
-  title: 'Applet List',
+  title: 'Projects',
   type: 'object',
   properties: {
     projectID: { $ref: '#/definitions/projects' }
@@ -30,8 +25,8 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-export class AppletListSchema extends JSONSchemaState<SchemaType> {
-  constructor(args: Partial<AppletListSchema> = {}) {
+export class ProjectListSchema extends JSONSchemaState<SchemaType> {
+  constructor(args: Partial<ProjectListSchema> = {}) {
     super(args);
     this.init({
       //@ts-ignore
@@ -41,10 +36,6 @@ export class AppletListSchema extends JSONSchemaState<SchemaType> {
           norender: true,
           submitText: 'Submit'
         }
-      },
-      afterChange(e) {
-        if (!e.formData.projectID) return;
-        rootStore.w3s.applets.call({ projectID: e.formData.projectID });
       },
       reactive: true,
       value: new JSONValue<SchemaType>({

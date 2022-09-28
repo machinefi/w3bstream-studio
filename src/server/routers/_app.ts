@@ -4,6 +4,7 @@
 import superjson from 'superjson';
 import { createRouter } from '../createRouter';
 import { templateRouter } from './template';
+import { w3bstreamRouter } from './w3bstream';
 
 /**
  * Create your application's root router
@@ -28,6 +29,7 @@ export const appRouter = createRouter()
       return 'ok';
     }
   })
-  .merge('dev.', templateRouter);
+  .merge('dev.', templateRouter)
+  .merge('api.', w3bstreamRouter);
 
 export type AppRouter = typeof appRouter;

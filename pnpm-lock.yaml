@@ -22,6 +22,7 @@ specifiers:
   '@mantine/spotlight': ^4.1.4
   '@metamask/jazzicon': ^2.0.0
   '@monaco-editor/react': ^4.4.6
+  '@prisma/client': ^4.4.0
   '@rjsf/core': 5.0.0-beta.9
   '@rjsf/utils': 5.0.0-beta.9
   '@rjsf/validator-ajv6': 5.0.0-beta.9
@@ -34,6 +35,7 @@ specifiers:
   '@trpc/server': ^9.20.3
   '@types/json-schema': ^7.0.11
   '@types/localforage': ^0.0.34
+  '@types/lodash': ^4.14.185
   '@types/node': ^14.14.31
   '@types/prop-types': ^15.7.5
   '@types/react': ^17.0.0
@@ -107,6 +109,7 @@ dependencies:
   '@mantine/spotlight': 4.2.11_5634dklglt6cysgne32ea7m3eu
   '@metamask/jazzicon': 2.0.0
   '@monaco-editor/react': 4.4.6_sfoxds7t5ydpegc3knd667wn6m
+  '@prisma/client': 4.4.0
   '@rjsf/core': 5.0.0-beta.9_qyn2bqda6csoagge3hyysb7ab4
   '@rjsf/utils': 5.0.0-beta.9_react@17.0.2
   '@rjsf/validator-ajv6': 5.0.0-beta.9_@rjsf+utils@5.0.0-beta.9
@@ -169,6 +172,7 @@ dependencies:
 
 devDependencies:
   '@cypress/react': 4.16.4_zq3jike3ikot3srzbuez44i6wa
+  '@types/lodash': 4.14.185
   '@types/node': 14.18.21
   '@types/react': 17.0.47
   '@types/react-dom': 17.0.17
@@ -2333,6 +2337,23 @@ packages:
     resolution: {integrity: sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==}
     dev: false
 
+  /@prisma/client/4.4.0:
+    resolution: {integrity: sha512-ciKOP246x1xwr04G9ajHlJ4pkmtu9Q6esVyqVBO0QJihaKQIUvbPjClp17IsRJyxqNpFm4ScbOc/s9DUzKHINQ==}
+    engines: {node: '>=14.17'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6
+    dev: false
+
+  /@prisma/engines-version/4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6:
+    resolution: {integrity: sha512-P5v/PuEIJLYXZUZBvOLPqoyCW+m6StNqHdiR6te++gYVODpPdLakks5HVx3JaZIY+LwR02juJWFlwpc9Eog/ug==}
+    dev: false
+
   /@radix-ui/number/0.1.0:
     resolution: {integrity: sha512-rpf6QiOWLHAkM4FEMYu9i+5Jr8cKT893+R4mPpcdsy4LD7omr9JfdOqj/h/xPA5+EcVrpMMlU6rrRYpUB5UI8g==}
     dependencies:
@@ -2730,6 +2751,10 @@ packages:
     dependencies:
       localforage: 1.10.0
     dev: false
+
+  /@types/lodash/4.14.185:
+    resolution: {integrity: sha512-evMDG1bC4rgQg4ku9tKpuMh5iBNEwNa3tf9zRHdP1qlv+1WUg44xat4IxCE14gIpZRGUUWAx2VhItCZc25NfMA==}
+    dev: true
 
   /@types/node/12.12.50:
     resolution: {integrity: sha512-5ImO01Fb8YsEOYpV+aeyGYztcYcjGsBvN4D7G5r1ef2cuQOpymjWNQi5V0rKHE6PC2ru3HkoUr/Br2/8GUA84w==}

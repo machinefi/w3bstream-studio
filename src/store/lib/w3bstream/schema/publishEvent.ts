@@ -23,7 +23,7 @@ export const schema = {
   type: 'object',
   properties: {
     projectID: { $ref: '#/definitions/projects' },
-    appletID: { $ref: '#/definitions/applets' },
+    // appletID: { $ref: '#/definitions/applets' },
     event: { $ref: '#/definitions/event' }
   },
   required: ['projectID', 'appletID', 'event']
@@ -34,8 +34,8 @@ type SchemaType = FromSchema<typeof schema>;
 //@ts-ignore
 schema.definitions = {
   ...schema.definitions,
-  projects: definitions.projects,
-  applets: definitions.applets
+  projects: definitions.projects
+  // applets: definitions.applets
 };
 
 export const publishEventSchema = new JSONSchemaState<SchemaType>({

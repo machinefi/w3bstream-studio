@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model t_account {
+  f_account_id    String @db.VarChar(255)
+  f_username      String @db.VarChar(255)
+  f_identity_type Int    @default(0)
+  f_state         Int    @default(0)
+  f_password      String
+  f_vendor        String @default("")
+  f_meta          String @default("")
+  f_created_at    BigInt @default(0)
+  f_updated_at    BigInt @default(0)
+  f_deleted_at    BigInt @default(0)
+
+  @@id([f_account_id, f_deleted_at])
+  @@unique([f_username, f_deleted_at], map: "t_account_ui_username")
+}
+
+model t_applet {
+  f_id         BigInt       @id @default(autoincrement())
+  f_project_id String       @db.VarChar(255)
+  f_applet_id  String       @unique(map: "t_applet_ui_applet_id") @db.VarChar(255)
+  f_name       String       @db.VarChar(255)
+  f_path       String       @db.VarChar(255)
+  f_config     String       @default("")
+  f_created_at BigInt       @default(0)
+  f_updated_at BigInt       @default(0)
+  project      t_project    @relation(fields: [f_project_id], references: [f_project_id])
+  instances    t_instance[]
+
+  @@index([f_name], map: "t_applet_i_name")
+}
+
+model t_event_log {
+  f_id           BigInt @id @default(autoincrement())
+  f_event_id     String @unique(map: "t_event_log_ui_event_id") @db.VarChar(255)
+  f_project_id   String @db.VarChar(255)
+  f_applet_id    String @db.VarChar(255)
+  f_publisher_id String @db.VarChar(255)
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
+
+  @@index([f_project_id], map: "t_event_log_i_applet_id")
+  @@index([f_project_id], map: "t_event_log_i_project_id")
+  @@index([f_publisher_id], map: "t_event_log_i_publisher_id")
+}
+
+model t_instance {
+  f_id          BigInt @id @default(autoincrement())
+  f_instance_id String @db.VarChar(255)
+  f_applet_id   String @db.VarChar(255)
+  f_path        String @db.VarChar(255)
+  f_state       Int
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
+
+  applet t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
+
+  @@unique([f_instance_id, f_deleted_at], map: "t_instance_ui_instance_id")
+  @@index([f_applet_id], map: "t_instance_i_applet_id")
+  @@index([f_path], map: "t_instance_i_path")
+}
+
+model t_project {
+  f_id         BigInt     @id @default(autoincrement())
+  f_project_id String     @db.VarChar(255)
+  f_account_id String     @db.VarChar(255)
+  f_name       String     @db.VarChar(255)
+  f_version    String     @db.VarChar(255)
+  f_proto      Int        @default(0)
+  f_created_at BigInt     @default(0)
+  f_updated_at BigInt     @default(0)
+  f_deleted_at BigInt     @default(0)
+  applets      t_applet[]
+
+  @@unique([f_project_id])
+  @@unique([f_name, f_version, f_deleted_at], map: "t_project_ui_name_version")
+  @@unique([f_project_id, f_deleted_at], map: "t_project_ui_project_id")
+}
+
+model t_publisher {
+  f_id           BigInt @id @default(autoincrement())
+  f_project_id   String @db.VarChar(255)
+  f_publisher_id String @unique(map: "t_publisher_ui_publisher_id") @db.VarChar(255)
+  f_name         String @db.VarChar(255)
+  f_token        String @default("") @db.VarChar(255)
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
+}

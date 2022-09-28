@@ -6,6 +6,7 @@ import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
 import get from 'lodash/get';
 import set from 'lodash/set';
+import keyBy from 'lodash/keyBy';
 
 export const _ = {
   throttle,
@@ -15,5 +16,6 @@ export const _ = {
   omitBy,
   isNil,
   get,
-  set
+  set,
+  keyBy
 };

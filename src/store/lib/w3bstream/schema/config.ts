@@ -4,13 +4,14 @@ import { JSONSchema7 } from 'json-schema';
 import { StorageState } from '../../../standard/StorageState';
 
 export const schema = {
-  // export const configSchema: JSONSchema7 = {
+  // export const schema: JSONSchema7 = {
   title: 'Setting',
   type: 'object',
   properties: {
-    apiUrl: { type: 'string' },
-    token: { type: 'string' }
-  }
+    apiUrl: { type: 'string', minimum: 3 },
+    token: { type: 'string', minimum: 3 }
+  },
+  required: ['apiUrl', 'token']
 } as const;
 
 type ConfigType = FromSchema<typeof schema>;
@@ -28,7 +29,7 @@ export class W3bstreamConfigState extends JSONSchemaState<ConfigType> {
         }
       },
       reactive: true,
-      value: new StorageState<ConfigType>({ key: 'w3bstream-config', default: { apiUrl: 'http://localhost:8888' } })
+      value: new StorageState<ConfigType>({ key: 'w3bstream-config', default: { apiUrl: 'http://localhost:8888', token: '' } })
     });
   }
   logout() {

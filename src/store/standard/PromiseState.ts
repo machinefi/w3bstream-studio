@@ -6,13 +6,23 @@ import { showNotification } from '@mantine/notifications';
 export class PromiseState<T extends (...args: any[]) => Promise<any>, U = ReturnType<T>> {
   loading = new BooleanState();
   value?: Awaited<U> = null;
+  defaultValue: any = null;
   function: T;
 
   autoAlert = true;
   context: any = undefined;
 
+  // collection usage
+  currentId = '';
+  get current() {
+    return this.value[this.currentId];
+  }
+
   constructor(args: Partial<PromiseState<T, U>> = {}) {
     Object.assign(this, args);
+    if (this.defaultValue) {
+      this.value = this.defaultValue;
+    }
     makeAutoObservable(this);
   }
 

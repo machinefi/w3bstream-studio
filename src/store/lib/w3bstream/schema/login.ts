@@ -36,6 +36,7 @@ export const loginSchema = new JSONSchemaState<SchemaType>({
       data: e.formData
     });
     if (res.data.token) {
+      //@ts-ignore
       rootStore.w3s.config.setData({ token: res.data.token });
       eventBus.emit('user.login');
     }
