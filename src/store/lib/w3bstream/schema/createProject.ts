@@ -41,7 +41,6 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType> {
         if (res.data) {
           await showNotification({ message: 'create project successed' });
         }
-        rootStore.w3s.projects.call();
       },
       value: new JSONValue<SchemaType>({
         name: 'project_01',

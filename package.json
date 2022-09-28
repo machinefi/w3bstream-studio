@@ -14,7 +14,8 @@
     "export": "next build && next export",
     "start": "next start",
     "test": "concurrently \"yarn start \" \"cypress open\"",
-    "test:ci": "cypress run --headless"
+    "test:ci": "cypress run --headless",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@ethersproject/abstract-signer": "^5.6.0",

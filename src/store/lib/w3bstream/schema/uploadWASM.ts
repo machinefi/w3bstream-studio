@@ -70,7 +70,7 @@ export class UploadWASMSChema extends JSONSchemaState<SchemaType> {
         });
         if (res.data) {
           await showNotification({ message: 'create applet successed' });
-          rootStore.w3s.applets.call({});
+          // rootStore.w3s.applets.call({});
         }
         // rootStore.w3s.projects.call();
       },
