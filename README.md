@@ -2,19 +2,19 @@
 
 ### Installation
 
-```
-$ pnpm install
-$ cp .env.tmpl .env
+```bash
+pnpm install
+cp .env.tmpl .env
 ```
 
 ### DEV
 
-```
-$ pnpm dev
+```bash
+pnpm dev
 ```
 
 ### Deploy
 
-```
-$ pnpm build; pnpm start
+```bash
+pnpm build; pnpm start
 ```
