@@ -1,5 +1,7 @@
 # W3bstreawm frontend
 
+Pre require: Please make sure w3bstream is started
+
 ### Installation
 
 ```bash
