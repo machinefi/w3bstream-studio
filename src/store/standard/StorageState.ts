@@ -1,7 +1,8 @@
 import BigNumber from 'bignumber.js';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import { helper } from '@/lib/helper';
 import { JSONSchemaValue } from './JSONSchemaState';
+import { _ } from '@/lib/lodash';
 
 export class StorageState<T> implements JSONSchemaValue {
   key: string;
@@ -17,7 +18,8 @@ export class StorageState<T> implements JSONSchemaValue {
     return this.value;
   }
   set(val) {
-    this.value = { ...this.value, ...val };
+    const newVal = _.merge(this.value, val);
+    this.value = toJS(newVal);
     localStorage.setItem(this.key, JSON.stringify(this.value));
   }
 
