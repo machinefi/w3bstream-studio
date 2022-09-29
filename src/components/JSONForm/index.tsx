@@ -11,7 +11,15 @@ interface Props {
 export const JSONForm = observer(({ children, jsonstate: jsonState }: Props) => {
   if (!jsonState.dynamicData.ready) return <></>;
   return (
-    <Form formData={jsonState.formData} uiSchema={jsonState.uiSchema} schema={jsonState.schema} onChange={jsonState.onChange} onSubmit={jsonState.onSubmit} validator={jsonState.validator}>
+    <Form
+      formData={jsonState.formData}
+      readonly={jsonState.readonly}
+      uiSchema={jsonState.uiSchema}
+      schema={jsonState.schema}
+      onChange={jsonState.onChange}
+      onSubmit={jsonState.onSubmit}
+      validator={jsonState.validator}
+    >
       {children && children}
     </Form>
   );

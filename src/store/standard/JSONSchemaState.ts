@@ -19,7 +19,8 @@ export class JSONSchemaState<T> {
   schema: RJSFSchema;
   uiSchema: UiSchema;
   reactive: boolean;
-  liveValidate: boolean = false;
+  readonly = false;
+  liveValidate = false;
   validator = validator;
 
   get dynamicData() {
@@ -82,7 +83,8 @@ export class JSONValue<T> {
     return this.value;
   }
   set(val) {
-    this.value = { ...this.value, ...val };
+    const newVal = _.merge(this.value, val);
+    this.value = toJS(newVal);
   }
   constructor(args: Partial<T> = {}) {
     Object.assign(this.value, args);

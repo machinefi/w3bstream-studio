@@ -7,6 +7,7 @@ import isNil from 'lodash/isNil';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import keyBy from 'lodash/keyBy';
+import merge from 'lodash/merge';
 
 export const _ = {
   throttle,
@@ -17,5 +18,6 @@ export const _ = {
   isNil,
   get,
   set,
-  keyBy
+  keyBy,
+  merge
 };
