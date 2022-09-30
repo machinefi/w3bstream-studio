@@ -29,9 +29,10 @@ export class W3bstreamConfigState extends JSONSchemaState<ConfigType> {
         }
       },
       reactive: true,
-      value: new StorageState<ConfigType>({ key: 'w3bstream-config', default: { apiUrl: 'http://localhost:8888', token: '' } })
+      value: new StorageState<ConfigType>({ key: 'w3bstream-config', default: { apiUrl: process.env['NEXT_PUBLIC_API_URL'], token: '' } })
     });
   }
+  setToken() {}
   logout() {
     this.setData({
       apiUrl: '',

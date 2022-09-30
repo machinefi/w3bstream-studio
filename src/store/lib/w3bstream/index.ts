@@ -34,7 +34,6 @@ export class W3bStream {
       };
     }
   });
-  // publishEvent = publishEventSchema;
 
   allProjects = new PromiseState({
     defaultValue: [],
@@ -53,31 +52,6 @@ export class W3bStream {
   get curApplet() {
     return this.curProject ? this.curProject.applets[this.curAppletIndex] : null;
   }
-
-  // projects = new PromiseState({
-  //   function: async () => {
-  //     const { data = [] } = await axios.request({
-  //       url: '/srv-applet-mgr/v0/project'
-  //     });
-  //     if (data) {
-  //       eventBus.emit('project.list', data.data);
-  //     }
-  //     return data;
-  //   }
-  // });
-
-  // applets = new PromiseState({
-  //   function: async ({ projectID = this.appletList.formData.projectID }) => {
-  //     const { data = [] } = await axios.request({
-  //       url: `/srv-applet-mgr/v0/applet/${projectID}`
-  //     });
-  //     if (data) {
-  //       eventBus.emit('applet.list', data.data);
-  //     }
-  //     return data;
-  //   }
-  // });
-
   deployApplet = new PromiseState({
     function: async ({ appletID }: { appletID: string }) => {
       const res = await axios.request({
@@ -132,14 +106,12 @@ export class W3bStream {
   }
   initEvent() {
     eventBus.on('user.login', () => {
-      // this.projects.call();
       this.allProjects.call();
     });
   }
 
   initHook() {
     hooks.waitLogin().then(() => {
-      // this.projects.call();
       this.allProjects.call();
     });
   }
