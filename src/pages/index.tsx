@@ -4,6 +4,7 @@ import { useStore } from '../store';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Code } from '@mantine/core';
 import { JSONForm } from '../components/JSONForm/index';
+import { Copy } from '../components/Common/Copy';
 
 const STATUS = ['', 'idle', 'running', 'stop'];
 
@@ -49,15 +50,18 @@ const DEMO = observer(() => {
                       <Box sx={{ color: w3s.curAppletIndex == index ? 'black' : '#999' }} onClick={(e) => (w3s.curAppletIndex = index)}>{`${i.f_name}`}</Box>
                       <Box>({i.instances.length}):</Box>
                       <Box>{i.f_applet_id}</Box>
-                      <Group>
+                      {i.instances.length > 0 ? (
+                        <Group>
+                          <Button color="blue" size="xs" onClick={(e) => w3s.publishEvent.call({ appletID: i.f_applet_id, projectID: i.f_project_id })}>
+                            Send Event
+                          </Button>
+                          <Copy value={`curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${i.f_project_id}/${i.f_applet_id}/start' --header 'publisher: "admin"' --header 'Content-Type: text/plain' --data-raw 'input event'`}></Copy>
+                        </Group>
+                      ) : (
                         <Button disabled={i.instances.length > 0} color="dark" size="xs" onClick={(e) => w3s.deployApplet.call({ appletID: i.f_applet_id })}>
                           Deploy
                         </Button>
-
-                        <Button color="blue" size="xs" onClick={(e) => w3s.publishEvent.call({ appletID: i.f_applet_id, projectID: i.f_project_id })}>
-                          Send Event
-                        </Button>
-                      </Group>
+                      )}
                     </Group>
                   );
                 })}
