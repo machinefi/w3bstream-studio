@@ -76,13 +76,12 @@ export class W3bStream {
   });
 
   publishEvent = new PromiseState({
-    function: async ({ projectID, appletID, event = 'start', data = 'test msg', publisher = 'admin' }: { projectID: string; appletID: string; event?: string; data?: string }) => {
+    function: async ({ projectID, appletID, event = 'start', data = 'test msg', publisher = 'admin' }: { projectID: string; appletID: string; event?: string; data?: string; publisher?: string }) => {
       const res = await axios.request({
         method: 'post',
         url: `/srv-applet-mgr/v0/event/${projectID}/${appletID}/${event}`,
         headers: {
-          publisher: publisher,
-          'Content-Type': 'text/plain'
+          publisher: publisher
         },
         data
       });
