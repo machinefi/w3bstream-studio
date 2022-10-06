@@ -44,7 +44,7 @@ const DEMO = observer(() => {
                 {w3s.allProjects.value.map((i, index) => {
                   return (
                     <Group>
-                      <Box sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999' }} onClick={(e) => (w3s.curProjectIndex = index)}>{`${i.f_name}`}</Box>
+                      <Box sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999', cursor: 'pointer' }} onClick={(e) => (w3s.curProjectIndex = index)}>{`${i.f_name}`}</Box>
                       <Box>({i.applets.length})</Box>
                       <Box>{i.f_project_id}</Box>
                     </Group>
@@ -60,7 +60,7 @@ const DEMO = observer(() => {
                   {w3s.curProject.applets.map((i, index) => {
                     return (
                       <Group>
-                        <Box sx={{ color: w3s.curAppletIndex == index ? 'black' : '#999' }} onClick={(e) => (w3s.curAppletIndex = index)}>{`${i.f_name}`}</Box>
+                        <Box sx={{ color: w3s.curAppletIndex == index ? 'black' : '#999', cursor: 'pointer' }} onClick={(e) => (w3s.curAppletIndex = index)}>{`${i.f_name}`}</Box>
                         <Box>({i.instances.length})</Box>
                         <Box>{i.f_applet_id}</Box>
                         {i.instances.length > 0 ? (

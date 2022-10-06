@@ -81,7 +81,7 @@ export class W3bStream {
         method: 'post',
         url: `srv-applet-mgr/v0/event/${projectID}/${appletID}/${event}`,
         headers: {
-          publisher: ''
+          publisher: 'admin'
         },
         data
       });
