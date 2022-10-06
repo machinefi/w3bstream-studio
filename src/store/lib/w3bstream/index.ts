@@ -58,6 +58,7 @@ export class W3bStream {
         method: 'post',
         url: `/srv-applet-mgr/v0/deploy/applet/${appletID}`
       });
+      eventBus.emit('instance.deploy');
       return res.data;
     }
   });
@@ -68,9 +69,7 @@ export class W3bStream {
         method: 'put',
         url: `/srv-applet-mgr/v0/deploy/${instaceID}/${event}`
       });
-      setTimeout(() => {
-        this.allProjects.call();
-      }, 500);
+      eventBus.emit('instance.handle');
       return res.data;
     }
   });
@@ -85,9 +84,6 @@ export class W3bStream {
         },
         data
       });
-      setTimeout(() => {
-        this.allProjects.call();
-      }, 500);
       return res.data;
     }
   });
@@ -105,9 +101,22 @@ export class W3bStream {
     }, 100);
   }
   initEvent() {
-    eventBus.on('user.login', () => {
-      this.allProjects.call();
-    });
+    eventBus
+      .on('user.login', () => {
+        this.allProjects.call();
+      })
+      .on('project.create', () => {
+        this.allProjects.call();
+      })
+      .on('applet.create', () => {
+        this.allProjects.call();
+      })
+      .on('instance.deploy', () => {
+        this.allProjects.call();
+      })
+      .on('instance.handle', () => {
+        this.allProjects.call();
+      });
   }
 
   initHook() {

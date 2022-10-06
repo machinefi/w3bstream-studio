@@ -26,7 +26,11 @@ interface MessageEvents {
   // 'ScriptTemplateManager.modifyTemplate': () => void;
   'user.login': () => void;
   'project.list': (data: any[]) => void;
+  'project.create': () => void;
   'applet.list': (data: any[]) => void;
+  'applet.create': () => void;
+  'instance.deploy': () => void;
+  'instance.handle': () => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;

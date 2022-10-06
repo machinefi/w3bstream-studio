@@ -7,6 +7,7 @@ import { showNotification } from '@mantine/notifications';
 import { rootStore } from '../../../index';
 import { dataURItoBlob } from '@rjsf/utils';
 import { definitions } from './definitions';
+import { eventBus } from '../../../../lib/event';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -70,7 +71,7 @@ export class UploadWASMSChema extends JSONSchemaState<SchemaType> {
         });
         if (res.data) {
           await showNotification({ message: 'create applet successed' });
-          rootStore.w3s.allProjects.call();
+          eventBus.emit('applet.create');
         }
         // rootStore.w3s.projects.call();
       },

@@ -5,6 +5,7 @@ import { axios } from '../../../../lib/axios';
 import { JSONValue } from '../../../standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
 import { rootStore } from '../../../index';
+import { eventBus } from '../../../../lib/event';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -40,7 +41,7 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType> {
         });
         if (res.data) {
           await showNotification({ message: 'create project successed' });
-          rootStore.w3s.allProjects.call();
+          eventBus.emit('project.create');
         }
       },
       value: new JSONValue<SchemaType>({
