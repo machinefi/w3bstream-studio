@@ -40,6 +40,7 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType> {
         });
         if (res.data) {
           await showNotification({ message: 'create project successed' });
+          rootStore.w3s.allProjects.call();
         }
       },
       value: new JSONValue<SchemaType>({
