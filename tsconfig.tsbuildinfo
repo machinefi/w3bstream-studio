@@ -8311,7 +8311,7 @@
         "affectsGlobalScope": false
       },
       "./src/pages/_app.tsx": {
-        "version": "67a6241e9edda7db68cc641d0d6c637ea09e761b011ef3e6500cdb7b437e6761",
+        "version": "53e11156fc7aa8a6849103ba651dff49a709488aeafb6bb96fa33f92cf21f5d8",
         "signature": "fb4e03e45a4ea017ca60365846e3f5271b1adb0e57c711310105cb66eacd68ff",
         "affectsGlobalScope": false
       },
@@ -27706,19 +27706,7 @@
       "./src/lib/web3-react.ts",
       "./src/pages/404.tsx",
       "./src/pages/500.tsx",
-      [
-        "./src/pages/_app.tsx",
-        [
-          {
-            "file": "./src/pages/_app.tsx",
-            "start": 4130,
-            "length": 10,
-            "code": 2339,
-            "category": 1,
-            "messageText": "Property 'httpStatus' does not exist on type 'never'."
-          }
-        ]
-      ],
+      "./src/pages/_app.tsx",
       "./src/pages/_document.tsx",
       "./src/pages/api/graphql.ts",
       "./src/pages/api/trpc/[trpc].ts",

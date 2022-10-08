@@ -126,6 +126,7 @@ export default withTRPC<AppRouter>({
     if (clientErrors.length) {
       // propagate http first error from API calls
       return {
+        //@ts-ignore
         status: clientErrors[0].data?.httpStatus ?? 500
       };
     }
