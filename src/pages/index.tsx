@@ -17,15 +17,15 @@ const DEMO = observer(() => {
       <Center>
         <Title>Welcome to W3bstream!</Title>
       </Center>
-      <Box sx={{ display: 'flex' }}>
-        {!w3s.isLogin && (
-          <Box m="md">
-            <Box>
-              <JSONForm jsonstate={w3s.login} />
-            </Box>
+      {!w3s.isLogin && (
+        <Center m="md">
+          <Box sx={{ width: '300px' }}>
+            <JSONForm jsonstate={w3s.login} />
           </Box>
-        )}
-        {w3s.isLogin && (
+        </Center>
+      )}
+      {w3s.isLogin && (
+        <Box sx={{ display: 'flex' }}>
           <Box>
             <Box m="md">
               <JSONForm jsonstate={w3s.createProject} />
@@ -34,9 +34,7 @@ const DEMO = observer(() => {
               <JSONForm jsonstate={w3s.uploadWASMScript} />
             </Box>
           </Box>
-        )}
 
-        {w3s.isLogin && (
           <Box ml={30} mt={30} sx={{ minWidth: '400px' }}>
             <Box>Project Management</Box>
             <Box mt="md">
@@ -112,30 +110,8 @@ const DEMO = observer(() => {
               )}
             </Box>
           </Box>
-        )}
-      </Box>
-
-      {/* <Box mt="md">
-        Applets:
-        <pre>
-          {w3s.applets.value?.data.map((i) => {
-            return (
-              <Group>
-                <Box sx={{ width: '100px' }}>{`${i.name}\n`}</Box>
-                <Button color="dark" size="xs" onClick={(e) => w3s.deployApplet.call({ appletID: i.appletID })}>
-                  Deploy
-                </Button>
-                <Button size="xs" mx="xs" onClick={(e) => w3s.publishEvent.call({ projectID: i.projectID, appletID: i.appletID, event: 'start' })}>
-                  Start
-                </Button>
-                <Button color="red" size="xs" onClick={(e) => w3s.publishEvent.call({ projectID: i.projectID, appletID: i.appletID, event: 'stop' })}>
-                  Stop
-                </Button>
-              </Group>
-            );
-          })}
-        </pre>
-      </Box> */}
+        </Box>
+      )}
     </Container>
   );
 });

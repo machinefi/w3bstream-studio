@@ -19,30 +19,38 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-export const loginSchema = new JSONSchemaState<SchemaType>({
-  //@ts-ignore
-  schema,
-  uiSchema: {
-    'ui:submitButtonOptions': {
-      norender: false,
-      submitText: 'Login'
-    }
-  },
-  reactive: true,
-  afterSubmit: async (e) => {
-    const res = await axios.request({
-      method: 'put',
-      url: '/srv-applet-mgr/v0/login',
-      data: e.formData
-    });
-    if (res.data.token) {
+export class LoginSchema extends JSONSchemaState<SchemaType> {
+  constructor(args: Partial<LoginSchema> = {}) {
+    super(args);
+    this.init({
       //@ts-ignore
-      rootStore.w3s.config.setData({ token: res.data.token });
-      eventBus.emit('user.login');
-    }
-  },
-  value: new JSONValue<SchemaType>({
-    username: 'admin',
-    password: ''
-  })
-});
+      schema,
+      uiSchema: {
+        'ui:submitButtonOptions': {
+          norender: false,
+          submitText: 'Login'
+        }
+      },
+      reactive: true,
+      afterSubmit: async (e) => {
+        const res = await axios.request({
+          method: 'put',
+          url: '/srv-applet-mgr/v0/login',
+          data: e.formData
+        });
+        if (res.data.token) {
+          //@ts-ignore
+          rootStore.w3s.config.setData({ token: res.data.token, accountID: res.data.accountID });
+          eventBus.emit('user.login');
+          this.reset({ force: true });
+        }
+      },
+      value: new JSONValue<SchemaType>({
+        default: {
+          username: 'admin',
+          password: ''
+        }
+      })
+    });
+  }
+}

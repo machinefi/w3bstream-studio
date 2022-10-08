@@ -45,8 +45,10 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType> {
         }
       },
       value: new JSONValue<SchemaType>({
-        name: 'project_01',
-        version: '0.0.1'
+        default: {
+          name: 'project_01',
+          version: '0.0.1'
+        }
       })
     });
   }

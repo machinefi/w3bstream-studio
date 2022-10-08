@@ -9,14 +9,15 @@ export const schema = {
   type: 'object',
   properties: {
     apiUrl: { type: 'string', minimum: 3 },
-    token: { type: 'string', minimum: 3 }
+    token: { type: 'string', minimum: 3 },
+    accountID: { type: 'string' }
   },
-  required: ['apiUrl', 'token']
+  required: ['apiUrl', 'token', 'accountID']
 } as const;
 
-type ConfigType = FromSchema<typeof schema>;
+type SchemaType = FromSchema<typeof schema>;
 
-export class W3bstreamConfigState extends JSONSchemaState<ConfigType> {
+export class W3bstreamConfigState extends JSONSchemaState<SchemaType> {
   constructor(args: Partial<W3bstreamConfigState>) {
     super(args);
     this.init({
@@ -29,14 +30,10 @@ export class W3bstreamConfigState extends JSONSchemaState<ConfigType> {
         }
       },
       reactive: true,
-      value: new StorageState<ConfigType>({ key: 'w3bstream-config', default: { apiUrl: process.env['NEXT_PUBLIC_API_URL'], token: '' } })
+      value: new StorageState<SchemaType>({ key: 'w3bstream-config', default: { apiUrl: process.env['NEXT_PUBLIC_API_URL'], token: '', accountID: '' } })
     });
   }
-  setToken() {}
   logout() {
-    this.setData({
-      apiUrl: '',
-      token: ''
-    });
+    this.reset();
   }
 }

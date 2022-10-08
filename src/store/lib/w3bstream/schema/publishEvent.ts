@@ -60,8 +60,10 @@ export const publishEventSchema = new JSONSchemaState<SchemaType>({
     });
   },
   value: new JSONValue<SchemaType>({
-    projectID: '',
-    appletID: '',
-    event: 'start'
+    default: {
+      projectID: '',
+      appletID: '',
+      event: 'start'
+    }
   })
 });

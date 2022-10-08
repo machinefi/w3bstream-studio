@@ -1,7 +1,14 @@
-import { createRouter } from 'server/createRouter';
+import { t } from '../trpc';
+import { z } from 'zod';
 
-export const templateRouter = createRouter().query('health', {
-  async resolve({ ctx }) {
-    return 'ok';
-  }
+export const templateRouter = t.router({
+  hello: t.procedure
+    .input(
+      z.object({
+        text: z.string()
+      })
+    )
+    .query(({ ctx, input }) => {
+      return input.text;
+    })
 });

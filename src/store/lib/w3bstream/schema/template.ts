@@ -39,7 +39,9 @@ export class TemplateSchema extends JSONSchemaState<SchemaType> {
       },
       reactive: true,
       value: new JSONValue<SchemaType>({
-        projectID: ''
+        default: {
+          projectID: ''
+        }
       })
     });
   }

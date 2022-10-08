@@ -3,12 +3,12 @@ import { UiSchema, RJSFSchema } from '@rjsf/utils';
 import { makeAutoObservable, observable, makeObservable, computed, action, reaction, toJS } from 'mobx';
 import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent, FormState, FormProps } from '@rjsf/core';
-import { helper } from '../../lib/helper';
 import { _ } from '../../lib/lodash';
 
 export class JSONSchemaState<T> {
   extraData = new JSONValue();
   value: JSONSchemaValue = new JSONValue();
+
   // formData: T = {} as T;
   get formData() {
     return this.value.get();
@@ -31,7 +31,6 @@ export class JSONSchemaState<T> {
   };
 
   onChange = (e: IChangeEvent<T, any>) => {
-    if (!e.edit) return;
     this.value.set(e.formData);
     if (this.afterChange) {
       this.afterChange(e);
@@ -55,6 +54,14 @@ export class JSONSchemaState<T> {
     Object.assign(this, data);
   }
 
+  reset({ force = false } = {}) {
+    if (force) {
+      this.value.value = this.value.default;
+    } else {
+      this.value.reset();
+    }
+  }
+
   constructor(args: Partial<JSONSchemaState<T>> = {}) {
     Object.assign(this, args);
     if (this.reactive) {
@@ -72,22 +79,36 @@ export class JSONSchemaState<T> {
 }
 
 export interface JSONSchemaValue {
-  value: any;
+  value?: any;
+  default?: any;
   set: (value: any) => void;
   get: () => any;
+  reset: () => any;
 }
 
 export class JSONValue<T> {
-  value: T = {} as T;
+  value?: T = null as T;
+  default?: T = null as T;
+
   get() {
     return this.value;
   }
   set(val) {
-    const newVal = _.merge(this.value, val);
+    console.log(val);
+    const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
+      return srcValue || '';
+    });
     this.value = toJS(newVal);
   }
-  constructor(args: Partial<T> = {}) {
-    Object.assign(this.value, args);
+  reset() {
+    this.set(this.default);
+  }
+  constructor(args: Partial<JSONValue<T>> = {}) {
+    if (!args.value && args.default) {
+      args.value = args.default;
+    }
+    Object.assign(this, args);
+
     makeAutoObservable(this);
   }
 }

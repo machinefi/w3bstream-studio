@@ -10,7 +10,9 @@ export class StorageState<T> implements JSONSchemaValue {
   default: T = null as T;
   constructor(args: Partial<StorageState<T>>) {
     Object.assign(this, args);
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      default: false
+    });
     this.load();
   }
 
@@ -18,9 +20,15 @@ export class StorageState<T> implements JSONSchemaValue {
     return this.value;
   }
   set(val) {
-    const newVal = _.merge(this.value, val);
+    const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
+      return srcValue;
+    });
     this.value = toJS(newVal);
     localStorage.setItem(this.key, JSON.stringify(this.value));
+  }
+
+  reset() {
+    this.set(this.default);
   }
 
   load() {

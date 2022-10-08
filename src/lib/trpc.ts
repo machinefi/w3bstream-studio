@@ -1,9 +1,13 @@
 // pages/index.tsx
-import { createTRPCClient } from '@trpc/client';
-import { AppRouter } from '../server/routers/_app';
+import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
+import type { AppRouter } from '../server/routers/_app';
 import superjson from 'superjson';
 
-export const trpc = createTRPCClient<AppRouter>({
-  url: '/api/trpc',
+export const trpc = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: 'http://localhost:3000/api/trpc'
+    })
+  ],
   transformer: superjson
 });

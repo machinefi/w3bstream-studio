@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import RootStore from '@/store/root';
 import { rootStore } from '../../index';
-import { loginSchema } from './schema/login';
 import { CreateProjectSchema } from './schema/createProject';
 import { PromiseState } from '../../standard/PromiseState';
 import { axios } from '../../../lib/axios';
@@ -13,12 +12,13 @@ import { UploadWASMSChema } from './schema/uploadWASM';
 import { ProjectListSchema } from './schema/projectList';
 import { _ } from '../../../lib/lodash';
 import { trpc } from '../../../lib/trpc';
+import { LoginSchema } from './schema/login';
 
 export class W3bStream {
   rootStore: RootStore;
 
   config = new W3bstreamConfigState({});
-  login = loginSchema;
+  login = new LoginSchema({});
   createProject = new CreateProjectSchema({});
   uploadWASMScript = new UploadWASMSChema({
     getDymaicData: () => {
@@ -38,7 +38,7 @@ export class W3bStream {
   allProjects = new PromiseState({
     defaultValue: [],
     function: async () => {
-      const res = await trpc.query('api.projects');
+      const res = await trpc.api.projects.query({ accountID: this.config.formData.accountID });
       return res;
     }
   });

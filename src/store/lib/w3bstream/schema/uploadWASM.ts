@@ -75,11 +75,13 @@ export class UploadWASMSChema extends JSONSchemaState<SchemaType> {
         }
         // rootStore.w3s.projects.call();
       },
-      //@ts-ignore
       value: new JSONValue<SchemaType>({
-        info: {
-          appletName: 'app_01',
-          projectID: ''
+        //@ts-ignore
+        default: {
+          info: {
+            appletName: 'app_01',
+            projectID: ''
+          }
         }
       })
     });
