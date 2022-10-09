@@ -1,35 +1,17 @@
 import React from 'react';
-import { Flex, Box, Portal, useColorModeValue, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Text, Button, chakra, FlexProps } from '@chakra-ui/react';
+import { Flex, Box, Portal, useColorModeValue, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Text, FlexProps } from '@chakra-ui/react';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Menu, MenuItem } from '@/components/Menu';
 import toast from 'react-hot-toast';
 import copy from 'copy-to-clipboard';
-
-const STATUS = {
-  0: {
-    color: '#000',
-    text: ''
-  },
-  1: {
-    color: 'green',
-    text: 'idle'
-  },
-  2: {
-    color: '#ff9900',
-    text: 'running'
-  },
-  3: {
-    color: 'red',
-    text: 'stop'
-  }
-};
+import { ProjectModal } from './ProjectModal';
 
 interface SideBarProps extends FlexProps {}
 
 const SideBar = observer((props: SideBarProps) => {
-  const { w3s } = useStore();
+  const { w3s, ide } = useStore();
   const bg = useColorModeValue('white', 'dark');
   const borderColor = useColorModeValue('gray.200', 'grey.100');
 
@@ -82,31 +64,16 @@ const SideBar = observer((props: SideBarProps) => {
         </Accordion>
       </ContextMenuTrigger>
 
-      <ContextMenuTrigger id="InstanceContext" holdToDisplay={-1}>
-        <Accordion defaultIndex={[0]} allowToggle>
-          <AccordionItem>
-            <AccordionButton>
-              <Box flex="1" textAlign="left">
-                Instance
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel>
-              {w3s.curApplet?.instances.map((i, index) => {
-                return <InstanceItem instance={i} index={index} />;
-              })}
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      </ContextMenuTrigger>
-
       <Portal>
         <ContextMenu id="ProjectContext">
           <Menu bordered>
             <MenuItem>
               <Box
                 onClick={(e) => {
-                  // ide.addProject.toggleOpen(true);
+                  ide.projectModal = {
+                    show: true,
+                    type: 'add'
+                  };
                 }}
               >
                 Add Project
@@ -127,16 +94,15 @@ const SideBar = observer((props: SideBarProps) => {
             </MenuItem>
           </Menu>
         </ContextMenu>
-
-        {/* <AddProjectModal /> */}
-        {/* <AddAppletModal /> */}
       </Portal>
+      <ProjectModal />
+      {/* <AddAppletModal /> */}
     </Flex>
   );
 });
 
 const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: string; f_project_id: string; applets: any }>; index: number }) => {
-  const { w3s } = useStore();
+  const { w3s, ide } = useStore();
   return (
     <ContextMenuTrigger id={`ProjectItemContext${project.f_project_id}`} holdToDisplay={-1}>
       <Box key={index} sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999', cursor: 'pointer' }} onClick={(e) => (w3s.curProjectIndex = index)}>
@@ -147,7 +113,17 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
       <Portal>
         <ContextMenu id={`ProjectItemContext${project.f_project_id}`}>
           <Menu bordered>
-            <MenuItem onItemSelect={() => {}}>Detail</MenuItem>
+            <MenuItem
+              onItemSelect={() => {
+                w3s.curProjectIndex = index;
+                ide.projectModal = {
+                  show: true,
+                  type: 'detail'
+                };
+              }}
+            >
+              Detail
+            </MenuItem>
           </Menu>
         </ContextMenu>
       </Portal>
@@ -156,10 +132,17 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
 });
 
 const AppletItem = observer(({ applet, index }: { applet: Partial<{ f_name: string; f_project_id: string; f_applet_id: string; instances: any }>; index: number }) => {
-  const { w3s } = useStore();
+  const { w3s, ide } = useStore();
   return (
     <ContextMenuTrigger id={`AppletItemContext${applet.f_applet_id}`} holdToDisplay={-1}>
-      <Box key={index} sx={{ color: w3s.curAppletIndex == index ? 'black' : '#999', cursor: 'pointer' }} onClick={(e) => (w3s.curAppletIndex = index)}>
+      <Box
+        key={index}
+        sx={{ color: w3s.curAppletIndex == index ? 'black' : '#999', cursor: 'pointer' }}
+        onClick={(e) => {
+          w3s.curAppletIndex = index;
+          ide.setTabIndex(2);
+        }}
+      >
         <Text lineHeight={2} fontSize="sm">
           {applet.f_name}
         </Text>
@@ -198,45 +181,5 @@ const AppletItem = observer(({ applet, index }: { applet: Partial<{ f_name: stri
     </ContextMenuTrigger>
   );
 });
-
-const InstanceItem = observer(({ instance, index }: { instance: { f_instance_id: string; f_state: number }; index: number }) => {
-  const { w3s } = useStore();
-  return (
-    <ContextMenuTrigger id={`InstanceItemContext${instance.f_instance_id}`} holdToDisplay={-1}>
-      <Flex key={index} justifyContent="space-between" alignItems="center">
-        <Text lineHeight={2} fontSize="sm" cursor="pointer">
-          {instanceIdFormat(instance.f_instance_id)}
-        </Text>
-        <Text fontSize="sm">Status: <chakra.span color={STATUS[instance.f_state].color}>{STATUS[instance.f_state].text}</chakra.span></Text>
-      </Flex>
-      <Portal>
-        <ContextMenu id={`InstanceItemContext${instance.f_instance_id}`}>
-          <Menu bordered>
-            <MenuItem onItemSelect={(e) => w3s.handleInstance.call({ instaceID: instance.f_instance_id, event: 'START' })}>
-              <Button color="green" w="100%">
-                Start
-              </Button>
-            </MenuItem>
-            <MenuItem onItemSelect={(e) => w3s.handleInstance.call({ instaceID: instance.f_instance_id, event: 'Restart' })}>
-              <Button color="#ff9900" w="100%">
-                Restart
-              </Button>
-            </MenuItem>
-            <MenuItem onItemSelect={(e) => w3s.handleInstance.call({ instaceID: instance.f_instance_id, event: 'STOP' })}>
-              <Button color="red" w="100%">
-                STOP
-              </Button>
-            </MenuItem>
-          </Menu>
-        </ContextMenu>
-      </Portal>
-    </ContextMenuTrigger>
-  );
-});
-
-export const instanceIdFormat = (instanceId: string) => {
-  const len = instanceId.length;
-  return `${instanceId.substring(0, 6)}...${instanceId.substring(len - 5, len)}`;
-};
 
 export default SideBar;

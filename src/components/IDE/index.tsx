@@ -7,6 +7,7 @@ import { hideMenu } from 'react-contextmenu';
 import ToolBar from './ToolBar';
 import SideBar from './SideBar';
 import { JSONForm } from '../JSONForm';
+import Instance from './Instance';
 
 const IDE = observer(() => {
   const {
@@ -23,10 +24,9 @@ const IDE = observer(() => {
           {(tabIndex === 0 || tabIndex === 1 || tabIndex === 2) && <SideBar />}
         </Box>
         <Box ml="370px" mt="80px" w="100%">
-          {/* {ide.showContent === ide.TABS.PROJECT && <ProjectList />}
-          {ide.showContent === ide.TABS.APPLETS && <Applets />}
-          {ide.showContent === ide.TABS.INSTANCE && <Instance />} */}
-          {!w3s.isLogin && (
+          {w3s.isLogin ? (
+            <>{ide.showContent === ide.TABS.INSTANCE && <Instance />}</>
+          ) : (
             <Box sx={{ width: '300px' }}>
               <JSONForm jsonstate={w3s.login} />
             </Box>

@@ -11,10 +11,9 @@ const Profile = observer(() => {
     return (
       <Popover isLazy matchWidth={true}>
         <PopoverTrigger>
-          <Text>accountID: {accountID}</Text>
+          <Button>accountID: {accountID}</Button>
         </PopoverTrigger>
         <PopoverContent bg="white">
-          <PopoverHeader fontWeight="semibold">{accountID}</PopoverHeader>
           <PopoverArrow />
           <PopoverBody>
             <Button

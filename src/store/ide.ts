@@ -2,10 +2,16 @@ import { makeAutoObservable } from 'mobx';
 
 export class IDEStore {
   tabIndex = 0;
+
   TABS = {
     PROJECT: 'Project Management',
     APPLETS: 'Applets',
     INSTANCE: 'Instance'
+  };
+
+  projectModal: { show: boolean; type: '' | 'add' | 'detail' } = {
+    show: false,
+    type: 'add'
   };
 
   constructor() {
@@ -29,5 +35,9 @@ export class IDEStore {
         break;
     }
     return curContent;
+  }
+
+  setTabIndex(v: 0 | 1 | 2) {
+    this.tabIndex = v;
   }
 }

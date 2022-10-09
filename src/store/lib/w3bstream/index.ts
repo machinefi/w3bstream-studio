@@ -107,6 +107,10 @@ export class W3bStream {
       })
       .on('project.create', () => {
         this.allProjects.call();
+        this.rootStore.ide.projectModal = {
+          show: false,
+          type: ''
+        };
       })
       .on('applet.create', () => {
         this.allProjects.call();
