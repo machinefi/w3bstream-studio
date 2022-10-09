@@ -1,7 +1,7 @@
 import React from 'react';
-import { useLocalObservable, observer, Observer } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { JSONSchemaState } from '../../store/standard/JSONSchemaState';
-import Form, { FormState, IChangeEvent, withTheme } from '@rjsf/core';
+import Form from "@rjsf/chakra-ui";
 
 interface Props {
   jsonstate: JSONSchemaState<any>;
