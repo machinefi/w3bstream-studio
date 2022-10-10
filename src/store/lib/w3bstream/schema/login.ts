@@ -48,7 +48,7 @@ export class LoginSchema extends JSONSchemaState<SchemaType> {
       value: new JSONValue<SchemaType>({
         default: {
           username: 'admin',
-          password: ''
+          password: 'iotex.W3B.admin'
         }
       })
     });
