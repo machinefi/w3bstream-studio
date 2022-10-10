@@ -1,18 +1,42 @@
+import { useEffect } from 'react';
 import { Button, Flex, TableContainer, Table, Thead, Tr, Th, Tbody, Td, useDisclosure, Collapse, Badge } from '@chakra-ui/react';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { AddIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { W3bStream } from '@/store/lib/w3bstream';
 import copy from 'copy-to-clipboard';
 import toast from 'react-hot-toast';
 import { AppletModal } from '../SideBar/AppletModal';
+import SimplePagination from '@/components/Common/SimplePagination';
 
 const AppletTable = observer(() => {
-  const {
-    ide,
-    w3s,
-    w3s: { curProject }
-  } = useStore();
+  const { ide, w3s } = useStore();
+  const paginationState = useLocalObservable(() => ({
+    page: 1,
+    limit: 10,
+    total: 0,
+    get offset() {
+      return (this.page - 1) * this.limit;
+    },
+    onPageChange(page: number) {
+      this.page = page;
+    },
+    onSizeChange(limit: number) {
+      this.limit = limit;
+    },
+    setTotal(total: number) {
+      this.total = total;
+    }
+  }));
+
+  const applets = w3s.curProject?.applets || [];
+
+  useEffect(() => {
+    paginationState.setTotal(applets.length);
+  }, [applets]);
+
+  const dataSource = applets.slice(paginationState.offset, paginationState.offset + paginationState.limit);
+
   return (
     <>
       <TableContainer>
@@ -45,11 +69,12 @@ const AppletTable = observer(() => {
             </Tr>
           </Thead>
           <Tbody>
-            {curProject?.applets.map((applet, index) => {
-              return <CollapseTable key={index} applet={applet} w3s={w3s} />;
+            {dataSource.map((applet) => {
+              return <CollapseTable key={applet.f_applet_id} applet={applet} w3s={w3s} />;
             })}
           </Tbody>
         </Table>
+        <SimplePagination total={paginationState.total} limit={paginationState.limit} page={paginationState.page} onPageChange={paginationState.onPageChange} />
       </TableContainer>
       <AppletModal />
     </>
@@ -136,7 +161,7 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
                 </Thead>
                 <Tbody>
                   {applet.instances.map((item) => (
-                    <Tr bg="#F2FAFB">
+                    <Tr bg="#F2FAFB" key={item.f_instance_id}>
                       <Td w="340px">{item.f_instance_id}</Td>
                       <Td w="120px">
                         <Badge colorScheme={STATUS[item.f_state].colorScheme}>{STATUS[item.f_state].text}</Badge>
