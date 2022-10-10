@@ -6236,7 +6236,7 @@
         "affectsGlobalScope": false
       },
       "./src/lib/axios.ts": {
-        "version": "488eacbf25f4ff082352f0c10ede6c0aef96739921bfbeaa62a64f663e3ad0c0",
+        "version": "39d1d88ad2dd99eca44d3c254a691ac94189e67fdc3f785285394d667ef19bcd",
         "signature": "30dab881c5dfb35fbb810b013184fc84913cc3177a2e0929921f59c917d80106",
         "affectsGlobalScope": false
       },

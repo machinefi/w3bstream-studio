@@ -6,11 +6,13 @@ export const axios = Axios.create({});
 
 function checkErr(err) {
   console.error({ err });
-  if ((err.code = 401)) {
+  if (err.code == 401) {
     rootStore.w3s.config.logout();
+  }
+  if (err.response && err.response.data && err.response.data.msg) {
     showNotification({
       color: 'red',
-      message: 'token expired'
+      message: err.response.data.msg
     });
   }
 }
