@@ -24,13 +24,7 @@ const IDE = observer(() => {
           {(tabIndex === 0 || tabIndex === 1 || tabIndex === 2) && <SideBar />}
         </Box>
         <Box ml="370px" mt="80px" w="100%">
-          {w3s.isLogin ? (
-            <>{ide.showContent === ide.TABS.INSTANCE && <Instance />}</>
-          ) : (
-            <Box sx={{ width: '300px' }}>
-              <JSONForm jsonstate={w3s.login} />
-            </Box>
-          )}
+          {ide.showContent === ide.TABS.INSTANCE && <Instance />}
         </Box>
       </Flex>
     </Box>

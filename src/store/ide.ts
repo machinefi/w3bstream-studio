@@ -14,6 +14,11 @@ export class IDEStore {
     type: 'add'
   };
 
+  appletModal: { show: boolean; type: '' | 'add' | 'detail' } = {
+    show: false,
+    type: 'add'
+  };
+
   constructor() {
     makeAutoObservable(this);
   }

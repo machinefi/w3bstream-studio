@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, Button, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverArrow, PopoverBody, Flex, FlexProps } from '@chakra-ui/react';
+import Link from 'next/link';
+import NextRouter from 'next/router';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 
@@ -20,6 +22,7 @@ const Profile = observer(() => {
               w="full"
               onClick={() => {
                 w3s.config.logout();
+                NextRouter.push('/login');
               }}
             >
               Sign out
@@ -30,7 +33,7 @@ const Profile = observer(() => {
     );
   }
 
-  return null;
+  return <Link href="/login">Login</Link>;
 });
 
 const DesktopNav = observer((props: FlexProps) => {

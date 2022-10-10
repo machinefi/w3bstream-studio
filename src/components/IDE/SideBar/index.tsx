@@ -7,6 +7,7 @@ import { Menu, MenuItem } from '@/components/Menu';
 import toast from 'react-hot-toast';
 import copy from 'copy-to-clipboard';
 import { ProjectModal } from './ProjectModal';
+import { AppletModal } from './AppletModal';
 
 interface SideBarProps extends FlexProps {}
 
@@ -86,7 +87,10 @@ const SideBar = observer((props: SideBarProps) => {
             <MenuItem>
               <Box
                 onClick={(e) => {
-                  // ide.addApplet.toggleOpen(true);
+                  ide.appletModal = {
+                    show: true,
+                    type: 'add'
+                  };
                 }}
               >
                 Add Applet
@@ -96,7 +100,7 @@ const SideBar = observer((props: SideBarProps) => {
         </ContextMenu>
       </Portal>
       <ProjectModal />
-      {/* <AddAppletModal /> */}
+      <AppletModal />
     </Flex>
   );
 });
@@ -150,6 +154,17 @@ const AppletItem = observer(({ applet, index }: { applet: Partial<{ f_name: stri
       <Portal>
         <ContextMenu id={`AppletItemContext${applet.f_applet_id}`}>
           <Menu bordered>
+            <MenuItem
+              onItemSelect={() => {
+                w3s.curAppletIndex = index;
+                ide.appletModal = {
+                  show: true,
+                  type: 'detail'
+                };
+              }}
+            >
+              Detail
+            </MenuItem>
             {applet.instances.length > 0 ? (
               <>
                 <MenuItem onItemSelect={(e) => w3s.publishEvent.call({ appletID: applet.f_applet_id, projectID: applet.f_project_id })}>Send Event</MenuItem>
