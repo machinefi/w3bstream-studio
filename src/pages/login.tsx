@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { JSONForm } from '@/components/JSONForm';
 import { useStore } from '../store';
 import { Center } from '@chakra-ui/layout';

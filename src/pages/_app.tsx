@@ -12,13 +12,18 @@ import { theme } from '@/lib/theme';
 import { getLibrary } from '@/lib/web3-react';
 import { GlobalProvider } from '@/components/Global';
 import Header from '@/components/Header';
+import NextRouter from 'next/router';
 import type { AppRouter } from '@/server/routers/_app';
 import type { AppProps } from 'next/app';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { lang } = useStore();
+  const { lang, w3s } = useStore();
   useEffect(() => {
     lang.init();
+
+    if (!w3s.isLogin) {
+      NextRouter.push('/login');
+    }
   }, []);
 
   return useMemo(() => {

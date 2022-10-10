@@ -30,12 +30,12 @@ const ToolBar = (props: ToolBar) => {
           <Tooltip label="Project" placement="right">
             <Image onClick={() => toogleTab(0)} src="/images/icons/home.svg" {...iconStyle} {...isSelect(0)}></Image>
           </Tooltip>
-          <Tooltip label="Document(Comming Soon)" placement="right">
+          {/* <Tooltip label="Document(Comming Soon)" placement="right">
             <Image src="/images/icons/documents.svg" {...iconStyle} {...isSelect(1)}></Image>
           </Tooltip>
           <Tooltip label="Script" placement="right">
             <Image userSelect={'unset'} onClick={() => toogleTab(2)} src="/images/icons/code.svg" {...iconStyle} {...isSelect(2)}></Image>
-          </Tooltip>
+          </Tooltip> */}
         </Flex>
       </Flex>
     </>

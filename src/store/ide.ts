@@ -5,8 +5,6 @@ export class IDEStore {
 
   TABS = {
     PROJECT: 'Project Management',
-    APPLETS: 'Applets',
-    INSTANCE: 'Instance'
   };
 
   projectModal: { show: boolean; type: '' | 'add' | 'detail' } = {
@@ -29,12 +27,6 @@ export class IDEStore {
       case 0:
         curContent = this.TABS.PROJECT;
         break;
-      case 1:
-        curContent = this.TABS.APPLETS;
-        break;
-      case 2:
-        curContent = this.TABS.INSTANCE;
-        break;
       default:
         curContent = this.TABS.PROJECT;
         break;
@@ -42,7 +34,7 @@ export class IDEStore {
     return curContent;
   }
 
-  setTabIndex(v: 0 | 1 | 2) {
+  setTabIndex(v: number) {
     this.tabIndex = v;
   }
 }
