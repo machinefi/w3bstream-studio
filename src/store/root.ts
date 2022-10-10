@@ -4,7 +4,7 @@ import { UserStore } from './user';
 import { TransactionHistoryStore } from './history';
 import { W3bStream } from './lib/w3bstream';
 import { Base } from './base';
-import { IDEStore } from './IDE';
+import { IDEStore } from './ide';
 
 export default class RootStore {
   lang = new LangStore();
