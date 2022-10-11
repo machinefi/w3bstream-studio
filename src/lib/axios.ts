@@ -1,21 +1,18 @@
 import Axios from 'axios';
-import { publicConfig } from '../config/public';
 import { rootStore } from '../store/index';
 import { showNotification } from '@mantine/notifications';
 
 export const axios = Axios.create({});
 
 function checkErr(err) {
-  console.error(err);
-  const data = err.response?.data;
-  if (data?.desc) {
-    if (data?.desc.includes('token')) {
-      rootStore.w3s.config.logout();
-      return;
-    }
+  console.error({ err });
+  if (err.code == 401) {
+    rootStore.w3s.config.logout();
+  }
+  if (err.response && err.response.data && err.response.data.msg) {
     showNotification({
       color: 'red',
-      message: data.desc
+      message: err.response.data.msg
     });
   }
 }
