@@ -34,6 +34,7 @@ export const ProjectModal = observer(() => {
                     <Box>Name: {w3s.curProject.f_name}</Box>
                     <Box>Number of applets: {w3s.curProject.applets.length}</Box>
                     <Box>ID: {w3s.curProject.f_project_id}</Box>
+                    <Box>Version: {w3s.curProject.f_version}</Box>
                   </Stack>
                 )}
               </>

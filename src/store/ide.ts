@@ -4,7 +4,8 @@ export class IDEStore {
   tabIndex = 0;
 
   TABS = {
-    PROJECT: 'Project Management',
+    ALLAPPLET: 'ALLAPPLET',
+    ALLINSTANCES: 'ALLINSTANCES'
   };
 
   projectModal: { show: boolean; type: '' | 'add' | 'detail' } = {
@@ -25,10 +26,13 @@ export class IDEStore {
     let curContent: string = '';
     switch (this.tabIndex) {
       case 0:
-        curContent = this.TABS.PROJECT;
+        curContent = this.TABS.ALLAPPLET;
+        break;
+      case 1:
+        curContent = this.TABS.ALLINSTANCES;
         break;
       default:
-        curContent = this.TABS.PROJECT;
+        curContent = this.TABS.ALLAPPLET;
         break;
     }
     return curContent;

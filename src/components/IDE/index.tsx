@@ -7,6 +7,7 @@ import { hideMenu } from 'react-contextmenu';
 import ToolBar from './ToolBar';
 import SideBar from './SideBar';
 import AppletTable from './AppletTable';
+import AllInstances from './AllInstances';
 
 const IDE = observer(() => {
   const { ide } = useStore();
@@ -19,7 +20,8 @@ const IDE = observer(() => {
           <SideBar />
         </Box>
         <Box ml="370px" mt="80px" w="100%">
-          {ide.showContent === ide.TABS.PROJECT && <AppletTable />}
+          {ide.showContent === ide.TABS.ALLAPPLET && <AppletTable />}
+          {ide.showContent === ide.TABS.ALLINSTANCES && <AllInstances />}
         </Box>
       </Flex>
     </Box>

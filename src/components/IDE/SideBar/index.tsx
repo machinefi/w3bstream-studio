@@ -28,32 +28,40 @@ const SideBar = observer((props: SideBarProps) => {
       borderColor={borderColor}
       {...props}
     >
-      <Box p={2}>
-        <Flex alignItems="center" justifyContent="space-between">
-          <Text>Project Management</Text>
-          <Flex alignItems="center">
-            <Icon
-              as={MdNoteAdd}
-              ml={2}
-              w={5}
-              h={4}
-              cursor="pointer"
-              onClick={(e) => {
-                ide.projectModal = {
-                  show: true,
-                  type: 'add'
-                };
-              }}
-            />
-            <Icon as={MdRefresh} ml={2} w={5} h={5} cursor="pointer" />
-          </Flex>
+      <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
+        <Text>Project Management</Text>
+        <Flex alignItems="center">
+          <Icon
+            as={MdNoteAdd}
+            ml={2}
+            w={5}
+            h={4}
+            cursor="pointer"
+            onClick={(e) => {
+              ide.projectModal = {
+                show: true,
+                type: 'add'
+              };
+            }}
+          />
+          <Icon as={MdRefresh} ml={2} w={5} h={5} cursor="pointer" />
         </Flex>
-        <Stack mt={4}>
-          {w3s.allProjects.value.map((i, index) => {
-            return <ProjectItem project={i} index={index} />;
-          })}
-        </Stack>
-      </Box>
+      </Flex>
+      <Stack mt={2} px={2}>
+        {w3s.allProjects.value.map((i, index) => {
+          return <ProjectItem project={i} index={index} />;
+        })}
+      </Stack>
+      <Flex alignItems="center" justifyContent="space-between" mt={6} p={2} bg="#FAFAFA">
+        <Text
+          cursor="pointer"
+          onClick={() => {
+            ide.tabIndex = 1;
+          }}
+        >
+          Instances
+        </Text>
+      </Flex>
       <ProjectModal />
     </Flex>
   );
@@ -68,6 +76,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
         sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999', cursor: 'pointer' }}
         onClick={(e) => {
           w3s.curProjectIndex = index;
+          ide.tabIndex = 0;
         }}
       >
         <Text lineHeight={2} fontSize="sm">

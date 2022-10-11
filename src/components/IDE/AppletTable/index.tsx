@@ -8,6 +8,7 @@ import copy from 'copy-to-clipboard';
 import toast from 'react-hot-toast';
 import { AppletModal } from '../AppletModal';
 import SimplePagination from '@/components/Common/SimplePagination';
+import { INSTANCE_STATUS } from '../AllInstances';
 
 const AppletTable = observer(() => {
   const { ide, w3s } = useStore();
@@ -81,25 +82,6 @@ const AppletTable = observer(() => {
   );
 });
 
-const STATUS = {
-  0: {
-    colorScheme: 'gray',
-    text: ''
-  },
-  1: {
-    colorScheme: 'gray',
-    text: 'idle'
-  },
-  2: {
-    colorScheme: 'green',
-    text: 'running'
-  },
-  3: {
-    colorScheme: 'red',
-    text: 'stop'
-  }
-};
-
 function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_project_id: string; f_applet_id: string; instances: any[] }>; w3s: W3bStream }) {
   const { isOpen, onToggle } = useDisclosure();
 
@@ -164,7 +146,7 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
                     <Tr bg="#F2FAFB" key={item.f_instance_id}>
                       <Td w="340px">{item.f_instance_id}</Td>
                       <Td w="120px">
-                        <Badge colorScheme={STATUS[item.f_state].colorScheme}>{STATUS[item.f_state].text}</Badge>
+                        <Badge colorScheme={INSTANCE_STATUS[item.f_state].colorScheme}>{INSTANCE_STATUS[item.f_state].text}</Badge>
                       </Td>
                       <Td>
                         <Button colorScheme="green" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' })}>
