@@ -90,6 +90,7 @@ specifiers:
   react-dom: 18.2.0
   react-hot-toast: ^1.0.2
   react-i18next: ^11.16.9
+  react-icons: ^4.4.0
   react-query: ^3.34.19
   react-tiny-virtual-list: ^2.2.0
   reflect-metadata: ^0.1.13
@@ -181,6 +182,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-hot-toast: 1.0.2_biqbaboplfbrettd7655fr4n2y
   react-i18next: 11.17.3_vth7g6zw6lco7clwxal23of2km
+  react-icons: 4.4.0_react@18.2.0
   react-query: 3.39.1_biqbaboplfbrettd7655fr4n2y
   react-tiny-virtual-list: 2.2.0_react@18.2.0
   reflect-metadata: 0.1.13
@@ -9153,6 +9155,14 @@ packages:
       i18next: 21.8.11
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /react-icons/4.4.0_react@18.2.0:
+    resolution: {integrity: sha512-fSbvHeVYo/B5/L4VhB7sBA1i2tS8MkT0Hb9t2H1AVPkwGfVHLJCqyr2Py9dKMxsyM63Eng1GkdZfbWj+Fmv8Rg==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:

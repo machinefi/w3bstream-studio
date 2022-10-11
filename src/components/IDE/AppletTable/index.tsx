@@ -6,7 +6,7 @@ import { AddIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { W3bStream } from '@/store/lib/w3bstream';
 import copy from 'copy-to-clipboard';
 import toast from 'react-hot-toast';
-import { AppletModal } from '../SideBar/AppletModal';
+import { AppletModal } from '../AppletModal';
 import SimplePagination from '@/components/Common/SimplePagination';
 
 const AppletTable = observer(() => {

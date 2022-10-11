@@ -1,10 +1,12 @@
 import React from 'react';
-import { Flex, Box, Portal, useColorModeValue, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Text, FlexProps } from '@chakra-ui/react';
+import { Flex, Box, Portal, useColorModeValue, Stack, Text, FlexProps } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/react';
+import { MdNoteAdd, MdRefresh } from 'react-icons/md';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Menu, MenuItem } from '@/components/Menu';
-import { ProjectModal } from './ProjectModal';
+import { ProjectModal } from '../ProjectModal';
 
 interface SideBarProps extends FlexProps {}
 
@@ -26,42 +28,32 @@ const SideBar = observer((props: SideBarProps) => {
       borderColor={borderColor}
       {...props}
     >
-      <ContextMenuTrigger id="ProjectContext" holdToDisplay={-1}>
-        <Accordion defaultIndex={[0]} allowToggle>
-          <AccordionItem>
-            <AccordionButton>
-              <Box flex="1" textAlign="left">
-                Project Management
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel>
-              {w3s.allProjects.value.map((i, index) => {
-                return <ProjectItem project={i} index={index} />;
-              })}
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      </ContextMenuTrigger>
-
-      <Portal>
-        <ContextMenu id="ProjectContext">
-          <Menu bordered>
-            <MenuItem>
-              <Box
-                onClick={(e) => {
-                  ide.projectModal = {
-                    show: true,
-                    type: 'add'
-                  };
-                }}
-              >
-                Add Project
-              </Box>
-            </MenuItem>
-          </Menu>
-        </ContextMenu>
-      </Portal>
+      <Box p={2}>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Text>Project Management</Text>
+          <Flex alignItems="center">
+            <Icon
+              as={MdNoteAdd}
+              ml={2}
+              w={5}
+              h={4}
+              cursor="pointer"
+              onClick={(e) => {
+                ide.projectModal = {
+                  show: true,
+                  type: 'add'
+                };
+              }}
+            />
+            <Icon as={MdRefresh} ml={2} w={5} h={5} cursor="pointer" />
+          </Flex>
+        </Flex>
+        <Stack mt={4}>
+          {w3s.allProjects.value.map((i, index) => {
+            return <ProjectItem project={i} index={index} />;
+          })}
+        </Stack>
+      </Box>
       <ProjectModal />
     </Flex>
   );

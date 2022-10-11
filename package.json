@@ -95,6 +95,7 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^1.0.2",
     "react-i18next": "^11.16.9",
+    "react-icons": "^4.4.0",
     "react-query": "^3.34.19",
     "react-tiny-virtual-list": "^2.2.0",
     "reflect-metadata": "^0.1.13",
