@@ -25,7 +25,7 @@ const Profile = observer(() => {
                 NextRouter.push('/login');
               }}
             >
-              Sign out
+              Log out
             </Button>
           </PopoverBody>
         </PopoverContent>
