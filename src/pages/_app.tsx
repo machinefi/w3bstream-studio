@@ -1,72 +1,46 @@
-import 'reflect-metadata';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { Web3ReactProvider } from '@web3-react/core';
-import type { AppProps } from 'next/app';
-import superjson from 'superjson';
-
+import { Toaster } from 'react-hot-toast';
+import { withTRPC } from '@trpc/next';
+import { observer } from 'mobx-react-lite';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { loggerLink } from '@trpc/client/links/loggerLink';
-import { withTRPC } from '@trpc/next';
-
+import superjson from 'superjson';
 import { useStore } from '@/store/index';
-import { ETHProvider } from '../components/EthProvider';
-import { getLibrary } from '../lib/web3-react';
-import { WalletSelecter } from '../components/WalletSelecter/index';
-import { AppRouter } from '@/server/routers/_app';
-import { MantineProvider, ColorSchemeProvider, ColorScheme, Global } from '@mantine/core';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { helper } from '../lib/helper';
-import { NotificationsProvider } from '@mantine/notifications';
-import '../i18n/config';
-import { smartGraph } from '../lib/smartgraph/index';
-import { WrongNetworkDialog } from '@/components/NetworkCheckProvider';
-import { TransactionSubmitDialog } from '@/components/HistoryModal';
+import { theme } from '@/lib/theme';
+import { getLibrary } from '@/lib/web3-react';
+import { GlobalProvider } from '@/components/Global';
+import Header from '@/components/Header';
+import NextRouter from 'next/router';
+import type { AppRouter } from '@/server/routers/_app';
+import type { AppProps } from 'next/app';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { lang } = useStore();
-  // const store = useLocalObservable(() => ({
-  //   get colorScheme() {
-  //     return user.theme.value || ('dark' as ColorScheme);
-  //   }
-  // }));
-
+  const { lang, w3s } = useStore();
   useEffect(() => {
     lang.init();
-    // setInterval(() => {
-    //   god.pollingData();
-    // }, 15000);
+
+    if (!w3s.isLogin) {
+      NextRouter.push('/login');
+    }
   }, []);
 
-  // if (!helper.env.isBrower) {
-  //   return <div></div>;
-  // }
-
-  // use useMemo to fix issue https://github.com/vercel/next.js/issues/12010
-  return (
-    <>
-      {/* <ColorSchemeProvider colorScheme={store.colorScheme} toggleColorScheme={user.toggleTheme}> */}
-      <MantineProvider theme={{ fontFamily: 'Oxanium, sans-serif;' }} withGlobalStyles withNormalizeCSS>
-        <Global
-          styles={(theme) => ({
-            body: {}
-          })}
-        />
-        <NotificationsProvider>
-          {/* <Web3ReactProvider getLibrary={getLibrary}> */}
-          {/* <WrongNetworkDialog /> */}
-          {/* <TransactionSubmitDialog /> */}
-          {/* <WalletSelecter /> */}
-          {/* <ETHProvider /> */}
-          {/* <Toaster /> */}
-          {/* <Header /> */}
-          <Component {...pageProps} />
-          {/* </Web3ReactProvider> */}
-        </NotificationsProvider>
-      </MantineProvider>
-      {/* </ColorSchemeProvider> */}
-    </>
-  );
+  return useMemo(() => {
+    return (
+      <ChakraProvider theme={theme}>
+        <GlobalProvider>
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <Toaster />
+            <Header />
+            <Component {...pageProps} />
+          </Web3ReactProvider>
+        </GlobalProvider>
+      </ChakraProvider>
+    );
+  }, [Component, pageProps]);
 }
+
 function getBaseUrl() {
   if (process.browser) {
     return '';

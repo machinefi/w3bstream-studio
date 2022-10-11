@@ -13,6 +13,7 @@ import { ProjectListSchema } from './schema/projectList';
 import { _ } from '../../../lib/lodash';
 import { trpc } from '../../../lib/trpc';
 import { LoginSchema } from './schema/login';
+import NextRouter from 'next/router';
 
 export class W3bStream {
   rootStore: RootStore;
@@ -104,12 +105,21 @@ export class W3bStream {
     eventBus
       .on('user.login', () => {
         this.allProjects.call();
+        NextRouter.push('/');
       })
       .on('project.create', () => {
         this.allProjects.call();
+        this.rootStore.ide.projectModal = {
+          show: false,
+          type: ''
+        };
       })
       .on('applet.create', () => {
         this.allProjects.call();
+        this.rootStore.ide.appletModal = {
+          show: false,
+          type: ''
+        };
       })
       .on('instance.deploy', () => {
         this.allProjects.call();
