@@ -29,10 +29,10 @@ const ToolBar = (props: ToolBar) => {
             <Image
               src="/images/icons/home.svg"
               onClick={() => {
-                ide.showContent = 'ALLAPPLET';
+                ide.showContent = 'CURRENT_APPLETS';
               }}
               {...iconStyle}
-              {...isSelect('ALLAPPLET')}
+              {...isSelect('CURRENT_APPLETS')}
             ></Image>
           </Tooltip>
           {/* <Tooltip label="Document(Comming Soon)" placement="right">
