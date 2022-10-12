@@ -3,20 +3,28 @@ import { Modal, ModalOverlay, ModalContent, ModalBody, Box, Stack, Text } from '
 import { useStore } from '@/store/index';
 import { observer } from 'mobx-react-lite';
 import { JSONForm } from '@/components/JSONForm';
+import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaModalState } from '../../../store/standard/JSONSchemaState';
 
-export const AppletModal = observer(() => {
-  const { ide, w3s } = useStore();
+interface Props {
+  jsonstate: JSONSchemaState<any, { modal: JSONSchemaModalState }>;
+  children?: any;
+}
 
-  const { show, type } = ide.appletModal;
+export const AppletModal = observer((props: Props) => {
+  const { w3s } = useStore();
+  const { jsonstate } = props;
 
   return (
     <Modal
-      isOpen={show}
+      isOpen={jsonstate.extraData.modal.show}
       onClose={() => {
-        ide.appletModal = {
-          show: false,
-          type: ''
-        };
+        jsonstate.setExtraData({
+          modal: {
+            show: false,
+            type: 'add'
+          }
+        });
       }}
       size="2xl"
     >
@@ -24,11 +32,13 @@ export const AppletModal = observer(() => {
       <ModalContent>
         <ModalBody>
           <Box mt="2xl">
-            {type === 'add' ? (
-              <JSONForm jsonstate={w3s.uploadWASMScript} />
+            {jsonstate.extraData.modal.type === 'add' ? (
+              <JSONForm jsonstate={jsonstate} />
             ) : (
               <>
-                <Text fontWeight={600} fontSize="2xl">Detail</Text>
+                <Text fontWeight={600} fontSize="2xl">
+                  Detail
+                </Text>
                 {w3s.curApplet && (
                   <Stack my={4}>
                     <Box>Name: {w3s.curApplet.f_name}</Box>

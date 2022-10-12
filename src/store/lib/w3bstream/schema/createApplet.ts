@@ -2,7 +2,7 @@ import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { JSONSchema7 } from 'json-schema';
 import { axios } from '../../../../lib/axios';
-import { JSONValue } from '../../../standard/JSONSchemaState';
+import { JSONValue, JSONSchemaModalState } from '../../../standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
 import { rootStore } from '../../../index';
 import { dataURItoBlob } from '@rjsf/utils';
@@ -42,12 +42,15 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-export class UploadWASMSChema extends JSONSchemaState<SchemaType> {
-  constructor(args: Partial<UploadWASMSChema> = {}) {
+type ExtraDataType = {
+  modal: JSONSchemaModalState;
+};
+
+export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+  constructor(args: Partial<CreateAppletSchema> = {}) {
     super(args);
     this.init({
       //@ts-ignore
-
       schema,
       uiSchema: {
         'ui:submitButtonOptions': {
@@ -72,6 +75,7 @@ export class UploadWASMSChema extends JSONSchemaState<SchemaType> {
         if (res.data) {
           await showNotification({ message: 'create applet successed' });
           eventBus.emit('applet.create');
+          this.reset();
         }
         // rootStore.w3s.projects.call();
       },
@@ -82,6 +86,12 @@ export class UploadWASMSChema extends JSONSchemaState<SchemaType> {
             appletName: 'app_01',
             projectID: ''
           }
+        }
+      }),
+      extraValue: new JSONValue<ExtraDataType>({
+        //@ts-ignore
+        default: {
+          modal: { show: false, type: 'add' }
         }
       })
     });

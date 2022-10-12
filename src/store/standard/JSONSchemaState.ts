@@ -5,9 +5,16 @@ import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent, FormState, FormProps } from '@rjsf/core';
 import { _ } from '../../lib/lodash';
 
-export class JSONSchemaState<T> {
-  extraData = new JSONValue();
+export class JSONSchemaState<T, V = any> {
+  extraValue: JSONSchemaValue = new JSONValue();
   value: JSONSchemaValue = new JSONValue();
+
+  get extraData() {
+    return this.extraValue.get();
+  }
+  set extraData(value: V) {
+    this.extraValue.set(value);
+  }
 
   // formData: T = {} as T;
   get formData() {
@@ -47,10 +54,13 @@ export class JSONSchemaState<T> {
   setData(data: T) {
     this.value.set(data);
   }
+  setExtraData(data: V) {
+    this.extraValue.set(data);
+  }
   setKV(key, value) {
     _.set(this, key, value);
   }
-  init(data: Partial<JSONSchemaState<T>>) {
+  init(data: Partial<JSONSchemaState<T, V>>) {
     Object.assign(this, data);
   }
 
@@ -62,7 +72,7 @@ export class JSONSchemaState<T> {
     }
   }
 
-  constructor(args: Partial<JSONSchemaState<T>> = {}) {
+  constructor(args: Partial<JSONSchemaState<T, V>> = {}) {
     Object.assign(this, args);
     if (this.reactive) {
       //@ts-ignore
@@ -93,8 +103,7 @@ export class JSONValue<T> {
   get() {
     return this.value;
   }
-  set(val) {
-    console.log(val);
+  set(val: T) {
     const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
       return srcValue || '';
     });
@@ -111,4 +120,9 @@ export class JSONValue<T> {
 
     makeAutoObservable(this);
   }
+}
+
+export interface JSONSchemaModalState {
+  show: boolean;
+  type: '' | 'add' | 'detail';
 }

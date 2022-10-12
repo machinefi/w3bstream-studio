@@ -8,7 +8,7 @@ import { hooks } from '../../../lib/hooks';
 import { eventBus } from '../../../lib/event';
 import { publishEventSchema } from './schema/publishEvent';
 import { W3bstreamConfigState } from './schema/config';
-import { UploadWASMSChema } from './schema/uploadWASM';
+import { CreateAppletSchema } from './schema/createApplet';
 import { ProjectListSchema } from './schema/projectList';
 import { _ } from '../../../lib/lodash';
 import { trpc } from '../../../lib/trpc';
@@ -21,7 +21,7 @@ export class W3bStream {
   config = new W3bstreamConfigState({});
   login = new LoginSchema({});
   createProject = new CreateProjectSchema({});
-  uploadWASMScript = new UploadWASMSChema({
+  createApplet = new CreateAppletSchema({
     getDymaicData: () => {
       return {
         ready: this.allProjects.value.length > 0
@@ -45,7 +45,6 @@ export class W3bStream {
         const instances = [];
         res.forEach((p) => {
           p.applets.forEach((a) => {
-            applets.push(a);
             a.instances.forEach((i) => {
               instances.push({
                 project_id: p.f_project_id,
@@ -55,6 +54,7 @@ export class W3bStream {
                 ...i
               });
             });
+            applets.push(a);
           });
         });
         this.allApplets = applets;
@@ -140,10 +140,14 @@ export class W3bStream {
       })
       .on('applet.create', () => {
         this.allProjects.call();
-        this.rootStore.ide.appletModal = {
-          show: false,
-          type: ''
-        };
+        // this.rootStore.ide.appletModal = {
+        //   show: false,
+        //   type: ''
+        // };
+        // this.createApplet.setExtraData({
+        //   show: false,
+        //   type: 'add'
+        // });
       })
       .on('instance.deploy', () => {
         this.allProjects.call();

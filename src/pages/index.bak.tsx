@@ -15,7 +15,7 @@ const DEMO = observer(() => {
     <Container>
       <Box sx={{ display: 'flex' }}>
         <Box>
-          {[w3s.config, w3s.login, w3s.createProject, w3s.uploadWASMScript].map((i) => {
+          {[w3s.config, w3s.login, w3s.createProject, w3s.createApplet].map((i) => {
             return (
               <Box key={i.schema.title} mt="xl">
                 <JSONForm jsonstate={i} />

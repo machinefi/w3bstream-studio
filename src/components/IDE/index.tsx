@@ -8,9 +8,10 @@ import ToolBar from './ToolBar';
 import SideBar from './SideBar';
 import AppletTable from './AppletTable';
 import AllInstances from './AllInstances';
+import { AppletModal } from './AppletModal/index';
 
 const IDE = observer(() => {
-  const { ide } = useStore();
+  const { ide, w3s } = useStore();
 
   return (
     <Box overflow="hidden">
@@ -24,6 +25,7 @@ const IDE = observer(() => {
           {ide.showContent === 'ALL_INSTANCES' && <AllInstances />}
         </Box>
       </Flex>
+      <AppletModal jsonstate={w3s.createApplet} />
     </Box>
   );
 });

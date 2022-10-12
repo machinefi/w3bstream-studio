@@ -3607,8 +3607,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "f479144e71c25200c5873022d7c2ae4afd339cf8c57a745dfa232a3b9bf5ced4",
-        "signature": "69d257a2b70273d56677b20e40acbbe1ce4dff728792ab6805ab468fbcb9f57b",
+        "version": "5bd4207a43fa95321dfec2e81de5425e10b3119f8fb40770ba34b8557a80c8b4",
+        "signature": "de15527885854d7fe9a2d82f963cf13d5e7084ccb059ccec42d5ef19f1221a9d",
         "affectsGlobalScope": false
       },
       "./src/store/standard/storagestate.ts": {
@@ -4637,7 +4637,7 @@
       },
       "./src/store/user.tsx": {
         "version": "a95e079f7a208bf99285c7497801500cf4ce80462f3ae5eccb79e82483af42a4",
-        "signature": "7258bbaf9a409d25c58bf79ea9b68a106b5af1e4e9d2901e907b3e5efaeb7162",
+        "signature": "d31ddf5bbea12204392eeaf11c3bfd6370fb34740d1401875c5c9de49bec8576",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/ts-algebra@1.1.1/node_modules/ts-algebra/lib/meta-types/never.d.ts": {
@@ -6257,7 +6257,7 @@
       },
       "./src/store/lib/w3bstream/schema/publishevent.ts": {
         "version": "5d5820e331f174f367ee4163020eaa02913a5fcb2615de43c039446941547f08",
-        "signature": "35c1acb9a1a0263e6ee3316dea267a011f9c2fda2220e23c97397387ab44db86",
+        "signature": "158138be8cd201f5004c485e814305cb2c1bbfce678050e2ef40194f1a3fbc94",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/config.ts": {
@@ -6265,9 +6265,9 @@
         "signature": "a704c28ac940907d6b4c96e831649dd1ea8c2e8fd716f322c2ec7fef75b22edb",
         "affectsGlobalScope": false
       },
-      "./src/store/lib/w3bstream/schema/uploadwasm.ts": {
-        "version": "518d817bccf4061662551c5b1d0d1718168b3d6e0d3cc0818cff5b6299a2f948",
-        "signature": "8fd43ef5f28c3a9d37e510ffd9e70d12e4d35daf2e6fb65c6df36f786a08f097",
+      "./src/store/lib/w3bstream/schema/createapplet.ts": {
+        "version": "117878ce14d39a422e7ad55d7704af1484c8d2905214eb8a88f2adb18d0ae6b0",
+        "signature": "d6a6fcbccef292d5113646379eae6588bbc38599f5a9db6ad72a286916ca66b8",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/projectlist.ts": {
@@ -7021,8 +7021,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "24db7e424d16b7559d34830c4732a2add8e170d1fcb5298d30609349e1791f7d",
-        "signature": "989977e1529e347802c6a5929e0257b5ef9d0a5ae37021cccadcf5a81111e89a",
+        "version": "c80aac1c9c0dfcd506cf8598ad19554907a778bcf6c0bedd6c5793314620329b",
+        "signature": "c84df57aa28b065d234a5614f3d14ec23ba071ab956f7d9cfb45c029f02a744f",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@chakra-ui+color-mode@2.0.4_react@18.2.0/node_modules/@chakra-ui/color-mode/dist/declarations/src/color-mode.utils.d.ts": {
@@ -9271,8 +9271,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/ide.ts": {
-        "version": "02b608e2b83e3f9b157501c817aee8a3a40477a2343d427e61c538dcdd91ef33",
-        "signature": "eee23d42441d83984fefbbb2c585a86cf07bc0c3fd45fd0d56b83799afee2808",
+        "version": "561e8f1eb06fd1ed13a7f943f33b0887fd26068803a1a9c66dc24c82700a069a",
+        "signature": "e16abfc31daf3d9ce1aba432b534b7b1adea75284eb8eb92826b8f7149458450",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -9526,7 +9526,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/toolbar/index.tsx": {
-        "version": "c718eabbf16661c10002e300730836a9709cdd5b036a114157f12d6f49c56484",
+        "version": "a65a2669aa9454b9b6cfc163215a3f97df0cbee21509b93015719e640545da4f",
         "signature": "0c4a283d2cfe8a37165000659f2d9adec6db97665a4c74bdf6cab418800f3c7a",
         "affectsGlobalScope": false
       },
@@ -9601,7 +9601,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "edcf3bf2b86c5353e047a40cbf311c75545b14faea3945e1792197d7d1df7bc3",
+        "version": "855940d0ebaef0bb091464a312130f1421f0477c4a1e22d160858dec86581047",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
@@ -9611,8 +9611,8 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/appletmodal/index.tsx": {
-        "version": "ed499741487a1f541e6d0520e0936eca2576dadd5f4d726e21afe2912939ebc1",
-        "signature": "1a235598e609666e383060fe5a1651667eebc3b6ebce43d5783ff864ca36808c",
+        "version": "38aa76e4c4d16f5b6796cd5af74c4698c0b3b67a2a0f74b05950a40a2c968c86",
+        "signature": "0d04432a6e3200e74256f35e9a40ae5578e7254dcd0e86f9b828b6d707490dad",
         "affectsGlobalScope": false
       },
       "./src/components/ide/allinstances/index.tsx": {
@@ -9621,12 +9621,12 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/applettable/index.tsx": {
-        "version": "16ad40d4a04cbc55b9eb1a116ecb080a083a779ee888113095304bec06b537b9",
+        "version": "d1c3ed146278452a52302f3f20cbcc0b23e7127a7a0ac931cfd0c08844128346",
         "signature": "546a76a4f48d356471d323104659cbe0341b8ade72ae5717ae04aaa217c79b5e",
         "affectsGlobalScope": false
       },
       "./src/components/ide/index.tsx": {
-        "version": "41a8a0a070456014b9c68e62526e128701e58875101b62a76f10365205598bf1",
+        "version": "4110e6b722d614ccd2ac270088ffdd01306a2cf198f765a13af8ed226c52109e",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
         "affectsGlobalScope": false
       },
@@ -10741,7 +10741,7 @@
         "affectsGlobalScope": false
       },
       "./src/pages/index.bak.tsx": {
-        "version": "7e1e1ab7109f7a436e1b5b9162f62996e47f52b81f22eda68d14c88263ef1611",
+        "version": "5b0480b1cae00a8b70772fafab809a4282532abc884f7ca7731b6ee7860bd4ca",
         "signature": "e38f9ab0473854db96582724e79953b1cad8f900bf525f2b6f7fc976313a58e5",
         "affectsGlobalScope": false
       },
@@ -11450,8 +11450,13 @@
         "signature": "4b236f1e891b56be8b9cc4fd49290e262bb2de78f8972f2908811a1bf33dcd38",
         "affectsGlobalScope": false
       },
-      "./src/store/lib/w3bstream/schema/template.ts": {
-        "version": "1011f17c5434c485fc603e848ed5249d287215248c9df7c178a0636239d67bcb",
+      "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts": {
+        "version": "b1f280d03107facd9ac6e2e5e24a949693475dd395cced06b45bc2bd416293c4",
+        "signature": "2a22c91de085d4385c52ca756cb1d14be58fe2bdc7eda759dbbac219a78c5536",
+        "affectsGlobalScope": false
+      },
+      "./src/store/lib/w3bstream/schema/teamplates/template.ts": {
+        "version": "71b3b099e63c4f824faa60f79260caeb62a30a8e6b4c4e62f0febb81f795463b",
         "signature": "e337b12eec01715ec4d4f1794861c915761c2a6286125ddf2f94a1254ccdb512",
         "affectsGlobalScope": false
       },
@@ -21403,7 +21408,8 @@
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
         "./src/components/jsonform/index.tsx",
-        "./src/store/index.ts"
+        "./src/store/index.ts",
+        "./src/store/standard/jsonschemastate.ts"
       ],
       "./src/components/ide/applettable/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
@@ -21425,6 +21431,7 @@
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
         "./node_modules/.pnpm/react-contextmenu@2.14.0_v2m5e27vhdewzwhryxwfaorcca/node_modules/react-contextmenu/src/index.d.ts",
         "./src/components/ide/allinstances/index.tsx",
+        "./src/components/ide/appletmodal/index.tsx",
         "./src/components/ide/applettable/index.tsx",
         "./src/components/ide/sidebar/index.tsx",
         "./src/components/ide/toolbar/index.tsx",
@@ -21805,11 +21812,11 @@
         "./src/lib/trpc.ts",
         "./src/store/index.ts",
         "./src/store/lib/w3bstream/schema/config.ts",
+        "./src/store/lib/w3bstream/schema/createapplet.ts",
         "./src/store/lib/w3bstream/schema/createproject.ts",
         "./src/store/lib/w3bstream/schema/login.ts",
         "./src/store/lib/w3bstream/schema/projectlist.ts",
         "./src/store/lib/w3bstream/schema/publishevent.ts",
-        "./src/store/lib/w3bstream/schema/uploadwasm.ts",
         "./src/store/root.ts",
         "./src/store/standard/promisestate.ts"
       ],
@@ -21818,6 +21825,17 @@
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/store/standard/jsonschemastate.ts",
         "./src/store/standard/storagestate.ts"
+      ],
+      "./src/store/lib/w3bstream/schema/createapplet.ts": [
+        "./node_modules/.pnpm/@mantine+notifications@4.2.11_hwkwxxnle3jso5fw4rzinaggj4/node_modules/@mantine/notifications/lib/index.d.ts",
+        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
+        "./node_modules/.pnpm/@types+json-schema@7.0.11/node_modules/@types/json-schema/index.d.ts",
+        "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
+        "./src/lib/axios.ts",
+        "./src/lib/event.ts",
+        "./src/store/index.ts",
+        "./src/store/lib/w3bstream/schema/definitions.ts",
+        "./src/store/standard/jsonschemastate.ts"
       ],
       "./src/store/lib/w3bstream/schema/createproject.ts": [
         "./node_modules/.pnpm/@mantine+notifications@4.2.11_hwkwxxnle3jso5fw4rzinaggj4/node_modules/@mantine/notifications/lib/index.d.ts",
@@ -21851,19 +21869,13 @@
         "./src/store/lib/w3bstream/schema/definitions.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
-      "./src/store/lib/w3bstream/schema/template.ts": [
+      "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/store/lib/w3bstream/schema/definitions.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
-      "./src/store/lib/w3bstream/schema/uploadwasm.ts": [
-        "./node_modules/.pnpm/@mantine+notifications@4.2.11_hwkwxxnle3jso5fw4rzinaggj4/node_modules/@mantine/notifications/lib/index.d.ts",
-        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
-        "./node_modules/.pnpm/@types+json-schema@7.0.11/node_modules/@types/json-schema/index.d.ts",
+      "./src/store/lib/w3bstream/schema/teamplates/template.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
-        "./src/lib/axios.ts",
-        "./src/lib/event.ts",
-        "./src/store/index.ts",
         "./src/store/lib/w3bstream/schema/definitions.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
@@ -31730,6 +31742,9 @@
       "./src/components/header/desktopnav.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts"
       ],
+      "./src/components/ide/appletmodal/index.tsx": [
+        "./src/store/standard/jsonschemastate.ts"
+      ],
       "./src/components/ide/sidebar/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts"
       ],
@@ -31900,14 +31915,18 @@
       ],
       "./src/store/lib/w3bstream/index.ts": [
         "./src/store/lib/w3bstream/schema/config.ts",
+        "./src/store/lib/w3bstream/schema/createapplet.ts",
         "./src/store/lib/w3bstream/schema/createproject.ts",
         "./src/store/lib/w3bstream/schema/login.ts",
         "./src/store/lib/w3bstream/schema/projectlist.ts",
-        "./src/store/lib/w3bstream/schema/uploadwasm.ts",
         "./src/store/root.ts",
         "./src/store/standard/promisestate.ts"
       ],
       "./src/store/lib/w3bstream/schema/config.ts": [
+        "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
+      "./src/store/lib/w3bstream/schema/createapplet.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
@@ -31926,11 +31945,11 @@
       "./src/store/lib/w3bstream/schema/publishevent.ts": [
         "./src/store/standard/jsonschemastate.ts"
       ],
-      "./src/store/lib/w3bstream/schema/template.ts": [
+      "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
-      "./src/store/lib/w3bstream/schema/uploadwasm.ts": [
+      "./src/store/lib/w3bstream/schema/teamplates/template.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
@@ -31950,8 +31969,8 @@
         "./node_modules/.pnpm/bignumber.js@9.0.2/node_modules/bignumber.js/bignumber.d.ts"
       ],
       "./src/store/standard/jsonschemastate.ts": [
-        "./node_modules/.pnpm/@rjsf+core@5.0.0-beta.9_qyn2bqda6csoagge3hyysb7ab4/node_modules/@rjsf/core/dist/index.d.ts",
-        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@17.0.2/node_modules/@rjsf/utils/dist/index.d.ts"
+        "./node_modules/.pnpm/@rjsf+core@5.0.0-beta.9_xxggowvcxghin6obwjaqsepeeq/node_modules/@rjsf/core/dist/index.d.ts",
+        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts"
       ],
       "./src/store/standard/mappingstate.ts": [
         "./src/store/standard/storagestate.ts"
@@ -34261,13 +34280,14 @@
       "./src/store/lib/networkstate.ts",
       "./src/store/lib/w3bstream/index.ts",
       "./src/store/lib/w3bstream/schema/config.ts",
+      "./src/store/lib/w3bstream/schema/createapplet.ts",
       "./src/store/lib/w3bstream/schema/createproject.ts",
       "./src/store/lib/w3bstream/schema/definitions.ts",
       "./src/store/lib/w3bstream/schema/login.ts",
       "./src/store/lib/w3bstream/schema/projectlist.ts",
       "./src/store/lib/w3bstream/schema/publishevent.ts",
-      "./src/store/lib/w3bstream/schema/template.ts",
-      "./src/store/lib/w3bstream/schema/uploadwasm.ts",
+      "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts",
+      "./src/store/lib/w3bstream/schema/teamplates/template.ts",
       "./src/store/root.ts",
       "./src/store/standard/base.ts",
       "./src/store/standard/bignumberinputstate.ts",
@@ -46075,6 +46095,10 @@
         1
       ],
       [
+        "./src/store/lib/w3bstream/schema/createapplet.ts",
+        1
+      ],
+      [
         "./src/store/lib/w3bstream/schema/createproject.ts",
         1
       ],
@@ -46092,6 +46116,22 @@
       ],
       [
         "./src/store/lib/w3bstream/schema/publishevent.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/schema/teamplate-dialog.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/schema/teamplates/teamplate-dialog.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/schema/teamplates/template.ts",
         1
       ],
       [

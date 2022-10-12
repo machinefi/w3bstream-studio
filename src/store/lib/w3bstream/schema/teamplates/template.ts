@@ -1,7 +1,7 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { JSONValue } from '../../../standard/JSONSchemaState';
-import { definitions } from './definitions';
+import { JSONValue } from '../../../../standard/JSONSchemaState';
+import { definitions } from '../definitions';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {

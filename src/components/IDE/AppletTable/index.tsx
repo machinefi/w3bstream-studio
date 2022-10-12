@@ -51,10 +51,12 @@ const AppletTable = observer(() => {
             size="xs"
             borderRadius="base"
             onClick={(e) => {
-              ide.appletModal = {
-                show: true,
-                type: 'add'
-              };
+              w3s.createApplet.setExtraData({
+                modal: {
+                  show: true,
+                  type: 'add'
+                }
+              });
             }}
           >
             Add Applet
@@ -77,7 +79,6 @@ const AppletTable = observer(() => {
         </Table>
         <SimplePagination total={paginationState.total} limit={paginationState.limit} page={paginationState.page} onPageChange={paginationState.onPageChange} />
       </TableContainer>
-      <AppletModal />
     </>
   );
 });
