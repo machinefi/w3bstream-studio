@@ -5,14 +5,14 @@ import { showNotification } from '@mantine/notifications';
 export const axios = Axios.create({});
 
 function checkErr(err) {
-  console.error({ err });
-  if (err.code == 401) {
+  if (err.response.status == 401) {
     rootStore.w3s.config.logout();
   }
-  if (err.response && err.response.data && err.response.data.msg) {
+  if (err.response && err.response.data) {
+    console.error(err.response.data.desc);
     showNotification({
       color: 'red',
-      message: err.response.data.msg
+      message: err.response.data.desc || err.response.data.msg || err.response.data.key
     });
   }
 }

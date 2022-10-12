@@ -15,6 +15,7 @@ import Header from '@/components/Header';
 import NextRouter from 'next/router';
 import type { AppRouter } from '@/server/routers/_app';
 import type { AppProps } from 'next/app';
+import { NotificationsProvider } from '@mantine/notifications';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { lang, w3s } = useStore();
@@ -30,11 +31,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
       <ChakraProvider theme={theme}>
         <GlobalProvider>
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <Toaster />
-            <Header />
-            <Component {...pageProps} />
-          </Web3ReactProvider>
+          <NotificationsProvider>
+            <Web3ReactProvider getLibrary={getLibrary}>
+              <Toaster />
+              <Header />
+              <Component {...pageProps} />
+            </Web3ReactProvider>
+          </NotificationsProvider>
         </GlobalProvider>
       </ChakraProvider>
     );

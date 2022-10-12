@@ -4637,7 +4637,7 @@
       },
       "./src/store/user.tsx": {
         "version": "a95e079f7a208bf99285c7497801500cf4ce80462f3ae5eccb79e82483af42a4",
-        "signature": "3e9bd9d13db869b677c4a0950a21aa32040b5285e69a105a52065fdc64a0a54d",
+        "signature": "7258bbaf9a409d25c58bf79ea9b68a106b5af1e4e9d2901e907b3e5efaeb7162",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/ts-algebra@1.1.1/node_modules/ts-algebra/lib/meta-types/never.d.ts": {
@@ -6236,7 +6236,7 @@
         "affectsGlobalScope": false
       },
       "./src/lib/axios.ts": {
-        "version": "39d1d88ad2dd99eca44d3c254a691ac94189e67fdc3f785285394d667ef19bcd",
+        "version": "ef9cfa1b1e00a3ac35adb1a8157cb55097f00f35f184380b40038b32bce497c3",
         "signature": "30dab881c5dfb35fbb810b013184fc84913cc3177a2e0929921f59c917d80106",
         "affectsGlobalScope": false
       },
@@ -7021,8 +7021,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "d938b6a9b9ed4d2ea55bd9a20411aef92d823e6819953aeb985b4682e5d8b2fc",
-        "signature": "dd725aad86af42d4659dea8afef07bbce9c897fa0495e7eacb19c98d6e241770",
+        "version": "24db7e424d16b7559d34830c4732a2add8e170d1fcb5298d30609349e1791f7d",
+        "signature": "989977e1529e347802c6a5929e0257b5ef9d0a5ae37021cccadcf5a81111e89a",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@chakra-ui+color-mode@2.0.4_react@18.2.0/node_modules/@chakra-ui/color-mode/dist/declarations/src/color-mode.utils.d.ts": {
@@ -9271,8 +9271,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/ide.ts": {
-        "version": "a280e5eae67f7cdda9232afcc0ab572eb6136736874ddbc71407431f16f69103",
-        "signature": "a320dbebdab41595097a965c76943f42cf1fe6f8d1922f296ab4c2c498b7efd3",
+        "version": "02b608e2b83e3f9b157501c817aee8a3a40477a2343d427e61c538dcdd91ef33",
+        "signature": "eee23d42441d83984fefbbb2c585a86cf07bc0c3fd45fd0d56b83799afee2808",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -9526,7 +9526,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/toolbar/index.tsx": {
-        "version": "b0cfd8503b546bc2a123241e22ab2c2eedf055de047106641a7d466f2de5ca2c",
+        "version": "c718eabbf16661c10002e300730836a9709cdd5b036a114157f12d6f49c56484",
         "signature": "0c4a283d2cfe8a37165000659f2d9adec6db97665a4c74bdf6cab418800f3c7a",
         "affectsGlobalScope": false
       },
@@ -9596,12 +9596,12 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/projectmodal/index.tsx": {
-        "version": "89855cceb8fae2a4cb75b49122d00b087643ee1db6b16ad92420d6716675e676",
+        "version": "f758872705676b83639f3d57796f85746cf115975274aab6071d57ee17f84cec",
         "signature": "2adf484e43f8104446acd35108ac249090d45709d32eabf8b96e1cdc7d6acf9c",
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "db5b53ae3d1e3f49b1f28494a19b66d5bac5dad9d14f3bc13abbc67ea5658ba7",
+        "version": "edcf3bf2b86c5353e047a40cbf311c75545b14faea3945e1792197d7d1df7bc3",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
@@ -9615,19 +9615,19 @@
         "signature": "1a235598e609666e383060fe5a1651667eebc3b6ebce43d5783ff864ca36808c",
         "affectsGlobalScope": false
       },
+      "./src/components/ide/allinstances/index.tsx": {
+        "version": "a602af0f6c5bbe4678109d0f9b8127c4cca196e3bee9921929c244265f2a5e43",
+        "signature": "85f32e3f76d5a820c09aeb5dfae44e17d8b8ea1464de3f598b4f5cf505c56f4e",
+        "affectsGlobalScope": false
+      },
       "./src/components/ide/applettable/index.tsx": {
-        "version": "a60118b0932712117423b5fec4fc96017279fe2e89b12e4a474db77bef5e87c8",
+        "version": "16ad40d4a04cbc55b9eb1a116ecb080a083a779ee888113095304bec06b537b9",
         "signature": "546a76a4f48d356471d323104659cbe0341b8ade72ae5717ae04aaa217c79b5e",
         "affectsGlobalScope": false
       },
       "./src/components/ide/index.tsx": {
-        "version": "2069322e4a580a16d759418d24a86f07a9a6084986e36f4c70a02c0cc2788f56",
+        "version": "41a8a0a070456014b9c68e62526e128701e58875101b62a76f10365205598bf1",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
-        "affectsGlobalScope": false
-      },
-      "./src/components/ide/instance/index.tsx": {
-        "version": "88afcaccd919c09eb2943ed6f36583c32aa09972666bb3cd0455f4d07516e061",
-        "signature": "9a4d11bd219cd9085f2437d80ddd0e4d5e9a84de34b58fb3d02e46cde6d555d0",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@types+bn.js@5.1.0/node_modules/@types/bn.js/index.d.ts": {
@@ -10676,7 +10676,7 @@
         "affectsGlobalScope": false
       },
       "./src/pages/_app.tsx": {
-        "version": "997c0bfe6a4682bbac9da68d6d61fc18e8d02a1049dae0b4a831c298afe00b8f",
+        "version": "8fe30dfdad5b5e2fca1db1e18610bd045dbb5ee09372e945f4705bd8d3d907b5",
         "signature": "011f4558f53a1dd873e6f4e488dc212eeb921df4c9928d9c6e3bccd88a73e35a",
         "affectsGlobalScope": false
       },
@@ -21393,6 +21393,11 @@
         "./src/store/history.ts",
         "./src/store/index.ts"
       ],
+      "./src/components/ide/allinstances/index.tsx": [
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
+        "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
+        "./src/store/index.ts"
+      ],
       "./src/components/ide/appletmodal/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
@@ -21408,6 +21413,7 @@
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
         "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
         "./src/components/common/simplepagination/index.tsx",
+        "./src/components/ide/allinstances/index.tsx",
         "./src/components/ide/appletmodal/index.tsx",
         "./src/store/index.ts",
         "./src/store/lib/w3bstream/index.ts"
@@ -21418,14 +21424,10 @@
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
         "./node_modules/.pnpm/react-contextmenu@2.14.0_v2m5e27vhdewzwhryxwfaorcca/node_modules/react-contextmenu/src/index.d.ts",
+        "./src/components/ide/allinstances/index.tsx",
         "./src/components/ide/applettable/index.tsx",
         "./src/components/ide/sidebar/index.tsx",
         "./src/components/ide/toolbar/index.tsx",
-        "./src/store/index.ts"
-      ],
-      "./src/components/ide/instance/index.tsx": [
-        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
-        "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
         "./src/store/index.ts"
       ],
       "./src/components/ide/projectmodal/index.tsx": [
@@ -21632,6 +21634,7 @@
       ],
       "./src/pages/_app.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
+        "./node_modules/.pnpm/@mantine+notifications@4.2.11_hwkwxxnle3jso5fw4rzinaggj4/node_modules/@mantine/notifications/lib/index.d.ts",
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/httpbatchlink/index.d.ts",
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/loggerlink/index.d.ts",
         "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_uq7wwdjluvhzf6forjlvpz56vq/node_modules/@trpc/next/dist/index.d.ts",
@@ -34169,10 +34172,10 @@
       "./src/components/header/desktopnav.tsx",
       "./src/components/header/index.tsx",
       "./src/components/historymodal/index.tsx",
+      "./src/components/ide/allinstances/index.tsx",
       "./src/components/ide/appletmodal/index.tsx",
       "./src/components/ide/applettable/index.tsx",
       "./src/components/ide/index.tsx",
-      "./src/components/ide/instance/index.tsx",
       "./src/components/ide/projectmodal/index.tsx",
       "./src/components/ide/sidebar/index.tsx",
       "./src/components/ide/toolbar/index.tsx",
@@ -45717,6 +45720,10 @@
       ],
       [
         "./src/components/historymodal/index.tsx",
+        1
+      ],
+      [
+        "./src/components/ide/allinstances/index.tsx",
         1
       ],
       [
