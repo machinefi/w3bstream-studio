@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Button, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverArrow, PopoverBody, Flex, FlexProps } from '@chakra-ui/react';
+import { Button, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, Flex, FlexProps } from '@chakra-ui/react';
 import Link from 'next/link';
 import NextRouter from 'next/router';
 import { observer } from 'mobx-react-lite';
@@ -21,8 +21,20 @@ const Profile = observer(() => {
             <Button
               w="full"
               onClick={() => {
+                w3s.updatePassword.setExtraData({
+                  modal: {
+                    show: true,
+                  }
+                });
+              }}
+            >
+              Update password
+            </Button>
+            <Button
+              mt={2}
+              w="full"
+              onClick={() => {
                 w3s.config.logout();
-                NextRouter.push('/login');
               }}
             >
               Log out

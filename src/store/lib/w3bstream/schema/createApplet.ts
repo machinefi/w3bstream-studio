@@ -1,16 +1,13 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
+import { JSONValue, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { JSONSchema7 } from 'json-schema';
-import { axios } from '../../../../lib/axios';
-import { JSONValue, JSONSchemaModalState } from '../../../standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
-import { rootStore } from '../../../index';
 import { dataURItoBlob } from '@rjsf/utils';
 import { definitions } from './definitions';
-import { eventBus } from '../../../../lib/event';
+import { eventBus } from '@/lib/event';
+import { axios } from '@/lib/axios';
 
 export const schema = {
-  // export const configSchema: JSONSchema7 = {
   definitions: {
     projects: {
       type: 'string'
@@ -76,8 +73,10 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           await showNotification({ message: 'create applet successed' });
           eventBus.emit('applet.create');
           this.reset();
+          this.setExtraData({
+            modal: { show: false }
+          });
         }
-        // rootStore.w3s.projects.call();
       },
       value: new JSONValue<SchemaType>({
         //@ts-ignore
@@ -91,7 +90,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false, type: 'add' }
+          modal: { show: false }
         }
       })
     });

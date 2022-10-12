@@ -1,18 +1,18 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONValue, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaModalState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { rootStore } from '@/store/index';
 import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
-import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
+import { eventBus } from '@/lib/event';
 
 export const schema = {
-  title: 'Create Project',
+  title: 'Update Password',
   type: 'object',
   properties: {
-    name: { type: 'string' },
-    version: { type: 'string' }
+    password: { type: 'string' }
   },
-  required: ['name', 'version']
+  required: ['password']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -21,8 +21,8 @@ type ExtraDataType = {
   modal: JSONSchemaModalState;
 };
 
-export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
-  constructor(args: Partial<CreateProjectSchema> = {}) {
+export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+  constructor(args: Partial<UpdatePasswordSchema> = {}) {
     super(args);
     this.init({
       //@ts-ignore
@@ -30,20 +30,19 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
-          submitText: 'Submit'
+          submitText: 'Update'
         }
       },
       reactive: true,
       afterSubmit: async (e) => {
         const res = await axios.request({
-          method: 'post',
-          url: '/srv-applet-mgr/v0/project',
+          method: 'put',
+          url: `/srv-applet-mgr/v0/account/${rootStore.w3s.config.formData.accountID}`,
           data: e.formData
         });
         if (res.data) {
-          await showNotification({ message: 'create project successed' });
-          eventBus.emit('project.create');
-          this.reset();
+          await showNotification({ message: 'update password successed' });
+          eventBus.emit('user.updatepwd');
           this.setExtraData({
             modal: { show: false }
           });
@@ -51,11 +50,11 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
       },
       value: new JSONValue<SchemaType>({
         default: {
-          name: 'project_01',
-          version: '0.0.1'
+          password: ''
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({
+        //@ts-ignore
         default: {
           modal: { show: false }
         }

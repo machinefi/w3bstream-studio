@@ -8,10 +8,10 @@ import ToolBar from './ToolBar';
 import SideBar from './SideBar';
 import AppletTable from './AppletTable';
 import AllInstances from './AllInstances';
-import { AppletModal } from './AppletModal/index';
+import JSONSchemaModal from '../JSONSchemaModal';
 
 const IDE = observer(() => {
-  const { ide, w3s } = useStore();
+  const { w3s } = useStore();
 
   return (
     <Box overflow="hidden">
@@ -21,11 +21,13 @@ const IDE = observer(() => {
           <SideBar />
         </Box>
         <Box ml="370px" mt="80px" w="100%">
-          {(ide.showContent === 'CURRENT_APPLETS' || ide.showContent === 'ALL_APPLETS') && <AppletTable />}
-          {ide.showContent === 'ALL_INSTANCES' && <AllInstances />}
+          {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <AppletTable />}
+          {w3s.showContent === 'ALL_INSTANCES' && <AllInstances />}
         </Box>
       </Flex>
-      <AppletModal jsonstate={w3s.createApplet} />
+      <JSONSchemaModal jsonstate={w3s.createProject} />
+      <JSONSchemaModal jsonstate={w3s.createApplet} />
+      <JSONSchemaModal jsonstate={w3s.updatePassword} />
     </Box>
   );
 });

@@ -6,12 +6,11 @@ import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Menu, MenuItem } from '@/components/Menu';
-import { ProjectModal } from '../ProjectModal';
 
 interface SideBarProps extends FlexProps {}
 
 const SideBar = observer((props: SideBarProps) => {
-  const { w3s, ide } = useStore();
+  const { w3s } = useStore();
   const bg = useColorModeValue('white', 'dark');
   const borderColor = useColorModeValue('gray.200', 'grey.100');
 
@@ -38,10 +37,11 @@ const SideBar = observer((props: SideBarProps) => {
             h={4}
             cursor="pointer"
             onClick={(e) => {
-              ide.projectModal = {
-                show: true,
-                type: 'add'
-              };
+              w3s.createProject.setExtraData({
+                modal: {
+                  show: true,
+                }
+              });
             }}
           />
           <Icon as={MdRefresh} ml={2} w={5} h={5} cursor="pointer" />
@@ -56,7 +56,7 @@ const SideBar = observer((props: SideBarProps) => {
         <Text
           cursor="pointer"
           onClick={() => {
-            ide.showContent = 'ALL_APPLETS';
+            w3s.showContent = 'ALL_APPLETS';
           }}
         >
           Applets
@@ -66,19 +66,18 @@ const SideBar = observer((props: SideBarProps) => {
         <Text
           cursor="pointer"
           onClick={() => {
-            ide.showContent = 'ALL_INSTANCES';
+            w3s.showContent = 'ALL_INSTANCES';
           }}
         >
           Instances
         </Text>
       </Flex>
-      <ProjectModal />
     </Flex>
   );
 });
 
 const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: string; f_project_id: string; applets: any }>; index: number }) => {
-  const { w3s, ide } = useStore();
+  const { w3s } = useStore();
   return (
     <ContextMenuTrigger id={`ProjectItemContext${project.f_project_id}`} holdToDisplay={-1}>
       <Box
@@ -86,7 +85,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
         sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999', cursor: 'pointer' }}
         onClick={(e) => {
           w3s.curProjectIndex = index;
-          ide.showContent = 'CURRENT_APPLETS';
+          w3s.showContent = 'CURRENT_APPLETS';
         }}
       >
         <Text lineHeight={2} fontSize="sm">
@@ -99,10 +98,17 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
             <MenuItem
               onItemSelect={() => {
                 w3s.curProjectIndex = index;
-                ide.projectModal = {
-                  show: true,
-                  type: 'detail'
-                };
+                w3s.createProject.setData({
+                  name: w3s.curProject.f_name,
+                  version: w3s.curProject.f_version
+                });
+                w3s.createProject.schema.title = 'Project Details';
+                w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = true;
+                w3s.createProject.setExtraData({
+                  modal: {
+                    show: true,
+                  }
+                });
               }}
             >
               Detail

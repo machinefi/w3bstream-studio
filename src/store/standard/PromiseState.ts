@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import { BooleanState } from './base';
-import { helper } from '../../lib/helper';
 import { showNotification } from '@mantine/notifications';
 
 export class PromiseState<T extends (...args: any[]) => Promise<any>, U = ReturnType<T>> {

@@ -6,7 +6,7 @@ interface ToolBar extends BoxProps {}
 
 const ToolBar = (props: ToolBar) => {
   const bg = useColorModeValue('white', 'dark');
-  const { ide } = useStore();
+  const { w3s } = useStore();
   const iconStyle = {
     p: '0.5',
     h: '8',
@@ -16,7 +16,7 @@ const ToolBar = (props: ToolBar) => {
     _hover: { background: 'gray.200', borderRadius: '4px' }
   };
   const isSelect = (type) => {
-    if (ide.showContent == type) {
+    if (w3s.showContent == type) {
       return { background: 'gray.200' };
     }
   };
@@ -29,7 +29,7 @@ const ToolBar = (props: ToolBar) => {
             <Image
               src="/images/icons/home.svg"
               onClick={() => {
-                ide.showContent = 'CURRENT_APPLETS';
+                w3s.showContent = 'CURRENT_APPLETS';
               }}
               {...iconStyle}
               {...isSelect('CURRENT_APPLETS')}

@@ -1,10 +1,9 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
+import { JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { JSONValue } from '../../../standard/JSONSchemaState';
 import { definitions } from './definitions';
 
 export const schema = {
-  // export const configSchema: JSONSchema7 = {
   definitions: {
     projects: {
       type: 'string'

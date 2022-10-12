@@ -1,9 +1,8 @@
-import React from 'react';
 import { UiSchema, RJSFSchema } from '@rjsf/utils';
-import { makeAutoObservable, observable, makeObservable, computed, action, reaction, toJS } from 'mobx';
+import { makeAutoObservable, makeObservable, computed, toJS } from 'mobx';
 import validator from '@rjsf/validator-ajv6';
-import { IChangeEvent, FormState, FormProps } from '@rjsf/core';
-import { _ } from '../../lib/lodash';
+import { IChangeEvent } from '@rjsf/core';
+import { _ } from '@/lib/lodash';
 
 export class JSONSchemaState<T, V = any> {
   extraValue: JSONSchemaValue = new JSONValue();
@@ -124,5 +123,4 @@ export class JSONValue<T> {
 
 export interface JSONSchemaModalState {
   show: boolean;
-  type: '' | 'add' | 'detail';
 }

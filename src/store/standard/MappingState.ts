@@ -1,4 +1,4 @@
-import { makeAutoObservable, makeObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { StorageState } from './StorageState';
 
 export class MappingState<T> {

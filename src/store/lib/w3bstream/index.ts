@@ -1,23 +1,22 @@
+import NextRouter from 'next/router';
 import { makeAutoObservable } from 'mobx';
 import RootStore from '@/store/root';
-import { rootStore } from '../../index';
-import { CreateProjectSchema } from './schema/createProject';
-import { PromiseState } from '../../standard/PromiseState';
-import { axios } from '../../../lib/axios';
-import { hooks } from '../../../lib/hooks';
-import { eventBus } from '../../../lib/event';
-import { publishEventSchema } from './schema/publishEvent';
+import { axios } from '@/lib/axios';
+import { eventBus } from '@/lib/event';
+import { _ } from '@/lib/lodash';
+import { trpc } from '@/lib/trpc';
+import { hooks } from '@/lib/hooks';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { LoginSchema } from './schema/login';
 import { W3bstreamConfigState } from './schema/config';
 import { CreateAppletSchema } from './schema/createApplet';
 import { ProjectListSchema } from './schema/projectList';
-import { _ } from '../../../lib/lodash';
-import { trpc } from '../../../lib/trpc';
-import { LoginSchema } from './schema/login';
-import NextRouter from 'next/router';
+import { CreateProjectSchema } from './schema/createProject';
+import { UpdatePasswordSchema } from './schema/updatePassword';
+
 
 export class W3bStream {
   rootStore: RootStore;
-
   config = new W3bstreamConfigState({});
   login = new LoginSchema({});
   createProject = new CreateProjectSchema({});
@@ -28,6 +27,7 @@ export class W3bStream {
       };
     }
   });
+  updatePassword = new UpdatePasswordSchema({})
   projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
@@ -35,7 +35,6 @@ export class W3bStream {
       };
     }
   });
-
   allProjects = new PromiseState({
     defaultValue: [],
     function: async () => {
@@ -113,6 +112,8 @@ export class W3bStream {
     }
   });
 
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' = 'CURRENT_APPLETS';
+
   get isLogin() {
     return !!this.config.formData.token;
   }
@@ -131,23 +132,14 @@ export class W3bStream {
         this.allProjects.call();
         NextRouter.push('/');
       })
+      .on('user.updatepwd', () => {
+
+      })
       .on('project.create', () => {
         this.allProjects.call();
-        this.rootStore.ide.projectModal = {
-          show: false,
-          type: ''
-        };
       })
       .on('applet.create', () => {
         this.allProjects.call();
-        // this.rootStore.ide.appletModal = {
-        //   show: false,
-        //   type: ''
-        // };
-        // this.createApplet.setExtraData({
-        //   show: false,
-        //   type: 'add'
-        // });
       })
       .on('instance.deploy', () => {
         this.allProjects.call();

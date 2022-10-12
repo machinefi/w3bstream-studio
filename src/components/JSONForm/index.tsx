@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { JSONSchemaState } from '../../store/standard/JSONSchemaState';
+import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import Form from "@rjsf/chakra-ui";
 
 interface Props {

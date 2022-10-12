@@ -1,6 +1,6 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaModalState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { JSONSchemaModalState, JSONValue } from '../../../../standard/JSONSchemaState';
 import { definitions } from '../definitions';
 
 export const schema = {
@@ -50,7 +50,7 @@ export class TemplateSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false, type: 'add' }
+          modal: { show: false }
         }
       })
     });

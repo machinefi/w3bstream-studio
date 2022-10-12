@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { makeAutoObservable, toJS } from 'mobx';
 import { helper } from '@/lib/helper';
 import { JSONSchemaValue } from './JSONSchemaState';

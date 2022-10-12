@@ -1,4 +1,4 @@
-import { Box, Button, chakra, Text, Flex, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Badge } from '@chakra-ui/react';
+import { Button, Flex, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Badge } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 

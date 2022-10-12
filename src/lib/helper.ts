@@ -1,20 +1,11 @@
 import numeral from 'numeral';
 import BN from 'bignumber.js';
-import { CallParams } from '../../type';
-import { BigNumberState } from '../store/standard/BigNumberState';
+import { BigNumberState } from '@/store/standard/BigNumberState';
+import { NumberState, StringState } from '@/store/standard/base';
+import { rootStore } from '@/store/index';
 import BigNumber from 'bignumber.js';
-import { NumberState, StringState } from '../store/standard/base';
-import { DynamicMappingState } from '@/store/standard/MappingState';
-import { metamaskUtils } from './metaskUtils';
-import { TransactionReceipt, TransactionRequest, TransactionResponse } from '@ethersproject/providers';
-import { Deferrable } from 'ethers/lib/utils';
-import { rootStore } from '../store/index';
-import { hooks } from './hooks';
-import { ethers, utils } from 'ethers';
 import { _ } from './lodash';
 import { showNotification } from '@mantine/notifications';
-import { eventBus } from './event';
-import { TransactionModule, TransctionCoin } from '@/store/history';
 
 export interface RouterParsed {
   pathname: string;
@@ -47,49 +38,6 @@ export const toast = {
 };
 
 export const helper = {
-  recordHistory(params: { chainId: number; amount: string; module: TransactionModule; title: string; receipt: TransactionReceipt; coin?: TransctionCoin }) {
-    //If you give the "coin" argument, it will automatically pop up
-    eventBus.emit('history.insert', {
-      uuid: this.uuid,
-      timestamp: Date.now(),
-      from: params.receipt.from,
-      to: params.receipt.to,
-      hash: params.receipt.transactionHash,
-      isRead: false,
-      status: 'success',
-      ...params
-    });
-    return this.uuid;
-  },
-  setChain(god, chainId) {
-    if (god.chainId === chainId) return;
-    return new Promise((resolve, reject) => {
-      const chain = god.currentNetwork.chain.map[chainId];
-      console.log(chain);
-      metamaskUtils
-        .setupNetwork({
-          chainId: chain.chainId,
-          blockExplorerUrls: [chain.explorerURL],
-          chainName: chain.name,
-          nativeCurrency: {
-            decimals: chain.Coin.decimals || 18,
-            name: chain.Coin.symbol,
-            symbol: chain.Coin.symbol
-          },
-          rpcUrls: [chain.rpcUrl]
-        })
-        .then((res) => {
-          god.setChain(chainId);
-          setTimeout(() => {
-            resolve(res);
-          }, 1000);
-        })
-        .catch((err) => {
-          toast.error(err.message);
-          reject(err);
-        });
-    });
-  },
   promise: {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -202,21 +150,6 @@ export const helper = {
       return value instanceof BN ? value : typeof value === 'string' ? new BN(Number(value)) : new BN(value);
     }
   },
-  address: {
-    formatAddress(address) {
-      if (!address) return;
-      return address.replace(/^(.{4})(.*)(.{4})$/, '$1...$3');
-    },
-    validateEthAddress(address: string) {
-      return /^0x[a-fA-F0-9]{40}$/.test(address);
-    },
-    validateIoAddress(address: string) {
-      return /^io[a-zA-Z0-9]{39}$/.test(address);
-    },
-    validateAddress(address: string) {
-      return helper.address.validateEthAddress(address) || helper.address.validateIoAddress(address);
-    }
-  },
   state: {
     handleCallBack(callback, val, key?) {
       try {
@@ -231,75 +164,6 @@ export const helper = {
         }
       } catch (error) {
         throw new Error(error.message);
-      }
-    }
-  },
-  c: {
-    async sendTx({
-      chainId,
-      address,
-      data,
-      gasPrice = 0,
-      value = 0,
-      autoRefresh = true,
-      autoAlert = false,
-      showTransactionSubmitDialog = true,
-      onSubmit,
-      onSuccess,
-      onError
-    }: {
-      chainId: number | string;
-      address: string;
-      data: string;
-      value?: string | number;
-      gasPrice?: string | number;
-      autoRefresh?: boolean;
-      autoAlert?: boolean;
-      showTransactionSubmitDialog?: boolean;
-      onSubmit?: ({ res }: { res: ethers.providers.TransactionResponse }) => void;
-      onSuccess?: ({ res }: { res: TransactionResponse }) => void;
-      onError?: (e: Error) => void;
-    }): Promise<TransactionReceipt> {
-      chainId = Number(chainId);
-
-      try {
-        if (!chainId || !address || !data) throw new Error('chainId, address, data is required');
-        if (!rootStore.god.currentNetwork.account) {
-          await hooks.waitAccount();
-        }
-
-        if (rootStore.god.currentChain.chainId !== chainId) {
-          await helper.setChain(rootStore.god, chainId);
-        }
-        let sendTransactionParam: Deferrable<TransactionRequest> = _.omitBy(
-          { to: address, data, value: value ? ethers.BigNumber.from(value) : null, gasPrice: gasPrice ? ethers.BigNumber.from(gasPrice) : null },
-          _.isNil
-        );
-        const res = await rootStore.god.eth.signer.sendTransaction(sendTransactionParam);
-
-        if (showTransactionSubmitDialog) {
-          rootStore.god.showTransactionSubmitDialog.setValue(true);
-          rootStore.god.curTransaction = res;
-        }
-        const receipt = await res.wait();
-        if (autoRefresh) {
-          rootStore.god.pollingData();
-        }
-        if (receipt.status) {
-          onSuccess && onSuccess({ res });
-        }
-        return receipt;
-      } catch (error) {
-        console.log(error);
-        if (autoAlert) {
-          showNotification({
-            title: 'Error',
-            message: error.data?.message || error.message,
-            color: 'red'
-          });
-        }
-        onError && onError(error);
-        throw error;
       }
     }
   }

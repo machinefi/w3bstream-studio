@@ -1,8 +1,5 @@
-import { TransactionItem } from '@/store/history';
-// import { ScriptTemplateState } from '@/store/IDE/ScriptTemplate';
 import { EventEmitter } from 'events';
-import TypedEmitter from 'typed-emitter';
-import { publicConfig } from '../config/public';
+import TypedEmitter from 'typed-emitter'
 
 class MyEmitter extends EventEmitter {
   emit(type: any, ...args: any[]) {
@@ -14,17 +11,8 @@ class MyEmitter extends EventEmitter {
 interface MessageEvents {
   // @ts-ignore
   '*': ({ type: string, args: [] }) => void;
-  'wallet.onAccount': () => void;
-  'wallet.logout': () => void;
-  'chain.switch': () => void;
-  'global.cacheData': () => void;
-  'history.insert': (transactionItem: TransactionItem) => void;
-  'history.update': (transactionItem: TransactionItem) => void;
-  'history.delete': (transactionItem: Pick<TransactionItem, 'uuid'>) => void;
-  // 'ScriptTemplateManager.removeTemplate': () => void;
-  // 'ScriptTemplateManager.addTemplate': (args: Partial<ScriptTemplateState>) => void;
-  // 'ScriptTemplateManager.modifyTemplate': () => void;
   'user.login': () => void;
+  'user.updatepwd': () => void;
   'project.list': (data: any[]) => void;
   'project.create': () => void;
   'applet.list': (data: any[]) => void;
@@ -37,9 +25,3 @@ interface MessageEvents {
 }
 
 export const eventBus = new MyEmitter() as TypedEmitter<MessageEvents>;
-
-if (!publicConfig.isProd) {
-  eventBus.on('*', ({ type, args }) => {
-    console.log(type, args);
-  });
-}

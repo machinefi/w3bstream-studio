@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { Web3ReactProvider } from '@web3-react/core';
 import { Toaster } from 'react-hot-toast';
 import { withTRPC } from '@trpc/next';
 import { observer } from 'mobx-react-lite';
@@ -9,8 +8,6 @@ import { loggerLink } from '@trpc/client/links/loggerLink';
 import superjson from 'superjson';
 import { useStore } from '@/store/index';
 import { theme } from '@/lib/theme';
-import { getLibrary } from '@/lib/web3-react';
-import { GlobalProvider } from '@/components/Global';
 import Header from '@/components/Header';
 import NextRouter from 'next/router';
 import type { AppRouter } from '@/server/routers/_app';
@@ -18,27 +15,32 @@ import type { AppProps } from 'next/app';
 import { NotificationsProvider } from '@mantine/notifications';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { lang, w3s } = useStore();
+  const {
+    lang,
+    w3s: {
+      config: {
+        formData: { token }
+      }
+    }
+  } = useStore();
   useEffect(() => {
     lang.init();
+  }, []);
 
-    if (!w3s.isLogin) {
+  useEffect(() => {
+    if (!token) {
       NextRouter.push('/login');
     }
-  }, []);
+  }, [token]);
 
   return useMemo(() => {
     return (
       <ChakraProvider theme={theme}>
-        <GlobalProvider>
-          <NotificationsProvider>
-            <Web3ReactProvider getLibrary={getLibrary}>
-              <Toaster />
-              <Header />
-              <Component {...pageProps} />
-            </Web3ReactProvider>
-          </NotificationsProvider>
-        </GlobalProvider>
+        <NotificationsProvider>
+          <Toaster />
+          <Header />
+          <Component {...pageProps} />
+        </NotificationsProvider>
       </ChakraProvider>
     );
   }, [Component, pageProps]);

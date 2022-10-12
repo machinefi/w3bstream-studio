@@ -1,13 +1,11 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
+import { JSONValue } from '@/store/standard/JSONSchemaState';
+import { rootStore } from '@/store/index';
 import { FromSchema } from 'json-schema-to-ts';
-import { JSONSchema7 } from 'json-schema';
 import { axios } from '@/lib/axios';
-import { rootStore } from '../../../index';
-import { JSONValue } from '../../../standard/JSONSchemaState';
-import { eventBus } from '../../../../lib/event';
+import { eventBus } from '@/lib/event';
 
 export const schema = {
-  // export const configSchema: JSONSchema7 = {
   title: 'Login',
   type: 'object',
   properties: {

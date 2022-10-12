@@ -1,10 +1,8 @@
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
+import { StorageState } from '@/store/standard/StorageState';
 import { FromSchema } from 'json-schema-to-ts';
-import { JSONSchema7 } from 'json-schema';
-import { StorageState } from '../../../standard/StorageState';
 
 export const schema = {
-  // export const schema: JSONSchema7 = {
   title: 'Setting',
   type: 'object',
   properties: {

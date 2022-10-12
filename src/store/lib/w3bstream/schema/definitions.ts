@@ -1,4 +1,4 @@
-import { rootStore } from '../../../index';
+import { rootStore } from '@/store/index';
 
 export const definitions = {
   projects: {

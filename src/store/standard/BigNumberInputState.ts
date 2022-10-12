@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { makeAutoObservable } from 'mobx';
-import { helper } from '../../lib/helper';
+import { helper } from '@/lib/helper';
 export class BigNumberInputState {
   value = new BigNumber(0);
   format = '';
