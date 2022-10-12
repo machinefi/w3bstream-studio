@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, Flex, FlexProps } from '@chakra-ui/react';
 import Link from 'next/link';
-import NextRouter from 'next/router';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 

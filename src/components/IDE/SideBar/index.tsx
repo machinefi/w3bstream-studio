@@ -39,7 +39,7 @@ const SideBar = observer((props: SideBarProps) => {
             onClick={(e) => {
               w3s.createProject.setExtraData({
                 modal: {
-                  show: true,
+                  show: true
                 }
               });
             }}
@@ -47,12 +47,12 @@ const SideBar = observer((props: SideBarProps) => {
           <Icon as={MdRefresh} ml={2} w={5} h={5} cursor="pointer" />
         </Flex>
       </Flex>
-      <Stack mt={2} px={2}>
+      <Stack mt={2} p={2} h="200px" overflowY="auto">
         {w3s.allProjects.value.map((i, index) => {
           return <ProjectItem project={i} index={index} />;
         })}
       </Stack>
-      <Flex alignItems="center" justifyContent="space-between" mt={6} p={2} bg="#FAFAFA">
+      <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
         <Text
           cursor="pointer"
           onClick={() => {
@@ -106,7 +106,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
                 w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = true;
                 w3s.createProject.setExtraData({
                   modal: {
-                    show: true,
+                    show: true
                   }
                 });
               }}
