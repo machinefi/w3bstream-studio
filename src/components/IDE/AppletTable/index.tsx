@@ -14,7 +14,7 @@ const AppletTable = observer(() => {
   const { ide, w3s } = useStore();
   const paginationState = useLocalObservable(() => ({
     page: 1,
-    limit: 10,
+    limit: 6,
     total: 0,
     get offset() {
       return (this.page - 1) * this.limit;
@@ -30,7 +30,7 @@ const AppletTable = observer(() => {
     }
   }));
 
-  const applets = w3s.curProject?.applets || [];
+  const applets = ide.showContent === 'CURRENT_APPLETS' ? w3s.curProject?.applets || [] : w3s.allApplets;
 
   useEffect(() => {
     paginationState.setTotal(applets.length);

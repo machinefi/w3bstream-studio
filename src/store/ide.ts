@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
 export class IDEStore {
-  showContent: 'ALLAPPLET' | 'ALLINSTANCES' = 'ALLAPPLET';
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' = 'CURRENT_APPLETS';
 
   projectModal: { show: boolean; type: '' | 'add' | 'detail' } = {
     show: false,

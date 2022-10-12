@@ -41,9 +41,11 @@ export class W3bStream {
     function: async () => {
       const res = await trpc.api.projects.query({ accountID: this.config.formData.accountID });
       if (res) {
+        const applets = [];
         const instances = [];
         res.forEach((p) => {
           p.applets.forEach((a) => {
+            applets.push(a);
             a.instances.forEach((i) => {
               instances.push({
                 project_id: p.f_project_id,
@@ -55,6 +57,7 @@ export class W3bStream {
             });
           });
         });
+        this.allApplets = applets;
         this.allInstances = instances;
       }
 
@@ -62,6 +65,7 @@ export class W3bStream {
     }
   });
 
+  allApplets = [];
   allInstances = [];
 
   curProjectIndex = 0;

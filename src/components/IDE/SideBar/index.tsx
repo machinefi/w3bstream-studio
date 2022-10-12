@@ -56,7 +56,17 @@ const SideBar = observer((props: SideBarProps) => {
         <Text
           cursor="pointer"
           onClick={() => {
-            ide.showContent = 'ALLINSTANCES';
+            ide.showContent = 'ALL_APPLETS';
+          }}
+        >
+          Applets
+        </Text>
+      </Flex>
+      <Flex alignItems="center" justifyContent="space-between" mt={1} p={2} bg="#FAFAFA">
+        <Text
+          cursor="pointer"
+          onClick={() => {
+            ide.showContent = 'ALL_INSTANCES';
           }}
         >
           Instances
@@ -76,7 +86,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
         sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999', cursor: 'pointer' }}
         onClick={(e) => {
           w3s.curProjectIndex = index;
-          ide.showContent = 'ALLAPPLET';
+          ide.showContent = 'CURRENT_APPLETS';
         }}
       >
         <Text lineHeight={2} fontSize="sm">
