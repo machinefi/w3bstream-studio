@@ -20,8 +20,8 @@ const IDE = observer(() => {
           <SideBar />
         </Box>
         <Box ml="370px" mt="80px" w="100%">
-          {ide.showContent === ide.TABS.ALLAPPLET && <AppletTable />}
-          {ide.showContent === ide.TABS.ALLINSTANCES && <AllInstances />}
+          {ide.showContent === 'ALLAPPLET' && <AppletTable />}
+          {ide.showContent === 'ALLINSTANCES' && <AllInstances />}
         </Box>
       </Flex>
     </Box>

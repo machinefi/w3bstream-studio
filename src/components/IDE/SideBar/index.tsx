@@ -56,7 +56,7 @@ const SideBar = observer((props: SideBarProps) => {
         <Text
           cursor="pointer"
           onClick={() => {
-            ide.tabIndex = 1;
+            ide.showContent = 'ALLINSTANCES';
           }}
         >
           Instances
@@ -76,7 +76,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
         sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999', cursor: 'pointer' }}
         onClick={(e) => {
           w3s.curProjectIndex = index;
-          ide.tabIndex = 0;
+          ide.showContent = 'ALLAPPLET';
         }}
       >
         <Text lineHeight={2} fontSize="sm">
