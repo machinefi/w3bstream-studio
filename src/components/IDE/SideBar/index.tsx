@@ -37,6 +37,9 @@ const SideBar = observer((props: SideBarProps) => {
             h={4}
             cursor="pointer"
             onClick={(e) => {
+              w3s.createProject.schema.title = 'Create Project';
+              w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = false;
+              w3s.createProject.reset();
               w3s.createProject.setExtraData({
                 modal: {
                   show: true
