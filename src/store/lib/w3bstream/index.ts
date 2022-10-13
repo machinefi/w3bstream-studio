@@ -13,7 +13,7 @@ import { CreateAppletSchema } from './schema/createApplet';
 import { ProjectListSchema } from './schema/projectList';
 import { CreateProjectSchema } from './schema/createProject';
 import { UpdatePasswordSchema } from './schema/updatePassword';
-
+import { PublishEventSchema } from './schema/publishEvent';
 
 export class W3bStream {
   rootStore: RootStore;
@@ -27,7 +27,7 @@ export class W3bStream {
       };
     }
   });
-  updatePassword = new UpdatePasswordSchema({})
+  updatePassword = new UpdatePasswordSchema({});
   projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
@@ -53,7 +53,10 @@ export class W3bStream {
                 ...i
               });
             });
-            applets.push(a);
+            applets.push({
+              ...a,
+              project_name: p.f_name
+            });
           });
         });
         this.allApplets = applets;
@@ -98,19 +101,7 @@ export class W3bStream {
     }
   });
 
-  publishEvent = new PromiseState({
-    function: async ({ projectID, appletID, event = 'start', data = 'test msg' }: { projectID: string; appletID: string; event?: string; data?: string }) => {
-      const res = await axios.request({
-        method: 'post',
-        url: `srv-applet-mgr/v0/event/${projectID}/${appletID}/${event}`,
-        headers: {
-          publisher: 'admin'
-        },
-        data
-      });
-      return res.data;
-    }
-  });
+  publishEvent = new PublishEventSchema({});
 
   showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' = 'CURRENT_APPLETS';
 
@@ -132,15 +123,14 @@ export class W3bStream {
         this.allProjects.call();
         NextRouter.push('/');
       })
-      .on('user.updatepwd', () => {
-
-      })
+      .on('user.update-pwd', () => {})
       .on('project.create', () => {
         this.allProjects.call();
       })
       .on('applet.create', () => {
         this.allProjects.call();
       })
+      .on('applet.publish-event', () => {})
       .on('instance.deploy', () => {
         this.allProjects.call();
       })

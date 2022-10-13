@@ -1,5 +1,4 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { rootStore } from '@/store/index';
 import { FromSchema } from 'json-schema-to-ts';
 import { axios } from '@/lib/axios';

@@ -1,5 +1,4 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONSchemaModalState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaState, JSONSchemaModalState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { rootStore } from '@/store/index';
 import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
@@ -42,7 +41,7 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
         });
         if (res.data) {
           await showNotification({ message: 'update password successed' });
-          eventBus.emit('user.updatepwd');
+          eventBus.emit('user.update-pwd');
           this.setExtraData({
             modal: { show: false }
           });

@@ -1,5 +1,4 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONSchemaModalState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaModalState, JSONSchemaState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from '../definitions';
 

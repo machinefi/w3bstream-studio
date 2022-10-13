@@ -1,67 +1,74 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONValue, JSONSchemaState, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
+import { rootStore } from '@/store/index';
+import { showNotification } from '@mantine/notifications';
 import { axios } from '@/lib/axios';
-import { definitions } from './definitions';
+import { eventBus } from '@/lib/event';
 
 export const schema = {
-  definitions: {
-    projects: {
-      type: 'string'
-    },
-    applets: {
-      type: 'string'
-    },
-    event: {
-      type: 'string',
-      enum: ['start']
-    }
-  },
   title: 'Publish Event',
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects' },
-    // appletID: { $ref: '#/definitions/applets' },
-    event: { $ref: '#/definitions/event' }
+    handler: {
+      type: 'string',
+      enum: ['start']
+    },
+    data: { type: 'string' }
   },
-  required: ['projectID', 'appletID', 'event']
+  required: ['handler', 'data']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
 
-//@ts-ignore
-schema.definitions = {
-  ...schema.definitions,
-  projects: definitions.projects
-  // applets: definitions.applets
+type ExtraDataType = {
+  modal: JSONSchemaModalState;
 };
 
-export const publishEventSchema = new JSONSchemaState<SchemaType>({
-  //@ts-ignore
-  schema,
-  uiSchema: {
-    'ui:submitButtonOptions': {
-      norender: true
-    }
-  },
-  reactive: true,
-  afterSubmit: async (e) => {
-    const { projectID, appletID, event } = e.formData;
-    const res = await axios.request({
-      method: 'post',
-      url: `/srv-applet-mgr/v0/event/${projectID}/${appletID}/${event}`,
-      headers: {
-        publisher: Math.random(),
-        'Content-Type': 'text/plain'
+export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+  constructor(args: Partial<PublishEventSchema> = {}) {
+    super(args);
+    this.init({
+      //@ts-ignore
+      schema,
+      uiSchema: {
+        'ui:submitButtonOptions': {
+          norender: false
+        },
       },
-      data: 'input a test sentence'
+      reactive: true,
+      afterSubmit: async (e) => {
+        const { projectID, appletID, handler, data } = e.formData;
+        const res = await axios.request({
+          method: 'post',
+          url: `/srv-applet-mgr/v0/event/${projectID}/${appletID}/${handler}`,
+          headers: {
+            publisher: rootStore.w3s.config.formData.accountID,
+            'Content-Type': 'text/plain'
+          },
+          data
+        });
+        if (res.data) {
+          await showNotification({ message: 'publish event successed' });
+          eventBus.emit('applet.publish-event');
+          this.reset();
+          this.setExtraData({
+            modal: { show: false }
+          });
+        }
+      },
+      value: new JSONValue<SchemaType>({
+        default: {
+          projectID: '',
+          appletID: '',
+          handler: 'start',
+          data: ''
+        }
+      }),
+      extraValue: new JSONValue<ExtraDataType>({
+        default: {
+          modal: { show: false }
+        }
+      })
     });
-  },
-  value: new JSONValue<SchemaType>({
-    default: {
-      projectID: '',
-      appletID: '',
-      event: 'start'
-    }
-  })
-});
+  }
+}

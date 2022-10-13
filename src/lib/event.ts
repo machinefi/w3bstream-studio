@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import TypedEmitter from 'typed-emitter'
+import TypedEmitter from 'typed-emitter';
 
 class MyEmitter extends EventEmitter {
   emit(type: any, ...args: any[]) {
@@ -12,11 +12,12 @@ interface MessageEvents {
   // @ts-ignore
   '*': ({ type: string, args: [] }) => void;
   'user.login': () => void;
-  'user.updatepwd': () => void;
+  'user.update-pwd': () => void;
   'project.list': (data: any[]) => void;
   'project.create': () => void;
   'applet.list': (data: any[]) => void;
   'applet.create': () => void;
+  'applet.publish-event': () => void;
   'instance.deploy': () => void;
   'instance.handle': () => void;
 

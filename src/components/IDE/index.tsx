@@ -27,6 +27,7 @@ const IDE = observer(() => {
       </Flex>
       <JSONSchemaModal jsonstate={w3s.createProject} />
       <JSONSchemaModal jsonstate={w3s.createApplet} />
+      <JSONSchemaModal jsonstate={w3s.publishEvent} />
       <JSONSchemaModal jsonstate={w3s.updatePassword} />
     </Box>
   );

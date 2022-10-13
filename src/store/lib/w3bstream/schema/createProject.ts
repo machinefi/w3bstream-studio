@@ -1,5 +1,4 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONValue, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
+import { JSONValue, JSONSchemaState, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';

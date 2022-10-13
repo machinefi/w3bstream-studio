@@ -1,6 +1,9 @@
 import { Button, Flex, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Badge } from '@chakra-ui/react';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
+import { PaginationState } from '@/store/standard/PaginationState';
+import SimplePagination from '@/components/Common/SimplePagination';
+import { useEffect } from 'react';
 
 export const INSTANCE_STATUS = {
   0: {
@@ -26,6 +29,22 @@ const AllInstances = observer(() => {
     w3s,
     w3s: { allInstances }
   } = useStore();
+
+  const store = useLocalObservable(() => ({
+    paginationState: new PaginationState({
+      page: 1,
+      limit: 10
+    })
+  }));
+
+  useEffect(() => {
+    store.paginationState.setData({
+      total: allInstances.length
+    });
+  }, [allInstances]);
+
+  const dataSource = allInstances.slice(store.paginationState.offset, store.paginationState.offset + store.paginationState.limit);
+
   return (
     <TableContainer>
       <Flex fontSize="xl" fontWeight={600}>
@@ -42,7 +61,7 @@ const AllInstances = observer(() => {
           </Tr>
         </Thead>
         <Tbody>
-          {allInstances.map((item) => (
+          {dataSource.map((item) => (
             <Tr bg="#F2FAFB" key={item.f_instance_id}>
               <Td>
                 <Badge colorScheme={INSTANCE_STATUS[item.f_state].colorScheme}>{INSTANCE_STATUS[item.f_state].text}</Badge>
@@ -65,6 +84,16 @@ const AllInstances = observer(() => {
           ))}
         </Tbody>
       </Table>
+      <SimplePagination
+        total={store.paginationState.total}
+        limit={store.paginationState.limit}
+        page={store.paginationState.page}
+        onPageChange={(currentPage) => {
+          store.paginationState.setData({
+            page: currentPage
+          });
+        }}
+      />
     </TableContainer>
   );
 });

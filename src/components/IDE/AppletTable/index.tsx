@@ -39,7 +39,7 @@ const AppletTable = observer(() => {
             onClick={() => {
               w3s.createProject.setExtraData({
                 modal: {
-                  show: true,
+                  show: true
                 }
               });
             }}
@@ -52,67 +52,67 @@ const AppletTable = observer(() => {
   }
 
   return (
-    <>
-      <TableContainer>
-        <Flex alignItems="center">
-          <Text fontSize="xl" fontWeight={600}>
-            Applets
-          </Text>
-          <Button
-            ml={6}
-            leftIcon={<AddIcon />}
-            colorScheme="blue"
-            size="xs"
-            borderRadius="base"
-            onClick={(e) => {
-              //@ts-ignore
-              w3s.createApplet.setData({
-                info: {
-                  projectID: w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject.f_project_id : '',
-                  appletName: ''
-                }
-              });
-              w3s.createApplet.setExtraData({
-                modal: {
-                  show: true,
-                }
-              });
-            }}
-          >
-            Add Applet
-          </Button>
-        </Flex>
-        <Table mt={4} variant="simple">
-          <Thead>
-            <Tr bg="#FAFAFA">
-              <Th></Th>
-              <Th>ID</Th>
-              <Th>Name</Th>
-              <Th>Actions</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {dataSource.map((applet) => {
-              return <CollapseTable key={applet.f_applet_id} applet={applet} w3s={w3s} />;
-            })}
-          </Tbody>
-        </Table>
-        <SimplePagination
-          total={store.paginationState.total}
-          limit={store.paginationState.limit}
-          page={store.paginationState.page}
-          onPageChange={(currentPage) => {
-            store.paginationState.setData({
-              page: currentPage
+    <TableContainer>
+      <Flex alignItems="center">
+        <Text fontSize="xl" fontWeight={600}>
+          Applets
+        </Text>
+        <Button
+          ml={6}
+          leftIcon={<AddIcon />}
+          colorScheme="blue"
+          size="xs"
+          borderRadius="base"
+          onClick={(e) => {
+            //@ts-ignore
+            w3s.createApplet.setData({
+              info: {
+                projectID: w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject.f_project_id : '',
+                appletName: ''
+              }
+            });
+            w3s.createApplet.setExtraData({
+              modal: {
+                show: true
+              }
             });
           }}
-        />
-      </TableContainer>
-    </>
+        >
+          Add Applet
+        </Button>
+      </Flex>
+      <Table mt={4} variant="simple">
+        <Thead>
+          <Tr bg="#FAFAFA">
+            <Th></Th>
+            <Th>ID</Th>
+            <Th>Name</Th>
+            {w3s.showContent === 'ALL_APPLETS' && <Th>Project Name</Th>}
+
+            <Th>Actions</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {dataSource.map((applet) => {
+            return <CollapseTable key={applet.f_applet_id} applet={applet} w3s={w3s} />;
+          })}
+        </Tbody>
+      </Table>
+      <SimplePagination
+        total={store.paginationState.total}
+        limit={store.paginationState.limit}
+        page={store.paginationState.page}
+        onPageChange={(currentPage) => {
+          store.paginationState.setData({
+            page: currentPage
+          });
+        }}
+      />
+    </TableContainer>
   );
 });
 
-function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_project_id: string; f_applet_id: string; instances: any[] }>; w3s: W3bStream }) {
+function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_project_id: string; f_applet_id: string; project_name?: string; instances: any[] }>; w3s: W3bStream }) {
   const { isOpen, onToggle } = useDisclosure();
   const styles = isOpen ? { display: 'table-row' } : { display: 'none' };
 
@@ -122,10 +122,28 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
         <Td w="40px">{isOpen ? <ChevronDownIcon w={6} h={6} onClick={onToggle} cursor="pointer" /> : <ChevronRightIcon w={6} h={6} onClick={onToggle} cursor="pointer" />}</Td>
         <Td w="300px">{applet.f_applet_id}</Td>
         <Td w="140px">{applet.f_name}</Td>
+        {w3s.showContent === 'ALL_APPLETS' && <Td w="140px">{applet.project_name}</Td>}
         <Td>
           {applet.instances.length > 0 ? (
             <>
-              <Button colorScheme="blue" size="xs" borderRadius="base" onClick={(e) => w3s.publishEvent.call({ appletID: applet.f_applet_id, projectID: applet.f_project_id })}>
+              <Button
+                colorScheme="blue"
+                size="xs"
+                borderRadius="base"
+                onClick={(e) => {
+                  w3s.publishEvent.setData({
+                    projectID: applet.f_project_id,
+                    appletID: applet.f_applet_id,
+                    handler: 'start',
+                    data: ''
+                  });
+                  w3s.publishEvent.setExtraData({
+                    modal: {
+                      show: true
+                    }
+                  });
+                }}
+              >
                 Send Event
               </Button>
               <Button
