@@ -39,13 +39,12 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
           url: `/srv-applet-mgr/v0/account/${rootStore.w3s.config.formData.accountID}`,
           data: e.formData
         });
-        if (res.data) {
-          await showNotification({ message: 'update password successed' });
-          eventBus.emit('user.update-pwd');
-          this.setExtraData({
-            modal: { show: false }
-          });
-        }
+        showNotification({ message: 'update password successed' });
+        eventBus.emit('user.update-pwd');
+        this.setExtraData({
+          modal: { show: false }
+        });
+        rootStore.w3s.config.logout();
       },
       value: new JSONValue<SchemaType>({
         default: {

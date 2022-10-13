@@ -9,10 +9,7 @@ export const schema = {
   title: 'Publish Event',
   type: 'object',
   properties: {
-    handler: {
-      type: 'string',
-      enum: ['start']
-    },
+    handler: { type: 'string' },
     data: { type: 'string' }
   },
   required: ['handler', 'data']
@@ -33,7 +30,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false
-        },
+        }
       },
       reactive: true,
       afterSubmit: async (e) => {
