@@ -1,15 +1,15 @@
 import React from 'react';
-import { Center, Flex, Image, Text } from '@chakra-ui/react';
+import { Center, Flex, Image, Text, Box, Button } from '@chakra-ui/react';
+import { Center as LayoutCenter } from '@chakra-ui/layout';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { Box } from '@chakra-ui/layout';
-import { hideMenu } from 'react-contextmenu';
+import Header from './Header';
 import ToolBar from './ToolBar';
 import SideBar from './SideBar';
 import AppletTable from './AppletTable';
 import AllInstances from './AllInstances';
 import JSONSchemaModal from '../JSONSchemaModal';
-import Header from './Header';
+import { gradientButtonStyle } from '@/lib/theme';
 
 const IDE = observer(() => {
   const { w3s } = useStore();
@@ -28,14 +28,42 @@ const IDE = observer(() => {
               W3bstream Demo Portal
             </Text>
           </Center>
-          <Flex w="100%" h="calc(100vh - 260px)" bg="#fff">
-            <ToolBar w="50px" />
-            <SideBar w="300px" />
-            <Box ml="24px" mt="24px" w="100%" h="100%">
-              {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <AppletTable />}
-              {w3s.showContent === 'ALL_INSTANCES' && <AllInstances />}
-            </Box>
-          </Flex>
+          {w3s.allProjects.value.length ? (
+            <Flex w="100%" h="calc(100vh - 260px)" bg="#fff">
+              <ToolBar w="50px" />
+              <SideBar w="300px" />
+              <Box ml="24px" mt="24px" w="100%" h="100%">
+                {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <AppletTable />}
+                {w3s.showContent === 'ALL_INSTANCES' && <AllInstances />}
+              </Box>
+            </Flex>
+          ) : (
+            <Flex w="100%" h="calc(100vh - 260px)" bg="#fff">
+              <LayoutCenter w="100%" h="100%">
+                <Flex flexDir="column" alignItems="center">
+                  <Image w="80px" src="/images/empty_box.svg" alt="" />
+                  <Text mt="16px" fontSize="14px" color="#7A7A7A">
+                    You haven't created any project.
+                  </Text>
+                  <Button
+                    mt="30px"
+                    h="32px"
+                    {...gradientButtonStyle}
+                    onClick={() => {
+                      w3s.createProject.setExtraData({
+                        modal: {
+                          title: 'Create project',
+                          show: true
+                        }
+                      });
+                    }}
+                  >
+                    Create a project now
+                  </Button>
+                </Flex>
+              </LayoutCenter>
+            </Flex>
+          )}
         </Box>
       </Box>
       <JSONSchemaModal jsonstate={w3s.createProject} />

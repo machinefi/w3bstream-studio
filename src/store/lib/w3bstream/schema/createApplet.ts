@@ -5,14 +5,15 @@ import { dataURItoBlob } from '@rjsf/utils';
 import { definitions } from './definitions';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
+import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
+    // title: 'Create Applet',
   definitions: {
     projects: {
       type: 'string'
     }
   },
-  title: 'Create Applet',
   type: 'object',
   properties: {
     file: {
@@ -51,7 +52,12 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
-          submitText: 'Submit'
+          submitText: 'Submit',
+          props: {
+            w: '100%',
+            h: '32px',
+            ...gradientButtonStyle
+          }
         }
       },
       reactive: true,
@@ -73,7 +79,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           eventBus.emit('applet.create');
           this.reset();
           this.setExtraData({
-            modal: { show: false }
+            modal: { ...this.extraData.modal, show: false  }
           });
         }
       },
@@ -89,7 +95,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false }
+          modal: { show: false, title: 'Create Applet' }
         }
       })
     });

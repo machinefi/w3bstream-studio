@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Button, Flex, TableContainer, Table, Thead, Tr, Th, Tbody, Td, useDisclosure, Badge, Center, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, TableContainer, Table, Thead, Tr, Th, Tbody, Td, useDisclosure, Badge } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { AddIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import SimplePagination from '@/components/Common/SimplePagination';
 import { PaginationState } from '@/store/standard/PaginationState';
 import { INSTANCE_STATUS } from '../AllInstances';
+import { gradientButtonStyle } from '@/lib/theme';
 
 const AppletTable = observer(() => {
   const { w3s } = useStore();
@@ -29,51 +30,24 @@ const AppletTable = observer(() => {
 
   const dataSource = applets.slice(store.paginationState.offset, store.paginationState.offset + store.paginationState.limit);
 
-  if (!w3s.curProject) {
-    return (
-      <Center h="300px">
-        <Stack>
-          <Text fontSize="2xl"> You have no any project.</Text>
-          <Button
-            borderRadius="base"
-            onClick={() => {
-              w3s.createProject.setExtraData({
-                modal: {
-                  show: true
-                }
-              });
-            }}
-          >
-            Create project
-          </Button>
-        </Stack>
-      </Center>
-    );
-  }
-
   return (
     <>
       <Flex alignItems="center">
         <Button
           h="32px"
           leftIcon={<AddIcon />}
-          bg="linear-gradient(93.42deg, #6FB2FF 2.82%, #946FFF 97.18%)"
-          color="#fff"
-          borderRadius="base"
-          _hover={{ opacity: 0.8 }}
-          _active={{
-            opacity: 0.6
-          }}
+          {...gradientButtonStyle}
           onClick={(e) => {
             //@ts-ignore
             w3s.createApplet.setData({
               info: {
-                projectID: w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject.f_project_id : '',
+                projectID: w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject?.f_project_id : '',
                 appletName: ''
               }
             });
             w3s.createApplet.setExtraData({
               modal: {
+                ...w3s.createApplet.extraData.modal,
                 show: true
               }
             });
@@ -157,6 +131,7 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
                   });
                   w3s.publishEvent.setExtraData({
                     modal: {
+                      ...w3s.publishEvent.extraData.modal,
                       show: true
                     }
                   });
@@ -239,7 +214,7 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
                         Start
                       </Button>
                       <Button
-                        ml='8px'
+                        ml="8px"
                         h="32px"
                         bg="#FAB400"
                         color="#fff"
@@ -253,7 +228,7 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
                         Restart
                       </Button>
                       <Button
-                        ml='8px'
+                        ml="8px"
                         h="32px"
                         bg="#E53E3E"
                         color="#fff"

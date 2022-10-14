@@ -7,7 +7,7 @@ export const definitions = {
       return rootStore.w3s.allProjects.value?.map((i) => i.f_project_id) || [];
     },
     get enumNames() {
-      return rootStore.w3s.allProjects.value?.map((i) => `${i.f_name}-${i.f_version}`) || [];
+      return rootStore.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
     }
   }
   // applets: {

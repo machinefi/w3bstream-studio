@@ -123,4 +123,5 @@ export class JSONValue<T> {
 
 export interface JSONSchemaModalState {
   show: boolean;
+  title: string;
 }

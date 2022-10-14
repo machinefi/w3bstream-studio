@@ -3,9 +3,10 @@ import { rootStore } from '@/store/index';
 import { FromSchema } from 'json-schema-to-ts';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
-  title: 'Login',
+  // title: 'Login',
   type: 'object',
   properties: {
     username: { type: 'string' },
@@ -25,7 +26,12 @@ export class LoginSchema extends JSONSchemaState<SchemaType> {
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
-          submitText: 'Login'
+          submitText: 'Login',
+          props: {
+            w: '100%',
+            h: '32px',
+            ...gradientButtonStyle
+          }
         }
       },
       reactive: true,

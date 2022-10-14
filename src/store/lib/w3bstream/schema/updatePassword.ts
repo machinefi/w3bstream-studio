@@ -4,9 +4,10 @@ import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
-  title: 'Update Password',
+  // title: 'Update Password',
   type: 'object',
   properties: {
     password: { type: 'string' }
@@ -29,7 +30,12 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
-          submitText: 'Update'
+          submitText: 'Update',
+          props: {
+            w: '100%',
+            h: '32px',
+            ...gradientButtonStyle
+          }
         }
       },
       reactive: true,
@@ -42,7 +48,7 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
         showNotification({ message: 'update password successed' });
         eventBus.emit('user.update-pwd');
         this.setExtraData({
-          modal: { show: false }
+          modal: { ...this.extraData.modal, show: false  }
         });
         rootStore.w3s.config.logout();
       },
@@ -54,7 +60,7 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false }
+          modal: { show: false, title: 'Update Password' }
         }
       })
     });

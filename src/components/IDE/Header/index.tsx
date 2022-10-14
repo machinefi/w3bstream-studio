@@ -55,6 +55,7 @@ const Profile = observer(() => {
                 onClick={() => {
                   w3s.updatePassword.setExtraData({
                     modal: {
+                      ...w3s.updatePassword.extraData.modal,
                       show: true
                     }
                   });

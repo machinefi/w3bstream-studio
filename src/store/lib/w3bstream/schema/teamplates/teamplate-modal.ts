@@ -49,7 +49,7 @@ export class TemplateSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false }
+          modal: { show: false, title: '' }
         }
       })
     });

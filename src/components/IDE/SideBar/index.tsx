@@ -26,12 +26,12 @@ const SideBar = observer((props: SideBarProps) => {
             h="19px"
             cursor="pointer"
             onClick={(e) => {
-              w3s.createProject.schema.title = 'Create Project';
               w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = false;
               w3s.createProject.reset();
               w3s.createProject.setExtraData({
                 modal: {
-                  show: true
+                  show: true,
+                  title: 'Create Project'
                 }
               });
             }}
@@ -105,14 +105,13 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
               onItemSelect={() => {
                 w3s.curProjectIndex = index;
                 w3s.createProject.setData({
-                  name: w3s.curProject.f_name,
-                  version: w3s.curProject.f_version
+                  name: w3s.curProject.f_name
                 });
-                w3s.createProject.schema.title = 'Project Details';
                 w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = true;
                 w3s.createProject.setExtraData({
                   modal: {
-                    show: true
+                    show: true,
+                    title: 'Project Details'
                   }
                 });
               }}

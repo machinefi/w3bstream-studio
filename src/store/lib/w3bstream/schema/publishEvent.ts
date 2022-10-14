@@ -4,9 +4,10 @@ import { rootStore } from '@/store/index';
 import { showNotification } from '@mantine/notifications';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
-  title: 'Publish Event',
+  // title: 'Publish Event',
   type: 'object',
   properties: {
     handler: { type: 'string' },
@@ -29,7 +30,13 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       schema,
       uiSchema: {
         'ui:submitButtonOptions': {
-          norender: false
+          norender: false,
+          submitText: 'Submit',
+          props: {
+            w: '100%',
+            h: '32px',
+            ...gradientButtonStyle
+          }
         }
       },
       reactive: true,
@@ -49,7 +56,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           eventBus.emit('applet.publish-event');
           this.reset();
           this.setExtraData({
-            modal: { show: false }
+            modal: { ...this.extraData.modal, show: false  }
           });
         }
       },
@@ -63,7 +70,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       }),
       extraValue: new JSONValue<ExtraDataType>({
         default: {
-          modal: { show: false }
+          modal: { show: false, title: 'Publish Event' }
         }
       })
     });
