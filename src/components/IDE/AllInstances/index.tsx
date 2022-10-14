@@ -33,7 +33,7 @@ const AllInstances = observer(() => {
   const store = useLocalObservable(() => ({
     paginationState: new PaginationState({
       page: 1,
-      limit: 10
+      limit: 8
     })
   }));
 
@@ -46,45 +46,89 @@ const AllInstances = observer(() => {
   const dataSource = allInstances.slice(store.paginationState.offset, store.paginationState.offset + store.paginationState.limit);
 
   return (
-    <TableContainer>
-      <Flex fontSize="xl" fontWeight={600}>
-        All Instances
-      </Flex>
-      <Table mt={2} size="sm">
-        <Thead bg="#EAF5FE">
-          <Tr>
-            <Th>Status</Th>
-            <Th>Actions</Th>
-            <Th>ID</Th>
-            <Th>Project Name</Th>
-            <Th>Applet Name</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {dataSource.map((item) => (
-            <Tr bg="#F2FAFB" key={item.f_instance_id}>
-              <Td>
-                <Badge colorScheme={INSTANCE_STATUS[item.f_state].colorScheme}>{INSTANCE_STATUS[item.f_state].text}</Badge>
-              </Td>
-              <Td>
-                <Button colorScheme="green" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' })}>
-                  Start
-                </Button>
-                <Button ml={4} colorScheme="yellow" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' })}>
-                  Restart
-                </Button>
-                <Button ml={4} colorScheme="red" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' })}>
-                  Stop
-                </Button>
-              </Td>
-              <Td>{item.f_instance_id}</Td>
-              <Td>{item.project_name}</Td>
-              <Td>{item.applet_name}</Td>
+    <>
+      <TableContainer h="calc(100vh - 350px)" overflowY="auto">
+        <Table>
+          <Thead>
+            <Tr h="54px" bg="#F5F5F5">
+              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                Status
+              </Th>
+              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                Actions
+              </Th>
+              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                ID
+              </Th>
+              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                Project Name
+              </Th>
+              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                Applet Name
+              </Th>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
+          </Thead>
+          <Tbody>
+            {dataSource.map((item) => (
+              <Tr key={item.f_instance_id} h="54px" fontSize="14px" color="#0F0F0F">
+                <Td>
+                  <Badge variant="outline" colorScheme={INSTANCE_STATUS[item.f_state].colorScheme}>
+                    {INSTANCE_STATUS[item.f_state].text}
+                  </Badge>
+                </Td>
+                <Td>
+                  <Button
+                    h="32px"
+                    bg="#37A169"
+                    color="#fff"
+                    borderRadius="base"
+                    _hover={{ opacity: 0.8 }}
+                    _active={{
+                      opacity: 0.6
+                    }}
+                    onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' })}
+                  >
+                    Start
+                  </Button>
+                  <Button
+                    ml="8px"
+                    h="32px"
+                    bg="#FAB400"
+                    color="#fff"
+                    borderRadius="base"
+                    _hover={{ opacity: 0.8 }}
+                    _active={{
+                      opacity: 0.6
+                    }}
+                    onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' })}
+                  >
+                    Restart
+                  </Button>
+                  <Button
+                    ml="8px"
+                    h="32px"
+                    bg="#E53E3E"
+                    color="#fff"
+                    borderRadius="base"
+                    _hover={{ opacity: 0.8 }}
+                    _active={{
+                      opacity: 0.6
+                    }}
+                    onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' })}
+                  >
+                    Stop
+                  </Button>
+                </Td>
+                <Td>{item.f_instance_id}</Td>
+                <Td>{item.project_name}</Td>
+                <Td>{item.applet_name}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
       <SimplePagination
+        mt="10px"
         total={store.paginationState.total}
         limit={store.paginationState.limit}
         page={store.paginationState.page}
@@ -94,7 +138,7 @@ const AllInstances = observer(() => {
           });
         }}
       />
-    </TableContainer>
+    </>
   );
 });
 

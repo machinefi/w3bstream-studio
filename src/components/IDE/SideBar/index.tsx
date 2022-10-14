@@ -1,7 +1,7 @@
 import React from 'react';
-import { Flex, Box, Portal, useColorModeValue, Stack, Text, FlexProps } from '@chakra-ui/react';
+import { Flex, Box, Portal, Stack, Text, FlexProps } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
-import { MdNoteAdd, MdRefresh } from 'react-icons/md';
+import { MdAddBox, MdRefresh } from 'react-icons/md';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -11,30 +11,19 @@ interface SideBarProps extends FlexProps {}
 
 const SideBar = observer((props: SideBarProps) => {
   const { w3s } = useStore();
-  const bg = useColorModeValue('white', 'dark');
-  const borderColor = useColorModeValue('gray.200', 'grey.100');
 
   return (
-    <Flex
-      h="100%"
-      style={{ height: '100vh', overflowY: 'auto' }}
-      direction="column"
-      borderWidth="1px"
-      borderStyle="solid"
-      bg={bg}
-      display="flex"
-      flexDirection="column"
-      borderColor={borderColor}
-      {...props}
-    >
-      <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
-        <Text>Project Management</Text>
+    <Flex h="100%" direction="column" flexDirection="column" bg="#FAFAFA" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
+      <Flex alignItems="center" justifyContent="space-between" h="80px" p={2} borderBottom="1px solid rgba(0, 0, 0, 0.06)">
+        <Text fontSize="16px" fontWeight={700}>
+          Project Management
+        </Text>
         <Flex alignItems="center">
           <Icon
-            as={MdNoteAdd}
+            as={MdAddBox}
             ml={2}
-            w={5}
-            h={4}
+            w="22px"
+            h="19px"
             cursor="pointer"
             onClick={(e) => {
               w3s.createProject.schema.title = 'Create Project';
@@ -47,31 +36,43 @@ const SideBar = observer((props: SideBarProps) => {
               });
             }}
           />
-          <Icon as={MdRefresh} ml={2} w={5} h={5} cursor="pointer" />
+          <Icon as={MdRefresh} ml={2} w="22px" h="19px" cursor="pointer" />
         </Flex>
       </Flex>
-      <Stack mt={2} p={2} h="200px" overflowY="auto">
+      <Box h="350px" overflowY="auto">
         {w3s.allProjects.value.map((i, index) => {
           return <ProjectItem project={i} index={index} />;
         })}
-      </Stack>
-      <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
-        <Text
-          cursor="pointer"
-          onClick={() => {
-            w3s.showContent = 'ALL_APPLETS';
-          }}
-        >
+      </Box>
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        h="60px"
+        p={2}
+        borderTop="1px solid rgba(0, 0, 0, 0.06)"
+        sx={getSelectedStyles(w3s.showContent === 'ALL_APPLETS')}
+        cursor="pointer"
+        onClick={() => {
+          w3s.showContent = 'ALL_APPLETS';
+        }}
+      >
+        <Text fontSize="16px" fontWeight={700}>
           Applets
         </Text>
       </Flex>
-      <Flex alignItems="center" justifyContent="space-between" mt={1} p={2} bg="#FAFAFA">
-        <Text
-          cursor="pointer"
-          onClick={() => {
-            w3s.showContent = 'ALL_INSTANCES';
-          }}
-        >
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        h="60px"
+        p={2}
+        borderTop="1px solid rgba(0, 0, 0, 0.06)"
+        sx={getSelectedStyles(w3s.showContent === 'ALL_INSTANCES')}
+        cursor="pointer"
+        onClick={() => {
+          w3s.showContent = 'ALL_INSTANCES';
+        }}
+      >
+        <Text fontSize="16px" fontWeight={700}>
           Instances
         </Text>
       </Flex>
@@ -85,13 +86,15 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
     <ContextMenuTrigger id={`ProjectItemContext${project.f_project_id}`} holdToDisplay={-1}>
       <Box
         key={index}
-        sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999', cursor: 'pointer' }}
+        p={2}
+        cursor="pointer"
+        sx={getSelectedStyles(w3s.curProjectIndex == index)}
         onClick={(e) => {
           w3s.curProjectIndex = index;
           w3s.showContent = 'CURRENT_APPLETS';
         }}
       >
-        <Text lineHeight={2} fontSize="sm">
+        <Text lineHeight="28px" fontSize="14px">
           {project.f_name}
         </Text>
       </Box>
@@ -122,5 +125,17 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
     </ContextMenuTrigger>
   );
 });
+
+function getSelectedStyles(selected: boolean) {
+  return selected
+    ? {
+        color: '#4689F7',
+        bg: '#EDF3FA'
+      }
+    : {
+        color: '#283241',
+        bg: '#FAFAFA'
+      };
+}
 
 export default SideBar;

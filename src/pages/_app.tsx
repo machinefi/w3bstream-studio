@@ -8,7 +8,6 @@ import { loggerLink } from '@trpc/client/links/loggerLink';
 import superjson from 'superjson';
 import { useStore } from '@/store/index';
 import { theme } from '@/lib/theme';
-import Header from '@/components/Header';
 import NextRouter from 'next/router';
 import type { AppRouter } from '@/server/routers/_app';
 import type { AppProps } from 'next/app';
@@ -38,7 +37,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ChakraProvider theme={theme}>
         <NotificationsProvider>
           <Toaster />
-          <Header />
           <Component {...pageProps} />
         </NotificationsProvider>
       </ChakraProvider>

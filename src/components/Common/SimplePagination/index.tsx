@@ -1,8 +1,8 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import Pagination from 'rc-pagination';
 
-interface PaginationProps {
+interface SimplePaginationProps extends FlexProps {
   total: number;
   limit: number;
   page: number;
@@ -12,14 +12,14 @@ interface PaginationProps {
 const itemRender = (current, type, element) => {
   if (type === 'prev') {
     return (
-      <Flex w="30px" h="30px" justifyContent="center" alignItems="center" mr="10px" bg="#F2F9FC" borderRadius="md" cursor="pointer">
+      <Flex w="30px" h="30px" justifyContent="center" alignItems="center" mr="10px" bg="#F2F9FC" cursor="pointer">
         <ChevronLeftIcon />
       </Flex>
     );
   }
   if (type === 'next') {
     return (
-      <Flex w="30px" h="30px" justifyContent="center" alignItems="center" ml="10px" bg="#F2F9FC" borderRadius="md" cursor="pointer">
+      <Flex w="30px" h="30px" justifyContent="center" alignItems="center" ml="10px" bg="#F2F9FC" cursor="pointer">
         <ChevronRightIcon />
       </Flex>
     );
@@ -27,12 +27,10 @@ const itemRender = (current, type, element) => {
   return element;
 };
 
-const SimplePagination = (paginationState: PaginationProps) => {
+const SimplePagination = ({ total, limit, page, onPageChange, ...props }: SimplePaginationProps) => {
   return (
     <Flex
-      mt="20px"
-      mr="20px"
-      justifyContent="flex-end"
+      justifyContent="center"
       sx={{
         '.rc-pagination-simple': {
           display: 'flex',
@@ -41,9 +39,9 @@ const SimplePagination = (paginationState: PaginationProps) => {
         '.rc-pagination-simple-pager >input': {
           width: '30px',
           height: '30px',
-          bg: 'boxBackground',
+          bg: '#F3F9FC',
           color: 'primary',
-          borderRadius: 'md',
+
           lineHeight: '30px',
           textAlign: 'center',
           outline: 'none'
@@ -53,16 +51,17 @@ const SimplePagination = (paginationState: PaginationProps) => {
           marginRight: '10px'
         }
       }}
+      {...props}
     >
       <Pagination
         simple
-        total={paginationState.total}
-        pageSize={paginationState.limit}
-        current={paginationState.page}
+        total={total}
+        pageSize={limit}
+        current={page}
         itemRender={itemRender}
         onChange={(currentPage) => {
           if (currentPage) {
-            paginationState?.onPageChange?.(currentPage);
+            onPageChange?.(currentPage);
           }
         }}
       />

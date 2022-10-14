@@ -52,17 +52,18 @@ const AppletTable = observer(() => {
   }
 
   return (
-    <TableContainer>
+    <>
       <Flex alignItems="center">
-        <Text fontSize="xl" fontWeight={600}>
-          Applets
-        </Text>
         <Button
-          ml={6}
+          h="32px"
           leftIcon={<AddIcon />}
-          colorScheme="blue"
-          size="xs"
+          bg="linear-gradient(93.42deg, #6FB2FF 2.82%, #946FFF 97.18%)"
+          color="#fff"
           borderRadius="base"
+          _hover={{ opacity: 0.8 }}
+          _active={{
+            opacity: 0.6
+          }}
           onClick={(e) => {
             //@ts-ignore
             w3s.createApplet.setData({
@@ -81,24 +82,36 @@ const AppletTable = observer(() => {
           Add Applet
         </Button>
       </Flex>
-      <Table mt={4} variant="simple">
-        <Thead>
-          <Tr bg="#FAFAFA">
-            <Th></Th>
-            <Th>ID</Th>
-            <Th>Name</Th>
-            {w3s.showContent === 'ALL_APPLETS' && <Th>Project Name</Th>}
-
-            <Th>Actions</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {dataSource.map((applet) => {
-            return <CollapseTable key={applet.f_applet_id} applet={applet} w3s={w3s} />;
-          })}
-        </Tbody>
-      </Table>
+      <TableContainer mt={4} h="calc(100vh - 400px)" overflowY="auto">
+        <Table variant="simple">
+          <Thead>
+            <Tr h="54px" bg="#F5F5F5">
+              <Th></Th>
+              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                Applet ID
+              </Th>
+              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                Name
+              </Th>
+              {w3s.showContent === 'ALL_APPLETS' && (
+                <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                  Project Name
+                </Th>
+              )}
+              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                Actions
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {dataSource.map((applet) => {
+              return <CollapseTable key={applet.f_applet_id} applet={applet} w3s={w3s} />;
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
       <SimplePagination
+        mt="10px"
         total={store.paginationState.total}
         limit={store.paginationState.limit}
         page={store.paginationState.page}
@@ -108,7 +121,7 @@ const AppletTable = observer(() => {
           });
         }}
       />
-    </TableContainer>
+    </>
   );
 });
 
@@ -118,7 +131,7 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
 
   return (
     <>
-      <Tr>
+      <Tr h="54px" fontSize="14px" color="#0F0F0F">
         <Td w="40px">{isOpen ? <ChevronDownIcon w={6} h={6} onClick={onToggle} cursor="pointer" /> : <ChevronRightIcon w={6} h={6} onClick={onToggle} cursor="pointer" />}</Td>
         <Td w="300px">{applet.f_applet_id}</Td>
         <Td w="140px">{applet.f_name}</Td>
@@ -127,9 +140,14 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
           {applet.instances.length > 0 ? (
             <>
               <Button
-                colorScheme="blue"
-                size="xs"
+                h="32px"
+                bg="#6FB2FF"
+                color="#fff"
                 borderRadius="base"
+                _hover={{ opacity: 0.8 }}
+                _active={{
+                  opacity: 0.6
+                }}
                 onClick={(e) => {
                   w3s.publishEvent.setData({
                     projectID: applet.f_project_id,
@@ -147,10 +165,12 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
                 Send Event
               </Button>
               <Button
-                ml={4}
-                colorScheme="blue"
-                size="xs"
+                ml="8px"
+                h="32px"
+                variant="outline"
                 borderRadius="base"
+                borderColor="#6FB2FF"
+                color="#6FB2FF"
                 onClick={() => {
                   copy(
                     `curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${applet.f_project_id}/${applet.f_applet_id}/start' --header 'publisher: "admin"' --header 'Content-Type: text/plain' --data-raw 'input event'`
@@ -179,31 +199,71 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
       </Tr>
       <Tr {...styles}>
         <Td></Td>
-        <Td colSpan={3}>
+        <Td colSpan={4}>
           <TableContainer>
-            <Table size="sm">
-              <Thead bg="#EAF5FE">
-                <Tr>
-                  <Th>ID</Th>
-                  <Th>Status</Th>
-                  <Th>Actions</Th>
+            <Table>
+              <Thead>
+                <Tr h="54px" bg="#F5F5F5">
+                  <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                    Instance ID
+                  </Th>
+                  <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                    Status
+                  </Th>
+                  <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                    Actions
+                  </Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {applet.instances.map((item) => (
-                  <Tr bg="#F2FAFB" key={item.f_instance_id}>
+                  <Tr h="54px" key={item.f_instance_id}>
                     <Td w="340px">{item.f_instance_id}</Td>
                     <Td w="120px">
-                      <Badge colorScheme={INSTANCE_STATUS[item.f_state].colorScheme}>{INSTANCE_STATUS[item.f_state].text}</Badge>
+                      <Badge variant="outline" colorScheme={INSTANCE_STATUS[item.f_state].colorScheme}>
+                        {INSTANCE_STATUS[item.f_state].text}
+                      </Badge>
                     </Td>
                     <Td>
-                      <Button colorScheme="green" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' })}>
+                      <Button
+                        h="32px"
+                        bg="#37A169"
+                        color="#fff"
+                        borderRadius="base"
+                        _hover={{ opacity: 0.8 }}
+                        _active={{
+                          opacity: 0.6
+                        }}
+                        onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' })}
+                      >
                         Start
                       </Button>
-                      <Button ml={4} colorScheme="yellow" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' })}>
+                      <Button
+                        ml='8px'
+                        h="32px"
+                        bg="#FAB400"
+                        color="#fff"
+                        borderRadius="base"
+                        _hover={{ opacity: 0.8 }}
+                        _active={{
+                          opacity: 0.6
+                        }}
+                        onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' })}
+                      >
                         Restart
                       </Button>
-                      <Button ml={4} colorScheme="red" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' })}>
+                      <Button
+                        ml='8px'
+                        h="32px"
+                        bg="#E53E3E"
+                        color="#fff"
+                        borderRadius="base"
+                        _hover={{ opacity: 0.8 }}
+                        _active={{
+                          opacity: 0.6
+                        }}
+                        onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' })}
+                      >
                         Stop
                       </Button>
                     </Td>
