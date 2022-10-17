@@ -20,7 +20,7 @@ export class JSONSchemaState<T, V = any> {
     return this.value.get();
   }
   set formData(value: T) {
-    this.value.set(this.setFormat(value));
+    this.value.set(value);
   }
   schema: RJSFSchema;
   uiSchema: UiSchema;
@@ -47,7 +47,6 @@ export class JSONSchemaState<T, V = any> {
       this.afterSubmit(e);
     }
   };
-  setFormat = (val: T) => val;
   afterSubmit: (e: IChangeEvent<T, any>) => void;
   afterChange: (e: IChangeEvent<T, any>) => void;
 
@@ -97,6 +96,7 @@ export interface JSONSchemaValue {
   value?: any;
   default?: any;
   set: (value: any) => void;
+  setFormat: (value: any) => void;
   get: () => any;
   reset: () => any;
 }
@@ -105,12 +105,14 @@ export class JSONValue<T> {
   value?: T = null as T;
   default?: T = null as T;
 
+  setFormat = (val: T) => val;
+
   get() {
     return this.value;
   }
   set(val: T) {
+    val = this.setFormat(val);
     const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
-      console.log(objValue, srcValue);
       return srcValue || '';
     });
     this.value = toJS(newVal);

@@ -5,7 +5,6 @@ import { withTRPC } from '@trpc/next';
 import { observer } from 'mobx-react-lite';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { loggerLink } from '@trpc/client/links/loggerLink';
-import superjson from 'superjson';
 import { useStore } from '@/store/index';
 import { theme } from '@/lib/theme';
 import NextRouter from 'next/router';
@@ -13,7 +12,9 @@ import type { AppRouter } from '@/server/routers/_app';
 import type { AppProps } from 'next/app';
 import { NotificationsProvider } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
+import superjson from 'superjson';
 
+import '@/lib/superjson';
 function MyApp({ Component, pageProps }: AppProps) {
   const {
     lang,

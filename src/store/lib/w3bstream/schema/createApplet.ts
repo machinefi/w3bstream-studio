@@ -21,8 +21,13 @@ export const schema = {
       format: 'data-url',
       title: 'Single file'
     },
-    projectID: { $ref: '#/definitions/projects' },
-    appletName: { type: 'string' }
+    info: {
+      type: 'object',
+      properties: {
+        projectID: { $ref: '#/definitions/projects' },
+        appletName: { type: 'string' }
+      }
+    }
   },
   required: ['file', 'info']
 } as const;
@@ -58,12 +63,13 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       reactive: true,
       afterSubmit: async (e) => {
         let formData = new FormData();
+        console.log(e.formData);
         const file = dataURItoBlob(e.formData.file);
         formData.append('file', file.blob);
         formData.append('info', JSON.stringify(e.formData.info));
         const res = await axios.request({
           method: 'post',
-          url: '/srv-applet-mgr/v0/applet',
+          url: `/srv-applet-mgr/v0/applet/${e.formData.info.projectID}`,
           headers: {
             'Content-Type': 'multipart/form-data'
           },
@@ -78,15 +84,19 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           });
         }
       },
-      setFormat: (val) => {
-        val.projectID = `${val.projectID}`;
-        return val;
-      },
       value: new JSONValue<SchemaType>({
         //@ts-ignore
         default: {
-          appletName: 'app_01',
-          projectID: ''
+          info: {
+            appletName: 'app_01',
+            projectID: ''
+          }
+        },
+        setFormat: (val) => {
+          if (val.info.projectID) {
+            val.info.projectID = `${val.info.projectID}`;
+          }
+          return val;
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({

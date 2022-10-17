@@ -1,5 +1,5 @@
 import NextRouter from 'next/router';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import RootStore from '@/store/root';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
@@ -61,6 +61,7 @@ export class W3bStream {
         });
         this.allApplets = applets;
         this.allInstances = instances;
+        console.log(toJS(res));
       }
 
       return res;
