@@ -121,10 +121,12 @@ export class W3bStream {
   initEvent() {
     eventBus
       .on('app.ready', async () => {
-        await axios.request({
-          method: 'get',
-          url: '/srv-applet-mgr/v0/project'
-        });
+        if (this.isLogin) {
+          await axios.request({
+            method: 'get',
+            url: '/srv-applet-mgr/v0/project'
+          });
+        }
       })
       .on('user.login', () => {
         this.allProjects.call();
