@@ -48,9 +48,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 function getBaseUrl() {
-  if (process.browser) {
-    return '';
-  }
   // reference for vercel.com
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
