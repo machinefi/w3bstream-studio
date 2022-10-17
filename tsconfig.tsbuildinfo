@@ -4086,9 +4086,14 @@
         "signature": "b97ca69c1576e5f9666f87d449a13e873ac864e0a514e5cf8af8921a263ddb77",
         "affectsGlobalScope": false
       },
+      "./src/lib/superjson.ts": {
+        "version": "b3b68212e01e93e8120fa6e83700e9075b342b92b422a2a6f58efae653e9099a",
+        "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "affectsGlobalScope": false
+      },
       "./src/server/routers/_app.ts": {
-        "version": "82174da57d8e8afb35d95804c308817adef593ebe07430f3ccf1b445e6f55b39",
-        "signature": "520f0ca0ed971d118864d4d5eda8dc7b3c56447dca8734af3893b5169e3f8411",
+        "version": "117b4d406ff9e4a8a69e57ebbbebb5e1b3ff023843e564353f36b4cacaf36b8b",
+        "signature": "4da751aa063201803cee19167f6f7cf0c6b5ca9013e15a4de3c3c9b1b21fcbcf",
         "affectsGlobalScope": false
       },
       "./src/lib/trpc.ts": {
@@ -5852,7 +5857,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/toolbar/index.tsx": {
-        "version": "aacb7ea21aac28b79b56438b3a4b6b2f454c3bb09e08b32708e7dd633ef60163",
+        "version": "58bf2f51a124e4c28c58bb201d8f433d3259a9881350c1e087233ef2972477df",
         "signature": "0c4a283d2cfe8a37165000659f2d9adec6db97665a4c74bdf6cab418800f3c7a",
         "affectsGlobalScope": false
       },
@@ -5892,7 +5897,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "dd5b6d7f01d741b9aa862f84fbd23512a9a3515d1873ad5879cc07e8a9063e73",
+        "version": "893c7b65d746366367202d5dcae45145fb808744af06a43ad2bbb9ff384f41be",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
@@ -5962,12 +5967,12 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/allinstances/index.tsx": {
-        "version": "8e599e9dde62e2dfe9084abccea1f30089ec37bdeba9c0a0ed811d7228b7c923",
+        "version": "d9c6555d85327d4f54dd438e846a694281e432e723c2beafea873fb7e71a709f",
         "signature": "85f32e3f76d5a820c09aeb5dfae44e17d8b8ea1464de3f598b4f5cf505c56f4e",
         "affectsGlobalScope": false
       },
       "./src/components/ide/applettable/index.tsx": {
-        "version": "6956f3aa688d912d919228dda2c48e3425f8dceb84dc34a64f587f960db4c99c",
+        "version": "c8bc3179b301cb6d674fff8322bce249ba278f9507babec0d53c63cad6d36f43",
         "signature": "546a76a4f48d356471d323104659cbe0341b8ade72ae5717ae04aaa217c79b5e",
         "affectsGlobalScope": false
       },
@@ -5987,13 +5992,8 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/index.tsx": {
-        "version": "cffccb9b60464d433db066719abf17e517a92fb846e4fa02ae581fda79ad8c70",
+        "version": "7362b592a76b434b224b7f9b19425b9eb5d79d67f67550fe96e5e9c25c4ae486",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
-        "affectsGlobalScope": false
-      },
-      "./src/lib/superjson.ts": {
-        "version": "3e911ca4eb0fb7e194b3a21f2b91fbe2acd2e79b191b6bb7ff4bf8401e05bf13",
-        "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
         "affectsGlobalScope": false
       },
       "./src/lib/__generated/sdk.ts": {
@@ -15756,6 +15756,7 @@
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts"
       ],
       "./src/server/routers/_app.ts": [
+        "./src/lib/superjson.ts",
         "./src/server/routers/template.ts",
         "./src/server/routers/w3bstream.ts",
         "./src/server/trpc.ts"
@@ -23287,7 +23288,8 @@
       ],
       "./src/server/routers/_app.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
-        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./src/lib/superjson.ts"
       ],
       "./src/server/routers/template.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
@@ -25063,11 +25065,11 @@
             "length": 5,
             "code": 2741,
             "category": 1,
-            "messageText": "Property 'setFormat' is missing in type 'StorageState<{ [x: string]: unknown; apiUrl: string; token: string; accountID: string; }>' but required in type 'JSONSchemaValue'.",
+            "messageText": "Property 'setFormat' is missing in type 'StorageState<{ [x: string]: unknown; accountID: string; apiUrl: string; token: string; }>' but required in type 'JSONSchemaValue'.",
             "relatedInformation": [
               {
                 "file": "./src/store/standard/jsonschemastate.ts",
-                "start": 2215,
+                "start": 2199,
                 "length": 9,
                 "messageText": "'setFormat' is declared here.",
                 "category": 3,
@@ -25077,7 +25079,7 @@
                 "file": "./src/store/standard/jsonschemastate.ts",
                 "start": 345,
                 "length": 5,
-                "messageText": "The expected type comes from property 'value' which is declared here on type 'Partial<JSONSchemaState<{ [x: string]: unknown; apiUrl: string; token: string; accountID: string; }, any>>'",
+                "messageText": "The expected type comes from property 'value' which is declared here on type 'Partial<JSONSchemaState<{ [x: string]: unknown; accountID: string; apiUrl: string; token: string; }, any>>'",
                 "category": 3,
                 "code": 6500
               }
@@ -25202,7 +25204,7 @@
             "relatedInformation": [
               {
                 "file": "./src/store/standard/jsonschemastate.ts",
-                "start": 2215,
+                "start": 2199,
                 "length": 9,
                 "messageText": "'setFormat' is declared here.",
                 "category": 3,

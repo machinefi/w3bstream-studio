@@ -5,7 +5,7 @@ import { t } from '../trpc';
 import { templateRouter } from './template';
 import { w3bstreamRouter } from './w3bstream';
 
-// import '@/lib/superjson';P
+import '@/lib/superjson';
 /**
  * Create your application's root router
  * If you want to use SSG, you need export this
