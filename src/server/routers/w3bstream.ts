@@ -19,6 +19,15 @@ export const w3bstreamRouter = t.router({
               f_name: true,
               f_applet_id: true,
               f_project_id: true,
+              strategies: {
+                select: {
+                  f_strategy_id: true,
+                  f_applet_id: true,
+                  f_project_id: true,
+                  f_event_type: true,
+                  f_handler: true
+                }
+              },
               instances: {
                 select: {
                   f_instance_id: true,

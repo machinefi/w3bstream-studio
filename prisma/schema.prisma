@@ -34,6 +34,7 @@ model t_applet {
   f_updated_at BigInt       @default(0)
   project      t_project    @relation(fields: [f_project_id], references: [f_project_id])
   instances    t_instance[]
+  strategies   t_strategy[]
 }
 
 model t_event_log {
@@ -132,15 +133,16 @@ model t_sql_meta_enum {
 }
 
 model t_strategy {
-  f_id          BigInt @id @default(autoincrement())
+  f_id          BigInt   @id @default(autoincrement())
   f_strategy_id BigInt
   f_project_id  BigInt
   f_applet_id   BigInt
   f_event_type  Int
-  f_handler     String @db.VarChar(255)
-  f_created_at  BigInt @default(0)
-  f_updated_at  BigInt @default(0)
-  f_deleted_at  BigInt @default(0)
+  f_handler     String   @db.VarChar(255)
+  f_created_at  BigInt   @default(0)
+  f_updated_at  BigInt   @default(0)
+  f_deleted_at  BigInt   @default(0)
+  applet        t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
 
   @@unique([f_project_id, f_applet_id, f_event_type, f_handler, f_deleted_at], map: "t_strategy_ui_prj_app_event")
   @@unique([f_strategy_id, f_deleted_at], map: "t_strategy_ui_strategy_id")
