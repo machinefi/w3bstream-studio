@@ -8,7 +8,7 @@ import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
-    // title: 'Create Applet',
+  // title: 'Create Applet',
   definitions: {
     projects: {
       type: 'string'
@@ -21,13 +21,8 @@ export const schema = {
       format: 'data-url',
       title: 'Single file'
     },
-    info: {
-      type: 'object',
-      properties: {
-        projectID: { $ref: '#/definitions/projects' },
-        appletName: { type: 'string' }
-      }
-    }
+    projectID: { $ref: '#/definitions/projects' },
+    appletName: { type: 'string' }
   },
   required: ['file', 'info']
 } as const;
@@ -79,17 +74,19 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           eventBus.emit('applet.create');
           this.reset();
           this.setExtraData({
-            modal: { ...this.extraData.modal, show: false  }
+            modal: { ...this.extraData.modal, show: false }
           });
         }
+      },
+      setFormat: (val) => {
+        val.projectID = `${val.projectID}`;
+        return val;
       },
       value: new JSONValue<SchemaType>({
         //@ts-ignore
         default: {
-          info: {
-            appletName: 'app_01',
-            projectID: ''
-          }
+          appletName: 'app_01',
+          projectID: ''
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({

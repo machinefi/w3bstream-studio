@@ -105,7 +105,8 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
               onItemSelect={() => {
                 w3s.curProjectIndex = index;
                 w3s.createProject.setData({
-                  name: w3s.curProject.f_name
+                  name: w3s.curProject.f_name,
+                  version: w3s.createProject.formData.version
                 });
                 w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = true;
                 w3s.createProject.setExtraData({

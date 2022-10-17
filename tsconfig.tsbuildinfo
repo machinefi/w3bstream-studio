@@ -6197,8 +6197,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "c981c69ccdcc6ed2073ebffa216c4541e7636dd3ebff61eb5c4ecfdd4679fb3d",
-        "signature": "765d27bb9f2c70ca111374dd19763c7cad35b35b7b65ace946cdc4169ec90275",
+        "version": "772998f7af5f27d9e2a71e55f4efea63d26b7b7c5e0aea93e9eefcba13127ead",
+        "signature": "95e616d5053f8ed1987ef1a7ef365e2f746d1ea226bc1ff8f95126bbe0885d55",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/ts-algebra@1.1.1/node_modules/ts-algebra/lib/meta-types/never.d.ts": {
@@ -7827,13 +7827,13 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/definitions.ts": {
-        "version": "c578a0887ee67b0222bdc498571685f6d63ca0f46123eb90d0219c5b6fa1afce",
+        "version": "45fcf1d257b1ea522707c05b515a45f4e9a037216c25f122c9a1237cc5936891",
         "signature": "45a2e7262dd3c9df93b0f53f61096a573a916e4c83d09c23a65f14e3a518f900",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createapplet.ts": {
-        "version": "5a0653137b0d637ee99689c4b535f574bf6e1e35d3d8fdce6511a6ea1bb02d85",
-        "signature": "79dabd1dbe7f722edbe1377336e114a37541959bd1a7adca53ec112949457555",
+        "version": "1d50d535a9ba68bf4c52658cf1bbb6bbb3e0b63a0005e1fdd86524a36f58f6cf",
+        "signature": "e4a5daab861a6f37347e8aa606e5198686323165ad983b1155a8c3720357b0a1",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/projectlist.ts": {
@@ -7952,7 +7952,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "fcc2ce3304ea5773aa076e5b17602d537b9e5c73fb42ea67949d268cd95b9333",
+        "version": "dd5b6d7f01d741b9aa862f84fbd23512a9a3515d1873ad5879cc07e8a9063e73",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
@@ -8042,7 +8042,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/jsonschemamodal/index.tsx": {
-        "version": "7578cae323e035bdaef7ca36f9fb1e35ae22d53bbbd9544f366047c7966afd8c",
+        "version": "c874416239ba5249441c36b090ec8b5fece1e8f1778843204ac4fdf9af5e15f9",
         "signature": "f720bf7417bd1e82f043e73e31f132d8d95402c08f31f833f7ae2a229ed33980",
         "affectsGlobalScope": false
       },
@@ -30777,30 +30777,7 @@
       "./src/components/ide/applettable/index.tsx",
       "./src/components/ide/header/index.tsx",
       "./src/components/ide/index.tsx",
-      [
-        "./src/components/ide/sidebar/index.tsx",
-        [
-          {
-            "file": "./src/components/ide/sidebar/index.tsx",
-            "start": 3503,
-            "length": 65,
-            "code": 2345,
-            "category": 1,
-            "messageText": {
-              "messageText": "Argument of type '{ name: any; }' is not assignable to parameter of type '{ [x: string]: unknown; name: string; version: string; }'.",
-              "category": 1,
-              "code": 2345,
-              "next": [
-                {
-                  "messageText": "Property 'version' is missing in type '{ name: any; }' but required in type '{ [x: string]: unknown; name: string; version: string; }'.",
-                  "category": 1,
-                  "code": 2741
-                }
-              ]
-            }
-          }
-        ]
-      ],
+      "./src/components/ide/sidebar/index.tsx",
       "./src/components/ide/toolbar/index.tsx",
       "./src/components/jsonform/index.tsx",
       "./src/components/jsonschemamodal/index.tsx",

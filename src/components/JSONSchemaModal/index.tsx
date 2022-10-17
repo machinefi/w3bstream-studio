@@ -17,10 +17,10 @@ const JSONSchemaModal = observer((props: Props) => {
     <Modal
       isOpen={jsonstate.extraData.modal.show}
       onClose={() => {
-        jsonstate.setExtraData({
+        jsonstate.reset().setExtraData({
           modal: {
             ...jsonstate.extraData.modal,
-            show: false,
+            show: false
           }
         });
       }}
@@ -28,7 +28,9 @@ const JSONSchemaModal = observer((props: Props) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader bg="#FAFAFA" borderBottom="1px solid #eee">{jsonstate.extraData.modal.title}</ModalHeader>
+        <ModalHeader bg="#FAFAFA" borderBottom="1px solid #eee">
+          {jsonstate.extraData.modal.title}
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Box p="20px 30px">
