@@ -47,7 +47,7 @@ const AllInstances = observer(() => {
 
   return (
     <>
-      <TableContainer h="calc(100vh - 350px)" overflowY="auto">
+      <TableContainer h="calc(100vh - 160px)" overflowY="auto">
         <Table>
           <Thead>
             <Tr h="54px" bg="#F5F5F5">

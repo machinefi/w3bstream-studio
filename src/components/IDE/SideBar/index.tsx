@@ -13,7 +13,7 @@ const SideBar = observer((props: SideBarProps) => {
   const { w3s } = useStore();
 
   return (
-    <Flex h="100%" direction="column" flexDirection="column" bg="#FAFAFA" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
+    <Flex h="100%" direction="column" flexDirection="column" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
       <Flex alignItems="center" justifyContent="space-between" h="80px" p={2} borderBottom="1px solid rgba(0, 0, 0, 0.06)">
         <Text fontSize="16px" fontWeight={700}>
           Project Management

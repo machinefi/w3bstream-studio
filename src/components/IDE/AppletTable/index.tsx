@@ -56,7 +56,7 @@ const AppletTable = observer(() => {
           Add Applet
         </Button>
       </Flex>
-      <TableContainer mt={4} h="calc(100vh - 400px)" overflowY="auto">
+      <TableContainer mt={4} h="calc(100vh - 200px)" overflowY="auto">
         <Table variant="simple">
           <Thead>
             <Tr h="54px" bg="#F5F5F5">
