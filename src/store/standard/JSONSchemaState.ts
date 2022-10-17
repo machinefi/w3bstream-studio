@@ -52,15 +52,19 @@ export class JSONSchemaState<T, V = any> {
 
   setData(data: T) {
     this.value.set(data);
+    return this;
   }
   setExtraData(data: V) {
     this.extraValue.set(data);
+    return this;
   }
   setKV(key, value) {
     _.set(this, key, value);
+    return this;
   }
   init(data: Partial<JSONSchemaState<T, V>>) {
     Object.assign(this, data);
+    return this;
   }
 
   reset({ force = false } = {}) {
@@ -69,6 +73,7 @@ export class JSONSchemaState<T, V = any> {
     } else {
       this.value.reset();
     }
+    return this;
   }
 
   constructor(args: Partial<JSONSchemaState<T, V>> = {}) {

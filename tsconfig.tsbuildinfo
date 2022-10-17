@@ -5652,8 +5652,8 @@
         "affectsGlobalScope": false
       },
       "./src/lib/event.ts": {
-        "version": "82c898b86b5bc92981c82176d7a1f80eee8293e68b9f5a5b385ac59384065b0e",
-        "signature": "71d8c5a63feeab3df0a2ef5b17becdc5993de1c33ca840616d4cdcbd83b9bf49",
+        "version": "098db2f0ce5a33a74760d3d8049ef9d98709c30a659877f9030e1e89af3891e0",
+        "signature": "0a014bf6d5fd12c2cee84fe801b1d0b0190c45ab62a56c9fe4c47448803ad0f0",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@types+lodash@4.14.185/node_modules/@types/lodash/debounce.d.ts": {
@@ -6197,8 +6197,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "0f0e8c2c007e27529a7988bee10c1b588bc60b97f7df0e0c81016bfad5164f92",
-        "signature": "41fd30e5df292766f59b0649ea259299474af73e23636a88707354210264cc22",
+        "version": "c981c69ccdcc6ed2073ebffa216c4541e7636dd3ebff61eb5c4ecfdd4679fb3d",
+        "signature": "765d27bb9f2c70ca111374dd19763c7cad35b35b7b65ace946cdc4169ec90275",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/ts-algebra@1.1.1/node_modules/ts-algebra/lib/meta-types/never.d.ts": {
@@ -7842,8 +7842,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createproject.ts": {
-        "version": "9569ca9dc5569bd2550659cf0d8908fe0c874bc85f47a19b2122a8bff872a930",
-        "signature": "81bbbbde6d01589d55d498fceb612ebfff2ae4977b139a4b9acf17f5f96655d2",
+        "version": "2e2042c757fb5dbf3c926d354818ceb169a9328a8e2275a6448a919827db3e11",
+        "signature": "76543feca55961dd73eebb7b2d8bc605c61daf4e31f99eaa1ef39c4eac9ac738",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/updatepassword.ts": {
@@ -7857,8 +7857,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "ef1226a7538e8410ce0f8af8503d9170881c736591a875bdaaad15cf27672165",
-        "signature": "a1c9ae6c82a8f9df12f366eed63b087e89654617b25de9749e61457bd5e4214f",
+        "version": "3e4d8a8aa2fa2756feb57885d95dc9fbb1c8d4c093208f17c461c107927b69ed",
+        "signature": "6cd7d08bb44d403384f5b2ed96358fd3090d57aa5991d1b1b21db77bc2f948dc",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -9631,7 +9631,7 @@
         "affectsGlobalScope": false
       },
       "./src/pages/_app.tsx": {
-        "version": "73876e56af7fe9f8112647009d7a68078b706260a4c706e1702d1c36b7a54d3e",
+        "version": "caac8b031cdc13c50984285d42bb315b97797723b740655fa9c4625eb6240156",
         "signature": "011f4558f53a1dd873e6f4e488dc212eeb921df4c9928d9c6e3bccd88a73e35a",
         "affectsGlobalScope": false
       },
@@ -19457,6 +19457,7 @@
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts",
         "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
         "./node_modules/.pnpm/superjson@1.9.1/node_modules/superjson/dist/index.d.ts",
+        "./src/lib/event.ts",
         "./src/lib/theme.ts",
         "./src/server/routers/_app.ts",
         "./src/store/index.ts"
@@ -30776,7 +30777,30 @@
       "./src/components/ide/applettable/index.tsx",
       "./src/components/ide/header/index.tsx",
       "./src/components/ide/index.tsx",
-      "./src/components/ide/sidebar/index.tsx",
+      [
+        "./src/components/ide/sidebar/index.tsx",
+        [
+          {
+            "file": "./src/components/ide/sidebar/index.tsx",
+            "start": 3503,
+            "length": 65,
+            "code": 2345,
+            "category": 1,
+            "messageText": {
+              "messageText": "Argument of type '{ name: any; }' is not assignable to parameter of type '{ [x: string]: unknown; name: string; version: string; }'.",
+              "category": 1,
+              "code": 2345,
+              "next": [
+                {
+                  "messageText": "Property 'version' is missing in type '{ name: any; }' but required in type '{ [x: string]: unknown; name: string; version: string; }'.",
+                  "category": 1,
+                  "code": 2741
+                }
+              ]
+            }
+          }
+        ]
+      ],
       "./src/components/ide/toolbar/index.tsx",
       "./src/components/jsonform/index.tsx",
       "./src/components/jsonschemamodal/index.tsx",
