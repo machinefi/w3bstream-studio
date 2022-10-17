@@ -11,6 +11,7 @@ class MyEmitter extends EventEmitter {
 interface MessageEvents {
   // @ts-ignore
   '*': ({ type: string, args: [] }) => void;
+  'app.ready': () => void;
   'user.login': () => void;
   'user.update-pwd': () => void;
   'project.list': (data: any[]) => void;

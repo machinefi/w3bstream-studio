@@ -12,6 +12,7 @@ import NextRouter from 'next/router';
 import type { AppRouter } from '@/server/routers/_app';
 import type { AppProps } from 'next/app';
 import { NotificationsProvider } from '@mantine/notifications';
+import { eventBus } from '@/lib/event';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const {
@@ -24,6 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   } = useStore();
   useEffect(() => {
     lang.init();
+    eventBus.emit('app.ready');
   }, []);
 
   useEffect(() => {
