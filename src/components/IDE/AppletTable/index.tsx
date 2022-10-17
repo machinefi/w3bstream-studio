@@ -94,7 +94,13 @@ const AppletTable = observer(() => {
   );
 });
 
-function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_project_id: string; f_applet_id: string; project_name?: string; instances: any[] }>; w3s: W3bStream }) {
+function CollapseTable({
+  applet,
+  w3s
+}: {
+  applet: Partial<{ f_name: string; f_project_id: string; f_applet_id: string; project_name?: string; instances: any[]; strategies: any[] }>;
+  w3s: W3bStream;
+}) {
   const { isOpen, onToggle } = useDisclosure();
   const styles = isOpen ? { display: 'table-row' } : { display: 'none' };
 
@@ -236,6 +242,32 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
                         Stop
                       </Button>
                     </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+          <TableContainer>
+            <Table>
+              <Thead>
+                <Tr h="54px" bg="#F5F5F5">
+                  <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                    Strategy ID
+                  </Th>
+                  <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                    Event Type
+                  </Th>
+                  <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
+                    handler
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {applet.strategies.map((item) => (
+                  <Tr h="54px" key={item.f_strategy_id}>
+                    <Td>{item.f_strategy_id}</Td>
+                    <Td>{item.f_event_type}</Td>
+                    <Td>{item.f_handler}</Td>
                   </Tr>
                 ))}
               </Tbody>

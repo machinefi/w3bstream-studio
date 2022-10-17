@@ -43,6 +43,7 @@ export class W3bStream {
         const applets = [];
         const instances = [];
         res.forEach((p) => {
+          // @ts-ignore
           p.applets.forEach((a) => {
             a.instances.forEach((i) => {
               instances.push({
@@ -78,6 +79,7 @@ export class W3bStream {
 
   curAppletIndex = 0;
   get curApplet() {
+    // @ts-ignore
     return this.curProject ? this.curProject.applets[this.curAppletIndex] : null;
   }
   deployApplet = new PromiseState({

@@ -19,6 +19,7 @@ export const w3bstreamRouter = t.router({
               f_name: true,
               f_applet_id: true,
               f_project_id: true,
+              // @ts-ignore
               strategies: {
                 select: {
                   f_strategy_id: true,
