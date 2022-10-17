@@ -10,7 +10,7 @@ export const w3bstreamRouter = t.router({
     )
     .query(({ ctx, input }) => {
       return ctx.prisma.t_project.findMany({
-        where: { f_account_id: input.accountID },
+        where: { f_account_id: Number(input.accountID) },
         select: {
           f_project_id: true,
           f_name: true,
