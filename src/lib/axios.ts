@@ -5,14 +5,18 @@ import { showNotification } from '@mantine/notifications';
 export const axios = Axios.create({});
 
 function checkErr(err) {
-  if (err.response.status == 401) {
+  if (err.response?.status == 401) {
     rootStore.w3s.config.logout();
   }
-  if (err.response && err.response.data) {
-    console.error(err.response.data.desc);
+  if (err.response) {
     showNotification({
       color: 'red',
       message: err.response.data.desc || err.response.data.msg || err.response.data.key
+    });
+  } else {
+    showNotification({
+      color: 'red',
+      message: 'Network error'
     });
   }
 }

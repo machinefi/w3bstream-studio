@@ -8,7 +8,7 @@ datasource db {
 }
 
 model t_account {
-  f_account_id    String @db.VarChar(255)
+  f_account_id    BigInt
   f_username      String @db.VarChar(255)
   f_identity_type Int    @default(0)
   f_state         Int    @default(0)
@@ -25,25 +25,23 @@ model t_account {
 
 model t_applet {
   f_id         BigInt       @id @default(autoincrement())
-  f_project_id String       @db.VarChar(255)
-  f_applet_id  String       @unique(map: "t_applet_ui_applet_id") @db.VarChar(255)
-  f_name       String       @db.VarChar(255)
+  f_project_id BigInt
+  f_applet_id  BigInt       @unique(map: "t_applet_ui_applet_id")
+  f_name       String       @unique(map: "t_applet_ui_name") @db.VarChar(255)
   f_path       String       @db.VarChar(255)
-  f_config     String       @default("")
+  f_md5        String       @unique(map: "t_applet_ui_md5") @db.VarChar(255)
   f_created_at BigInt       @default(0)
   f_updated_at BigInt       @default(0)
   project      t_project    @relation(fields: [f_project_id], references: [f_project_id])
   instances    t_instance[]
-
-  @@index([f_name], map: "t_applet_i_name")
 }
 
 model t_event_log {
   f_id           BigInt @id @default(autoincrement())
-  f_event_id     String @unique(map: "t_event_log_ui_event_id") @db.VarChar(255)
-  f_project_id   String @db.VarChar(255)
-  f_applet_id    String @db.VarChar(255)
-  f_publisher_id String @db.VarChar(255)
+  f_event_id     BigInt @unique(map: "t_event_log_ui_event_id")
+  f_project_id   BigInt
+  f_applet_id    BigInt
+  f_publisher_id BigInt
   f_created_at   BigInt @default(0)
   f_updated_at   BigInt @default(0)
 
@@ -53,16 +51,15 @@ model t_event_log {
 }
 
 model t_instance {
-  f_id          BigInt @id @default(autoincrement())
-  f_instance_id String @db.VarChar(255)
-  f_applet_id   String @db.VarChar(255)
-  f_path        String @db.VarChar(255)
+  f_id          BigInt   @id @default(autoincrement())
+  f_instance_id BigInt
+  f_applet_id   BigInt
+  f_path        String   @db.VarChar(255)
   f_state       Int
-  f_created_at  BigInt @default(0)
-  f_updated_at  BigInt @default(0)
-  f_deleted_at  BigInt @default(0)
-
-  applet t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
+  f_created_at  BigInt   @default(0)
+  f_updated_at  BigInt   @default(0)
+  f_deleted_at  BigInt   @default(0)
+  applet        t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
 
   @@unique([f_instance_id, f_deleted_at], map: "t_instance_ui_instance_id")
   @@index([f_applet_id], map: "t_instance_i_applet_id")
@@ -71,10 +68,10 @@ model t_instance {
 
 model t_project {
   f_id         BigInt     @id @default(autoincrement())
-  f_project_id String     @db.VarChar(255)
-  f_account_id String     @db.VarChar(255)
+  f_project_id BigInt
+  f_account_id BigInt
   f_name       String     @db.VarChar(255)
-  f_version    String     @db.VarChar(255)
+  f_version    String     @default("") @db.VarChar(255)
   f_proto      Int        @default(0)
   f_created_at BigInt     @default(0)
   f_updated_at BigInt     @default(0)
@@ -82,16 +79,69 @@ model t_project {
   applets      t_applet[]
 
   @@unique([f_project_id])
-  @@unique([f_name, f_version, f_deleted_at], map: "t_project_ui_name_version")
   @@unique([f_project_id, f_deleted_at], map: "t_project_ui_project_id")
+  @@unique([f_name, f_deleted_at], map: "t_project_ui_name")
 }
 
 model t_publisher {
   f_id           BigInt @id @default(autoincrement())
-  f_project_id   String @db.VarChar(255)
-  f_publisher_id String @unique(map: "t_publisher_ui_publisher_id") @db.VarChar(255)
+  f_project_id   BigInt
+  f_publisher_id BigInt @unique(map: "t_publisher_ui_publisher_id")
   f_name         String @db.VarChar(255)
+  f_key          String @unique(map: "t_publisher_ui_publisher_key") @db.VarChar(255)
   f_token        String @default("") @db.VarChar(255)
   f_created_at   BigInt @default(0)
   f_updated_at   BigInt @default(0)
+}
+
+model t_blockchain {
+  f_id           BigInt @id @default(autoincrement())
+  f_chain_id     BigInt @unique(map: "t_blockchain_ui_chain_id")
+  f_chainaddress String @db.VarChar(255)
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
+}
+
+model t_contractlog {
+  f_id              BigInt @id @default(autoincrement())
+  f_contractlog_id  BigInt
+  f_project_name    String @db.VarChar(255)
+  f_event_type      String @db.VarChar(255)
+  f_chainid         BigInt
+  f_contractaddress String @db.VarChar(255)
+  f_blockstart      BigInt
+  f_blockcurrent    BigInt
+  f_blockend        BigInt @default(0)
+  f_topic0          String @default("") @db.VarChar(255)
+  f_topic1          String @default("") @db.VarChar(255)
+  f_topic2          String @default("") @db.VarChar(255)
+  f_topic3          String @default("") @db.VarChar(255)
+  f_created_at      BigInt @default(0)
+  f_updated_at      BigInt @default(0)
+}
+
+model t_sql_meta_enum {
+  f_table_name  String @db.VarChar(64)
+  f_column_name String @db.VarChar(64)
+  f_value       Int
+  f_type        String @db.VarChar(255)
+  f_key         String @db.VarChar(255)
+  f_label       String @db.VarChar(255)
+
+  @@unique([f_table_name, f_column_name, f_value], map: "t_sql_meta_enum_i_enum")
+}
+
+model t_strategy {
+  f_id          BigInt @id @default(autoincrement())
+  f_strategy_id BigInt
+  f_project_id  BigInt
+  f_applet_id   BigInt
+  f_event_type  Int
+  f_handler     String @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
+
+  @@unique([f_project_id, f_applet_id, f_event_type, f_handler, f_deleted_at], map: "t_strategy_ui_prj_app_event")
+  @@unique([f_strategy_id, f_deleted_at], map: "t_strategy_ui_strategy_id")
 }
