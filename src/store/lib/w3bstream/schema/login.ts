@@ -43,7 +43,7 @@ export class LoginSchema extends JSONSchemaState<SchemaType> {
         });
         if (res.data.token) {
           //@ts-ignore
-          rootStore.w3s.config.setData({ token: res.data.token, accountID: res.data.accountID });
+          rootStore.w3s.config.value.set({ token: res.data.token, accountID: res.data.accountID });
           eventBus.emit('user.login');
           this.reset({ force: true });
         }

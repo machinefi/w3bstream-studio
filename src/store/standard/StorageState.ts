@@ -18,13 +18,18 @@ export class StorageState<T> implements JSONSchemaValue {
   get() {
     return this.value;
   }
-  set(val) {
+  set(val, options: JSONSchemaValue['options'] = { force: true }) {
     const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
-      return srcValue;
+      if (options.force) {
+        return srcValue || '';
+      } else {
+        return srcValue || objValue || '';
+      }
     });
     this.value = toJS(newVal);
     localStorage.setItem(this.key, JSON.stringify(this.value));
   }
+  setFormat: (value: any) => void;
 
   reset() {
     this.set(this.default);

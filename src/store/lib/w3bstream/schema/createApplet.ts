@@ -79,9 +79,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           await showNotification({ message: 'create applet successed' });
           eventBus.emit('applet.create');
           this.reset();
-          this.setExtraData({
-            modal: { ...this.extraData.modal, show: false }
-          });
+          this.extraValue.set({ modal: { show: false } }, { force: false });
         }
       },
       value: new JSONValue<SchemaType>({

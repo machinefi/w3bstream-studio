@@ -39,18 +39,13 @@ const AppletTable = observer(() => {
           {...gradientButtonStyle}
           onClick={(e) => {
             //@ts-ignore
-            w3s.createApplet.setData({
+            w3s.createApplet.value.set({
               info: {
                 projectID: w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject?.f_project_id : '',
                 appletName: ''
               }
             });
-            w3s.createApplet.setExtraData({
-              modal: {
-                ...w3s.createApplet.extraData.modal,
-                show: true
-              }
-            });
+            w3s.createApplet.extraValue.set({ modal: { show: true } }, { force: false });
           }}
         >
           Add Applet
@@ -123,15 +118,14 @@ function CollapseTable({ applet, w3s }: { applet: Partial<{ f_name: string; f_pr
                   opacity: 0.6
                 }}
                 onClick={(e) => {
-                  w3s.publishEvent.setData({
+                  w3s.publishEvent.value.set({
                     projectID: applet.f_project_id,
                     appletID: applet.f_applet_id,
                     handler: 'start',
                     data: ''
                   });
-                  w3s.publishEvent.setExtraData({
+                  w3s.publishEvent.extraValue.set({
                     modal: {
-                      ...w3s.publishEvent.extraData.modal,
                       show: true
                     }
                   });

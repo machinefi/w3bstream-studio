@@ -41,7 +41,7 @@ const IDE = observer(() => {
                     h="32px"
                     {...gradientButtonStyle}
                     onClick={() => {
-                      w3s.createProject.setExtraData({
+                      w3s.createProject.extraValue.set({
                         modal: {
                           title: 'Create project',
                           show: true

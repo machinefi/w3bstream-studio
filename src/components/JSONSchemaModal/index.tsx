@@ -17,7 +17,7 @@ const JSONSchemaModal = observer((props: Props) => {
     <Modal
       isOpen={jsonstate.extraData.modal.show}
       onClose={() => {
-        jsonstate.reset().setExtraData({
+        jsonstate.reset().extraValue.set({
           modal: {
             ...jsonstate.extraData.modal,
             show: false

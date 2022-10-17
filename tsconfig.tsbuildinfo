@@ -4142,8 +4142,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "19cfd925905f130a8f8cb451d5f0b43414d21f49a2eaa791de2766eaf049b195",
-        "signature": "cecc3420116768907229bde5dc26e70c8702a0691351ff9898d25d5d1ba5755d",
+        "version": "d318777ddacb001c72781cb63f21fb4c88c1ef12f370826e04b5d3c3fcafce53",
+        "signature": "52c35762c53d0d0d239ba917acb2f94949d8b4eb1b4b1b85996be3f118bdff70",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/ts-algebra@1.1.1/node_modules/ts-algebra/lib/meta-types/never.d.ts": {
@@ -5742,7 +5742,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/login.ts": {
-        "version": "56c172a5fe463c2d61ba12e34b87a96d45e758c3f187732da36ac45642f926df",
+        "version": "e92b35c297f84427033718f9188e6782223015941a68254033292469a1cc8e97",
         "signature": "beaf8d53315bb488e30684d7e9256d5d0743a19bb700851c8808f5a48260b26e",
         "affectsGlobalScope": false
       },
@@ -5762,8 +5762,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/storagestate.ts": {
-        "version": "36389a2f021ca1ababecf4bb8c4f0a2d6c5a678ea7180b7e06bd97c4478ad75e",
-        "signature": "47dcf0e13d9c04aecf37f5133625b792a2719d0a59b4e2eac6dd61d2c96d9257",
+        "version": "b077bae4444e6c8a1f5220b74913cbd25bd6a2a4b523eb0205f539a40e778a6b",
+        "signature": "bff2667ed6b39e32217596847fb999a31526d5a9c6da6664ebc71e6ad6cd6cb5",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/config.ts": {
@@ -5777,7 +5777,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createapplet.ts": {
-        "version": "9622b4155c8747e2a84ec75345accac48751a594595c80e7497efea647376aa9",
+        "version": "52c96c1a2480194934cd029701e35bc2755dac948e8186b3bed96bc21721436d",
         "signature": "79dabd1dbe7f722edbe1377336e114a37541959bd1a7adca53ec112949457555",
         "affectsGlobalScope": false
       },
@@ -5787,23 +5787,23 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createproject.ts": {
-        "version": "2e2042c757fb5dbf3c926d354818ceb169a9328a8e2275a6448a919827db3e11",
+        "version": "2bb36b1a66188b4251095d9170964c6a3e7f8318b8fb3f435ad03d8aea0f2e24",
         "signature": "76543feca55961dd73eebb7b2d8bc605c61daf4e31f99eaa1ef39c4eac9ac738",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/updatepassword.ts": {
-        "version": "b7dc0d4a71b3ceaac883a228b932f18b45e8084cc42afc6bdb06e1f7b1d5b26e",
+        "version": "e5c8dac4af4435cc390461dc9e459b29719882bfa436dda81ebfd2dc0fd694c8",
         "signature": "cadb58f476e2c21b9851786de4e76511996c2c077163ba3e2793f31a9555edd3",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/publishevent.ts": {
-        "version": "49730088fbaaa0009973ae9e70874fdd15648a41dcc297a505baf656e17fc286",
+        "version": "8b547dd96573ce4e273f477a65b845e622055745aa4d1b276bf5ae6c9825bef6",
         "signature": "3d0045798c13b31378d30cfff46e7ba022972c838a8372cf68b8e98543f924cd",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
         "version": "dd77a69cc9ecfc02f8ec8b777572bcd56474254e9e8ef78329f6421b47f6d6cf",
-        "signature": "6cd7d08bb44d403384f5b2ed96358fd3090d57aa5991d1b1b21db77bc2f948dc",
+        "signature": "fcac905f17a9aef81f34b2140d86d983c404d9d02485a889cd36ac4f5d77b88a",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -5852,7 +5852,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/header/index.tsx": {
-        "version": "cdbac49f915ca5aba18fe227946df6e528f39e990644c4d8091f751dadba7ba8",
+        "version": "0a1dd495d072e5cbc131f426ec11c6d985b854d333d88258be5686dac3d2d728",
         "signature": "dd98811e38ab92b2069f13bfe91c856f7f0a52a15c19487c43f5784c51adea28",
         "affectsGlobalScope": false
       },
@@ -5897,7 +5897,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "893c7b65d746366367202d5dcae45145fb808744af06a43ad2bbb9ff384f41be",
+        "version": "4594f48ed63c0e6de0f3b73f461c0a7628fc4bba965a80635e06f9039326b785",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
@@ -5972,7 +5972,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/applettable/index.tsx": {
-        "version": "c8bc3179b301cb6d674fff8322bce249ba278f9507babec0d53c63cad6d36f43",
+        "version": "f8cf84e4881efa164cc30bc999676c6c551b545c7149649d79caa7e360b04253",
         "signature": "546a76a4f48d356471d323104659cbe0341b8ade72ae5717ae04aaa217c79b5e",
         "affectsGlobalScope": false
       },
@@ -5987,12 +5987,12 @@
         "affectsGlobalScope": false
       },
       "./src/components/jsonschemamodal/index.tsx": {
-        "version": "c874416239ba5249441c36b090ec8b5fece1e8f1778843204ac4fdf9af5e15f9",
+        "version": "8380ff8eeafd4c9b2a8e0eef9af2e4e9432a446ac3b1609b4171be1a45ada25b",
         "signature": "f720bf7417bd1e82f043e73e31f132d8d95402c08f31f833f7ae2a229ed33980",
         "affectsGlobalScope": false
       },
       "./src/components/ide/index.tsx": {
-        "version": "7362b592a76b434b224b7f9b19425b9eb5d79d67f67550fe96e5e9c25c4ae486",
+        "version": "7980b7607d384568279f1b48b9425cac8f4db054c57e8f793c099a8c3621cbd9",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
         "affectsGlobalScope": false
       },
@@ -25056,37 +25056,7 @@
       "./src/store/index.ts",
       "./src/store/lang.ts",
       "./src/store/lib/w3bstream/index.ts",
-      [
-        "./src/store/lib/w3bstream/schema/config.ts",
-        [
-          {
-            "file": "./src/store/lib/w3bstream/schema/config.ts",
-            "start": 836,
-            "length": 5,
-            "code": 2741,
-            "category": 1,
-            "messageText": "Property 'setFormat' is missing in type 'StorageState<{ [x: string]: unknown; accountID: string; apiUrl: string; token: string; }>' but required in type 'JSONSchemaValue'.",
-            "relatedInformation": [
-              {
-                "file": "./src/store/standard/jsonschemastate.ts",
-                "start": 2199,
-                "length": 9,
-                "messageText": "'setFormat' is declared here.",
-                "category": 3,
-                "code": 2728
-              },
-              {
-                "file": "./src/store/standard/jsonschemastate.ts",
-                "start": 345,
-                "length": 5,
-                "messageText": "The expected type comes from property 'value' which is declared here on type 'Partial<JSONSchemaState<{ [x: string]: unknown; accountID: string; apiUrl: string; token: string; }, any>>'",
-                "category": 3,
-                "code": 6500
-              }
-            ]
-          }
-        ]
-      ],
+      "./src/store/lib/w3bstream/schema/config.ts",
       [
         "./src/store/lib/w3bstream/schema/createapplet.ts",
         [
@@ -25180,40 +25150,7 @@
           }
         ]
       ],
-      [
-        "./src/store/standard/storagestate.ts",
-        [
-          {
-            "file": "./src/store/standard/storagestate.ts",
-            "start": 189,
-            "length": 12,
-            "code": 2420,
-            "category": 1,
-            "messageText": {
-              "messageText": "Class 'StorageState<T>' incorrectly implements interface 'JSONSchemaValue'.",
-              "category": 1,
-              "code": 2420,
-              "next": [
-                {
-                  "messageText": "Property 'setFormat' is missing in type 'StorageState<T>' but required in type 'JSONSchemaValue'.",
-                  "category": 1,
-                  "code": 2741
-                }
-              ]
-            },
-            "relatedInformation": [
-              {
-                "file": "./src/store/standard/jsonschemastate.ts",
-                "start": 2199,
-                "length": 9,
-                "messageText": "'setFormat' is declared here.",
-                "category": 3,
-                "code": 2728
-              }
-            ]
-          }
-        ]
-      ],
+      "./src/store/standard/storagestate.ts",
       "./src/store/template/state.ts",
       "./src/store/template/store.ts",
       "./type.ts"

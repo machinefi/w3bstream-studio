@@ -53,12 +53,7 @@ const Profile = observer(() => {
                 bg="rgba(0, 0, 0, 0.03)"
                 borderRadius="base"
                 onClick={() => {
-                  w3s.updatePassword.setExtraData({
-                    modal: {
-                      ...w3s.updatePassword.extraData.modal,
-                      show: true
-                    }
-                  });
+                  w3s.updatePassword.extraValue.set({ modal: { show: true } }, { force: false });
                 }}
               >
                 Update password

@@ -50,18 +50,6 @@ export class JSONSchemaState<T, V = any> {
   afterSubmit: (e: IChangeEvent<T, any>) => void;
   afterChange: (e: IChangeEvent<T, any>) => void;
 
-  setData(data: T) {
-    this.value.set(data);
-    return this;
-  }
-  setExtraData(data: V) {
-    this.extraValue.set(data);
-    return this;
-  }
-  setKV(key, value) {
-    _.set(this, key, value);
-    return this;
-  }
   init(data: Partial<JSONSchemaState<T, V>>) {
     Object.assign(this, data);
     return this;
@@ -83,11 +71,6 @@ export class JSONSchemaState<T, V = any> {
       makeObservable(this, {
         formData: computed
       });
-      // makeAutoObservable(this, {
-      //   formData: observable,
-      //   onChange: action.bound,
-      //   onSubmit: action.bound
-      // });
     }
   }
 }
@@ -95,7 +78,8 @@ export class JSONSchemaState<T, V = any> {
 export interface JSONSchemaValue {
   value?: any;
   default?: any;
-  set: (value: any) => void;
+  options?: { force: boolean };
+  set: (value: any, options?: JSONSchemaValue['options']) => void;
   setFormat: (value: any) => void;
   get: () => any;
   reset: () => any;
@@ -110,10 +94,14 @@ export class JSONValue<T> {
   get() {
     return this.value;
   }
-  set(val: T) {
+  set(val: T, options: { force: boolean } = { force: true }) {
     val = this.setFormat(val);
     const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
-      return srcValue || '';
+      if (options.force) {
+        return srcValue || '';
+      } else {
+        return srcValue || objValue || '';
+      }
     });
     this.value = toJS(newVal);
   }

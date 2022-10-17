@@ -48,9 +48,7 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
         if (res.data) {
           await showNotification({ message: 'create project successed' });
           eventBus.emit('project.create');
-          this.reset().setExtraData({
-            modal: { ...this.extraData.modal, show: false }
-          });
+          this.reset().extraValue.set({ modal: { show: false } }, { force: false });
         }
       },
       value: new JSONValue<SchemaType>({
