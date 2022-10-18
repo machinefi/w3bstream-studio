@@ -6,9 +6,10 @@ import { useStore } from '@/store/index';
 import Header from './Header';
 import ToolBar from './ToolBar';
 import SideBar from './SideBar';
-import AllApplets from './AllApplets';
+import Applets from './Applets';
 import AllInstances from './AllInstances';
 import AllStrategies from './AllStrategies';
+import AllPublishers from './AllPublishers';
 import JSONSchemaModal from '../JSONSchemaModal';
 import { gradientButtonStyle } from '@/lib/theme';
 
@@ -25,9 +26,10 @@ const IDE = observer(() => {
               <ToolBar w="50px" />
               <SideBar w="300px" />
               <Box ml="24px" mt="24px" w="100%" h="100%">
-                {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <AllApplets />}
+                {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <Applets />}
                 {w3s.showContent === 'ALL_INSTANCES' && <AllInstances />}
                 {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
+                {w3s.showContent === 'ALL_PUBLISHERS' && <AllPublishers />}
               </Box>
             </Flex>
           ) : (

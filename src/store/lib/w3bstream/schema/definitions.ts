@@ -9,6 +9,12 @@ export const definitions = {
     get enumNames() {
       return rootStore.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
     }
+  },
+  publishers: {
+    type: 'string',
+    get enum() {
+      return rootStore.w3s.allPublishers.map((i) => `${i.f_publisher_id}`) || [];
+    }
   }
   // applets: {
   //   type: 'string',

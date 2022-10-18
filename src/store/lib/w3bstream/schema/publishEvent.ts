@@ -5,16 +5,27 @@ import { showNotification } from '@mantine/notifications';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
+import { definitions } from './definitions';
 
 export const schema = {
   // title: 'Publish Event',
+  definitions: {
+    publishers: {
+      type: 'string'
+    }
+  },
   type: 'object',
   properties: {
-    handler: { type: 'string' },
-    data: { type: 'string' }
+    publisherId: { $ref: '#/definitions/publishers' },
+    payload: { type: 'string' }
   },
-  required: ['handler', 'data']
+  required: ['publisherId', 'payload']
 } as const;
+
+//@ts-ignore
+schema.definitions = {
+  publishers: definitions.publishers
+};
 
 type SchemaType = FromSchema<typeof schema>;
 
@@ -41,29 +52,39 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       },
       reactive: true,
       afterSubmit: async (e) => {
-        const { projectID, appletID, handler, data } = e.formData;
-        const res = await axios.request({
-          method: 'post',
-          url: `/srv-applet-mgr/v0/event/${projectID}/${appletID}/${handler}`,
-          headers: {
-            publisher: rootStore.w3s.config.formData.accountID,
-            'Content-Type': 'text/plain'
-          },
-          data
-        });
-        if (res.data) {
-          await showNotification({ message: 'publish event successed' });
-          eventBus.emit('applet.publish-event');
-          this.reset();
-          this.extraValue.set({ modal: { show: false } });
+        const { projectName, publisherId, payload } = e.formData;
+        const { allPublishers } = rootStore.w3s;
+        const pub = allPublishers.find((item) => item.f_publisher_id === publisherId);
+        if (pub) {
+          const res = await axios.request({
+            method: 'post',
+            url: `/srv-applet-mgr/v0/event/${projectName}`,
+            headers: {
+              'Content-Type': 'text/plain'
+            },
+            data: {
+              payload,
+              header: {
+                token: pub.f_token,
+                event_type: 2147483647,
+                pub_id: publisherId,
+                pub_time: Date.now()
+              }
+            }
+          });
+          if (res.data) {
+            await showNotification({ message: 'publish event successed' });
+            eventBus.emit('applet.publish-event');
+            this.reset();
+            this.extraValue.set({ modal: { show: false } });
+          }
         }
       },
       value: new JSONValue<SchemaType>({
         default: {
-          projectID: '',
-          appletID: '',
-          handler: 'start',
-          data: ''
+          projectName: '',
+          publisherId: '',
+          payload: ''
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({

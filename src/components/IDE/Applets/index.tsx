@@ -8,7 +8,7 @@ import { gradientButtonStyle } from '@/lib/theme';
 import Table from '@/components/Table';
 import { InstanceActions, InstanceStatus } from '../AllInstances';
 
-const AllApplets = observer(() => {
+const Applets = observer(() => {
   const { w3s } = useStore();
   // @ts-ignore
   const applets = w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject?.applets || [] : w3s.allApplets;
@@ -21,14 +21,14 @@ const AllApplets = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
-            //@ts-ignore
-            w3s.createApplet.value.set({
-              info: {
-                //@ts-ignore
-                projectID: w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject?.f_project_id : '',
-                appletName: ''
-              }
-            });
+            if (w3s.showContent === 'CURRENT_APPLETS') {
+              w3s.createApplet.value.set({
+                info: {
+                  projectID: w3s.curProject?.f_project_id
+                }
+              });
+            }
+
             w3s.createApplet.extraValue.set({ modal: { show: true } });
           }}
         >
@@ -67,10 +67,7 @@ const AllApplets = observer(() => {
                         }}
                         onClick={(e) => {
                           w3s.publishEvent.value.set({
-                            projectID: item.f_project_id,
-                            appletID: item.f_applet_id,
-                            handler: 'start',
-                            data: ''
+                            projectName: item.project_name
                           });
                           w3s.publishEvent.extraValue.set({
                             modal: {
@@ -165,4 +162,4 @@ const AllApplets = observer(() => {
   );
 });
 
-export default AllApplets;
+export default Applets;

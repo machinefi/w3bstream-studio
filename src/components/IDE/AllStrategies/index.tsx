@@ -32,7 +32,7 @@ const AllStrategies = observer(() => {
         }
       ]}
       dataSource={allStrategies}
-      rowKey="f_instance_id"
+      rowKey="f_strategy_id"
       chakraTableContainerProps={{ h: 'calc(100vh - 160px)' }}
     />
   );
