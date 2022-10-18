@@ -14,6 +14,16 @@ export const w3bstreamRouter = t.router({
         select: {
           f_project_id: true,
           f_name: true,
+
+          publishers: {
+            select: {
+              f_publisher_id: true,
+              f_name: true,
+              f_key: true,
+              f_created_at: true,
+              f_token: true
+            }
+          },
           applets: {
             select: {
               f_name: true,

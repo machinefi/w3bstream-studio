@@ -176,8 +176,6 @@ export const helper = {
   deepMerge(obj, newObj) {
     const newVal = _.mergeWith(obj, newObj, (...args) => {
       const [objValue, srcValue] = args;
-      console.log(objValue, srcValue);
-
       if (typeof srcValue === 'object') {
         return helper.deepMerge(objValue, srcValue);
       }
