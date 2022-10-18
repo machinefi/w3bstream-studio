@@ -50,6 +50,7 @@ export class W3bStream {
         res.forEach((p) => {
           // @ts-ignore
           p.applets.forEach((a) => {
+            //@ts-ignore
             a.project_name = p.f_name;
             a.instances.forEach((i) => {
               instances.push({

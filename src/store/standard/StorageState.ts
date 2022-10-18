@@ -23,7 +23,7 @@ export class StorageState<T> implements JSONSchemaValue {
     this.value = toJS(newVal);
     localStorage.setItem(this.key, JSON.stringify(this.value));
   }
-  setFormat: (value: any) => void;
+  setFormat = (value: any) => value;
 
   reset() {
     this.set(this.default);

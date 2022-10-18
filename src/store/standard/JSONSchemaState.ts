@@ -81,12 +81,12 @@ export interface JSONSchemaValue {
   default?: any;
   options?: { force: boolean };
   set: (value: any, options?: JSONSchemaValue['options']) => void;
-  setFormat: (value: any) => void;
+  setFormat: (value: any) => any;
   get: () => any;
   reset: () => any;
 }
 
-export class JSONValue<T> {
+export class JSONValue<T> implements JSONSchemaValue {
   value?: T = null as T;
   default?: T = null as T;
 

@@ -5742,8 +5742,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "88cbd52ab31665c598bd31b3c2acbe4b56e15983213d5d63c536c12d3cd03f24",
-        "signature": "45309c4626e16507ae7f4bd75fd65304a28b8aa92546145e637f89129b1ed6c2",
+        "version": "2015eef7488fbe6780db267daf9ab766c5a6c65f6d205c1a21655181dbf90fc2",
+        "signature": "f4fc493b04312484d424a2d50f411dabe389cb56631ef7a417ef99f889d5bb10",
         "affectsGlobalScope": false
       },
       "./src/lib/event.ts": {
@@ -7812,8 +7812,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/storagestate.ts": {
-        "version": "0dda8d08894fce27d5db96a7d6b262587193c959314c9d13ab2d5eb31733c9af",
-        "signature": "91d3476ce6654f40da7d0cea953da43b09552b1ded439d93301d7c51003bed61",
+        "version": "ebe161a94c639353c6e17d1237bf29a6ece91e5da5c7cb293ce739e2f289bcdc",
+        "signature": "6fb2c519f2a2853535b344bdac2db4202ab0e44e64b1575d180a55bf0d2e0982",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/config.ts": {
@@ -7912,7 +7912,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "8b80846e8111d0f4a8ed2779c7aaba05b6fe28b107a7ff800d92092bd5eef39e",
+        "version": "ce92ab14ae3ab9e1cdcacf9628120a68360caf0e3febbc893b8a7d022886a677",
         "signature": "c6b063248542c7a170d03b681464ce21bd35db2df05f354580ff68cd4987e91c",
         "affectsGlobalScope": false
       },
@@ -8114,11 +8114,6 @@
       "./src/components/ide/index.tsx": {
         "version": "73027a07ee1667041816232264449bab534bba9c3080dd4bd457d4ad3e742fe9",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
-        "affectsGlobalScope": false
-      },
-      "./src/components/ide/spotlight/index.tsx": {
-        "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": false
       },
       "./src/pages/404.tsx": {
@@ -25277,7 +25272,6 @@
       "./src/components/ide/header/index.tsx",
       "./src/components/ide/index.tsx",
       "./src/components/ide/sidebar/index.tsx",
-      "./src/components/ide/spotlight/index.tsx",
       "./src/components/ide/toolbar/index.tsx",
       "./src/components/jsonform/index.tsx",
       "./src/components/jsonschemamodal/index.tsx",
@@ -25344,60 +25338,8 @@
       "./src/server/trpc.ts",
       "./src/store/index.ts",
       "./src/store/lang.ts",
-      [
-        "./src/store/lib/w3bstream/index.ts",
-        [
-          {
-            "file": "./src/store/lib/w3bstream/index.ts",
-            "start": 1861,
-            "length": 12,
-            "code": 2339,
-            "category": 1,
-            "messageText": "Property 'project_name' does not exist on type '{ f_project_id: bigint; f_name: string; f_applet_id: bigint; strategies: { f_project_id: bigint; f_applet_id: bigint; f_strategy_id: bigint; f_event_type: number; f_handler: string; }[]; instances: { ...; }[]; }'."
-          }
-        ]
-      ],
-      [
-        "./src/store/lib/w3bstream/schema/config.ts",
-        [
-          {
-            "file": "./src/store/lib/w3bstream/schema/config.ts",
-            "start": 836,
-            "length": 5,
-            "code": 2322,
-            "category": 1,
-            "messageText": {
-              "messageText": "Type 'StorageState<{ [x: string]: unknown; apiUrl: string; token: string; accountID: string; }>' is not assignable to type 'JSONValue<{ [x: string]: unknown; apiUrl: string; token: string; accountID: string; }>'.",
-              "category": 1,
-              "code": 2322,
-              "next": [
-                {
-                  "messageText": "The types returned by 'setFormat(...)' are incompatible between these types.",
-                  "category": 1,
-                  "code": 2201,
-                  "next": [
-                    {
-                      "messageText": "Type 'void' is not assignable to type '{ [x: string]: unknown; apiUrl: string; token: string; accountID: string; }'.",
-                      "category": 1,
-                      "code": 2322
-                    }
-                  ]
-                }
-              ]
-            },
-            "relatedInformation": [
-              {
-                "file": "./src/store/standard/jsonschemastate.ts",
-                "start": 385,
-                "length": 5,
-                "messageText": "The expected type comes from property 'value' which is declared here on type 'Partial<JSONSchemaState<{ [x: string]: unknown; apiUrl: string; token: string; accountID: string; }, any>>'",
-                "category": 3,
-                "code": 6500
-              }
-            ]
-          }
-        ]
-      ],
+      "./src/store/lib/w3bstream/index.ts",
+      "./src/store/lib/w3bstream/schema/config.ts",
       "./src/store/lib/w3bstream/schema/createapplet.ts",
       "./src/store/lib/w3bstream/schema/createproject.ts",
       "./src/store/lib/w3bstream/schema/createpublisher.ts",
