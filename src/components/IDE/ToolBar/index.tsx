@@ -18,6 +18,7 @@ const ToolBar = (props: ToolBar) => {
   return (
     <Flex h="100%" direction="column" justify="space-between" align="center" py={2} {...props}>
       <Flex direction="column">
+        <Image mt="25px" mb="32px" w="30px" src="/images/logo.svg" alt="logo" />
         <Tooltip label="Project" placement="right">
           <Image
             src="/images/icons/home.svg"

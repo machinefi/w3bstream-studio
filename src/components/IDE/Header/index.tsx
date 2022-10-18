@@ -11,19 +11,19 @@ const Header = observer(() => {
       as="header"
       position="fixed"
       top="0px"
-      left="0px"
+      left="350px"
       zIndex="999"
       alignItems="center"
       px="30px"
-      w="100vw"
+      w="calc(100vw - 350px)"
       h="60px"
       boxShadow="sm"
+      borderBottom="1px solid rgba(0, 0, 0, 0.1)"
       css={{
         backdropFilter: 'saturate(180%) blur(5px)',
-        backgroundColor: '#fff'
+        backgroundColor: 'rgba(255, 255, 255, 0.8)'
       }}
     >
-      <Image w="60px" src="/images/logo.svg" alt="logo" />
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
         <Icon as={MdHome} mr="20px" w="22px" h="21px" cursor="pointer" />
         <Profile />
@@ -41,9 +41,7 @@ const Profile = observer(() => {
       <>
         <Popover isLazy matchWidth={true}>
           <PopoverTrigger>
-            <Button bg="rgba(0, 0, 0, 0.03)">
-              accountID: {accountID}
-            </Button>
+            <Button bg="rgba(0, 0, 0, 0.03)">accountID: {accountID}</Button>
           </PopoverTrigger>
           <PopoverContent bg="white">
             <PopoverArrow />
