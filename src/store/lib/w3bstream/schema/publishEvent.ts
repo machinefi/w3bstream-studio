@@ -55,7 +55,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           await showNotification({ message: 'publish event successed' });
           eventBus.emit('applet.publish-event');
           this.reset();
-          this.extraValue.set({ modal: { show: false } }, { force: false });
+          this.extraValue.set({ modal: { show: false } });
         }
       },
       value: new JSONValue<SchemaType>({

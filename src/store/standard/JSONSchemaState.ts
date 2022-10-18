@@ -3,12 +3,13 @@ import { makeAutoObservable, makeObservable, computed, toJS } from 'mobx';
 import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent } from '@rjsf/core';
 import { _ } from '@/lib/lodash';
+import { helper } from '../../lib/helper';
 
 export class JSONSchemaState<T, V = any> {
-  extraValue: JSONSchemaValue = new JSONValue();
-  value: JSONSchemaValue = new JSONValue();
+  extraValue: JSONValue<V> = new JSONValue();
+  value: JSONValue<T> = new JSONValue();
 
-  get extraData() {
+  get extraData(): V {
     return this.extraValue.get();
   }
   set extraData(value: V) {
@@ -20,7 +21,7 @@ export class JSONSchemaState<T, V = any> {
     return this.value.get();
   }
   set formData(value: T) {
-    this.value.set(value);
+    this.value.set(value, { force: true });
   }
   schema: RJSFSchema;
   uiSchema: UiSchema;
@@ -37,7 +38,7 @@ export class JSONSchemaState<T, V = any> {
   };
 
   onChange = (e: IChangeEvent<T, any>) => {
-    this.value.set(e.formData);
+    this.value.set(e.formData, { force: true });
     if (this.afterChange) {
       this.afterChange(e);
     }
@@ -94,15 +95,9 @@ export class JSONValue<T> {
   get() {
     return this.value;
   }
-  set(val: T, options: { force: boolean } = { force: true }) {
+  set(val: T) {
     val = this.setFormat(val);
-    const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
-      if (options.force) {
-        return srcValue || '';
-      } else {
-        return srcValue || objValue || '';
-      }
-    });
+    const newVal = helper.deepMerge(this.value, val);
     this.value = toJS(newVal);
   }
   reset() {
@@ -120,5 +115,5 @@ export class JSONValue<T> {
 
 export interface JSONSchemaModalState {
   show: boolean;
-  title: string;
+  title?: string;
 }

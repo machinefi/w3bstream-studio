@@ -14,6 +14,8 @@ import { ProjectListSchema } from './schema/projectList';
 import { CreateProjectSchema } from './schema/createProject';
 import { UpdatePasswordSchema } from './schema/updatePassword';
 import { PublishEventSchema } from './schema/publishEvent';
+import { CreatePublisherSchema } from './schema/createPublisher';
+import { SpotlightAction } from '@mantine/spotlight';
 
 export class W3bStream {
   rootStore: RootStore;
@@ -28,6 +30,8 @@ export class W3bStream {
     }
   });
   updatePassword = new UpdatePasswordSchema({});
+  createPublisher = new CreatePublisherSchema({});
+
   projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
@@ -115,6 +119,10 @@ export class W3bStream {
 
   get isLogin() {
     return !!this.config.formData.token;
+  }
+
+  get actions(): SpotlightAction[] {
+    return [this.createProject, this.createApplet, this.createPublisher].map((i) => ({ title: i.extraData.modal.title, onTrigger: () => i.extraValue.set({ modal: { show: true } }) }));
   }
 
   constructor(rootStore: RootStore) {

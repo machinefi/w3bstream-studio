@@ -118,6 +118,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
         <ContextMenu id={`ProjectItemContext${project.f_project_id}`}>
           <Menu bordered>
             <MenuItem
+              //TODO:  please make sure there has two state for create project and project detail
               onItemSelect={() => {
                 w3s.curProjectIndex = index;
                 w3s.createProject.value.set({

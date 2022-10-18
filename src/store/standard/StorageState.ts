@@ -18,14 +18,8 @@ export class StorageState<T> implements JSONSchemaValue {
   get() {
     return this.value;
   }
-  set(val, options: JSONSchemaValue['options'] = { force: true }) {
-    const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
-      if (options.force) {
-        return srcValue || '';
-      } else {
-        return srcValue || objValue || '';
-      }
-    });
+  set(val) {
+    const newVal = helper.deepMerge(this.value, val);
     this.value = toJS(newVal);
     localStorage.setItem(this.key, JSON.stringify(this.value));
   }

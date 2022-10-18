@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import TypedEmitter from 'typed-emitter';
+import { JSONSchemaModalState } from '../store/standard/JSONSchemaState';
 
 class MyEmitter extends EventEmitter {
   emit(type: any, ...args: any[]) {
@@ -21,6 +22,8 @@ interface MessageEvents {
   'applet.publish-event': () => void;
   'instance.deploy': () => void;
   'instance.handle': () => void;
+  'publisher.create': () => void;
+  'spotlight.register': (state: JSONSchemaModalState) => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;

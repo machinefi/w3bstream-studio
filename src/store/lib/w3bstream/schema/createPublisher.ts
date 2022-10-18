@@ -1,28 +1,41 @@
-import { JSONValue, JSONSchemaState, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaModalState, JSONSchemaState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
+import { definitions } from '@/store/lib/w3bstream/schema/definitions';
+import { axios } from '../../../../lib/axios';
 import { showNotification } from '@mantine/notifications';
-import { eventBus } from '@/lib/event';
-import { axios } from '@/lib/axios';
-import { gradientButtonStyle } from '@/lib/theme';
+import { eventBus } from '../../../../lib/event';
+import { gradientButtonStyle } from '../../../../lib/theme';
 
 export const schema = {
-  // title: 'Create Project',
+  // export const configSchema: JSONSchema7 = {
+  definitions: {
+    projects: {
+      type: 'string'
+    }
+  },
+  // title: 'Create Publisher',
   type: 'object',
   properties: {
+    projectID: { $ref: '#/definitions/projects' },
     name: { type: 'string' },
-    version: { type: 'string' }
+    key: { type: 'string' }
   },
-  required: ['name', 'version']
+  required: ['projectID', 'name', 'key']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
+
+//@ts-ignore
+schema.definitions = {
+  projects: definitions.projects
+};
 
 type ExtraDataType = {
   modal: JSONSchemaModalState;
 };
 
-export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
-  constructor(args: Partial<CreateProjectSchema> = {}) {
+export class CreatePublisherSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+  constructor(args: Partial<CreatePublisherSchema> = {}) {
     super(args);
     this.init({
       //@ts-ignore
@@ -46,20 +59,21 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
           data: e.formData
         });
         if (res.data) {
-          await showNotification({ message: 'create project successed' });
-          eventBus.emit('project.create');
+          await showNotification({ message: 'create publisher successed' });
+          eventBus.emit('publisher.create');
           this.reset().extraValue.set({ modal: { show: false } });
         }
       },
       value: new JSONValue<SchemaType>({
         default: {
-          name: 'project_01',
-          version: '0.0.1'
+          projectID: '',
+          name: '',
+          key: ''
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({
         default: {
-          modal: { show: false, title: 'Create Project' }
+          modal: { show: false, title: 'Create Publisher' }
         }
       })
     });

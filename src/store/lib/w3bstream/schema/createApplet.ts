@@ -23,6 +23,7 @@ export const schema = {
     },
     info: {
       type: 'object',
+      title: '',
       properties: {
         projectID: { $ref: '#/definitions/projects' },
         appletName: { type: 'string' }
@@ -79,7 +80,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           await showNotification({ message: 'create applet successed' });
           eventBus.emit('applet.create');
           this.reset();
-          this.extraValue.set({ modal: { show: false } }, { force: false });
+          this.extraValue.set({ modal: { show: false } });
         }
       },
       value: new JSONValue<SchemaType>({

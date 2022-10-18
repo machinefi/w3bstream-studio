@@ -12,6 +12,7 @@ specifiers:
   '@mantine/core': ^4.1.4
   '@mantine/hooks': ^4.1.4
   '@mantine/notifications': ^4.1.4
+  '@mantine/spotlight': ^5.5.5
   '@monaco-editor/react': ^4.4.6
   '@prisma/client': ^4.4.0
   '@rjsf/chakra-ui': 5.0.0-beta.10
@@ -89,6 +90,7 @@ dependencies:
   '@mantine/core': 4.2.12_5xygnop5723tamgcmcnjbwu4iu
   '@mantine/hooks': 4.2.12_react@18.2.0
   '@mantine/notifications': 4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4
+  '@mantine/spotlight': 5.5.5_n5fi23fjjzlwcbqhnnpdtjftw4
   '@monaco-editor/react': 4.4.6_biqbaboplfbrettd7655fr4n2y
   '@prisma/client': 4.4.0_prisma@4.4.0
   '@rjsf/chakra-ui': 5.0.0-beta.10_yij3nyyxwjqlipgod37yegxm2e
@@ -1550,6 +1552,21 @@ packages:
       react-transition-group: 4.4.2_biqbaboplfbrettd7655fr4n2y
     dev: false
 
+  /@mantine/spotlight/5.5.5_n5fi23fjjzlwcbqhnnpdtjftw4:
+    resolution: {integrity: sha512-2q/tsWYakJsKevvf1yHA0z5HjHIzpHQlqc2fYYG/IpHihJ3m/IYbQItjQM3SusjCkHJQgSaw+Z4KGOS7yFtDQA==}
+    peerDependencies:
+      '@mantine/core': 5.5.5
+      '@mantine/hooks': 5.5.5
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      '@mantine/core': 4.2.12_5xygnop5723tamgcmcnjbwu4iu
+      '@mantine/hooks': 4.2.12_react@18.2.0
+      '@mantine/utils': 5.5.5_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /@mantine/styles/4.2.12_h3umwasw2xj55xde6qtxq6tis4:
     resolution: {integrity: sha512-9q1DzW0UNW/ORMGLHfN2XABOSEm0ZQebhNlLD757R6OQouoLuUf9elUwgGOXSyogMlsAYoy84XbJ3ZbbTm4YCA==}
     peerDependencies:
@@ -1567,6 +1584,14 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - '@types/react'
+    dev: false
+
+  /@mantine/utils/5.5.5_react@18.2.0:
+    resolution: {integrity: sha512-nt8+A0N1cV4cJNqlKuXazShoEwqtLohHNKFuywEdF3B6vHWdbY799PbT2WmqGTwNQ+se8y5/nBMmamBZrUN4fg==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@monaco-editor/loader/1.3.2:

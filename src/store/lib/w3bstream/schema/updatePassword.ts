@@ -48,7 +48,7 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
         showNotification({ message: 'update password successed' });
         eventBus.emit('user.update-pwd');
         this.reset();
-        this.extraValue.set({ modal: { show: false } }, { force: false });
+        this.extraValue.set({ modal: { show: false } });
         rootStore.w3s.config.logout();
       },
       value: new JSONValue<SchemaType>({

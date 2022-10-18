@@ -45,7 +45,6 @@ const IDE = observer(() => {
                     onClick={() => {
                       w3s.createProject.extraValue.set({
                         modal: {
-                          title: 'Create project',
                           show: true
                         }
                       });
@@ -63,6 +62,7 @@ const IDE = observer(() => {
       <JSONSchemaModal jsonstate={w3s.createApplet} />
       <JSONSchemaModal jsonstate={w3s.publishEvent} />
       <JSONSchemaModal jsonstate={w3s.updatePassword} />
+      <JSONSchemaModal jsonstate={w3s.createPublisher} />
     </>
   );
 });
