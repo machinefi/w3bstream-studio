@@ -55,8 +55,11 @@ export class CreatePublisherSchema extends JSONSchemaState<SchemaType, ExtraData
       afterSubmit: async (e) => {
         const res = await axios.request({
           method: 'post',
-          url: '/srv-applet-mgr/v0/project',
-          data: e.formData
+          url: `/srv-applet-mgr/v0/publisher/${e.formData.projectID}`,
+          data: {
+            name: e.formData.name,
+            key: e.formData.key
+          }
         });
         if (res.data) {
           await showNotification({ message: 'create publisher successed' });

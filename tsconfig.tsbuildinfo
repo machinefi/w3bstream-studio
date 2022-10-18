@@ -7852,7 +7852,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createpublisher.ts": {
-        "version": "8b0866563eecf0f1c42fd4b627b08262607829183109903815dc1225a8b3dcdb",
+        "version": "4c35ed5f1132c20334f17d1fe44a2885aaef3e589ba0ca27b0b4d426043ce835",
         "signature": "9eff94eb39d9e7637c186a1ba9663cc6109316907eb63a5e42cff570bef31f56",
         "affectsGlobalScope": false
       },
