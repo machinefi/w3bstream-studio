@@ -81,7 +81,6 @@ const AllInstances = observer(() => {
                     h="32px"
                     bg="#37A169"
                     color="#fff"
-                    borderRadius="base"
                     _hover={{ opacity: 0.8 }}
                     _active={{
                       opacity: 0.6
@@ -95,7 +94,6 @@ const AllInstances = observer(() => {
                     h="32px"
                     bg="#FAB400"
                     color="#fff"
-                    borderRadius="base"
                     _hover={{ opacity: 0.8 }}
                     _active={{
                       opacity: 0.6
@@ -109,7 +107,6 @@ const AllInstances = observer(() => {
                     h="32px"
                     bg="#E53E3E"
                     color="#fff"
-                    borderRadius="base"
                     _hover={{ opacity: 0.8 }}
                     _active={{
                       opacity: 0.6

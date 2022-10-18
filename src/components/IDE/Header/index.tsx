@@ -41,7 +41,7 @@ const Profile = observer(() => {
       <>
         <Popover isLazy matchWidth={true}>
           <PopoverTrigger>
-            <Button bg="rgba(0, 0, 0, 0.03)" borderRadius="base">
+            <Button bg="rgba(0, 0, 0, 0.03)">
               accountID: {accountID}
             </Button>
           </PopoverTrigger>
@@ -51,7 +51,6 @@ const Profile = observer(() => {
               <Button
                 w="full"
                 bg="rgba(0, 0, 0, 0.03)"
-                borderRadius="base"
                 onClick={() => {
                   w3s.updatePassword.extraValue.set({ modal: { show: true } }, { force: false });
                 }}

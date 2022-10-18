@@ -20,6 +20,7 @@ const AppletTable = observer(() => {
     })
   }));
 
+  // @ts-ignore
   const applets = w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject?.applets || [] : w3s.allApplets;
 
   useEffect(() => {
@@ -118,7 +119,6 @@ function CollapseTable({
                 h="32px"
                 bg="#6FB2FF"
                 color="#fff"
-                borderRadius="base"
                 _hover={{ opacity: 0.8 }}
                 _active={{
                   opacity: 0.6
@@ -143,7 +143,6 @@ function CollapseTable({
                 ml="8px"
                 h="32px"
                 variant="outline"
-                borderRadius="base"
                 borderColor="#6FB2FF"
                 color="#6FB2FF"
                 onClick={() => {
@@ -160,7 +159,6 @@ function CollapseTable({
             <Button
               colorScheme="blue"
               size="xs"
-              borderRadius="base"
               onClick={(e) => {
                 if (applet.instances.length === 0) {
                   w3s.deployApplet.call({ appletID: applet.f_applet_id });
@@ -204,7 +202,6 @@ function CollapseTable({
                         h="32px"
                         bg="#37A169"
                         color="#fff"
-                        borderRadius="base"
                         _hover={{ opacity: 0.8 }}
                         _active={{
                           opacity: 0.6
@@ -218,7 +215,6 @@ function CollapseTable({
                         h="32px"
                         bg="#FAB400"
                         color="#fff"
-                        borderRadius="base"
                         _hover={{ opacity: 0.8 }}
                         _active={{
                           opacity: 0.6
@@ -232,7 +228,6 @@ function CollapseTable({
                         h="32px"
                         bg="#E53E3E"
                         color="#fff"
-                        borderRadius="base"
                         _hover={{ opacity: 0.8 }}
                         _active={{
                           opacity: 0.6
