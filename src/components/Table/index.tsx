@@ -57,9 +57,9 @@ const Table = observer(({ columns, dataSource, rowKey, extendedTables = [], init
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((item) => (
-              <Collapse key={item[rowKey]} item={item} columns={columns} extendedTables={extendedTables} needExtendedTable={needExtendedTable} />
-            ))}
+            {data.map((item) =>
+              needExtendedTable ? <CollapseBody key={item[rowKey]} item={item} columns={columns} extendedTables={extendedTables} /> : <Body key={item[rowKey]} item={item} columns={columns} />
+            )}
           </Tbody>
         </ChakraTable>
       </TableContainer>
@@ -78,55 +78,63 @@ const Table = observer(({ columns, dataSource, rowKey, extendedTables = [], init
   );
 });
 
-function Collapse({ item, columns, extendedTables, needExtendedTable }) {
+function Body({ item, columns }) {
+  return (
+    <Tr h="54px" fontSize="14px" color="#0F0F0F">
+      {columns.map((column) => {
+        return <Td key={column.key}>{column.render ? column.render(item) : item[column.key]}</Td>;
+      })}
+    </Tr>
+  );
+}
+
+function CollapseBody({ item, columns, extendedTables }) {
   const { isOpen, onToggle } = useDisclosure();
   const styles = isOpen ? { display: 'table-row' } : { display: 'none' };
 
   return (
     <>
       <Tr h="54px" fontSize="14px" color="#0F0F0F">
-        {needExtendedTable && <Td w="40px">{isOpen ? <ChevronDownIcon w={6} h={6} onClick={onToggle} cursor="pointer" /> : <ChevronRightIcon w={6} h={6} onClick={onToggle} cursor="pointer" />}</Td>}
+        <Td w="40px">{isOpen ? <ChevronDownIcon w={6} h={6} onClick={onToggle} cursor="pointer" /> : <ChevronRightIcon w={6} h={6} onClick={onToggle} cursor="pointer" />}</Td>
         {columns.map((column) => {
           return <Td key={column.key}>{column.render ? column.render(item) : item[column.key]}</Td>;
         })}
       </Tr>
-      {needExtendedTable && (
-        <Tr {...styles}>
-          <Td></Td>
-          <Td colSpan={columns.length}>
-            {extendedTables.map((ex) => {
-              const exColumns = ex.columns;
-              const exRow = item[ex.key];
-              return (
-                <TableContainer mb="10px">
-                  <ChakraTable>
-                    <Thead>
-                      <Tr h="54px" bg="#F5F5F5">
+      <Tr {...styles}>
+        <Td></Td>
+        <Td colSpan={columns.length}>
+          {extendedTables.map((ex) => {
+            const exColumns = ex.columns;
+            const exRow = item[ex.key];
+            return (
+              <TableContainer mb="10px">
+                <ChakraTable>
+                  <Thead>
+                    <Tr h="54px" bg="#F5F5F5">
+                      {exColumns.map((exC) => {
+                        return (
+                          <Th key={exC.key} fontSize="14px" fontWeight={700} color="#0F0F0F">
+                            {exC.label}
+                          </Th>
+                        );
+                      })}
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {exRow.map((exItem) => (
+                      <Tr h="54px" fontSize="14px" color="#0F0F0F">
                         {exColumns.map((exC) => {
-                          return (
-                            <Th key={exC.key} fontSize="14px" fontWeight={700} color="#0F0F0F">
-                              {exC.label}
-                            </Th>
-                          );
+                          return <Td key={exC.key}>{exC.render ? exC.render(exItem) : exItem[exC.key]}</Td>;
                         })}
                       </Tr>
-                    </Thead>
-                    <Tbody>
-                      {exRow.map((exItem) => (
-                        <Tr h="54px" fontSize="14px" color="#0F0F0F">
-                          {exColumns.map((exC) => {
-                            return <Td key={exC.key}>{exC.render ? exC.render(exItem) : exItem[exC.key]}</Td>;
-                          })}
-                        </Tr>
-                      ))}
-                    </Tbody>
-                  </ChakraTable>
-                </TableContainer>
-              );
-            })}
-          </Td>
-        </Tr>
-      )}
+                    ))}
+                  </Tbody>
+                </ChakraTable>
+              </TableContainer>
+            );
+          })}
+        </Td>
+      </Tr>
     </>
   );
 }
