@@ -24,6 +24,7 @@ const Applets = observer(() => {
             if (w3s.showContent === 'CURRENT_APPLETS') {
               w3s.createApplet.value.set({
                 info: {
+                  // @ts-ignore
                   projectID: w3s.curProject?.f_project_id
                 }
               });
@@ -66,6 +67,7 @@ const Applets = observer(() => {
                           opacity: 0.6
                         }}
                         onClick={(e) => {
+                          //@ts-ignore
                           w3s.publishEvent.value.set({
                             projectName: item.project_name
                           });

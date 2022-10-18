@@ -28,6 +28,7 @@ const AllPublishers = observer(() => {
           onClick={(e) => {
             if (w3s.showContent === 'CURRENT_APPLETS') {
               w3s.createPublisher.value.set({
+                // @ts-ignore
                 projectID: w3s.curProject?.f_project_id,
               });
             }
