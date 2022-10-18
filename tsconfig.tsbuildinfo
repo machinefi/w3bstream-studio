@@ -5742,7 +5742,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "134125e6923363da0489ee5a1643dd13b90d741104e1ad849684c5b296e71c54",
+        "version": "34455131c25776f945a915c98e651406c8a9ddb7b169446bfbf7551cb1f644e3",
         "signature": "45309c4626e16507ae7f4bd75fd65304a28b8aa92546145e637f89129b1ed6c2",
         "affectsGlobalScope": false
       },
@@ -8087,7 +8087,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/allapplets/index.tsx": {
-        "version": "f380922f6e8ace792615074fb035d98816ce70f2cc3605ef2ce0edb68f2ca535",
+        "version": "d565f292d17c8662fec96cc76a9b5e814a78278ce1c5c2ae76ff295ec3f214d1",
         "signature": "f31142d14304ef4bb7862d6289b17493c7b017844e4a6d5343eda3041679bc82",
         "affectsGlobalScope": false
       },
@@ -8114,11 +8114,6 @@
       "./src/components/ide/index.tsx": {
         "version": "73027a07ee1667041816232264449bab534bba9c3080dd4bd457d4ad3e742fe9",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
-        "affectsGlobalScope": false
-      },
-      "./src/components/ide/applettable/index.tsx": {
-        "version": "003c92a704b0e3bf1491570b1a13574724fdf08fb178ef883050b46a0360438a",
-        "signature": "546a76a4f48d356471d323104659cbe0341b8ade72ae5717ae04aaa217c79b5e",
         "affectsGlobalScope": false
       },
       "./src/components/ide/spotlight/index.tsx": {
@@ -15829,20 +15824,6 @@
         "./src/components/table/index.tsx",
         "./src/store/index.ts"
       ],
-      "./src/components/ide/applettable/index.tsx": [
-        "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
-        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
-        "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts",
-        "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
-        "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
-        "./src/components/common/simplepagination/index.tsx",
-        "./src/components/ide/allinstances/index.tsx",
-        "./src/lib/theme.ts",
-        "./src/store/index.ts",
-        "./src/store/lib/w3bstream/index.ts",
-        "./src/store/standard/paginationstate.ts"
-      ],
       "./src/components/ide/header/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
@@ -15994,6 +15975,7 @@
       "./src/pages/_app.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@mantine+notifications@4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/notifications/lib/index.d.ts",
+        "./node_modules/.pnpm/@mantine+spotlight@5.5.5_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/spotlight/lib/index.d.ts",
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/httpbatchlink/index.d.ts",
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/loggerlink/index.d.ts",
         "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_uq7wwdjluvhzf6forjlvpz56vq/node_modules/@trpc/next/dist/index.d.ts",
@@ -16181,6 +16163,7 @@
         "./node_modules/.pnpm/@rjsf+core@5.0.0-beta.9_xxggowvcxghin6obwjaqsepeeq/node_modules/@rjsf/core/dist/index.d.ts",
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
         "./node_modules/.pnpm/@rjsf+validator-ajv6@5.0.0-beta.9_@rjsf+utils@5.0.0-beta.9/node_modules/@rjsf/validator-ajv6/dist/index.d.ts",
+        "./node_modules/.pnpm/@types+lodash@4.14.185/node_modules/@types/lodash/index.d.ts",
         "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/mobx.d.ts",
         "./src/lib/helper.ts",
         "./src/lib/lodash.ts"
@@ -25289,22 +25272,9 @@
       "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/zoderror.d.ts",
       "./src/components/common/simplepagination/index.tsx",
       "./src/components/editor/index.tsx",
-      [
-        "./src/components/ide/allapplets/index.tsx",
-        [
-          {
-            "file": "./src/components/ide/allapplets/index.tsx",
-            "start": 1115,
-            "length": 16,
-            "messageText": "Expected 1 arguments, but got 2.",
-            "category": 1,
-            "code": 2554
-          }
-        ]
-      ],
+      "./src/components/ide/allapplets/index.tsx",
       "./src/components/ide/allinstances/index.tsx",
       "./src/components/ide/allstrategies/index.tsx",
-      "./src/components/ide/applettable/index.tsx",
       "./src/components/ide/header/index.tsx",
       "./src/components/ide/index.tsx",
       "./src/components/ide/sidebar/index.tsx",
@@ -25350,19 +25320,7 @@
       "./src/lib/trpc.ts",
       "./src/pages/404.tsx",
       "./src/pages/500.tsx",
-      [
-        "./src/pages/_app.tsx",
-        [
-          {
-            "file": "./src/pages/_app.tsx",
-            "start": 742,
-            "length": 20,
-            "messageText": "Cannot find module '@mantine/spotlight' or its corresponding type declarations.",
-            "category": 1,
-            "code": 2307
-          }
-        ]
-      ],
+      "./src/pages/_app.tsx",
       "./src/pages/_document.tsx",
       "./src/pages/api/trpc/[trpc].ts",
       "./src/pages/index.tsx",
@@ -25460,19 +25418,30 @@
         [
           {
             "file": "./src/store/standard/jsonschemastate.ts",
-            "start": 684,
-            "length": 15,
-            "messageText": "Expected 1 arguments, but got 2.",
+            "start": 710,
+            "length": 6,
+            "code": 2345,
             "category": 1,
-            "code": 2554
+            "messageText": {
+              "messageText": "Argument of type '{ <T>(object: Dictionary<T> | NumericDictionary<T> | List<T>): T[]; <T extends object>(object: T): T[keyof T][]; (object: any): any[]; }' is not assignable to parameter of type 'T'.",
+              "category": 1,
+              "code": 2345,
+              "next": [
+                {
+                  "messageText": "'T' could be instantiated with an arbitrary type which could be unrelated to '{ <T>(object: Dictionary<T> | NumericDictionary<T> | List<T>): T[]; <T extends object>(object: T): T[keyof T][]; (object: any): any[]; }'.",
+                  "category": 1,
+                  "code": 5082
+                }
+              ]
+            }
           },
           {
             "file": "./src/store/standard/jsonschemastate.ts",
-            "start": 1035,
-            "length": 15,
-            "messageText": "Expected 1 arguments, but got 2.",
+            "start": 1042,
+            "length": 14,
+            "code": 2339,
             "category": 1,
-            "code": 2554
+            "messageText": "Property 'formDatavalues' does not exist on type 'IChangeEvent<T, any>'."
           }
         ]
       ],

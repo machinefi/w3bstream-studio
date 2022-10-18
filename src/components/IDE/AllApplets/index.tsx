@@ -24,11 +24,12 @@ const AllApplets = observer(() => {
             //@ts-ignore
             w3s.createApplet.value.set({
               info: {
+                //@ts-ignore
                 projectID: w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject?.f_project_id : '',
                 appletName: ''
               }
             });
-            w3s.createApplet.extraValue.set({ modal: { show: true } }, { force: false });
+            w3s.createApplet.extraValue.set({ modal: { show: true } });
           }}
         >
           Add Applet

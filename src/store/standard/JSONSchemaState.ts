@@ -4,6 +4,7 @@ import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent } from '@rjsf/core';
 import { _ } from '@/lib/lodash';
 import { helper } from '../../lib/helper';
+import { values } from 'lodash';
 
 export class JSONSchemaState<T, V = any> {
   extraValue: JSONValue<V> = new JSONValue();
@@ -21,7 +22,7 @@ export class JSONSchemaState<T, V = any> {
     return this.value.get();
   }
   set formData(value: T) {
-    this.value.set(value, { force: true });
+    this.value.set(values);
   }
   schema: RJSFSchema;
   uiSchema: UiSchema;
@@ -38,7 +39,7 @@ export class JSONSchemaState<T, V = any> {
   };
 
   onChange = (e: IChangeEvent<T, any>) => {
-    this.value.set(e.formData, { force: true });
+    this.value.set(e.formDatavalues);
     if (this.afterChange) {
       this.afterChange(e);
     }
