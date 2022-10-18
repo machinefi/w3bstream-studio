@@ -42,9 +42,11 @@ export class W3bStream {
       if (res) {
         const applets = [];
         const instances = [];
+        let strategies = [];
         res.forEach((p) => {
           // @ts-ignore
           p.applets.forEach((a) => {
+            a.project_name = p.f_name;
             a.instances.forEach((i) => {
               instances.push({
                 project_id: p.f_project_id,
@@ -58,10 +60,12 @@ export class W3bStream {
               ...a,
               project_name: p.f_name
             });
+            strategies = strategies.concat(a.strategies);
           });
         });
         this.allApplets = applets;
         this.allInstances = instances;
+        this.allStrategies = strategies;
         console.log(toJS(res));
       }
 
@@ -71,6 +75,7 @@ export class W3bStream {
 
   allApplets = [];
   allInstances = [];
+  allStrategies = [];
 
   curProjectIndex = 0;
   get curProject() {
@@ -106,7 +111,7 @@ export class W3bStream {
 
   publishEvent = new PublishEventSchema({});
 
-  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' = 'CURRENT_APPLETS';
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' = 'CURRENT_APPLETS';
 
   get isLogin() {
     return !!this.config.formData.token;

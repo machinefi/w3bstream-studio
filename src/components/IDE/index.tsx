@@ -1,13 +1,14 @@
 import React from 'react';
-import { Center, Flex, Image, Text, Box, Button } from '@chakra-ui/react';
+import { Flex, Image, Text, Box, Button } from '@chakra-ui/react';
 import { Center as LayoutCenter } from '@chakra-ui/layout';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import Header from './Header';
 import ToolBar from './ToolBar';
 import SideBar from './SideBar';
-import AppletTable from './AppletTable';
+import AllApplets from './AllApplets';
 import AllInstances from './AllInstances';
+import AllStrategies from './AllStrategies';
 import JSONSchemaModal from '../JSONSchemaModal';
 import { gradientButtonStyle } from '@/lib/theme';
 
@@ -24,8 +25,9 @@ const IDE = observer(() => {
               <ToolBar w="50px" />
               <SideBar w="300px" />
               <Box ml="24px" mt="24px" w="100%" h="100%">
-                {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <AppletTable />}
+                {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <AllApplets />}
                 {w3s.showContent === 'ALL_INSTANCES' && <AllInstances />}
+                {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
               </Box>
             </Flex>
           ) : (

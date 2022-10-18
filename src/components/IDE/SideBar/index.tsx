@@ -76,6 +76,22 @@ const SideBar = observer((props: SideBarProps) => {
           Instances
         </Text>
       </Flex>
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        h="60px"
+        p={2}
+        borderTop="1px solid rgba(0, 0, 0, 0.06)"
+        sx={getSelectedStyles(w3s.showContent === 'ALL_STRATEGIES')}
+        cursor="pointer"
+        onClick={() => {
+          w3s.showContent = 'ALL_STRATEGIES';
+        }}
+      >
+        <Text fontSize="16px" fontWeight={700}>
+          Strategies
+        </Text>
+      </Flex>
     </Flex>
   );
 });

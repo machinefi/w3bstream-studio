@@ -1,9 +1,7 @@
-import { Button, Flex, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Badge } from '@chakra-ui/react';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { Badge, Button } from '@chakra-ui/react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { PaginationState } from '@/store/standard/PaginationState';
-import SimplePagination from '@/components/Common/SimplePagination';
-import { useEffect } from 'react';
+import Table from '@/components/Table';
 
 export const INSTANCE_STATUS = {
   0: {
@@ -24,118 +22,100 @@ export const INSTANCE_STATUS = {
   }
 };
 
-const AllInstances = observer(() => {
-  const {
-    w3s,
-    w3s: { allInstances }
-  } = useStore();
+export const InstanceStatus = ({ state }: { state: number }) => {
+  return (
+    <Badge variant="outline" colorScheme={INSTANCE_STATUS[state].colorScheme}>
+      {INSTANCE_STATUS[state].text}
+    </Badge>
+  );
+};
 
-  const store = useLocalObservable(() => ({
-    paginationState: new PaginationState({
-      page: 1,
-      limit: 8
-    })
-  }));
-
-  useEffect(() => {
-    store.paginationState.setData({
-      total: allInstances.length
-    });
-  }, [allInstances]);
-
-  const dataSource = allInstances.slice(store.paginationState.offset, store.paginationState.offset + store.paginationState.limit);
+export const InstanceActions = observer(({ data }: { data: Partial<{ f_instance_id: string }> }) => {
+  const { w3s } = useStore();
 
   return (
     <>
-      <TableContainer h="calc(100vh - 160px)" overflowY="auto">
-        <Table>
-          <Thead>
-            <Tr h="54px" bg="#F5F5F5">
-              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
-                Status
-              </Th>
-              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
-                Actions
-              </Th>
-              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
-                ID
-              </Th>
-              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
-                Project Name
-              </Th>
-              <Th fontSize="14px" fontWeight={700} color="#0F0F0F">
-                Applet Name
-              </Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {dataSource.map((item) => (
-              <Tr key={item.f_instance_id} h="54px" fontSize="14px" color="#0F0F0F">
-                <Td>
-                  <Badge variant="outline" colorScheme={INSTANCE_STATUS[item.f_state].colorScheme}>
-                    {INSTANCE_STATUS[item.f_state].text}
-                  </Badge>
-                </Td>
-                <Td>
-                  <Button
-                    h="32px"
-                    bg="#37A169"
-                    color="#fff"
-                    _hover={{ opacity: 0.8 }}
-                    _active={{
-                      opacity: 0.6
-                    }}
-                    onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' })}
-                  >
-                    Start
-                  </Button>
-                  <Button
-                    ml="8px"
-                    h="32px"
-                    bg="#FAB400"
-                    color="#fff"
-                    _hover={{ opacity: 0.8 }}
-                    _active={{
-                      opacity: 0.6
-                    }}
-                    onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' })}
-                  >
-                    Restart
-                  </Button>
-                  <Button
-                    ml="8px"
-                    h="32px"
-                    bg="#E53E3E"
-                    color="#fff"
-                    _hover={{ opacity: 0.8 }}
-                    _active={{
-                      opacity: 0.6
-                    }}
-                    onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' })}
-                  >
-                    Stop
-                  </Button>
-                </Td>
-                <Td>{item.f_instance_id}</Td>
-                <Td>{item.project_name}</Td>
-                <Td>{item.applet_name}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <SimplePagination
-        mt="10px"
-        total={store.paginationState.total}
-        limit={store.paginationState.limit}
-        page={store.paginationState.page}
-        onPageChange={(currentPage) => {
-          store.paginationState.setData({
-            page: currentPage
-          });
+      <Button
+        h="32px"
+        bg="#37A169"
+        color="#fff"
+        _hover={{ opacity: 0.8 }}
+        _active={{
+          opacity: 0.6
         }}
-      />
+        onClick={(e) => w3s.handleInstance.call({ instaceID: data.f_instance_id, event: 'START' })}
+      >
+        Start
+      </Button>
+      <Button
+        ml="8px"
+        h="32px"
+        bg="#FAB400"
+        color="#fff"
+        _hover={{ opacity: 0.8 }}
+        _active={{
+          opacity: 0.6
+        }}
+        onClick={(e) => w3s.handleInstance.call({ instaceID: data.f_instance_id, event: 'Restart' })}
+      >
+        Restart
+      </Button>
+      <Button
+        ml="8px"
+        h="32px"
+        bg="#E53E3E"
+        color="#fff"
+        _hover={{ opacity: 0.8 }}
+        _active={{
+          opacity: 0.6
+        }}
+        onClick={(e) => w3s.handleInstance.call({ instaceID: data.f_instance_id, event: 'STOP' })}
+      >
+        Stop
+      </Button>
     </>
+  );
+});
+
+const AllInstances = observer(() => {
+  const {
+    w3s: { allInstances }
+  } = useStore();
+
+  return (
+    <Table
+      columns={[
+        {
+          key: 'f_state',
+          label: 'Status',
+          render(item) {
+            return <InstanceStatus state={item.f_state} />;
+          }
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+          render(item) {
+            return <InstanceActions data={item} />;
+          }
+        },
+        {
+          key: 'f_instance_id',
+          label: 'Instance ID'
+        },
+        {
+          key: 'project_name',
+          label: 'Project Name'
+        },
+        {
+          key: 'applet_name',
+          label: 'Applet Name'
+        }
+      ]}
+      dataSource={allInstances}
+      rowKey="f_instance_id"
+      chakraTableContainerProps={{ h: 'calc(100vh - 160px)' }}
+    />
   );
 });
 
