@@ -26,27 +26,72 @@ const SideBar = observer((props: SideBarProps) => {
             </Stack>
           </>
         );
+
       default:
         return (
           <>
-            <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
-              <Text
-                cursor="pointer"
-                onClick={() => {
-                  w3s.showContent = 'ALL_APPLETS';
-                }}
-              >
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              h="60px"
+              p={2}
+              borderTop="1px solid rgba(0, 0, 0, 0.06)"
+              sx={getSelectedStyles(w3s.showContent === 'ALL_APPLETS')}
+              cursor="pointer"
+              onClick={() => {
+                w3s.showContent = 'ALL_APPLETS';
+              }}
+            >
+              <Text fontSize="16px" fontWeight={700}>
                 Applets
               </Text>
             </Flex>
-            <Flex alignItems="center" justifyContent="space-between" mt={1} p={2} bg="#FAFAFA">
-              <Text
-                cursor="pointer"
-                onClick={() => {
-                  w3s.showContent = 'ALL_INSTANCES';
-                }}
-              >
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              h="60px"
+              p={2}
+              borderTop="1px solid rgba(0, 0, 0, 0.06)"
+              sx={getSelectedStyles(w3s.showContent === 'ALL_INSTANCES')}
+              cursor="pointer"
+              onClick={() => {
+                w3s.showContent = 'ALL_INSTANCES';
+              }}
+            >
+              <Text fontSize="16px" fontWeight={700}>
                 Instances
+              </Text>
+            </Flex>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              h="60px"
+              p={2}
+              borderTop="1px solid rgba(0, 0, 0, 0.06)"
+              sx={getSelectedStyles(w3s.showContent === 'ALL_STRATEGIES')}
+              cursor="pointer"
+              onClick={() => {
+                w3s.showContent = 'ALL_STRATEGIES';
+              }}
+            >
+              <Text fontSize="16px" fontWeight={700}>
+                Strategies
+              </Text>
+            </Flex>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              h="60px"
+              p={2}
+              borderTop="1px solid rgba(0, 0, 0, 0.06)"
+              sx={getSelectedStyles(w3s.showContent === 'ALL_PUBLISHERS')}
+              cursor="pointer"
+              onClick={() => {
+                w3s.showContent = 'ALL_PUBLISHERS';
+              }}
+            >
+              <Text fontSize="16px" fontWeight={700}>
+                Publishers
               </Text>
             </Flex>
           </>
@@ -81,78 +126,13 @@ const SideBar = observer((props: SideBarProps) => {
         </Flex>
       </Flex>
 
-      {showOtherTab()}
-
       <Box h="350px" overflowY="auto">
         {w3s.allProjects.value.map((i, index) => {
           return <ProjectItem project={i} index={index} />;
         })}
       </Box>
 
-      <Flex
-        alignItems="center"
-        justifyContent="space-between"
-        h="60px"
-        p={2}
-        borderTop="1px solid rgba(0, 0, 0, 0.06)"
-        sx={getSelectedStyles(w3s.showContent === 'ALL_APPLETS')}
-        cursor="pointer"
-        onClick={() => {
-          w3s.showContent = 'ALL_APPLETS';
-        }}
-      >
-        <Text fontSize="16px" fontWeight={700}>
-          Applets
-        </Text>
-      </Flex>
-      <Flex
-        alignItems="center"
-        justifyContent="space-between"
-        h="60px"
-        p={2}
-        borderTop="1px solid rgba(0, 0, 0, 0.06)"
-        sx={getSelectedStyles(w3s.showContent === 'ALL_INSTANCES')}
-        cursor="pointer"
-        onClick={() => {
-          w3s.showContent = 'ALL_INSTANCES';
-        }}
-      >
-        <Text fontSize="16px" fontWeight={700}>
-          Instances
-        </Text>
-      </Flex>
-      <Flex
-        alignItems="center"
-        justifyContent="space-between"
-        h="60px"
-        p={2}
-        borderTop="1px solid rgba(0, 0, 0, 0.06)"
-        sx={getSelectedStyles(w3s.showContent === 'ALL_STRATEGIES')}
-        cursor="pointer"
-        onClick={() => {
-          w3s.showContent = 'ALL_STRATEGIES';
-        }}
-      >
-        <Text fontSize="16px" fontWeight={700}>
-          Strategies
-        </Text>
-      </Flex>
-      <Flex
-        alignItems="center"
-        justifyContent="space-between"
-        h="60px"
-        p={2}
-        borderTop="1px solid rgba(0, 0, 0, 0.06)"
-        sx={getSelectedStyles(w3s.showContent === 'ALL_PUBLISHERS')}
-        cursor="pointer"
-        onClick={() => {
-          w3s.showContent = 'ALL_PUBLISHERS';
-        }}
-      >
-        <Text fontSize="16px" fontWeight={700}>
-          Publishers
-        </Text>
-      </Flex>
+      {showOtherTab()}
     </Flex>
   );
 });
