@@ -66,7 +66,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           }
         }
       },
-      reactive: true,
+
       afterSubmit: async (e) => {
         let formData = new FormData();
         console.log(e.formData);

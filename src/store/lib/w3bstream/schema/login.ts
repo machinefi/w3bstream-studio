@@ -34,7 +34,7 @@ export class LoginSchema extends JSONSchemaState<SchemaType> {
           }
         }
       },
-      reactive: true,
+
       afterSubmit: async (e) => {
         const res = await axios.request({
           method: 'put',

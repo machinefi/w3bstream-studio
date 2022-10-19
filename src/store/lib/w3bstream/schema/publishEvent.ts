@@ -50,7 +50,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           }
         }
       },
-      reactive: true,
+
       afterSubmit: async (e) => {
         const { projectName, publisher, payload } = e.formData;
         const { allPublishers } = rootStore.w3s;

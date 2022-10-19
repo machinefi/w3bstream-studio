@@ -38,7 +38,7 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
           }
         }
       },
-      reactive: true,
+
       afterSubmit: async (e) => {
         const res = await axios.request({
           method: 'put',

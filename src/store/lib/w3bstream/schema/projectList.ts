@@ -35,7 +35,7 @@ export class ProjectListSchema extends JSONSchemaState<SchemaType> {
           submitText: 'Submit'
         }
       },
-      reactive: true,
+
       value: new JSONValue<SchemaType>({
         default: {
           projectID: ''

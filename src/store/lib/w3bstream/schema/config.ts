@@ -27,7 +27,6 @@ export class W3bstreamConfigState extends JSONSchemaState<SchemaType> {
           submitText: 'Update'
         }
       },
-      reactive: true,
       value: new StorageState<SchemaType>({ key: 'w3bstream-config', default: { apiUrl: process.env['NEXT_PUBLIC_API_URL'], token: '', accountID: '' } })
     });
   }

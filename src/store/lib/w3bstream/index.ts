@@ -16,6 +16,7 @@ import { UpdatePasswordSchema } from './schema/updatePassword';
 import { PublishEventSchema } from './schema/publishEvent';
 import { CreatePublisherSchema } from './schema/createPublisher';
 import { SpotlightAction } from '@mantine/spotlight';
+import { t_strategy } from '@prisma/client';
 
 export class W3bStream {
   rootStore: RootStore;
@@ -84,7 +85,7 @@ export class W3bStream {
 
   allApplets = [];
   allInstances = [];
-  allStrategies = [];
+  allStrategies: Partial<t_strategy>[] = [];
   allPublishers = [];
 
   curProjectIndex = 0;

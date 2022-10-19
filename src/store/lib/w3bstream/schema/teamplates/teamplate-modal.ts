@@ -40,7 +40,7 @@ export class TemplateSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
           submitText: 'Submit'
         }
       },
-      reactive: true,
+
       value: new JSONValue<SchemaType>({
         default: {
           projectID: ''
