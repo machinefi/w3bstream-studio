@@ -59,6 +59,11 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
             h: '32px',
             ...gradientButtonStyle
           }
+        },
+        file: {
+          'ui:options': {
+            accept: '.wasm'
+          }
         }
       },
       reactive: true,

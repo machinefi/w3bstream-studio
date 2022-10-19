@@ -13,7 +13,7 @@ export const definitions = {
   publishers: {
     type: 'string',
     get enum() {
-      return rootStore.w3s.allPublishers.map((i) => `${i.f_publisher_id}`) || [];
+      return rootStore.w3s.allPublishers.map((i) => `[Publisher Id]: ${i.f_publisher_id} [Name]: ${i.f_name}`) || [];
     }
   }
   // applets: {
