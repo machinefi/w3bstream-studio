@@ -24,7 +24,10 @@ const AllStrategies = observer(() => {
         },
         {
           key: 'f_event_type',
-          label: 'Event Type'
+          label: 'Event Type',
+          render(item) {
+            return <>Any</>;
+          }
         },
         {
           key: 'f_handler',

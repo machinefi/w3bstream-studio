@@ -1,32 +1,19 @@
-import { makeAutoObservable, toJS } from 'mobx';
+import { makeAutoObservable, toJS, makeObservable } from 'mobx';
 import { helper } from '@/lib/helper';
 import { JSONSchemaValue } from './JSONSchemaState';
 import { _ } from '@/lib/lodash';
 
-export class StorageState<T> implements JSONSchemaValue {
+export class StorageState<T> extends JSONSchemaValue<T> {
   key: string;
-  value: T = null as T;
-  default: T = null as T;
   constructor(args: Partial<StorageState<T>>) {
+    super(args);
     Object.assign(this, args);
-    makeAutoObservable(this, {
-      default: false
-    });
     this.load();
   }
-
-  get() {
-    return this.value;
-  }
   set(val) {
-    const newVal = helper.deepMerge(this.value, val);
-    this.value = toJS(newVal);
-    localStorage.setItem(this.key, JSON.stringify(this.value));
-  }
-  setFormat = (value: any) => value;
-
-  reset() {
-    this.set(this.default);
+    const value = super.set(val);
+    localStorage.setItem(this.key, JSON.stringify(value));
+    return value;
   }
 
   load() {

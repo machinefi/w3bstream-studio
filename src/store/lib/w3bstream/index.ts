@@ -17,6 +17,7 @@ import { FilesListSchema } from './schema/filesList';
 import { PublishEventSchema } from './schema/publishEvent';
 import { CreatePublisherSchema } from './schema/createPublisher';
 import { SpotlightAction } from '@mantine/spotlight';
+import { t_strategy } from '@prisma/client';
 
 type allProjectType = {
   f_project_id: string;
@@ -114,7 +115,7 @@ export class W3bStream {
 
   allApplets = [];
   allInstances = [];
-  allStrategies = [];
+  allStrategies: Partial<t_strategy>[] = [];
   allPublishers = [];
 
   curProjectIndex = 0;

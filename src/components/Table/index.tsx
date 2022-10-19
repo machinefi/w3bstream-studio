@@ -94,8 +94,19 @@ function CollapseBody({ item, columns, extendedTables }) {
 
   return (
     <>
-      <Tr h="54px" fontSize="14px" color="#0F0F0F">
-        <Td w="40px">{isOpen ? <ChevronDownIcon w={6} h={6} onClick={onToggle} cursor="pointer" /> : <ChevronRightIcon w={6} h={6} onClick={onToggle} cursor="pointer" />}</Td>
+      <Tr
+        h="54px"
+        fontSize="14px"
+        color="#0F0F0F"
+        cursor="pointer"
+        onClick={(e: any) => {
+          const { nodeName } = e.target;
+          if (nodeName === 'TD' || nodeName === 'svg') {
+            onToggle();
+          }
+        }}
+      >
+        <Td w="40px">{isOpen ? <ChevronDownIcon w={6} h={6} /> : <ChevronRightIcon w={6} h={6} />}</Td>
         {columns.map((column) => {
           return <Td key={column.key}>{column.render ? column.render(item) : item[column.key]}</Td>;
         })}

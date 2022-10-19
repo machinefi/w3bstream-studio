@@ -1,5 +1,5 @@
 import { UiSchema, RJSFSchema } from '@rjsf/utils';
-import { makeAutoObservable, makeObservable, computed, toJS } from 'mobx';
+import { makeAutoObservable, makeObservable, computed, toJS, observable, action } from 'mobx';
 import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent } from '@rjsf/core';
 import { _ } from '@/lib/lodash';
@@ -25,7 +25,7 @@ export class JSONSchemaState<T, V = any> {
   }
   schema: RJSFSchema;
   uiSchema: UiSchema;
-  reactive: boolean;
+  reactive: boolean = true;
   readonly = false;
   liveValidate = false;
   validator = validator;
@@ -76,40 +76,42 @@ export class JSONSchemaState<T, V = any> {
   }
 }
 
-export interface JSONSchemaValue {
-  value?: any;
-  default?: any;
-  options?: { force: boolean };
-  set: (value: any, options?: JSONSchemaValue['options']) => void;
-  setFormat: (value: any) => any;
-  get: () => any;
-  reset: () => any;
-}
-
-export class JSONValue<T> implements JSONSchemaValue {
+export abstract class JSONSchemaValue<T> {
   value?: T = null as T;
   default?: T = null as T;
-
-  setFormat = (val: T) => val;
-
-  get() {
-    return this.value;
-  }
-  set(val: T) {
-    val = this.setFormat(val);
-    const newVal = helper.deepMerge(this.value, val);
-    this.value = toJS(newVal);
-  }
-  reset() {
-    this.set(this.default);
-  }
-  constructor(args: Partial<JSONValue<T>> = {}) {
+  constructor(args: Partial<JSONSchemaValue<T>> = {}) {
     if (!args.value && args.default) {
       args.value = args.default;
     }
     Object.assign(this, args);
+    makeObservable(this, {
+      value: observable,
+      set: action
+    });
+  }
+  set(value: any) {
+    value = this.setFormat(value);
+    const newVal = helper.deepMerge(this.value, value);
+    this.value = toJS(newVal);
+    return this.value;
+  }
+  setFormat(value: any) {
+    return value;
+  }
+  get() {
+    return this.getFormat(this.value);
+  }
+  getFormat(value: any) {
+    return value;
+  }
+  reset() {
+    this.set(this.default);
+  }
+}
 
-    makeAutoObservable(this);
+export class JSONValue<T> extends JSONSchemaValue<T> {
+  constructor(args: Partial<JSONValue<T>> = {}) {
+    super(args);
   }
 }
 

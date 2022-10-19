@@ -38,7 +38,7 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
           }
         }
       },
-      reactive: true,
+
       afterSubmit: async (e) => {
         const res = await axios.request({
           method: 'post',

@@ -51,7 +51,7 @@ export class CreatePublisherSchema extends JSONSchemaState<SchemaType, ExtraData
           }
         }
       },
-      reactive: true,
+
       afterSubmit: async (e) => {
         const res = await axios.request({
           method: 'post',
