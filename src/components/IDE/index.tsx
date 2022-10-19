@@ -9,6 +9,7 @@ import SideBar from './SideBar';
 import AppletTable from './AppletTable';
 import AllInstances from './AllInstances';
 import JSONSchemaModal from '../JSONSchemaModal';
+import Editor from './Editor';
 
 const IDE = observer(() => {
   const { w3s } = useStore();
@@ -23,6 +24,7 @@ const IDE = observer(() => {
         <Box ml="370px" mt="80px" w="100%">
           {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <AppletTable />}
           {w3s.showContent === 'ALL_INSTANCES' && <AllInstances />}
+          {w3s.showContent === 'EDITOR' && <Editor />}
         </Box>
       </Flex>
       <JSONSchemaModal jsonstate={w3s.createProject} />

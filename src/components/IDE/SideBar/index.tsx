@@ -6,6 +6,7 @@ import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Menu, MenuItem } from '@/components/Menu';
+import { FilesItem } from './filesItem';
 
 interface SideBarProps extends FlexProps {}
 
@@ -14,6 +15,46 @@ const SideBar = observer((props: SideBarProps) => {
   const bg = useColorModeValue('white', 'dark');
   const borderColor = useColorModeValue('gray.200', 'grey.100');
 
+  const showOtherTab = () => {
+    switch (w3s.showContent) {
+      case 'EDITOR':
+        return (
+          <>
+            <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
+              <Text cursor="pointer">Files</Text>
+            </Flex>
+            <Stack mt={1} h="calc(100vh - 100px)" overflowY="auto">
+              <FilesItem />
+            </Stack>
+          </>
+        );
+      default:
+        return (
+          <>
+            <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
+              <Text
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'ALL_APPLETS';
+                }}
+              >
+                Applets
+              </Text>
+            </Flex>
+            <Flex alignItems="center" justifyContent="space-between" mt={1} p={2} bg="#FAFAFA">
+              <Text
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'ALL_INSTANCES';
+                }}
+              >
+                Instances
+              </Text>
+            </Flex>
+          </>
+        );
+    }
+  };
   return (
     <Flex
       h="100%"
@@ -47,31 +88,12 @@ const SideBar = observer((props: SideBarProps) => {
           <Icon as={MdRefresh} ml={2} w={5} h={5} cursor="pointer" />
         </Flex>
       </Flex>
-      <Stack mt={2} p={2} h="200px" overflowY="auto">
+      <Stack mt={2} p={2} h="200" overflowY="auto">
         {w3s.allProjects.value.map((i, index) => {
           return <ProjectItem project={i} index={index} />;
         })}
       </Stack>
-      <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
-        <Text
-          cursor="pointer"
-          onClick={() => {
-            w3s.showContent = 'ALL_APPLETS';
-          }}
-        >
-          Applets
-        </Text>
-      </Flex>
-      <Flex alignItems="center" justifyContent="space-between" mt={1} p={2} bg="#FAFAFA">
-        <Text
-          cursor="pointer"
-          onClick={() => {
-            w3s.showContent = 'ALL_INSTANCES';
-          }}
-        >
-          Instances
-        </Text>
-      </Flex>
+      {showOtherTab()}
     </Flex>
   );
 });
@@ -85,7 +107,10 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
         sx={{ color: w3s.curProjectIndex == index ? 'black' : '#999', cursor: 'pointer' }}
         onClick={(e) => {
           w3s.curProjectIndex = index;
-          w3s.showContent = 'CURRENT_APPLETS';
+          if (w3s.showContent != 'EDITOR' && w3s.showContent != 'CURRENT_APPLETS') {
+            w3s.showContent = 'CURRENT_APPLETS';
+          }
+          console.log(w3s.curFilesList);
         }}
       >
         <Text lineHeight={2} fontSize="sm">
@@ -119,5 +144,4 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: s
     </ContextMenuTrigger>
   );
 });
-
 export default SideBar;

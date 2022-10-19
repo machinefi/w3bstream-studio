@@ -35,6 +35,17 @@ const ToolBar = (props: ToolBar) => {
               {...isSelect('CURRENT_APPLETS')}
             ></Image>
           </Tooltip>
+
+          <Tooltip label="Editor" placement="right">
+            <Image
+              src="/images/icons/code.svg"
+              onClick={() => {
+                w3s.showContent = 'EDITOR';
+              }}
+              {...iconStyle}
+              {...isSelect('EDITOR')}
+            ></Image>
+          </Tooltip>
           {/* <Tooltip label="Document(Comming Soon)" placement="right">
             <Image src="/images/icons/documents.svg" {...iconStyle} {...isSelect('')} onClick={() => {}}></Image>
           </Tooltip>

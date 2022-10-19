@@ -1,0 +1,14 @@
+.p-tree {
+  border: none;
+  padding: 0;
+}
+
+.p-tree .p-tree-container .p-treenode .p-treenode-content .p-tree-toggler:focus {
+  box-shadow: none;
+}
+
+
+
+.p-tree .p-tree-container .p-treenode .p-treenode-content .p-tree-toggler:enabled:hover{
+  background-color: none;
+}

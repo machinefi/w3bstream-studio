@@ -13,7 +13,23 @@ import { CreateAppletSchema } from './schema/createApplet';
 import { ProjectListSchema } from './schema/projectList';
 import { CreateProjectSchema } from './schema/createProject';
 import { UpdatePasswordSchema } from './schema/updatePassword';
+import { FilesListSchema } from './schema/filesList';
 
+type allProjectType = {
+  applets: {
+    f_project_id: string;
+    f_name: string;
+    f_applet_id: string;
+    instances: {
+      f_instance_id: string;
+      f_state: number;
+    }[];
+  }[];
+  project_files: FilesListSchema;
+  f_project_id: string;
+  f_name: string;
+  f_version: string;
+};
 
 export class W3bStream {
   rootStore: RootStore;
@@ -27,7 +43,7 @@ export class W3bStream {
       };
     }
   });
-  updatePassword = new UpdatePasswordSchema({})
+  updatePassword = new UpdatePasswordSchema({});
   projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
@@ -35,14 +51,16 @@ export class W3bStream {
       };
     }
   });
-  allProjects = new PromiseState({
+
+  allProjects = new PromiseState<() => Promise<any>, allProjectType[]>({
     defaultValue: [],
     function: async () => {
       const res = await trpc.api.projects.query({ accountID: this.config.formData.accountID });
       if (res) {
         const applets = [];
         const instances = [];
-        res.forEach((p) => {
+        res.forEach((p: allProjectType) => {
+          p.project_files = new FilesListSchema();
           p.applets.forEach((a) => {
             a.instances.forEach((i) => {
               instances.push({
@@ -59,7 +77,6 @@ export class W3bStream {
         this.allApplets = applets;
         this.allInstances = instances;
       }
-
       return res;
     }
   });
@@ -75,6 +92,12 @@ export class W3bStream {
   curAppletIndex = 0;
   get curApplet() {
     return this.curProject ? this.curProject.applets[this.curAppletIndex] : null;
+  }
+  get curFilesList() {
+    return this.curProject ? this.curProject.project_files.extraData.files : [];
+  }
+  get curFilesListSchema() {
+    return this.curProject ? this.curProject.project_files : null;
   }
   deployApplet = new PromiseState({
     function: async ({ appletID }: { appletID: string }) => {
@@ -112,7 +135,7 @@ export class W3bStream {
     }
   });
 
-  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' = 'CURRENT_APPLETS';
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'EDITOR' = 'CURRENT_APPLETS';
 
   get isLogin() {
     return !!this.config.formData.token;
@@ -132,9 +155,7 @@ export class W3bStream {
         this.allProjects.call();
         NextRouter.push('/');
       })
-      .on('user.updatepwd', () => {
-
-      })
+      .on('user.updatepwd', () => {})
       .on('project.create', () => {
         this.allProjects.call();
       })
