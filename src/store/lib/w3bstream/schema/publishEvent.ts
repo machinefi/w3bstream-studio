@@ -16,10 +16,10 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    publisherId: { $ref: '#/definitions/publishers' },
+    publisher: { $ref: '#/definitions/publishers' },
     payload: { type: 'string' }
   },
-  required: ['publisherId', 'payload']
+  required: ['publisher', 'payload']
 } as const;
 
 //@ts-ignore
@@ -52,9 +52,11 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       },
       reactive: true,
       afterSubmit: async (e) => {
-        const { projectName, publisherId, payload } = e.formData;
+        const { projectName, publisher, payload } = e.formData;
         const { allPublishers } = rootStore.w3s;
-        const pub = allPublishers.find((item) => item.f_publisher_id === publisherId);
+        const pub = allPublishers.find((item) => {
+          return `[Publisher Id]: ${item.f_publisher_id} [Name]: ${item.f_name}` === publisher;
+        });
         if (pub) {
           const res = await axios.request({
             method: 'post',
@@ -67,7 +69,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
               header: {
                 token: pub.f_token,
                 event_type: 2147483647,
-                pub_id: publisherId,
+                pub_id: pub.f_key,
                 pub_time: Date.now()
               }
             }
@@ -83,7 +85,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       value: new JSONValue<SchemaType>({
         default: {
           projectName: '',
-          publisherId: '',
+          publisher: '',
           payload: ''
         }
       }),
