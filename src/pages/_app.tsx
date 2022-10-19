@@ -5,16 +5,19 @@ import { withTRPC } from '@trpc/next';
 import { observer } from 'mobx-react-lite';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { loggerLink } from '@trpc/client/links/loggerLink';
-import superjson from 'superjson';
 import { useStore } from '@/store/index';
 import { theme } from '@/lib/theme';
-import Header from '@/components/Header';
 import NextRouter from 'next/router';
 import type { AppRouter } from '@/server/routers/_app';
 import type { AppProps } from 'next/app';
 import { NotificationsProvider } from '@mantine/notifications';
 import 'primereact/resources/themes/tailwind-light/theme.css';
 import "../../primereact.reset.css"
+import { eventBus } from '@/lib/event';
+import superjson from 'superjson';
+import { SpotlightProvider } from '@mantine/spotlight';
+
+import '@/lib/superjson';
 function MyApp({ Component, pageProps }: AppProps) {
   const {
     lang,
@@ -22,10 +25,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       config: {
         formData: { token }
       }
-    }
+    },
+    w3s
   } = useStore();
   useEffect(() => {
     lang.init();
+    eventBus.emit('app.ready');
   }, []);
 
   useEffect(() => {
@@ -37,20 +42,18 @@ function MyApp({ Component, pageProps }: AppProps) {
   return useMemo(() => {
     return (
       <ChakraProvider theme={theme}>
-        <NotificationsProvider>
-          <Toaster />
-          <Header />
-          <Component {...pageProps} />
-        </NotificationsProvider>
+        <SpotlightProvider actions={w3s.actions}>
+          <NotificationsProvider>
+            <Toaster />
+            <Component {...pageProps} />
+          </NotificationsProvider>
+        </SpotlightProvider>
       </ChakraProvider>
     );
   }, [Component, pageProps]);
 }
 
 function getBaseUrl() {
-  if (process.browser) {
-    return '';
-  }
   // reference for vercel.com
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;

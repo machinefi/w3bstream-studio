@@ -1,12 +1,12 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { rootStore } from '@/store/index';
 import { FromSchema } from 'json-schema-to-ts';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
-  title: 'Login',
+  // title: 'Login',
   type: 'object',
   properties: {
     username: { type: 'string' },
@@ -26,7 +26,12 @@ export class LoginSchema extends JSONSchemaState<SchemaType> {
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
-          submitText: 'Login'
+          submitText: 'Login',
+          props: {
+            w: '100%',
+            h: '32px',
+            ...gradientButtonStyle
+          }
         }
       },
       reactive: true,
@@ -38,7 +43,7 @@ export class LoginSchema extends JSONSchemaState<SchemaType> {
         });
         if (res.data.token) {
           //@ts-ignore
-          rootStore.w3s.config.setData({ token: res.data.token, accountID: res.data.accountID });
+          rootStore.w3s.config.value.set({ token: res.data.token, accountID: res.data.accountID });
           eventBus.emit('user.login');
           this.reset({ force: true });
         }

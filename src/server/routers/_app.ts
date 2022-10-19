@@ -5,6 +5,7 @@ import { t } from '../trpc';
 import { templateRouter } from './template';
 import { w3bstreamRouter } from './w3bstream';
 
+import '@/lib/superjson';
 /**
  * Create your application's root router
  * If you want to use SSG, you need export this
@@ -19,5 +20,4 @@ export const appRouter = t.router({
  * Add data transformers
  * @link https://trpc.io/docs/data-transformers
  */
-
 export type AppRouter = typeof appRouter;

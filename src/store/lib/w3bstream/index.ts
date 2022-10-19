@@ -1,5 +1,5 @@
 import NextRouter from 'next/router';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import RootStore from '@/store/root';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
@@ -14,21 +14,37 @@ import { ProjectListSchema } from './schema/projectList';
 import { CreateProjectSchema } from './schema/createProject';
 import { UpdatePasswordSchema } from './schema/updatePassword';
 import { FilesListSchema } from './schema/filesList';
+import { PublishEventSchema } from './schema/publishEvent';
+import { CreatePublisherSchema } from './schema/createPublisher';
+import { SpotlightAction } from '@mantine/spotlight';
 
 type allProjectType = {
-  applets: {
-    f_project_id: string;
-    f_name: string;
-    f_applet_id: string;
-    instances: {
-      f_instance_id: string;
-      f_state: number;
-    }[];
-  }[];
-  project_files: FilesListSchema;
   f_project_id: string;
   f_name: string;
-  f_version: string;
+  project_files: FilesListSchema;
+  publishers: {
+    f_publisher_id: string;
+    f_name: string;
+    f_key: string;
+    f_created_at: string;
+    f_token: string;
+  };
+  applets: {
+    f_name: string;
+    f_applet_id: string;
+    f_project_id: string;
+    strategies: {
+      f_strategy_id: string;
+      f_applet_id: string;
+      f_project_id: string;
+      f_event_type: string;
+      f_handler: string;
+    };
+    instances: {
+      f_instance_id: string;
+      f_state: string;
+    };
+  };
 };
 
 export class W3bStream {
@@ -44,6 +60,7 @@ export class W3bStream {
     }
   });
   updatePassword = new UpdatePasswordSchema({});
+  createPublisher = new CreatePublisherSchema({});
   projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
@@ -59,9 +76,14 @@ export class W3bStream {
       if (res) {
         const applets = [];
         const instances = [];
+        let strategies = [];
+        let publishers = [];
         res.forEach((p: allProjectType) => {
           p.project_files = new FilesListSchema();
+          // @ts-ignore
           p.applets.forEach((a) => {
+            //@ts-ignore
+            a.project_name = p.f_name;
             a.instances.forEach((i) => {
               instances.push({
                 project_id: p.f_project_id,
@@ -71,11 +93,20 @@ export class W3bStream {
                 ...i
               });
             });
-            applets.push(a);
+            applets.push({
+              ...a,
+              project_name: p.f_name
+            });
+            strategies = strategies.concat(a.strategies);
           });
+          //@ts-ignore
+          publishers = publishers.concat(p.publishers);
         });
         this.allApplets = applets;
         this.allInstances = instances;
+        this.allStrategies = strategies;
+        this.allPublishers = publishers;
+        console.log(toJS(res));
       }
       return res;
     }
@@ -83,6 +114,8 @@ export class W3bStream {
 
   allApplets = [];
   allInstances = [];
+  allStrategies = [];
+  allPublishers = [];
 
   curProjectIndex = 0;
   get curProject() {
@@ -91,6 +124,7 @@ export class W3bStream {
 
   curAppletIndex = 0;
   get curApplet() {
+    // @ts-ignore
     return this.curProject ? this.curProject.applets[this.curAppletIndex] : null;
   }
   get curFilesList() {
@@ -121,24 +155,16 @@ export class W3bStream {
     }
   });
 
-  publishEvent = new PromiseState({
-    function: async ({ projectID, appletID, event = 'start', data = 'test msg' }: { projectID: string; appletID: string; event?: string; data?: string }) => {
-      const res = await axios.request({
-        method: 'post',
-        url: `srv-applet-mgr/v0/event/${projectID}/${appletID}/${event}`,
-        headers: {
-          publisher: 'admin'
-        },
-        data
-      });
-      return res.data;
-    }
-  });
+  publishEvent = new PublishEventSchema({});
 
-  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'EDITOR' = 'CURRENT_APPLETS';
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' = 'CURRENT_APPLETS';
 
   get isLogin() {
     return !!this.config.formData.token;
+  }
+
+  get actions(): SpotlightAction[] {
+    return [this.createProject, this.createApplet, this.createPublisher].map((i) => ({ title: i.extraData.modal.title, onTrigger: () => i.extraValue.set({ modal: { show: true } }) }));
   }
 
   constructor(rootStore: RootStore) {
@@ -151,21 +177,33 @@ export class W3bStream {
   }
   initEvent() {
     eventBus
+      .on('app.ready', async () => {
+        if (this.isLogin) {
+          await axios.request({
+            method: 'get',
+            url: '/srv-applet-mgr/v0/project'
+          });
+        }
+      })
       .on('user.login', () => {
         this.allProjects.call();
         NextRouter.push('/');
       })
-      .on('user.updatepwd', () => {})
+      .on('user.update-pwd', () => {})
       .on('project.create', () => {
         this.allProjects.call();
       })
       .on('applet.create', () => {
         this.allProjects.call();
       })
+      .on('applet.publish-event', () => {})
       .on('instance.deploy', () => {
         this.allProjects.call();
       })
       .on('instance.handle', () => {
+        this.allProjects.call();
+      })
+      .on('publisher.create', () => {
         this.allProjects.call();
       });
   }

@@ -1,12 +1,12 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONValue, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
+import { JSONValue, JSONSchemaState, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
+import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
-  title: 'Create Project',
+  // title: 'Create Project',
   type: 'object',
   properties: {
     name: { type: 'string' },
@@ -30,7 +30,12 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
-          submitText: 'Submit'
+          submitText: 'Submit',
+          props: {
+            w: '100%',
+            h: '32px',
+            ...gradientButtonStyle
+          }
         }
       },
       reactive: true,
@@ -43,10 +48,7 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
         if (res.data) {
           await showNotification({ message: 'create project successed' });
           eventBus.emit('project.create');
-          this.reset();
-          this.setExtraData({
-            modal: { show: false }
-          });
+          this.reset().extraValue.set({ modal: { show: false } });
         }
       },
       value: new JSONValue<SchemaType>({
@@ -57,7 +59,7 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
       }),
       extraValue: new JSONValue<ExtraDataType>({
         default: {
-          modal: { show: false }
+          modal: { show: false, title: 'Create Project' }
         }
       })
     });

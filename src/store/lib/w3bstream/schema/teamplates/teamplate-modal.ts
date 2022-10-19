@@ -1,7 +1,6 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONSchemaModalState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaModalState, JSONSchemaState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { definitions } from '../definitions';
+import { definitions } from '@/store/lib/w3bstream/schema/definitions';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -10,7 +9,7 @@ export const schema = {
       type: 'string'
     }
   },
-  title: 'Tamplates',
+  // title: 'Tamplates',
   type: 'object',
   properties: {
     projectID: { $ref: '#/definitions/projects' }
@@ -50,7 +49,7 @@ export class TemplateSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false }
+          modal: { show: false, title: '' }
         }
       })
     });

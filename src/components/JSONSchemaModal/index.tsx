@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalBody, Box } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalBody, Box, ModalHeader, ModalCloseButton } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { JSONForm } from '@/components/JSONForm';
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
@@ -17,9 +17,10 @@ const JSONSchemaModal = observer((props: Props) => {
     <Modal
       isOpen={jsonstate.extraData.modal.show}
       onClose={() => {
-        jsonstate.setExtraData({
+        jsonstate.reset().extraValue.set({
           modal: {
-            show: false,
+            ...jsonstate.extraData.modal,
+            show: false
           }
         });
       }}
@@ -27,8 +28,12 @@ const JSONSchemaModal = observer((props: Props) => {
     >
       <ModalOverlay />
       <ModalContent>
+        <ModalHeader bg="#FAFAFA" borderBottom="1px solid #eee">
+          {jsonstate.extraData.modal.title}
+        </ModalHeader>
+        <ModalCloseButton />
         <ModalBody>
-          <Box mt="2xl">
+          <Box p="20px 30px">
             <JSONForm jsonstate={jsonstate} />
           </Box>
         </ModalBody>

@@ -1,13 +1,13 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONSchemaModalState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaState, JSONSchemaModalState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { rootStore } from '@/store/index';
 import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
-  title: 'Update Password',
+  // title: 'Update Password',
   type: 'object',
   properties: {
     password: { type: 'string' }
@@ -30,7 +30,12 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
-          submitText: 'Update'
+          submitText: 'Update',
+          props: {
+            w: '100%',
+            h: '32px',
+            ...gradientButtonStyle
+          }
         }
       },
       reactive: true,
@@ -40,13 +45,11 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
           url: `/srv-applet-mgr/v0/account/${rootStore.w3s.config.formData.accountID}`,
           data: e.formData
         });
-        if (res.data) {
-          await showNotification({ message: 'update password successed' });
-          eventBus.emit('user.updatepwd');
-          this.setExtraData({
-            modal: { show: false }
-          });
-        }
+        showNotification({ message: 'update password successed' });
+        eventBus.emit('user.update-pwd');
+        this.reset();
+        this.extraValue.set({ modal: { show: false } });
+        rootStore.w3s.config.logout();
       },
       value: new JSONValue<SchemaType>({
         default: {
@@ -56,7 +59,7 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false }
+          modal: { show: false, title: 'Update Password' }
         }
       })
     });

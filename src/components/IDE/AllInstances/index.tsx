@@ -1,6 +1,7 @@
-import { Button, Flex, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Badge } from '@chakra-ui/react';
+import { Badge, Button } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
+import Table from '@/components/Table';
 
 export const INSTANCE_STATUS = {
   0: {
@@ -21,51 +22,100 @@ export const INSTANCE_STATUS = {
   }
 };
 
+export const InstanceStatus = ({ state }: { state: number }) => {
+  return (
+    <Badge variant="outline" colorScheme={INSTANCE_STATUS[state].colorScheme}>
+      {INSTANCE_STATUS[state].text}
+    </Badge>
+  );
+};
+
+export const InstanceActions = observer(({ data }: { data: Partial<{ f_instance_id: string }> }) => {
+  const { w3s } = useStore();
+
+  return (
+    <>
+      <Button
+        h="32px"
+        bg="#37A169"
+        color="#fff"
+        _hover={{ opacity: 0.8 }}
+        _active={{
+          opacity: 0.6
+        }}
+        onClick={(e) => w3s.handleInstance.call({ instaceID: data.f_instance_id, event: 'START' })}
+      >
+        Start
+      </Button>
+      <Button
+        ml="8px"
+        h="32px"
+        bg="#FAB400"
+        color="#fff"
+        _hover={{ opacity: 0.8 }}
+        _active={{
+          opacity: 0.6
+        }}
+        onClick={(e) => w3s.handleInstance.call({ instaceID: data.f_instance_id, event: 'Restart' })}
+      >
+        Restart
+      </Button>
+      <Button
+        ml="8px"
+        h="32px"
+        bg="#E53E3E"
+        color="#fff"
+        _hover={{ opacity: 0.8 }}
+        _active={{
+          opacity: 0.6
+        }}
+        onClick={(e) => w3s.handleInstance.call({ instaceID: data.f_instance_id, event: 'STOP' })}
+      >
+        Stop
+      </Button>
+    </>
+  );
+});
+
 const AllInstances = observer(() => {
   const {
-    w3s,
     w3s: { allInstances }
   } = useStore();
+
   return (
-    <TableContainer>
-      <Flex fontSize="xl" fontWeight={600}>
-        All Instances
-      </Flex>
-      <Table mt={2} size="sm">
-        <Thead bg="#EAF5FE">
-          <Tr>
-            <Th>Status</Th>
-            <Th>Actions</Th>
-            <Th>ID</Th>
-            <Th>Project Name</Th>
-            <Th>Applet Name</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {allInstances.map((item) => (
-            <Tr bg="#F2FAFB" key={item.f_instance_id}>
-              <Td>
-                <Badge colorScheme={INSTANCE_STATUS[item.f_state].colorScheme}>{INSTANCE_STATUS[item.f_state].text}</Badge>
-              </Td>
-              <Td>
-                <Button colorScheme="green" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' })}>
-                  Start
-                </Button>
-                <Button ml={4} colorScheme="yellow" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' })}>
-                  Restart
-                </Button>
-                <Button ml={4} colorScheme="red" size="xs" borderRadius="base" onClick={(e) => w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' })}>
-                  Stop
-                </Button>
-              </Td>
-              <Td>{item.f_instance_id}</Td>
-              <Td>{item.project_name}</Td>
-              <Td>{item.applet_name}</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <Table
+      columns={[
+        {
+          key: 'f_state',
+          label: 'Status',
+          render(item) {
+            return <InstanceStatus state={item.f_state} />;
+          }
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+          render(item) {
+            return <InstanceActions data={item} />;
+          }
+        },
+        {
+          key: 'f_instance_id',
+          label: 'Instance ID'
+        },
+        {
+          key: 'project_name',
+          label: 'Project Name'
+        },
+        {
+          key: 'applet_name',
+          label: 'Applet Name'
+        }
+      ]}
+      dataSource={allInstances}
+      rowKey="f_instance_id"
+      chakraTableContainerProps={{ h: 'calc(100vh - 160px)' }}
+    />
   );
 });
 

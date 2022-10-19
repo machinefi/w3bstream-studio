@@ -10,16 +10,35 @@ export const w3bstreamRouter = t.router({
     )
     .query(({ ctx, input }) => {
       return ctx.prisma.t_project.findMany({
-        where: { f_account_id: input.accountID },
+        where: { f_account_id: Number(input.accountID) },
         select: {
           f_project_id: true,
           f_name: true,
-          f_version: true,
+
+          publishers: {
+            select: {
+              f_publisher_id: true,
+              f_name: true,
+              f_key: true,
+              f_created_at: true,
+              f_token: true
+            }
+          },
           applets: {
             select: {
               f_name: true,
               f_applet_id: true,
               f_project_id: true,
+              // @ts-ignore
+              strategies: {
+                select: {
+                  f_strategy_id: true,
+                  f_applet_id: true,
+                  f_project_id: true,
+                  f_event_type: true,
+                  f_handler: true
+                }
+              },
               instances: {
                 select: {
                   f_instance_id: true,

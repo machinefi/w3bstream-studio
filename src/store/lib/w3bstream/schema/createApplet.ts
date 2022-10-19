@@ -1,19 +1,19 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONValue, JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
+import { JSONValue, JSONSchemaModalState, JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob } from '@rjsf/utils';
 import { definitions } from './definitions';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
+import { gradientButtonStyle } from '@/lib/theme';
 
 export const schema = {
+  // title: 'Create Applet',
   definitions: {
     projects: {
       type: 'string'
     }
   },
-  title: 'Create Applet',
   type: 'object',
   properties: {
     file: {
@@ -23,6 +23,7 @@ export const schema = {
     },
     info: {
       type: 'object',
+      title: '',
       properties: {
         projectID: { $ref: '#/definitions/projects' },
         appletName: { type: 'string' }
@@ -52,18 +53,24 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
-          submitText: 'Submit'
+          submitText: 'Submit',
+          props: {
+            w: '100%',
+            h: '32px',
+            ...gradientButtonStyle
+          }
         }
       },
       reactive: true,
       afterSubmit: async (e) => {
         let formData = new FormData();
+        console.log(e.formData);
         const file = dataURItoBlob(e.formData.file);
         formData.append('file', file.blob);
         formData.append('info', JSON.stringify(e.formData.info));
         const res = await axios.request({
           method: 'post',
-          url: '/srv-applet-mgr/v0/applet',
+          url: `/srv-applet-mgr/v0/applet/${e.formData.info.projectID}`,
           headers: {
             'Content-Type': 'multipart/form-data'
           },
@@ -73,9 +80,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           await showNotification({ message: 'create applet successed' });
           eventBus.emit('applet.create');
           this.reset();
-          this.setExtraData({
-            modal: { show: false }
-          });
+          this.extraValue.set({ modal: { show: false } });
         }
       },
       value: new JSONValue<SchemaType>({
@@ -85,12 +90,18 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
             appletName: 'app_01',
             projectID: ''
           }
+        },
+        setFormat: (val) => {
+          if (val.info.projectID) {
+            val.info.projectID = `${val.info.projectID}`;
+          }
+          return val;
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false }
+          modal: { show: false, title: 'Create Applet' }
         }
       })
     });

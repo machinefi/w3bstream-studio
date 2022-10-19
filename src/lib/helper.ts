@@ -7,6 +7,12 @@ import BigNumber from 'bignumber.js';
 import { _ } from './lodash';
 import { showNotification } from '@mantine/notifications';
 
+const valMap = {
+  undefined: '',
+  null: '',
+  false: false
+};
+
 export interface RouterParsed {
   pathname: string;
   hash: string;
@@ -166,5 +172,15 @@ export const helper = {
         throw new Error(error.message);
       }
     }
+  },
+  deepMerge(obj, newObj) {
+    const newVal = _.mergeWith(obj, newObj, (...args) => {
+      const [objValue, srcValue] = args;
+      if (typeof srcValue === 'object') {
+        return helper.deepMerge(objValue, srcValue);
+      }
+      return srcValue || valMap[srcValue];
+    });
+    return newVal;
   }
 };

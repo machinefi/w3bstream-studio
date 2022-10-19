@@ -3,12 +3,13 @@ import { makeAutoObservable, makeObservable, computed, toJS } from 'mobx';
 import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent } from '@rjsf/core';
 import { _ } from '@/lib/lodash';
+import { helper } from '../../lib/helper';
 
 export class JSONSchemaState<T, V = any> {
-  extraValue: JSONSchemaValue = new JSONValue();
-  value: JSONSchemaValue = new JSONValue();
+  extraValue: JSONValue<V> = new JSONValue();
+  value: JSONValue<T> = new JSONValue();
 
-  get extraData() {
+  get extraData(): V {
     return this.extraValue.get();
   }
   set extraData(value: V) {
@@ -50,17 +51,9 @@ export class JSONSchemaState<T, V = any> {
   afterSubmit: (e: IChangeEvent<T, any>) => void;
   afterChange: (e: IChangeEvent<T, any>) => void;
 
-  setData(data: T) {
-    this.value.set(data);
-  }
-  setExtraData(data: V) {
-    this.extraValue.set(data);
-  }
-  setKV(key, value) {
-    _.set(this, key, value);
-  }
   init(data: Partial<JSONSchemaState<T, V>>) {
     Object.assign(this, data);
+    return this;
   }
 
   reset({ force = false } = {}) {
@@ -69,6 +62,7 @@ export class JSONSchemaState<T, V = any> {
     } else {
       this.value.reset();
     }
+    return this;
   }
 
   constructor(args: Partial<JSONSchemaState<T, V>> = {}) {
@@ -78,11 +72,6 @@ export class JSONSchemaState<T, V = any> {
       makeObservable(this, {
         formData: computed
       });
-      // makeAutoObservable(this, {
-      //   formData: observable,
-      //   onChange: action.bound,
-      //   onSubmit: action.bound
-      // });
     }
   }
 }
@@ -90,22 +79,25 @@ export class JSONSchemaState<T, V = any> {
 export interface JSONSchemaValue {
   value?: any;
   default?: any;
-  set: (value: any) => void;
+  options?: { force: boolean };
+  set: (value: any, options?: JSONSchemaValue['options']) => void;
+  setFormat: (value: any) => any;
   get: () => any;
   reset: () => any;
 }
 
-export class JSONValue<T> {
+export class JSONValue<T> implements JSONSchemaValue {
   value?: T = null as T;
   default?: T = null as T;
+
+  setFormat = (val: T) => val;
 
   get() {
     return this.value;
   }
   set(val: T) {
-    const newVal = _.mergeWith(this.value, val, (objValue, srcValue) => {
-      return srcValue || '';
-    });
+    val = this.setFormat(val);
+    const newVal = helper.deepMerge(this.value, val);
     this.value = toJS(newVal);
   }
   reset() {
@@ -123,4 +115,5 @@ export class JSONValue<T> {
 
 export interface JSONSchemaModalState {
   show: boolean;
+  title?: string;
 }
