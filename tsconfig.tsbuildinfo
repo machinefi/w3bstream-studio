@@ -8500,7 +8500,7 @@
         ]
       },
       "incremental": true,
-      "pathsBasePath": "/Users/test/project/w3bstream-frontend",
+      "pathsBasePath": "/Users/test/project/w3bstream-studio",
       "pretty": false,
       "watch": true,
       "listFiles": true,
