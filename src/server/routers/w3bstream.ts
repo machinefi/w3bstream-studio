@@ -14,7 +14,6 @@ export const w3bstreamRouter = t.router({
         select: {
           f_project_id: true,
           f_name: true,
-
           publishers: {
             select: {
               f_publisher_id: true,
@@ -29,7 +28,6 @@ export const w3bstreamRouter = t.router({
               f_name: true,
               f_applet_id: true,
               f_project_id: true,
-              // @ts-ignore
               strategies: {
                 select: {
                   f_strategy_id: true,

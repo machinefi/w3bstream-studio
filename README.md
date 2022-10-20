@@ -1,6 +1,11 @@
-# W3bstreawm frontend
+# W3bstream Studio 
 
-Pre require: Please make sure w3bstream is started
+- Managing your W3bstream node
+- Code and deploy Wasm Applets
+- Publisher management
+- Test events
+- Logs viewer
+
 
 ### Installation
 
