@@ -16,7 +16,7 @@ const Login = observer(() => {
         <Flex>
           <Box>
             <Text fontSize="30px" fontWeight={700} color="#0D0D0D">
-              Welcome to W3bstream Demo Portal
+              Welcome to W3bstream Studio
             </Text>
             <Image mt="120px" w="350px" src="/images/polygon_2.svg" alt="" />
           </Box>
