@@ -10,7 +10,7 @@ import { InstanceActions, InstanceStatus } from '../AllInstances';
 
 const Applets = observer(() => {
   const { w3s } = useStore();
-  // @ts-ignore
+
   const applets = w3s.showContent === 'CURRENT_APPLETS' ? w3s.curProject?.applets || [] : w3s.allApplets;
 
   return (
@@ -66,7 +66,6 @@ const Applets = observer(() => {
                           opacity: 0.6
                         }}
                         onClick={(e) => {
-                          //@ts-ignore
                           w3s.publishEvent.value.set({
                             projectName: item.project_name
                           });
@@ -87,7 +86,7 @@ const Applets = observer(() => {
                         color="#6FB2FF"
                         onClick={() => {
                           copy(
-                            `curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${item.f_project_id}/${item.f_applet_id}/start' --header 'publisher: "admin"' --header 'Content-Type: text/plain' --data-raw 'input event'`
+                            `curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${item.project_name}' --header 'Content-Type: text/plain' --data-raw '{"payload":"xxx yyy zzz"}'`
                           );
                           toast.success('Copied');
                         }}
