@@ -27,6 +27,7 @@ type FilesActiveType = {
 
 //todo create file in value
 export class FilesListSchema extends JSONSchemaState<null, FilesActiveType> {
+  lockFile: boolean = true;
   constructor(args: Partial<FilesListSchema> = {}) {
     super(args);
     this.init({
@@ -77,8 +78,18 @@ export class FilesListSchema extends JSONSchemaState<null, FilesActiveType> {
     this.extraData.activeFiles.splice(index, 1);
   }
 
+  setCurFileCode(code: string) {
+    if (this.lockFile) return;
+    this.extraData.curActiveFile.data.code = code;
+  }
+
+  unlockFile(){
+    this.lockFile = false
+  }
+
   setCurActiveFile(activeFile: FilesItemType) {
     this.extraData.curActiveFile = activeFile;
+    this.lockFile = true;
     this.setActiveFiles(activeFile);
   }
 }

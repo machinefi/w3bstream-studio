@@ -53,7 +53,7 @@ export const FilesItem = observer(() => {
         selectionMode="single"
         selectionKeys={store.selectedNodeKey}
         expandedKeys={store.expandedKeys}
-        onSelect={store.onSelect}
+        onSelect={(e) => store.onSelect(e as any)}
         onSelectionChange={(e) => (store.selectedNodeKey = e.value)}
         onToggle={(e) => (store.expandedKeys = e.value)}
         contextMenuSelectionKey={store.selectedNodeKey}

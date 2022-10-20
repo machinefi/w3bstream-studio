@@ -38,6 +38,7 @@ export class JSONSchemaState<T, V = any> {
   };
 
   onChange = (e: IChangeEvent<T, any>) => {
+    console.log(e)
     this.value.set(e.formData);
     if (this.afterChange) {
       this.afterChange(e);

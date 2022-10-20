@@ -66,10 +66,9 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           }
         }
       },
-
       afterSubmit: async (e) => {
         let formData = new FormData();
-        console.log(e.formData);
+        console.log(this.extraValue);
         const file = dataURItoBlob(e.formData.file);
         formData.append('file', file.blob);
         formData.append('info', JSON.stringify(e.formData.info));
@@ -106,7 +105,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false, title: 'Create Applet' }
+          modal: { show: false, title: 'Create Applet' },
         }
       })
     });

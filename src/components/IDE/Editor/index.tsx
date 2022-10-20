@@ -11,6 +11,8 @@ import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from '@/lib/helper';
 import _ from 'lodash';
+import { IChangeEvent } from '@rjsf/core';
+import { dataURItoBlob } from '@rjsf/utils';
 const Editor = observer(() => {
   const { w3s } = useStore();
   const curActiveFile = w3s.curFilesListSchema?.extraData?.curActiveFile;
@@ -19,14 +21,14 @@ const Editor = observer(() => {
   const store = useLocalObservable(() => ({
     curPreviewRawData: null,
     showPreviewMode: false,
-
+    lockFile: true,
     async compile(filesItem: FilesItemType) {
       if (filesItem.data.type != 'file') return;
       if (!filesItem.label.endsWith('.ts')) return;
       try {
         const { error, binary, text } = await asc.compileString(filesItem.data.code, {
-          optimizeLevel: 3,
-          runtime: 'stub'
+          optimizeLevel: 4,
+          runtime: 'minimal'
         });
         // console.log(binary, text);
         if (error) console.log(error);
@@ -131,17 +133,27 @@ const Editor = observer(() => {
               onClick={() => {
                 // w3s.createApplet.mo
                 //@ts-ignore
-                w3s.createApplet.setData({
+                w3s.createApplet.value.set({
                   info: {
                     projectID: w3s.curProject.f_project_id,
                     appletName: ''
                   }
                 });
-                w3s.createApplet.setExtraData({
+                w3s.createApplet.extraValue.set({
                   modal: {
                     show: true
                   }
                 });
+                w3s.createApplet.onChange({
+                  formData: {
+                    // @ts-ignore
+                    file: `data:application/wasm;name=${curActiveFile.label};base64,${Buffer.from(curActiveFile.data.extraData.raw, 'binary').toString('base64')}`,
+                    info: {
+                      projectID: w3s.curProject.f_project_id,
+                      appletName: ''
+                    }
+                  }
+                } as IChangeEvent);
               }}
             ></Text>
           </Tooltip>
@@ -154,7 +166,13 @@ const Editor = observer(() => {
           {store.showPreviewMode ? (
             <iframe style={{ background: '#1e1e1e' }} frameBorder="0" height={400} src={`data:text/html;base64,${store.curPreviewRawData}`} sandbox="allow-scripts allow-pointer-lock"></iframe>
           ) : (
-            <div style={{ display: 'flex' }}>
+            <div
+              style={{ display: 'flex' }}
+              onClick={(e) => {
+                console.log(e);
+                w3s.curFilesListSchema.unlockFile();
+              }}
+            >
               <MonacoEditor
                 width={'100%'}
                 height={400}
@@ -166,7 +184,8 @@ const Editor = observer(() => {
                   if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
                 }}
                 onChange={(e) => {
-                  console.log(e);
+                  w3s.curFilesListSchema.setCurFileCode(e);
+                  // curActiveFile.data.code = e;
                   // store.files[store.curFile].content = e;
                   // store.compile();
                 }}
