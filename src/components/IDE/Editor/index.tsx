@@ -129,15 +129,12 @@ const Editor = observer(() => {
               className="pi pi-cloud-upload"
               color="white"
               onClick={() => {
-                // w3s.createApplet.mo
-                //@ts-ignore
-                w3s.createApplet.setData({
+                w3s.createApplet.value.set({
                   info: {
-                    projectID: w3s.curProject.f_project_id,
-                    appletName: ''
+                    projectID: w3s.curProject?.f_project_id,
                   }
                 });
-                w3s.createApplet.setExtraData({
+                w3s.createApplet.extraValue.set({
                   modal: {
                     show: true
                   }

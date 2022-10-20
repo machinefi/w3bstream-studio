@@ -17,35 +17,44 @@ import { FilesListSchema } from './schema/filesList';
 import { PublishEventSchema } from './schema/publishEvent';
 import { CreatePublisherSchema } from './schema/createPublisher';
 import { SpotlightAction } from '@mantine/spotlight';
-import { t_strategy } from '@prisma/client';
 
-type allProjectType = {
+type Publisher = {
+  f_publisher_id: string;
+  f_name: string;
+  f_key: string;
+  f_created_at: string;
+  f_token: string;
+};
+
+type Strategy = {
+  f_strategy_id: string;
+  f_applet_id: string;
+  f_project_id: string;
+  f_event_type: string;
+  f_handler: string;
+};
+
+type Instance = {
+  f_instance_id: string;
+  f_state: string;
+};
+
+type Applet = {
+  f_name: string;
+  f_applet_id: string;
+  f_project_id: string;
+  project_name: string;
+  strategies: Strategy[];
+  instances: Instance[];
+};
+
+type Project = {
   f_project_id: string;
   f_name: string;
+  f_applet_id: string;
   project_files: FilesListSchema;
-  publishers: {
-    f_publisher_id: string;
-    f_name: string;
-    f_key: string;
-    f_created_at: string;
-    f_token: string;
-  };
-  applets: {
-    f_name: string;
-    f_applet_id: string;
-    f_project_id: string;
-    strategies: {
-      f_strategy_id: string;
-      f_applet_id: string;
-      f_project_id: string;
-      f_event_type: string;
-      f_handler: string;
-    };
-    instances: {
-      f_instance_id: string;
-      f_state: string;
-    };
-  };
+  publishers: Publisher[];
+  applets: Applet[];
 };
 
 export class W3bStream {
@@ -70,7 +79,7 @@ export class W3bStream {
     }
   });
 
-  allProjects = new PromiseState<() => Promise<any>, allProjectType[]>({
+  allProjects = new PromiseState<() => Promise<any>, Project[]>({
     defaultValue: [],
     function: async () => {
       const res = await trpc.api.projects.query({ accountID: this.config.formData.accountID });
@@ -79,11 +88,9 @@ export class W3bStream {
         const instances = [];
         let strategies = [];
         let publishers = [];
-        res.forEach((p: allProjectType) => {
+        res.forEach((p: any) => {
           p.project_files = new FilesListSchema();
-          // @ts-ignore
           p.applets.forEach((a) => {
-            //@ts-ignore
             a.project_name = p.f_name;
             a.instances.forEach((i) => {
               instances.push({
@@ -100,7 +107,6 @@ export class W3bStream {
             });
             strategies = strategies.concat(a.strategies);
           });
-          //@ts-ignore
           publishers = publishers.concat(p.publishers);
         });
         this.allApplets = applets;
@@ -113,10 +119,10 @@ export class W3bStream {
     }
   });
 
-  allApplets = [];
-  allInstances = [];
-  allStrategies: Partial<t_strategy>[] = [];
-  allPublishers = [];
+  allApplets: Applet[] = [];
+  allInstances: Instance[] = [];
+  allStrategies: Strategy[] = [];
+  allPublishers: Publisher[] = [];
 
   curProjectIndex = 0;
   get curProject() {
@@ -125,7 +131,6 @@ export class W3bStream {
 
   curAppletIndex = 0;
   get curApplet() {
-    // @ts-ignore
     return this.curProject ? this.curProject.applets[this.curAppletIndex] : null;
   }
   get curFilesList() {

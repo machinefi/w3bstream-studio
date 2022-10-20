@@ -53,6 +53,7 @@ export const FilesItem = observer(() => {
         selectionMode="single"
         selectionKeys={store.selectedNodeKey}
         expandedKeys={store.expandedKeys}
+        // @ts-ignore
         onSelect={store.onSelect}
         onSelectionChange={(e) => (store.selectedNodeKey = e.value)}
         onToggle={(e) => (store.expandedKeys = e.value)}

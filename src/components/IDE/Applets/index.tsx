@@ -24,7 +24,6 @@ const Applets = observer(() => {
             if (w3s.showContent === 'CURRENT_APPLETS') {
               w3s.createApplet.value.set({
                 info: {
-                  // @ts-ignore
                   projectID: w3s.curProject?.f_project_id
                 }
               });
