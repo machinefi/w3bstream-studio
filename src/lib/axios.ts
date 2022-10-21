@@ -22,7 +22,7 @@ function checkErr(err) {
 }
 
 axios.interceptors.request.use((req) => {
-  req.baseURL = process.env['NEXT_PUBLIC_API_URL'];
+  req.baseURL = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:8888';
   if (rootStore.w3s.config.formData.token) {
     req.headers['Authorization'] = `${rootStore.w3s.config.formData.token}`;
   }
