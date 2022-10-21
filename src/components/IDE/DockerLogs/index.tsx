@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from 'react';
 const DockerLogs = () => {
   const [logs, setLogs] = useState([]);
   const boxRef = useRef(null);
-  const countRef = useRef(0);
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:9000');
@@ -20,12 +19,9 @@ const DockerLogs = () => {
       const { type, data } = JSON.parse(event.data);
       if (type === 'logs') {
         setLogs((pre) => {
-          const count = countRef.current;
-          if (count === 20) {
-            countRef.current = count - 1;
+          if (pre.length === 20) {
             return pre.slice(1, 20).concat(data);
           } else {
-            countRef.current = count + 1;
             return pre.concat(data);
           }
         });

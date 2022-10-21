@@ -30,20 +30,29 @@ wss.on('connection', (ws) => {
 
       if (type === 'logs') {
         const container = await getContainer(docker, 'iotex/w3bstream');
-        const stream = await container.logs({
-          follow: true,
-          stdout: true,
-          stderr: true
-        });
-        stream.on('data', (info) => {
-          const log = info.toString();
+        if (container) {
+          const stream = await container.logs({
+            follow: true,
+            stdout: true,
+            stderr: true
+          });
+          stream.on('data', (info) => {
+            const log = info.toString();
+            ws.send(
+              JSON.stringify({
+                type: 'logs',
+                data: log
+              })
+            );
+          });
+        } else {
           ws.send(
             JSON.stringify({
               type: 'logs',
-              data: log
+              data: 'No "iotex/w3bstream" container found'
             })
           );
-        });
+        }
       }
     } catch (error) {}
   });
