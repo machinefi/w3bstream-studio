@@ -7937,8 +7937,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "ed79b325f07935d82d41038c8a175b144650aa012ea1302b5167cb2e4414cb44",
-        "signature": "eddb318e486e956b132939afd08e7272af5874e6cc5de8f0a06d6354c0a5d24e",
+        "version": "5a52435037860a7835a5fdb3dd395d620143112992c6b527866be37b56136df4",
+        "signature": "dc3766cb7f2092f9c2e973a209defb0f9edc90c240312cbe148fce754c4b9c02",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -8007,7 +8007,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/toolbar/index.tsx": {
-        "version": "715821c842cefaab21552a7c6468d21ed2c186fc9da4685ee9eda1cbadf9eca2",
+        "version": "f878f1a07f768f5b5e3e03d018ca75f47c5bdfd2ade6253eabead41deca13986",
         "signature": "0c4a283d2cfe8a37165000659f2d9adec6db97665a4c74bdf6cab418800f3c7a",
         "affectsGlobalScope": false
       },
@@ -8307,7 +8307,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/index.tsx": {
-        "version": "e01f8dd5f4de7cc4a85276b796cbf8e0fdb3fc5deaa45c469bc8cb971585cc9a",
+        "version": "22bd23761a62c9428cab2dcb2c9345c084fc6397b82964cbb4ed27d55c1242f9",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
         "affectsGlobalScope": false
       },
