@@ -2551,23 +2551,6 @@ packages:
     resolution: {integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==}
     dev: false
 
-<<<<<<< HEAD
-  /dexie-react-hooks/1.1.1_v3ms5jebdbsj6le67ymfczyos4:
-    resolution: {integrity: sha512-Cam5JP6PxHN564RvWEoe8cqLhosW0O4CAZ9XEVYeGHJBa6KEJlOpd9CUpV3kmU9dm2MrW97/lk7qkf1xpij7gA==}
-    peerDependencies:
-      '@types/react': '>=16'
-      dexie: '>=3.1.0-alpha.1 <5.0.0'
-      react: '>=16'
-    dependencies:
-      '@types/react': 17.0.47
-      dexie: 3.2.2
-      react: 18.2.0
-    dev: false
-
-  /dexie/3.2.2:
-    resolution: {integrity: sha512-q5dC3HPmir2DERlX+toCBbHQXW5MsyrFqPFcovkH9N2S/UW/H3H5AWAB6iEOExeraAu+j+zRDG+zg/D7YhH0qg==}
-    engines: {node: '>=6.0'}
-=======
   /docker-modem/0.3.7:
     resolution: {integrity: sha512-4Xn4ZVtc/2DEFtxY04lOVeF7yvxwXGVo0sN8FKRBnLhBcwQ78Hb56j+Z5yAXXUhoweVhzGeBeGWahS+af0/mcg==}
     engines: {node: '>= 0.8'}
@@ -2578,7 +2561,6 @@ packages:
       split-ca: 1.0.1
     transitivePeerDependencies:
       - supports-color
->>>>>>> 2b116c4a5b858846d39ad88eee009a046eca59d3
     dev: false
 
   /dom-helpers/5.2.1:
