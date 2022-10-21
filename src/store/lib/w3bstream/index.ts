@@ -1,5 +1,5 @@
 import NextRouter from 'next/router';
-import { makeAutoObservable, toJS } from 'mobx';
+import { configure, makeAutoObservable, toJS } from 'mobx';
 import RootStore from '@/store/root';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
@@ -17,50 +17,55 @@ import { FilesListSchema } from './schema/filesList';
 import { PublishEventSchema } from './schema/publishEvent';
 import { CreatePublisherSchema } from './schema/createPublisher';
 import { SpotlightAction } from '@mantine/spotlight';
+import { AppletType, ProjectsType, InstanceType, PublisherType, StrategieType, ProjectType } from '@/server/routers/w3bstream';
+import { ProjectManager } from './project';
 
-type Publisher = {
-  f_publisher_id: string;
-  f_name: string;
-  f_key: string;
-  f_created_at: string;
-  f_token: string;
-};
+// type Publisher = {
+//   f_publisher_id: string;
+//   f_name: string;
+//   f_key: string;
+//   f_created_at: string;
+//   f_token: string;
+// };
 
-type Strategy = {
-  f_strategy_id: string;
-  f_applet_id: string;
-  f_project_id: string;
-  f_event_type: string;
-  f_handler: string;
-};
+// type Strategy = {
+//   f_strategy_id: string;
+//   f_applet_id: string;
+//   f_project_id: string;
+//   f_event_type: string;
+//   f_handler: string;
+// };
 
-type Instance = {
-  f_instance_id: string;
-  f_state: string;
-};
+// type Instance = {
+//   f_instance_id: string;
+//   f_state: string;
+// };
 
-type Applet = {
-  f_name: string;
-  f_applet_id: string;
-  f_project_id: string;
-  project_name: string;
-  strategies: Strategy[];
-  instances: Instance[];
-};
+// type Applet = {
+//   f_name: string;
+//   f_applet_id: string;
+//   f_project_id: string;
+//   project_name: string;
+//   strategies: Strategy[];
+//   instances: Instance[];
+// };
 
-type Project = {
-  f_project_id: string;
-  f_name: string;
-  f_applet_id: string;
-  project_files: FilesListSchema;
-  publishers: Publisher[];
-  applets: Applet[];
-};
-
+// type Project = {
+//   f_project_id: string;
+//   f_name: string;
+//   f_applet_id: string;
+//   project_files: FilesListSchema;
+//   publishers: Publisher[];
+//   applets: Applet[];
+// };
+configure({
+  enforceActions: "never",
+})
 export class W3bStream {
   rootStore: RootStore;
   config = new W3bstreamConfigState({});
   login = new LoginSchema({});
+  projectManager = new ProjectManager();
   createProject = new CreateProjectSchema({});
   createApplet = new CreateAppletSchema({
     getDymaicData: () => {
@@ -78,8 +83,7 @@ export class W3bStream {
       };
     }
   });
-
-  allProjects = new PromiseState<() => Promise<any>, Project[]>({
+  allProjects = new PromiseState<() => Promise<any>, ProjectsType[]>({
     defaultValue: [],
     function: async () => {
       const res = await trpc.api.projects.query({ accountID: this.config.formData.accountID });
@@ -88,9 +92,9 @@ export class W3bStream {
         const instances = [];
         let strategies = [];
         let publishers = [];
-        res.forEach((p: any) => {
-          p.project_files = new FilesListSchema();
-          p.applets.forEach((a) => {
+        res.forEach((p: ProjectsType) => {
+          // p.project_files = new FilesListSchema();
+          p.applets.forEach((a: AppletType) => {
             a.project_name = p.f_name;
             a.instances.forEach((i) => {
               instances.push({
@@ -119,10 +123,10 @@ export class W3bStream {
     }
   });
 
-  allApplets: Applet[] = [];
-  allInstances: Instance[] = [];
-  allStrategies: Strategy[] = [];
-  allPublishers: Publisher[] = [];
+  allApplets: AppletType[] = [];
+  allInstances: InstanceType[] = [];
+  allStrategies: StrategieType[] = [];
+  allPublishers: PublisherType[] = [];
 
   curProjectIndex = 0;
   get curProject() {
@@ -133,12 +137,13 @@ export class W3bStream {
   get curApplet() {
     return this.curProject ? this.curProject.applets[this.curAppletIndex] : null;
   }
-  get curFilesList() {
-    return this.curProject ? this.curProject.project_files.extraData.files : [];
-  }
-  get curFilesListSchema() {
-    return this.curProject ? this.curProject.project_files : null;
-  }
+
+  // get curFilesList() {
+  //   return this.curProject ? this.curProject.project_files.extraData.files : [];
+  // }
+  // get curFilesListSchema() {
+  //   return this.curProject ? this.curProject.project_files : null;
+  // }
   deployApplet = new PromiseState({
     function: async ({ appletID }: { appletID: string }) => {
       const res = await axios.request({
@@ -189,34 +194,45 @@ export class W3bStream {
             method: 'get',
             url: '/srv-applet-mgr/v0/project'
           });
+          // this.projectManager.sync();
         }
       })
-      .on('user.login', () => {
-        this.allProjects.call();
+      .on('user.login', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
         NextRouter.push('/');
       })
       .on('user.update-pwd', () => {})
-      .on('project.create', () => {
-        this.allProjects.call();
+      .on('project.create', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
       })
-      .on('applet.create', () => {
-        this.allProjects.call();
+      .on('applet.create', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
       })
       .on('applet.publish-event', () => {})
-      .on('instance.deploy', () => {
-        this.allProjects.call();
+      .on('instance.deploy', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
       })
-      .on('instance.handle', () => {
-        this.allProjects.call();
+      .on('instance.handle', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
       })
-      .on('publisher.create', () => {
-        this.allProjects.call();
+      .on('publisher.create', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
       });
   }
 
   initHook() {
-    hooks.waitLogin().then(() => {
-      this.allProjects.call();
+    hooks.waitLogin().then(async () => {
+      console.log('====================================');
+      console.log('waitLogin');
+      console.log('====================================');
+      await this.allProjects.call();
+      this.projectManager.sync();
     });
   }
 }

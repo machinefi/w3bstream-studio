@@ -1,62 +1,72 @@
+import { IndexDb } from '@/lib/dexie';
+import { toast } from '@/lib/helper';
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { JSONValue } from '@/store/standard/JSONSchemaState';
 import _ from 'lodash';
+import { toJS } from 'mobx';
+import { string } from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import { templatecode } from '../../../../lib/templatecode';
 
 type FileItemDataType<T = any> = {
   code?: string;
   language?: 'typescript' | 'scheme' | 'html';
-  type: 'folder' | 'file';
+
   extraData?: T;
 };
 
 export type FilesItemType = {
   key: string;
   label: string;
-  data: FileItemDataType;
-  icon?: string;
+  isOpen?: Boolean;
+  isRename?: Boolean;
+  type: 'folder' | 'file';
+  data?: FileItemDataType;
   children?: FilesItemType[];
 };
 
-type FilesActiveType = {
-  activeFiles: Omit<FilesItemType, 'children'>[];
-  curActiveFile: Omit<FilesItemType, 'children'> | null;
+export type FilesType = {
+  activeFileIds?: string[];
+  curActiveFileId?: string;
   files: FilesItemType[];
 };
 
 //todo create file in value
-export class FilesListSchema extends JSONSchemaState<null, FilesActiveType> {
+export class FilesListSchema extends JSONSchemaState<null, FilesType> {
   lockFile: boolean = true;
+  project_id: string;
   constructor(args: Partial<FilesListSchema> = {}) {
     super(args);
     this.init({
-      extraValue: new JSONValue<FilesActiveType>({
+      reactive: true,
+      extraValue: new JSONValue<FilesType>({
         default: {
-          activeFiles: [],
-          curActiveFile: null,
+          activeFileIds: [],
+          curActiveFileId: null,
           files: [
             {
               key: uuidv4(),
-              label: 'Local Files',
-              data: { type: 'folder' },
-              icon: 'pi pi-fw pi-credit-card',
+              type: 'folder',
+              label: 'Browser Files',
               children: [
-                { key: uuidv4(), label: 'module.ts', icon: 'pi pi-fw pi-file', data: { type: 'file', code: templatecode['module.ts'], language: 'typescript' } },
-                { key: uuidv4(), label: 'index.html', icon: 'pi pi-fw pi-file', data: { type: 'file', code: templatecode['index.html'], language: 'html' } }
+                {
+                  type: 'file',
+                  key: uuidv4(),
+                  label: `module.ts`,
+                  data: { code: templatecode['module.ts'], language: 'typescript' }
+                },
+                { type: 'file', key: uuidv4(), label: `index.html`, data: { code: templatecode['index.html'], language: 'html' } }
               ]
             },
             {
               key: uuidv4(),
               label: 'Remote Files',
-              data: { type: 'folder' },
-              icon: 'pi pi-fw pi-cloud',
+              type: 'folder',
               children: [
                 {
+                  type: 'file',
                   key: uuidv4(),
-                  label: 'Home',
-                  data: { type: 'file' },
-                  icon: 'pi pi-fw pi-home'
+                  label: `module.ts`
                 }
               ]
             }
@@ -66,30 +76,107 @@ export class FilesListSchema extends JSONSchemaState<null, FilesActiveType> {
     });
   }
 
-  setActiveFiles(activeFile: FilesItemType) {
-    const index = _.findIndex(this.extraData.activeFiles, activeFile);
-    if (index == -1) {
-      this.extraData.activeFiles.push(activeFile);
+  findFile(objects: FilesItemType[], key: string): FilesItemType {
+    for (let o of objects || []) {
+      if (o.key == key) return o;
+      const o_ = this.findFile(o.children, key);
+      if (o_) return o_;
     }
   }
 
+  findCurFolder(objects: FilesItemType[]): FilesItemType {
+    for (let o of objects || []) {
+      if (o.children?.find((i) => i.key == this.extraData.curActiveFileId)) return o;
+      const o_ = this.findCurFolder(o.children);
+      if (o_) return o_;
+    }
+  }
+
+  get activeFiles() {
+    const activeFiles = [];
+    this.extraData.activeFileIds?.forEach((key) => {
+      activeFiles.push(this.findFile(this.extraData.files, key));
+    });
+    return activeFiles;
+  }
+
+  get curActiveFile() {
+    return this.findFile(this.extraData.files, this.extraData.curActiveFileId);
+  }
+
+  createFileFormFolder(file: FilesItemType, action: 'file' | 'folder') {
+    if (file.type == 'folder' && action == 'file') {
+      file.children.push({
+        type: 'file',
+        key: uuidv4(),
+        label: `New File`,
+        isRename: true,
+        data: { code: '', language: 'typescript' }
+      });
+      file.isOpen = true;
+    }
+    if (file.type == 'folder' && action == 'folder') {
+      file.children.push({
+        type: 'folder',
+        key: uuidv4(),
+        label: `New Folder`,
+        isRename: true,
+        isOpen: false,
+        children: []
+      });
+      file.isOpen = true;
+    }
+    this.syncToIndexDb();
+  }
+
+  deleteFile(file: FilesItemType) {
+    const curFolder = this.findCurFolder(this.extraData.files);
+    _.remove(curFolder.children, (i) => i.key == file.key);
+    this.syncToIndexDb();
+  }
+
+  setActiveFiles(activeFile: FilesItemType) {
+    const index = _.findIndex(this.extraData.activeFileIds, (i) => i == activeFile.key);
+    if (index == -1) {
+      this.extraData.activeFileIds.push(activeFile.key);
+    }
+    this.syncToIndexDb();
+  }
+
   deleteActiveFiles(activeFile: FilesItemType) {
-    const index = _.findIndex(this.extraData.activeFiles, activeFile);
-    this.extraData.activeFiles.splice(index, 1);
+    _.remove(this.extraData.activeFileIds, (i) => i == activeFile.key);
+    console.log(toJS(this.extraData.activeFileIds));
+    this.syncToIndexDb();
   }
 
   setCurFileCode(code: string) {
     if (this.lockFile) return;
-    this.extraData.curActiveFile.data.code = code;
+    this.curActiveFile.data.code = code;
+    _.debounce(() => {
+      this.syncToIndexDb();
+    })();
   }
 
-  unlockFile(){
-    this.lockFile = false
+  unlockFile() {
+    this.lockFile = false;
+  }
+
+  lockedFile() {
+    this.lockFile = true;
   }
 
   setCurActiveFile(activeFile: FilesItemType) {
-    this.extraData.curActiveFile = activeFile;
+    this.extraData.curActiveFileId = activeFile.key;
     this.lockFile = true;
     this.setActiveFiles(activeFile);
+  }
+
+  async syncToIndexDb() {
+    const IndexDbFile = await IndexDb.findFilesById(String(this.project_id));
+    if (IndexDbFile[0]) {
+      await IndexDb.files.update(String(this.project_id), { data: toJS(this.extraData) });
+    } else {
+      await IndexDb.files.add({ id: String(this.project_id), data: toJS(this.extraData) });
+    }
   }
 }

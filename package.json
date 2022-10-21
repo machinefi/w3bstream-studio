@@ -51,6 +51,8 @@
     "dataloader": "^2.0.0",
     "dayjs": "^1.11.1",
     "decimal.js": "^10.4.2",
+    "dexie": "^3.2.2",
+    "dexie-react-hooks": "^1.1.1",
     "events": "^3.3.0",
     "framer-motion": "^7.5.3",
     "graphql": "^16.3.0",

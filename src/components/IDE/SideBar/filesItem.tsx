@@ -1,28 +1,24 @@
 import { ContextMenu as PrContextMenu } from 'primereact/contextmenu';
 import { useEffect, useRef, useState } from 'react';
-import { Tree } from 'primereact/tree';
+// import { Tree } from 'primereact/tree';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
+import { Box, Flex, Image } from '@chakra-ui/react';
+import { Tree } from '@/components/Tree';
 
 export const FilesItem = observer(() => {
   const { w3s } = useStore();
   const store = useLocalObservable(() => ({
-    nodes: w3s.curFilesList,
     selectedNodeKey: null,
     expandedKeys: {},
-    onSelect({ node }: { node: FilesItemType }) {
-      if (node.data.type == 'file') {
-        w3s.curFilesListSchema.setCurActiveFile(node);
+    onSelect(file: FilesItemType) {
+      if (file.type == 'file') {
+        w3s.projectManager.curFilesListSchema.setCurActiveFile(file);
       }
     }
   }));
 
-  useEffect(() => {
-    setTimeout(() => {
-      console.log(w3s.curFilesList);
-    }, 3000);
-  }, []);
   const cm = useRef(null);
 
   const menu: any = [
@@ -48,8 +44,13 @@ export const FilesItem = observer(() => {
   return (
     <>
       <PrContextMenu ref={cm} model={menu} onHide={() => (store.selectedNodeKey = null)} />
-      <Tree
-        value={store.nodes}
+      <Box opacity={0} h={0}>
+        {w3s.projectManager.curFilesList?.[0].children.length}
+      </Box>
+      {/* force update the tree view   */}
+
+      {/* <Tree
+        value={w3s.projectManager.curFilesList}
         selectionMode="single"
         selectionKeys={store.selectedNodeKey}
         expandedKeys={store.expandedKeys}
@@ -59,7 +60,13 @@ export const FilesItem = observer(() => {
         contextMenuSelectionKey={store.selectedNodeKey}
         onContextMenuSelectionChange={(event) => (store.selectedNodeKey = event.value)}
         onContextMenu={(event) => cm.current.show(event.originalEvent)}
-      />
+      /> */}
+      {/* todo:  */}
+      {/* <Flex px={4}>
+        <Image cursor="pointer" _hover={{opacity:0.8}} w={5} h={5} mr={4} src="/images/icons/new-file.svg" ></Image>
+        <Image cursor="pointer" _hover={{opacity:0.8}} w={5} h={5} src="/images/icons/new-folder.svg"></Image>
+      </Flex> */}
+      <Tree data={w3s.projectManager.curFilesList} onSelect={store.onSelect} />
     </>
   );
 });

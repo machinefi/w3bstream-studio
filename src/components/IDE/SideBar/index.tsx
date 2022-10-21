@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Menu, MenuItem } from '@/components/Menu';
 import { FilesItem } from './filesItem';
+import { helper } from '@/lib/helper';
 
 interface SideBarProps extends FlexProps {}
 
@@ -151,7 +152,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
           if (w3s.showContent != 'EDITOR' && w3s.showContent != 'CURRENT_APPLETS') {
             w3s.showContent = 'CURRENT_APPLETS';
           }
-          console.log(w3s.curFilesList);
+          console.log(helper.log(w3s.projectManager.curFilesListSchema));
         }}
       >
         <Text lineHeight="28px" fontSize="14px">

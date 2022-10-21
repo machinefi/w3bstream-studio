@@ -1,5 +1,6 @@
 import { t } from '../trpc';
 import { z } from 'zod';
+import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server';
 
 export const w3bstreamRouter = t.router({
   projects: t.procedure
@@ -49,3 +50,14 @@ export const w3bstreamRouter = t.router({
       });
     })
 });
+
+export type W3bstreamRouter = typeof w3bstreamRouter;
+export type ProjectsType = inferProcedureOutput<W3bstreamRouter['projects']>[0];
+
+// export type ProjectType = ProjectsType & {
+//   project_name: string;
+// };
+export type AppletType = ProjectsType['applets'][0] & { project_name: string };
+export type StrategieType = AppletType['strategies'][0];
+export type InstanceType = AppletType['instances'][0];
+export type PublisherType = ProjectsType['publishers'];

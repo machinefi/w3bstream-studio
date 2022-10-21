@@ -57,6 +57,9 @@ export const helper = {
       return a > b ? a : b;
     }
   },
+  log: (str: Object) => {
+    return JSON.parse(JSON.stringify(str));
+  },
   env: {
     //@ts-ignore
     isBrower: typeof window === 'undefined' ? false : true,

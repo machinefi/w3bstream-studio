@@ -9,21 +9,26 @@ import { useStore } from '@/store/index';
 import { Box, Flex, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
-import { toast } from '@/lib/helper';
+import { helper, toast } from '@/lib/helper';
 import _ from 'lodash';
 import { IChangeEvent } from '@rjsf/core';
 import { dataURItoBlob } from '@rjsf/utils';
+import { FileIcon } from '@/components/Tree';
+import { SmallCloseIcon } from '@chakra-ui/icons';
+
 const Editor = observer(() => {
   const { w3s } = useStore();
-  const curActiveFile = w3s.curFilesListSchema?.extraData?.curActiveFile;
-  const activeFiles = w3s.curFilesListSchema?.extraData?.activeFiles;
+  let curFilesListSchema = w3s.projectManager?.curFilesListSchema;
+  let curActiveFile = curFilesListSchema?.curActiveFile;
+  let activeFiles = curFilesListSchema?.activeFiles;
 
   const store = useLocalObservable(() => ({
     curPreviewRawData: null,
     showPreviewMode: false,
     lockFile: true,
+
     async compile(filesItem: FilesItemType) {
-      if (filesItem.data.type != 'file') return;
+      if (filesItem.type != 'file') return;
       if (!filesItem.label.endsWith('.ts')) return;
       try {
         const { error, binary, text } = await asc.compileString(filesItem.data.code, {
@@ -32,26 +37,27 @@ const Editor = observer(() => {
         });
         // console.log(binary, text);
         if (error) console.log(error);
+        const currentFolder = curFilesListSchema.findCurFolder(curFilesListSchema.extraData.files);
         const wasmFileName = filesItem?.label.replace('.ts', '') + '.wasm';
-        const curWasmIndex = _.findIndex(activeFiles, (i) => i.label == wasmFileName);
-        console.log(curWasmIndex);
+        const curWasmIndex = _.findIndex(currentFolder.children, (i) => i.label == wasmFileName);
         const wasmFile: FilesItemType = {
           key: uuidv4(),
           label: wasmFileName,
+          type: 'file',
           data: {
-            type: 'file',
             code: text,
             extraData: {
               raw: binary
             }
           }
         };
-        console.log(curWasmIndex);
         if (curWasmIndex == -1) {
-          w3s.curFilesListSchema.setActiveFiles(wasmFile);
+          currentFolder.children.push(wasmFile);
         } else {
-          activeFiles[curWasmIndex] = wasmFile;
+          currentFolder.children[curWasmIndex] = wasmFile;
         }
+        curFilesListSchema.setActiveFiles(wasmFile);
+        console.log('current folder ->', helper.log(curFilesListSchema.findCurFolder(curFilesListSchema.extraData.files)));
         toast.success('Compile Success!');
       } catch (error) {
         console.log(error);
@@ -96,16 +102,22 @@ const Editor = observer(() => {
             <Box
               onClick={() => {
                 store.showPreviewMode = false;
-                w3s.curFilesListSchema.setCurActiveFile(i);
+                curFilesListSchema.setCurActiveFile(i);
               }}
+              display="flex"
               py={2}
-              px={4}
-              background={i.label == curActiveFile?.label ? '#1e1e1e' : 'none'}
+              px={2}
+              background={i?.key == curActiveFile?.key ? '#1e1e1e' : 'none'}
               fontSize="sm"
-              color={i.label == curActiveFile?.label ? '#a9dc76' : 'white'}
+              color={i?.key == curActiveFile?.key ? '#a9dc76' : 'white'}
               cursor="pointer"
+              alignItems={'center'}
             >
-              {i.label}
+              {FileIcon(i)}
+            <Text mr="4">{i?.label}</Text>
+              {/* <SmallCloseIcon _hover={{ bg: '#3f3f3f' }} color="white" ml="auto" onClick={()=>{
+                curFilesListSchema.deleteActiveFiles(i)
+              }}/> */}
             </Box>
           );
         })}
@@ -134,7 +146,7 @@ const Editor = observer(() => {
                 //@ts-ignore
                 w3s.createApplet.value.set({
                   info: {
-                    projectID: w3s.curProject?.f_project_id,
+                    projectID: w3s.curProject?.f_project_id
                   }
                 });
                 w3s.createApplet.extraValue.set({
@@ -166,29 +178,25 @@ const Editor = observer(() => {
           ) : (
             <div
               style={{ display: 'flex' }}
-              onClick={(e) => {
-                console.log(e);
-                w3s.curFilesListSchema.unlockFile();
+              onMouseEnter={() => {
+                curFilesListSchema.unlockFile();
+              }}
+              onMouseLeave={() => {
+                curFilesListSchema.lockedFile();
               }}
             >
               <MonacoEditor
                 width={'100%'}
                 height={400}
                 theme="vs-dark"
-                language={curActiveFile?.data.language}
+                language={curActiveFile?.data?.language}
                 defaultValue="export function test(): void {}"
-                value={curActiveFile?.data.code}
+                value={curActiveFile?.data?.code}
                 beforeMount={(monaco) => {
                   if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
                 }}
                 onChange={(e) => {
-                  w3s.curFilesListSchema.setCurFileCode(e);
-                  // curActiveFile.data.code = e;
-                  // store.files[store.curFile].content = e;
-                  // store.compile();
-                }}
-                onMount={(editor, monaco) => {
-                  // store.compile();
+                  curFilesListSchema.setCurFileCode(e);
                 }}
               />
             </div>
