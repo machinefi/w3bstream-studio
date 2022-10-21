@@ -31,7 +31,7 @@ const IDE = observer(() => {
             {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
             {w3s.showContent === 'ALL_PUBLISHERS' && <AllPublishers />}
             {w3s.showContent === 'EDITOR' && <Editor />}
-            {w3s.showContent === 'LOGS' && <DockerLogs />}
+            {w3s.showContent === 'DOCKER_LOGS' && <DockerLogs />}
           </Box>
         ) : (
           <LayoutCenter w="100%" h="calc(100vh - 100px)">

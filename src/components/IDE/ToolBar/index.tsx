@@ -32,23 +32,25 @@ const ToolBar = (props: ToolBar) => {
 
         <Tooltip label="Editor" placement="right">
           <Image
+            mt="10px"
             src="/images/icons/code.svg"
             onClick={() => {
               w3s.showContent = 'EDITOR';
             }}
             {...iconStyle}
             {...getSelectedStyles(w3s.showContent === 'EDITOR')}
-          ></Image>
+          />
         </Tooltip>
 
         <Tooltip label="Docker Logs" placement="right">
           <Image
-            src="/images/icons/logs.svg"
+            mt="10px"
+            src="/images/icons/docker.svg"
             onClick={() => {
-              w3s.showContent = 'LOGS';
+              w3s.showContent = 'DOCKER_LOGS';
             }}
             {...iconStyle}
-            {...getSelectedStyles(w3s.showContent === 'LOGS')}
+            {...getSelectedStyles(w3s.showContent === 'DOCKER_LOGS')}
           />
         </Tooltip>
       </Flex>
