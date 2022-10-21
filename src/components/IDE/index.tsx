@@ -3,6 +3,8 @@ import { Flex, Image, Text, Box, Button } from '@chakra-ui/react';
 import { Center as LayoutCenter } from '@chakra-ui/layout';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
+import { gradientButtonStyle } from '@/lib/theme';
+import JSONSchemaModal from '../JSONSchemaModal';
 import Header from './Header';
 import ToolBar from './ToolBar';
 import SideBar from './SideBar';
@@ -10,9 +12,8 @@ import Applets from './Applets';
 import AllInstances from './AllInstances';
 import AllStrategies from './AllStrategies';
 import AllPublishers from './AllPublishers';
-import JSONSchemaModal from '../JSONSchemaModal';
 import Editor from './Editor';
-import { gradientButtonStyle } from '@/lib/theme';
+import DockerLogs from './DockerLogs';
 
 const IDE = observer(() => {
   const { w3s } = useStore();
@@ -30,6 +31,7 @@ const IDE = observer(() => {
             {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
             {w3s.showContent === 'ALL_PUBLISHERS' && <AllPublishers />}
             {w3s.showContent === 'EDITOR' && <Editor />}
+            {w3s.showContent === 'DOCKER_LOGS' && <DockerLogs />}
           </Box>
         ) : (
           <LayoutCenter w="100%" h="calc(100vh - 100px)">
