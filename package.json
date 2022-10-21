@@ -14,7 +14,7 @@
     "build:standalone": "STANDALONE=true next build",
     "analyze": "ANALYZE=true next build",
     "export": "next build && next export",
-    "start": "concurrently \"node node-docker-server\" \"next start\"",
+    "start": "next start",
     "test": "concurrently \"yarn start \"",
     "test:ci": "cypress run --headless",
     "postinstall": "prisma generate"
