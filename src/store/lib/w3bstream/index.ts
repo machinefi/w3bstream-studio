@@ -163,7 +163,7 @@ export class W3bStream {
 
   publishEvent = new PublishEventSchema({});
 
-  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' = 'CURRENT_APPLETS';
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'LOGS' = 'CURRENT_APPLETS';
 
   get isLogin() {
     return !!this.config.formData.token;

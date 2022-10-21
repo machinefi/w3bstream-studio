@@ -40,6 +40,17 @@ const ToolBar = (props: ToolBar) => {
             {...getSelectedStyles(w3s.showContent === 'EDITOR')}
           ></Image>
         </Tooltip>
+
+        <Tooltip label="Docker Logs" placement="right">
+          <Image
+            src="/images/icons/logs.svg"
+            onClick={() => {
+              w3s.showContent = 'LOGS';
+            }}
+            {...iconStyle}
+            {...getSelectedStyles(w3s.showContent === 'LOGS')}
+          />
+        </Tooltip>
       </Flex>
     </Flex>
   );

@@ -16,10 +16,10 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    publisher: { $ref: '#/definitions/publishers' },
+    // publisher: { $ref: '#/definitions/publishers' },
     payload: { type: 'string' }
   },
-  required: ['publisher', 'payload']
+  required: ['payload']
 } as const;
 
 //@ts-ignore
@@ -53,39 +53,56 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
 
       afterSubmit: async (e) => {
         const { projectName, publisher, payload } = e.formData;
-        const { allPublishers } = rootStore.w3s;
-        const pub = allPublishers.find((item) => {
-          return `[Publisher Id]: ${item.f_publisher_id} [Name]: ${item.f_name}` === publisher;
-        });
-        if (pub) {
-          const res = await axios.request({
-            method: 'post',
-            url: `/srv-applet-mgr/v0/event/${projectName}`,
-            headers: {
-              'Content-Type': 'text/plain'
-            },
-            data: {
-              payload,
-              header: {
-                token: pub.f_token,
-                event_type: 2147483647,
-                pub_id: pub.f_key,
-                pub_time: Date.now()
-              }
-            }
-          });
-          if (res.data) {
-            await showNotification({ message: 'publish event successed' });
-            eventBus.emit('applet.publish-event');
-            this.reset();
-            this.extraValue.set({ modal: { show: false } });
+        // const { allPublishers } = rootStore.w3s;
+        // const pub = allPublishers.find((item) => {
+        //   return `[Publisher Id]: ${item.f_publisher_id} [Name]: ${item.f_name}` === publisher;
+        // });
+        // if (pub) {
+        //   const res = await axios.request({
+        //     method: 'post',
+        //     url: `/srv-applet-mgr/v0/event/${projectName}`,
+        //     headers: {
+        //       'Content-Type': 'text/plain'
+        //     },
+        //     data: {
+        //       payload,
+        //       header: {
+        //         token: pub.f_token,
+        //         event_type: 2147483647,
+        //         pub_id: pub.f_key,
+        //         pub_time: Date.now()
+        //       }
+        //     }
+        //   });
+        //   if (res.data) {
+        //     await showNotification({ message: 'publish event successed' });
+        //     eventBus.emit('applet.publish-event');
+        //     this.reset();
+        //     this.extraValue.set({ modal: { show: false } });
+        //   }
+        // }
+
+        const res = await axios.request({
+          method: 'post',
+          url: `/srv-applet-mgr/v0/event/${projectName}`,
+          headers: {
+            'Content-Type': 'text/plain'
+          },
+          data: {
+            payload
           }
+        });
+        if (res.data) {
+          await showNotification({ message: 'publish event successed' });
+          eventBus.emit('applet.publish-event');
+          this.reset();
+          this.extraValue.set({ modal: { show: false } });
         }
       },
       value: new JSONValue<SchemaType>({
         default: {
           projectName: '',
-          publisher: '',
+          // publisher: '',
           payload: ''
         }
       }),
