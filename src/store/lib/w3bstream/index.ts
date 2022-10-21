@@ -17,7 +17,7 @@ import { FilesListSchema } from './schema/filesList';
 import { PublishEventSchema } from './schema/publishEvent';
 import { CreatePublisherSchema } from './schema/createPublisher';
 import { SpotlightAction } from '@mantine/spotlight';
-import { AppletType, ProjectsType, InstanceType, PublisherType, StrategieType, ProjectType } from '@/server/routers/w3bstream';
+import { AppletType, ProjectsType, InstanceType, PublisherType, StrategieType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
 
 // type Publisher = {
