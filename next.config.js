@@ -1,6 +1,14 @@
+// @ts-check
+
+/**
+ * @type {import('next').NextConfig}
+ **/
 const nextConfig = {
   experimental: {
     outputStandalone: true
+  },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL']
   },
   webpack: (config, { isServer }) => {
     config.experiments = {
@@ -23,9 +31,5 @@ const nextConfig = {
 
 // const withBundleAnalyzer = require('@next/bundle-analyzer')();
 // module.exports = withBundleAnalyzer(nextConfig);
-
-if (process.env['STANDALONE'] === 'true') {
-  nextConfig.experimental.outputStandalone = true;
-}
 
 module.exports = nextConfig;
