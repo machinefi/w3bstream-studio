@@ -9,8 +9,8 @@ export const schema = {
   // title: 'Login',
   type: 'object',
   properties: {
-    username: { type: 'string' },
-    password: { type: 'string' }
+    username: { type: 'string', title: 'Username' },
+    password: { type: 'string', title: 'Password' }
   },
   required: ['username', 'password']
 } as const;

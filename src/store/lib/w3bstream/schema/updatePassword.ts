@@ -10,7 +10,7 @@ export const schema = {
   // title: 'Update Password',
   type: 'object',
   properties: {
-    password: { type: 'string' }
+    password: { type: 'string', title: 'Password' }
   },
   required: ['password']
 } as const;

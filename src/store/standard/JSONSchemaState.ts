@@ -1,4 +1,4 @@
-import { UiSchema, RJSFSchema } from '@rjsf/utils';
+import { UiSchema, RJSFSchema, RegistryWidgetsType } from '@rjsf/utils';
 import { makeAutoObservable, makeObservable, computed, toJS, observable, action } from 'mobx';
 import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent } from '@rjsf/core';
@@ -8,6 +8,7 @@ import { helper } from '../../lib/helper';
 export class JSONSchemaState<T, V = any> {
   extraValue: JSONValue<V> = new JSONValue();
   value: JSONValue<T> = new JSONValue();
+  widgets: RegistryWidgetsType<any, any>;
 
   get extraData(): V {
     return this.extraValue.get();
@@ -38,7 +39,6 @@ export class JSONSchemaState<T, V = any> {
   };
 
   onChange = (e: IChangeEvent<T, any>) => {
-    console.log(e)
     this.value.set(e.formData);
     if (this.afterChange) {
       this.afterChange(e);

@@ -6,6 +6,7 @@ import { definitions } from './definitions';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
+import FileWidget from '@/components/FileWidget';
 
 export const schema = {
   // title: 'Create Applet',
@@ -18,19 +19,12 @@ export const schema = {
   properties: {
     file: {
       type: 'string',
-      format: 'data-url',
-      title: 'Single file'
+      title: 'Upload Single File'
     },
-    info: {
-      type: 'object',
-      title: '',
-      properties: {
-        projectID: { $ref: '#/definitions/projects' },
-        appletName: { type: 'string' }
-      }
-    }
+    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    appletName: { type: 'string', title: 'Applet Name' }
   },
-  required: ['file', 'info']
+  required: ['file', 'projectID', 'appletName']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -50,6 +44,9 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
     this.init({
       //@ts-ignore
       schema,
+      widgets: {
+        FileWidget
+      },
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
@@ -61,20 +58,34 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           }
         },
         file: {
+          'ui:widget': 'file',
           'ui:options': {
-            accept: '.wasm'
+            // https://developer.mozilla.org/en-US/docs/Web/API/window/showOpenFilePicker
+            accept: {
+              'application/wasm': ['.wasm']
+            },
+            tips: `Drag 'n' drop a file here, or click to select a file`
+            // Maximum accepted number of files The default value is 0 which means there is no limitation to how many files are accepted.
+            // maxFiles: 1,
+            // Allow drag 'n' drop (or selection from the file dialog) of multiple files
+            // multiple: false
           }
         }
       },
       afterSubmit: async (e) => {
         let formData = new FormData();
-        console.log(this.extraValue);
         const file = dataURItoBlob(e.formData.file);
         formData.append('file', file.blob);
-        formData.append('info', JSON.stringify(e.formData.info));
+        formData.append(
+          'info',
+          JSON.stringify({
+            projectID: e.formData.projectID,
+            appletName: e.formData.appletName
+          })
+        );
         const res = await axios.request({
           method: 'post',
-          url: `/srv-applet-mgr/v0/applet/${e.formData.info.projectID}`,
+          url: `/srv-applet-mgr/v0/applet/${e.formData.projectID}`,
           headers: {
             'Content-Type': 'multipart/form-data'
           },
@@ -90,22 +101,14 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       value: new JSONValue<SchemaType>({
         //@ts-ignore
         default: {
-          info: {
-            appletName: 'app_01',
-            projectID: ''
-          }
-        },
-        setFormat: (val) => {
-          if (val.info.projectID) {
-            val.info.projectID = `${val.info.projectID}`;
-          }
-          return val;
+          projectID: '',
+          appletName: 'app_01'
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({
         //@ts-ignore
         default: {
-          modal: { show: false, title: 'Create Applet' },
+          modal: { show: false, title: 'Create Applet' }
         }
       })
     });

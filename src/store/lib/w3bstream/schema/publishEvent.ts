@@ -17,7 +17,7 @@ export const schema = {
   type: 'object',
   properties: {
     // publisher: { $ref: '#/definitions/publishers' },
-    payload: { type: 'string' }
+    payload: { type: 'string', title: 'Payload' }
   },
   required: ['payload']
 } as const;

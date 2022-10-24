@@ -16,9 +16,9 @@ export const schema = {
   // title: 'Create Publisher',
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects' },
-    name: { type: 'string' },
-    key: { type: 'string' }
+    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    name: { type: 'string', title: 'Name' },
+    key: { type: 'string', title: 'Key' }
   },
   required: ['projectID', 'name', 'key']
 } as const;

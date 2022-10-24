@@ -9,8 +9,8 @@ export const schema = {
   // title: 'Create Project',
   type: 'object',
   properties: {
-    name: { type: 'string' },
-    version: { type: 'string' }
+    name: { type: 'string', title: 'Name' },
+    version: { type: 'string', title: 'Version' }
   },
   required: ['name', 'version']
 } as const;

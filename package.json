@@ -78,6 +78,7 @@
     "react": "18.2.0",
     "react-contextmenu": "^2.14.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hot-toast": "^1.0.2",
     "react-i18next": "^11.16.9",
     "react-icons": "^4.4.0",

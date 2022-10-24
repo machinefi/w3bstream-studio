@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import Form from "@rjsf/chakra-ui";
+import Form from '@rjsf/chakra-ui';
 
 interface Props {
   jsonstate: JSONSchemaState<any>;
@@ -19,6 +19,7 @@ export const JSONForm = observer(({ children, jsonstate: jsonState }: Props) => 
       onChange={jsonState.onChange}
       onSubmit={jsonState.onSubmit}
       validator={jsonState.validator}
+      widgets={jsonState.widgets}
     >
       {children && children}
     </Form>
