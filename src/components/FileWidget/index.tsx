@@ -87,7 +87,7 @@ interface CustomFileWidgetProps extends WidgetProps {
   };
 }
 
-const CustomFileWidget = ({ id, readonly, disabled, onChange, label, value, autofocus = false, options }: CustomFileWidgetProps) => {
+const CustomFileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: CustomFileWidgetProps) => {
   const { accept, maxFiles = 0, multiple = false, tips } = options;
   const extractedFilesInfo = useMemo(() => (Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value])), [value]);
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>(extractedFilesInfo);
@@ -124,9 +124,11 @@ const CustomFileWidget = ({ id, readonly, disabled, onChange, label, value, auto
     <Flex flexDir="column">
       <Flex alignItems="center">
         <Text>{label}</Text>
-        <chakra.span ml="0.25rem" color="#D34B46">
-          *
-        </chakra.span>
+        {required && (
+          <chakra.span ml="0.25rem" color="#D34B46">
+            *
+          </chakra.span>
+        )}
       </Flex>
       <Flex mt="10px" w="100%" h="100px" flexDirection="column" justifyContent="center" alignItems="center" border="2px dashed #eee" mb="20px" {...getRootProps({ className: 'dropzone' })}>
         <input id={id} name={id} disabled={readonly || disabled} autoFocus={autofocus} {...getInputProps()} />
