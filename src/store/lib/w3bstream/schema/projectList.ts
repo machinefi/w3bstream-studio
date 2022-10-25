@@ -11,7 +11,7 @@ export const schema = {
   title: 'Projects',
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects' }
+    projectID: { $ref: '#/definitions/projects', title: 'Project ID' }
   },
   required: ['projectID']
 } as const;

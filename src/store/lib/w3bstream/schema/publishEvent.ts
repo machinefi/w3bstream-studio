@@ -6,6 +6,7 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
+import EditorWidget from '@/components/EditorWidget';
 
 export const schema = {
   // title: 'Publish Event',
@@ -17,9 +18,9 @@ export const schema = {
   type: 'object',
   properties: {
     // publisher: { $ref: '#/definitions/publishers' },
-    payload: { type: 'string' }
+    payload: { type: 'string', title: 'Payload' }
   },
-  required: ['payload']
+  required: []
 } as const;
 
 //@ts-ignore
@@ -39,6 +40,9 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
     this.init({
       //@ts-ignore
       schema,
+      widgets: {
+        EditorWidget
+      },
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
@@ -47,6 +51,12 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
             w: '100%',
             h: '32px',
             ...gradientButtonStyle
+          }
+        },
+        payload: {
+          'ui:widget': EditorWidget,
+          'ui:options': {
+            emptyValue: `{"payload":"xxx yyy zzz"}`
           }
         }
       },
@@ -82,15 +92,18 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
         //   }
         // }
 
+        let data = '{}';
+        try {
+          data = JSON.parse(payload);
+        } catch (error) {}
+
         const res = await axios.request({
           method: 'post',
           url: `/srv-applet-mgr/v0/event/${projectName}`,
           headers: {
             'Content-Type': 'text/plain'
           },
-          data: {
-            payload
-          }
+          data
         });
         if (res.data) {
           await showNotification({ message: 'publish event successed' });
@@ -102,8 +115,19 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       value: new JSONValue<SchemaType>({
         default: {
           projectName: '',
-          // publisher: '',
-          payload: ''
+          payload: JSON.stringify(
+            {
+              payload: 'xxx yyy zzz',
+              header: {
+                token: '',
+                event_type: 2147483647,
+                pub_id: '',
+                pub_time: 1666676685457
+              }
+            },
+            null,
+            2
+          )
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({

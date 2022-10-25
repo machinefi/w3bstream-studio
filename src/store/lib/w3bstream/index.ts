@@ -20,47 +20,10 @@ import { SpotlightAction } from '@mantine/spotlight';
 import { AppletType, ProjectsType, InstanceType, PublisherType, StrategieType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
 
-// type Publisher = {
-//   f_publisher_id: string;
-//   f_name: string;
-//   f_key: string;
-//   f_created_at: string;
-//   f_token: string;
-// };
-
-// type Strategy = {
-//   f_strategy_id: string;
-//   f_applet_id: string;
-//   f_project_id: string;
-//   f_event_type: string;
-//   f_handler: string;
-// };
-
-// type Instance = {
-//   f_instance_id: string;
-//   f_state: string;
-// };
-
-// type Applet = {
-//   f_name: string;
-//   f_applet_id: string;
-//   f_project_id: string;
-//   project_name: string;
-//   strategies: Strategy[];
-//   instances: Instance[];
-// };
-
-// type Project = {
-//   f_project_id: string;
-//   f_name: string;
-//   f_applet_id: string;
-//   project_files: FilesListSchema;
-//   publishers: Publisher[];
-//   applets: Applet[];
-// };
 configure({
   enforceActions: "never",
 })
+
 export class W3bStream {
   rootStore: RootStore;
   config = new W3bstreamConfigState({});
