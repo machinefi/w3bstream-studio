@@ -2656,14 +2656,49 @@
         "signature": "194fce35a55cda0cf2c98c028585d1fdfb84ee3aa719f278e87e2b5667f70997",
         "affectsGlobalScope": false
       },
+      "./node_modules/.pnpm/@types+json-schema@7.0.11/node_modules/@types/json-schema/index.d.ts": {
+        "version": "f3e604694b624fa3f83f6684185452992088f5efb2cf136b62474aa106d6f1b6",
+        "signature": "f3e604694b624fa3f83f6684185452992088f5efb2cf136b62474aa106d6f1b6",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts": {
+        "version": "8040afd77d696e029af3f31f2e3ed960dfb9964d98ef8837330a279cd5ee7303",
+        "signature": "8040afd77d696e029af3f31f2e3ed960dfb9964d98ef8837330a279cd5ee7303",
+        "affectsGlobalScope": false
+      },
       "./node_modules/.pnpm/@monaco-editor+react@4.4.6_biqbaboplfbrettd7655fr4n2y/node_modules/@monaco-editor/react/lib/types.d.ts": {
         "version": "6dde60c27b84ac2b2bcef6c9261c308844a977b229241fd86798eea15e6c2bf6",
         "signature": "6dde60c27b84ac2b2bcef6c9261c308844a977b229241fd86798eea15e6c2bf6",
         "affectsGlobalScope": false
       },
-      "./src/components/editor/index.tsx": {
-        "version": "f5b2e899e1589e5042f2004d3d8aadd2f468ad4654477f59c3c12481930ed55a",
-        "signature": "d4d3ca64daed7febfcc78bbd1f798fee5dff058a1056985afec345078d2d2309",
+      "./src/components/editorwidget/index.tsx": {
+        "version": "3b4a7d4c76d09d3c5bb1ec52af1d38bb69787c7e4f9da905d9a8d8d82daee445",
+        "signature": "0743824b577f37a384047ac91d10bc48f1cf372df65c983b0d6bda7d4b1ace0a",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file.d.ts": {
+        "version": "e5bf8891e05547d8ec7cf006d9715eaa4d703ba54a1242e854134b42bbd4e6c0",
+        "signature": "e5bf8891e05547d8ec7cf006d9715eaa4d703ba54a1242e854134b42bbd4e6c0",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file-selector.d.ts": {
+        "version": "4a3e425808751200a7709671667ad3d7e7cbfd0a06d469cab42adf06c2601f4a",
+        "signature": "4a3e425808751200a7709671667ad3d7e7cbfd0a06d469cab42adf06c2601f4a",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/index.d.ts": {
+        "version": "401da46338f5b4f97c2a5f8a0faaace045c51aabd751d2dc704159f64feafe89",
+        "signature": "401da46338f5b4f97c2a5f8a0faaace045c51aabd751d2dc704159f64feafe89",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-dropzone@14.2.3_react@18.2.0/node_modules/react-dropzone/typings/react-dropzone.d.ts": {
+        "version": "9df36b787e20adc0a87f3c7f74f788f8299ee40ce41644617c3713cc600756fb",
+        "signature": "9df36b787e20adc0a87f3c7f74f788f8299ee40ce41644617c3713cc600756fb",
+        "affectsGlobalScope": false
+      },
+      "./src/components/filewidget/index.tsx": {
+        "version": "65af5d95ff3cc05e285afe2877d148a20a3b2c79480253e13bafbacbbffb4615",
+        "signature": "417178054334fd7ac063bf135a3853ff645823241cc97d3d8697afdb59a430f2",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@chakra-ui+layout@2.1.8_react@18.2.0/node_modules/@chakra-ui/layout/dist/index.d.ts": {
@@ -5651,16 +5686,6 @@
         "signature": "05a88db495057a6c3b1a0897fb40d7462f54d41a7d034b6bf8535f05e2aa534d",
         "affectsGlobalScope": false
       },
-      "./node_modules/.pnpm/@types+json-schema@7.0.11/node_modules/@types/json-schema/index.d.ts": {
-        "version": "f3e604694b624fa3f83f6684185452992088f5efb2cf136b62474aa106d6f1b6",
-        "signature": "f3e604694b624fa3f83f6684185452992088f5efb2cf136b62474aa106d6f1b6",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts": {
-        "version": "8040afd77d696e029af3f31f2e3ed960dfb9964d98ef8837330a279cd5ee7303",
-        "signature": "8040afd77d696e029af3f31f2e3ed960dfb9964d98ef8837330a279cd5ee7303",
-        "affectsGlobalScope": false
-      },
       "./node_modules/.pnpm/ajv@6.12.6/node_modules/ajv/lib/ajv.d.ts": {
         "version": "67f129ed8b372622ff36b8b10e39d03e09e363a5ff7821105f92f085b8d1ccba",
         "signature": "67f129ed8b372622ff36b8b10e39d03e09e363a5ff7821105f92f085b8d1ccba",
@@ -5747,13 +5772,13 @@
         "affectsGlobalScope": false
       },
       "./src/lib/helper.ts": {
-        "version": "2607149b20c5eea07b353e3f6e3f446356d1e26207799ddfdbdc615099ed6493",
-        "signature": "8537b85cddc44497771f07c4b3167cbb7d19b4f2e110e6bb1cde8e5070c4bc1d",
+        "version": "1708d94feddaf34a19fefa8cb44811a60de740e3ec6daa37adb259096e6d76b0",
+        "signature": "c8211c4c1b1fdaed9d9f4148f4c3a8668dd4fbdfa52b73e2c2b174fc47d4009e",
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "b9930f787cefc67a609f7d95464e772ff3537538b979f30e07c9c655c7913118",
-        "signature": "3a3b3c345a8c033d87391b2e251718f087ec5e8e31cf22ae9b07e0409236e84d",
+        "version": "1e1d8f02393bb8e4dc8fb1a82115d8be1ff9e64c296884d7d72ca62ce2dfc31f",
+        "signature": "4af4972395049a7dfeb353b4e43f552708d9e052e296f5710b940ab902c01f83",
         "affectsGlobalScope": false
       },
       "./src/lib/event.ts": {
@@ -6192,8 +6217,8 @@
         "affectsGlobalScope": false
       },
       "./src/server/routers/w3bstream.ts": {
-        "version": "b2d94668c761c057f90b98a50b34f119b63c5fd36060cc8c9958e7215a469a2a",
-        "signature": "4d899f1a00a2fa5956d9642b1060df485eb7168755562e44dddfcc414e926975",
+        "version": "d5e08a89e6bd4beb0e9e1b690e71c3d36c16e625a2e884c6f6c72c30fb5a7d8f",
+        "signature": "9a8733ff392d2215b2c8169bb5e0ddba0889ca3d281cbd1ca6ba4d6c8641bd4d",
         "affectsGlobalScope": false
       },
       "./src/lib/superjson.ts": {
@@ -6203,12 +6228,12 @@
       },
       "./src/server/routers/_app.ts": {
         "version": "117b4d406ff9e4a8a69e57ebbbebb5e1b3ff023843e564353f36b4cacaf36b8b",
-        "signature": "ae7abe933d56254fc341641845e760c0eaaaf47c760cdce97536f4df1af3e679",
+        "signature": "8f168fbee3daef82b109063958ef606e7378e22e4b6d3f43e18492dcf211e0ff",
         "affectsGlobalScope": false
       },
       "./src/lib/trpc.ts": {
         "version": "0c445e826585329ad99320e7bb3ef474e342791fb896bbf981ad79b7d8587510",
-        "signature": "8d420718691358c8aaa22ebe798fc264dc043d05c8fd886b44e14325489c5c4b",
+        "signature": "450072ae7d376fec11cb4b79471daec21fe96fe0c5216addd72465858ecff455",
         "affectsGlobalScope": false
       },
       "./src/lib/hooks.ts": {
@@ -7817,8 +7842,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/login.ts": {
-        "version": "da7058aa4bb37b9dda7c3345732c8e0cc99659adec41d68eafd5200d35dcfd77",
-        "signature": "beaf8d53315bb488e30684d7e9256d5d0743a19bb700851c8808f5a48260b26e",
+        "version": "78c846dc66befb4c2c6b78e599bd1cb6c48238b88dbb4824f645aec2a45de953",
+        "signature": "c6b8b49486b18e9b9ce5e41ff2da29a1c7335de05bec5089b56f1198119cb0b5",
         "affectsGlobalScope": false
       },
       "./src/store/standard/storagestate.ts": {
@@ -7837,23 +7862,33 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createapplet.ts": {
-        "version": "058dea36865887badb67aeca6ce69a08c24bfc7b8cfd9ff5be4ae518a0b65362",
-        "signature": "c33b35429170f81a379b96f2fec59390fdda025da45f290b6402707007b7980d",
+        "version": "c09d09bbb01bf2c1b03bc0deda5605afc45e57cedff868b6e6f10312a9f3b64a",
+        "signature": "93ededd35ed99dce82b8a6b42bde8b5612b212170a4887c1a1e4fbad76670b07",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/projectlist.ts": {
-        "version": "84a4f7ed4cf1e86afbb6ba61eced1db71f65399ce12218db8fd122520d0adb68",
-        "signature": "17087131877e17ed13a867730ecf7be5e386a3538cfac431d0549df0ec3cf6c9",
+        "version": "6d9974a12206b4231ad0590e1b7c396261df38ee8726be9447c135081bf18e57",
+        "signature": "4ebe2843bd17d052f4f321e787e0b5b7a0135fe0b7285b8fdf43e888f14c1490",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createproject.ts": {
-        "version": "ecea17d3d7a1edaa7283109761dadfc820cc51b406c3e621a4a13d8e4c90aca7",
-        "signature": "76543feca55961dd73eebb7b2d8bc605c61daf4e31f99eaa1ef39c4eac9ac738",
+        "version": "ce6b251ed393e4e8bb5cdf9c9df170ac5e201f63bc6c9f80bc99a1b5c91f5401",
+        "signature": "0c0df7ef5d2459c5654d4e423c4f8e332e0bb4a06468badab0b8ac9cc1c84cf2",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/updatepassword.ts": {
-        "version": "241b9cfa564793649ab4bd1aae5c235c620ff7b134d10458d63533c5f7284a1a",
-        "signature": "cadb58f476e2c21b9851786de4e76511996c2c077163ba3e2793f31a9555edd3",
+        "version": "1b0300ec9edd94b1004c3f7f7d3733fb8891126cf85e181aec65b632b24b8d29",
+        "signature": "084ba11bd863055192b6ff350b917959f0e17b40b3ffc5343414aa8a3badde1a",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/dexie@3.2.2/node_modules/dexie/dist/dexie.d.ts": {
+        "version": "33cffd5ca9095af2ed7ba139141da8149b46f6920ee5a4379977d5b0b5ef0420",
+        "signature": "33cffd5ca9095af2ed7ba139141da8149b46f6920ee5a4379977d5b0b5ef0420",
+        "affectsGlobalScope": true
+      },
+      "./src/lib/dexie.ts": {
+        "version": "a2c410c35520dd606e18c19c74e088e8242571fa2acb21924609505fb0c8f5a3",
+        "signature": "548408c2ef4827b1d56df285603dbe7f4e1d99222c026d6c01062ff665c0c025",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@types+uuid@8.3.4/node_modules/@types/uuid/index.d.ts": {
@@ -7867,18 +7902,18 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/fileslist.ts": {
-        "version": "7d17952568fc82ae00f2ecdbdcd1ab283d107e93e745b59712f67e967cebc958",
-        "signature": "e72c3230db223777ea7074b5864038d3952997088e25dddd264995e37a5d65c1",
+        "version": "2bc541a37b953c1f64cb65235fb3914a65bd383040d18ca861294ee85ca70e5a",
+        "signature": "bf43ad0e428d2dc49c209ff4872f306aa53ac162877621e9e0f63b3e73768a05",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/publishevent.ts": {
-        "version": "6ce36216ff5707a2e113120e0dc6ce5e44b2644ef112e11b740aa00cca35a852",
-        "signature": "f4790afe8d73e2624f3ba38dbdab1060c75d1429b2480412b7e67bb0dcdb0a54",
+        "version": "05069c5e3a9910199cfc469a0d64911f01e4f911228fb3979b358bd5b6b08337",
+        "signature": "a583185f0f97848be5a6fc30b17d3213e30ec7775d2c20037815eaa14c69f3e7",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createpublisher.ts": {
-        "version": "9dfaad098b5cfea6c8e4ce4a9c6bbb4aee3f3efacae0e79c91c14083caffc7ea",
-        "signature": "9eff94eb39d9e7637c186a1ba9663cc6109316907eb63a5e42cff570bef31f56",
+        "version": "b982f066c196c920204b6cd9b0ef1bb57345139f0a24598d36e24b0f970d018d",
+        "signature": "9bf600815cd7c7db347732201c1d4aaa1b9502fec5655e1958a51f755ade0010",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@mantine+spotlight@5.5.5_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/spotlight/lib/types.d.ts": {
@@ -7936,9 +7971,154 @@
         "signature": "84716fd2784ea8e9772c204745eef781a0e6600e3c2a309e4c22482a7dfe70e9",
         "affectsGlobalScope": false
       },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/expose-options.interface.d.ts": {
+        "version": "b6e995b5ef6661f5636ff738e67e4ec90150768ef119ad74b473c404304408a1",
+        "signature": "b6e995b5ef6661f5636ff738e67e4ec90150768ef119ad74b473c404304408a1",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/exclude-options.interface.d.ts": {
+        "version": "5d470930bf6142d7cbda81c157869024527dc7911ba55d90b8387ef6e1585aa1",
+        "signature": "5d470930bf6142d7cbda81c157869024527dc7911ba55d90b8387ef6e1585aa1",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/transform-options.interface.d.ts": {
+        "version": "074483fdbf20b30bd450e54e6892e96ea093430c313e61be5fdfe51588baa2d6",
+        "signature": "074483fdbf20b30bd450e54e6892e96ea093430c313e61be5fdfe51588baa2d6",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-discriminator-descriptor.interface.d.ts": {
+        "version": "b7e6a6a3495301360edb9e1474702db73d18be7803b3f5c6c05571212acccd16",
+        "signature": "b7e6a6a3495301360edb9e1474702db73d18be7803b3f5c6c05571212acccd16",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-options.interface.d.ts": {
+        "version": "aa7527285c94043f21baf6e337bc60a92c20b6efaa90859473f6476954ac5f79",
+        "signature": "aa7527285c94043f21baf6e337bc60a92c20b6efaa90859473f6476954ac5f79",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/exclude-metadata.interface.d.ts": {
+        "version": "dd3be6d9dcd79e46d192175a756546630f2dc89dab28073823c936557b977f26",
+        "signature": "dd3be6d9dcd79e46d192175a756546630f2dc89dab28073823c936557b977f26",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/expose-metadata.interface.d.ts": {
+        "version": "8d0566152618a1da6536c75a5659c139522d67c63a9ae27e8228d76ab0420584",
+        "signature": "8d0566152618a1da6536c75a5659c139522d67c63a9ae27e8228d76ab0420584",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/transformation-type.enum.d.ts": {
+        "version": "ba06bf784edafe0db0e2bd1f6ecf3465b81f6b1819871bf190a0e0137b5b7f18",
+        "signature": "ba06bf784edafe0db0e2bd1f6ecf3465b81f6b1819871bf190a0e0137b5b7f18",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/index.d.ts": {
+        "version": "a0500233cb989bcb78f5f1a81f51eabc06b5c39e3042c560a7489f022f1f55a3",
+        "signature": "a0500233cb989bcb78f5f1a81f51eabc06b5c39e3042c560a7489f022f1f55a3",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/target-map.interface.d.ts": {
+        "version": "220508b3fb6b773f49d8fb0765b04f90ef15caacf0f3d260e3412ed38f71ef09",
+        "signature": "220508b3fb6b773f49d8fb0765b04f90ef15caacf0f3d260e3412ed38f71ef09",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-transformer-options.interface.d.ts": {
+        "version": "1ad113089ad5c188fec4c9a339cb53d1bcbb65682407d6937557bb23a6e1d4e5",
+        "signature": "1ad113089ad5c188fec4c9a339cb53d1bcbb65682407d6937557bb23a6e1d4e5",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-fn-params.interface.d.ts": {
+        "version": "e56427c055602078cbf0e58e815960541136388f4fc62554813575508def98b6",
+        "signature": "e56427c055602078cbf0e58e815960541136388f4fc62554813575508def98b6",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-metadata.interface.d.ts": {
+        "version": "1f58b0676a80db38df1ce19d15360c20ce9e983b35298a5d0b4aa4eb4fb67e0f",
+        "signature": "1f58b0676a80db38df1ce19d15360c20ce9e983b35298a5d0b4aa4eb4fb67e0f",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/type-metadata.interface.d.ts": {
+        "version": "3d67e7eb73c6955ee27f1d845cae88923f75c8b0830d4b5440eea2339958e8ec",
+        "signature": "3d67e7eb73c6955ee27f1d845cae88923f75c8b0830d4b5440eea2339958e8ec",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-constructor.type.d.ts": {
+        "version": "11fec302d58b56033ab07290a3abc29e9908e29d504db9468544b15c4cd7670d",
+        "signature": "11fec302d58b56033ab07290a3abc29e9908e29d504db9468544b15c4cd7670d",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/type-help-options.interface.d.ts": {
+        "version": "c66d6817c931633650edf19a8644eea61aeeb84190c7219911cefa8ddea8bd9a",
+        "signature": "c66d6817c931633650edf19a8644eea61aeeb84190c7219911cefa8ddea8bd9a",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts": {
+        "version": "ab1359707e4fc610c5f37f1488063af65cda3badca6b692d44b95e8380e0f6c2",
+        "signature": "ab1359707e4fc610c5f37f1488063af65cda3badca6b692d44b95e8380e0f6c2",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/classtransformer.d.ts": {
+        "version": "37deda160549729287645b3769cf126b0a17e7e2218737352676705a01d5957e",
+        "signature": "37deda160549729287645b3769cf126b0a17e7e2218737352676705a01d5957e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/exclude.decorator.d.ts": {
+        "version": "d80ffdd55e7f4bc69cde66933582b8592d3736d3b0d1d8cc63995a7b2bcca579",
+        "signature": "d80ffdd55e7f4bc69cde66933582b8592d3736d3b0d1d8cc63995a7b2bcca579",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/expose.decorator.d.ts": {
+        "version": "c9b71952b2178e8737b63079dba30e1b29872240b122905cbaba756cb60b32f5",
+        "signature": "c9b71952b2178e8737b63079dba30e1b29872240b122905cbaba756cb60b32f5",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-instance.decorator.d.ts": {
+        "version": "b596585338b0d870f0e19e6b6bcbf024f76328f2c4f4e59745714e38ee9b0582",
+        "signature": "b596585338b0d870f0e19e6b6bcbf024f76328f2c4f4e59745714e38ee9b0582",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-plain.decorator.d.ts": {
+        "version": "e6717fc103dfa1635947bf2b41161b5e4f2fabbcaf555754cc1b4340ec4ca587",
+        "signature": "e6717fc103dfa1635947bf2b41161b5e4f2fabbcaf555754cc1b4340ec4ca587",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-plain-to-instance.decorator.d.ts": {
+        "version": "c36186d7bdf1f525b7685ee5bf639e4b157b1e803a70c25f234d4762496f771f",
+        "signature": "c36186d7bdf1f525b7685ee5bf639e4b157b1e803a70c25f234d4762496f771f",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform.decorator.d.ts": {
+        "version": "026726932a4964341ab8544f12b912c8dfaa388d2936b71cc3eca0cffb49cc1d",
+        "signature": "026726932a4964341ab8544f12b912c8dfaa388d2936b71cc3eca0cffb49cc1d",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/type.decorator.d.ts": {
+        "version": "83188d037c81bd27076218934ba9e1742ddb69cd8cc64cdb8a554078de38eb12",
+        "signature": "83188d037c81bd27076218934ba9e1742ddb69cd8cc64cdb8a554078de38eb12",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/index.d.ts": {
+        "version": "7d82f2d6a89f07c46c7e3e9071ab890124f95931d9c999ba8f865fa6ef6cbf72",
+        "signature": "7d82f2d6a89f07c46c7e3e9071ab890124f95931d9c999ba8f865fa6ef6cbf72",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/index.d.ts": {
+        "version": "4fc523037d14d9bb6ddb586621a93dd05b6c6d8d59919a40c436ca3ac29d9716",
+        "signature": "4fc523037d14d9bb6ddb586621a93dd05b6c6d8d59919a40c436ca3ac29d9716",
+        "affectsGlobalScope": false
+      },
+      "./src/store/standard/mappingstate.ts": {
+        "version": "aa262c6060ca2de2bcd03886b936be652b599ff50c4ee8be8819f741ecbc6d29",
+        "signature": "4671599055662863b56af917e7250fc4af06dcefb46e913f6d45c35c9bd067c5",
+        "affectsGlobalScope": false
+      },
+      "./src/store/lib/w3bstream/project.ts": {
+        "version": "79bc8716220e460d953f584b7f92575bd46264ad9c859fbeffc3ab6e786ee09e",
+        "signature": "34d892f6ab0d8153f56cf7dd5aed9e8f55db39ee4707d0457a51e8b3bb482302",
+        "affectsGlobalScope": false
+      },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "5a52435037860a7835a5fdb3dd395d620143112992c6b527866be37b56136df4",
-        "signature": "dc3766cb7f2092f9c2e973a209defb0f9edc90c240312cbe148fce754c4b9c02",
+        "version": "831c57891c4dcde7bab63c8100aad9f1af8c558ccf1a9e84ecf8fcf9a42398bf",
+        "signature": "d4105591e940a86e6f0bf824a3ccfebdef90dba7ceb3ea9bc5980dbd39f6f5fc",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -7957,12 +8137,12 @@
         "affectsGlobalScope": false
       },
       "./src/components/jsonform/index.tsx": {
-        "version": "10cbd282ea932800ab0ef5df0721ffc7b76f12a9f519099e27bf0e93a19fc7f1",
+        "version": "46416a8646d4f0d026c415aa46ceae504c8c6f928e58fd419f7d983cc9d5a58f",
         "signature": "53cdfde0f3036032eb9a00ca5099988762663130b8abbf4a19040c455c070f1d",
         "affectsGlobalScope": false
       },
       "./src/components/jsonschemamodal/index.tsx": {
-        "version": "8380ff8eeafd4c9b2a8e0eef9af2e4e9432a446ac3b1609b4171be1a45ada25b",
+        "version": "ca89f60afdab77aad0425b1e9241f808640b489e2a2dd77c7f7fdffcd69c6272",
         "signature": "f720bf7417bd1e82f043e73e31f132d8d95402c08f31f833f7ae2a229ed33980",
         "affectsGlobalScope": false
       },
@@ -8046,53 +8226,18 @@
         "signature": "023f2c9d0a851590bc2b41d7ef0195ce6abf5e4fd76e2469fa7e1e332be808df",
         "affectsGlobalScope": false
       },
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/menuitem/menuitem.d.ts": {
-        "version": "ebff326303e7b1e37da0955c178868b079e9fc8526536b9814af7932ef48574b",
-        "signature": "ebff326303e7b1e37da0955c178868b079e9fc8526536b9814af7932ef48574b",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/transition.d.ts": {
-        "version": "30688eab034d1aa3bbe4d8f2c7f462ddaec9f30f1a38a306a4728a9a06a58b11",
-        "signature": "30688eab034d1aa3bbe4d8f2c7f462ddaec9f30f1a38a306a4728a9a06a58b11",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/csstransition.d.ts": {
-        "version": "e03334588c63840b7054accd0b90f29c5890db6a6555ac0869a78a23297f1396",
-        "signature": "e03334588c63840b7054accd0b90f29c5890db6a6555ac0869a78a23297f1396",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/csstransition/csstransition.d.ts": {
-        "version": "de4ce365ac7010e015f8b8489d8971f2e6cfa5d3cb6a77a2eb8cd3e6c427ff61",
-        "signature": "de4ce365ac7010e015f8b8489d8971f2e6cfa5d3cb6a77a2eb8cd3e6c427ff61",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/contextmenu/contextmenu.d.ts": {
-        "version": "91c5ca6af79de4502ad5feb79ea4809848c7d91645e11b3514df8d5a84731460",
-        "signature": "91c5ca6af79de4502ad5feb79ea4809848c7d91645e11b3514df8d5a84731460",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/utils/utils.d.ts": {
-        "version": "0b50b351bde61814d4977412195f8be6d9c6f8ee10d159c05cb52b29fe21e31f",
-        "signature": "0b50b351bde61814d4977412195f8be6d9c6f8ee10d159c05cb52b29fe21e31f",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/treenode/treenode.d.ts": {
-        "version": "9751312cb1cde938ca6665af80a9bc94ca384c6e1dec95a778e9b3696fb1f4b3",
-        "signature": "9751312cb1cde938ca6665af80a9bc94ca384c6e1dec95a778e9b3696fb1f4b3",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/tree/tree.d.ts": {
-        "version": "22bcdf2c026eca1134e6c1abefaf2aad81644c6d9fee5628983ee8407dd33c98",
-        "signature": "22bcdf2c026eca1134e6c1abefaf2aad81644c6d9fee5628983ee8407dd33c98",
+      "./src/components/tree/index.tsx": {
+        "version": "6912711af8a76b82e10e0c3694146cb69eb1c07712a5eff2cb129e6cee0a3aca",
+        "signature": "9e6c67774f4e22171bb2c92cff925bcecdacf237847c35561698ca0e076be704",
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/filesitem.tsx": {
-        "version": "be9d1a20eea3628daca92c248ccb4fcbd74bba1c26963ffe7ac252e0155d3c22",
+        "version": "7541bc6d40902e32f979f6069e47ee1bd80b221ea5847a349fdd13c7102cf362",
         "signature": "11d24ecb7f053dabf731e427fd83f39035fc74aa655b0f3cac49bf847f4bdfa5",
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "007c048f1fa7ccad80abdbc81c1968fa7845d642cb453799a43ca12524466910",
+        "version": "91599ec9e0e2d6b6b3be1a9c49370ca84edfaea32e13ccc79526b9cdd6a2eab4",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
@@ -8186,101 +8331,6 @@
         "signature": "f2150375b898ca0091f38df8528bd8744a1a882f9e298d54dcb4e031545aaa92",
         "affectsGlobalScope": false
       },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts": {
-        "version": "fe58262f1f3f9a83431292bef0cdbf508a20391eb7533df424dcdc624a9001bd",
-        "signature": "fe58262f1f3f9a83431292bef0cdbf508a20391eb7533df424dcdc624a9001bd",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts": {
-        "version": "05fd364b8ef02fb1e174fbac8b825bdb1e5a36a016997c8e421f5fab0a6da0a0",
-        "signature": "05fd364b8ef02fb1e174fbac8b825bdb1e5a36a016997c8e421f5fab0a6da0a0",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_app.d.ts": {
-        "version": "6148e1cba85721ace8b3e29fae4d745b20434faec2ada3b26e9a91b9f983fce2",
-        "signature": "6148e1cba85721ace8b3e29fae4d745b20434faec2ada3b26e9a91b9f983fce2",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts": {
-        "version": "65c24a8baa2cca1de069a0ba9fba82a173690f52d7e2d0f1f7542d59d5eb4db0",
-        "signature": "65c24a8baa2cca1de069a0ba9fba82a173690f52d7e2d0f1f7542d59d5eb4db0",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts": {
-        "version": "1ffce20c2e07f89f74e3df09cf67cc66aaf1a19a9d550043e7a4226db6c143e7",
-        "signature": "1ffce20c2e07f89f74e3df09cf67cc66aaf1a19a9d550043e7a4226db6c143e7",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts": {
-        "version": "4545c1a1ceca170d5d83452dd7c4994644c35cf676a671412601689d9a62da35",
-        "signature": "4545c1a1ceca170d5d83452dd7c4994644c35cf676a671412601689d9a62da35",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts": {
-        "version": "65b0842cef0bce65a00d4fc230c6c00b2a57542952c906ea84f4e4c825af9da0",
-        "signature": "65b0842cef0bce65a00d4fc230c6c00b2a57542952c906ea84f4e4c825af9da0",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts": {
-        "version": "a2d648d333cf67b9aeac5d81a1a379d563a8ffa91ddd61c6179f68de724260ff",
-        "signature": "a2d648d333cf67b9aeac5d81a1a379d563a8ffa91ddd61c6179f68de724260ff",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts": {
-        "version": "05e5c9d6f902ab5d1eaf9e3fc566623882bf40f652b0b27e94778866175a76f3",
-        "signature": "05e5c9d6f902ab5d1eaf9e3fc566623882bf40f652b0b27e94778866175a76f3",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts": {
-        "version": "a3f41ed1b4f2fc3049394b945a68ae4fdefd49fa1739c32f149d32c0545d67f5",
-        "signature": "a3f41ed1b4f2fc3049394b945a68ae4fdefd49fa1739c32f149d32c0545d67f5",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts": {
-        "version": "c2489c80994d62e5b51370a6f02f537db4c37af5f914fcb5b2755b81f1906cae",
-        "signature": "c2489c80994d62e5b51370a6f02f537db4c37af5f914fcb5b2755b81f1906cae",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts": {
-        "version": "47699512e6d8bebf7be488182427189f999affe3addc1c87c882d36b7f2d0b0e",
-        "signature": "47699512e6d8bebf7be488182427189f999affe3addc1c87c882d36b7f2d0b0e",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts": {
-        "version": "9b75a8a1751461fdc3eed12a0d088cdcd41feea3a5d0aaf6e5897c1873b4d176",
-        "signature": "9b75a8a1751461fdc3eed12a0d088cdcd41feea3a5d0aaf6e5897c1873b4d176",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts": {
-        "version": "42c686ce08bf5576ed178f4a6a62d1b580d941334fb53bdff7054e0980f2dc75",
-        "signature": "42c686ce08bf5576ed178f4a6a62d1b580d941334fb53bdff7054e0980f2dc75",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts": {
-        "version": "15723beb6ee9b4fcf129f30d9e1abbd0419f6dec6829b7ece3695b708473ea47",
-        "signature": "15723beb6ee9b4fcf129f30d9e1abbd0419f6dec6829b7ece3695b708473ea47",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts": {
-        "version": "5835a6e0d7cd2738e56b671af0e561e7c1b4fb77751383672f4b009f4e161d70",
-        "signature": "5835a6e0d7cd2738e56b671af0e561e7c1b4fb77751383672f4b009f4e161d70",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts": {
-        "version": "6a95a81a7ff77b3e3b0c3d6cf943c3b9822f89e68db532176681734fcc78d965",
-        "signature": "6a95a81a7ff77b3e3b0c3d6cf943c3b9822f89e68db532176681734fcc78d965",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts": {
-        "version": "7a87441a419deeff2165cf497fed7c3600c886cd41e92bce644320b9a01f5c5c",
-        "signature": "7a87441a419deeff2165cf497fed7c3600c886cd41e92bce644320b9a01f5c5c",
-        "affectsGlobalScope": true
-      },
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts": {
-        "version": "b2d48b68756afa0d35400ee55b838fde7fb8af24374c912311312e6e279b2eba",
-        "signature": "b2d48b68756afa0d35400ee55b838fde7fb8af24374c912311312e6e279b2eba",
-        "affectsGlobalScope": false
-      },
       "./node_modules/.pnpm/assemblyscript@0.21.4/node_modules/assemblyscript/dist/assemblyscript.generated.d.ts": {
         "version": "9c6c4ca3eb68a13c09b9c96e7b00252d9e02f0a14afada43a1f497b2174457b5",
         "signature": "9c6c4ca3eb68a13c09b9c96e7b00252d9e02f0a14afada43a1f497b2174457b5",
@@ -8297,7 +8347,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/editor/index.tsx": {
-        "version": "0729ba53a445a3a72b36f8e321d9324c85b7f908e5d2a876ccd88f3ac310ded2",
+        "version": "0a1b9c84bc4d3451c04ba5e8942d8dd98dbf2c5a878c226b4f3f5aee4bb54cfc",
         "signature": "d5525de83f2ec840aea1bdd1190d73d8384a1b63251cefa390ee0dea0f49ef3d",
         "affectsGlobalScope": false
       },
@@ -8561,13 +8611,33 @@
         "signature": "357f61152c7633b551edbc0ef9623f9b79427634078adcbe5f9d2bdc4bfa7005",
         "affectsGlobalScope": false
       },
+      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_app.d.ts": {
+        "version": "6148e1cba85721ace8b3e29fae4d745b20434faec2ada3b26e9a91b9f983fce2",
+        "signature": "6148e1cba85721ace8b3e29fae4d745b20434faec2ada3b26e9a91b9f983fce2",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts": {
+        "version": "65c24a8baa2cca1de069a0ba9fba82a173690f52d7e2d0f1f7542d59d5eb4db0",
+        "signature": "65c24a8baa2cca1de069a0ba9fba82a173690f52d7e2d0f1f7542d59d5eb4db0",
+        "affectsGlobalScope": false
+      },
       "./src/pages/_app.tsx": {
-        "version": "3aed6c00126b2ecf007ddc741b565aa6bd6b9ca2a8e10170537ac020d1137556",
-        "signature": "34f2768c60ea7a8e487ff5fab1488726444a071b78be381599ec2d2aa7946567",
+        "version": "0ac3c185b46418d39bbc5537bc0a131c04708d8900ba0601c2414a8890121e71",
+        "signature": "4bdbc51e424008e76f1ffce92bf0c884cba3656d3bc13a0d586a5a302fcb1b35",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts": {
+        "version": "1ffce20c2e07f89f74e3df09cf67cc66aaf1a19a9d550043e7a4226db6c143e7",
+        "signature": "1ffce20c2e07f89f74e3df09cf67cc66aaf1a19a9d550043e7a4226db6c143e7",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts": {
+        "version": "4545c1a1ceca170d5d83452dd7c4994644c35cf676a671412601689d9a62da35",
+        "signature": "4545c1a1ceca170d5d83452dd7c4994644c35cf676a671412601689d9a62da35",
         "affectsGlobalScope": false
       },
       "./src/pages/_document.tsx": {
-        "version": "4c36636a1571dc6a4c302b30944b6007bcb72ddcc8c2af051625e308273b3d3b",
+        "version": "5623294c047a282bea9a366f5c468ad0f5bea21779cb3c1c1a7ed4e369a61969",
         "signature": "1232245fca3c7b2aac48b72446a50de781a70c27e079154f0a79fcbd5249b1ea",
         "affectsGlobalScope": false
       },
@@ -8583,7 +8653,7 @@
       },
       "./src/pages/api/trpc/[trpc].ts": {
         "version": "2da4367b3b93d183c787d553bb8591b1d36752636a140c87e9266006605ae40b",
-        "signature": "fb413299ae5662129b2ed93d57a728647e8674a9bd7aa72c469563ce25888fe4",
+        "signature": "4451cc704911df1b376acc6ad19cd9646190b95b12f85de5d730731623472afb",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts": {
@@ -8599,11 +8669,6 @@
       "./src/store/standard/bignumberinputstate.ts": {
         "version": "849a31a26e1647cafee2098f26d2fbd9c6d2452b17440fd9021d90498b439d63",
         "signature": "fcabb2a55e6978249377ee03a3c03b3392d4c26ff068323a5ded69f0f684d2cc",
-        "affectsGlobalScope": false
-      },
-      "./src/store/standard/mappingstate.ts": {
-        "version": "aa262c6060ca2de2bcd03886b936be652b599ff50c4ee8be8819f741ecbc6d29",
-        "signature": "4671599055662863b56af917e7250fc4af06dcefb46e913f6d45c35c9bd067c5",
         "affectsGlobalScope": false
       },
       "./src/store/template/state.ts": {
@@ -13137,13 +13202,6 @@
       "./node_modules/.pnpm/@types+react-dom@17.0.17/node_modules/@types/react-dom/index.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
       ],
-      "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/csstransition.d.ts": [
-        "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/transition.d.ts",
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/transition.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
       "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts": [
         "./node_modules/.pnpm/@types+prop-types@15.7.5/node_modules/@types/prop-types/index.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/global.d.ts",
@@ -13159,6 +13217,97 @@
       ],
       "./node_modules/.pnpm/assemblyscript@0.21.4/node_modules/assemblyscript/dist/assemblyscript.generated.d.ts": [
         "./node_modules/.pnpm/assemblyscript@0.21.4/node_modules/assemblyscript/dist/assemblyscript.generated.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/classtransformer.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/exclude.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/expose.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/index.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/exclude.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/expose.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-instance.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-plain.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-plain-to-instance.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/type.decorator.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-instance.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-plain.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-plain-to-instance.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/type.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/index.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/transformation-type.enum.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/index.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/classtransformer.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-transformer-options.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/target-map.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-discriminator-descriptor.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-options.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-discriminator-descriptor.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-constructor.type.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-transformer-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/exclude-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/expose-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/transform-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-discriminator-descriptor.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/exclude-metadata.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/expose-metadata.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-fn-params.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-metadata.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/type-metadata.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/target-map.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/type-help-options.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/exclude-metadata.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/expose-metadata.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-fn-params.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-transformer-options.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-metadata.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-fn-params.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/type-metadata.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file-selector.d.ts": [
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file.d.ts"
+      ],
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/index.d.ts": [
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file-selector.d.ts",
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file.d.ts"
       ],
       "./node_modules/.pnpm/framer-motion@7.5.3_biqbaboplfbrettd7655fr4n2y/node_modules/framer-motion/dist/index.d.ts": [
         "./node_modules/.pnpm/@motionone+dom@10.13.1/node_modules/@motionone/dom/types/index.d.ts",
@@ -13563,9 +13712,6 @@
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/types/type-utils.d.ts": [
         "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/internal.d.ts"
       ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts"
-      ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_app.d.ts"
       ],
@@ -13585,9 +13731,6 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/pages-manifest-plugin.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/webpack/webpack.d.ts"
       ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/index.d.ts",
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/url.d.ts",
@@ -13603,9 +13746,6 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/router/router.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
       ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
@@ -13623,10 +13763,6 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
       ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/api-utils/index.d.ts": [
@@ -13823,12 +13959,6 @@
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts"
       ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/get-page-files.d.ts",
@@ -13886,51 +14016,11 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts"
       ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
-      ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts"
       ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/fetch-event.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/types.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts": [
-        "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/index.d.ts"
       ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/http.d.ts",
@@ -14036,30 +14126,12 @@
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/utils/point-from-vector.d.ts": [
         "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/types.d.ts"
       ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/contextmenu/contextmenu.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/csstransition/csstransition.d.ts",
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/menuitem/menuitem.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/csstransition/csstransition.d.ts": [
-        "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/csstransition.d.ts",
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/menuitem/menuitem.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/tree/tree.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/treenode/treenode.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/treenode/treenode.d.ts": [
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/utils/utils.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/utils/utils.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
       "./node_modules/.pnpm/react-contextmenu@2.14.0_v2m5e27vhdewzwhryxwfaorcca/node_modules/react-contextmenu/src/index.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/react-dropzone@14.2.3_react@18.2.0/node_modules/react-dropzone/typings/react-dropzone.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/index.d.ts"
       ],
       "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/checkmark.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
@@ -16070,8 +16142,17 @@
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/rc-pagination@3.1.17_biqbaboplfbrettd7655fr4n2y/node_modules/rc-pagination/rc-pagination.d.ts"
       ],
-      "./src/components/editor/index.tsx": [
-        "./node_modules/.pnpm/@monaco-editor+react@4.4.6_biqbaboplfbrettd7655fr4n2y/node_modules/@monaco-editor/react/lib/types.d.ts"
+      "./src/components/editorwidget/index.tsx": [
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
+        "./node_modules/.pnpm/@monaco-editor+react@4.4.6_biqbaboplfbrettd7655fr4n2y/node_modules/@monaco-editor/react/lib/types.d.ts",
+        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./src/components/filewidget/index.tsx": [
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
+        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/react-dropzone@14.2.3_react@18.2.0/node_modules/react-dropzone/typings/react-dropzone.d.ts"
       ],
       "./src/components/ide/allinstances/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
@@ -16111,17 +16192,15 @@
       ],
       "./src/components/ide/editor/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
-        "./node_modules/.pnpm/@mantine+core@4.2.12_5xygnop5723tamgcmcnjbwu4iu/node_modules/@mantine/core/lib/index.d.ts",
         "./node_modules/.pnpm/@monaco-editor+react@4.4.6_biqbaboplfbrettd7655fr4n2y/node_modules/@monaco-editor/react/lib/types.d.ts",
         "./node_modules/.pnpm/@rjsf+core@5.0.0-beta.9_xxggowvcxghin6obwjaqsepeeq/node_modules/@rjsf/core/dist/index.d.ts",
-        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
         "./node_modules/.pnpm/@types+lodash@4.14.185/node_modules/@types/lodash/index.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/@types+uuid@8.3.4/node_modules/@types/uuid/index.d.ts",
         "./node_modules/.pnpm/assemblyscript@0.21.4/node_modules/assemblyscript/dist/asc.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts",
+        "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/mobx.d.ts",
+        "./src/components/tree/index.tsx",
         "./src/lib/helper.ts",
         "./src/store/index.ts",
         "./src/store/lib/w3bstream/schema/fileslist.ts"
@@ -16155,8 +16234,7 @@
       "./src/components/ide/sidebar/filesitem.tsx": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/contextmenu/contextmenu.d.ts",
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/tree/tree.d.ts",
+        "./src/components/tree/index.tsx",
         "./src/store/index.ts",
         "./src/store/lib/w3bstream/schema/fileslist.ts"
       ],
@@ -16168,6 +16246,7 @@
         "./node_modules/.pnpm/react-icons@4.4.0_react@18.2.0/node_modules/react-icons/md/index.d.ts",
         "./src/components/ide/sidebar/filesitem.tsx",
         "./src/components/menu/index.tsx",
+        "./src/lib/helper.ts",
         "./src/store/index.ts"
       ],
       "./src/components/ide/toolbar/index.tsx": [
@@ -16223,6 +16302,16 @@
         "./src/components/common/simplepagination/index.tsx",
         "./src/store/standard/paginationstate.ts"
       ],
+      "./src/components/tree/index.tsx": [
+        "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
+        "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
+        "./node_modules/.pnpm/react-contextmenu@2.14.0_v2m5e27vhdewzwhryxwfaorcca/node_modules/react-contextmenu/src/index.d.ts",
+        "./src/components/menu/index.tsx",
+        "./src/lib/helper.ts",
+        "./src/store/index.ts",
+        "./src/store/lib/w3bstream/schema/fileslist.ts"
+      ],
       "./src/i18n/config.ts": [
         "./node_modules/.pnpm/i18next@21.8.11/node_modules/i18next/index.d.ts",
         "./node_modules/.pnpm/react-i18next@11.17.3_vth7g6zw6lco7clwxal23of2km/node_modules/react-i18next/ts4.1/index.d.ts",
@@ -16240,6 +16329,10 @@
         "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts",
         "./src/store/index.ts"
+      ],
+      "./src/lib/dexie.ts": [
+        "./node_modules/.pnpm/dexie@3.2.2/node_modules/dexie/dist/dexie.d.ts",
+        "./src/store/lib/w3bstream/schema/fileslist.ts"
       ],
       "./src/lib/event.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/events.d.ts",
@@ -16345,6 +16438,7 @@
         "./src/server/trpc.ts"
       ],
       "./src/server/routers/w3bstream.ts": [
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
         "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/index.d.ts",
         "./src/server/trpc.ts"
       ],
@@ -16370,6 +16464,8 @@
         "./src/lib/hooks.ts",
         "./src/lib/lodash.ts",
         "./src/lib/trpc.ts",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/lib/w3bstream/project.ts",
         "./src/store/lib/w3bstream/schema/config.ts",
         "./src/store/lib/w3bstream/schema/createapplet.ts",
         "./src/store/lib/w3bstream/schema/createproject.ts",
@@ -16382,6 +16478,18 @@
         "./src/store/root.ts",
         "./src/store/standard/promisestate.ts"
       ],
+      "./src/store/lib/w3bstream/project.ts": [
+        "./node_modules/.pnpm/@types+lodash@4.14.185/node_modules/@types/lodash/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/index.d.ts",
+        "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/mobx.d.ts",
+        "./src/lib/dexie.ts",
+        "./src/lib/helper.ts",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/index.ts",
+        "./src/store/lib/w3bstream/schema/fileslist.ts",
+        "./src/store/standard/jsonschemastate.ts",
+        "./src/store/standard/mappingstate.ts"
+      ],
       "./src/store/lib/w3bstream/schema/config.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/store/standard/jsonschemastate.ts",
@@ -16391,6 +16499,7 @@
         "./node_modules/.pnpm/@mantine+notifications@4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/notifications/lib/index.d.ts",
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
+        "./src/components/filewidget/index.tsx",
         "./src/lib/axios.ts",
         "./src/lib/event.ts",
         "./src/lib/theme.ts",
@@ -16420,8 +16529,9 @@
       "./src/store/lib/w3bstream/schema/fileslist.ts": [
         "./node_modules/.pnpm/@types+lodash@4.14.185/node_modules/@types/lodash/index.d.ts",
         "./node_modules/.pnpm/@types+uuid@8.3.4/node_modules/@types/uuid/index.d.ts",
-        "./src/lib/templatecode.ts",
-        "./src/store/standard/jsonschemastate.ts"
+        "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/mobx.d.ts",
+        "./src/lib/dexie.ts",
+        "./src/lib/templatecode.ts"
       ],
       "./src/store/lib/w3bstream/schema/login.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
@@ -16439,6 +16549,7 @@
       "./src/store/lib/w3bstream/schema/publishevent.ts": [
         "./node_modules/.pnpm/@mantine+notifications@4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/notifications/lib/index.d.ts",
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
+        "./src/components/editorwidget/index.tsx",
         "./src/lib/axios.ts",
         "./src/lib/event.ts",
         "./src/lib/theme.ts",
@@ -20976,13 +21087,6 @@
       "./node_modules/.pnpm/@types+react-dom@17.0.17/node_modules/@types/react-dom/index.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
       ],
-      "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/csstransition.d.ts": [
-        "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/transition.d.ts",
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/transition.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
       "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts": [
         "./node_modules/.pnpm/@types+prop-types@15.7.5/node_modules/@types/prop-types/index.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/global.d.ts",
@@ -20998,6 +21102,97 @@
       ],
       "./node_modules/.pnpm/assemblyscript@0.21.4/node_modules/assemblyscript/dist/assemblyscript.generated.d.ts": [
         "./node_modules/.pnpm/assemblyscript@0.21.4/node_modules/assemblyscript/dist/assemblyscript.generated.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/classtransformer.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/exclude.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/expose.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/index.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/exclude.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/expose.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-instance.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-plain.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-plain-to-instance.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform.decorator.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/type.decorator.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-instance.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-plain.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-plain-to-instance.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/type.decorator.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/index.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/transformation-type.enum.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/index.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/classtransformer.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-transformer-options.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/target-map.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-discriminator-descriptor.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-options.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-discriminator-descriptor.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-constructor.type.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-transformer-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/exclude-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/expose-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/transform-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-discriminator-descriptor.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-options.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/exclude-metadata.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/expose-metadata.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-fn-params.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-metadata.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/type-metadata.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/target-map.interface.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/type-help-options.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/exclude-metadata.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/expose-metadata.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-fn-params.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-transformer-options.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-metadata.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts",
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-fn-params.interface.d.ts"
+      ],
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/type-metadata.interface.d.ts": [
+        "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts"
+      ],
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file-selector.d.ts": [
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file.d.ts"
+      ],
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/index.d.ts": [
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file-selector.d.ts",
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file.d.ts"
       ],
       "./node_modules/.pnpm/framer-motion@7.5.3_biqbaboplfbrettd7655fr4n2y/node_modules/framer-motion/dist/index.d.ts": [
         "./node_modules/.pnpm/@motionone+dom@10.13.1/node_modules/@motionone/dom/types/index.d.ts",
@@ -21402,9 +21597,6 @@
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/types/type-utils.d.ts": [
         "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/internal.d.ts"
       ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts"
-      ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_app.d.ts"
       ],
@@ -21424,9 +21616,6 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/pages-manifest-plugin.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/webpack/webpack.d.ts"
       ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/index.d.ts",
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/url.d.ts",
@@ -21442,9 +21631,6 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/router/router.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
       ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
@@ -21462,10 +21648,6 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
       ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/api-utils/index.d.ts": [
@@ -21662,12 +21844,6 @@
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts"
       ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/get-page-files.d.ts",
@@ -21725,51 +21901,11 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts"
       ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
-      ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts"
       ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/fetch-event.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts",
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/types.d.ts"
-      ],
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts": [
-        "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/index.d.ts"
       ],
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/http.d.ts",
@@ -21875,30 +22011,12 @@
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/utils/point-from-vector.d.ts": [
         "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/types.d.ts"
       ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/contextmenu/contextmenu.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/csstransition/csstransition.d.ts",
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/menuitem/menuitem.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/csstransition/csstransition.d.ts": [
-        "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/csstransition.d.ts",
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/menuitem/menuitem.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/tree/tree.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/treenode/treenode.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/treenode/treenode.d.ts": [
-        "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/utils/utils.d.ts"
-      ],
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/utils/utils.d.ts": [
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
       "./node_modules/.pnpm/react-contextmenu@2.14.0_v2m5e27vhdewzwhryxwfaorcca/node_modules/react-contextmenu/src/index.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/react-dropzone@14.2.3_react@18.2.0/node_modules/react-dropzone/typings/react-dropzone.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/index.d.ts"
       ],
       "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/checkmark.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
@@ -23907,6 +24025,13 @@
       "./src/components/common/simplepagination/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts"
       ],
+      "./src/components/editorwidget/index.tsx": [
+        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts"
+      ],
+      "./src/components/filewidget/index.tsx": [
+        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
+        "./node_modules/.pnpm/react-dropzone@14.2.3_react@18.2.0/node_modules/react-dropzone/typings/react-dropzone.d.ts"
+      ],
       "./src/components/ide/sidebar/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts"
       ],
@@ -23947,11 +24072,18 @@
       "./src/components/table/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts"
       ],
+      "./src/components/tree/index.tsx": [
+        "./src/store/lib/w3bstream/schema/fileslist.ts"
+      ],
       "./src/i18n/config.ts": [
         "./node_modules/.pnpm/i18next@21.8.11/node_modules/i18next/index.d.ts"
       ],
       "./src/lib/axios.ts": [
         "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts"
+      ],
+      "./src/lib/dexie.ts": [
+        "./node_modules/.pnpm/dexie@3.2.2/node_modules/dexie/dist/dexie.d.ts",
+        "./src/store/lib/w3bstream/schema/fileslist.ts"
       ],
       "./src/lib/event.ts": [
         "./node_modules/.pnpm/typed-emitter@1.4.0/node_modules/typed-emitter/index.d.ts",
@@ -23970,14 +24102,14 @@
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
       ],
       "./src/pages/_app.tsx": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts",
+        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts",
         "./src/lib/superjson.ts"
       ],
       "./src/pages/_document.tsx": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts"
       ],
       "./src/pages/api/trpc/[trpc].ts": [
-        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+        "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
       ],
       "./src/server/context.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
@@ -23988,6 +24120,8 @@
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts"
       ],
       "./src/server/routers/_app.ts": [
+        "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
         "./src/lib/superjson.ts"
       ],
       "./src/server/routers/template.ts": [
@@ -24007,17 +24141,23 @@
       ],
       "./src/store/lib/w3bstream/index.ts": [
         "./node_modules/.pnpm/@mantine+spotlight@5.5.5_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/spotlight/lib/index.d.ts",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/lib/w3bstream/project.ts",
         "./src/store/lib/w3bstream/schema/config.ts",
         "./src/store/lib/w3bstream/schema/createapplet.ts",
         "./src/store/lib/w3bstream/schema/createproject.ts",
         "./src/store/lib/w3bstream/schema/createpublisher.ts",
-        "./src/store/lib/w3bstream/schema/fileslist.ts",
         "./src/store/lib/w3bstream/schema/login.ts",
         "./src/store/lib/w3bstream/schema/projectlist.ts",
         "./src/store/lib/w3bstream/schema/publishevent.ts",
         "./src/store/lib/w3bstream/schema/updatepassword.ts",
         "./src/store/root.ts",
         "./src/store/standard/promisestate.ts"
+      ],
+      "./src/store/lib/w3bstream/project.ts": [
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/lib/w3bstream/schema/fileslist.ts",
+        "./src/store/standard/mappingstate.ts"
       ],
       "./src/store/lib/w3bstream/schema/config.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
@@ -24033,9 +24173,6 @@
       ],
       "./src/store/lib/w3bstream/schema/createpublisher.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
-        "./src/store/standard/jsonschemastate.ts"
-      ],
-      "./src/store/lib/w3bstream/schema/fileslist.ts": [
         "./src/store/standard/jsonschemastate.ts"
       ],
       "./src/store/lib/w3bstream/schema/login.ts": [
@@ -25162,8 +25299,6 @@
       "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/zlib.d.ts",
       "./node_modules/.pnpm/@types+prop-types@15.7.5/node_modules/@types/prop-types/index.d.ts",
       "./node_modules/.pnpm/@types+react-dom@17.0.17/node_modules/@types/react-dom/index.d.ts",
-      "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/csstransition.d.ts",
-      "./node_modules/.pnpm/@types+react-transition-group@4.4.5/node_modules/@types/react-transition-group/transition.d.ts",
       "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/global.d.ts",
       "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
       "./node_modules/.pnpm/@types+scheduler@0.16.2/node_modules/@types/scheduler/tracing.d.ts",
@@ -25174,10 +25309,41 @@
       "./node_modules/.pnpm/assemblyscript@0.21.4/node_modules/assemblyscript/dist/assemblyscript.generated.d.ts",
       "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts",
       "./node_modules/.pnpm/bignumber.js@9.0.2/node_modules/bignumber.js/bignumber.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/classtransformer.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/exclude.decorator.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/expose.decorator.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/index.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-instance.decorator.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-instance-to-plain.decorator.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform-plain-to-instance.decorator.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/transform.decorator.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/decorators/type.decorator.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/index.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/enums/transformation-type.enum.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/index.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-constructor.type.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/class-transformer-options.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/exclude-options.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/expose-options.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/transform-options.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-discriminator-descriptor.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/decorator-options/type-options.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/index.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/exclude-metadata.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/expose-metadata.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-fn-params.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/transform-metadata.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/metadata/type-metadata.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/target-map.interface.d.ts",
+      "./node_modules/.pnpm/class-transformer@0.5.1/node_modules/class-transformer/types/interfaces/type-help-options.interface.d.ts",
       "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts",
       "./node_modules/.pnpm/css-box-model@1.2.1/node_modules/css-box-model/src/index.d.ts",
       "./node_modules/.pnpm/csstype@3.0.9/node_modules/csstype/index.d.ts",
       "./node_modules/.pnpm/csstype@3.1.0/node_modules/csstype/index.d.ts",
+      "./node_modules/.pnpm/dexie@3.2.2/node_modules/dexie/dist/dexie.d.ts",
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file-selector.d.ts",
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file.d.ts",
+      "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/index.d.ts",
       "./node_modules/.pnpm/framer-motion@7.5.3_biqbaboplfbrettd7655fr4n2y/node_modules/framer-motion/dist/index.d.ts",
       "./node_modules/.pnpm/goober@2.1.10/node_modules/goober/goober.d.ts",
       "./node_modules/.pnpm/i18next@21.8.11/node_modules/i18next/index.d.ts",
@@ -25282,26 +25448,22 @@
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/utils/global.d.ts",
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/utils/iterable.d.ts",
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/utils/utils.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/index.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/loaders/get-module-build-info.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/middleware-plugin.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/pages-manifest-plugin.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/page-loader.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/route-loader.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/webpack/webpack.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/lib/coalesced-function.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/lib/load-custom-routes.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_app.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/api-utils/index.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/base-http/index.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/base-http/node.d.ts",
@@ -25330,9 +25492,6 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/types.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/i18n/normalize-locale-path.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/image-config.d.ts",
@@ -25350,16 +25509,8 @@
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/runtime-config.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts",
-      "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts",
       "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts",
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/animations/generators/decay.d.ts",
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/animations/generators/keyframes.d.ts",
@@ -25397,14 +25548,9 @@
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/utils/velocity-per-frame.d.ts",
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/utils/velocity-per-second.d.ts",
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/utils/wrap.d.ts",
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/contextmenu/contextmenu.d.ts",
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/csstransition/csstransition.d.ts",
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/menuitem/menuitem.d.ts",
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/tree/tree.d.ts",
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/treenode/treenode.d.ts",
-      "./node_modules/.pnpm/primereact@8.6.1_iook5lngwdgxih63q5v7d3xfnm/node_modules/primereact/utils/utils.d.ts",
       "./node_modules/.pnpm/rc-pagination@3.1.17_biqbaboplfbrettd7655fr4n2y/node_modules/rc-pagination/rc-pagination.d.ts",
       "./node_modules/.pnpm/react-contextmenu@2.14.0_v2m5e27vhdewzwhryxwfaorcca/node_modules/react-contextmenu/src/index.d.ts",
+      "./node_modules/.pnpm/react-dropzone@14.2.3_react@18.2.0/node_modules/react-dropzone/typings/react-dropzone.d.ts",
       "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/checkmark.d.ts",
       "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/error.d.ts",
       "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/loader.d.ts",
@@ -25735,33 +25881,14 @@
       "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/types.d.ts",
       "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/zoderror.d.ts",
       "./src/components/common/simplepagination/index.tsx",
-      "./src/components/editor/index.tsx",
+      "./src/components/editorwidget/index.tsx",
+      "./src/components/filewidget/index.tsx",
       "./src/components/ide/allinstances/index.tsx",
       "./src/components/ide/allpublishers/index.tsx",
       "./src/components/ide/allstrategies/index.tsx",
       "./src/components/ide/applets/index.tsx",
       "./src/components/ide/dockerlogs/index.tsx",
-      [
-        "./src/components/ide/editor/index.tsx",
-        [
-          {
-            "file": "./src/components/ide/editor/index.tsx",
-            "start": 1570,
-            "length": 5,
-            "code": 2339,
-            "category": 1,
-            "messageText": "Property 'label' does not exist on type 'unknown'."
-          },
-          {
-            "file": "./src/components/ide/editor/index.tsx",
-            "start": 2729,
-            "length": 5,
-            "code": 2339,
-            "category": 1,
-            "messageText": "Property 'label' does not exist on type 'unknown'."
-          }
-        ]
-      ],
+      "./src/components/ide/editor/index.tsx",
       "./src/components/ide/header/index.tsx",
       "./src/components/ide/index.tsx",
       "./src/components/ide/sidebar/filesitem.tsx",
@@ -25776,6 +25903,30 @@
       "./src/components/menu/menuitem.tsx",
       "./src/components/menu/menulist.tsx",
       "./src/components/table/index.tsx",
+      [
+        "./src/components/tree/index.tsx",
+        [
+          {
+            "file": "./src/components/tree/index.tsx",
+            "start": 5849,
+            "length": 5,
+            "code": 2322,
+            "category": 1,
+            "messageText": {
+              "messageText": "Type '{ children: Element; style: { cursor: string; }; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<MenuItemProps, any, any>> & Readonly<MenuItemProps> & Readonly<...>'.",
+              "category": 1,
+              "code": 2322,
+              "next": [
+                {
+                  "messageText": "Property 'style' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<MenuItemProps, any, any>> & Readonly<MenuItemProps> & Readonly<...>'.",
+                  "category": 1,
+                  "code": 2339
+                }
+              ]
+            }
+          }
+        ]
+      ],
       "./src/i18n/config.ts",
       "./src/i18n/de/translation.json",
       "./src/i18n/en/translation.json",
@@ -25786,6 +25937,19 @@
       "./src/i18n/zh-cn/translation.json",
       "./src/i18n/zh-tw/translation.json",
       "./src/lib/axios.ts",
+      [
+        "./src/lib/dexie.ts",
+        [
+          {
+            "file": "./src/lib/dexie.ts",
+            "start": 9,
+            "length": 9,
+            "messageText": "Module '\"@/store/lib/w3bstream/schema/filesList\"' has no exported member 'FilesType'.",
+            "category": 1,
+            "code": 2305
+          }
+        ]
+      ],
       "./src/lib/event.ts",
       "./src/lib/helper.ts",
       "./src/lib/hooks.ts",
@@ -25822,6 +25986,7 @@
       "./src/store/index.ts",
       "./src/store/lang.ts",
       "./src/store/lib/w3bstream/index.ts",
+      "./src/store/lib/w3bstream/project.ts",
       "./src/store/lib/w3bstream/schema/config.ts",
       "./src/store/lib/w3bstream/schema/createapplet.ts",
       "./src/store/lib/w3bstream/schema/createproject.ts",
@@ -35129,6 +35294,10 @@
         1
       ],
       [
+        "./node_modules/.pnpm/dexie@3.2.2/node_modules/dexie/dist/dexie.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/ethcall@4.7.2/node_modules/ethcall/lib/abi.d.ts",
         1
       ],
@@ -35214,6 +35383,18 @@
       ],
       [
         "./node_modules/.pnpm/eventemitter3@4.0.7/node_modules/eventemitter3/index.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file-selector.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/index.d.ts",
         1
       ],
       [
@@ -37113,6 +37294,10 @@
         1
       ],
       [
+        "./node_modules/.pnpm/react-dropzone@14.2.3_react@18.2.0/node_modules/react-dropzone/typings/react-dropzone.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/checkmark.d.ts",
         1
       ],
@@ -39005,7 +39190,15 @@
         1
       ],
       [
+        "./src/components/editorwidget/index.tsx",
+        1
+      ],
+      [
         "./src/components/ethprovider/index.tsx",
+        1
+      ],
+      [
+        "./src/components/filewidget/index.tsx",
         1
       ],
       [
@@ -39185,6 +39378,10 @@
         1
       ],
       [
+        "./src/components/tree/index.tsx",
+        1
+      ],
+      [
         "./src/components/walletinfo/index.tsx",
         1
       ],
@@ -39246,6 +39443,10 @@
       ],
       [
         "./src/lib/axios.ts",
+        1
+      ],
+      [
+        "./src/lib/dexie.ts",
         1
       ],
       [
@@ -39422,6 +39623,10 @@
       ],
       [
         "./src/store/lib/w3bstream/index.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/project.ts",
         1
       ],
       [
