@@ -70,6 +70,7 @@
     "node-docker-api": "^1.1.22",
     "node-prune": "^1.0.2",
     "numeral": "^2.0.6",
+    "primeicons": "^6.0.1",
     "promise-retry": "^2.0.1",
     "prop-types": "^15.8.1",
     "rc-pagination": "^3.1.17",

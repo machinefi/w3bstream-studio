@@ -65,6 +65,7 @@ specifiers:
   node-docker-api: ^1.1.22
   node-prune: ^1.0.2
   numeral: ^2.0.6
+  primeicons: ^6.0.1
   prisma: ^4.4.0
   promise-retry: ^2.0.1
   prop-types: ^15.8.1
@@ -139,6 +140,7 @@ dependencies:
   node-docker-api: 1.1.22
   node-prune: 1.0.2
   numeral: 2.0.6
+  primeicons: 6.0.1
   promise-retry: 2.0.1
   prop-types: 15.8.1
   rc-pagination: 3.1.17_biqbaboplfbrettd7655fr4n2y
@@ -3193,6 +3195,10 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
+    dev: false
+
+  /primeicons/6.0.1:
+    resolution: {integrity: sha512-KDeO94CbWI4pKsPnYpA1FPjo79EsY9I+M8ywoPBSf9XMXoe/0crjbUK7jcQEDHuc0ZMRIZsxH3TYLv4TUtHmAA==}
     dev: false
 
   /prisma/4.4.0:
