@@ -54,7 +54,10 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           }
         },
         payload: {
-          'ui:widget': EditorWidget
+          'ui:widget': EditorWidget,
+          'ui:options': {
+            emptyValue: `{"payload":"xxx yyy zzz"}`
+          }
         }
       },
 
@@ -89,12 +92,10 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
         //   }
         // }
 
-        let data = `{"payload":"xxx yyy zzz"}`;
+        let data = '{}';
         try {
-          data = JSON.parse(payload)
-        } catch (error) {
-
-        }
+          data = JSON.parse(payload);
+        } catch (error) {}
 
         const res = await axios.request({
           method: 'post',

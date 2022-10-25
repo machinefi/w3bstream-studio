@@ -23,9 +23,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
         theme="vs-dark"
         defaultLanguage="json"
         defaultValue={value}
-        onChange={(e) => {
-          handleChange(e);
-        }}
+        onChange={handleChange}
       />
     </Flex>
   );
