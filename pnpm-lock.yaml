@@ -65,8 +65,6 @@ specifiers:
   node-docker-api: ^1.1.22
   node-prune: ^1.0.2
   numeral: ^2.0.6
-  primeicons: ^6.0.1
-  primereact: ^8.6.1
   prisma: ^4.4.0
   promise-retry: ^2.0.1
   prop-types: ^15.8.1
@@ -140,8 +138,6 @@ dependencies:
   node-docker-api: 1.1.22
   node-prune: 1.0.2
   numeral: 2.0.6
-  primeicons: 6.0.1
-  primereact: 8.6.1_iook5lngwdgxih63q5v7d3xfnm
   promise-retry: 2.0.1
   prop-types: 15.8.1
   rc-pagination: 3.1.17_biqbaboplfbrettd7655fr4n2y
@@ -2551,6 +2547,23 @@ packages:
     resolution: {integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==}
     dev: false
 
+  /dexie-react-hooks/1.1.1_v3ms5jebdbsj6le67ymfczyos4:
+    resolution: {integrity: sha512-Cam5JP6PxHN564RvWEoe8cqLhosW0O4CAZ9XEVYeGHJBa6KEJlOpd9CUpV3kmU9dm2MrW97/lk7qkf1xpij7gA==}
+    peerDependencies:
+      '@types/react': '>=16'
+      dexie: '>=3.1.0-alpha.1 <5.0.0'
+      react: '>=16'
+    dependencies:
+      '@types/react': 17.0.47
+      dexie: 3.2.2
+      react: 18.2.0
+    dev: false
+
+  /dexie/3.2.2:
+    resolution: {integrity: sha512-q5dC3HPmir2DERlX+toCBbHQXW5MsyrFqPFcovkH9N2S/UW/H3H5AWAB6iEOExeraAu+j+zRDG+zg/D7YhH0qg==}
+    engines: {node: '>=6.0'}
+    dev: false
+
   /docker-modem/0.3.7:
     resolution: {integrity: sha512-4Xn4ZVtc/2DEFtxY04lOVeF7yvxwXGVo0sN8FKRBnLhBcwQ78Hb56j+Z5yAXXUhoweVhzGeBeGWahS+af0/mcg==}
     engines: {node: '>= 0.8'}
@@ -3166,29 +3179,6 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: false
-
-  /primeicons/6.0.1:
-    resolution: {integrity: sha512-KDeO94CbWI4pKsPnYpA1FPjo79EsY9I+M8ywoPBSf9XMXoe/0crjbUK7jcQEDHuc0ZMRIZsxH3TYLv4TUtHmAA==}
-    dev: false
-
-  /primereact/8.6.1_iook5lngwdgxih63q5v7d3xfnm:
-    resolution: {integrity: sha512-dCavcAztsB8cqrGw0iSpSLIGos5ZYHLIWWS3skaxqd2jOs6dCclkcEBbvlO3FDYIkpCq9a6pROJnFUaqo35a4w==}
-    peerDependencies:
-      '@types/react': ^17.0.0 || ^18.0.0
-      primeicons: ^5.0.0 || ^6.0.0
-      react: ^17.0.0 || ^18.0.0
-      react-dom: ^17.0.0 || ^18.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-    dependencies:
-      '@types/react': 17.0.47
-      '@types/react-transition-group': 4.4.5
-      primeicons: 6.0.1
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      react-transition-group: 4.4.2_biqbaboplfbrettd7655fr4n2y
     dev: false
 
   /prisma/4.4.0:

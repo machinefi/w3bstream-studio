@@ -1,10 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
-import type { NextPage } from 'next';
-import Head from 'next/head';
 import MonacoEditor from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 let asc: typeof import('assemblyscript/dist/asc');
-import { Button, Container, Group, Tabs } from '@mantine/core';
 import { useStore } from '@/store/index';
 import { Box, Flex, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
@@ -12,15 +9,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
 import _ from 'lodash';
 import { IChangeEvent } from '@rjsf/core';
-import { dataURItoBlob } from '@rjsf/utils';
 import { FileIcon } from '@/components/Tree';
-import { SmallCloseIcon } from '@chakra-ui/icons';
+import { toJS } from 'mobx';
 
 const Editor = observer(() => {
-  const { w3s } = useStore();
-  let curFilesListSchema = w3s.projectManager?.curFilesListSchema;
-  let curActiveFile = curFilesListSchema?.curActiveFile;
-  let activeFiles = curFilesListSchema?.activeFiles;
+  const {
+    w3s,
+    w3s: {
+      projectManager: {
+        curFilesListSchema,
+        curFilesListSchema: { curActiveFile, activeFiles }
+      }
+    }
+  } = useStore();
 
   const store = useLocalObservable(() => ({
     curPreviewRawData: null,
@@ -33,11 +34,12 @@ const Editor = observer(() => {
       try {
         const { error, binary, text } = await asc.compileString(filesItem.data.code, {
           optimizeLevel: 4,
-          runtime: 'minimal'
+          runtime: 'minimal',
+          debug: true
         });
         // console.log(binary, text);
         if (error) console.log(error);
-        const currentFolder = curFilesListSchema.findCurFolder(curFilesListSchema.extraData.files);
+        const currentFolder = curFilesListSchema.findCurFolder(curFilesListSchema.files);
         const wasmFileName = filesItem?.label.replace('.ts', '') + '.wasm';
         const curWasmIndex = _.findIndex(currentFolder.children, (i) => i.label == wasmFileName);
         const wasmFile: FilesItemType = {
@@ -54,10 +56,11 @@ const Editor = observer(() => {
         if (curWasmIndex == -1) {
           currentFolder.children.push(wasmFile);
         } else {
+          wasmFile.key = currentFolder.children[curWasmIndex].key;
           currentFolder.children[curWasmIndex] = wasmFile;
         }
         curFilesListSchema.setActiveFiles(wasmFile);
-        console.log('current folder ->', helper.log(curFilesListSchema.findCurFolder(curFilesListSchema.extraData.files)));
+        console.log('current folder ->', helper.log(curFilesListSchema.findCurFolder(curFilesListSchema.files)));
         toast.success('Compile Success!');
       } catch (error) {
         console.log(error);
@@ -79,10 +82,27 @@ const Editor = observer(() => {
       `;
     },
     genHTMLRawData(filesItem: FilesItemType) {
-      const curWasmIndex = _.findIndex(activeFiles, (i) => i.label.endsWith('.wasm'));
+      const curWasmIndex = _.findIndex(curFilesListSchema?.activeFiles, (i) => i?.label.endsWith('.wasm'));
+      console.log(curFilesListSchema?.activeFiles, curWasmIndex, activeFiles[curWasmIndex]);
       if (curWasmIndex == -1) return toast.error('No wasm file find!');
-      this.curPreviewRawData = window.btoa(this.getCompileScript(activeFiles[curWasmIndex].data.extraData?.raw) + filesItem.data.code);
+      const arr = [];
+      console.log(activeFiles, activeFiles[curWasmIndex], curWasmIndex);
+      for (let key in toJS(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw)) {
+        arr.push(toJS(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw)[key]);
+      }
+      this.curPreviewRawData = window.btoa(this.getCompileScript(arr) + filesItem.data.code);
       this.showPreviewMode = true;
+    },
+    getLanguage(filesItem: FilesItemType) {
+      if (filesItem.label.endsWith('.go')) {
+        return 'go';
+      }
+      if (filesItem.label.endsWith('.html')) {
+        return 'html';
+      }
+      if (filesItem.label.endsWith('.ts')) {
+        return 'typescript';
+      }
     }
   }));
 
@@ -99,26 +119,30 @@ const Editor = observer(() => {
       <Flex w="full" bg="#2f3030" alignItems={'center'}>
         {activeFiles?.map((i) => {
           return (
-            <Box
-              onClick={() => {
-                store.showPreviewMode = false;
-                curFilesListSchema.setCurActiveFile(i);
-              }}
-              display="flex"
-              py={2}
-              px={2}
-              background={i?.key == curActiveFile?.key ? '#1e1e1e' : 'none'}
-              fontSize="sm"
-              color={i?.key == curActiveFile?.key ? '#a9dc76' : 'white'}
-              cursor="pointer"
-              alignItems={'center'}
-            >
-              {FileIcon(i)}
-            <Text mr="4">{i?.label}</Text>
-              {/* <SmallCloseIcon _hover={{ bg: '#3f3f3f' }} color="white" ml="auto" onClick={()=>{
-                curFilesListSchema.deleteActiveFiles(i)
-              }}/> */}
-            </Box>
+            <>
+              {i?.label && (
+                <Box
+                  onClick={() => {
+                    store.showPreviewMode = false;
+                    curFilesListSchema.setCurActiveFile(i);
+                  }}
+                  display="flex"
+                  py={2}
+                  px={2}
+                  background={i?.key == curActiveFile?.key ? '#1e1e1e' : 'none'}
+                  fontSize="sm"
+                  color={i?.key == curActiveFile?.key ? '#a9dc76' : 'white'}
+                  cursor="pointer"
+                  alignItems={'center'}
+                >
+                  {FileIcon(i)}
+                  <Text mr="4">{i?.label}</Text>
+                  {/* <SmallCloseIcon _hover={{ bg: '#3f3f3f' }} color="white" ml="auto" onClick={()=>{
+                  curFilesListSchema.deleteActiveFiles(i)
+                }}/> */}
+                </Box>
+              )}
+            </>
           );
         })}
 
@@ -189,7 +213,7 @@ const Editor = observer(() => {
                 width={'100%'}
                 height={400}
                 theme="vs-dark"
-                language={curActiveFile?.data?.language}
+                language={store.getLanguage(curActiveFile)}
                 defaultValue="export function test(): void {}"
                 value={curActiveFile?.data?.code}
                 beforeMount={(monaco) => {
@@ -201,6 +225,7 @@ const Editor = observer(() => {
               />
             </div>
           )}
+          {/* <Box mt={4} w="100%" h="200px" p="10px" bg="#1D262D" color="#98AABA" whiteSpace="pre-line" overflowY="auto" dangerouslySetInnerHTML={{ __html: '123123' }} /> */}
         </main>
       ) : (
         <>No File Selected!</>

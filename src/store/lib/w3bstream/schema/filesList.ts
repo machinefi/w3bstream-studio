@@ -1,10 +1,6 @@
 import { IndexDb } from '@/lib/dexie';
-import { toast } from '@/lib/helper';
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONValue } from '@/store/standard/JSONSchemaState';
 import _ from 'lodash';
-import { toJS } from 'mobx';
-import { string } from 'prop-types';
+import { toJS, makeAutoObservable } from 'mobx';
 import { v4 as uuidv4 } from 'uuid';
 import { templatecode } from '../../../../lib/templatecode';
 
@@ -25,55 +21,44 @@ export type FilesItemType = {
   children?: FilesItemType[];
 };
 
-export type FilesType = {
-  activeFileIds?: string[];
-  curActiveFileId?: string;
-  files: FilesItemType[];
-};
-
 //todo create file in value
-export class FilesListSchema extends JSONSchemaState<null, FilesType> {
+export class FilesListSchema {
   lockFile: boolean = true;
   project_id: string;
-  constructor(args: Partial<FilesListSchema> = {}) {
-    super(args);
-    this.init({
-      reactive: true,
-      extraValue: new JSONValue<FilesType>({
-        default: {
-          activeFileIds: [],
-          curActiveFileId: null,
-          files: [
-            {
-              key: uuidv4(),
-              type: 'folder',
-              label: 'Browser Files',
-              children: [
-                {
-                  type: 'file',
-                  key: uuidv4(),
-                  label: `module.ts`,
-                  data: { code: templatecode['module.ts'], language: 'typescript' }
-                },
-                { type: 'file', key: uuidv4(), label: `index.html`, data: { code: templatecode['index.html'], language: 'html' } }
-              ]
-            },
-            {
-              key: uuidv4(),
-              label: 'Remote Files',
-              type: 'folder',
-              children: [
-                {
-                  type: 'file',
-                  key: uuidv4(),
-                  label: `module.ts`
-                }
-              ]
-            }
-          ]
+  activeFileIds: string[] = [];
+  curActiveFileId: string = '';
+  files: FilesItemType[] = [
+    {
+      key: uuidv4(),
+      type: 'folder',
+      label: 'Browser Files',
+      children: [
+        {
+          type: 'file',
+          key: uuidv4(),
+          label: `module.ts`,
+          data: { code: templatecode['module.ts'], language: 'typescript' }
+        },
+        { type: 'file', key: uuidv4(), label: `index.html`, data: { code: templatecode['index.html'], language: 'html' } }
+      ]
+    },
+    {
+      key: uuidv4(),
+      label: 'Remote Files',
+      type: 'folder',
+      children: [
+        {
+          type: 'file',
+          key: uuidv4(),
+          label: `module.ts`
         }
-      })
-    });
+      ]
+    }
+  ]
+
+  constructor(args:Partial<FilesListSchema>) {
+    Object.assign(this,args)
+    makeAutoObservable(this);
   }
 
   findFile(objects: FilesItemType[], key: string): FilesItemType {
@@ -86,22 +71,22 @@ export class FilesListSchema extends JSONSchemaState<null, FilesType> {
 
   findCurFolder(objects: FilesItemType[]): FilesItemType {
     for (let o of objects || []) {
-      if (o.children?.find((i) => i.key == this.extraData.curActiveFileId)) return o;
+      if (o.children?.find((i) => i.key == this.curActiveFileId)) return o;
       const o_ = this.findCurFolder(o.children);
       if (o_) return o_;
     }
   }
 
-  get activeFiles() {
-    const activeFiles = [];
-    this.extraData.activeFileIds?.forEach((key) => {
-      activeFiles.push(this.findFile(this.extraData.files, key));
+  get activeFiles(): FilesItemType[] {
+    const activeFiles: FilesItemType[] = [];
+    this.activeFileIds?.forEach((key) => {
+      activeFiles.push(this.findFile(this.files, key));
     });
     return activeFiles;
   }
 
   get curActiveFile() {
-    return this.findFile(this.extraData.files, this.extraData.curActiveFileId);
+    return this.findFile(this.files, this.curActiveFileId);
   }
 
   createFileFormFolder(file: FilesItemType, action: 'file' | 'folder') {
@@ -130,22 +115,28 @@ export class FilesListSchema extends JSONSchemaState<null, FilesType> {
   }
 
   deleteFile(file: FilesItemType) {
-    const curFolder = this.findCurFolder(this.extraData.files);
+    const curFolder = this.findCurFolder(this.files);
     _.remove(curFolder.children, (i) => i.key == file.key);
-    this.syncToIndexDb();
+    this.deleteActiveFiles(file);
   }
 
   setActiveFiles(activeFile: FilesItemType) {
-    const index = _.findIndex(this.extraData.activeFileIds, (i) => i == activeFile.key);
+    const index = _.findIndex(this.activeFileIds, (i) => i == activeFile.key);
     if (index == -1) {
-      this.extraData.activeFileIds.push(activeFile.key);
+      this.activeFileIds.push(activeFile.key);
     }
     this.syncToIndexDb();
   }
 
   deleteActiveFiles(activeFile: FilesItemType) {
-    _.remove(this.extraData.activeFileIds, (i) => i == activeFile.key);
-    console.log(toJS(this.extraData.activeFileIds));
+    const index = _.findIndex(this.activeFileIds, (i) => i == activeFile.key);
+    if (index != -1) {
+      if (this.activeFileIds[index] == this.curActiveFileId) {
+        this.curActiveFileId = '';
+        console.log('curActiveFileId null', this.curActiveFileId);
+      }
+      _.remove(this.activeFileIds, (i) => i == activeFile.key);
+    }
     this.syncToIndexDb();
   }
 
@@ -166,7 +157,7 @@ export class FilesListSchema extends JSONSchemaState<null, FilesType> {
   }
 
   setCurActiveFile(activeFile: FilesItemType) {
-    this.extraData.curActiveFileId = activeFile.key;
+    this.curActiveFileId = activeFile.key;
     this.lockFile = true;
     this.setActiveFiles(activeFile);
   }
@@ -174,9 +165,9 @@ export class FilesListSchema extends JSONSchemaState<null, FilesType> {
   async syncToIndexDb() {
     const IndexDbFile = await IndexDb.findFilesById(String(this.project_id));
     if (IndexDbFile[0]) {
-      await IndexDb.files.update(String(this.project_id), { data: toJS(this.extraData) });
+      await IndexDb.files.update(String(this.project_id), { data: toJS(this) });
     } else {
-      await IndexDb.files.add({ id: String(this.project_id), data: toJS(this.extraData) });
+      await IndexDb.files.add({ id: String(this.project_id), data: toJS(this) });
     }
   }
 }

@@ -13,6 +13,7 @@ export class JSONSchemaState<T, V = any> {
     return this.extraValue.get();
   }
   set extraData(value: V) {
+    console.log('set')
     this.extraValue.set(value);
   }
 
@@ -91,8 +92,11 @@ export abstract class JSONSchemaValue<T> {
     });
   }
   set(value: any) {
+    console.log('deepMerge set',value)
     value = this.setFormat(value);
+    console.log('deepMerge set',value)
     const newVal = helper.deepMerge(this.value, value);
+    console.log('deepMerge set',newVal)
     this.value = toJS(newVal);
     return this.value;
   }
@@ -100,6 +104,7 @@ export abstract class JSONSchemaValue<T> {
     return value;
   }
   get() {
+    console.log('deepMerge get',this.value)
     return this.getFormat(this.value);
   }
   getFormat(value: any) {

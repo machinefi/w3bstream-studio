@@ -2,9 +2,9 @@ import { useStore } from '@/store/index';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Box, Flex, Image, ImageProps, Portal } from '@chakra-ui/react';
-import { observer } from 'mobx-react-lite';
-import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
-import { MenuItem, Menu } from '@/components/Menu';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { ContextMenu, ContextMenuTrigger,MenuItem  } from 'react-contextmenu';
+import { Menu } from '@/components/Menu';
 import { toast } from '@/lib/helper';
 
 export const FileIcon = (file: FilesItemType) => {
@@ -42,20 +42,49 @@ type IProps = {
   onSelect?: (file: FilesItemType) => void;
 };
 
+
 export const Tree = observer(({ data, onSelect }: IProps) => {
   const { w3s } = useStore();
+
   const curFilekey = w3s.projectManager?.curFilesListSchema?.curActiveFile?.key;
+
+  const FolderSetting=[
+    {
+      name:"New File",
+      onClick:(item)=>w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file')
+    },
+    {
+      name:"New Folder",
+      onClick:(item)=>w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'folder')
+    },
+    {
+      name:"Delete",
+      onClick:(item)=>w3s.projectManager.curFilesListSchema.deleteFile(item)
+    }
+  ]
+  
+  const FileSetting=[
+    {
+      name:"Rename",
+      onClick:(item)=> item.isRename = true
+    },
+    {
+      name:"Delete",
+      onClick:(item)=> w3s.projectManager.curFilesListSchema.deleteFile(item)
+    },
+  ]
   return (
     <Flex flexDirection="column" cursor="pointer">
       {data?.map?.((item: FilesItemType) => {
         return (
-          <ContextMenuTrigger id={`ProjectItemContext${item.key}`} holdToDisplay={-1}>
+          <>
             <Flex
               pl={5}
               key={item.key}
               flexDirection="column"
               onClick={(e) => {
                 e.stopPropagation();
+                if(w3s.projectManager?.rightClickLock) return
                 if (item.type == 'folder') {
                   item.isOpen = !item.isOpen;
                 } else {
@@ -63,91 +92,94 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                 }
               }}
             >
-              <Flex px={1} py={1} alignItems={'center'} _hover={{ bg: '#f6f6f6' }} bg={item.key == curFilekey ? '#f6f6f6' : ''}>
-                {item.children && <> {item?.isOpen ? <ChevronDownIcon mr={1} /> : <ChevronRightIcon mr={1} />}</>}
-                {FileIcon(item)}
-                {item.isRename ? (
-                  <input
-                    autoFocus
-                    type="text"
-                    style={{ outline: 'none' }}
-                    value={item.label}
-                    onChange={(e) => {
-                      item.label = e.target.value;
-                    }}
-                    onBlur={() => {
-                      if (item.label == '') return toast.warning('name can not empty');
-                      item.isRename = false;
-                    }}
-                  ></input>
-                ) : (
-                  <Box
-                    cursor={'text'}
-                    as="span"
-                    userSelect="none"
-                    onDoubleClick={(e) => {
-                      e.stopPropagation();
-                      item.isRename = true;
-                    }}
-                  >
-                    {item.label}
-                  </Box>
-                )}
-
-                <Portal>
-                  <ContextMenu id={`ProjectItemContext${item.key}`}>
-                    <Menu bordered>
-                      {item.type == 'folder' ? (
-                        <>
-                          <MenuItem
-                            onItemSelect={() => {
-                              w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file');
-                            }}
-                          >
-                            New File
-                          </MenuItem>
-                          <MenuItem
-                            onItemSelect={() => {
-                              w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'folder');
-                            }}
-                          >
-                            New Folder
-                          </MenuItem>
-                          <MenuItem
-                            onItemSelect={() => {
-                              console.log(item);
-                              w3s.projectManager.curFilesListSchema.deleteFile(item);
-                            }}
-                          >
-                            Delete
-                          </MenuItem>
-                        </>
-                      ) : (
-                        <>
-                          <MenuItem
-                            onItemSelect={() => {
-                              item.isRename = true;
-                            }}
-                          >
-                            Rename
-                          </MenuItem>
-                          <MenuItem
-                            onItemSelect={() => {
-                              console.log(item);
-                              w3s.projectManager.curFilesListSchema.deleteFile(item);
-                            }}
-                          >
-                            Delete
-                          </MenuItem>
-                        </>
-                      )}
-                    </Menu>
-                  </ContextMenu>
-                </Portal>
-              </Flex>
-              {item.children && item.isOpen && <Tree data={item.children} onSelect={onSelect} />}
+              <ContextMenuTrigger id={`ProjectItemContext${item.key}`} holdToDisplay={-1}>
+                <Flex px={1} py={1} alignItems={'center'} _hover={{ bg: '#f6f6f6' }} bg={item.key == curFilekey ? '#f6f6f6' : ''}>
+                  {item.children && <> {item?.isOpen ? <ChevronDownIcon mr={1} /> : <ChevronRightIcon mr={1} />}</>}
+                  {FileIcon(item)}
+                  {item.isRename ? (
+                    <input
+                      autoFocus
+                      type="text"
+                      style={{ outline: 'none' }}
+                      value={item.label}
+                      onChange={(e) => {
+                        item.label = e.target.value;
+                      }}
+                      onBlur={() => {
+                        if (item.label == '') return toast.warning('name can not empty');
+                        item.isRename = false;
+                      }}
+                    ></input>
+                  ) : (
+                    <Box
+                      cursor={'text'}
+                      as="span"
+                      userSelect="none"
+                      onDoubleClick={(e) => {
+                        e.stopPropagation();
+                        item.isRename = true;
+                      }}
+                    >
+                      {item.label}
+                    </Box>
+                  )}
+                </Flex>
+                {item.children && item.isOpen && <Tree data={item.children} onSelect={onSelect} />}
+              </ContextMenuTrigger>
             </Flex>
-          </ContextMenuTrigger>
+
+            <Portal>
+              <ContextMenu
+                id={`ProjectItemContext${item.key}`}
+                onShow={() => {
+                  w3s.projectManager.rightClickLock = true
+                  console.log('show',w3s.projectManager.rightClickLock)
+                }}
+                onHide={() => {
+                  setTimeout(()=>{
+                    w3s.projectManager.rightClickLock = false
+                  },500)
+                }}
+              >
+                <Menu bordered p={2}>
+                  {item.type == 'folder' ? (
+                    <>
+                    {
+                      FolderSetting.map(i=>{
+                        return  <MenuItem
+                        onClick={() => {
+                        i.onClick(item)
+                        }}
+                      >
+                        <Box cursor="pointer">
+                        {i.name}
+                        </Box>
+                      </MenuItem>
+                      })
+                    }
+                    </>
+                  ) : (
+                    <>
+                     {
+                      FileSetting.map(i=>{
+                        return  <MenuItem
+                        style={{cursor:"pointer"}}
+                        onClick={() => {
+                        i.onClick(item)
+                        }}
+                      >
+                       <Box cursor="pointer">
+                        {i.name}
+                        </Box>
+                      </MenuItem>
+                      })
+                    }
+                    </>
+                  )}
+                </Menu>
+              </ContextMenu>
+            </Portal>
+          </>
         );
       })}
     </Flex>

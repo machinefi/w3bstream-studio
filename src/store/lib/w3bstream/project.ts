@@ -2,7 +2,7 @@ import { ProjectsType } from '@/server/routers/w3bstream';
 import { makeAutoObservable } from 'mobx';
 import { Type } from 'class-transformer';
 import { MappingState } from '@/store/standard/MappingState';
-import { FilesListSchema, FilesType } from './schema/filesList';
+import { FilesListSchema } from './schema/filesList';
 import _ from 'lodash';
 import { rootStore } from '../../index';
 // import RootStore from '@/store/root';
@@ -12,7 +12,7 @@ import { JSONValue } from '@/store/standard/JSONSchemaState';
 
 export class ProjectManager {
   projects: ProjectsType[] = [];
-
+  rightClickLock:boolean = false;
   files: MappingState<FilesListSchema> = new MappingState({
     currentId: '',
     map: {}
@@ -20,7 +20,7 @@ export class ProjectManager {
 
   get curFilesList() {
     this.files.setCurrentId(String(rootStore?.w3s.curProject?.f_project_id));
-    return this.files.current?.extraData?.files;
+    return this.files.current?.files;
   }
 
   get curFilesListSchema() {
@@ -36,10 +36,7 @@ export class ProjectManager {
     _.each(rootStore?.w3s.allProjects.value, async (v: ProjectsType, k) => {
       const IndexDbFile = await IndexDb.findFilesById(String(v.f_project_id));
       if (IndexDbFile[0]) {
-        const filesListSchema = new FilesListSchema({
-          project_id: IndexDbFile[0].id
-        });
-        filesListSchema.extraData = IndexDbFile[0].data;
+        let filesListSchema = new FilesListSchema(IndexDbFile[0].data);
         this.files.setMap(String(v.f_project_id), filesListSchema);
       } else {
         this.files.setMap(String(v.f_project_id), new FilesListSchema({ project_id: String(v.f_project_id) }));

@@ -11,8 +11,6 @@ import NextRouter from 'next/router';
 import type { AppRouter } from '@/server/routers/_app';
 import type { AppProps } from 'next/app';
 import { NotificationsProvider } from '@mantine/notifications';
-import 'primereact/resources/themes/tailwind-light/theme.css';
-import "../../primereact.reset.css"
 import { eventBus } from '@/lib/event';
 import superjson from 'superjson';
 import { SpotlightProvider } from '@mantine/spotlight';
