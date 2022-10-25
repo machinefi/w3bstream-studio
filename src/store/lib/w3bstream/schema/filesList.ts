@@ -54,10 +54,10 @@ export class FilesListSchema {
         }
       ]
     }
-  ]
+  ];
 
-  constructor(args:Partial<FilesListSchema>) {
-    Object.assign(this,args)
+  constructor(args: Partial<FilesListSchema>) {
+    Object.assign(this, args);
     makeAutoObservable(this);
   }
 
@@ -116,7 +116,9 @@ export class FilesListSchema {
 
   deleteFile(file: FilesItemType) {
     const curFolder = this.findCurFolder(this.files);
-    _.remove(curFolder.children, (i) => i.key == file.key);
+    if (curFolder.children) {
+      _.remove(curFolder.children, (i) => i.key == file.key);
+    }
     this.deleteActiveFiles(file);
   }
 

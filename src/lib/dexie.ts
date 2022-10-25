@@ -1,9 +1,9 @@
-import { FilesType } from '@/store/lib/w3bstream/schema/filesList';
+import { FilesListSchema } from '@/store/lib/w3bstream/schema/filesList';
 import Dexie, { Table } from 'dexie';
 
 export interface Files {
   id?: string;
-  data: FilesType;
+  data: FilesListSchema;
 }
 
 class IndexDatabase extends Dexie {

@@ -62,7 +62,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
       onClick:(item)=>w3s.projectManager.curFilesListSchema.deleteFile(item)
     }
   ]
-  
+
   const FileSetting=[
     {
       name:"Rename",
@@ -163,7 +163,6 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                      {
                       FileSetting.map(i=>{
                         return  <MenuItem
-                        style={{cursor:"pointer"}}
                         onClick={() => {
                         i.onClick(item)
                         }}
