@@ -26,7 +26,8 @@ export const schema = {
       }
     },
     body: { type: 'string' }
-  }
+  },
+  required: ['url', 'method', 'headers', 'body']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -72,11 +73,12 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
           body: JSON.stringify({ foo: 'bar' }, null, 2)
         }
       }),
-      afterChange: (e) => {
-        if (e.formData.api) {
+      onChange: (e) => {
+        console.log(e);
+        if (e.formData.api !== this.formData.api) {
           this.value.set({
-            url: config.NEXT_PUBLIC_API_URL + e.formData.api,
-            api: ''
+            ...e.formData,
+            url: config.NEXT_PUBLIC_API_URL + e.formData.api
           });
         }
       },

@@ -8122,8 +8122,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/postman.ts": {
-        "version": "68768d42fbe4790717326b3c6b7083e223788b7b5971f4ee8adc5a86331dc905",
-        "signature": "3ec5d8987e434cc9bc993c1e3794452ee8440b63d7cd5d2d50df42bdcea72107",
+        "version": "c1d82138f578081c4184b1ad92094061a0bff21eebdd7f69bec01aa1ea65f12b",
+        "signature": "b66ff75147fd8d773ca4c15b17c418e749429b60fc455c4967bf495170b95929",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
