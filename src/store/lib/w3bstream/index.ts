@@ -139,6 +139,7 @@ export class W3bStream {
     }
   });
 
+  curPublisherProjectID = '';
   publishEvent = new PublishEventSchema({});
 
   showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' = 'CURRENT_APPLETS';

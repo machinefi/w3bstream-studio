@@ -43,9 +43,6 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
     this.init({
       //@ts-ignore
       schema,
-      widgets: {
-        EditorWidget
-      },
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
@@ -59,7 +56,7 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
         body: {
           'ui:widget': EditorWidget,
           'ui:options': {
-            emptyValue: `{"payload":"xxx yyy zzz"}`
+            emptyValue: `{}`
           }
         }
       },

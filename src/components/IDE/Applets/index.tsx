@@ -64,6 +64,7 @@ const Applets = observer(() => {
                           opacity: 0.6
                         }}
                         onClick={(e) => {
+                          w3s.curPublisherProjectID = item.f_project_id;
                           w3s.publishEvent.value.set({
                             projectName: item.project_name
                           });

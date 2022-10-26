@@ -17,10 +17,10 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    // publisher: { $ref: '#/definitions/publishers' },
+    publisher: { $ref: '#/definitions/publishers', title: 'Publisher' },
     payload: { type: 'string', title: 'Payload' }
   },
-  required: []
+  required: ['publisher', 'payload']
 } as const;
 
 //@ts-ignore
@@ -60,66 +60,45 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
 
       afterSubmit: async (e) => {
         const { projectName, publisher, payload } = e.formData;
-        // const { allPublishers } = rootStore.w3s;
-        // const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
-        // if (pub) {
-        //   const res = await axios.request({
-        //     method: 'post',
-        //     url: `/srv-applet-mgr/v0/event/${projectName}`,
-        //     headers: {
-        //       'Content-Type': 'text/plain'
-        //     },
-        //     data: {
-        //       payload,
-        //       header: {
-        //         token: pub.f_token,
-        //         event_type: 2147483647,
-        //         pub_id: pub.f_key,
-        //         pub_time: Date.now()
-        //       }
-        //     }
-        //   });
-        //   if (res.data) {
-        //     await showNotification({ message: 'publish event successed' });
-        //     eventBus.emit('applet.publish-event');
-        //     this.reset();
-        //     this.extraValue.set({ modal: { show: false } });
-        //   }
-        // }
+        const { allPublishers } = rootStore.w3s;
+        const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
+        if (pub) {
+          let json = { payload: 'xxx yyy zzz' };
+          try {
+            json = JSON.parse(payload);
+          } catch (error) {}
 
-        let data = '{}';
-        try {
-          data = JSON.parse(payload);
-        } catch (error) {}
-
-        const res = await axios.request({
-          method: 'post',
-          url: `/srv-applet-mgr/v0/event/${projectName}`,
-          headers: {
-            'Content-Type': 'text/plain'
-          },
-          data
-        });
-        if (res.data) {
-          await showNotification({ message: 'publish event successed' });
-          eventBus.emit('applet.publish-event');
-          this.reset();
-          this.extraValue.set({ modal: { show: false } });
+          const res = await axios.request({
+            method: 'post',
+            url: `/srv-applet-mgr/v0/event/${projectName}`,
+            headers: {
+              'Content-Type': 'text/plain'
+            },
+            data: {
+              header: {
+                token: pub.f_token,
+                event_type: 'ANY',
+                pub_id: pub.f_key,
+                pub_time: Date.now()
+              },
+              ...json
+            }
+          });
+          if (res.data) {
+            await showNotification({ message: 'publish event successed' });
+            eventBus.emit('applet.publish-event');
+            this.reset();
+            this.extraValue.set({ modal: { show: false } });
+          }
         }
       },
       value: new JSONValue<SchemaType>({
         default: {
-          // publisher: '',
+          publisher: '',
           projectName: '',
           payload: JSON.stringify(
             {
-              payload: 'xxx yyy zzz',
-              header: {
-                token: '',
-                event_type: 2147483647,
-                pub_id: '',
-                pub_time: 1666676685457
-              }
+              payload: 'xxx yyy zzz'
             },
             null,
             2

@@ -13,10 +13,14 @@ export const definitions = {
   publishers: {
     type: 'string',
     get enum() {
-      return rootStore.w3s.allPublishers.map((i) => `${i.f_publisher_id}`) || [];
+      const { allPublishers, curPublisherProjectID } = rootStore.w3s;
+      const publishers = allPublishers.filter((item) => item.project_id === curPublisherProjectID);
+      return publishers.map((i) => `${i.f_publisher_id}`) || [];
     },
     get enumNames() {
-      return rootStore.w3s.allPublishers.map((i) => `${i.f_name}`) || [];
+      const { allPublishers, curPublisherProjectID } = rootStore.w3s;
+      const publishers = allPublishers.filter((item) => item.project_id === curPublisherProjectID);
+      return publishers.map((i) => `${i.f_name}`) || [];
     }
   },
   applets: {
