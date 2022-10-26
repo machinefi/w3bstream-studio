@@ -169,23 +169,19 @@ const Editor = observer(() => {
               onClick={() => {
                 //@ts-ignore
                 w3s.createApplet.value.set({
-                  info: {
-                    projectID: w3s.curProject?.f_project_id
-                  }
+                  projectID: w3s.curProject?.f_project_id.toString()
                 });
                 w3s.createApplet.extraValue.set({
                   modal: {
                     show: true
                   }
                 });
-                w3s.createApplet.onChange({
+                // @ts-ignore
+                w3s.createApplet.value.set({
                   formData: {
-                    // @ts-ignore
                     file: `data:application/wasm;name=${curActiveFile.label};base64,${Buffer.from(curActiveFile.data.extraData.raw, 'binary').toString('base64')}`,
-                    info: {
-                      projectID: w3s.curProject.f_project_id,
-                      appletName: ''
-                    }
+                    projectID: w3s.curProject.f_project_id,
+                    appletName: ''
                   }
                 } as IChangeEvent);
               }}

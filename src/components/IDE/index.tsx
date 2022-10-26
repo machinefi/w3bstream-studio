@@ -63,6 +63,7 @@ const IDE = observer(() => {
       <JSONSchemaModal jsonstate={w3s.publishEvent} />
       <JSONSchemaModal jsonstate={w3s.updatePassword} />
       <JSONSchemaModal jsonstate={w3s.createPublisher} />
+      <JSONSchemaModal jsonstate={w3s.postman} />
     </>
   );
 });

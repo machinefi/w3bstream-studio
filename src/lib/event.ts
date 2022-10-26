@@ -24,6 +24,7 @@ interface MessageEvents {
   'instance.handle': () => void;
   'publisher.create': () => void;
   'spotlight.register': (state: JSONSchemaModalState) => void;
+  'postman.request': () => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;

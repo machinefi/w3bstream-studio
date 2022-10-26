@@ -23,9 +23,7 @@ const Applets = observer(() => {
           onClick={(e) => {
             if (w3s.showContent === 'CURRENT_APPLETS') {
               w3s.createApplet.value.set({
-                info: {
-                  projectID: w3s.curProject?.f_project_id
-                }
+                projectID: w3s.curProject?.f_project_id.toString()
               });
             }
 

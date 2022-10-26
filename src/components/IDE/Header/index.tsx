@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Flex, Icon, Image, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { MdHome, MdLogout } from 'react-icons/md';
+import { MdHome, MdHttp, MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
 import Link from 'next/link';
 
 const Header = observer(() => {
+  const { w3s } = useStore();
   return (
     <Flex
       as="header"
@@ -25,7 +26,20 @@ const Header = observer(() => {
       }}
     >
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
-        <Icon as={MdHome} mr="20px" w="22px" h="21px" cursor="pointer" />
+        <Icon
+          as={MdHttp}
+          mr="20px"
+          w="22px"
+          h="21px"
+          cursor="pointer"
+          onClick={() =>
+            w3s.postman.extraValue.set({
+              modal: {
+                show: true
+              }
+            })
+          }
+        />
         <Profile />
       </Flex>
     </Flex>

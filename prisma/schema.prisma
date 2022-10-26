@@ -140,7 +140,7 @@ model t_strategy {
   f_strategy_id BigInt
   f_project_id  BigInt
   f_applet_id   BigInt
-  f_event_type  Int
+  f_event_type  String   @db.VarChar(255)
   f_handler     String   @db.VarChar(255)
   f_created_at  BigInt   @default(0)
   f_updated_at  BigInt   @default(0)

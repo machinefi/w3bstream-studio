@@ -19,10 +19,11 @@ import { CreatePublisherSchema } from './schema/createPublisher';
 import { SpotlightAction } from '@mantine/spotlight';
 import { AppletType, ProjectsType, InstanceType, PublisherType, StrategieType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
+import { PostmanSchema } from './schema/postman';
 
 configure({
-  enforceActions: "never",
-})
+  enforceActions: 'never'
+});
 
 export class W3bStream {
   rootStore: RootStore;
@@ -39,6 +40,7 @@ export class W3bStream {
   });
   updatePassword = new UpdatePasswordSchema({});
   createPublisher = new CreatePublisherSchema({});
+  postman = new PostmanSchema({});
   projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
@@ -133,6 +135,8 @@ export class W3bStream {
 
   showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' = 'CURRENT_APPLETS';
 
+  isReady = false;
+
   get isLogin() {
     return !!this.config.formData.token;
   }
@@ -152,6 +156,7 @@ export class W3bStream {
   initEvent() {
     eventBus
       .on('app.ready', async () => {
+        this.isReady = true;
         if (this.isLogin) {
           await axios.request({
             method: 'get',
@@ -186,6 +191,9 @@ export class W3bStream {
       .on('publisher.create', async () => {
         await this.allProjects.call();
         this.projectManager.sync();
+      })
+      .on('postman.request', async () => {
+        await this.allProjects.call();
       });
   }
 

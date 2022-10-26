@@ -9,28 +9,26 @@ export class JSONSchemaState<T, V = any> {
   extraValue: JSONValue<V> = new JSONValue();
   value: JSONValue<T> = new JSONValue();
   widgets: RegistryWidgetsType<any, any>;
-
-  get extraData(): V {
-    return this.extraValue.get();
-  }
-  set extraData(value: V) {
-    console.log('set')
-    this.extraValue.set(value);
-  }
-
-  // formData: T = {} as T;
-  get formData() {
-    return this.value.get();
-  }
-  set formData(value: T) {
-    this.value.set(value);
-  }
   schema: RJSFSchema;
   uiSchema: UiSchema;
   reactive: boolean = true;
   readonly = false;
   liveValidate = false;
   validator = validator;
+
+  get formData() {
+    return this.value.get();
+  }
+  set formData(value: T) {
+    this.value.set(value);
+  }
+
+  get extraData(): V {
+    return this.extraValue.get();
+  }
+  set extraData(value: V) {
+    this.extraValue.set(value);
+  }
 
   get dynamicData() {
     return this.getDymaicData();
@@ -91,19 +89,19 @@ export abstract class JSONSchemaValue<T> {
       set: action
     });
   }
-  set(value: any) {
+  set(value: Partial<T>) {
     value = this.setFormat(value);
     const newVal = helper.deepMerge(this.value, value);
     this.value = toJS(newVal);
     return this.value;
   }
-  setFormat(value: any) {
+  setFormat(value: Partial<T>) {
     return value;
   }
   get() {
     return this.getFormat(this.value);
   }
-  getFormat(value: any) {
+  getFormat(value: T) {
     return value;
   }
   reset() {

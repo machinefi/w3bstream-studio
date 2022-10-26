@@ -3,7 +3,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from '@/store/lib/w3bstream/schema/definitions';
 
 export const schema = {
-  // export const configSchema: JSONSchema7 = {
+  // export const schema: JSONSchema7 = {
   definitions: {
     projects: {
       type: 'string'

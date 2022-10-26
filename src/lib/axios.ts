@@ -1,9 +1,7 @@
 import Axios from 'axios';
 import { rootStore } from '../store/index';
 import { showNotification } from '@mantine/notifications';
-
-import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
+import { config } from './config';
 
 export const axios = Axios.create({});
 
@@ -23,9 +21,8 @@ function checkErr(err) {
     });
   }
 }
-console.log(publicRuntimeConfig['NEXT_PUBLIC_API_URL']);
 axios.interceptors.request.use((req) => {
-  req.baseURL = publicRuntimeConfig['NEXT_PUBLIC_API_URL'] || 'http://localhost:8888';
+  req.baseURL = config['NEXT_PUBLIC_API_URL'];
   if (rootStore.w3s.config.formData.token) {
     req.headers['Authorization'] = `${rootStore.w3s.config.formData.token}`;
   }
