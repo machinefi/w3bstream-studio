@@ -5782,8 +5782,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "52ab98032c85a5605021346fbe427aa0bdba0866e925349c8417a7041e2c0085",
-        "signature": "42ca4d623e5e8f9e841cbbc9a3113277c72dd5bab300dca32353ae4982a5faa3",
+        "version": "6744c104778354c190db6b6720076d70e41fca1249b88ce0efb6ddb966b1e48f",
+        "signature": "e09f6da0972315edc8f53a0aff60fcefafe600e9f9af99fee3817fc6db68c914",
         "affectsGlobalScope": false
       },
       "./src/lib/event.ts": {
@@ -8122,13 +8122,13 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/postman.ts": {
-        "version": "c1d82138f578081c4184b1ad92094061a0bff21eebdd7f69bec01aa1ea65f12b",
+        "version": "63a2b979ca273aecafe021dd5243e73f9b94d2c7eec7bb21c6a03fd0c082485d",
         "signature": "b66ff75147fd8d773ca4c15b17c418e749429b60fc455c4967bf495170b95929",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
         "version": "ad0de946a46d8dc263b01d6eb5b3ab9741aaf43ad78c92cdb2129b6824b4efaf",
-        "signature": "294c8d14b32956ee427d8c4cee77e51e1b4638eaeb2e6386f0d5513cab10df21",
+        "signature": "139efe82bde99fe4351e071dab4201150e2f39dc394b6ea1d38e9ba8fb3ffcec",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -8357,7 +8357,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/editor/index.tsx": {
-        "version": "00c60f46371fe042e2b3e577f0f4ef3f7eddab4362c81192fd98659883b8fdc6",
+        "version": "6fd4f50ec5ee1bb5ccbdc619044b386294c288ebb036c63b14d639c261bc7c24",
         "signature": "d5525de83f2ec840aea1bdd1190d73d8384a1b63251cefa390ee0dea0f49ef3d",
         "affectsGlobalScope": false
       },
@@ -16558,6 +16558,7 @@
       "./src/store/lib/w3bstream/schema/postman.ts": [
         "./node_modules/.pnpm/@mantine+notifications@4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/notifications/lib/index.d.ts",
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
+        "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/mobx.d.ts",
         "./src/components/editorwidget/index.tsx",
         "./src/lib/axios.ts",
         "./src/lib/config.ts",

@@ -176,13 +176,11 @@ const Editor = observer(() => {
                     show: true
                   }
                 });
-                // @ts-ignore
+                //@ts-ignore
                 w3s.createApplet.value.set({
-                  formData: {
-                    file: `data:application/wasm;name=${curActiveFile.label};base64,${Buffer.from(curActiveFile.data.extraData.raw, 'binary').toString('base64')}`,
-                    projectID: w3s.curProject.f_project_id,
-                    appletName: ''
-                  }
+                  file: `data:application/wasm;name=${curActiveFile.label};base64,${Buffer.from(curActiveFile.data.extraData.raw, 'binary').toString('base64')}`,
+                  projectID: w3s.curProject.f_project_id,
+                  appletName: ''
                 } as IChangeEvent);
               }}
             ></Text>
