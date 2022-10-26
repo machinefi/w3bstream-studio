@@ -40,9 +40,6 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
     this.init({
       //@ts-ignore
       schema,
-      widgets: {
-        EditorWidget
-      },
       uiSchema: {
         'ui:submitButtonOptions': {
           norender: false,
@@ -64,9 +61,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       afterSubmit: async (e) => {
         const { projectName, publisher, payload } = e.formData;
         // const { allPublishers } = rootStore.w3s;
-        // const pub = allPublishers.find((item) => {
-        //   return `[Publisher Id]: ${item.f_publisher_id} [Name]: ${item.f_name}` === publisher;
-        // });
+        // const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
         // if (pub) {
         //   const res = await axios.request({
         //     method: 'post',
@@ -114,6 +109,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
       },
       value: new JSONValue<SchemaType>({
         default: {
+          // publisher: '',
           projectName: '',
           payload: JSON.stringify(
             {

@@ -14,9 +14,13 @@ import AllStrategies from './AllStrategies';
 import AllPublishers from './AllPublishers';
 import Editor from './Editor';
 import DockerLogs from './DockerLogs';
+import { ConfirmModal } from '../Common/Confirm';
 
 const IDE = observer(() => {
-  const { w3s } = useStore();
+  const {
+    w3s,
+    base: { confirm }
+  } = useStore();
 
   return (
     <>
@@ -58,12 +62,14 @@ const IDE = observer(() => {
           </LayoutCenter>
         )}
       </Box>
+      <ConfirmModal {...confirm.confirmProps} openState={confirm} />
       <JSONSchemaModal jsonstate={w3s.createProject} />
       <JSONSchemaModal jsonstate={w3s.createApplet} />
       <JSONSchemaModal jsonstate={w3s.publishEvent} />
       <JSONSchemaModal jsonstate={w3s.updatePassword} />
       <JSONSchemaModal jsonstate={w3s.createPublisher} />
       <JSONSchemaModal jsonstate={w3s.postman} />
+      <JSONSchemaModal jsonstate={w3s.createStrategy} />
     </>
   );
 });

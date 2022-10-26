@@ -13,16 +13,19 @@ export const definitions = {
   publishers: {
     type: 'string',
     get enum() {
-      return rootStore.w3s.allPublishers.map((i) => `[Publisher Id]: ${i.f_publisher_id} [Name]: ${i.f_name}`) || [];
+      return rootStore.w3s.allPublishers.map((i) => `${i.f_publisher_id}`) || [];
+    },
+    get enumNames() {
+      return rootStore.w3s.allPublishers.map((i) => `${i.f_name}`) || [];
+    }
+  },
+  applets: {
+    type: 'string',
+    get enum() {
+      return rootStore.w3s.allApplets.map((i) => i.f_applet_id) || [];
+    },
+    get enumNames() {
+      return rootStore.w3s.allApplets.map((i) => `${i.f_name}`) || [];
     }
   }
-  // applets: {
-  //   type: 'string',
-  //   get enum() {
-  //     return rootStore.w3s.applets.value?.data?.map((i) => i.appletID) || [];
-  //   },
-  //   get enumNames() {
-  //     return rootStore.w3s.applets.value?.data?.map((i) => `${i.name}`) || [];
-  //   }
-  // }
 };

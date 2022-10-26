@@ -60,4 +60,4 @@ export type ProjectsType = inferProcedureOutput<W3bstreamRouter['projects']>[0];
 export type AppletType = ProjectsType['applets'][0] & { project_name: string };
 export type StrategieType = AppletType['strategies'][0];
 export type InstanceType = AppletType['instances'][0];
-export type PublisherType = ProjectsType['publishers'][0];
+export type PublisherType = ProjectsType['publishers'][0] & { project_id: string; project_name: string };
