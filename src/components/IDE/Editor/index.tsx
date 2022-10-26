@@ -32,10 +32,10 @@ const Editor = observer(() => {
       if (filesItem.type != 'file') return;
       if (!filesItem.label.endsWith('.ts')) return;
       try {
-        const { error, binary, text } = await asc.compileString(filesItem.data.code, {
+        const { error, binary, text, stats } = await asc.compileString(filesItem.data.code, {
           optimizeLevel: 4,
-          runtime: 'minimal',
-          debug: true
+          runtime: 'stub',
+          // debug: true
         });
         // console.log(binary, text);
         if (error) console.log(error);
@@ -67,6 +67,7 @@ const Editor = observer(() => {
       }
     },
     getCompileScript(raw) {
+      console.log(raw);
       return `
       <head>
         <script>
@@ -74,7 +75,16 @@ const Editor = observer(() => {
             return await WebAssembly.compile(new Uint8Array([${raw}]));
           }
           async function instantiate(module, imports = {}) {
-            const { exports } = await WebAssembly.instantiate(module, imports);
+            const __module0 = imports.module;
+            const adaptedImports = {
+              env: Object.assign(Object.create(globalThis), imports.env || {}, {
+                "Math.random": (
+                  Math.random
+                ),
+              }),
+              module: __module0,
+            };
+            const { exports } = await WebAssembly.instantiate(module, adaptedImports);
             return exports;
           }
           </script>
@@ -86,7 +96,7 @@ const Editor = observer(() => {
       console.log(curFilesListSchema?.activeFiles, curWasmIndex, activeFiles[curWasmIndex]);
       if (curWasmIndex == -1) return toast.error('No wasm file find!');
       const arr = [];
-      console.log(activeFiles, activeFiles[curWasmIndex], curWasmIndex);
+      console.log(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw);
       for (let key in toJS(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw)) {
         arr.push(toJS(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw)[key]);
       }
