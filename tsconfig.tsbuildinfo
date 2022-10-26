@@ -7877,8 +7877,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createproject.ts": {
-        "version": "ce6b251ed393e4e8bb5cdf9c9df170ac5e201f63bc6c9f80bc99a1b5c91f5401",
-        "signature": "0c0df7ef5d2459c5654d4e423c4f8e332e0bb4a06468badab0b8ac9cc1c84cf2",
+        "version": "18f31ee50f61e1928958667736ae13ad845de45b9225d8bdec4a42cc7a4d6838",
+        "signature": "081aef3e33911e41d7a4a18aae59af4c4bc9d2e47d191932d742705a7f5d7c60",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/updatepassword.ts": {
