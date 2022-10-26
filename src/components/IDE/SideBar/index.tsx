@@ -8,6 +8,9 @@ import { useStore } from '@/store/index';
 import { Menu, MenuItem } from '@/components/Menu';
 import { FilesItem } from './filesItem';
 import { helper } from '@/lib/helper';
+import toast from 'react-hot-toast';
+import { axios } from '@/lib/axios';
+import { eventBus } from '@/lib/event';
 
 interface SideBarProps extends FlexProps {}
 
@@ -123,7 +126,18 @@ const SideBar = observer((props: SideBarProps) => {
               });
             }}
           />
-          <Icon as={MdRefresh} ml={2} w="22px" h="19px" cursor="pointer" />
+          <Icon
+            as={MdRefresh}
+            ml={2}
+            w="22px"
+            h="19px"
+            cursor="pointer"
+            onClick={async () => {
+              await w3s.allProjects.call();
+              w3s.projectManager.sync();
+              toast.success('Reloaded');
+            }}
+          />
         </Flex>
       </Flex>
 
@@ -139,7 +153,10 @@ const SideBar = observer((props: SideBarProps) => {
 });
 
 const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: any; f_project_id: any; applets: any }>; index: number }) => {
-  const { w3s } = useStore();
+  const {
+    w3s,
+    base: { confirm }
+  } = useStore();
   return (
     <ContextMenuTrigger id={`ProjectItemContext${project.f_project_id}`} holdToDisplay={-1}>
       <Box
@@ -161,14 +178,13 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
       </Box>
       <Portal>
         <ContextMenu id={`ProjectItemContext${project.f_project_id}`}>
-          <Menu bordered>
+          <Menu w="150px" bordered>
             <MenuItem
               //TODO:  please make sure there has two state for create project and project detail
               onItemSelect={() => {
                 w3s.curProjectIndex = index;
                 w3s.createProject.value.set({
-                  name: w3s.curProject.f_name,
-                  version: w3s.createProject.formData.version
+                  name: w3s.curProject.f_name
                 });
                 w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = true;
                 w3s.createProject.extraValue.set({
@@ -180,6 +196,25 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
               }}
             >
               Detail
+            </MenuItem>
+            <MenuItem
+              color="red"
+              onItemSelect={() => {
+                confirm.show({
+                  title: 'Warning',
+                  description: 'Are you sure you want to delete it?',
+                  async onOk() {
+                    await axios.request({
+                      method: 'delete',
+                      url: `/srv-applet-mgr/v0/project/${project.f_name}`
+                    });
+                    eventBus.emit('project.delete');
+                    toast.success('Deleted successfully');
+                  }
+                });
+              }}
+            >
+              Delete
             </MenuItem>
           </Menu>
         </ContextMenu>

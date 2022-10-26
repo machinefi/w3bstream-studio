@@ -89,13 +89,15 @@ export abstract class JSONSchemaValue<T> {
       set: action
     });
   }
-  set(value: Partial<T>) {
-    value = this.setFormat(value);
+  set(value: Partial<T>, { onSet = true } = {}) {
+    value = this.onSet(value);
     const newVal = helper.deepMerge(this.value, value);
     this.value = toJS(newVal);
+
     return this.value;
   }
-  setFormat(value: Partial<T>) {
+
+  onSet(value: Partial<T>) {
     return value;
   }
   get() {

@@ -9,10 +9,9 @@ export const schema = {
   // title: 'Create Project',
   type: 'object',
   properties: {
-    name: { type: 'string', title: 'Name' },
-    version: { type: 'string', title: 'Version' }
+    name: { type: 'string', title: 'Name' }
   },
-  required: ['name', 'version']
+  required: ['name']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -53,8 +52,7 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
       },
       value: new JSONValue<SchemaType>({
         default: {
-          name: 'project_01',
-          version: '0.0.1'
+          name: 'project_01'
         }
       }),
       extraValue: new JSONValue<ExtraDataType>({

@@ -9,6 +9,7 @@ import { hooks } from '../../../../lib/hooks';
 import { showNotification } from '@mantine/notifications';
 import { axios } from '../../../../lib/axios';
 import { eventBus } from '../../../../lib/event';
+import { toJS } from 'mobx';
 
 export const schema = {
   // export const schema: JSONSchema7 = {
@@ -26,7 +27,8 @@ export const schema = {
       }
     },
     body: { type: 'string' }
-  }
+  },
+  required: ['url', 'method', 'headers', 'body']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -70,16 +72,17 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
             Authorization: ''
           },
           body: JSON.stringify({ foo: 'bar' }, null, 2)
+        },
+        onSet: (e) => {
+          console.log(e.api, this.formData.api);
+          if (e.api != this.formData.api) {
+            e.url = config.NEXT_PUBLIC_API_URL + e.api;
+          }
+          console.log(e);
+          return e;
         }
       }),
-      afterChange: (e) => {
-        if (e.formData.api) {
-          this.value.set({
-            url: config.NEXT_PUBLIC_API_URL + e.formData.api,
-            api: ''
-          });
-        }
-      },
+
       afterSubmit: async (e) => {
         const res = await axios.request({
           baseURL: e.formData.url,
@@ -97,18 +100,16 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
         //@ts-ignore
         default: {
           modal: { show: false, title: 'Postman' }
+        },
+        onSet: (e) => {
+          this.value.set({
+            headers: {
+              Authorization: `Bearer ${rootStore.w3s.config.formData.token}`
+            }
+          });
+          return e;
         }
       })
     });
-
-    setTimeout(() => {
-      hooks.waitReady().then(() => {
-        this.value.set({
-          headers: {
-            Authorization: `Bearer ${rootStore.w3s.config.formData.token}`
-          }
-        });
-      });
-    }, 500);
   }
 }

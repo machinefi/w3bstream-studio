@@ -17,14 +17,20 @@ interface MessageEvents {
   'user.update-pwd': () => void;
   'project.list': (data: any[]) => void;
   'project.create': () => void;
+  'project.delete': () => void;
   'applet.list': (data: any[]) => void;
   'applet.create': () => void;
   'applet.publish-event': () => void;
   'instance.deploy': () => void;
   'instance.handle': () => void;
   'publisher.create': () => void;
+  'publisher.update': () => void;
+  'publisher.delete': () => void;
   'spotlight.register': (state: JSONSchemaModalState) => void;
   'postman.request': () => void;
+  'strategy.create': () => void;
+  'strategy.update': () => void;
+  'strategy.delete': () => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;

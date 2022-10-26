@@ -16,6 +16,7 @@ import { UpdatePasswordSchema } from './schema/updatePassword';
 import { FilesListSchema } from './schema/filesList';
 import { PublishEventSchema } from './schema/publishEvent';
 import { CreatePublisherSchema } from './schema/createPublisher';
+import { CreateStrategySchema } from './schema/createStrategy';
 import { SpotlightAction } from '@mantine/spotlight';
 import { AppletType, ProjectsType, InstanceType, PublisherType, StrategieType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
@@ -41,6 +42,7 @@ export class W3bStream {
   updatePassword = new UpdatePasswordSchema({});
   createPublisher = new CreatePublisherSchema({});
   postman = new PostmanSchema({});
+  createStrategy = new CreateStrategySchema({});
   projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
@@ -76,7 +78,13 @@ export class W3bStream {
             });
             strategies = strategies.concat(a.strategies);
           });
-          publishers = publishers.concat(p.publishers);
+          p.publishers.forEach((pub) => {
+            publishers.push({
+              ...pub,
+              project_id: p.f_project_id,
+              project_name: p.f_name
+            });
+          });
         });
         this.allApplets = applets;
         this.allInstances = instances;
@@ -175,6 +183,10 @@ export class W3bStream {
         await this.allProjects.call();
         this.projectManager.sync();
       })
+      .on('project.delete', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
+      })
       .on('applet.create', async () => {
         await this.allProjects.call();
         this.projectManager.sync();
@@ -194,6 +206,26 @@ export class W3bStream {
       })
       .on('postman.request', async () => {
         await this.allProjects.call();
+      })
+      .on('publisher.update', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
+      })
+      .on('publisher.delete', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
+      })
+      .on('strategy.create', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
+      })
+      .on('strategy.update', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
+      })
+      .on('strategy.delete', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
       });
   }
 
