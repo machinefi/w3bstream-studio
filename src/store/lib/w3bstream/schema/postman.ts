@@ -16,8 +16,8 @@ export const schema = {
   type: 'object',
   properties: {
     url: { type: 'string' },
-    method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
     api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor'].map((i) => `/srv-applet-mgr/v0/${i}`) },
+    method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
     headers: {
       type: 'object',
       title: '',
