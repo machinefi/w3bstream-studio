@@ -8122,7 +8122,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/postman.ts": {
-        "version": "f57e37207f5ee721f75592eb495a7e49ff1931dac69bc76383aa53d0f73fe124",
+        "version": "fc36ff2dc6363084b9b2e4c1f282fe09a260b994d6b5a1c37d7738de635971c6",
         "signature": "c21f1585b0cad2a3fd7162c5bf55b08df6a30eacdca8bfde56ded35822be4234",
         "affectsGlobalScope": false
       },

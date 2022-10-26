@@ -75,7 +75,8 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
       afterChange: (e) => {
         if (e.formData.api) {
           this.value.set({
-            url: config.NEXT_PUBLIC_API_URL + this.formData.api
+            url: config.NEXT_PUBLIC_API_URL + e.formData.api,
+            api: ''
           });
         }
       },
