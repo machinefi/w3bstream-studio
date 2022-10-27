@@ -1,7 +1,7 @@
 import { JSONSchemaModalState, JSONSchemaState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from '@/store/lib/w3bstream/schema/definitions';
-import EditorWidget from '../../../../components/EditorWidget/index';
+import EditorWidget, { EditorWidgetUIOptions } from '../../../../components/EditorWidget/index';
 import { gradientButtonStyle } from '../../../../lib/theme';
 import { config } from '../../../../lib/config';
 import { rootStore } from '../../../index';
@@ -10,6 +10,7 @@ import { showNotification } from '@mantine/notifications';
 import { axios } from '../../../../lib/axios';
 import { eventBus } from '../../../../lib/event';
 import { toJS } from 'mobx';
+import { UiSchema } from '@rjsf/utils';
 
 export const schema = {
   // export const schema: JSONSchema7 = {
@@ -36,8 +37,7 @@ type SchemaType = FromSchema<typeof schema>;
 type ExtraDataType = {
   modal: JSONSchemaModalState;
 };
-
-export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType, UiSchema & { body: EditorWidgetUIOptions }> {
   constructor(args: Partial<PostmanSchema> = {}) {
     super(args);
     this.init({
@@ -56,7 +56,7 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
         body: {
           'ui:widget': EditorWidget,
           'ui:options': {
-            emptyValue: `{}`
+            emptyValue: '{}'
           }
         }
       },

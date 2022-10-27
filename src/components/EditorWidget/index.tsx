@@ -3,11 +3,18 @@ import { WidgetProps } from '@rjsf/utils';
 import MonacoEditor from '@monaco-editor/react';
 import { Flex, Text } from '@chakra-ui/react';
 
+type Options = {
+  emptyValue?: string;
+};
+
 export interface EditorWidgetProps extends WidgetProps {
-  options: {
-    emptyValue?: string
-  }
+  options: Options;
 }
+
+export type EditorWidgetUIOptions = {
+  'ui:widget': (props: EditorWidgetProps) => JSX.Element;
+  'ui:options': Options;
+};
 
 const EditorWidget = ({ id, label, options = {}, value, required, onChange }: EditorWidgetProps) => {
   const handleChange = useCallback((value) => onChange(value === '' ? options.emptyValue : value), [onChange, options.emptyValue]);
@@ -22,13 +29,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
           </Text>
         )}
       </Flex>
-      <MonacoEditor
-        height="200px"
-        theme="vs-dark"
-        defaultLanguage="json"
-        defaultValue={value}
-        onChange={handleChange}
-      />
+      <MonacoEditor height="200px" theme="vs-dark" defaultLanguage="json" defaultValue={value} onChange={handleChange} />
     </Flex>
   );
 };

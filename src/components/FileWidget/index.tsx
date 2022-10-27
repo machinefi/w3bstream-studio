@@ -78,14 +78,21 @@ function extractFileInfo(dataURLs: string[]) {
     });
 }
 
-interface CustomFileWidgetProps extends WidgetProps {
-  options: {
-    accept?: Accept;
-    maxFiles?: number;
-    multiple?: boolean;
-    tips?: string;
-  };
+type Options = {
+  accept?: Accept; // https://developer.mozilla.org/en-US/docs/Web/API/window/showOpenFilePicker
+  maxFiles?: number; // Maximum accepted number of files The default value is 0 which means there is no limitation to how many files are accepted.
+  multiple?: boolean; // Allow drag 'n' drop (or selection from the file dialog) of multiple files
+  tips?: string;
+};
+
+export interface CustomFileWidgetProps extends WidgetProps {
+  options: Options;
 }
+
+export type CustomFileWidgetUIOptions = {
+  'ui:widget': 'file';
+  'ui:options': Options;
+};
 
 const CustomFileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: CustomFileWidgetProps) => {
   const { accept, maxFiles = 0, multiple = false, tips } = options;

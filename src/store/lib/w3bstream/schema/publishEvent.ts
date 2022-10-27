@@ -6,7 +6,8 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
-import EditorWidget from '@/components/EditorWidget';
+import EditorWidget, { EditorWidgetUIOptions } from '@/components/EditorWidget';
+import { UiSchema } from '@rjsf/utils';
 
 export const schema = {
   // title: 'Publish Event',
@@ -34,7 +35,7 @@ type ExtraDataType = {
   modal: JSONSchemaModalState;
 };
 
-export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataType, UiSchema & { payload: EditorWidgetUIOptions }> {
   constructor(args: Partial<PublishEventSchema> = {}) {
     super(args);
     this.init({

@@ -1,12 +1,12 @@
 import { JSONValue, JSONSchemaModalState, JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
-import { dataURItoBlob } from '@rjsf/utils';
+import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { definitions } from './definitions';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
-import FileWidget from '@/components/FileWidget';
+import FileWidget, { CustomFileWidgetUIOptions } from '@/components/FileWidget';
 
 export const schema = {
   // title: 'Create Applet',
@@ -38,7 +38,7 @@ type ExtraDataType = {
   modal: JSONSchemaModalState;
 };
 
-export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataType, UiSchema & { file: CustomFileWidgetUIOptions }> {
   constructor(args: Partial<CreateAppletSchema> = {}) {
     super(args);
     this.init({
@@ -60,15 +60,10 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
         file: {
           'ui:widget': 'file',
           'ui:options': {
-            // https://developer.mozilla.org/en-US/docs/Web/API/window/showOpenFilePicker
             accept: {
               'application/wasm': ['.wasm']
             },
-            tips: `Drag 'n' drop a file here, or click to select a file`
-            // Maximum accepted number of files The default value is 0 which means there is no limitation to how many files are accepted.
-            // maxFiles: 1,
-            // Allow drag 'n' drop (or selection from the file dialog) of multiple files
-            // multiple: false
+            tips: `Drag 'n' drop a file here, or click to select a file`,
           }
         }
       },

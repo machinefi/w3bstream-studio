@@ -5,12 +5,12 @@ import { IChangeEvent } from '@rjsf/core';
 import { _ } from '@/lib/lodash';
 import { helper } from '../../lib/helper';
 
-export class JSONSchemaState<T, V = any> {
+export class JSONSchemaState<T, V = any, UI = UiSchema> {
   extraValue: JSONValue<V> = new JSONValue();
   value: JSONValue<T> = new JSONValue();
   widgets: RegistryWidgetsType<any, any>;
   schema: RJSFSchema;
-  uiSchema: UiSchema;
+  uiSchema: UI;
   reactive: boolean = true;
   readonly = false;
   liveValidate = false;
@@ -51,7 +51,7 @@ export class JSONSchemaState<T, V = any> {
   afterSubmit: (e: IChangeEvent<T, any>) => void;
   afterChange: (e: IChangeEvent<T, any>) => void;
 
-  init(data: Partial<JSONSchemaState<T, V>>) {
+  init(data: Partial<JSONSchemaState<T, V, UI>>) {
     Object.assign(this, data);
     return this;
   }
@@ -65,7 +65,7 @@ export class JSONSchemaState<T, V = any> {
     return this;
   }
 
-  constructor(args: Partial<JSONSchemaState<T, V>> = {}) {
+  constructor(args: Partial<JSONSchemaState<T, V, UI>> = {}) {
     Object.assign(this, args);
     if (this.reactive) {
       //@ts-ignore
