@@ -53,7 +53,8 @@ export class CreateProjectSchema {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Create Project'
+      title: 'Create Project',
+      autoReset: true
     }
   });
 }

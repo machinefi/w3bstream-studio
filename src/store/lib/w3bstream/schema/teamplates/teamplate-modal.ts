@@ -42,7 +42,8 @@ export class TemplateSchema {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'modal teamplate'
+      title: 'modal teamplate',
+      autoReset: true
     }
   });
 }

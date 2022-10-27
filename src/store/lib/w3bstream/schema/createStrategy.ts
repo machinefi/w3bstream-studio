@@ -107,7 +107,8 @@ export class CreateStrategySchema {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Create Strategy'
+      title: 'Create Strategy',
+      autoReset: true
     }
   });
 }

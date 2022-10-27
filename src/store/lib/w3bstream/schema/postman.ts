@@ -60,9 +60,19 @@ export class PostmanSchema {
         body: JSON.stringify({ foo: 'bar' }, null, 2)
       },
       onSet(e) {
-        // console.log(e.api, this.value.api);
-        if (e.api != this.value.api) {
-          e.url = config.NEXT_PUBLIC_API_URL + e.api;
+        const { api, method } = e;
+        if ((api && api != this.value.api) || (method && method != this.value.method)) {
+          const name = api.split('/srv-applet-mgr/v0/')[1];
+          const template = TEMPLATES[name];
+          if (!template) {
+            return;
+          }
+          e.url = config.NEXT_PUBLIC_API_URL + api + template[method].suffix;
+          if (method === 'post' || method === 'put') {
+            e.body = template[method].body;
+          } else {
+            e.body = '{}';
+          }
         }
 
         return e;
@@ -74,27 +84,179 @@ export class PostmanSchema {
         method: e.formData.method,
         data: JSON.parse(e.formData.body)
       });
-      if (res.data) {
-        await showNotification({ message: 'requset successed' });
-        eventBus.emit('postman.request');
-        // this.form.reset();
-        this.modal.set({ show: false });
-      }
+      await showNotification({ message: 'requset successed' });
+      eventBus.emit('postman.request');
+      // this.form.reset();
+      this.modal.set({ show: false });
     }
   });
 
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Postman'
+      title: 'Postman',
+      autoReset: false
     },
     onSet: (e) => {
-      this.form.value.set({
-        headers: {
-          Authorization: `Bearer ${rootStore.w3s.config.form.formData.token}`
-        }
-      });
+      if (e.show) {
+        this.form.value.set({
+          headers: {
+            Authorization: `Bearer ${rootStore.w3s.config.form.formData.token}`
+          }
+        });
+      }
+
       return e;
     }
   });
 }
+
+type TEMPLATES_TYPE = {
+  [x: string]: {
+    get: {
+      suffix: string;
+    };
+    delete: {
+      suffix: string;
+    };
+    post: {
+      suffix: string;
+      body: string;
+    };
+    put: {
+      suffix: string;
+      body: string;
+    };
+  };
+};
+
+const TEMPLATES: TEMPLATES_TYPE = {
+  account: {
+    get: {
+      suffix: ''
+    },
+    delete: {
+      suffix: ''
+    },
+    post: {
+      suffix: '',
+      body: JSON.stringify({})
+    },
+    put: {
+      suffix: '',
+      body: JSON.stringify({})
+    }
+  },
+  applet: {
+    get: {
+      suffix: ''
+    },
+    delete: {
+      suffix: ''
+    },
+    post: {
+      suffix: '/$PROJECTID',
+      body: JSON.stringify({ file: '$WASMFILE', info: { projectID: '', appletName: '' } }, null, 2)
+    },
+    put: { suffix: '/$PROJECTID/$APPLETID', body: JSON.stringify({ file: '$WASMFILE', info: { projectID: '', appletName: '' } }, null, 2) }
+  },
+  project: {
+    get: {
+      suffix: ''
+    },
+    delete: {
+      suffix: '/$PROJECTNAME'
+    },
+    post: {
+      suffix: '',
+      body: JSON.stringify({ name: 'project_01' }, null, 2)
+    },
+    put: {
+      suffix: '/$PROJECTID',
+      body: JSON.stringify({ name: 'project_01' }, null, 2)
+    }
+  },
+  strategy: {
+    get: {
+      suffix: '/$PROJECTNAME/$STRATEGYID'
+    },
+    delete: {
+      suffix: '/$PROJECTNAME?strategyID=$STRATEGYID'
+    },
+    post: {
+      suffix: '/$PROJECTNAME',
+      body: JSON.stringify(
+        {
+          strategies: [
+            {
+              appletID: '',
+              eventType: '2147483647',
+              handler: 'start'
+            }
+          ]
+        },
+        null,
+        2
+      )
+    },
+    put: {
+      suffix: '/$PROJECTNAME/$STRATEGYID',
+      body: JSON.stringify({ appletID: '', eventType: '2147483647', handler: 'start' }, null, 2)
+    }
+  },
+  publisher: {
+    get: {
+      suffix: '/$PROJECTNAME/$PUBLISHERID'
+    },
+    delete: {
+      suffix: '/$PROJECTNAME?publisherID=$PUBLISHERID'
+    },
+    post: {
+      suffix: '/$PROJECTID',
+      body: JSON.stringify({ name: '', key: '' }, null, 2)
+    },
+    put: {
+      suffix: '/$PROJECTNAME/$PUBLISHERID',
+      body: JSON.stringify({ name: '', key: '' }, null, 2)
+    }
+  },
+  monitor: {
+    get: {
+      suffix: ''
+    },
+    delete: {
+      suffix: ''
+    },
+    post: {
+      suffix: '/$PROJECTID',
+      body: JSON.stringify(
+        {
+          contractLog: {
+            eventType: 'DEFAULT',
+            chainID: 4690,
+            contractAddress: '${contractAddress}',
+            blockStart: '${blockStart}',
+            blockEnd: '${blockEnd}',
+            topic0: '${topic0}'
+          },
+          chainTx: {
+            eventType: 'DEFAULT',
+            chainID: 4690,
+            txAddress: '${txAddress}'
+          },
+          chainHeight: {
+            eventType: 'DEFAULT',
+            chainID: 4690,
+            height: '${height}'
+          }
+        },
+        null,
+        2
+      )
+    },
+    put: {
+      suffix: '/$PROJECTID',
+      body: JSON.stringify({}, null, 2)
+    }
+  }
+};

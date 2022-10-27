@@ -6,8 +6,8 @@ import { JSONSchemaFormState, JSONModalValue } from '@/store/standard/JSONSchema
 
 interface Props {
   jsonstate: {
-    form: JSONSchemaFormState<any>,
-    modal: JSONModalValue
+    form: JSONSchemaFormState<any>;
+    modal: JSONModalValue;
   };
   children?: any;
 }
@@ -19,7 +19,9 @@ const JSONSchemaModal = observer((props: Props) => {
     <Modal
       isOpen={modal?.value.show}
       onClose={() => {
-        form.reset({ force: true });
+        if (modal.value.autoReset) {
+          form.reset({ force: true });
+        }
         modal.set({
           show: false
         });

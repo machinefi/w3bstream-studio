@@ -2,7 +2,6 @@ import { UiSchema, RJSFSchema } from '@rjsf/utils';
 import { makeObservable, computed, toJS, observable, action } from 'mobx';
 import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent } from '@rjsf/core';
-import { _ } from '@/lib/lodash';
 import { helper } from '@/lib/helper';
 
 export class JSONSchemaFormState<T, U = UiSchema> {
@@ -100,12 +99,9 @@ export class JSONValue<T> extends JSONSchemaValue<T> {
 
 export class JSONModalValue extends JSONSchemaValue<{
   show: boolean;
-  title?: string;
+  title: string;
+  autoReset: boolean;
 }> {
-  default = {
-    show: false,
-    title: ''
-  };
   constructor(args: Partial<JSONModalValue> = {}) {
     super(args);
   }

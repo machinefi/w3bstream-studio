@@ -107,7 +107,8 @@ export class CreateAppletSchema {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Create Applet'
+      title: 'Create Applet',
+      autoReset: true
     }
   });
 }

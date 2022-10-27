@@ -53,7 +53,8 @@ export class UpdatePasswordSchema {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Update Password'
+      title: 'Update Password',
+      autoReset: true
     }
   });
 }

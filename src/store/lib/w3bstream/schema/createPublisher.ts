@@ -91,7 +91,8 @@ export class CreatePublisherSchema {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Create Publisher'
+      title: 'Create Publisher',
+      autoReset: true
     }
   });
 }

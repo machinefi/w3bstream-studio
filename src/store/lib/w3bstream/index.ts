@@ -186,7 +186,6 @@ export class W3bStream {
       })
       .on('project.delete', async () => {
         await this.allProjects.call();
-        this.projectManager.sync();
       })
       .on('applet.create', async () => {
         await this.allProjects.call();
@@ -210,23 +209,18 @@ export class W3bStream {
       })
       .on('publisher.update', async () => {
         await this.allProjects.call();
-        this.projectManager.sync();
       })
       .on('publisher.delete', async () => {
         await this.allProjects.call();
-        this.projectManager.sync();
       })
       .on('strategy.create', async () => {
         await this.allProjects.call();
-        this.projectManager.sync();
       })
       .on('strategy.update', async () => {
         await this.allProjects.call();
-        this.projectManager.sync();
       })
       .on('strategy.delete', async () => {
         await this.allProjects.call();
-        this.projectManager.sync();
       });
   }
 

@@ -75,7 +75,7 @@ export class PublishEventSchema {
     },
     value: new JSONValue<SchemaType>({
       default: {
-        publisher: undefined,
+        publisher: '',
         projectName: '',
         payload: JSON.stringify(
           {
@@ -86,7 +86,7 @@ export class PublishEventSchema {
         )
       },
       onSet(e) {
-        if (e.publisher != this.value.publisher) {
+        if (e.publisher && e.publisher != this.value.publisher) {
           const { allPublishers } = rootStore.w3s;
           const pub = allPublishers.find((item) => String(item.f_publisher_id) === e.publisher);
           if (pub) {
@@ -119,7 +119,8 @@ export class PublishEventSchema {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Publish Event'
+      title: 'Publish Event',
+      autoReset: true
     }
   });
 }
