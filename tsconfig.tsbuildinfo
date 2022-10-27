@@ -8142,7 +8142,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/postman.ts": {
-        "version": "feeb38b9fd39df10de1474bfc688419e0df64522d3ff8785535345d16efecafd",
+        "version": "55744f02ca57b35c89311ca83c43e9b710f0a90dc18193165f57fdf919aec1c9",
         "signature": "2a94406b3f499dcc1e3292521c11c0197bdb89a7646b0d29707b364c88d1bc61",
         "affectsGlobalScope": false
       },
@@ -26081,29 +26081,7 @@
       "./src/store/lib/w3bstream/schema/definitions.ts",
       "./src/store/lib/w3bstream/schema/fileslist.ts",
       "./src/store/lib/w3bstream/schema/login.ts",
-      [
-        "./src/store/lib/w3bstream/schema/postman.ts",
-        [
-          {
-            "file": "./src/store/lib/w3bstream/schema/postman.ts",
-            "start": 2344,
-            "length": 3,
-            "code": 2322,
-            "category": 1,
-            "messageText": "Type 'unknown' is not assignable to type 'string'.",
-            "relatedInformation": [
-              {
-                "file": "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts",
-                "start": 911,
-                "length": 3,
-                "messageText": "The expected type comes from property 'url' which is declared here on type 'AxiosRequestConfig'",
-                "category": 3,
-                "code": 6500
-              }
-            ]
-          }
-        ]
-      ],
+      "./src/store/lib/w3bstream/schema/postman.ts",
       "./src/store/lib/w3bstream/schema/projectlist.ts",
       "./src/store/lib/w3bstream/schema/publishevent.ts",
       "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts",

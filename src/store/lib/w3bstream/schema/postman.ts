@@ -75,7 +75,6 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType, Ui
         const res = await axios.request({
           baseURL: e.formData.url,
           method: e.formData.method,
-          url: e.formData.api,
           data: JSON.parse(e.formData.body)
         });
         if (res.data) {
