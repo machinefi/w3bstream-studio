@@ -18,7 +18,6 @@ export const schema = {
   type: 'object',
   properties: {
     url: { type: 'string' },
-    api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor'].map((i) => `/srv-applet-mgr/v0/${i}`) },
     method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
     headers: {
       type: 'object',
@@ -69,14 +68,6 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType, Ui
             Authorization: ''
           },
           body: JSON.stringify({ foo: 'bar' }, null, 2)
-        },
-        onSet: (e) => {
-          console.log(e.api, this.formData.api);
-          if (e.api != this.formData.api) {
-            e.url = config.NEXT_PUBLIC_API_URL + e.api;
-          }
-          console.log(e);
-          return e;
         }
       }),
 
