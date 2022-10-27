@@ -29,7 +29,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
           </Text>
         )}
       </Flex>
-      <MonacoEditor height="200px" theme="vs-dark" defaultLanguage="json" defaultValue={value} onChange={handleChange} />
+      <MonacoEditor height="200px" theme="vs-dark" defaultLanguage="json" value={value} onChange={handleChange} />
     </Flex>
   );
 };

@@ -1,4 +1,4 @@
-import { JSONSchemaModalState, JSONSchemaState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONModalValue, JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from '@/store/lib/w3bstream/schema/definitions';
 
@@ -9,7 +9,6 @@ export const schema = {
       type: 'string'
     }
   },
-  // title: 'Tamplates',
   type: 'object',
   properties: {
     projectID: { $ref: '#/definitions/projects' }
@@ -23,35 +22,27 @@ type SchemaType = FromSchema<typeof schema>;
 schema.definitions = {
   projects: definitions.projects
 };
+export class TemplateSchema {
+  form = new JSONSchemaFormState<SchemaType>({
+    //@ts-ignore
+    schema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: true,
+        submitText: 'Submit'
+      }
+    },
+    value: new JSONValue<SchemaType>({
+      default: {
+        projectID: ''
+      }
+    })
+  });
 
-type ExtraDataType = {
-  modal: JSONSchemaModalState;
-};
-
-export class TemplateSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
-  constructor(args: Partial<TemplateSchema> = {}) {
-    super(args);
-    this.init({
-      //@ts-ignore
-      schema,
-      uiSchema: {
-        'ui:submitButtonOptions': {
-          norender: true,
-          submitText: 'Submit'
-        }
-      },
-
-      value: new JSONValue<SchemaType>({
-        default: {
-          projectID: ''
-        }
-      }),
-      extraValue: new JSONValue<ExtraDataType>({
-        //@ts-ignore
-        default: {
-          modal: { show: false, title: '' }
-        }
-      })
-    });
-  }
+  modal = new JSONModalValue({
+    default: {
+      show: false,
+      title: 'modal teamplate'
+    }
+  });
 }

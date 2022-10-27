@@ -85,16 +85,16 @@ type Options = {
   tips?: string;
 };
 
-export interface CustomFileWidgetProps extends WidgetProps {
+export interface FileWidgetProps extends WidgetProps {
   options: Options;
 }
 
-export type CustomFileWidgetUIOptions = {
-  'ui:widget': 'file';
+export type FileWidgetUIOptions = {
+  'ui:widget': (props: FileWidgetProps) => JSX.Element;
   'ui:options': Options;
 };
 
-const CustomFileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: CustomFileWidgetProps) => {
+const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: FileWidgetProps) => {
   const { accept, maxFiles = 0, multiple = false, tips } = options;
   const extractedFilesInfo = useMemo(() => (Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value])), [value]);
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>(extractedFilesInfo);
@@ -151,4 +151,4 @@ const CustomFileWidget = ({ id, readonly, disabled, required, onChange, label, v
   );
 };
 
-export default CustomFileWidget;
+export default FileWidget;

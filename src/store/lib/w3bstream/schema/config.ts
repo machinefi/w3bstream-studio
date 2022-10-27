@@ -1,4 +1,4 @@
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState } from '@/store/standard/JSONSchemaState';
 import { StorageState } from '@/store/standard/StorageState';
 import { FromSchema } from 'json-schema-to-ts';
 
@@ -15,22 +15,20 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-export class W3bstreamConfigState extends JSONSchemaState<SchemaType> {
-  constructor(args: Partial<W3bstreamConfigState>) {
-    super(args);
-    this.init({
-      //@ts-ignore
-      schema,
-      uiSchema: {
-        'ui:submitButtonOptions': {
-          norender: true,
-          submitText: 'Update'
-        }
-      },
-      value: new StorageState<SchemaType>({ key: 'w3bstream-config', default: { apiUrl: process.env['NEXT_PUBLIC_API_URL'], token: '', accountID: '' } })
-    });
-  }
+export class W3bstreamConfigState {
+  form = new JSONSchemaFormState<SchemaType>({
+    //@ts-ignore
+    schema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: true,
+        submitText: 'Update'
+      }
+    },
+    value: new StorageState<SchemaType>({ key: 'w3bstream-config', default: { apiUrl: process.env['NEXT_PUBLIC_API_URL'], token: '', accountID: '' } })
+  });
+
   logout() {
-    this.reset();
+    this.form.reset();
   }
 }

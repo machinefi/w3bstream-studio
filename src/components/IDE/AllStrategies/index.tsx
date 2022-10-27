@@ -69,7 +69,7 @@ const AllStrategies = observer(() => {
                       opacity: 0.6
                     }}
                     onClick={(e) => {
-                      w3s.createStrategy.value.set({
+                      w3s.createStrategy.form.value.set({
                         strategyID: item.f_strategy_id,
                         appletID: item.f_applet_id,
                         eventType: String(item.f_event_type),

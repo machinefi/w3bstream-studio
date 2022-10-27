@@ -1,7 +1,5 @@
 import { EventEmitter } from 'events';
 import TypedEmitter from 'typed-emitter';
-import { JSONSchemaModalState } from '../store/standard/JSONSchemaState';
-
 class MyEmitter extends EventEmitter {
   emit(type: any, ...args: any[]) {
     super.emit('*', { type, args });
@@ -26,7 +24,7 @@ interface MessageEvents {
   'publisher.create': () => void;
   'publisher.update': () => void;
   'publisher.delete': () => void;
-  'spotlight.register': (state: JSONSchemaModalState) => void;
+  'spotlight.register': () => void;
   'postman.request': () => void;
   'strategy.create': () => void;
   'strategy.update': () => void;

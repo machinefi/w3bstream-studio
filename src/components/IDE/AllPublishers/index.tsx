@@ -87,7 +87,7 @@ const AllPublishers = observer(() => {
                       opacity: 0.6
                     }}
                     onClick={(e) => {
-                      w3s.createPublisher.value.set({
+                      w3s.createPublisher.form.value.set({
                         publisherID: item.f_publisher_id,
                         projectName: item.project_name,
                         projectID: item.project_id,

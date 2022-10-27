@@ -28,10 +28,10 @@ configure({
 
 export class W3bStream {
   rootStore: RootStore;
-  config = new W3bstreamConfigState({});
-  login = new LoginSchema({});
+  config = new W3bstreamConfigState();
+  login = new LoginSchema();
   projectManager = new ProjectManager();
-  createProject = new CreateProjectSchema({});
+  createProject = new CreateProjectSchema();
   createApplet = new CreateAppletSchema({
     getDymaicData: () => {
       return {
@@ -39,10 +39,10 @@ export class W3bStream {
       };
     }
   });
-  updatePassword = new UpdatePasswordSchema({});
-  createPublisher = new CreatePublisherSchema({});
-  postman = new PostmanSchema({});
-  createStrategy = new CreateStrategySchema({});
+  updatePassword = new UpdatePasswordSchema();
+  createPublisher = new CreatePublisherSchema();
+  postman = new PostmanSchema();
+  createStrategy = new CreateStrategySchema();
   projectList = new ProjectListSchema({
     getDymaicData: () => {
       return {
@@ -53,7 +53,7 @@ export class W3bStream {
   allProjects = new PromiseState<() => Promise<any>, ProjectsType[]>({
     defaultValue: [],
     function: async () => {
-      const res = await trpc.api.projects.query({ accountID: this.config.formData.accountID });
+      const res = await trpc.api.projects.query({ accountID: this.config.form.formData.accountID });
       if (res) {
         const applets = [];
         const instances = [];
@@ -140,14 +140,14 @@ export class W3bStream {
   });
 
   curPublisherProjectID = '';
-  publishEvent = new PublishEventSchema({});
+  publishEvent = new PublishEventSchema();
 
   showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' = 'CURRENT_APPLETS';
 
   isReady = false;
 
   get isLogin() {
-    return !!this.config.formData.token;
+    return !!this.config.form.formData.token;
   }
 
   get actions(): SpotlightAction[] {

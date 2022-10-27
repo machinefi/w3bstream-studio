@@ -1,4 +1,4 @@
-import { JSONSchemaState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from './definitions';
 
@@ -23,24 +23,33 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-export class ProjectListSchema extends JSONSchemaState<SchemaType> {
-  constructor(args: Partial<ProjectListSchema> = {}) {
-    super(args);
-    this.init({
-      //@ts-ignore
-      schema,
-      uiSchema: {
-        'ui:submitButtonOptions': {
-          norender: true,
-          submitText: 'Submit'
-        }
-      },
-
-      value: new JSONValue<SchemaType>({
-        default: {
-          projectID: ''
-        }
-      })
-    });
+export class ProjectListSchema {
+  constructor({
+    getDymaicData
+  }: Partial<{
+    getDymaicData: () => {
+      ready: boolean;
+    };
+  }> = {}) {
+    if (getDymaicData) {
+      this.form.getDymaicData = getDymaicData;
+    }
   }
+
+  form = new JSONSchemaFormState<SchemaType>({
+    //@ts-ignore
+    schema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: true,
+        submitText: 'Submit'
+      }
+    },
+
+    value: new JSONValue<SchemaType>({
+      default: {
+        projectID: ''
+      }
+    })
+  });
 }

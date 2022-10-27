@@ -22,7 +22,7 @@ const Applets = observer(() => {
           {...gradientButtonStyle}
           onClick={(e) => {
             if (w3s.showContent === 'CURRENT_APPLETS') {
-              w3s.createApplet.value.set({
+              w3s.createApplet.form.value.set({
                 projectID: w3s.curProject?.f_project_id.toString()
               });
             }
@@ -65,7 +65,7 @@ const Applets = observer(() => {
                         }}
                         onClick={(e) => {
                           w3s.curPublisherProjectID = item.f_project_id;
-                          w3s.publishEvent.value.set({
+                          w3s.publishEvent.form.value.set({
                             projectName: item.project_name
                           });
                           w3s.publishEvent.modal.set({

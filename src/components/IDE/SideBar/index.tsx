@@ -116,8 +116,8 @@ const SideBar = observer((props: SideBarProps) => {
             h="19px"
             cursor="pointer"
             onClick={(e) => {
-              w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = false;
-              w3s.createProject.reset();
+              w3s.createProject.form.uiSchema['ui:submitButtonOptions'].norender = false;
+              w3s.createProject.form.reset();
               w3s.createProject.modal.set({
                 show: true,
                 title: 'Create Project'
@@ -181,10 +181,10 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
               //TODO:  please make sure there has two state for create project and project detail
               onItemSelect={() => {
                 w3s.curProjectIndex = index;
-                w3s.createProject.value.set({
+                w3s.createProject.form.value.set({
                   name: w3s.curProject.f_name
                 });
-                w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = true;
+                w3s.createProject.form.uiSchema['ui:submitButtonOptions'].norender = true;
                 w3s.createProject.modal.set({
                   show: true,
                   title: 'Project Details'

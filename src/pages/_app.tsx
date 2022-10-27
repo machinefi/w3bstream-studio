@@ -17,15 +17,9 @@ import { SpotlightProvider } from '@mantine/spotlight';
 
 import '@/lib/superjson';
 function MyApp({ Component, pageProps }: AppProps) {
-  const {
-    lang,
-    w3s: {
-      config: {
-        formData: { token }
-      }
-    },
-    w3s
-  } = useStore();
+  const { lang, w3s } = useStore();
+  const { token } = w3s.config.form.formData;
+
   useEffect(() => {
     lang.init();
     eventBus.emit('app.ready');

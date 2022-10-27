@@ -46,7 +46,7 @@ const Header = observer(() => {
 
 const Profile = observer(() => {
   const { w3s } = useStore();
-  const { accountID } = w3s.config.formData;
+  const { accountID } = w3s.config.form.formData;
 
   if (accountID) {
     return (

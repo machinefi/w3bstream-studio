@@ -2,25 +2,25 @@ import React from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalBody, Box, ModalHeader, ModalCloseButton } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { JSONForm } from '@/components/JSONForm';
-import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
-import { JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
-import { JSONModalValue } from '../../store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONModalValue } from '@/store/standard/JSONSchemaState';
 
 interface Props {
-  jsonstate: JSONSchemaState<any> & { modal?: JSONModalValue };
+  jsonstate: {
+    form: JSONSchemaFormState<any>,
+    modal: JSONModalValue
+  };
   children?: any;
 }
 
 const JSONSchemaModal = observer((props: Props) => {
-  const { jsonstate } = props;
+  const { form, modal } = props.jsonstate;
 
   return (
     <Modal
-      isOpen={jsonstate.modal?.value.show}
+      isOpen={modal?.value.show}
       onClose={() => {
-        jsonstate.reset({ force: true });
-
-        jsonstate.modal.set({
+        form.reset({ force: true });
+        modal.set({
           show: false
         });
       }}
@@ -29,12 +29,12 @@ const JSONSchemaModal = observer((props: Props) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader bg="#FAFAFA" borderBottom="1px solid #eee">
-          {jsonstate.modal.value.title}
+          {modal.value.title}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Box p="20px 30px">
-            <JSONForm jsonstate={jsonstate} />
+            <JSONForm jsonstate={form} />
           </Box>
         </ModalBody>
       </ModalContent>
