@@ -27,7 +27,7 @@ const Applets = observer(() => {
               });
             }
 
-            w3s.createApplet.extraValue.set({ modal: { show: true } });
+            w3s.createApplet.modal.set({ show: true });
           }}
         >
           Add Applet
@@ -68,10 +68,8 @@ const Applets = observer(() => {
                           w3s.publishEvent.value.set({
                             projectName: item.project_name
                           });
-                          w3s.publishEvent.extraValue.set({
-                            modal: {
-                              show: true
-                            }
+                          w3s.publishEvent.modal.set({
+                            show: true
                           });
                         }}
                       >

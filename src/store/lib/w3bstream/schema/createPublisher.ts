@@ -5,6 +5,7 @@ import { axios } from '../../../../lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '../../../../lib/event';
 import { gradientButtonStyle } from '../../../../lib/theme';
+import { JSONModalValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   // export const configSchema: JSONSchema7 = {
@@ -30,11 +31,7 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-type ExtraDataType = {
-  modal: JSONSchemaModalState;
-};
-
-export class CreatePublisherSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+export class CreatePublisherSchema extends JSONSchemaState<SchemaType> {
   constructor(args: Partial<CreatePublisherSchema> = {}) {
     super(args);
     this.init({
@@ -83,7 +80,7 @@ export class CreatePublisherSchema extends JSONSchemaState<SchemaType, ExtraData
           eventBus.emit('publisher.create');
         }
 
-        this.reset().extraValue.set({ modal: { show: false } });
+        this.reset().modal.set({ show: false });
       },
       value: new JSONValue<SchemaType>({
         default: {
@@ -93,12 +90,14 @@ export class CreatePublisherSchema extends JSONSchemaState<SchemaType, ExtraData
           name: '',
           key: ''
         }
-      }),
-      extraValue: new JSONValue<ExtraDataType>({
-        default: {
-          modal: { show: false, title: 'Create Publisher' }
-        }
       })
     });
   }
+
+  modal = new JSONModalValue({
+    default: {
+      show: false,
+      title: 'Create Publisher'
+    }
+  });
 }

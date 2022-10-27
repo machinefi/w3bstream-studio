@@ -4,6 +4,7 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
+import { JSONModalValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   // title: 'Create Project',
@@ -16,11 +17,7 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-type ExtraDataType = {
-  modal: JSONSchemaModalState;
-};
-
-export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+export class CreateProjectSchema extends JSONSchemaState<SchemaType> {
   constructor(args: Partial<CreateProjectSchema> = {}) {
     super(args);
     this.init({
@@ -47,19 +44,20 @@ export class CreateProjectSchema extends JSONSchemaState<SchemaType, ExtraDataTy
         if (res.data) {
           await showNotification({ message: 'create project successed' });
           eventBus.emit('project.create');
-          this.reset().extraValue.set({ modal: { show: false } });
+          this.reset().modal.set({ show: false });
         }
       },
       value: new JSONValue<SchemaType>({
         default: {
           name: 'project_01'
         }
-      }),
-      extraValue: new JSONValue<ExtraDataType>({
-        default: {
-          modal: { show: false, title: 'Create Project' }
-        }
       })
     });
   }
+  modal = new JSONModalValue({
+    default: {
+      show: false,
+      title: 'Create Project'
+    }
+  });
 }

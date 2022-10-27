@@ -11,6 +11,7 @@ import { axios } from '../../../../lib/axios';
 import { eventBus } from '../../../../lib/event';
 import { toJS } from 'mobx';
 import { UiSchema } from '@rjsf/utils';
+import { JSONModalValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   // export const schema: JSONSchema7 = {
@@ -33,10 +34,7 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-type ExtraDataType = {
-  modal: JSONSchemaModalState;
-};
-export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType, UiSchema & { body: EditorWidgetUIOptions }> {
+export class PostmanSchema extends JSONSchemaState<SchemaType, any, UiSchema & { body: EditorWidgetUIOptions }> {
   constructor(args: Partial<PostmanSchema> = {}) {
     super(args);
     this.init({
@@ -80,23 +78,23 @@ export class PostmanSchema extends JSONSchemaState<SchemaType, ExtraDataType, Ui
         if (res.data) {
           await showNotification({ message: 'requset successed' });
           eventBus.emit('postman.request');
-          //  this.reset()
         }
-      },
-      extraValue: new JSONValue<ExtraDataType>({
-        //@ts-ignore
-        default: {
-          modal: { show: false, title: 'Postman' }
-        },
-        onSet: (e) => {
-          this.value.set({
-            headers: {
-              Authorization: `Bearer ${rootStore.w3s.config.formData.token}`
-            }
-          });
-          return e;
-        }
-      })
+      }
     });
   }
+
+  modal = new JSONModalValue({
+    default: {
+      show: false,
+      title: 'Postman'
+    },
+    onSet: (e) => {
+      this.value.set({
+        headers: {
+          Authorization: `Bearer ${rootStore.w3s.config.formData.token}`
+        }
+      });
+      return e;
+    }
+  });
 }

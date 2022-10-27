@@ -6,6 +6,7 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
 import { rootStore } from '@/store/index';
+import { JSONModalValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   definitions: {
@@ -28,12 +29,7 @@ type SchemaType = FromSchema<typeof schema>;
 schema.definitions = {
   applets: definitions.applets
 };
-
-type ExtraDataType = {
-  modal: JSONSchemaModalState;
-};
-
-export class CreateStrategySchema extends JSONSchemaState<SchemaType, ExtraDataType> {
+export class CreateStrategySchema extends JSONSchemaState<SchemaType, any> {
   constructor(args: Partial<CreateStrategySchema> = {}) {
     super(args);
     this.init({
@@ -99,7 +95,7 @@ export class CreateStrategySchema extends JSONSchemaState<SchemaType, ExtraDataT
           eventBus.emit('strategy.create');
         }
 
-        this.reset().extraValue.set({ modal: { show: false } });
+        this.reset().modal.set({ show: false });
       },
       value: new JSONValue<SchemaType>({
         default: {
@@ -108,12 +104,14 @@ export class CreateStrategySchema extends JSONSchemaState<SchemaType, ExtraDataT
           eventType: '',
           handler: ''
         }
-      }),
-      extraValue: new JSONValue<ExtraDataType>({
-        default: {
-          modal: { show: false, title: 'Create Strategy' }
-        }
       })
     });
   }
+
+  modal = new JSONModalValue({
+    default: {
+      show: false,
+      title: 'Create Strategy'
+    }
+  });
 }

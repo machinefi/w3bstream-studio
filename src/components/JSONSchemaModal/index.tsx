@@ -4,9 +4,10 @@ import { observer } from 'mobx-react-lite';
 import { JSONForm } from '@/components/JSONForm';
 import { JSONSchemaState } from '@/store/standard/JSONSchemaState';
 import { JSONSchemaModalState } from '@/store/standard/JSONSchemaState';
+import { JSONModalValue } from '../../store/standard/JSONSchemaState';
 
 interface Props {
-  jsonstate: JSONSchemaState<any, { modal: JSONSchemaModalState }>;
+  jsonstate: JSONSchemaState<any> & { modal?: JSONModalValue };
   children?: any;
 }
 
@@ -15,12 +16,12 @@ const JSONSchemaModal = observer((props: Props) => {
 
   return (
     <Modal
-      isOpen={jsonstate.extraData.modal.show}
+      isOpen={jsonstate.modal?.value.show}
       onClose={() => {
-        jsonstate.reset({ force: true }).extraValue.set({
-          modal: {
-            show: false
-          }
+        jsonstate.reset({ force: true });
+
+        jsonstate.modal.set({
+          show: false
         });
       }}
       size="2xl"
@@ -28,7 +29,7 @@ const JSONSchemaModal = observer((props: Props) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader bg="#FAFAFA" borderBottom="1px solid #eee">
-          {jsonstate.extraData.modal.title}
+          {jsonstate.modal.value.title}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>

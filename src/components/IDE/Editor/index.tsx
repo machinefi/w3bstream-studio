@@ -34,7 +34,7 @@ const Editor = observer(() => {
       try {
         const { error, binary, text, stats } = await asc.compileString(filesItem.data.code, {
           optimizeLevel: 4,
-          runtime: 'stub',
+          runtime: 'stub'
           // debug: true
         });
         // console.log(binary, text);
@@ -181,10 +181,8 @@ const Editor = observer(() => {
                 w3s.createApplet.value.set({
                   projectID: w3s.curProject?.f_project_id.toString()
                 });
-                w3s.createApplet.extraValue.set({
-                  modal: {
-                    show: true
-                  }
+                w3s.createApplet.modal.set({
+                  show: true
                 });
                 //@ts-ignore
                 w3s.createApplet.value.set({

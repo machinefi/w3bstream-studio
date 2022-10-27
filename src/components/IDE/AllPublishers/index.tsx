@@ -29,7 +29,7 @@ const AllPublishers = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
-            w3s.createPublisher.extraValue.set({ modal: { show: true, title: 'Create Publisher' } });
+            w3s.createPublisher.modal.set({ show: true, title: 'Create Publisher' });
           }}
         >
           Add Publisher
@@ -94,7 +94,7 @@ const AllPublishers = observer(() => {
                         name: item.f_name,
                         key: item.f_key
                       });
-                      w3s.createPublisher.extraValue.set({ modal: { show: true, title: 'Edit Publisher' } });
+                      w3s.createPublisher.modal.set({ show: true, title: 'Edit Publisher' });
                     }}
                   >
                     Edit

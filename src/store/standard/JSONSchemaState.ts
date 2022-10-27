@@ -6,7 +6,6 @@ import { _ } from '@/lib/lodash';
 import { helper } from '../../lib/helper';
 
 export class JSONSchemaState<T, V = any, UI = UiSchema> {
-  extraValue: JSONValue<V> = new JSONValue();
   value: JSONValue<T> = new JSONValue();
   widgets: RegistryWidgetsType<any, any>;
   schema: RJSFSchema;
@@ -21,13 +20,6 @@ export class JSONSchemaState<T, V = any, UI = UiSchema> {
   }
   set formData(value: T) {
     this.value.set(value);
-  }
-
-  get extraData(): V {
-    return this.extraValue.get();
-  }
-  set extraData(value: V) {
-    this.extraValue.set(value);
   }
 
   get dynamicData() {
@@ -120,4 +112,17 @@ export class JSONValue<T> extends JSONSchemaValue<T> {
 export interface JSONSchemaModalState {
   show: boolean;
   title?: string;
+}
+
+export class JSONModalValue extends JSONSchemaValue<{
+  show: boolean;
+  title?: string;
+}> {
+  default = {
+    show: false,
+    title: ''
+  };
+  constructor(args: Partial<JSONModalValue> = {}) {
+    super(args);
+  }
 }

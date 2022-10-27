@@ -7,6 +7,7 @@ import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
 import FileWidget, { CustomFileWidgetUIOptions } from '@/components/FileWidget';
+import { JSONModalValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   // title: 'Create Applet',
@@ -34,11 +35,7 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-type ExtraDataType = {
-  modal: JSONSchemaModalState;
-};
-
-export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataType, UiSchema & { file: CustomFileWidgetUIOptions }> {
+export class CreateAppletSchema extends JSONSchemaState<SchemaType, any, UiSchema & { file: CustomFileWidgetUIOptions }> {
   constructor(args: Partial<CreateAppletSchema> = {}) {
     super(args);
     this.init({
@@ -63,7 +60,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
             accept: {
               'application/wasm': ['.wasm']
             },
-            tips: `Drag 'n' drop a file here, or click to select a file`,
+            tips: `Drag 'n' drop a file here, or click to select a file`
           }
         }
       },
@@ -90,7 +87,7 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           await showNotification({ message: 'create applet successed' });
           eventBus.emit('applet.create');
           this.reset();
-          this.extraValue.set({ modal: { show: false } });
+          this.modal.set({ show: false });
         }
       },
       value: new JSONValue<SchemaType>({
@@ -99,13 +96,14 @@ export class CreateAppletSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
           projectID: '',
           appletName: 'app_01'
         }
-      }),
-      extraValue: new JSONValue<ExtraDataType>({
-        //@ts-ignore
-        default: {
-          modal: { show: false, title: 'Create Applet' }
-        }
       })
     });
   }
+
+  modal = new JSONModalValue({
+    default: {
+      show: false,
+      title: 'Create Applet'
+    }
+  });
 }

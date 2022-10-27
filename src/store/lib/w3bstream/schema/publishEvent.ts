@@ -8,6 +8,7 @@ import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/EditorWidget';
 import { UiSchema } from '@rjsf/utils';
+import { JSONModalValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   // title: 'Publish Event',
@@ -31,11 +32,7 @@ schema.definitions = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-type ExtraDataType = {
-  modal: JSONSchemaModalState;
-};
-
-export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataType, UiSchema & { payload: EditorWidgetUIOptions }> {
+export class PublishEventSchema extends JSONSchemaState<SchemaType, any, UiSchema & { payload: EditorWidgetUIOptions }> {
   constructor(args: Partial<PublishEventSchema> = {}) {
     super(args);
     this.init({
@@ -89,7 +86,7 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
             await showNotification({ message: 'publish event successed' });
             eventBus.emit('applet.publish-event');
             this.reset();
-            this.extraValue.set({ modal: { show: false } });
+            this.modal.set({ show: false });
           }
         }
       },
@@ -105,12 +102,14 @@ export class PublishEventSchema extends JSONSchemaState<SchemaType, ExtraDataTyp
             2
           )
         }
-      }),
-      extraValue: new JSONValue<ExtraDataType>({
-        default: {
-          modal: { show: false, title: 'Publish Event' }
-        }
       })
     });
   }
+
+  modal = new JSONModalValue({
+    default: {
+      show: false,
+      title: 'Publish Event'
+    }
+  });
 }

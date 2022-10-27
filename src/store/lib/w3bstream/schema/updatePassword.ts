@@ -5,6 +5,7 @@ import { showNotification } from '@mantine/notifications';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
+import { JSONModalValue } from '../../../standard/JSONSchemaState';
 
 export const schema = {
   // title: 'Update Password',
@@ -48,20 +49,21 @@ export class UpdatePasswordSchema extends JSONSchemaState<SchemaType, ExtraDataT
         showNotification({ message: 'update password successed' });
         eventBus.emit('user.update-pwd');
         this.reset();
-        this.extraValue.set({ modal: { show: false } });
+        this.modal.set({ show: false });
         rootStore.w3s.config.logout();
       },
       value: new JSONValue<SchemaType>({
         default: {
           password: ''
         }
-      }),
-      extraValue: new JSONValue<ExtraDataType>({
-        //@ts-ignore
-        default: {
-          modal: { show: false, title: 'Update Password' }
-        }
       })
     });
   }
+
+  modal = new JSONModalValue({
+    default: {
+      show: false,
+      title: 'Update Password'
+    }
+  });
 }

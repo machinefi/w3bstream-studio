@@ -151,7 +151,7 @@ export class W3bStream {
   }
 
   get actions(): SpotlightAction[] {
-    return [this.createProject, this.createApplet, this.createPublisher].map((i) => ({ title: i.extraData.modal.title, onTrigger: () => i.extraValue.set({ modal: { show: true } }) }));
+    return [this.createProject, this.createApplet, this.createPublisher].map((i) => ({ title: i.modal.value.title, onTrigger: () => i.modal.set({ show: true }) }));
   }
 
   constructor(rootStore: RootStore) {

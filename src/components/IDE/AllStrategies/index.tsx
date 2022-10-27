@@ -23,7 +23,7 @@ const AllStrategies = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
-            w3s.createStrategy.extraValue.set({ modal: { show: true, title: 'Create Strategy' } });
+            w3s.createStrategy.modal.set({ show: true, title: 'Create Strategy' });
           }}
         >
           Add Strategy
@@ -75,7 +75,7 @@ const AllStrategies = observer(() => {
                         eventType: String(item.f_event_type),
                         handler: item.f_handler
                       });
-                      w3s.createStrategy.extraValue.set({ modal: { show: true, title: 'Edit Strategy' } });
+                      w3s.createStrategy.modal.set({ show: true, title: 'Edit Strategy' });
                     }}
                   >
                     Edit

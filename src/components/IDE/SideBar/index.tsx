@@ -118,11 +118,9 @@ const SideBar = observer((props: SideBarProps) => {
             onClick={(e) => {
               w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = false;
               w3s.createProject.reset();
-              w3s.createProject.extraValue.set({
-                modal: {
-                  show: true,
-                  title: 'Create Project'
-                }
+              w3s.createProject.modal.set({
+                show: true,
+                title: 'Create Project'
               });
             }}
           />
@@ -187,11 +185,9 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
                   name: w3s.curProject.f_name
                 });
                 w3s.createProject.uiSchema['ui:submitButtonOptions'].norender = true;
-                w3s.createProject.extraValue.set({
-                  modal: {
-                    show: true,
-                    title: 'Project Details'
-                  }
+                w3s.createProject.modal.set({
+                  show: true,
+                  title: 'Project Details'
                 });
               }}
             >

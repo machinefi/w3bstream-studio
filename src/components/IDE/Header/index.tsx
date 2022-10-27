@@ -33,10 +33,8 @@ const Header = observer(() => {
           h="21px"
           cursor="pointer"
           onClick={() =>
-            w3s.postman.extraValue.set({
-              modal: {
-                show: true
-              }
+            w3s.postman.modal.set({
+              show: true
             })
           }
         />
@@ -64,7 +62,7 @@ const Profile = observer(() => {
                 w="full"
                 bg="rgba(0, 0, 0, 0.03)"
                 onClick={() => {
-                  w3s.updatePassword.extraValue.set({ modal: { show: true } });
+                  w3s.updatePassword.modal.set({ show: true });
                 }}
               >
                 Update password
