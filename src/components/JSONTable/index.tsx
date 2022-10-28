@@ -1,29 +1,20 @@
 import React, { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { Table as ChakraTable, TableContainer, TableContainerProps, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
+import { Button, Table as ChakraTable, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 import { PaginationState } from '@/store/standard/PaginationState';
 import SimplePagination from '../Common/SimplePagination';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { ActionButtonType, Column, ExtendedTable, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 
-type Column = { key: string; label: string; render?: (item: any) => JSX.Element };
-type ExtendedTable = {
-  key: string;
-  columns: Column[];
-};
-
-interface Props {
-  columns: Column[];
-  dataSource: object[];
-  rowKey: string;
-  extendedTables?: ExtendedTable[];
-  initPagination?: {
-    page: number;
-    limit: number;
+export interface JSONTableProps<T> {
+  jsonstate: {
+    table: JSONSchemaTableState<T>;
   };
-  chakraTableContainerProps?: TableContainerProps;
 }
 
-const Table = observer(({ columns, dataSource, rowKey, extendedTables = [], initPagination = { page: 1, limit: 8 }, chakraTableContainerProps = {} }: Props) => {
+const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
+  const { columns, dataSource, rowKey, extendedTables = [], initPagination = { page: 1, limit: 8 }, containerProps = {} } = props.jsonstate.table;
+
   const store = useLocalObservable(() => ({
     paginationState: new PaginationState(initPagination)
   }));
@@ -44,7 +35,7 @@ const Table = observer(({ columns, dataSource, rowKey, extendedTables = [], init
 
   return (
     <>
-      <TableContainer {...chakraTableContainerProps}>
+      <TableContainer {...containerProps}>
         <ChakraTable>
           <Thead>
             <Tr h="54px" bg="#F5F5F5">
@@ -78,17 +69,36 @@ const Table = observer(({ columns, dataSource, rowKey, extendedTables = [], init
   );
 });
 
-function Body({ item, columns }) {
+function ActionButton({ props, text }: ActionButtonType) {
+  return (
+    <Button
+      h="32px"
+      _hover={{ opacity: 0.8 }}
+      _active={{
+        opacity: 0.6
+      }}
+      {...props}
+    >
+      {text}
+    </Button>
+  );
+}
+
+function Body<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
   return (
     <Tr h="54px" fontSize="14px" color="#0F0F0F">
       {columns.map((column) => {
-        return <Td key={column.key}>{column.render ? column.render(item) : item[column.key]}</Td>;
+        return (
+          <Td key={column.key}>
+            {column.actions ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />) : column.render ? column.render(item) : item[column.key]}
+          </Td>
+        );
       })}
     </Tr>
   );
 }
 
-function CollapseBody({ item, columns, extendedTables }) {
+function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: Column<T>[]; extendedTables: ExtendedTable<any>[] }) {
   const { isOpen, onToggle } = useDisclosure();
   const styles = isOpen ? { display: 'table-row' } : { display: 'none' };
 
@@ -108,7 +118,11 @@ function CollapseBody({ item, columns, extendedTables }) {
       >
         <Td w="40px">{isOpen ? <ChevronDownIcon w={6} h={6} /> : <ChevronRightIcon w={6} h={6} />}</Td>
         {columns.map((column) => {
-          return <Td key={column.key}>{column.render ? column.render(item) : item[column.key]}</Td>;
+          return (
+            <Td key={column.key}>
+              {column.actions ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />) : column.render ? column.render(item) : item[column.key]}
+            </Td>
+          );
         })}
       </Tr>
       <Tr {...styles}>
@@ -135,7 +149,11 @@ function CollapseBody({ item, columns, extendedTables }) {
                     {exRow.map((exItem) => (
                       <Tr h="54px" fontSize="14px" color="#0F0F0F">
                         {exColumns.map((exC) => {
-                          return <Td key={exC.key}>{exC.render ? exC.render(exItem) : exItem[exC.key]}</Td>;
+                          return (
+                            <Td key={exC.key}>
+                              {exC.actions ? exC.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />) : exC.render ? exC.render(exItem) : exItem[exC.key]}
+                            </Td>
+                          );
                         })}
                       </Tr>
                     ))}
@@ -150,4 +168,4 @@ function CollapseBody({ item, columns, extendedTables }) {
   );
 }
 
-export default Table;
+export default JSONTable;

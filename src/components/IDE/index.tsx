@@ -8,13 +8,13 @@ import JSONSchemaModal from '../JSONSchemaModal';
 import Header from './Header';
 import ToolBar from './ToolBar';
 import SideBar from './SideBar';
-import Applets from './Applets';
-import AllInstances from './AllInstances';
+import { CurProjectApplets, AllApplets } from './Applets';
 import AllStrategies from './AllStrategies';
 import AllPublishers from './AllPublishers';
 import Editor from './Editor';
 import DockerLogs from './DockerLogs';
 import { ConfirmModal } from '../Common/Confirm';
+import JSONTable from '../JSONTable';
 
 const IDE = observer(() => {
   const {
@@ -30,8 +30,9 @@ const IDE = observer(() => {
       <Box ml="350px" mt="60px" w="calc(100vw - 350px)" p="20px">
         {w3s.allProjects.value.length ? (
           <Box w="100%" h="100%">
-            {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <Applets />}
-            {w3s.showContent === 'ALL_INSTANCES' && <AllInstances />}
+            {w3s.showContent === 'CURRENT_APPLETS' && <CurProjectApplets />}
+            {w3s.showContent === 'ALL_APPLETS' && <AllApplets />}
+            {w3s.showContent === 'ALL_INSTANCES' && <JSONTable jsonstate={w3s.instances} />}
             {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
             {w3s.showContent === 'ALL_PUBLISHERS' && <AllPublishers />}
             {w3s.showContent === 'EDITOR' && <Editor />}

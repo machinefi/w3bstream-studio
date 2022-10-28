@@ -45,7 +45,7 @@ export class CreateStrategySchema {
     },
     afterSubmit: async (e) => {
       const { appletID, eventType, handler, strategyID } = e.formData;
-      const { allApplets } = rootStore.w3s;
+      const allApplets = rootStore.w3s.applets.table.dataSource;
       const applet = allApplets.find((item) => String(item.f_applet_id) === appletID);
       if (!applet) {
         return;

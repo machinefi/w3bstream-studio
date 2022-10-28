@@ -1,4 +1,4 @@
-import { ProjectsType } from '@/server/routers/w3bstream';
+import { ProjectType } from '@/server/routers/w3bstream';
 import { makeAutoObservable } from 'mobx';
 import { Type } from 'class-transformer';
 import { MappingState } from '@/store/standard/MappingState';
@@ -11,7 +11,7 @@ import { IndexDb } from '@/lib/dexie';
 import { JSONValue } from '@/store/standard/JSONSchemaState';
 
 export class ProjectManager {
-  projects: ProjectsType[] = [];
+  projects: ProjectType[] = [];
   rightClickLock:boolean = false;
   files: MappingState<FilesListSchema> = new MappingState({
     currentId: '',
@@ -33,7 +33,7 @@ export class ProjectManager {
   }
 
   sync() {
-    _.each(rootStore?.w3s.allProjects.value, async (v: ProjectsType, k) => {
+    _.each(rootStore?.w3s.allProjects.value, async (v: ProjectType, k) => {
       const IndexDbFile = await IndexDb.findFilesById(String(v.f_project_id));
       if (IndexDbFile[0]) {
         let filesListSchema = new FilesListSchema(IndexDbFile[0].data);

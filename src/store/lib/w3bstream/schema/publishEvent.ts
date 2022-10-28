@@ -87,7 +87,7 @@ export class PublishEventSchema {
       },
       onSet(e) {
         if (e.publisher && e.publisher != this.value.publisher) {
-          const { allPublishers } = rootStore.w3s;
+          const allPublishers = rootStore.w3s.publishers.table.dataSource;
           const pub = allPublishers.find((item) => String(item.f_publisher_id) === e.publisher);
           if (pub) {
             let json = { payload: 'xxx yyy zzz' };

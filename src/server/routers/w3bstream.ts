@@ -52,12 +52,12 @@ export const w3bstreamRouter = t.router({
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
-export type ProjectsType = inferProcedureOutput<W3bstreamRouter['projects']>[0];
-
-// export type ProjectType = ProjectsType & {
-//   project_name: string;
-// };
-export type AppletType = ProjectsType['applets'][0] & { project_name: string };
-export type StrategieType = AppletType['strategies'][0];
-export type InstanceType = AppletType['instances'][0];
-export type PublisherType = ProjectsType['publishers'][0] & { project_id: string; project_name: string };
+export type ProjectOriginalType = inferProcedureOutput<W3bstreamRouter['projects']>[0];
+export type AppletType = ProjectOriginalType['applets'][0] & { project_name: string };
+export type StrategyType = AppletType['strategies'][0];
+export type InstanceType = AppletType['instances'][0] & { project_name: string; applet_name: string };
+export type PublisherType = ProjectOriginalType['publishers'][0] & { project_id: string; project_name: string };
+export type ProjectType = ProjectOriginalType & {
+  applets: AppletType[];
+  publishers: PublisherType[];
+};

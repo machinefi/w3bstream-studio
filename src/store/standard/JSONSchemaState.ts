@@ -3,6 +3,7 @@ import { makeObservable, computed, toJS, observable, action } from 'mobx';
 import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent } from '@rjsf/core';
 import { helper } from '@/lib/helper';
+import { ButtonProps, TableContainerProps } from '@chakra-ui/react';
 
 export class JSONSchemaFormState<T, U = UiSchema> {
   value: JSONValue<T> = new JSONValue();
@@ -104,5 +105,41 @@ export class JSONModalValue extends JSONSchemaValue<{
 }> {
   constructor(args: Partial<JSONModalValue> = {}) {
     super(args);
+  }
+}
+
+export type ActionButtonType = {
+  props?: ButtonProps;
+  text: string;
+};
+export type Column<T> = { key: string; label: string; render?: (item: T) => any; actions?: (item: T) => ActionButtonType[] };
+export type ExtendedTable<U> = {
+  key: string;
+  columns: Column<U>[];
+};
+export class JSONSchemaTableState<T = object> {
+  columns: Column<T>[] = [];
+  dataSource: T[] = [];
+  rowKey: string = '';
+  extendedTables?: ExtendedTable<any>[] = [];
+  initPagination?: {
+    page: number;
+    limit: number;
+  } = {
+    page: 1,
+    limit: 10
+  };
+  containerProps?: TableContainerProps = {};
+
+  set(v: Partial<JSONSchemaTableState<T>>) {
+    Object.assign(this, v);
+  }
+
+  constructor(args: Partial<JSONSchemaTableState<T>> = {}) {
+    Object.assign(this, args);
+    makeObservable(this, {
+      dataSource: observable,
+      set: action
+    });
   }
 }

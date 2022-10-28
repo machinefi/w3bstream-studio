@@ -18,9 +18,13 @@ import { PublishEventSchema } from './schema/publishEvent';
 import { CreatePublisherSchema } from './schema/createPublisher';
 import { CreateStrategySchema } from './schema/createStrategy';
 import { SpotlightAction } from '@mantine/spotlight';
-import { AppletType, ProjectsType, InstanceType, PublisherType, StrategieType } from '@/server/routers/w3bstream';
+import { AppletType, ProjectType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
 import { PostmanSchema } from './schema/postman';
+import { AppletsSchema } from './schema/applets';
+import { InstancesSchema } from './schema/instances';
+import { StrategiesSchema } from './schema/strategies';
+import { PublishersSchema } from './schema/publishers';
 
 configure({
   enforceActions: 'never'
@@ -50,7 +54,7 @@ export class W3bStream {
       };
     }
   });
-  allProjects = new PromiseState<() => Promise<any>, ProjectsType[]>({
+  allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
     function: async () => {
       const res = await trpc.api.projects.query({ accountID: this.config.form.formData.accountID });
@@ -59,7 +63,7 @@ export class W3bStream {
         const instances = [];
         let strategies = [];
         let publishers = [];
-        res.forEach((p: ProjectsType) => {
+        res.forEach((p: ProjectType) => {
           // p.project_files = new FilesListSchema();
           p.applets.forEach((a: AppletType) => {
             a.project_name = p.f_name;
@@ -86,20 +90,32 @@ export class W3bStream {
             });
           });
         });
-        this.allApplets = applets;
-        this.allInstances = instances;
-        this.allStrategies = strategies;
-        this.allPublishers = publishers;
+
         console.log(toJS(res));
+
+        this.applets.table.set({
+          dataSource: applets
+        });
+        this.instances.table.set({
+          dataSource: instances
+        });
+        this.strategies.table.set({
+          dataSource: strategies
+        });
+        this.publishers.table.set({
+          dataSource: publishers
+        });
       }
+
       return res;
     }
   });
 
-  allApplets: AppletType[] = [];
-  allInstances: InstanceType[] = [];
-  allStrategies: StrategieType[] = [];
-  allPublishers: PublisherType[] = [];
+  curProjectApplets = new AppletsSchema();
+  applets = new AppletsSchema();
+  instances = new InstancesSchema();
+  strategies = new StrategiesSchema();
+  publishers = new PublishersSchema();
 
   curProjectIndex = 0;
   get curProject() {

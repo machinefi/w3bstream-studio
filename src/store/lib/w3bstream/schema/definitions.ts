@@ -13,12 +13,14 @@ export const definitions = {
   publishers: {
     type: 'string',
     get enum() {
-      const { allPublishers, curPublisherProjectID } = rootStore.w3s;
+      const { curPublisherProjectID } = rootStore.w3s;
+      const allPublishers = rootStore.w3s.publishers.table.dataSource;
       const publishers = allPublishers.filter((item) => item.project_id === curPublisherProjectID);
       return publishers.map((i) => `${i.f_publisher_id}`) || [];
     },
     get enumNames() {
-      const { allPublishers, curPublisherProjectID } = rootStore.w3s;
+      const { curPublisherProjectID } = rootStore.w3s;
+      const allPublishers = rootStore.w3s.publishers.table.dataSource;
       const publishers = allPublishers.filter((item) => item.project_id === curPublisherProjectID);
       return publishers.map((i) => `${i.f_name}`) || [];
     }
@@ -26,10 +28,12 @@ export const definitions = {
   applets: {
     type: 'string',
     get enum() {
-      return rootStore.w3s.allApplets.map((i) => i.f_applet_id) || [];
+      const allApplets = rootStore.w3s.applets.table.dataSource;
+      return allApplets.map((i) => i.f_applet_id) || [];
     },
     get enumNames() {
-      return rootStore.w3s.allApplets.map((i) => `${i.f_name}`) || [];
+      const allApplets = rootStore.w3s.applets.table.dataSource;
+      return allApplets.map((i) => `${i.f_name}`) || [];
     }
   }
 };
