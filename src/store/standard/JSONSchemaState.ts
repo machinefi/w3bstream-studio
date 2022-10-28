@@ -127,7 +127,7 @@ export class JSONSchemaTableState<T = object> {
     limit: number;
   } = {
     page: 1,
-    limit: 10
+    limit: 8
   };
   containerProps?: TableContainerProps = {};
 
