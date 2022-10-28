@@ -23,7 +23,6 @@ export class StrategiesSchema {
       {
         key: 'f_event_type',
         label: 'Event Type',
-        render: (item) => 'Any'
       },
       {
         key: 'f_handler',
