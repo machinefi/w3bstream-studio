@@ -109,7 +109,7 @@ export class JSONModalValue extends JSONSchemaValue<{
 }
 
 export type ActionButtonType = {
-  props?: ButtonProps;
+  props: ButtonProps;
   text: string;
 };
 export type Column<T> = { key: string; label: string; render?: (item: T) => any; actions?: (item: T) => ActionButtonType[] };

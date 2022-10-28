@@ -68,7 +68,7 @@ export class AppletsSchema {
                   }
                 }
               },
-              text: 'Copy'
+              text: 'Deploy'
             }
           ];
         }
