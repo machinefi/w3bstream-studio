@@ -29,6 +29,7 @@ interface MessageEvents {
   'strategy.create': () => void;
   'strategy.update': () => void;
   'strategy.delete': () => void;
+  'contractlog.create': () => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;

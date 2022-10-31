@@ -98,6 +98,22 @@ const SideBar = observer((props: SideBarProps) => {
                 Publishers
               </Text>
             </Flex>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              h="60px"
+              p={2}
+              borderTop="1px solid rgba(0, 0, 0, 0.06)"
+              sx={getSelectedStyles(w3s.showContent === 'ALL_CONTRACT_LOGS')}
+              cursor="pointer"
+              onClick={() => {
+                w3s.showContent = 'ALL_CONTRACT_LOGS';
+              }}
+            >
+              <Text fontSize="16px" fontWeight={700}>
+                Contract Logs
+              </Text>
+            </Flex>
           </>
         );
     }

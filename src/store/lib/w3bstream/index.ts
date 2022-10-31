@@ -18,13 +18,15 @@ import { PublishEventSchema } from './schema/publishEvent';
 import { CreatePublisherSchema } from './schema/createPublisher';
 import { CreateStrategySchema } from './schema/createStrategy';
 import { SpotlightAction } from '@mantine/spotlight';
-import { AppletType, ProjectType } from '@/server/routers/w3bstream';
+import { AppletType, ContractLogType, ProjectType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
 import { PostmanSchema } from './schema/postman';
 import { AppletsSchema } from './schema/applets';
 import { InstancesSchema } from './schema/instances';
 import { StrategiesSchema } from './schema/strategies';
 import { PublishersSchema } from './schema/publishers';
+import { ContractLogsSchema } from './schema/contractLogs';
+import { CreateContractLogSchema } from './schema/createContractLog';
 
 configure({
   enforceActions: 'never'
@@ -158,9 +160,24 @@ export class W3bStream {
   curPublisherProjectID = '';
   publishEvent = new PublishEventSchema();
 
-  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' = 'CURRENT_APPLETS';
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' | 'ALL_CONTRACT_LOGS' = 'CURRENT_APPLETS';
 
   isReady = false;
+
+  allContractLogs = new PromiseState<() => Promise<any>, ContractLogType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.contractLogs.query();
+      if (res?.length) {
+        this.contractLogs.table.set({
+          dataSource: res
+        });
+      }
+      return res;
+    }
+  });
+  contractLogs = new ContractLogsSchema();
+  createContractLog = new CreateContractLogSchema();
 
   get isLogin() {
     return !!this.config.form.formData.token;
@@ -192,6 +209,7 @@ export class W3bStream {
       })
       .on('user.login', async () => {
         await this.allProjects.call();
+        this.allContractLogs.call();
         this.projectManager.sync();
         NextRouter.push('/');
       })
@@ -237,6 +255,9 @@ export class W3bStream {
       })
       .on('strategy.delete', async () => {
         await this.allProjects.call();
+      })
+      .on('contractlog.create', async () => {
+        await this.allContractLogs.call();
       });
   }
 

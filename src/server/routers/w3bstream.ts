@@ -48,6 +48,24 @@ export const w3bstreamRouter = t.router({
           }
         }
       });
+    }),
+  contractLogs: t.procedure
+    .query(({ ctx, input }) => {
+      return ctx.prisma.t_contractlog.findMany({
+        select: {
+          f_contractlog_id: true,
+          f_project_name: true,
+          f_event_type: true,
+          f_chainid: true,
+          f_contractaddress: true,
+          f_blockstart: true,
+          f_blockcurrent: true,
+          f_blockend: true,
+          f_topic0: true,
+          f_created_at: true,
+          f_updated_at: true
+        }
+      });
     })
 });
 
@@ -61,3 +79,4 @@ export type ProjectType = ProjectOriginalType & {
   applets: AppletType[];
   publishers: PublisherType[];
 };
+export type ContractLogType = inferProcedureOutput<W3bstreamRouter['contractLogs']>[0];

@@ -15,6 +15,7 @@ import Editor from './Editor';
 import DockerLogs from './DockerLogs';
 import { ConfirmModal } from '../Common/Confirm';
 import JSONTable from '../JSONTable';
+import AllContractLogs from './AllContractLogs';
 
 const IDE = observer(() => {
   const {
@@ -37,6 +38,7 @@ const IDE = observer(() => {
             {w3s.showContent === 'ALL_PUBLISHERS' && <AllPublishers />}
             {w3s.showContent === 'EDITOR' && <Editor />}
             {w3s.showContent === 'DOCKER_LOGS' && <DockerLogs />}
+            {w3s.showContent === 'ALL_CONTRACT_LOGS' && <AllContractLogs />}
           </Box>
         ) : (
           <LayoutCenter w="100%" h="calc(100vh - 100px)">
@@ -69,6 +71,7 @@ const IDE = observer(() => {
       <JSONSchemaModal jsonstate={w3s.createPublisher} />
       <JSONSchemaModal jsonstate={w3s.postman} />
       <JSONSchemaModal jsonstate={w3s.createStrategy} />
+      <JSONSchemaModal jsonstate={w3s.createContractLog} />
     </>
   );
 });

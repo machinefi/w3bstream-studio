@@ -25,9 +25,9 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
     });
   }, [dataSource]);
 
-  if (!dataSource.length) {
-    return null;
-  }
+  // if (!dataSource.length) {
+  //   return null;
+  // }
 
   const needExtendedTable = !!extendedTables.length;
 
@@ -151,7 +151,11 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
                         {exColumns.map((exC) => {
                           return (
                             <Td key={exC.key}>
-                              {exC.actions ? exC.actions(exItem).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />) : exC.render ? exC.render(exItem) : exItem[exC.key]}
+                              {exC.actions
+                                ? exC.actions(exItem).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
+                                : exC.render
+                                ? exC.render(exItem)
+                                : exItem[exC.key]}
                             </Td>
                           );
                         })}
