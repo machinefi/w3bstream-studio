@@ -87,7 +87,7 @@ export class PostmanSchema {
       await showNotification({ message: 'requset successed' });
       eventBus.emit('postman.request');
       // this.form.reset();
-      this.modal.set({ show: false });
+      // this.modal.set({ show: false });
     }
   });
 

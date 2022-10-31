@@ -14,6 +14,7 @@ interface Props {
 
 const JSONSchemaModal = observer((props: Props) => {
   const { form, modal } = props.jsonstate;
+  const { children } = props;
 
   return (
     <Modal
@@ -37,6 +38,7 @@ const JSONSchemaModal = observer((props: Props) => {
         <ModalBody>
           <Box p="20px 30px">
             <JSONForm jsonstate={form} />
+            {children && children}
           </Box>
         </ModalBody>
       </ModalContent>

@@ -69,7 +69,18 @@ const IDE = observer(() => {
       <JSONSchemaModal jsonstate={w3s.publishEvent} />
       <JSONSchemaModal jsonstate={w3s.updatePassword} />
       <JSONSchemaModal jsonstate={w3s.createPublisher} />
-      <JSONSchemaModal jsonstate={w3s.postman} />
+      <JSONSchemaModal jsonstate={w3s.postman}>
+        <Button
+          mt="10px"
+          w="100%"
+          h="32px"
+          onClick={() => {
+            w3s.postman.form.reset();
+          }}
+        >
+          Reset
+        </Button>
+      </JSONSchemaModal>
       <JSONSchemaModal jsonstate={w3s.createStrategy} />
       <JSONSchemaModal jsonstate={w3s.createContractLog} />
     </>
