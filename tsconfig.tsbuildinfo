@@ -5697,8 +5697,8 @@
         "affectsGlobalScope": false
       },
       "./src/lib/event.ts": {
-        "version": "da17c3efdbf868e975cd07043e00c5d47a46a054d7a5a187acf6ac19a8c4ae84",
-        "signature": "db10cdd08167b9384be18e54e44bc120b08e1e6ce6ea991ad00cddc9f5a93334",
+        "version": "9f44cff7cdd735e686df4e226eae56af8049b916d027488810c302fe023717c7",
+        "signature": "05b2a06e88c6e90184efda5087307d67a86f2884ae6ce2a3eb0276eb4dffdb50",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@types+lodash@4.14.185/node_modules/@types/lodash/debounce.d.ts": {
@@ -6081,14 +6081,24 @@
         "signature": "022d0e5b18aa33e48e53e2fc7a558ee448a29cba6fe163a36cd5ece60cd1f7ff",
         "affectsGlobalScope": false
       },
+      "./node_modules/@generated/monitor/runtime/index.d.ts": {
+        "version": "e2f52bb9c822e3a6ca9939dd01a7304d56e9ecccc5b4af951a2d50e3c99fb336",
+        "signature": "e2f52bb9c822e3a6ca9939dd01a7304d56e9ecccc5b4af951a2d50e3c99fb336",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/@generated/monitor/index.d.ts": {
+        "version": "0418b650e6aa8d8b18058ab7b7b7984691b7e9c2f1e6a410c9352c5c3ad92d75",
+        "signature": "0418b650e6aa8d8b18058ab7b7b7984691b7e9c2f1e6a410c9352c5c3ad92d75",
+        "affectsGlobalScope": false
+      },
       "./src/server/prisma.ts": {
-        "version": "e85943a0b7e4cc53fb732de64cc873fa1beda95560198b02d846bfeef12c3e22",
-        "signature": "382280a26ceeb14a8ef14b25999406a21346a3673a8896079b391efe30cceac8",
+        "version": "ae9947f6ca0a5ddc6e715d222ec44d76c623b730a454b19424a8cce179d8da5a",
+        "signature": "5d4a80966a54a2f8bc6c3754b2bdfbe930d90d1784716f5dc8de571322b7245e",
         "affectsGlobalScope": false
       },
       "./src/server/context.ts": {
-        "version": "0bbc3305ba5fd997ec68069fbc0b94f3371530af6deebe8a75c39d80628a634c",
-        "signature": "0747901a4a448e4c5be2c6320cb5ddb8b1e6a3887526b17d8512b759a39f4e93",
+        "version": "d3aca931521a5dde5011ca4fac12f896130fd0ccf2134d5d451f31ba663d7e02",
+        "signature": "dc4e7677d6fb3f31fcca377da404fe240e216b0c3908ff79fe8b2e3445663433",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/superjson@1.9.1/node_modules/superjson/dist/transformer.d.ts": {
@@ -6128,7 +6138,7 @@
       },
       "./src/server/trpc.ts": {
         "version": "25daa746084155877ba77a2fa5a3f9caefbafd176cb224711b8cb32d763821b4",
-        "signature": "0b4d21c7ecf6ef1e1b1905aba0f8a95690808ba128551b645c5e0a8811ddc167",
+        "signature": "07dde0df44cd2656175d66b8eca26315ee1e1bee74cd012682542f553ef039b3",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/helpers/typealiases.d.ts": {
@@ -6187,8 +6197,8 @@
         "affectsGlobalScope": false
       },
       "./src/server/routers/w3bstream.ts": {
-        "version": "20ee1d0b890e2f369473950d36cbc29754530c843e73c9bc51c1616053deeeb1",
-        "signature": "7243b858539740afda9f4ee098b00468604c650acb041af017e42609098a52ca",
+        "version": "5ae0659b6aef2b032e1826007e9d693ace0f48e377a2b5d45bb1caed29c84fa4",
+        "signature": "6b703cdaa65ef7fec1e974446fa7f3482e83d7b37bd49511bd7a3f8eff26d651",
         "affectsGlobalScope": false
       },
       "./src/lib/superjson.ts": {
@@ -6198,7 +6208,7 @@
       },
       "./src/server/routers/_app.ts": {
         "version": "117b4d406ff9e4a8a69e57ebbbebb5e1b3ff023843e564353f36b4cacaf36b8b",
-        "signature": "0a53df864296e3ee4aade24c5434cb2240083d48f8b4068f58d6d5ac28e45376",
+        "signature": "5cc30a7f21f4bca37c5582ff717778c46be0524ec55308fb6d9daa90e4ac36b5",
         "affectsGlobalScope": false
       },
       "./src/lib/trpc.ts": {
@@ -6252,8 +6262,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "68f87eaf7dc047b7179709bc457659849c171d007714b83a1f96966f834dbf1d",
-        "signature": "5b337ab32311a6574c3c26c14a576f598217454075ab47fab08c9dd1bb5e3649",
+        "version": "67438de591ee77b4f40cfa1fcaa112095e6f6c1e1f75db2003fc4735d54f157d",
+        "signature": "4932e143581ab5f1de035f17785ef65683321effc30a18cfd061bb60af879495",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/ts-algebra@1.1.1/node_modules/ts-algebra/lib/meta-types/never.d.ts": {
@@ -7853,7 +7863,7 @@
       },
       "./src/store/lib/w3bstream/schema/login.ts": {
         "version": "03117e8874254d55feecf98259c93f56d8d1df2da868dfe8ca9f8a053f24d73a",
-        "signature": "47ff01e599bf7d9af7f92de626ac5d94749de869d7b8f62d154f525a3dc73d7a",
+        "signature": "d0a241890fd809ce85851c88d4d00121cdc876f59aa2f9d7207369ba9264fe2e",
         "affectsGlobalScope": false
       },
       "./src/store/standard/storagestate.ts": {
@@ -7863,11 +7873,11 @@
       },
       "./src/store/lib/w3bstream/schema/config.ts": {
         "version": "92f3429074eec8e6be41c0af0758df232c4cc124b10fe4b6d7aa290335966406",
-        "signature": "865d1ee4026755f0a3fa177c1496f554427090cc65fac4430c8fc3fc38e6ab37",
+        "signature": "25881aaed95c7825ce58f852849c85aa7b3796b5fb90deb12ca27db01c2486b0",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/definitions.ts": {
-        "version": "e4d97e223419cca4d980d17159abb5e958e4a67a2d1c992c599738ca948b980f",
+        "version": "7df4c0d0d21c3895eefbbf8ca45f74b130b84793b2699041bc644ebc02e2a055",
         "signature": "51d0c59f30386e9e0e37c685c7f086cbe4dcf43dcad99c2ebfafd103c91de4a8",
         "affectsGlobalScope": false
       },
@@ -7917,18 +7927,18 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/publishevent.ts": {
-        "version": "4fea6b5b915ab9dcca01d730b471a8baff7c333bec740ef4ac11464cb2a0b378",
+        "version": "24dd48c95297d0a7b3b2589638be00582b3748d47ae909fb94e284d1a7c69c7f",
         "signature": "6f35ea90ae58525fab79caecc50bce28709d5bba1512b6a6954d639169c5ad80",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createpublisher.ts": {
         "version": "ad9850be0aa90f90cf634ed34dc698a87c91340b3a830878667832779713aa5d",
-        "signature": "d2997a9ee78f0f4c36753afeb6e34ad2e62b0ac451302cdf8f955078d135821d",
+        "signature": "6b2fce0e83acc2ea938a91a76089b138ec03a686edc89eab9b55441a27973548",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/createstrategy.ts": {
-        "version": "5b87f4ca91f227aac31c917a49b155e809424b1616a39f4bac6769f403c8c997",
-        "signature": "9b33ebaa8a5603cd15631ca2f292cb35f0a299511938ad5ac91fd8eddd61a69a",
+        "version": "7a822ee7ce439654fa585d68a56dcec58d1158fa505dc0745fa5e999867c37a3",
+        "signature": "6700679d76dfb01afb292034e56468de62b9fae6ed57f81f3ed4e061ced39343",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@mantine+spotlight@5.5.5_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/spotlight/lib/types.d.ts": {
@@ -8127,18 +8137,108 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/project.ts": {
-        "version": "79bc8716220e460d953f584b7f92575bd46264ad9c859fbeffc3ab6e786ee09e",
-        "signature": "34d892f6ab0d8153f56cf7dd5aed9e8f55db39ee4707d0457a51e8b3bb482302",
+        "version": "0a534307bac26f7b82b73086950852dba42d2d3d5b3a194c6929399fdb72df42",
+        "signature": "292b6f83fe1b420a65aa8ac8dd1381efb2ead424b08bcbe0ce28057d8f4ce9cb",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/postman.ts": {
-        "version": "12830609b892262e1f95205a6b03376e579e36399521dbe8273ee3d99d13ef28",
+        "version": "6c56bf9334a37a7d03ef39c77db2a7000c05b44163903ada425cb7e7d0693bbf",
         "signature": "32210a1443cc35a4552f9ff6b82ad1acff90427defb2b5fd04de2c045a3e61e7",
         "affectsGlobalScope": false
       },
+      "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts": {
+        "version": "2c8381a3a5a1663aa1723b31f3718dda9a359ad8eef9342b79f553de106b7ead",
+        "signature": "2c8381a3a5a1663aa1723b31f3718dda9a359ad8eef9342b79f553de106b7ead",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/core/types.d.ts": {
+        "version": "d3b00379743c1c5491f135af90ca49a54d3270173491941468949797afb62e9b",
+        "signature": "d3b00379743c1c5491f135af90ca49a54d3270173491941468949797afb62e9b",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/core/toast.d.ts": {
+        "version": "69b02a4998bdf31657476c568fa4611861bc0053cb92eae8da54dc4a309b1f27",
+        "signature": "69b02a4998bdf31657476c568fa4611861bc0053cb92eae8da54dc4a309b1f27",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/core/use-toaster.d.ts": {
+        "version": "536e7260f790e3521461bc8f83dce75698e796f4dff4cb7165835378de562ae6",
+        "signature": "536e7260f790e3521461bc8f83dce75698e796f4dff4cb7165835378de562ae6",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/core/store.d.ts": {
+        "version": "74ba7cf0a2736cb7eac4751ff5807bccf7415df71c16c2991a76ad46c32a448f",
+        "signature": "74ba7cf0a2736cb7eac4751ff5807bccf7415df71c16c2991a76ad46c32a448f",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/toast-bar.d.ts": {
+        "version": "c9d8c39cf7b0396ee071df4bec639e8224cda530d28ed986769bfc45fbc60681",
+        "signature": "c9d8c39cf7b0396ee071df4bec639e8224cda530d28ed986769bfc45fbc60681",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/toaster.d.ts": {
+        "version": "c84fd44e12212ca9783941783b03db0b31c8318cb0dc74bd62e3b98c54aca590",
+        "signature": "c84fd44e12212ca9783941783b03db0b31c8318cb0dc74bd62e3b98c54aca590",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/goober@2.1.10/node_modules/goober/goober.d.ts": {
+        "version": "e84626067725d75771368f7f33a6b8898cfcff1190f4e9bde24c48f9fa818993",
+        "signature": "e84626067725d75771368f7f33a6b8898cfcff1190f4e9bde24c48f9fa818993",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/checkmark.d.ts": {
+        "version": "83c7f7373c2a83025c08cbe7f63253aea7fd557a66975931a98b1f41f5369073",
+        "signature": "83c7f7373c2a83025c08cbe7f63253aea7fd557a66975931a98b1f41f5369073",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/error.d.ts": {
+        "version": "fd92849272e08b6f2fe3b6d75d37e4bd92c378e455b9421a92c2f28097a70aa3",
+        "signature": "fd92849272e08b6f2fe3b6d75d37e4bd92c378e455b9421a92c2f28097a70aa3",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/loader.d.ts": {
+        "version": "f045fd129077d2d7d93674f637b61b90d6eea1388a938beb3272f790b1132a12",
+        "signature": "f045fd129077d2d7d93674f637b61b90d6eea1388a938beb3272f790b1132a12",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts": {
+        "version": "7a4094cb8681bf06616cdf628164a750ddaa167d429adcf194e484f31d4d079e",
+        "signature": "7a4094cb8681bf06616cdf628164a750ddaa167d429adcf194e484f31d4d079e",
+        "affectsGlobalScope": false
+      },
+      "./src/components/jsontablerender/index.tsx": {
+        "version": "475664e79daf7b19927d861e134dcd6d1a4b66e75d6bd03e41bcfedeba770256",
+        "signature": "d8c88e0d3fd520a4fb3f0ccff066c45450e5bbf0b62a563c9017416925f532a8",
+        "affectsGlobalScope": false
+      },
+      "./src/store/lib/w3bstream/schema/applets.tsx": {
+        "version": "a3dc3abbe8c131e803603dcfa04bd1a9e381f2062983d1f90a94a8788449e14c",
+        "signature": "27fafc59c1f269960a32b34b96a5d42a1ad175e59e4e5ef7607494bc829e1235",
+        "affectsGlobalScope": false
+      },
+      "./src/store/lib/w3bstream/schema/instances.ts": {
+        "version": "83292a0fcf7a0863e75c97fd390ff3ffb68c0d7f7ce7d9fb6a1d7efebcccb326",
+        "signature": "4a9cd90e22e0d0628682b8cf6a16ffaa50bf1fdb65c00ab4c71cd9ce2b0b7df5",
+        "affectsGlobalScope": false
+      },
+      "./src/store/lib/w3bstream/schema/strategies.ts": {
+        "version": "7427948f3a4dfaabdaebe33f2e9f080a598f9a17b952695f2f69feafe35a386f",
+        "signature": "b9fbb413819f56667d7d1475b534e24bbc61346ca23ab62a476f7e0cbc8232c5",
+        "affectsGlobalScope": false
+      },
+      "./src/store/lib/w3bstream/schema/publishers.ts": {
+        "version": "0d302ee883182c4d07d3b01098296288c59e3b8091618fc63f53d8e42884ccd1",
+        "signature": "e7f4ae0d62e68e9841c1226515f6b3ae7ef76a10b8736fb2d92acfbbb606f9b1",
+        "affectsGlobalScope": false
+      },
+      "./src/store/lib/w3bstream/schema/contractlog.ts": {
+        "version": "c8de360973e57ce89e749e976242e45dafca3f3d95855b05993ecb783bd89e47",
+        "signature": "03220c6041860885ab7c321552008192fafcdbd66f67e061cbc4396721e8a35b",
+        "affectsGlobalScope": false
+      },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "f43fc7a52a170b6f0999c54e3dfb0a6a98c384d8c085f9d88ce13f600546a2bd",
-        "signature": "c5ff80c834854ab1d981175ee3eca2270e241736aa3e5784d19584f2795de856",
+        "version": "0d5322eebc0ed52a0cda5abd83beb1b99210521ebfc52e93b2f86de860fb56f2",
+        "signature": "0292bde6c27f21046d903a223d726b9d3d76e2c840c0d125091ffd32d05256c5",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -8162,7 +8262,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/jsonschemamodal/index.tsx": {
-        "version": "34d467de91d2dfba31c97e2ac9ac218bdfd0c461e095ab67004e156f8365c415",
+        "version": "84b7c6153e17bb47a73959c4584d0a4179172875439e4d79591b10b14319797a",
         "signature": "1c599c85b3c9b90f869cea58ec89e1dc20dec66b542216801848c57f91ca03af",
         "affectsGlobalScope": false
       },
@@ -8256,69 +8356,9 @@
         "signature": "11d24ecb7f053dabf731e427fd83f39035fc74aa655b0f3cac49bf847f4bdfa5",
         "affectsGlobalScope": false
       },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/core/types.d.ts": {
-        "version": "d3b00379743c1c5491f135af90ca49a54d3270173491941468949797afb62e9b",
-        "signature": "d3b00379743c1c5491f135af90ca49a54d3270173491941468949797afb62e9b",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/core/toast.d.ts": {
-        "version": "69b02a4998bdf31657476c568fa4611861bc0053cb92eae8da54dc4a309b1f27",
-        "signature": "69b02a4998bdf31657476c568fa4611861bc0053cb92eae8da54dc4a309b1f27",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/core/use-toaster.d.ts": {
-        "version": "536e7260f790e3521461bc8f83dce75698e796f4dff4cb7165835378de562ae6",
-        "signature": "536e7260f790e3521461bc8f83dce75698e796f4dff4cb7165835378de562ae6",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/core/store.d.ts": {
-        "version": "74ba7cf0a2736cb7eac4751ff5807bccf7415df71c16c2991a76ad46c32a448f",
-        "signature": "74ba7cf0a2736cb7eac4751ff5807bccf7415df71c16c2991a76ad46c32a448f",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/toast-bar.d.ts": {
-        "version": "c9d8c39cf7b0396ee071df4bec639e8224cda530d28ed986769bfc45fbc60681",
-        "signature": "c9d8c39cf7b0396ee071df4bec639e8224cda530d28ed986769bfc45fbc60681",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/toaster.d.ts": {
-        "version": "c84fd44e12212ca9783941783b03db0b31c8318cb0dc74bd62e3b98c54aca590",
-        "signature": "c84fd44e12212ca9783941783b03db0b31c8318cb0dc74bd62e3b98c54aca590",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/goober@2.1.10/node_modules/goober/goober.d.ts": {
-        "version": "e84626067725d75771368f7f33a6b8898cfcff1190f4e9bde24c48f9fa818993",
-        "signature": "e84626067725d75771368f7f33a6b8898cfcff1190f4e9bde24c48f9fa818993",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/checkmark.d.ts": {
-        "version": "83c7f7373c2a83025c08cbe7f63253aea7fd557a66975931a98b1f41f5369073",
-        "signature": "83c7f7373c2a83025c08cbe7f63253aea7fd557a66975931a98b1f41f5369073",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/error.d.ts": {
-        "version": "fd92849272e08b6f2fe3b6d75d37e4bd92c378e455b9421a92c2f28097a70aa3",
-        "signature": "fd92849272e08b6f2fe3b6d75d37e4bd92c378e455b9421a92c2f28097a70aa3",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/components/loader.d.ts": {
-        "version": "f045fd129077d2d7d93674f637b61b90d6eea1388a938beb3272f790b1132a12",
-        "signature": "f045fd129077d2d7d93674f637b61b90d6eea1388a938beb3272f790b1132a12",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts": {
-        "version": "7a4094cb8681bf06616cdf628164a750ddaa167d429adcf194e484f31d4d079e",
-        "signature": "7a4094cb8681bf06616cdf628164a750ddaa167d429adcf194e484f31d4d079e",
-        "affectsGlobalScope": false
-      },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "1e64f0ce3598e0431cca97e4b366642085117a4b1d25cad18a0a9e15436396ba",
+        "version": "13e04353f626c6e74386896d9eadb75201115697a81af4aa6b232377c9e00d27",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts": {
-        "version": "2c8381a3a5a1663aa1723b31f3718dda9a359ad8eef9342b79f553de106b7ead",
-        "signature": "2c8381a3a5a1663aa1723b31f3718dda9a359ad8eef9342b79f553de106b7ead",
         "affectsGlobalScope": false
       },
       "./src/store/standard/paginationstate.ts": {
@@ -8326,28 +8366,23 @@
         "signature": "27ca89180f6f609cfdbd6ac74fb0ce35340444d4e811ef41d6f5a95edcbfe644",
         "affectsGlobalScope": false
       },
-      "./src/components/table/index.tsx": {
-        "version": "adb746f66f7fda02f3118ef6a4dc0a4702a84284195ae21eecd1fd2141377393",
-        "signature": "3eec487106b965b83f8382f42bb18170a08a57920ccfe0d05666c00aa30a457d",
-        "affectsGlobalScope": false
-      },
-      "./src/components/ide/allinstances/index.tsx": {
-        "version": "3464f600218ddcde2eae2157cf1c40530f4ec529e0e4d90064aa0f1398be8030",
-        "signature": "38996f53c5c43b2faedf3daa2aeead1a7ac900cae6ef4f72df5c5d3001ec88b5",
+      "./src/components/jsontable/index.tsx": {
+        "version": "1445f8859bac7675c6dae09aceba243ea41c9c9bfbe16b64267647fab1d84004",
+        "signature": "16c724b9f7cba4c5de5543c865f780a64a3285a7154d24c79207fcf7f8835289",
         "affectsGlobalScope": false
       },
       "./src/components/ide/applets/index.tsx": {
-        "version": "cda12fcf909ec0c9791d713783e4439da28b62b0f88fd56ed1cd283d6ad2168c",
-        "signature": "5352f373f9385d55b1e898b204f88ad71af7ba49649baa9ee6e6459138f95902",
+        "version": "5ebda1a36826e7b1e8b938f13b8e34895150e9648ae4e92a1be4d8db4634da13",
+        "signature": "65825006f95300c17272474e932a42c68cf5277e65254ace0e8421457131aa98",
         "affectsGlobalScope": false
       },
       "./src/components/ide/allstrategies/index.tsx": {
-        "version": "597a34f710d0959eded3a7d01c26bf15e91e73dad712c959764d59b5ecc2175f",
+        "version": "d62fe13c1b80e4045b5b2a8248f8105ed54d304c4ed049eafea56162e68cb247",
         "signature": "67eee0f55cb7f448ae2976d6fcaf17c2015adf148d43b3a75f20aa341ba650a0",
         "affectsGlobalScope": false
       },
       "./src/components/ide/allpublishers/index.tsx": {
-        "version": "bf9bb4ab70411d29833935f8e2a8d6c18dcbf7d4009325c10118e69223ec8ee6",
+        "version": "26d100abf26ad78f1df542e250497e8038feab5ed527413704e00ba1eb2d7446",
         "signature": "f2150375b898ca0091f38df8528bd8744a1a882f9e298d54dcb4e031545aaa92",
         "affectsGlobalScope": false
       },
@@ -8376,29 +8411,14 @@
         "signature": "c21c374367986aabc4b2592085d6190855e54ffb17068d4a21246a77e024ebc4",
         "affectsGlobalScope": false
       },
+      "./src/components/ide/allcontractlogs/index.tsx": {
+        "version": "9a97c72cfa6874da729e3e97f0175bb64afae0d3401b59b9e4a454db78ab4438",
+        "signature": "39ab3ebe5b1b35cef4eada13c7251a525a1c586ac0acdab5b31338c3fb453989",
+        "affectsGlobalScope": false
+      },
       "./src/components/ide/index.tsx": {
-        "version": "5d99571246f927bd293fddef04da4179d0c65bc6eda6b692051148ecd83411d8",
+        "version": "8da34a471aa3534e4ae16c18e8d3e8d3b5c1c286eee1b88af59c0e7c8dd1f8c0",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
-        "affectsGlobalScope": false
-      },
-      "./src/components/applet/modal.tsx": {
-        "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "affectsGlobalScope": false
-      },
-      "./src/components/applet/table.tsx": {
-        "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "affectsGlobalScope": false
-      },
-      "./src/components/instace/modal.tsx": {
-        "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "affectsGlobalScope": false
-      },
-      "./src/components/instace/table.tsx": {
-        "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": false
       },
       "./src/pages/404.tsx": {
@@ -8409,6 +8429,236 @@
       "./src/pages/500.tsx": {
         "version": "338b65ccee2bf56897acfd03abd554d6dd3d2c8e2a5c41d5a41e95de37eb11f0",
         "signature": "a58f72a5d9264b381e4cc070cd8a598b4837e373e9b19a22fc339e3fab22ffa5",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/setbatchupdatesfn.d.ts": {
+        "version": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts": {
+        "version": "d81ac5fa56a650daffd46e0fcb6f8bdd56db3a03e42dac256db1da4448089f0b",
+        "signature": "d81ac5fa56a650daffd46e0fcb6f8bdd56db3a03e42dac256db1da4448089f0b",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts": {
+        "version": "a26f0c964f5c919a17922ee048843e9006ef56d7b19200478263bbfcf1b2c422",
+        "signature": "a26f0c964f5c919a17922ee048843e9006ef56d7b19200478263bbfcf1b2c422",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts": {
+        "version": "fe34dfc033be1144362e549ba55b92bde147a6c6d92edf17e4d5597512b1ff9a",
+        "signature": "fe34dfc033be1144362e549ba55b92bde147a6c6d92edf17e4d5597512b1ff9a",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts": {
+        "version": "3c46b5e7a836ba669bd9b128b649c8925e7ab25f69badc9f2f4eb27d6ea190eb",
+        "signature": "3c46b5e7a836ba669bd9b128b649c8925e7ab25f69badc9f2f4eb27d6ea190eb",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/removable.d.ts": {
+        "version": "0dd7bc3250da0677a9f39147800d5209b360d3d6561a371d13f8095983791bec",
+        "signature": "0dd7bc3250da0677a9f39147800d5209b360d3d6561a371d13f8095983791bec",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts": {
+        "version": "e75821710f5adce6110067e4031c79ce8f562c934ae74d8409fe98d9396ba44e",
+        "signature": "e75821710f5adce6110067e4031c79ce8f562c934ae74d8409fe98d9396ba44e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts": {
+        "version": "95fe50f64fc00ac887c9fe5a71b2b64bed3ccf659dd56494ecbc0f184fbd989f",
+        "signature": "95fe50f64fc00ac887c9fe5a71b2b64bed3ccf659dd56494ecbc0f184fbd989f",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts": {
+        "version": "1dcd77c12dde563791260ab041dc4e2e3f315bee5017110469eac0ec1cb87e73",
+        "signature": "1dcd77c12dde563791260ab041dc4e2e3f315bee5017110469eac0ec1cb87e73",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts": {
+        "version": "c3d4e154af61b48b1a643ac85496728fe9d6bf08185b94fb1f17ab1a8fe86532",
+        "signature": "c3d4e154af61b48b1a643ac85496728fe9d6bf08185b94fb1f17ab1a8fe86532",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts": {
+        "version": "a5a2c8dfc3f9cfca91ed20baab8c4e52b8dc2336557b8038aef96533007e4bd4",
+        "signature": "a5a2c8dfc3f9cfca91ed20baab8c4e52b8dc2336557b8038aef96533007e4bd4",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts": {
+        "version": "9d2022af216a6704c40b8ba9b298650e5761828916a9122aed2a97d57e5d393c",
+        "signature": "9d2022af216a6704c40b8ba9b298650e5761828916a9122aed2a97d57e5d393c",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts": {
+        "version": "3769e897bd99c219d3d9922d889288f3a1b6fc9f6035917b25e533d68282fd33",
+        "signature": "3769e897bd99c219d3d9922d889288f3a1b6fc9f6035917b25e533d68282fd33",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/retryer.d.ts": {
+        "version": "51affde30ce0c6d16863b353a108ff5cc016cafcd29fa0fcb41e01670ec2e448",
+        "signature": "51affde30ce0c6d16863b353a108ff5cc016cafcd29fa0fcb41e01670ec2e448",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queriesobserver.d.ts": {
+        "version": "41d6b856dd5b750adfab90997654c91c9e011774f10839d7025e97bf33d6727c",
+        "signature": "41d6b856dd5b750adfab90997654c91c9e011774f10839d7025e97bf33d6727c",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/infinitequeryobserver.d.ts": {
+        "version": "c2f19013bd30a8bc03f02362f5ff24f336fc2d7e4c9bafed81a9c149ac9399fa",
+        "signature": "c2f19013bd30a8bc03f02362f5ff24f336fc2d7e4c9bafed81a9c149ac9399fa",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/notifymanager.d.ts": {
+        "version": "160c862dbb7cb9b459486cbd7c88d002e322a5d8dc37cb16b023aa98cd387dea",
+        "signature": "160c862dbb7cb9b459486cbd7c88d002e322a5d8dc37cb16b023aa98cd387dea",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/focusmanager.d.ts": {
+        "version": "a419ef898e624f14b3619f4a2bf889ab2cd0d0e6165fe4e8eec8e4994173df92",
+        "signature": "a419ef898e624f14b3619f4a2bf889ab2cd0d0e6165fe4e8eec8e4994173df92",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/onlinemanager.d.ts": {
+        "version": "b42b3ec88494f4a7f208335e75a610c44d7b26e86f37644506d33cc9190afd1e",
+        "signature": "b42b3ec88494f4a7f208335e75a610c44d7b26e86f37644506d33cc9190afd1e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/hydration.d.ts": {
+        "version": "db6ec19c2f7c8e1e5121cdcc78cc91af4b7a1df2ec444ff6e036fb669df1edee",
+        "signature": "db6ec19c2f7c8e1e5121cdcc78cc91af4b7a1df2ec444ff6e036fb669df1edee",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts": {
+        "version": "58dfcd08cf27f0069b972333886b86797eca1beb6c5a3734cf54dc585e323b7e",
+        "signature": "58dfcd08cf27f0069b972333886b86797eca1beb6c5a3734cf54dc585e323b7e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts": {
+        "version": "dfc6d142a4a24d1294301a0245555a17471fc6ae70172e41e9304b63300939c8",
+        "signature": "dfc6d142a4a24d1294301a0245555a17471fc6ae70172e41e9304b63300939c8",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequeries.d.ts": {
+        "version": "4c60d84b1f113cfd2953820e17abbd34d448a304183f8e60192e1229bd5dc964",
+        "signature": "4c60d84b1f113cfd2953820e17abbd34d448a304183f8e60192e1229bd5dc964",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequery.d.ts": {
+        "version": "1b338d38c15dbed19dda260198f17431fc5a0b83583b5c6ce0605da405b2413f",
+        "signature": "1b338d38c15dbed19dda260198f17431fc5a0b83583b5c6ce0605da405b2413f",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryclientprovider.d.ts": {
+        "version": "70012d8a9a48f28f325739c37b8b7686fc43b81ebd20ab75151caedd911e1c0f",
+        "signature": "70012d8a9a48f28f325739c37b8b7686fc43b81ebd20ab75151caedd911e1c0f",
+        "affectsGlobalScope": true
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryerrorresetboundary.d.ts": {
+        "version": "fec4dc4428894c8580c4499a2fb3597f28a91f38a91dc85d0f81c084f5edb564",
+        "signature": "fec4dc4428894c8580c4499a2fb3597f28a91f38a91dc85d0f81c084f5edb564",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/hydrate.d.ts": {
+        "version": "fabcf8a317c5a9e0b9f10e4158b6fff596ca4b69ce141186abb5db073626a7b9",
+        "signature": "fabcf8a317c5a9e0b9f10e4158b6fff596ca4b69ce141186abb5db073626a7b9",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useisfetching.d.ts": {
+        "version": "19992c04ab7af902a2be49e11d16ebefe80883a276b984249e18e20ea9dac8c6",
+        "signature": "19992c04ab7af902a2be49e11d16ebefe80883a276b984249e18e20ea9dac8c6",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useismutating.d.ts": {
+        "version": "b1132c9f4e5585968fb6c6fc6da93725d9b84c0d672c2f5a6dd43ccf41b6a0ef",
+        "signature": "b1132c9f4e5585968fb6c6fc6da93725d9b84c0d672c2f5a6dd43ccf41b6a0ef",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usemutation.d.ts": {
+        "version": "1323085c5e51f01e7e262e7e92d2458905a7232c66dfa891321d7b87d1f517e5",
+        "signature": "1323085c5e51f01e7e262e7e92d2458905a7232c66dfa891321d7b87d1f517e5",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useinfinitequery.d.ts": {
+        "version": "3ef31e112d99b9e3061f2fd57faa0503e309c8dd5b1da4f18635c4060655d245",
+        "signature": "3ef31e112d99b9e3061f2fd57faa0503e309c8dd5b1da4f18635c4060655d245",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/isrestoring.d.ts": {
+        "version": "c038d8a953b5728afe6efe989414d6ef03f411af3f239072c970e419c2ab7389",
+        "signature": "c038d8a953b5728afe6efe989414d6ef03f411af3f239072c970e419c2ab7389",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts": {
+        "version": "8ed3fbb7e972ba87c638c0537bb14419a056f826e490cf7d789018dd57414127",
+        "signature": "8ed3fbb7e972ba87c638c0537bb14419a056f826e490cf7d789018dd57414127",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/internals/context.d.ts": {
+        "version": "aaec60343675c13377b6b6c10d1b9c58a5583b67fa376c7ce3ba64618a44e570",
+        "signature": "aaec60343675c13377b6b6c10d1b9c58a5583b67fa376c7ce3ba64618a44e570",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/types.d.ts": {
+        "version": "2caf480ef05368843bb7b9528e5e0e0d33f6c37299e102db486a4360f2cd0633",
+        "signature": "2caf480ef05368843bb7b9528e5e0e0d33f6c37299e102db486a4360f2cd0633",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts": {
+        "version": "5c5d6541fe3705769ef71e6fb6321ec81d8a3b612db0dbfad8e9c5b20c022ff8",
+        "signature": "5c5d6541fe3705769ef71e6fb6321ec81d8a3b612db0dbfad8e9c5b20c022ff8",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/decorationproxy.d.ts": {
+        "version": "3f4743026037e154ff7824fb0826570a96b73bfda20b720a98a9993103cec82e",
+        "signature": "3f4743026037e154ff7824fb0826570a96b73bfda20b720a98a9993103cec82e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/utilsproxy.d.ts": {
+        "version": "31986696a11a7d7ef28309a67db4b77650e27f1ac5a019791b456162fa590348",
+        "signature": "31986696a11a7d7ef28309a67db4b77650e27f1ac5a019791b456162fa590348",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/index.d.ts": {
+        "version": "444e9c4c05960155dc3031208c252e9ae505a03f0171ea1cc420653c2d725847",
+        "signature": "444e9c4c05960155dc3031208c252e9ae505a03f0171ea1cc420653c2d725847",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts": {
+        "version": "1c110c5873c3664c25f43379a68760e78fe3679722568a836243e5db61ca046e",
+        "signature": "1c110c5873c3664c25f43379a68760e78fe3679722568a836243e5db61ca046e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/interop.d.ts": {
+        "version": "883cdcff9678ec9603048fe3baa033bc0bbe031e958f67e5f2af72d1a42ab530",
+        "signature": "883cdcff9678ec9603048fe3baa033bc0bbe031e958f67e5f2af72d1a42ab530",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/index.d.ts": {
+        "version": "cf7b6ca4c74aa55d03b1f2efb861ce3d82b2f19bf6ab347aa334226486c1005f",
+        "signature": "cf7b6ca4c74aa55d03b1f2efb861ce3d82b2f19bf6ab347aa334226486c1005f",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts": {
+        "version": "a71a2c26a521c13ec4f81ae0a4f7e71f9409a200e5da66fb33158d5ba1acbd5f",
+        "signature": "a71a2c26a521c13ec4f81ae0a4f7e71f9409a200e5da66fb33158d5ba1acbd5f",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/shared/index.d.ts": {
+        "version": "cdf62be1b66d0c0be0f7f4b1a6ad3a636d78a082c48e3ffcdda76bc0c613092c",
+        "signature": "cdf62be1b66d0c0be0f7f4b1a6ad3a636d78a082c48e3ffcdda76bc0c613092c",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/createtrpcnext.d.ts": {
+        "version": "beae7732c2c2ca20b3157384adfde9f3ba520baef778babe4c63110309f0eb38",
+        "signature": "beae7732c2c2ca20b3157384adfde9f3ba520baef778babe4c63110309f0eb38",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/index.d.ts": {
+        "version": "e4cf2947b9bfd6e63c8d29ffaf209a0177da28d0a00cf3e581a658bc8dcb258f",
+        "signature": "e4cf2947b9bfd6e63c8d29ffaf209a0177da28d0a00cf3e581a658bc8dcb258f",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/httpbatchlink/index.d.ts": {
@@ -8433,7 +8683,7 @@
       },
       "./src/pages/_app.tsx": {
         "version": "b69cc49461840861c083106fae13ff75a0901ab0c0ed9ba2e4f6bf49553a32f4",
-        "signature": "eee41eb75dcf6c8e09ff9191cbfa9e03f9587afadd9e8c4f60bc80cf5d32f481",
+        "signature": "4bdbc51e424008e76f1ffce92bf0c884cba3656d3bc13a0d586a5a302fcb1b35",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts": {
@@ -8463,7 +8713,7 @@
       },
       "./src/pages/api/trpc/[trpc].ts": {
         "version": "2da4367b3b93d183c787d553bb8591b1d36752636a140c87e9266006605ae40b",
-        "signature": "46a0b34e1264c4d25ca6646ff0e6cfaa7275ea1ae5a6bc23d4dfd84edf2f2b2e",
+        "signature": "4451cc704911df1b376acc6ad19cd9646190b95b12f85de5d730731623472afb",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts": {
@@ -12022,6 +12272,176 @@
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
         "./node_modules/.pnpm/ajv@6.12.6/node_modules/ajv/lib/ajv.d.ts"
       ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/focusmanager.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/hydration.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/focusmanager.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/hydration.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/infinitequeryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/notifymanager.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/onlinemanager.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queriesobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/retryer.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/infinitequeryobserver.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/removable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/onlinemanager.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queriesobserver.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/removable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/retryer.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/retryer.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/hydrate.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/hydrate.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/isrestoring.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryclientprovider.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryerrorresetboundary.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/setbatchupdatesfn.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useinfinitequery.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useisfetching.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useismutating.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usemutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequeries.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequery.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/isrestoring.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryclientprovider.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryerrorresetboundary.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useinfinitequery.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useisfetching.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useismutating.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usemutation.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequeries.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequery.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/createtrpcclient.d.ts": [
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/internals/trpcclient.d.ts",
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
@@ -12111,6 +12531,79 @@
       ],
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/loggerlink/index.d.ts": [
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/links/loggerlink.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/createtrpcnext.d.ts": [
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/shared/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/index.d.ts": [
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/createtrpcnext.d.ts",
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts": [
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/types.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/observable/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/index.d.ts": [
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/interop.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/internals/context.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/interop.d.ts": [
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/internals/context.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/types.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/observable/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/index.d.ts": [
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/decorationproxy.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/utilsproxy.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/decorationproxy.d.ts": [
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/utilsproxy.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/internals/context.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/types.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/shared/index.d.ts": [
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/index.d.ts"
       ],
       "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/adapters/next/index.d.ts": [
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/adapters/next.d.ts"
@@ -15722,6 +16215,9 @@
         "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/helpers/util.d.ts",
         "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/index.d.ts"
       ],
+      "./node_modules/@generated/monitor/index.d.ts": [
+        "./node_modules/@generated/monitor/runtime/index.d.ts"
+      ],
       "./src/components/common/confirm/confirmmodal.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
@@ -15751,21 +16247,19 @@
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/react-dropzone@14.2.3_react@18.2.0/node_modules/react-dropzone/typings/react-dropzone.d.ts"
       ],
-      "./src/components/ide/allinstances/index.tsx": [
+      "./src/components/ide/allcontractlogs/index.tsx": [
+        "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
-        "./src/components/table/index.tsx",
+        "./src/components/jsontable/index.tsx",
+        "./src/lib/theme.ts",
         "./src/store/index.ts"
       ],
       "./src/components/ide/allpublishers/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
-        "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
-        "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
-        "./src/components/table/index.tsx",
-        "./src/lib/axios.ts",
-        "./src/lib/event.ts",
+        "./src/components/jsontable/index.tsx",
         "./src/lib/theme.ts",
         "./src/store/index.ts"
       ],
@@ -15773,21 +16267,16 @@
         "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
-        "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
-        "./src/components/table/index.tsx",
-        "./src/lib/axios.ts",
-        "./src/lib/event.ts",
+        "./src/components/jsontable/index.tsx",
         "./src/lib/theme.ts",
         "./src/store/index.ts"
       ],
       "./src/components/ide/applets/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
-        "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
-        "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
-        "./src/components/ide/allinstances/index.tsx",
-        "./src/components/table/index.tsx",
+        "./src/components/jsontable/index.tsx",
         "./src/lib/theme.ts",
         "./src/store/index.ts"
       ],
@@ -15824,7 +16313,7 @@
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
         "./src/components/common/confirm/index.tsx",
-        "./src/components/ide/allinstances/index.tsx",
+        "./src/components/ide/allcontractlogs/index.tsx",
         "./src/components/ide/allpublishers/index.tsx",
         "./src/components/ide/allstrategies/index.tsx",
         "./src/components/ide/applets/index.tsx",
@@ -15834,6 +16323,7 @@
         "./src/components/ide/sidebar/index.tsx",
         "./src/components/ide/toolbar/index.tsx",
         "./src/components/jsonschemamodal/index.tsx",
+        "./src/components/jsontable/index.tsx",
         "./src/lib/theme.ts",
         "./src/store/index.ts"
       ],
@@ -15876,6 +16366,22 @@
         "./src/components/jsonform/index.tsx",
         "./src/store/standard/jsonschemastate.ts"
       ],
+      "./src/components/jsontable/index.tsx": [
+        "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
+        "./src/components/common/simplepagination/index.tsx",
+        "./src/store/standard/jsonschemastate.ts",
+        "./src/store/standard/paginationstate.ts"
+      ],
+      "./src/components/jsontablerender/index.tsx": [
+        "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
+        "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts",
+        "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
+        "./src/server/routers/w3bstream.ts"
+      ],
       "./src/components/menu/context.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
       ],
@@ -15902,14 +16408,6 @@
       "./src/components/menu/menulist.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./src/components/table/index.tsx": [
-        "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
-        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
-        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
-        "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
-        "./src/components/common/simplepagination/index.tsx",
-        "./src/store/standard/paginationstate.ts"
       ],
       "./src/components/tree/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
@@ -15997,6 +16495,7 @@
         "./node_modules/.pnpm/@mantine+spotlight@5.5.5_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/spotlight/lib/index.d.ts",
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/httpbatchlink/index.d.ts",
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/loggerlink/index.d.ts",
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/index.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts",
@@ -16035,7 +16534,8 @@
         "./src/server/prisma.ts"
       ],
       "./src/server/prisma.ts": [
-        "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts"
+        "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
+        "./node_modules/@generated/monitor/index.d.ts"
       ],
       "./src/server/routers/_app.ts": [
         "./src/lib/superjson.ts",
@@ -16080,16 +16580,21 @@
         "./src/lib/trpc.ts",
         "./src/server/routers/w3bstream.ts",
         "./src/store/lib/w3bstream/project.ts",
+        "./src/store/lib/w3bstream/schema/applets.tsx",
         "./src/store/lib/w3bstream/schema/config.ts",
+        "./src/store/lib/w3bstream/schema/contractlog.ts",
         "./src/store/lib/w3bstream/schema/createapplet.ts",
         "./src/store/lib/w3bstream/schema/createproject.ts",
         "./src/store/lib/w3bstream/schema/createpublisher.ts",
         "./src/store/lib/w3bstream/schema/createstrategy.ts",
         "./src/store/lib/w3bstream/schema/fileslist.ts",
+        "./src/store/lib/w3bstream/schema/instances.ts",
         "./src/store/lib/w3bstream/schema/login.ts",
         "./src/store/lib/w3bstream/schema/postman.ts",
         "./src/store/lib/w3bstream/schema/projectlist.ts",
+        "./src/store/lib/w3bstream/schema/publishers.ts",
         "./src/store/lib/w3bstream/schema/publishevent.ts",
+        "./src/store/lib/w3bstream/schema/strategies.ts",
         "./src/store/lib/w3bstream/schema/updatepassword.ts",
         "./src/store/root.ts",
         "./src/store/standard/promisestate.ts"
@@ -16106,10 +16611,28 @@
         "./src/store/standard/jsonschemastate.ts",
         "./src/store/standard/mappingstate.ts"
       ],
+      "./src/store/lib/w3bstream/schema/applets.tsx": [
+        "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts",
+        "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
+        "./src/components/jsontablerender/index.tsx",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/index.ts",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
       "./src/store/lib/w3bstream/schema/config.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/store/standard/jsonschemastate.ts",
         "./src/store/standard/storagestate.ts"
+      ],
+      "./src/store/lib/w3bstream/schema/contractlog.ts": [
+        "./node_modules/.pnpm/@mantine+notifications@4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/notifications/lib/index.d.ts",
+        "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
+        "./src/lib/axios.ts",
+        "./src/lib/event.ts",
+        "./src/lib/theme.ts",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/lib/w3bstream/schema/definitions.ts",
+        "./src/store/standard/jsonschemastate.ts"
       ],
       "./src/store/lib/w3bstream/schema/createapplet.ts": [
         "./node_modules/.pnpm/@mantine+notifications@4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/notifications/lib/index.d.ts",
@@ -16159,6 +16682,12 @@
         "./src/lib/dexie.ts",
         "./src/lib/templatecode.ts"
       ],
+      "./src/store/lib/w3bstream/schema/instances.ts": [
+        "./src/components/jsontablerender/index.tsx",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/index.ts",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
       "./src/store/lib/w3bstream/schema/login.ts": [
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/lib/axios.ts",
@@ -16184,6 +16713,15 @@
         "./src/store/lib/w3bstream/schema/definitions.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
+      "./src/store/lib/w3bstream/schema/publishers.ts": [
+        "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
+        "./src/components/jsontablerender/index.tsx",
+        "./src/lib/axios.ts",
+        "./src/lib/event.ts",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/index.ts",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
       "./src/store/lib/w3bstream/schema/publishevent.ts": [
         "./node_modules/.pnpm/@mantine+notifications@4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/notifications/lib/index.d.ts",
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
@@ -16194,6 +16732,14 @@
         "./src/lib/theme.ts",
         "./src/store/index.ts",
         "./src/store/lib/w3bstream/schema/definitions.ts",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
+      "./src/store/lib/w3bstream/schema/strategies.ts": [
+        "./node_modules/.pnpm/react-hot-toast@1.0.2_biqbaboplfbrettd7655fr4n2y/node_modules/react-hot-toast/dist/index.d.ts",
+        "./src/lib/axios.ts",
+        "./src/lib/event.ts",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/index.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
       "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts": [
@@ -16234,6 +16780,7 @@
         "./src/lib/helper.ts"
       ],
       "./src/store/standard/jsonschemastate.ts": [
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@rjsf+core@5.0.0-beta.9_xxggowvcxghin6obwjaqsepeeq/node_modules/@rjsf/core/dist/index.d.ts",
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
         "./node_modules/.pnpm/@rjsf+validator-ajv6@5.0.0-beta.9_@rjsf+utils@5.0.0-beta.9/node_modules/@rjsf/validator-ajv6/dist/index.d.ts",
@@ -19736,6 +20283,176 @@
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
         "./node_modules/.pnpm/ajv@6.12.6/node_modules/ajv/lib/ajv.d.ts"
       ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/focusmanager.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/hydration.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/focusmanager.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/hydration.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/infinitequeryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/notifymanager.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/onlinemanager.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queriesobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/retryer.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/infinitequeryobserver.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/removable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/onlinemanager.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queriesobserver.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/removable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/retryer.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/retryer.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/hydrate.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/hydrate.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/isrestoring.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryclientprovider.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryerrorresetboundary.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/setbatchupdatesfn.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useinfinitequery.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useisfetching.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useismutating.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usemutation.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequeries.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequery.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/isrestoring.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryclientprovider.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryerrorresetboundary.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useinfinitequery.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useisfetching.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useismutating.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usemutation.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequeries.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequery.d.ts": [
+        "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts"
+      ],
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/createtrpcclient.d.ts": [
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/internals/trpcclient.d.ts",
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
@@ -19825,6 +20542,79 @@
       ],
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/loggerlink/index.d.ts": [
         "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/links/loggerlink.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/createtrpcnext.d.ts": [
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/shared/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/index.d.ts": [
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/createtrpcnext.d.ts",
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts": [
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/types.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/observable/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/index.d.ts": [
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/interop.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/internals/context.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/interop.d.ts": [
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/internals/context.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/types.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/observable/index.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/index.d.ts": [
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/decorationproxy.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/utilsproxy.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/decorationproxy.d.ts": [
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/utilsproxy.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/index.d.ts",
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/internals/context.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/types.d.ts": [
+        "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+      ],
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/shared/index.d.ts": [
+        "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/index.d.ts"
       ],
       "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/adapters/next/index.d.ts": [
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/adapters/next.d.ts"
@@ -23437,6 +24227,9 @@
         "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/helpers/util.d.ts",
         "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/index.d.ts"
       ],
+      "./node_modules/@generated/monitor/index.d.ts": [
+        "./node_modules/@generated/monitor/runtime/index.d.ts"
+      ],
       "./src/components/common/confirm/confirmmodal.tsx": [
         "./src/components/common/confirm/index.tsx"
       ],
@@ -23466,6 +24259,12 @@
       "./src/components/jsonschemamodal/index.tsx": [
         "./src/store/standard/jsonschemastate.ts"
       ],
+      "./src/components/jsontable/index.tsx": [
+        "./src/store/standard/jsonschemastate.ts"
+      ],
+      "./src/components/jsontablerender/index.tsx": [
+        "./src/server/routers/w3bstream.ts"
+      ],
       "./src/components/menu/context.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
       ],
@@ -23490,9 +24289,6 @@
       "./src/components/menu/menulist.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
-      ],
-      "./src/components/table/index.tsx": [
-        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts"
       ],
       "./src/components/tree/index.tsx": [
         "./src/store/lib/w3bstream/schema/fileslist.ts"
@@ -23523,22 +24319,29 @@
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
       ],
       "./src/pages/_app.tsx": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts",
         "./src/lib/superjson.ts"
       ],
       "./src/pages/_document.tsx": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts"
       ],
+      "./src/pages/api/trpc/[trpc].ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
+      ],
       "./src/server/context.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/adapters/next/index.d.ts",
-        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/@generated/monitor/index.d.ts"
       ],
       "./src/server/prisma.ts": [
-        "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts"
+        "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
+        "./node_modules/@generated/monitor/index.d.ts"
       ],
       "./src/server/routers/_app.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/@generated/monitor/index.d.ts",
         "./src/lib/superjson.ts"
       ],
       "./src/server/routers/template.ts": [
@@ -23547,11 +24350,13 @@
       ],
       "./src/server/routers/w3bstream.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
-        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/@generated/monitor/index.d.ts"
       ],
       "./src/server/trpc.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
-        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/@generated/monitor/index.d.ts"
       ],
       "./src/store/base.ts": [
         "./src/components/common/confirm/index.tsx"
@@ -23563,15 +24368,20 @@
         "./node_modules/.pnpm/@mantine+spotlight@5.5.5_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/spotlight/lib/index.d.ts",
         "./src/server/routers/w3bstream.ts",
         "./src/store/lib/w3bstream/project.ts",
+        "./src/store/lib/w3bstream/schema/applets.tsx",
         "./src/store/lib/w3bstream/schema/config.ts",
+        "./src/store/lib/w3bstream/schema/contractlog.ts",
         "./src/store/lib/w3bstream/schema/createapplet.ts",
         "./src/store/lib/w3bstream/schema/createproject.ts",
         "./src/store/lib/w3bstream/schema/createpublisher.ts",
         "./src/store/lib/w3bstream/schema/createstrategy.ts",
+        "./src/store/lib/w3bstream/schema/instances.ts",
         "./src/store/lib/w3bstream/schema/login.ts",
         "./src/store/lib/w3bstream/schema/postman.ts",
         "./src/store/lib/w3bstream/schema/projectlist.ts",
+        "./src/store/lib/w3bstream/schema/publishers.ts",
         "./src/store/lib/w3bstream/schema/publishevent.ts",
+        "./src/store/lib/w3bstream/schema/strategies.ts",
         "./src/store/lib/w3bstream/schema/updatepassword.ts",
         "./src/store/root.ts",
         "./src/store/standard/promisestate.ts"
@@ -23581,7 +24391,14 @@
         "./src/store/lib/w3bstream/schema/fileslist.ts",
         "./src/store/standard/mappingstate.ts"
       ],
+      "./src/store/lib/w3bstream/schema/applets.tsx": [
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
       "./src/store/lib/w3bstream/schema/config.ts": [
+        "./src/store/standard/jsonschemastate.ts"
+      ],
+      "./src/store/lib/w3bstream/schema/contractlog.ts": [
         "./src/store/standard/jsonschemastate.ts"
       ],
       "./src/store/lib/w3bstream/schema/createapplet.ts": [
@@ -23599,6 +24416,10 @@
       "./src/store/lib/w3bstream/schema/createstrategy.ts": [
         "./src/store/standard/jsonschemastate.ts"
       ],
+      "./src/store/lib/w3bstream/schema/instances.ts": [
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
       "./src/store/lib/w3bstream/schema/login.ts": [
         "./src/store/standard/jsonschemastate.ts"
       ],
@@ -23611,10 +24432,18 @@
       "./src/store/lib/w3bstream/schema/projectlist.ts": [
         "./src/store/standard/jsonschemastate.ts"
       ],
+      "./src/store/lib/w3bstream/schema/publishers.ts": [
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
       "./src/store/lib/w3bstream/schema/publishevent.ts": [
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./src/components/editorwidget/index.tsx",
+        "./src/store/standard/jsonschemastate.ts"
+      ],
+      "./src/store/lib/w3bstream/schema/strategies.ts": [
+        "./src/server/routers/w3bstream.ts",
         "./src/store/standard/jsonschemastate.ts"
       ],
       "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts": [
@@ -23638,6 +24467,7 @@
         "./node_modules/.pnpm/bignumber.js@9.0.2/node_modules/bignumber.js/bignumber.d.ts"
       ],
       "./src/store/standard/jsonschemastate.ts": [
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@rjsf+core@5.0.0-beta.9_xxggowvcxghin6obwjaqsepeeq/node_modules/@rjsf/core/dist/index.d.ts",
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts"
       ],
@@ -24546,6 +25376,39 @@
       "./node_modules/.pnpm/@rjsf+core@5.0.0-beta.9_xxggowvcxghin6obwjaqsepeeq/node_modules/@rjsf/core/dist/index.d.ts",
       "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
       "./node_modules/.pnpm/@rjsf+validator-ajv6@5.0.0-beta.9_@rjsf+utils@5.0.0-beta.9/node_modules/@rjsf/validator-ajv6/dist/index.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/focusmanager.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/hydration.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/index.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/infinitequeryobserver.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/logger.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutation.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationcache.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/mutationobserver.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/notifymanager.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/onlinemanager.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queriesobserver.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/query.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/querycache.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryclient.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/queryobserver.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/removable.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/retryer.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/subscribable.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/types.d.ts",
+      "./node_modules/.pnpm/@tanstack+query-core@4.10.3/node_modules/@tanstack/query-core/build/lib/utils.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/hydrate.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/index.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/isrestoring.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryclientprovider.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/queryerrorresetboundary.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/setbatchupdatesfn.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/types.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useinfinitequery.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useisfetching.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/useismutating.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usemutation.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequeries.d.ts",
+      "./node_modules/.pnpm/@tanstack+react-query@4.10.3_biqbaboplfbrettd7655fr4n2y/node_modules/@tanstack/react-query/build/lib/usequery.d.ts",
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/createtrpcclient.d.ts",
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/createtrpcclientproxy.d.ts",
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/getfetch.d.ts",
@@ -24565,6 +25428,19 @@
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/dist/trpcclienterror.d.ts",
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/httpbatchlink/index.d.ts",
       "./node_modules/.pnpm/@trpc+client@10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude/node_modules/@trpc/client/links/loggerlink/index.d.ts",
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/createtrpcnext.d.ts",
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/index.d.ts",
+      "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/createtrpcreact.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/index.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/internals/context.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/interop.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/hooks/createhooksinternal.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/index.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/decorationproxy.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/proxy/utilsproxy.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/dist/shared/types.d.ts",
+      "./node_modules/.pnpm/@trpc+react@10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le/node_modules/@trpc/react/shared/index.d.ts",
       "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/adapters/next/index.d.ts",
       "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/adapters/next.d.ts",
       "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/adapters/node-http/index.d.ts",
@@ -25260,14 +26136,14 @@
       "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/index.d.ts",
       "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/types.d.ts",
       "./node_modules/.pnpm/zod@3.17.3/node_modules/zod/lib/zoderror.d.ts",
-      "./src/components/applet/modal.tsx",
-      "./src/components/applet/table.tsx",
+      "./node_modules/@generated/monitor/index.d.ts",
+      "./node_modules/@generated/monitor/runtime/index.d.ts",
       "./src/components/common/confirm/confirmmodal.tsx",
       "./src/components/common/confirm/index.tsx",
       "./src/components/common/simplepagination/index.tsx",
       "./src/components/editorwidget/index.tsx",
       "./src/components/filewidget/index.tsx",
-      "./src/components/ide/allinstances/index.tsx",
+      "./src/components/ide/allcontractlogs/index.tsx",
       "./src/components/ide/allpublishers/index.tsx",
       "./src/components/ide/allstrategies/index.tsx",
       "./src/components/ide/applets/index.tsx",
@@ -25278,17 +26154,16 @@
       "./src/components/ide/sidebar/filesitem.tsx",
       "./src/components/ide/sidebar/index.tsx",
       "./src/components/ide/toolbar/index.tsx",
-      "./src/components/instace/modal.tsx",
-      "./src/components/instace/table.tsx",
       "./src/components/jsonform/index.tsx",
       "./src/components/jsonschemamodal/index.tsx",
+      "./src/components/jsontable/index.tsx",
+      "./src/components/jsontablerender/index.tsx",
       "./src/components/menu/context.ts",
       "./src/components/menu/index.tsx",
       "./src/components/menu/menu.tsx",
       "./src/components/menu/menugroup.tsx",
       "./src/components/menu/menuitem.tsx",
       "./src/components/menu/menulist.tsx",
-      "./src/components/table/index.tsx",
       "./src/components/tree/index.tsx",
       "./src/i18n/config.ts",
       "./src/i18n/de/translation.json",
@@ -25324,19 +26199,7 @@
       "./src/lib/trpc.ts",
       "./src/pages/404.tsx",
       "./src/pages/500.tsx",
-      [
-        "./src/pages/_app.tsx",
-        [
-          {
-            "file": "./src/pages/_app.tsx",
-            "start": 170,
-            "length": 12,
-            "messageText": "Cannot find module '@trpc/next' or its corresponding type declarations.",
-            "category": 1,
-            "code": 2307
-          }
-        ]
-      ],
+      "./src/pages/_app.tsx",
       "./src/pages/_document.tsx",
       "./src/pages/api/trpc/[trpc].ts",
       "./src/pages/index.tsx",
@@ -25352,17 +26215,22 @@
       "./src/store/lang.ts",
       "./src/store/lib/w3bstream/index.ts",
       "./src/store/lib/w3bstream/project.ts",
+      "./src/store/lib/w3bstream/schema/applets.tsx",
       "./src/store/lib/w3bstream/schema/config.ts",
+      "./src/store/lib/w3bstream/schema/contractlog.ts",
       "./src/store/lib/w3bstream/schema/createapplet.ts",
       "./src/store/lib/w3bstream/schema/createproject.ts",
       "./src/store/lib/w3bstream/schema/createpublisher.ts",
       "./src/store/lib/w3bstream/schema/createstrategy.ts",
       "./src/store/lib/w3bstream/schema/definitions.ts",
       "./src/store/lib/w3bstream/schema/fileslist.ts",
+      "./src/store/lib/w3bstream/schema/instances.ts",
       "./src/store/lib/w3bstream/schema/login.ts",
       "./src/store/lib/w3bstream/schema/postman.ts",
       "./src/store/lib/w3bstream/schema/projectlist.ts",
+      "./src/store/lib/w3bstream/schema/publishers.ts",
       "./src/store/lib/w3bstream/schema/publishevent.ts",
+      "./src/store/lib/w3bstream/schema/strategies.ts",
       "./src/store/lib/w3bstream/schema/teamplates/teamplate-modal.ts",
       "./src/store/lib/w3bstream/schema/teamplates/template.ts",
       "./src/store/lib/w3bstream/schema/updatepassword.ts",
@@ -33289,6 +34157,18 @@
         1
       ],
       [
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/createtrpcnext.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/index.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy/node_modules/@trpc/next/dist/withtrpc.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/@trpc+next@10.0.0-proxy-beta.15_uq7wwdjluvhzf6forjlvpz56vq/node_modules/@trpc/next/dist/createtrpcnext.d.ts",
         1
       ],
@@ -38785,6 +39665,14 @@
         1
       ],
       [
+        "./node_modules/@generated/monitor/index.d.ts",
+        1
+      ],
+      [
+        "./node_modules/@generated/monitor/runtime/index.d.ts",
+        1
+      ],
+      [
         "./src/components/applet copy/modal.tsx",
         1
       ],
@@ -38866,6 +39754,10 @@
       ],
       [
         "./src/components/ide/allapplets/index.tsx",
+        1
+      ],
+      [
+        "./src/components/ide/allcontractlogs/index.tsx",
         1
       ],
       [
@@ -38974,6 +39866,14 @@
       ],
       [
         "./src/components/jsonschemamodal/index.tsx",
+        1
+      ],
+      [
+        "./src/components/jsontable/index.tsx",
+        1
+      ],
+      [
+        "./src/components/jsontablerender/index.tsx",
         1
       ],
       [
@@ -39305,11 +40205,27 @@
         1
       ],
       [
+        "./src/store/lib/w3bstream/schema/applets.tsx",
+        1
+      ],
+      [
         "./src/store/lib/w3bstream/schema/config.ts",
         1
       ],
       [
+        "./src/store/lib/w3bstream/schema/contractlog.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/schema/contractlogs.ts",
+        1
+      ],
+      [
         "./src/store/lib/w3bstream/schema/createapplet.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/schema/createcontractlog.ts",
         1
       ],
       [
@@ -39333,6 +40249,10 @@
         1
       ],
       [
+        "./src/store/lib/w3bstream/schema/instances.ts",
+        1
+      ],
+      [
         "./src/store/lib/w3bstream/schema/login.ts",
         1
       ],
@@ -39345,7 +40265,15 @@
         1
       ],
       [
+        "./src/store/lib/w3bstream/schema/publishers.ts",
+        1
+      ],
+      [
         "./src/store/lib/w3bstream/schema/publishevent.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/schema/strategies.ts",
         1
       ],
       [

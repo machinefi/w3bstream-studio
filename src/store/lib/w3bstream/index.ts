@@ -25,8 +25,7 @@ import { AppletsSchema } from './schema/applets';
 import { InstancesSchema } from './schema/instances';
 import { StrategiesSchema } from './schema/strategies';
 import { PublishersSchema } from './schema/publishers';
-import { ContractLogsSchema } from './schema/contractLogs';
-import { CreateContractLogSchema } from './schema/createContractLog';
+import { ContractLogModule } from './schema/contractLog';
 
 configure({
   enforceActions: 'never'
@@ -176,8 +175,7 @@ export class W3bStream {
       return res;
     }
   });
-  contractLogs = new ContractLogsSchema();
-  createContractLog = new CreateContractLogSchema();
+  contractLogs = new ContractLogModule();
 
   get isLogin() {
     return !!this.config.form.formData.token;

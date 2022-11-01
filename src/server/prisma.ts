@@ -4,6 +4,7 @@
  */
 import { env } from './env';
 import { PrismaClient } from '@prisma/client';
+import { PrismaClient as MonitorClient } from '@generated/monitor';
 
 const prismaGlobal = global as typeof global & {
   prisma?: PrismaClient;
@@ -18,3 +19,4 @@ export const prisma: PrismaClient =
 if (env.NODE_ENV !== 'production') {
   prismaGlobal.prisma = prisma;
 }
+export const monitor = new MonitorClient();

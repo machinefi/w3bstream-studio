@@ -5,6 +5,8 @@ import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
+import { JSONSchemaTableState } from '../../../standard/JSONSchemaState';
+import { ContractLogType } from '../../../../server/routers/w3bstream';
 
 export const schema = {
   definitions: {
@@ -32,7 +34,54 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-export class CreateContractLogSchema {
+export class ContractLogModule {
+  table = new JSONSchemaTableState<ContractLogType>({
+    columns: [
+      {
+        key: 'f_contractlog_id',
+        label: 'Contract Log ID'
+      },
+      {
+        key: 'f_project_name',
+        label: 'Project Name'
+      },
+      {
+        key: 'f_event_type',
+        label: 'Event Type'
+      },
+      {
+        key: 'f_chain_id',
+        label: 'Chain ID'
+      },
+      {
+        key: 'f_contract_address',
+        label: 'Contract Address'
+      },
+      {
+        key: 'f_block_start',
+        label: 'Block Start'
+      },
+      {
+        key: 'f_block_current',
+        label: 'Block Current'
+      },
+      {
+        key: 'f_block_end',
+        label: 'Block End'
+      },
+      {
+        key: 'f_topic0',
+        label: 'Topic0'
+      },
+      {
+        key: 'f_updated_at',
+        label: 'Updated At'
+      }
+    ],
+    rowKey: 'f_contractlog_id',
+    containerProps: { mt: '10px', h: 'calc(100vh - 160px)' }
+  });
+
   form = new JSONSchemaFormState<SchemaType>({
     //@ts-ignore
     schema,
@@ -51,7 +100,9 @@ export class CreateContractLogSchema {
       const res = await axios.request({
         method: 'post',
         url: `/srv-applet-mgr/v0/monitor/${e.formData.projectID}`,
-        data: e.formData
+        data: {
+          contractLog: e.formData
+        }
       });
       if (res.data) {
         await showNotification({ message: 'Post blockchain contract event log successed' });

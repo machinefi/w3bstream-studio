@@ -82,7 +82,7 @@ const IDE = observer(() => {
         </Button>
       </JSONSchemaModal>
       <JSONSchemaModal jsonstate={w3s.createStrategy} />
-      <JSONSchemaModal jsonstate={w3s.createContractLog} />
+      <JSONSchemaModal jsonstate={w3s.contractLogs} />
     </>
   );
 });

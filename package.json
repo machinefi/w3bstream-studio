@@ -17,7 +17,8 @@
     "start": "next start",
     "test": "concurrently \"yarn start \"",
     "test:ci": "cypress run --headless",
-    "postinstall": "prisma generate"
+    "postinstall": "npm run gen",
+    "gen": "prisma generate; prisma generate --schema ./prisma/monitor.prisma"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.11",

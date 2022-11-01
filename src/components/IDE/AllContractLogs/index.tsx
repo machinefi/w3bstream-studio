@@ -21,7 +21,7 @@ const AllContractLogs = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
-            w3s.createContractLog.modal.set({ show: true, title: 'Post blockchain contract event log' });
+            w3s.contractLogs.modal.set({ show: true, title: 'Post blockchain contract event log' });
           }}
         >
           Post blockchain contract event log

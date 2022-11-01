@@ -49,24 +49,23 @@ export const w3bstreamRouter = t.router({
         }
       });
     }),
-  contractLogs: t.procedure
-    .query(({ ctx, input }) => {
-      return ctx.prisma.t_contractlog.findMany({
-        select: {
-          f_contractlog_id: true,
-          f_project_name: true,
-          f_event_type: true,
-          f_chainid: true,
-          f_contractaddress: true,
-          f_blockstart: true,
-          f_blockcurrent: true,
-          f_blockend: true,
-          f_topic0: true,
-          f_created_at: true,
-          f_updated_at: true
-        }
-      });
-    })
+  contractLogs: t.procedure.query(({ ctx, input }) => {
+    return ctx.monitor.t_contractlog.findMany({
+      select: {
+        f_contractlog_id: true,
+        f_project_name: true,
+        f_event_type: true,
+        f_chain_id: true,
+        f_contract_address: true,
+        f_block_start: true,
+        f_block_current: true,
+        f_block_end: true,
+        f_topic0: true,
+        f_created_at: true,
+        f_updated_at: true
+      }
+    });
+  })
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
