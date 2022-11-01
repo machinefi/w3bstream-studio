@@ -17,7 +17,7 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-export class LoginSchema {
+export default class LoginModule {
   form = new JSONSchemaFormState<SchemaType>({
     //@ts-ignore
     schema,

@@ -177,15 +177,14 @@ const Editor = observer(() => {
               className="pi pi-cloud-upload"
               color="white"
               onClick={() => {
-                //@ts-ignore
-                w3s.createApplet.value.set({
+                w3s.applet.form.value.set({
                   projectID: w3s.curProject?.f_project_id.toString()
                 });
-                w3s.createApplet.modal.set({
+                w3s.applet.modal.set({
                   show: true
                 });
                 //@ts-ignore
-                w3s.createApplet.value.set({
+                w3s.applet.form.value.set({
                   file: `data:application/wasm;name=${curActiveFile.label};base64,${Buffer.from(curActiveFile.data.extraData.raw, 'binary').toString('base64')}`,
                   projectID: w3s.curProject.f_project_id,
                   appletName: ''

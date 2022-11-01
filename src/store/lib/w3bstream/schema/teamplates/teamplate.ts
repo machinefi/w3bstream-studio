@@ -1,4 +1,4 @@
-import { JSONModalValue, JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONModalValue, JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from '@/store/lib/w3bstream/schema/definitions';
 
@@ -22,7 +22,8 @@ type SchemaType = FromSchema<typeof schema>;
 schema.definitions = {
   projects: definitions.projects
 };
-export class TemplateSchema {
+
+export default class TemplateModule {
   form = new JSONSchemaFormState<SchemaType>({
     //@ts-ignore
     schema,
@@ -45,5 +46,10 @@ export class TemplateSchema {
       title: 'modal teamplate',
       autoReset: true
     }
+  });
+
+  table = new JSONSchemaTableState<any>({
+    columns: [],
+    rowKey: ''
   });
 }

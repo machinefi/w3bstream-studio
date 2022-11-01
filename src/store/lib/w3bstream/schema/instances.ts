@@ -3,7 +3,7 @@ import { InstanceType } from '@/server/routers/w3bstream';
 import { rootStore } from '@/store/index';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 
-export class InstancesSchema {
+export  default class InstancesModule {
   table = new JSONSchemaTableState<InstanceType>({
     columns: [
       {

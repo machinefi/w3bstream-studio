@@ -132,9 +132,9 @@ const SideBar = observer((props: SideBarProps) => {
             h="19px"
             cursor="pointer"
             onClick={(e) => {
-              w3s.createProject.form.uiSchema['ui:submitButtonOptions'].norender = false;
-              w3s.createProject.form.reset();
-              w3s.createProject.modal.set({
+              w3s.project.form.uiSchema['ui:submitButtonOptions'].norender = false;
+              w3s.project.form.reset();
+              w3s.project.modal.set({
                 show: true,
                 title: 'Create Project'
               });
@@ -177,7 +177,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
         key={index}
         p={2}
         cursor="pointer"
-        sx={getSelectedStyles(w3s.curProjectIndex == index)}
+        sx={getSelectedStyles(w3s.showContent === 'CURRENT_APPLETS' && w3s.curProjectIndex == index)}
         onClick={(e) => {
           w3s.curProjectIndex = index;
           if (w3s.showContent != 'EDITOR' && w3s.showContent != 'CURRENT_APPLETS') {
@@ -197,11 +197,11 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
               //TODO:  please make sure there has two state for create project and project detail
               onItemSelect={() => {
                 w3s.curProjectIndex = index;
-                w3s.createProject.form.value.set({
+                w3s.project.form.value.set({
                   name: w3s.curProject.f_name
                 });
-                w3s.createProject.form.uiSchema['ui:submitButtonOptions'].norender = true;
-                w3s.createProject.modal.set({
+                w3s.project.form.uiSchema['ui:submitButtonOptions'].norender = true;
+                w3s.project.modal.set({
                   show: true,
                   title: 'Project Details'
                 });

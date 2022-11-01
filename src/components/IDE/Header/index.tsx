@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Flex, Icon, Image, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react';
+import { Button, Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { MdHome, MdHttp, MdLogout } from 'react-icons/md';
+import { MdHttp, MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
 import Link from 'next/link';
 
@@ -62,7 +62,7 @@ const Profile = observer(() => {
                 w="full"
                 bg="rgba(0, 0, 0, 0.03)"
                 onClick={() => {
-                  w3s.updatePassword.modal.set({ show: true });
+                  w3s.password.modal.set({ show: true });
                 }}
               >
                 Update password

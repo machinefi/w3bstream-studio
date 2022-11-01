@@ -21,13 +21,13 @@ const AllPublishers = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
-            w3s.createPublisher.modal.set({ show: true, title: 'Create Publisher' });
+            w3s.publisher.modal.set({ show: true, title: 'Create Publisher' });
           }}
         >
           Add Publisher
         </Button>
       </Flex>
-      <JSONTable jsonstate={w3s.publishers} />
+      <JSONTable jsonstate={w3s.publisher} />
     </>
   );
 });

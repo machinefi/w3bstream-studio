@@ -12,7 +12,7 @@ interface Props {
   children?: any;
 }
 
-const JSONSchemaModal = observer((props: Props) => {
+const JSONModal = observer((props: Props) => {
   const { form, modal } = props.jsonstate;
   const { children } = props;
 
@@ -46,4 +46,4 @@ const JSONSchemaModal = observer((props: Props) => {
   );
 });
 
-export default JSONSchemaModal;
+export default JSONModal;

@@ -4,11 +4,11 @@ import { Center as LayoutCenter } from '@chakra-ui/layout';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { gradientButtonStyle } from '@/lib/theme';
-import JSONSchemaModal from '../JSONSchemaModal';
+import JSONModal from '../JSONModal';
 import Header from './Header';
 import ToolBar from './ToolBar';
 import SideBar from './SideBar';
-import { CurProjectApplets, AllApplets } from './Applets';
+import Applets from './Applets';
 import AllStrategies from './AllStrategies';
 import AllPublishers from './AllPublishers';
 import Editor from './Editor';
@@ -31,8 +31,7 @@ const IDE = observer(() => {
       <Box ml="350px" mt="60px" w="calc(100vw - 350px)" p="20px">
         {w3s.allProjects.value.length ? (
           <Box w="100%" h="100%">
-            {w3s.showContent === 'CURRENT_APPLETS' && <CurProjectApplets />}
-            {w3s.showContent === 'ALL_APPLETS' && <AllApplets />}
+            {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <Applets />}
             {w3s.showContent === 'ALL_INSTANCES' && <JSONTable jsonstate={w3s.instances} />}
             {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
             {w3s.showContent === 'ALL_PUBLISHERS' && <AllPublishers />}
@@ -52,7 +51,7 @@ const IDE = observer(() => {
                 h="32px"
                 {...gradientButtonStyle}
                 onClick={() => {
-                  w3s.createProject.modal.set({
+                  w3s.project.modal.set({
                     show: true
                   });
                 }}
@@ -64,25 +63,25 @@ const IDE = observer(() => {
         )}
       </Box>
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />
-      <JSONSchemaModal jsonstate={w3s.createProject} />
-      <JSONSchemaModal jsonstate={w3s.createApplet} />
-      <JSONSchemaModal jsonstate={w3s.publishEvent} />
-      <JSONSchemaModal jsonstate={w3s.updatePassword} />
-      <JSONSchemaModal jsonstate={w3s.createPublisher} />
-      <JSONSchemaModal jsonstate={w3s.postman}>
+      <JSONModal jsonstate={w3s.project} />
+      <JSONModal jsonstate={w3s.applet} />
+      <JSONModal jsonstate={w3s.publishEvent} />
+      <JSONModal jsonstate={w3s.password} />
+      <JSONModal jsonstate={w3s.publisher} />
+      <JSONModal jsonstate={w3s.strategy} />
+      <JSONModal jsonstate={w3s.contractLogs} />
+      <JSONModal jsonstate={w3s.postman}>
         <Button
           mt="10px"
           w="100%"
           h="32px"
           onClick={() => {
-            w3s.postman.form.reset();
+            w3s.postman.form.reset({ force: true });
           }}
         >
           Reset
         </Button>
-      </JSONSchemaModal>
-      <JSONSchemaModal jsonstate={w3s.createStrategy} />
-      <JSONSchemaModal jsonstate={w3s.contractLogs} />
+      </JSONModal>
     </>
   );
 });

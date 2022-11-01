@@ -16,11 +16,11 @@ const AddBtn = observer(() => {
         {...gradientButtonStyle}
         onClick={(e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
-            w3s.createApplet.form.value.set({
+            w3s.applet.form.value.set({
               projectID: w3s.curProject?.f_project_id.toString()
             });
           }
-          w3s.createApplet.modal.set({ show: true });
+          w3s.applet.modal.set({ show: true });
         }}
       >
         Add Applet
@@ -29,28 +29,28 @@ const AddBtn = observer(() => {
   );
 });
 
-export const AllApplets = observer(() => {
+const Applets = observer(() => {
   const { w3s } = useStore();
+
+  useEffect(() => {
+    if (w3s.showContent === 'CURRENT_APPLETS') {
+      const applets = w3s.curProject?.applets || [];
+      w3s.applet.table.set({
+        dataSource: applets
+      });
+    } else {
+      w3s.applet.table.set({
+        dataSource: w3s.applet.allData
+      });
+    }
+  }, [w3s.curProject, w3s.showContent]);
+
   return (
     <>
       <AddBtn />
-      <JSONTable jsonstate={w3s.applets} />
+      <JSONTable jsonstate={w3s.applet} />
     </>
   );
 });
 
-export const CurProjectApplets = observer(() => {
-  const { w3s } = useStore();
-  const applets = w3s.curProject?.applets || [];
-  useEffect(() => {
-    w3s.curProjectApplets.table.set({
-      dataSource: applets
-    });
-  }, [applets]);
-  return (
-    <>
-      <AddBtn />
-      <JSONTable jsonstate={w3s.curProjectApplets} />
-    </>
-  );
-});
+export default Applets;

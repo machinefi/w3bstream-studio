@@ -16,13 +16,13 @@ const AllStrategies = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
-            w3s.createStrategy.modal.set({ show: true, title: 'Create Strategy' });
+            w3s.strategy.modal.set({ show: true, title: 'Create Strategy' });
           }}
         >
           Add Strategy
         </Button>
       </Flex>
-      <JSONTable jsonstate={w3s.strategies} />
+      <JSONTable jsonstate={w3s.strategy} />
     </>
   );
 });

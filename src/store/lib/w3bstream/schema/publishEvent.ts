@@ -30,7 +30,7 @@ schema.definitions = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-export class PublishEventSchema {
+export default class PublishEventModule {
   form = new JSONSchemaFormState<SchemaType, UiSchema & { payload: EditorWidgetUIOptions }>({
     //@ts-ignore
     schema,
@@ -87,7 +87,7 @@ export class PublishEventSchema {
       },
       onSet(e) {
         if (e.publisher && e.publisher != this.value.publisher) {
-          const allPublishers = rootStore.w3s.publishers.table.dataSource;
+          const allPublishers = rootStore.w3s.publisher.table.dataSource;
           const pub = allPublishers.find((item) => String(item.f_publisher_id) === e.publisher);
           if (pub) {
             let json = { payload: 'xxx yyy zzz' };
@@ -123,4 +123,10 @@ export class PublishEventSchema {
       autoReset: true
     }
   });
+
+  curPublisherProjectID = '';
+
+  set(v: Partial<PublishEventModule>) {
+    Object.assign(this, v);
+  }
 }

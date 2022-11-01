@@ -1,4 +1,5 @@
 import NextRouter from 'next/router';
+import { SpotlightAction } from '@mantine/spotlight';
 import { configure, makeAutoObservable, toJS } from 'mobx';
 import RootStore from '@/store/root';
 import { axios } from '@/lib/axios';
@@ -7,25 +8,20 @@ import { _ } from '@/lib/lodash';
 import { trpc } from '@/lib/trpc';
 import { hooks } from '@/lib/hooks';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { LoginSchema } from './schema/login';
-import { W3bstreamConfigState } from './schema/config';
-import { CreateAppletSchema } from './schema/createApplet';
-import { ProjectListSchema } from './schema/projectList';
-import { CreateProjectSchema } from './schema/createProject';
-import { UpdatePasswordSchema } from './schema/updatePassword';
-import { FilesListSchema } from './schema/filesList';
-import { PublishEventSchema } from './schema/publishEvent';
-import { CreatePublisherSchema } from './schema/createPublisher';
-import { CreateStrategySchema } from './schema/createStrategy';
-import { SpotlightAction } from '@mantine/spotlight';
 import { AppletType, ContractLogType, ProjectType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
-import { PostmanSchema } from './schema/postman';
-import { AppletsSchema } from './schema/applets';
-import { InstancesSchema } from './schema/instances';
-import { StrategiesSchema } from './schema/strategies';
-import { PublishersSchema } from './schema/publishers';
-import { ContractLogModule } from './schema/contractLog';
+import { FilesListSchema } from './schema/filesList';
+import W3bstreamConfigModule from './schema/config';
+import LoginModule from './schema/login';
+import PasswordModule from './schema/password';
+import ProjectModule from './schema/project';
+import PublishEventModule from './schema/publishEvent';
+import PublisherModule from './schema/publisher';
+import StrategyModule from './schema/strategy';
+import AppletModule from './schema/applet';
+import InstancesModule from './schema/instances';
+import PostmanModule from './schema/postman';
+import ContractLogModule from './schema/contractLog';
 
 configure({
   enforceActions: 'never'
@@ -33,28 +29,25 @@ configure({
 
 export class W3bStream {
   rootStore: RootStore;
-  config = new W3bstreamConfigState();
-  login = new LoginSchema();
+  config = new W3bstreamConfigModule();
+  login = new LoginModule();
   projectManager = new ProjectManager();
-  createProject = new CreateProjectSchema();
-  createApplet = new CreateAppletSchema({
+  project = new ProjectModule();
+  applet = new AppletModule({
     getDymaicData: () => {
       return {
         ready: this.allProjects.value.length > 0
       };
     }
   });
-  updatePassword = new UpdatePasswordSchema();
-  createPublisher = new CreatePublisherSchema();
-  postman = new PostmanSchema();
-  createStrategy = new CreateStrategySchema();
-  projectList = new ProjectListSchema({
-    getDymaicData: () => {
-      return {
-        ready: this.allProjects.value.length > 0
-      };
-    }
-  });
+  instances = new InstancesModule();
+  password = new PasswordModule();
+  publisher = new PublisherModule();
+  postman = new PostmanModule();
+  strategy = new StrategyModule();
+  contractLogs = new ContractLogModule();
+  publishEvent = new PublishEventModule();
+
   allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
     function: async () => {
@@ -94,16 +87,17 @@ export class W3bStream {
 
         console.log(toJS(res));
 
-        this.applets.table.set({
-          dataSource: applets
+        this.applet.set({
+          allData: applets
         });
+
         this.instances.table.set({
           dataSource: instances
         });
-        this.strategies.table.set({
+        this.strategy.table.set({
           dataSource: strategies
         });
-        this.publishers.table.set({
+        this.publisher.table.set({
           dataSource: publishers
         });
       }
@@ -112,20 +106,9 @@ export class W3bStream {
     }
   });
 
-  curProjectApplets = new AppletsSchema();
-  applets = new AppletsSchema();
-  instances = new InstancesSchema();
-  strategies = new StrategiesSchema();
-  publishers = new PublishersSchema();
-
   curProjectIndex = 0;
   get curProject() {
     return this.allProjects.value ? this.allProjects.value[this.curProjectIndex] : null;
-  }
-
-  curAppletIndex = 0;
-  get curApplet() {
-    return this.curProject ? this.curProject.applets[this.curAppletIndex] : null;
   }
 
   // get curFilesList() {
@@ -156,18 +139,11 @@ export class W3bStream {
     }
   });
 
-  curPublisherProjectID = '';
-  publishEvent = new PublishEventSchema();
-
-  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' | 'ALL_CONTRACT_LOGS' = 'CURRENT_APPLETS';
-
-  isReady = false;
-
   allContractLogs = new PromiseState<() => Promise<any>, ContractLogType[]>({
     defaultValue: [],
     function: async () => {
       const res = await trpc.api.contractLogs.query();
-      if (res?.length) {
+      if (res) {
         this.contractLogs.table.set({
           dataSource: res
         });
@@ -175,14 +151,17 @@ export class W3bStream {
       return res;
     }
   });
-  contractLogs = new ContractLogModule();
+
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' | 'ALL_CONTRACT_LOGS' = 'CURRENT_APPLETS';
+
+  isReady = false;
 
   get isLogin() {
     return !!this.config.form.formData.token;
   }
 
   get actions(): SpotlightAction[] {
-    return [this.createProject, this.createApplet, this.createPublisher].map((i) => ({ title: i.modal.value.title, onTrigger: () => i.modal.set({ show: true }) }));
+    return [this.project, this.applet, this.publisher].map((i) => ({ title: i.modal.value.title, onTrigger: () => i.modal.set({ show: true }) }));
   }
 
   constructor(rootStore: RootStore) {
@@ -202,13 +181,9 @@ export class W3bStream {
             method: 'get',
             url: '/srv-applet-mgr/v0/project'
           });
-          // this.projectManager.sync();
         }
       })
       .on('user.login', async () => {
-        await this.allProjects.call();
-        this.allContractLogs.call();
-        this.projectManager.sync();
         NextRouter.push('/');
       })
       .on('user.update-pwd', () => {})
@@ -255,17 +230,15 @@ export class W3bStream {
         await this.allProjects.call();
       })
       .on('contractlog.create', async () => {
-        await this.allContractLogs.call();
+        this.allContractLogs.call();
       });
   }
 
   initHook() {
     hooks.waitLogin().then(async () => {
-      console.log('====================================');
-      console.log('waitLogin');
-      console.log('====================================');
       await this.allProjects.call();
       this.projectManager.sync();
+      this.allContractLogs.call();
     });
   }
 }

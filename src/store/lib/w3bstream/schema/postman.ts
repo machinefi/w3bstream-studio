@@ -29,7 +29,7 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-export class PostmanSchema {
+export default class PostmanModule {
   form = new JSONSchemaFormState<SchemaType, UiSchema & { body: EditorWidgetUIOptions }>({
     //@ts-ignore
     schema,

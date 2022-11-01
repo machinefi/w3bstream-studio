@@ -13,14 +13,14 @@ export const definitions = {
   publishers: {
     type: 'string',
     get enum() {
-      const { curPublisherProjectID } = rootStore.w3s;
-      const allPublishers = rootStore.w3s.publishers.table.dataSource;
+      const { curPublisherProjectID } = rootStore.w3s.publishEvent;
+      const allPublishers = rootStore.w3s.publisher.table.dataSource;
       const publishers = allPublishers.filter((item) => item.project_id === curPublisherProjectID);
       return publishers.map((i) => `${i.f_publisher_id}`) || [];
     },
     get enumNames() {
-      const { curPublisherProjectID } = rootStore.w3s;
-      const allPublishers = rootStore.w3s.publishers.table.dataSource;
+      const { curPublisherProjectID } = rootStore.w3s.publishEvent;
+      const allPublishers = rootStore.w3s.publisher.table.dataSource;
       const publishers = allPublishers.filter((item) => item.project_id === curPublisherProjectID);
       return publishers.map((i) => `${i.f_name}`) || [];
     }
@@ -28,11 +28,11 @@ export const definitions = {
   applets: {
     type: 'string',
     get enum() {
-      const allApplets = rootStore.w3s.applets.table.dataSource;
+      const allApplets = rootStore.w3s.applet.allData;
       return allApplets.map((i) => i.f_applet_id) || [];
     },
     get enumNames() {
-      const allApplets = rootStore.w3s.applets.table.dataSource;
+      const allApplets = rootStore.w3s.applet.allData;
       return allApplets.map((i) => `${i.f_name}`) || [];
     }
   }

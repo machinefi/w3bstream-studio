@@ -15,7 +15,7 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-export class CreateProjectSchema {
+export default class ProjectModule {
   form = new JSONSchemaFormState<SchemaType>({
     //@ts-ignore
     schema,

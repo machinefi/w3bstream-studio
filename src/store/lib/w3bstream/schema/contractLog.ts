@@ -34,7 +34,7 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-export class ContractLogModule {
+export default class ContractLogModule {
   table = new JSONSchemaTableState<ContractLogType>({
     columns: [
       {

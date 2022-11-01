@@ -15,7 +15,7 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-export class W3bstreamConfigState {
+export default class W3bstreamConfigModule {
   form = new JSONSchemaFormState<SchemaType>({
     //@ts-ignore
     schema,

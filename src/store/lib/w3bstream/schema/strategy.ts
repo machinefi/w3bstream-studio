@@ -1,4 +1,4 @@
-import { JSONSchemaFormState, JSONValue, JSONModalValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONValue, JSONModalValue, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from '@/store/lib/w3bstream/schema/definitions';
 import { axios } from '@/lib/axios';
@@ -6,6 +6,8 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
 import { rootStore } from '@/store/index';
+import { StrategyType } from '@/server/routers/w3bstream';
+import toast from 'react-hot-toast';
 
 export const schema = {
   definitions: {
@@ -28,7 +30,8 @@ type SchemaType = FromSchema<typeof schema>;
 schema.definitions = {
   applets: definitions.applets
 };
-export class CreateStrategySchema {
+
+export default class StrategyModule {
   form = new JSONSchemaFormState<SchemaType>({
     //@ts-ignore
     schema,
@@ -45,7 +48,7 @@ export class CreateStrategySchema {
     },
     afterSubmit: async (e) => {
       const { appletID, eventType, handler, strategyID } = e.formData;
-      const allApplets = rootStore.w3s.applets.table.dataSource;
+      const allApplets = rootStore.w3s.applet.allData;
       const applet = allApplets.find((item) => String(item.f_applet_id) === appletID);
       if (!applet) {
         return;
@@ -110,5 +113,82 @@ export class CreateStrategySchema {
       title: 'Create Strategy',
       autoReset: true
     }
+  });
+
+  table = new JSONSchemaTableState<StrategyType>({
+    columns: [
+      {
+        key: 'f_strategy_id',
+        label: 'Strategy ID'
+      },
+      {
+        key: 'f_applet_id',
+        label: 'Applet ID'
+      },
+      {
+        key: 'f_project_id',
+        label: 'Project ID'
+      },
+      {
+        key: 'f_event_type',
+        label: 'Event Type'
+      },
+      {
+        key: 'f_handler',
+        label: 'handler'
+      },
+      {
+        key: 'actions',
+        label: 'Actions',
+        actions: (item) => {
+          return [
+            {
+              props: {
+                bg: '#37A169',
+                color: '#fff',
+                onClick: () => {
+                  this.form.value.set({
+                    strategyID: item.f_strategy_id,
+                    appletID: item.f_applet_id.toString(),
+                    eventType: String(item.f_event_type),
+                    handler: item.f_handler
+                  });
+                  this.modal.set({ show: true, title: 'Edit Strategy' });
+                }
+              },
+              text: 'Edit'
+            },
+            {
+              props: {
+                ml: '8px',
+                bg: '#E53E3E',
+                color: '#fff',
+                onClick() {
+                  rootStore.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    async onOk() {
+                      const p = rootStore.w3s.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
+                      if (!p) {
+                        return;
+                      }
+                      await axios.request({
+                        method: 'delete',
+                        url: `/srv-applet-mgr/v0/strategy/${p.f_name}?strategyID=${item.f_strategy_id}`
+                      });
+                      eventBus.emit('strategy.delete');
+                      toast.success('Deleted successfully');
+                    }
+                  });
+                }
+              },
+              text: 'Delete'
+            }
+          ];
+        }
+      }
+    ],
+    rowKey: 'f_strategy_id',
+    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
   });
 }
