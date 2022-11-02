@@ -65,6 +65,34 @@ export const w3bstreamRouter = t.router({
         f_updated_at: true
       }
     });
+  }),
+  chainTx: t.procedure.query(({ ctx, input }) => {
+    return ctx.monitor.t_chaintx.findMany({
+      select: {
+        f_chaintx_id: true,
+        f_project_name: true,
+        f_finished: true,
+        f_event_type: true,
+        f_chain_id: true,
+        f_tx_address: true,
+        f_created_at: true,
+        f_updated_at: true
+      }
+    });
+  }),
+  chainHeight: t.procedure.query(({ ctx, input }) => {
+    return ctx.monitor.t_chain_height.findMany({
+      select: {
+        f_chain_height_id: true,
+        f_project_name: true,
+        f_finished: true,
+        f_event_type: true,
+        f_chain_id: true,
+        f_height: true,
+        f_created_at: true,
+        f_updated_at: true
+      }
+    });
   })
 });
 
@@ -79,3 +107,5 @@ export type ProjectType = ProjectOriginalType & {
   publishers: PublisherType[];
 };
 export type ContractLogType = inferProcedureOutput<W3bstreamRouter['contractLogs']>[0];
+export type ChainTxType = inferProcedureOutput<W3bstreamRouter['chainTx']>[0];
+export type ChainHeightType = inferProcedureOutput<W3bstreamRouter['chainHeight']>[0];

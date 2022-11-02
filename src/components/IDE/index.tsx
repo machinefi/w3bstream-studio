@@ -16,6 +16,8 @@ import DockerLogs from './DockerLogs';
 import { ConfirmModal } from '../Common/Confirm';
 import JSONTable from '../JSONTable';
 import AllContractLogs from './AllContractLogs';
+import AllChainTx from './AllChainTx';
+import AllChainHeight from './AllChainHeight';
 
 const IDE = observer(() => {
   const {
@@ -38,6 +40,8 @@ const IDE = observer(() => {
             {w3s.showContent === 'EDITOR' && <Editor />}
             {w3s.showContent === 'DOCKER_LOGS' && <DockerLogs />}
             {w3s.showContent === 'ALL_CONTRACT_LOGS' && <AllContractLogs />}
+            {w3s.showContent === 'All_CHAIN_TX' && <AllChainTx />}
+            {w3s.showContent === 'All_CHAIN_HEIGHT' && <AllChainHeight />}
           </Box>
         ) : (
           <LayoutCenter w="100%" h="calc(100vh - 100px)">
@@ -70,6 +74,8 @@ const IDE = observer(() => {
       <JSONModal jsonstate={w3s.publisher} />
       <JSONModal jsonstate={w3s.strategy} />
       <JSONModal jsonstate={w3s.contractLogs} />
+      <JSONModal jsonstate={w3s.chainTx} />
+      <JSONModal jsonstate={w3s.chainHeight} />
       <JSONModal jsonstate={w3s.postman}>
         <Button
           mt="10px"

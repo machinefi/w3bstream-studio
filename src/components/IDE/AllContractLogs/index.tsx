@@ -5,11 +5,6 @@ import { AddIcon } from '@chakra-ui/icons';
 import { gradientButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 
-export const tokenFormat = (token) => {
-  const len = token.length;
-  return `${token.substring(0, 12)}...${token.substring(len - 11, len)}`;
-};
-
 const AllContractLogs = observer(() => {
   const { w3s } = useStore();
 
@@ -21,7 +16,7 @@ const AllContractLogs = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
-            w3s.contractLogs.modal.set({ show: true, title: 'Post blockchain contract event log' });
+            w3s.contractLogs.modal.set({ show: true });
           }}
         >
           Post blockchain contract event log

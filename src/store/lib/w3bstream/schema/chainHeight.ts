@@ -5,7 +5,7 @@ import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
-import { ContractLogType } from '@/server/routers/w3bstream';
+import { ChainHeightType } from '@/server/routers/w3bstream';
 
 export const schema = {
   definitions: {
@@ -18,12 +18,9 @@ export const schema = {
     projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
     eventType: { type: 'string', title: 'Event Type' },
     chainID: { type: 'number', title: 'Chain ID' },
-    contractAddress: { type: 'string', title: 'Contract Address' },
-    blockStart: { type: 'number', title: 'Block Start' },
-    blockEnd: { type: 'number', title: 'Block End' },
-    topic0: { type: 'string', title: 'topic0' }
+    height: { type: 'number', title: 'Height' },
   },
-  required: ['projectID', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
+  required: ['projectID', 'eventType', 'chainID', 'height']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -33,16 +30,20 @@ schema.definitions = {
   projects: definitions.projects
 };
 
-export default class ContractLogModule {
-  table = new JSONSchemaTableState<ContractLogType>({
+export default class ChainHeightModule {
+  table = new JSONSchemaTableState<ChainHeightType>({
     columns: [
       {
-        key: 'f_contractlog_id',
-        label: 'Contract Log ID'
+        key: 'f_chain_height_id',
+        label: 'ChainTx ID'
       },
       {
         key: 'f_project_name',
         label: 'Project Name'
+      },
+      {
+        key: 'f_finished',
+        label: 'Finished'
       },
       {
         key: 'f_event_type',
@@ -53,31 +54,15 @@ export default class ContractLogModule {
         label: 'Chain ID'
       },
       {
-        key: 'f_contract_address',
-        label: 'Contract Address'
-      },
-      {
-        key: 'f_block_start',
-        label: 'Block Start'
-      },
-      {
-        key: 'f_block_current',
-        label: 'Block Current'
-      },
-      {
-        key: 'f_block_end',
-        label: 'Block End'
-      },
-      {
-        key: 'f_topic0',
-        label: 'Topic0'
+        key: 'f_height',
+        label: 'Height'
       },
       {
         key: 'f_updated_at',
         label: 'Updated At'
       }
     ],
-    rowKey: 'f_contractlog_id',
+    rowKey: 'f_chain_height_id',
     containerProps: { mt: '10px', h: 'calc(100vh - 160px)' }
   });
 
@@ -100,12 +85,12 @@ export default class ContractLogModule {
         method: 'post',
         url: `/srv-applet-mgr/v0/monitor/${e.formData.projectID}`,
         data: {
-          contractLog: e.formData
+          chainHeight: e.formData
         }
       });
       if (res.data) {
-        await showNotification({ message: 'Post blockchain contract event log successed' });
-        eventBus.emit('contractlog.create');
+        await showNotification({ message: 'Post blockchain height monitor successed' });
+        eventBus.emit('chainHeight.create');
         this.form.reset();
         this.modal.set({ show: false });
       }
@@ -115,10 +100,7 @@ export default class ContractLogModule {
         projectID: '',
         eventType: 'DEFAULT',
         chainID: 4690,
-        contractAddress: '',
-        blockStart: 16737070,
-        blockEnd: 16740080,
-        topic0: ''
+        height: 0
       }
     })
   });
@@ -126,7 +108,7 @@ export default class ContractLogModule {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Post blockchain contract event log',
+      title: 'Post blockchain height monitor',
       autoReset: true
     }
   });

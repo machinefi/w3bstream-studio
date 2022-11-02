@@ -8,7 +8,7 @@ import { _ } from '@/lib/lodash';
 import { trpc } from '@/lib/trpc';
 import { hooks } from '@/lib/hooks';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { AppletType, ContractLogType, ProjectType } from '@/server/routers/w3bstream';
+import { AppletType, ChainHeightType, ChainTxType, ContractLogType, ProjectType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
 import { FilesListSchema } from './schema/filesList';
 import W3bstreamConfigModule from './schema/config';
@@ -22,6 +22,8 @@ import AppletModule from './schema/applet';
 import InstancesModule from './schema/instances';
 import PostmanModule from './schema/postman';
 import ContractLogModule from './schema/contractLog';
+import ChainTxModule from './schema/chainTx';
+import ChainHeightModule from './schema/chainHeight';
 
 configure({
   enforceActions: 'never'
@@ -33,20 +35,16 @@ export class W3bStream {
   login = new LoginModule();
   projectManager = new ProjectManager();
   project = new ProjectModule();
-  applet = new AppletModule({
-    getDymaicData: () => {
-      return {
-        ready: this.allProjects.value.length > 0
-      };
-    }
-  });
+  applet = new AppletModule();
   instances = new InstancesModule();
   password = new PasswordModule();
   publisher = new PublisherModule();
   postman = new PostmanModule();
   strategy = new StrategyModule();
-  contractLogs = new ContractLogModule();
   publishEvent = new PublishEventModule();
+  contractLogs = new ContractLogModule();
+  chainTx = new ChainTxModule();
+  chainHeight = new ChainHeightModule();
 
   allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
@@ -90,6 +88,12 @@ export class W3bStream {
         this.applet.set({
           allData: applets
         });
+
+        // this.applet.form.getDymaicData = () => {
+        //   return {
+        //     ready: this.allProjects.value.length > 0
+        //   };
+        // };
 
         this.instances.table.set({
           dataSource: instances
@@ -151,8 +155,33 @@ export class W3bStream {
       return res;
     }
   });
+  allChainTx = new PromiseState<() => Promise<any>, ChainTxType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.chainTx.query();
+      if (res) {
+        this.chainTx.table.set({
+          dataSource: res
+        });
+      }
+      return res;
+    }
+  });
+  allChainHeight = new PromiseState<() => Promise<any>, ChainHeightType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.chainHeight.query();
+      if (res) {
+        this.chainHeight.table.set({
+          dataSource: res
+        });
+      }
+      return res;
+    }
+  });
 
-  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' | 'ALL_CONTRACT_LOGS' = 'CURRENT_APPLETS';
+  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' | 'ALL_CONTRACT_LOGS' | 'All_CHAIN_TX' | 'All_CHAIN_HEIGHT' =
+    'CURRENT_APPLETS';
 
   isReady = false;
 
@@ -231,6 +260,12 @@ export class W3bStream {
       })
       .on('contractlog.create', async () => {
         this.allContractLogs.call();
+      })
+      .on('chainTx.create', async () => {
+        this.allChainTx.call();
+      })
+      .on('chainHeight.create', async () => {
+        this.allChainHeight.call();
       });
   }
 
@@ -239,6 +274,8 @@ export class W3bStream {
       await this.allProjects.call();
       this.projectManager.sync();
       this.allContractLogs.call();
+      this.allChainTx.call();
+      this.allChainHeight.call();
     });
   }
 }
