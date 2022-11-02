@@ -13,16 +13,12 @@ export const definitions = {
   publishers: {
     type: 'string',
     get enum() {
-      const { curPublisherProjectID } = rootStore.w3s.publishEvent;
       const allPublishers = rootStore.w3s.publisher.table.dataSource;
-      const publishers = allPublishers.filter((item) => item.project_id === curPublisherProjectID);
-      return publishers.map((i) => `${i.f_publisher_id}`) || [];
+      return allPublishers.map((i) => `${i.f_publisher_id}`) || [];
     },
     get enumNames() {
-      const { curPublisherProjectID } = rootStore.w3s.publishEvent;
       const allPublishers = rootStore.w3s.publisher.table.dataSource;
-      const publishers = allPublishers.filter((item) => item.project_id === curPublisherProjectID);
-      return publishers.map((i) => `${i.f_name}`) || [];
+      return allPublishers.map((i) => `${i.f_name}`) || [];
     }
   },
   applets: {

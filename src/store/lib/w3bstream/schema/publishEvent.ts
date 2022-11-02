@@ -11,20 +11,25 @@ import { UiSchema } from '@rjsf/utils';
 
 export const schema = {
   definitions: {
+    projects: {
+      type: 'string'
+    },
     publishers: {
       type: 'string'
     }
   },
   type: 'object',
   properties: {
+    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
     publisher: { $ref: '#/definitions/publishers', title: 'Publisher' },
     payload: { type: 'string', title: 'Payload' }
   },
-  required: ['publisher', 'payload']
+  required: ['projectID', 'publisher', 'payload']
 } as const;
 
 //@ts-ignore
 schema.definitions = {
+  projects: definitions.projects,
   publishers: definitions.publishers
 };
 
@@ -52,15 +57,17 @@ export default class PublishEventModule {
       }
     },
     afterSubmit: async (e) => {
-      const { projectName, payload } = e.formData;
+      const { projectID, payload } = e.formData;
       let data = { payload: 'xxx yyy zzz' };
       try {
         data = JSON.parse(payload);
       } catch (error) {}
 
+      const p = rootStore.w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
+
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/event/${projectName}`,
+        url: `/srv-applet-mgr/v0/event/${p.f_name}`,
         headers: {
           'Content-Type': 'text/plain'
         },
@@ -75,8 +82,8 @@ export default class PublishEventModule {
     },
     value: new JSONValue<SchemaType>({
       default: {
+        projectID: '',
         publisher: '',
-        projectName: '',
         payload: JSON.stringify(
           {
             payload: 'xxx yyy zzz'
@@ -123,8 +130,6 @@ export default class PublishEventModule {
       autoReset: true
     }
   });
-
-  curPublisherProjectID = '';
 
   set(v: Partial<PublishEventModule>) {
     Object.assign(this, v);

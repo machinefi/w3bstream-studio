@@ -8,7 +8,6 @@ import { rootStore } from '@/store/index';
 import { JSONModalValue, JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
-import copy from 'copy-to-clipboard';
 import { FromSchema } from 'json-schema-to-ts';
 import toast from 'react-hot-toast';
 import { definitions } from './definitions';
@@ -123,41 +122,6 @@ export default class AppletModule {
         key: 'actions',
         label: 'Actions',
         actions: (item) => {
-          if (item.instances.length > 0) {
-            return [
-              {
-                props: {
-                  bg: '#6FB2FF',
-                  color: '#fff',
-                  onClick: () => {
-                    rootStore.w3s.publishEvent.set({
-                      curPublisherProjectID: item.f_project_id.toString()
-                    })
-                    rootStore.w3s.publishEvent.form.value.set({
-                      projectName: item.project_name
-                    });
-                    rootStore.w3s.publishEvent.modal.set({
-                      show: true
-                    });
-                  }
-                },
-                text: 'Send Event'
-              },
-              {
-                props: {
-                  ml: '8px',
-                  variant: 'outline',
-                  borderColor: '#6FB2FF',
-                  color: '#6FB2FF',
-                  onClick() {
-                    copy(`curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${item.project_name}' --header 'Content-Type: text/plain' --data-raw '{"payload":"xxx yyy zzz"}'`);
-                    toast.success('Copied');
-                  }
-                },
-                text: 'Copy'
-              }
-            ];
-          }
           return [
             {
               props: {
@@ -166,10 +130,12 @@ export default class AppletModule {
                 onClick: () => {
                   if (item.instances.length === 0) {
                     rootStore.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
+                  } else {
+                    toast.success('Deployed');
                   }
                 }
               },
-              text: 'Deploy'
+              text: 'Deployed'
             }
           ];
         }

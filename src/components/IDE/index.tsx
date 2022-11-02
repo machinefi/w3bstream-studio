@@ -18,6 +18,8 @@ import JSONTable from '../JSONTable';
 import AllContractLogs from './AllContractLogs';
 import AllChainTx from './AllChainTx';
 import AllChainHeight from './AllChainHeight';
+import toast from 'react-hot-toast';
+import copy from 'copy-to-clipboard';
 
 const IDE = observer(() => {
   const {
@@ -69,13 +71,38 @@ const IDE = observer(() => {
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />
       <JSONModal jsonstate={w3s.project} />
       <JSONModal jsonstate={w3s.applet} />
-      <JSONModal jsonstate={w3s.publishEvent} />
       <JSONModal jsonstate={w3s.password} />
       <JSONModal jsonstate={w3s.publisher} />
       <JSONModal jsonstate={w3s.strategy} />
       <JSONModal jsonstate={w3s.contractLogs} />
       <JSONModal jsonstate={w3s.chainTx} />
       <JSONModal jsonstate={w3s.chainHeight} />
+      <JSONModal jsonstate={w3s.publishEvent}>
+        <Button
+          mt="10px"
+          w="100%"
+          h="32px"
+          variant="outline"
+          borderColor="#6FB2FF"
+          color="#6FB2FF"
+          onClick={() => {
+            const { projectID, payload } = w3s.publishEvent.form.formData;
+            let data = { payload: 'xxx yyy zzz' };
+            try {
+              data = JSON.parse(payload);
+            } catch (error) {}
+            if (!projectID) {
+              toast.error('Please select the project first');
+              return;
+            }
+            const p = w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
+            copy(`curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${p?.f_name}' --header 'Content-Type: text/plain' --data-raw '${JSON.stringify(data)}'`);
+            toast.success('Copied');
+          }}
+        >
+          Copy
+        </Button>
+      </JSONModal>
       <JSONModal jsonstate={w3s.postman}>
         <Button
           mt="10px"

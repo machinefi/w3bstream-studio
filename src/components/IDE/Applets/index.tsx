@@ -25,6 +25,23 @@ const AddBtn = observer(() => {
       >
         Add Applet
       </Button>
+      <Button
+        ml="20px"
+        h="32px"
+        {...gradientButtonStyle}
+        onClick={(e) => {
+          if (w3s.showContent === 'CURRENT_APPLETS') {
+            w3s.publishEvent.form.value.set({
+              projectID: w3s.curProject?.f_project_id.toString()
+            });
+          }
+          w3s.publishEvent.modal.set({
+            show: true
+          });
+        }}
+      >
+        Send Event
+      </Button>
     </Flex>
   );
 });

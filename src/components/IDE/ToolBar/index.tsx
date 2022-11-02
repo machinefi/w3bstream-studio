@@ -30,7 +30,7 @@ const ToolBar = (props: ToolBar) => {
           />
         </Tooltip>
 
-        <Tooltip label="Editor" placement="right">
+        {/* <Tooltip label="Editor" placement="right">
           <Image
             mt="10px"
             src="/images/icons/code.svg"
@@ -40,7 +40,7 @@ const ToolBar = (props: ToolBar) => {
             {...iconStyle}
             {...getSelectedStyles(w3s.showContent === 'EDITOR')}
           />
-        </Tooltip>
+        </Tooltip> */}
 
         {process.env.NODE_ENV === 'development' && (
           <Tooltip label="Docker Logs" placement="right">
