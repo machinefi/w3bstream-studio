@@ -104,7 +104,7 @@ export default class ContractLogModule {
         }
       });
       if (res.data) {
-        await showNotification({ message: 'Post blockchain contract event log successed' });
+        await showNotification({ message: 'Smart Contract event monitor successfully created.' });
         eventBus.emit('contractlog.create');
         this.form.reset();
         this.modal.set({ show: false });
@@ -126,7 +126,7 @@ export default class ContractLogModule {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Post blockchain contract event log',
+      title: 'Add Smart Contract event monitor',
       autoReset: true
     }
   });
