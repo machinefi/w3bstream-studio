@@ -135,7 +135,7 @@ export default class AppletModule {
                   }
                 }
               },
-              text: 'Deployed'
+              text: 'Deploy'
             }
           ];
         }
