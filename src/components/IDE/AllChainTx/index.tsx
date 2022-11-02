@@ -5,7 +5,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { gradientButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 
-const AllPublishers = observer(() => {
+const AllChainTx = observer(() => {
   const { w3s } = useStore();
 
   return (
@@ -16,15 +16,15 @@ const AllPublishers = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
-            w3s.publisher.modal.set({ show: true, title: 'Create Publisher' });
+            w3s.chainTx.modal.set({ show: true });
           }}
         >
-          Add Publisher
+          Post blockchain transaction monitor
         </Button>
       </Flex>
-      <JSONTable jsonstate={w3s.publisher} />
+      <JSONTable jsonstate={w3s.chainTx} />
     </>
   );
 });
 
-export default AllPublishers;
+export default AllChainTx;

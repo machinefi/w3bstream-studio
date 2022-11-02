@@ -114,6 +114,38 @@ const SideBar = observer((props: SideBarProps) => {
                 Contract Logs
               </Text>
             </Flex>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              h="60px"
+              p={2}
+              borderTop="1px solid rgba(0, 0, 0, 0.06)"
+              sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_TX')}
+              cursor="pointer"
+              onClick={() => {
+                w3s.showContent = 'All_CHAIN_TX';
+              }}
+            >
+              <Text fontSize="16px" fontWeight={700}>
+                Chain TX
+              </Text>
+            </Flex>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              h="60px"
+              p={2}
+              borderTop="1px solid rgba(0, 0, 0, 0.06)"
+              sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_HEIGHT')}
+              cursor="pointer"
+              onClick={() => {
+                w3s.showContent = 'All_CHAIN_HEIGHT';
+              }}
+            >
+              <Text fontSize="16px" fontWeight={700}>
+                Chain Height
+              </Text>
+            </Flex>
           </>
         );
     }

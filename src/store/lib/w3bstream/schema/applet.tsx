@@ -257,16 +257,4 @@ export default class AppletModule {
   set(v: Partial<AppletModule>) {
     Object.assign(this, v);
   }
-
-  constructor({
-    getDymaicData
-  }: Partial<{
-    getDymaicData: () => {
-      ready: boolean;
-    };
-  }> = {}) {
-    if (getDymaicData) {
-      this.form.getDymaicData = getDymaicData;
-    }
-  }
 }
