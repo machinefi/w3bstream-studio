@@ -9,7 +9,7 @@ const Login = observer(() => {
   const { w3s } = useStore();
   return (
     <Box w="100vw" h="100vh" minW="1440px" bg="linear-gradient(to right, #EBF2FC, #E3DEFC)">
-      <Image w="100px" pos="fixed" top="70px" left="100px" src="/images/logo.svg" alt="logo" />
+      <Image w="200px" pos="fixed" top="70px" left="100px" src="/images/logo.svg" alt="logo" />
       <Image pos="fixed" top="0px" left="52%" src="/images/polygon_1.svg" alt="" />
       <Image pos="fixed" bottom="0px" right="0px" src="/images/polygon_3.svg" alt="" />
       <Center h="100%" p="20px">
