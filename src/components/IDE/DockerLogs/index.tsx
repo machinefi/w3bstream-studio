@@ -1,8 +1,12 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Input } from '@chakra-ui/react';
+import debounce from 'lodash/debounce';
 import { useEffect, useState, useRef } from 'react';
 
 const DockerLogs = () => {
-  const [logs, setLogs] = useState([]);
+  const [logs, setLogs] = useState<string[]>([]);
+  const [highlightLogs, setHighlightLogs] = useState<string[]>([]);
+  const [showHighligh, setShowHighligh] = useState(false);
+  const [inputV, setInputV] = useState('');
   const boxRef = useRef(null);
 
   useEffect(() => {
@@ -37,9 +41,44 @@ const DockerLogs = () => {
     };
   }, []);
 
-  const logStr = logs.join('');
+  const filterDebounced = useRef(
+    debounce((inputV: string, logs: string[]) => {
+      const highlightLogs = logs
+        .filter((item) => item.includes(inputV))
+        .map((item) => {
+          const [head, tail] = item.split(inputV);
+          return `${head}<span style="color:#FFFF54">${inputV}</span>${tail}`;
+        });
 
-  return <Box w="100%" h="calc(100vh - 100px)" p="10px" bg="#1D262D" color="#98AABA" whiteSpace="pre-line" overflowY="auto" dangerouslySetInnerHTML={{ __html: logStr }} ref={boxRef} />;
+      setHighlightLogs(highlightLogs);
+      setShowHighligh(true);
+    }, 500)
+  );
+
+  useEffect(() => {
+    if (inputV) {
+      filterDebounced.current(inputV, logs);
+    } else {
+      setShowHighligh(false);
+    }
+  }, [inputV, logs]);
+
+  const logStr = showHighligh ? highlightLogs.join('') : logs.join('');
+
+  return (
+    <Box w="100%" h="calc(100vh - 100px)" pos="relative">
+      <Box w="100%" h="100%" p="10px" bg="#1D262D" color="#98AABA" whiteSpace="pre-line" overflowY="auto" dangerouslySetInnerHTML={{ __html: logStr }} ref={boxRef} />
+      <Box pos="absolute" bottom="20px" right="20px" bg="#000">
+        <Input
+          placeholder="Search"
+          color="#fff"
+          onChange={(e) => {
+            setInputV(e.target.value);
+          }}
+        />
+      </Box>
+    </Box>
+  );
 };
 
 export default DockerLogs;
