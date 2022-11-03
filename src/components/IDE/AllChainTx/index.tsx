@@ -19,7 +19,7 @@ const AllChainTx = observer(() => {
             w3s.chainTx.modal.set({ show: true });
           }}
         >
-          Post blockchain transaction monitor
+          Add blockchain transaction monitor
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.chainTx} />

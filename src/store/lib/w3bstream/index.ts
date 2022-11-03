@@ -261,10 +261,19 @@ export class W3bStream {
       .on('contractlog.create', async () => {
         this.allContractLogs.call();
       })
+      .on('contractlog.delete', async () => {
+        this.allContractLogs.call();
+      })
       .on('chainTx.create', async () => {
         this.allChainTx.call();
       })
+      .on('chainTx.delete', async () => {
+        this.allChainTx.call();
+      })
       .on('chainHeight.create', async () => {
+        this.allChainHeight.call();
+      })
+      .on('chainHeight.delete', async () => {
         this.allChainHeight.call();
       });
   }

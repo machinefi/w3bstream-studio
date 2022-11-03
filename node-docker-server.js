@@ -29,7 +29,7 @@ wss.on('connection', (ws) => {
       const { type } = JSON.parse(msg);
 
       if (type === 'logs') {
-        const container = await getContainer(docker, 'iotex/w3bstream');
+        const container = await getContainer(docker, 'w3bstream');
         if (container) {
           const stream = await container.logs({
             follow: true,
@@ -49,7 +49,7 @@ wss.on('connection', (ws) => {
           ws.send(
             JSON.stringify({
               type: 'logs',
-              data: 'No "iotex/w3bstream" container found'
+              data: 'No "w3bstream" container found'
             })
           );
         }

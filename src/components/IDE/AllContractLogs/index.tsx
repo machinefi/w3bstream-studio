@@ -19,7 +19,7 @@ const AllContractLogs = observer(() => {
             w3s.contractLogs.modal.set({ show: true });
           }}
         >
-          Post blockchain contract event log
+          Add Smart Contract event monitor
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.contractLogs} />

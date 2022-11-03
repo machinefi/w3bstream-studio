@@ -19,7 +19,7 @@ const AllChainHeight = observer(() => {
             w3s.chainHeight.modal.set({ show: true });
           }}
         >
-          Post blockchain height monitor
+          Create blockchain height monitor
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.chainHeight} />

@@ -68,11 +68,7 @@ export default class PostmanModule {
             return;
           }
           e.url = config.NEXT_PUBLIC_API_URL + api + template[method].suffix;
-          if (method === 'post' || method === 'put') {
-            e.body = template[method].body;
-          } else {
-            e.body = '{}';
-          }
+          e.body = template[method].body;
         }
 
         return e;
@@ -115,9 +111,11 @@ type TEMPLATES_TYPE = {
   [x: string]: {
     get: {
       suffix: string;
+      body: string;
     };
     delete: {
       suffix: string;
+      body: string;
     };
     post: {
       suffix: string;
@@ -133,10 +131,12 @@ type TEMPLATES_TYPE = {
 const TEMPLATES: TEMPLATES_TYPE = {
   account: {
     get: {
-      suffix: ''
+      suffix: '',
+      body: '{}'
     },
     delete: {
-      suffix: ''
+      suffix: '',
+      body: '{}'
     },
     post: {
       suffix: '',
@@ -149,10 +149,12 @@ const TEMPLATES: TEMPLATES_TYPE = {
   },
   applet: {
     get: {
-      suffix: ''
+      suffix: '',
+      body: '{}'
     },
     delete: {
-      suffix: ''
+      suffix: '',
+      body: '{}'
     },
     post: {
       suffix: '/$PROJECTID',
@@ -162,10 +164,12 @@ const TEMPLATES: TEMPLATES_TYPE = {
   },
   project: {
     get: {
-      suffix: ''
+      suffix: '',
+      body: '{}'
     },
     delete: {
-      suffix: '/$PROJECTNAME'
+      suffix: '/$PROJECTNAME',
+      body: '{}'
     },
     post: {
       suffix: '',
@@ -178,10 +182,12 @@ const TEMPLATES: TEMPLATES_TYPE = {
   },
   strategy: {
     get: {
-      suffix: '/$PROJECTNAME/$STRATEGYID'
+      suffix: '/$PROJECTNAME/$STRATEGYID',
+      body: '{}'
     },
     delete: {
-      suffix: '/$PROJECTNAME?strategyID=$STRATEGYID'
+      suffix: '/$PROJECTNAME?strategyID=$STRATEGYID',
+      body: '{}'
     },
     post: {
       suffix: '/$PROJECTNAME',
@@ -206,10 +212,12 @@ const TEMPLATES: TEMPLATES_TYPE = {
   },
   publisher: {
     get: {
-      suffix: '/$PROJECTNAME/$PUBLISHERID'
+      suffix: '/$PROJECTNAME/$PUBLISHERID',
+      body: '{}'
     },
     delete: {
-      suffix: '/$PROJECTNAME?publisherID=$PUBLISHERID'
+      suffix: '/$PROJECTNAME?publisherID=$PUBLISHERID',
+      body: '{}'
     },
     post: {
       suffix: '/$PROJECTID',
@@ -222,10 +230,20 @@ const TEMPLATES: TEMPLATES_TYPE = {
   },
   monitor: {
     get: {
-      suffix: ''
+      suffix: '',
+      body: '{}'
     },
     delete: {
-      suffix: ''
+      suffix: '/$PROJECTID',
+      body: JSON.stringify(
+        {
+          contractlogID: '',
+          chaintxID: '',
+          chainHeightID: ''
+        },
+        null,
+        2
+      )
     },
     post: {
       suffix: '/$PROJECTID',
