@@ -78,7 +78,7 @@ export default class ContractLogModule {
       }
     ],
     rowKey: 'f_contractlog_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 160px)' }
+    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
   });
 
   form = new JSONSchemaFormState<SchemaType>({

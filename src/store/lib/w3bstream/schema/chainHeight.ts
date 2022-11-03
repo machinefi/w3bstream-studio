@@ -63,7 +63,7 @@ export default class ChainHeightModule {
       }
     ],
     rowKey: 'f_chain_height_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 160px)' }
+    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
   });
 
   form = new JSONSchemaFormState<SchemaType>({

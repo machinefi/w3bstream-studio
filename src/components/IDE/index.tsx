@@ -28,7 +28,7 @@ const IDE = observer(() => {
   } = useStore();
 
   return (
-    <>
+    <Box w="100vw" h="100vh" overflow="hidden">
       <Header />
       <ToolBar w="50px" h="100vh" pos="fixed" left="0px" top="0px" />
       <SideBar w="300px" h="100vh" pos="fixed" left="50px" top="0px" />
@@ -115,7 +115,7 @@ const IDE = observer(() => {
           Reset
         </Button>
       </JSONModal>
-    </>
+    </Box>
   );
 });
 

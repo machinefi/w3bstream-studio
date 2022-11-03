@@ -18,7 +18,7 @@ export const schema = {
     projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
     eventType: { type: 'string', title: 'Event Type' },
     chainID: { type: 'number', title: 'Chain ID' },
-    txAddress: { type: 'string', title: 'txAddress' },
+    txAddress: { type: 'string', title: 'txAddress' }
   },
   required: ['projectID', 'eventType', 'chainID', 'txAddress']
 } as const;
@@ -63,7 +63,7 @@ export default class ChainTxModule {
       }
     ],
     rowKey: 'f_chaintx_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 160px)' }
+    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
   });
 
   form = new JSONSchemaFormState<SchemaType>({
