@@ -9,9 +9,13 @@ export const w3bstreamRouter = t.router({
         accountID: z.string()
       })
     )
-    .query(({ ctx, input }) => {
-      return ctx.prisma.t_project.findMany({
-        where: { f_account_id: Number(input.accountID) },
+    .query(async ({ ctx, input }) => {
+      const res = await ctx.prisma.t_project.findMany({
+        where: {
+          f_account_id: {
+            equals: BigInt(input.accountID)
+          }
+        },
         select: {
           f_project_id: true,
           f_name: true,
@@ -48,6 +52,8 @@ export const w3bstreamRouter = t.router({
           }
         }
       });
+      console.log(res, input.accountID);
+      return res;
     }),
   contractLogs: t.procedure.query(({ ctx, input }) => {
     return ctx.monitor.t_contractlog.findMany({
