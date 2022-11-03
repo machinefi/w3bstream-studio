@@ -71,7 +71,11 @@ export default class PostmanModule {
           if (method === 'post' || method === 'put') {
             e.body = template[method].body;
           } else {
-            e.body = '{}';
+            if (method === 'delete' && template[method].body) {
+              e.body = template[method].body;
+            } else {
+              e.body = '{}';
+            }
           }
         }
 
@@ -118,6 +122,7 @@ type TEMPLATES_TYPE = {
     };
     delete: {
       suffix: string;
+      body?: string;
     };
     post: {
       suffix: string;
@@ -225,7 +230,16 @@ const TEMPLATES: TEMPLATES_TYPE = {
       suffix: ''
     },
     delete: {
-      suffix: ''
+      suffix: '/$PROJECTID',
+      body: JSON.stringify(
+        {
+          contractlogID: '',
+          chaintxID: '',
+          chainHeightID: ''
+        },
+        null,
+        2
+      )
     },
     post: {
       suffix: '/$PROJECTID',
