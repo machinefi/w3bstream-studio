@@ -54,15 +54,15 @@ model t_event_log {
 }
 
 model t_instance {
-  f_id          BigInt    @id @default(autoincrement())
+  f_id          BigInt   @id @default(autoincrement())
   f_instance_id BigInt
   f_applet_id   BigInt
-  f_path        String    @db.VarChar(255)
+  f_path        String   @db.VarChar(255)
   f_state       Int
-  f_created_at  BigInt    @default(0)
-  f_updated_at  BigInt    @default(0)
-  f_deleted_at  BigInt    @default(0)
-  t_applet      t_applet? @relation(fields: [f_applet_id], references: [f_id])
+  f_created_at  BigInt   @default(0)
+  f_updated_at  BigInt   @default(0)
+  f_deleted_at  BigInt   @default(0)
+  applet        t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
 
   @@unique([f_instance_id, f_deleted_at], map: "t_instance_ui_instance_id")
   @@index([f_applet_id], map: "t_instance_i_applet_id")

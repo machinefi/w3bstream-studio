@@ -52,7 +52,6 @@ export const w3bstreamRouter = t.router({
           }
         }
       });
-      console.log(res, input.accountID);
       return res;
     }),
   contractLogs: t.procedure.query(({ ctx, input }) => {
