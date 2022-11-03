@@ -30,8 +30,11 @@ interface MessageEvents {
   'strategy.update': () => void;
   'strategy.delete': () => void;
   'contractlog.create': () => void;
+  'contractlog.delete': () => void;
   'chainTx.create': () => void;
+  'chainTx.delete': () => void;
   'chainHeight.create': () => void;
+  'chainHeight.delete': () => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;

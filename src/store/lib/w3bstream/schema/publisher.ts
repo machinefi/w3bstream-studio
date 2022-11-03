@@ -20,7 +20,7 @@ export const schema = {
   properties: {
     projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
     name: { type: 'string', title: 'Name' },
-    key: { type: 'string', title: 'Key' }
+    key: { type: 'string', title: 'Publisher ID' }
   },
   required: ['projectID', 'name', 'key']
 } as const;
@@ -112,7 +112,7 @@ export default class PublisherModule {
       },
       {
         key: 'f_key',
-        label: 'Key'
+        label: 'Publisher ID'
       },
       {
         key: 'f_created_at',

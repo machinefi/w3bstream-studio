@@ -6,6 +6,8 @@ import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
 import { ContractLogType } from '@/server/routers/w3bstream';
+import { rootStore } from '@/store/index';
+import toast from 'react-hot-toast';
 
 export const schema = {
   definitions: {
@@ -75,6 +77,43 @@ export default class ContractLogModule {
       {
         key: 'f_updated_at',
         label: 'Updated At'
+      },
+      {
+        key: 'actions',
+        label: 'Actions',
+        actions: (item) => {
+          return [
+            {
+              props: {
+                bg: '#E53E3E',
+                color: '#fff',
+                onClick() {
+                  rootStore.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    async onOk() {
+                      const project = rootStore.w3s.allProjects.value.find((p) => p.f_name === item.f_project_name);
+                      try {
+                        await axios.request({
+                          method: 'delete',
+                          url: `/srv-applet-mgr/v0/monitor/${project?.f_project_id}`,
+                          data: {
+                            contractlogID: item.f_contractlog_id
+                          }
+                        });
+                        eventBus.emit('contractlog.delete');
+                        toast.success('Deleted successfully');
+                      } catch (error) {
+                        toast.error('Delete failed');
+                      }
+                    }
+                  });
+                }
+              },
+              text: 'Delete'
+            }
+          ];
+        }
       }
     ],
     rowKey: 'f_contractlog_id',
