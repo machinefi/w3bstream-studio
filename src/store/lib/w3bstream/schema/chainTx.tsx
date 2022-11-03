@@ -89,7 +89,7 @@ export default class ChainTxModule {
         }
       });
       if (res.data) {
-        await showNotification({ message: 'Post blockchain transaction monitor successed' });
+        await showNotification({ message: 'Blockchain transaction monitor successfully created' });
         eventBus.emit('chainTx.create');
         this.form.reset();
         this.modal.set({ show: false });
@@ -108,7 +108,7 @@ export default class ChainTxModule {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Post blockchain transaction monitor',
+      title: 'Add blockchain transaction monitor',
       autoReset: true
     }
   });

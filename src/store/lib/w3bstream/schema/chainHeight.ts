@@ -89,7 +89,7 @@ export default class ChainHeightModule {
         }
       });
       if (res.data) {
-        await showNotification({ message: 'Post blockchain height monitor successed' });
+        await showNotification({ message: 'Blockchain height monitor sucessfully created.' });
         eventBus.emit('chainHeight.create');
         this.form.reset();
         this.modal.set({ show: false });
@@ -108,7 +108,7 @@ export default class ChainHeightModule {
   modal = new JSONModalValue({
     default: {
       show: false,
-      title: 'Post blockchain height monitor',
+      title: 'Create blockchain height monitor',
       autoReset: true
     }
   });
