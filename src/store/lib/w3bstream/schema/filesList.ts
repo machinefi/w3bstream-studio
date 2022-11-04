@@ -39,35 +39,8 @@ export class FilesListSchema {
           label: `module.ts`,
           data: { code: templatecode['module.ts'], language: 'typescript' }
         },
-        { type: 'file', key: uuidv4(), label: `index.html`, data: { code: templatecode['index.html'], language: 'html' } }
       ]
     },
-    {
-      key: uuidv4(),
-      type: 'folder',
-      label: 'Example',
-      children: [
-        {
-          type: 'file',
-          key: uuidv4(),
-          label: `module.ts`,
-          data: { code: templatecode['interferenceExample.ts'], language: 'typescript' }
-        },
-        { type: 'file', key: uuidv4(), label: `index.html`, data: { code: templatecode['interferenceExample.html'], language: 'html' } }
-      ]
-    },
-    {
-      key: uuidv4(),
-      label: 'Remote Files',
-      type: 'folder',
-      children: [
-        {
-          type: 'file',
-          key: uuidv4(),
-          label: `module.ts`
-        }
-      ]
-    }
   ];
 
   constructor(args: Partial<FilesListSchema>) {
