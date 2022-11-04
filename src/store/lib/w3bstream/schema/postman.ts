@@ -13,7 +13,7 @@ export const schema = {
   type: 'object',
   properties: {
     url: { type: 'string' },
-    api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor'].map((i) => `/srv-applet-mgr/v0/${i}`) },
+    api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor'].map((i) => `/api/w3bapp/${i}`) },
     method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
     headers: {
       type: 'object',
@@ -62,7 +62,7 @@ export default class PostmanModule {
       onSet(e) {
         const { api, method } = e;
         if ((api && api != this.value.api) || (method && method != this.value.method)) {
-          const name = api.split('/srv-applet-mgr/v0/')[1];
+          const name = api.split('/api/w3bapp/')[1];
           const template = TEMPLATES[name];
           if (!template) {
             return;

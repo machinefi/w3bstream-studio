@@ -81,7 +81,7 @@ export default class ChainTxModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/srv-applet-mgr/v0/monitor/${project?.f_project_id}`,
+                          url: `/api/w3bapp/monitor/${project?.f_project_id}`,
                           data: {
                             chaintxID: item.f_chaintx_id
                           }
@@ -122,7 +122,7 @@ export default class ChainTxModule {
     afterSubmit: async (e) => {
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/monitor/${e.formData.projectID}`,
+        url: `/api/w3bapp/monitor/${e.formData.projectID}`,
         data: {
           chainTx: e.formData
         }

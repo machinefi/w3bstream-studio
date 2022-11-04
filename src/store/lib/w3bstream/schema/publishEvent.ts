@@ -67,7 +67,7 @@ export default class PublishEventModule {
 
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/event/${p.f_name}`,
+        url: `/api/w3bapp/event/${p.f_name}`,
         headers: {
           'Content-Type': 'text/plain'
         },

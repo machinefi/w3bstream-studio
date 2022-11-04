@@ -96,7 +96,7 @@ const IDE = observer(() => {
               return;
             }
             const p = w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
-            copy(`curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${p?.f_name}' --header 'Content-Type: text/plain' --data-raw '${JSON.stringify(data)}'`);
+            copy(`curl --location --request POST 'localhost:3000/api/w3bapp/event/${p?.f_name}' --header 'Content-Type: text/plain' --data-raw '${JSON.stringify(data)}'`);
             toast.success('Copied');
           }}
         >

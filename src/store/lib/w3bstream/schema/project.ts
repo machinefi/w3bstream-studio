@@ -33,13 +33,13 @@ export default class ProjectModule {
     afterSubmit: async (e) => {
       const res = await axios.request({
         method: 'post',
-        url: '/srv-applet-mgr/v0/project',
+        url: '/api/w3bapp/project',
         data: e.formData
       });
       if (res.data) {
         await showNotification({ message: 'create project successed' });
         eventBus.emit('project.create');
-        this.form.reset()
+        this.form.reset();
         this.modal.set({ show: false });
       }
     },

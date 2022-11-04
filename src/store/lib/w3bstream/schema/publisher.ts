@@ -53,7 +53,7 @@ export default class PublisherModule {
       if (publisherID && projectName) {
         res = await axios.request({
           method: 'put',
-          url: `/srv-applet-mgr/v0/publisher/${projectName}/${publisherID}`,
+          url: `/api/w3bapp/publisher/${projectName}/${publisherID}`,
           data: {
             name,
             key
@@ -62,7 +62,7 @@ export default class PublisherModule {
       } else {
         res = await axios.request({
           method: 'post',
-          url: `/srv-applet-mgr/v0/publisher/${projectID}`,
+          url: `/api/w3bapp/publisher/${projectID}`,
           data: {
             name,
             key
@@ -157,7 +157,7 @@ export default class PublisherModule {
                     async onOk() {
                       await axios.request({
                         method: 'delete',
-                        url: `/srv-applet-mgr/v0/publisher/${item.project_name}?publisherID=${item.f_publisher_id}`
+                        url: `/api/w3bapp/publisher/${item.project_name}?publisherID=${item.f_publisher_id}`
                       });
                       eventBus.emit('strategy.delete');
                       toast.success('Deleted successfully');

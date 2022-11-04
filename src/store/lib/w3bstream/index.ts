@@ -125,7 +125,7 @@ export class W3bStream {
     function: async ({ appletID }: { appletID: string }) => {
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/deploy/applet/${appletID}`
+        url: `/api/w3bapp/deploy/applet/${appletID}`
       });
       eventBus.emit('instance.deploy');
       return res.data;
@@ -136,7 +136,7 @@ export class W3bStream {
     function: async ({ instaceID, event }: { instaceID: string; event: string }) => {
       const res = await axios.request({
         method: 'put',
-        url: `/srv-applet-mgr/v0/deploy/${instaceID}/${event}`
+        url: `/api/w3bapp/deploy/${instaceID}/${event}`
       });
       eventBus.emit('instance.handle');
       return res.data;
@@ -208,7 +208,7 @@ export class W3bStream {
         if (this.isLogin) {
           await axios.request({
             method: 'get',
-            url: '/srv-applet-mgr/v0/project'
+            url: '/api/w3bapp/project'
           });
         }
       })

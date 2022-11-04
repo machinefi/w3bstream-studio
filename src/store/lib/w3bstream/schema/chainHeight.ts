@@ -81,7 +81,7 @@ export default class ChainHeightModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/srv-applet-mgr/v0/monitor/${project?.f_project_id}`,
+                          url: `/api/w3bapp/monitor/${project?.f_project_id}`,
                           data: {
                             chainHeightID: item.f_chain_height_id
                           }
@@ -122,7 +122,7 @@ export default class ChainHeightModule {
     afterSubmit: async (e) => {
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/monitor/${e.formData.projectID}`,
+        url: `/api/w3bapp/monitor/${e.formData.projectID}`,
         data: {
           chainHeight: e.formData
         }
