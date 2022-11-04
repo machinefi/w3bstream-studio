@@ -154,7 +154,7 @@ const SideBar = observer((props: SideBarProps) => {
     <Flex h="100%" direction="column" flexDirection="column" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
       <Flex alignItems="center" justifyContent="space-between" h="80px" p={2} borderBottom="1px solid rgba(0, 0, 0, 0.06)">
         <Text fontSize="16px" fontWeight={700}>
-          Project Management
+          W3bstream Studio
         </Text>
         <Flex alignItems="center">
           <Icon

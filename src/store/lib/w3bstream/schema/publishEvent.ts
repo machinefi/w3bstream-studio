@@ -52,13 +52,13 @@ export default class PublishEventModule {
       payload: {
         'ui:widget': EditorWidget,
         'ui:options': {
-          emptyValue: `{"payload":"xxx yyy zzz"}`
+          emptyValue: `{"payload":""}`
         }
       }
     },
     afterSubmit: async (e) => {
       const { projectID, payload } = e.formData;
-      let data = { payload: 'xxx yyy zzz' };
+      let data = { payload: '' };
       try {
         data = JSON.parse(payload);
       } catch (error) {}
@@ -86,7 +86,7 @@ export default class PublishEventModule {
         publisher: '',
         payload: JSON.stringify(
           {
-            payload: 'xxx yyy zzz'
+            payload: ''
           },
           null,
           2
@@ -97,7 +97,7 @@ export default class PublishEventModule {
           const allPublishers = rootStore.w3s.publisher.table.dataSource;
           const pub = allPublishers.find((item) => String(item.f_publisher_id) === e.publisher);
           if (pub) {
-            let json = { payload: 'xxx yyy zzz' };
+            let json = { payload: '' };
             try {
               json = JSON.parse(this.value.payload);
             } catch (error) {}

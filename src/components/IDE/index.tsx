@@ -87,7 +87,7 @@ const IDE = observer(() => {
           color="#6FB2FF"
           onClick={() => {
             const { projectID, payload } = w3s.publishEvent.form.formData;
-            let data = { payload: 'xxx yyy zzz' };
+            let data = { payload: '' };
             try {
               data = JSON.parse(payload);
             } catch (error) {}
@@ -100,7 +100,7 @@ const IDE = observer(() => {
             toast.success('Copied');
           }}
         >
-          Copy
+          Copy Curl
         </Button>
       </JSONModal>
       <JSONModal jsonstate={w3s.postman}>
