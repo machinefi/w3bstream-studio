@@ -45,7 +45,10 @@ const Header = observer(() => {
 });
 
 const Profile = observer(() => {
-  const { w3s } = useStore();
+  const {
+    w3s,
+    base: { confirm }
+  } = useStore();
   const { accountID } = w3s.config.form.formData;
 
   if (accountID) {
@@ -77,7 +80,13 @@ const Profile = observer(() => {
           h="21px"
           cursor="pointer"
           onClick={() => {
-            w3s.config.logout();
+            confirm.show({
+              title: 'Warning',
+              description: 'Are you sure you want to log out?',
+              async onOk() {
+                w3s.config.logout();
+              }
+            });
           }}
         />
       </>
