@@ -111,7 +111,7 @@ const SideBar = observer((props: SideBarProps) => {
               }}
             >
               <Text fontSize="16px" fontWeight={700}>
-                Contract Logs
+                Smart Contract Monitor
               </Text>
             </Flex>
             <Flex
@@ -127,7 +127,7 @@ const SideBar = observer((props: SideBarProps) => {
               }}
             >
               <Text fontSize="16px" fontWeight={700}>
-                Chain TX
+                Chain Transaction Monitor
               </Text>
             </Flex>
             <Flex
@@ -143,7 +143,7 @@ const SideBar = observer((props: SideBarProps) => {
               }}
             >
               <Text fontSize="16px" fontWeight={700}>
-                Chain Height
+                Chain Height Monitor
               </Text>
             </Flex>
           </>
