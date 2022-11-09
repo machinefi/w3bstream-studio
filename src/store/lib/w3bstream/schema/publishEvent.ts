@@ -53,24 +53,34 @@ export default class PublishEventModule {
         'ui:widget': EditorWidget,
         'ui:options': {
           emptyValue: `{"payload":""}`,
-          editorHeight: '250px'
+          onChangeLanguage: (language) => {
+            console.log('language:', language);
+            if (language === 'text') {
+              this.form.value.set({
+                payload: `{"example": "This is an example payload"}`
+              });
+            } else {
+              this.form.value.set({
+                payload: JSON.stringify(
+                  {
+                    payload: `{"example": "This is an example payload"}`
+                  },
+                  null,
+                  2
+                )
+              });
+            }
+          }
         }
       }
     },
     afterSubmit: async (e) => {
-      const { projectID, payload } = e.formData;
-      let data: any = { payload: '' };
-      try {
-        data = JSON.parse(payload);
-      } catch (error) {
-        data = payload.replace(/\n/g, '').replace(/\t/g, '');
-      }
-
-      const p = rootStore.w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
-
+      const { projectID } = e.formData;
+      const project = rootStore.w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
+      const data = this.generateBody();
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/event/${p.f_name}`,
+        url: `/srv-applet-mgr/v0/event/${project.f_name}`,
         headers: {
           'Content-Type': 'text/plain'
         },
@@ -87,57 +97,11 @@ export default class PublishEventModule {
         publisher: '',
         payload: JSON.stringify(
           {
-            header: {
-              event_type: 'ANY',
-              pub_id: '',
-              token: '',
-              pub_time: Date.now()
-            },
-            payload: {
-              example: 'This is an example payload'
-            }
+            payload: `{"example": "This is an example payload"}`
           },
           null,
           2
         )
-      },
-      onSet(e) {
-        if (e.publisher && e.publisher != this.value.publisher) {
-          const allPublishers = rootStore.w3s.publisher.table.dataSource;
-          const pub = allPublishers.find((item) => String(item.f_publisher_id) === e.publisher);
-          if (pub) {
-            let json = { payload: '' };
-            try {
-              json = JSON.parse(this.value.payload);
-              e.payload = JSON.stringify(
-                {
-                  ...json,
-                  header: {
-                    event_type: 'ANY',
-                    pub_id: pub.f_key,
-                    token: pub.f_token,
-                    pub_time: Date.now()
-                  }
-                },
-                null,
-                2
-              );
-            } catch (error) {
-              let [head, tail] = this.value.payload.split('"payload":');
-              let eventType = 'ANY';
-              try {
-                const json = JSON.parse(head.split('},')[0] + '}}');
-                eventType = json.header.event_type;
-              } catch (error) {}
-              if (!tail) {
-                tail = `"" \n}`;
-              }
-              e.payload = `{\n\t"header":{\n\t\t"event_type":"${eventType}",\n\t\t"pub_id":"${pub.f_key}",\n\t\t"token":"${pub.f_token}",\n\t\t"pub_time":${Date.now()}\n\t},\n\t"payload":${tail}`;
-            }
-          }
-        }
-
-        return e;
       }
     })
   });
@@ -152,5 +116,37 @@ export default class PublishEventModule {
 
   set(v: Partial<PublishEventModule>) {
     Object.assign(this, v);
+  }
+
+  generateBody() {
+    const { publisher, payload } = this.form.formData;
+    const allPublishers = rootStore.w3s.publisher.table.dataSource;
+    const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
+    const header = {
+      event_type: 'ANY',
+      pub_id: pub.f_key,
+      token: pub.f_token,
+      pub_time: Date.now()
+    };
+
+    try {
+      const body = JSON.parse(payload);
+      if (body.payload) {
+        return {
+          header,
+          ...body
+        };
+      } else {
+        return {
+          header,
+          payload: JSON.stringify(body)
+        };
+      }
+    } catch (error) {
+      return {
+        header,
+        payload: `${payload}`
+      };
+    }
   }
 }
