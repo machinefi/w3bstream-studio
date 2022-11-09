@@ -10,6 +10,15 @@ export const definitions = {
       return rootStore.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
     }
   },
+  projectName: {
+    type: 'string',
+    get enum() {
+      return rootStore.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
+    },
+    get enumNames() {
+      return rootStore.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
+    }
+  },
   publishers: {
     type: 'string',
     get enum() {

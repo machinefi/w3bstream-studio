@@ -29,7 +29,7 @@ type SchemaType = FromSchema<typeof schema>;
 
 //@ts-ignore
 schema.definitions = {
-  projects: definitions.projects
+  projects: definitions.projectName
 };
 
 export default class ChainHeightModule {
@@ -81,7 +81,7 @@ export default class ChainHeightModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/srv-applet-mgr/v0/monitor/${project?.f_project_id}`,
+                          url: `/srv-applet-mgr/v0/monitor/chain_height/${project?.f_name}`,
                           data: {
                             chainHeightID: item.f_chain_height_id
                           }
@@ -122,10 +122,8 @@ export default class ChainHeightModule {
     afterSubmit: async (e) => {
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/monitor/${e.formData.projectID}`,
-        data: {
-          chainHeight: e.formData
-        }
+        url: `/srv-applet-mgr/v0/monitor/chain_height/${e.formData.projectID}`,
+        data: e.formData
       });
       if (res.data) {
         await showNotification({ message: 'Blockchain height monitor sucessfully created.' });
