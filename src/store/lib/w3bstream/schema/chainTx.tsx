@@ -29,7 +29,7 @@ type SchemaType = FromSchema<typeof schema>;
 
 //@ts-ignore
 schema.definitions = {
-  projects: definitions.projects
+  projects: definitions.projectName
 };
 
 export default class ChainTxModule {
@@ -81,7 +81,7 @@ export default class ChainTxModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/srv-applet-mgr/v0/monitor/${project?.f_project_id}`,
+                          url: `/srv-applet-mgr/v0/monitor/chain_tx/${project?.f_name}`,
                           data: {
                             chaintxID: item.f_chaintx_id
                           }
@@ -122,10 +122,8 @@ export default class ChainTxModule {
     afterSubmit: async (e) => {
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/monitor/${e.formData.projectID}`,
-        data: {
-          chainTx: e.formData
-        }
+        url: `/srv-applet-mgr/v0/monitor/chain_tx/${e.formData.projectID}`,
+        data: e.formData
       });
       if (res.data) {
         await showNotification({ message: 'Blockchain transaction monitor successfully created' });

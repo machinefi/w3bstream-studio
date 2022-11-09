@@ -55,7 +55,7 @@ export const w3bstreamRouter = t.router({
       return res;
     }),
   contractLogs: t.procedure.query(({ ctx, input }) => {
-    return ctx.monitor.t_contractlog.findMany({
+    return ctx.monitor.t_contract_log.findMany({
       select: {
         f_contractlog_id: true,
         f_project_name: true,
@@ -72,7 +72,7 @@ export const w3bstreamRouter = t.router({
     });
   }),
   chainTx: t.procedure.query(({ ctx, input }) => {
-    return ctx.monitor.t_chaintx.findMany({
+    return ctx.monitor.t_chain_tx.findMany({
       select: {
         f_chaintx_id: true,
         f_project_name: true,

@@ -6142,8 +6142,8 @@
         "affectsGlobalScope": false
       },
       "./node_modules/@generated/monitor/index.d.ts": {
-        "version": "0418b650e6aa8d8b18058ab7b7b7984691b7e9c2f1e6a410c9352c5c3ad92d75",
-        "signature": "0418b650e6aa8d8b18058ab7b7b7984691b7e9c2f1e6a410c9352c5c3ad92d75",
+        "version": "c06e44efb7a83aae4b48f4128990e312d4aa0f47cd8880b641c092322972766b",
+        "signature": "c06e44efb7a83aae4b48f4128990e312d4aa0f47cd8880b641c092322972766b",
         "affectsGlobalScope": false
       },
       "./src/server/prisma.ts": {
@@ -6248,12 +6248,12 @@
       },
       "./src/server/routers/template.ts": {
         "version": "29cdd04c93b11e4f78ab1583e1872b540d553341faf3afc397bb9172e88efefb",
-        "signature": "e20fa890e040b7105ab96e8eef6c434b7701f589ec1a3525ca6502fceaeca8fc",
+        "signature": "66fcabe351bb2170140172be696b2e905c5e63ef330ebec266089911a6678391",
         "affectsGlobalScope": false
       },
       "./src/server/routers/w3bstream.ts": {
-        "version": "dfd062fdad19b6657027c50d4efa0d7059d7a9a42541448b2724c031df7c446e",
-        "signature": "23169f470581825bd62f27033b2185581d4f2a7f02fe1812bc7fbe770b850ea5",
+        "version": "6e94efd614efcf90cff2bc539ce5eac1e006eddb089dc163ba6dfe6855b0ae98",
+        "signature": "8d3a9f713ae0e85b941bde090cd98d8d3159fcd0564e38fe992b15e04e3a8b89",
         "affectsGlobalScope": false
       },
       "./src/lib/superjson.ts": {
@@ -6263,12 +6263,12 @@
       },
       "./src/server/routers/_app.ts": {
         "version": "117b4d406ff9e4a8a69e57ebbbebb5e1b3ff023843e564353f36b4cacaf36b8b",
-        "signature": "12d6434aef92ea29e589565c3d3d20e7b5e73b1e45a7850b186cc770cd7d7fe5",
+        "signature": "821a493583967c143e1494dd785494cd9310f86bd365305b31fda7b6ed3eb11d",
         "affectsGlobalScope": false
       },
       "./src/lib/trpc.ts": {
         "version": "0c445e826585329ad99320e7bb3ef474e342791fb896bbf981ad79b7d8587510",
-        "signature": "d78354a8bd5b19ec28810527d77e97f1930b76592fba47d10c1206194e38c410",
+        "signature": "6d8609a96b0f2541d577eb84bf950f0c09fb0f3262e570eb6fb93acf3791d97f",
         "affectsGlobalScope": false
       },
       "./src/lib/hooks.ts": {
@@ -6487,7 +6487,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/fileslist.ts": {
-        "version": "fed0f185d4e2cc1a314b1e2aa56c0a36c570ce595bb5876be3ced71b61fe42ba",
+        "version": "a60e5e91760478cb38af53ef54ab01c4f981d2e6dbd7db351c8f69f1f4f9053e",
         "signature": "bf43ad0e428d2dc49c209ff4872f306aa53ac162877621e9e0f63b3e73768a05",
         "affectsGlobalScope": false
       },
@@ -8098,7 +8098,7 @@
       },
       "./src/store/lib/w3bstream/schema/login.ts": {
         "version": "3a82cf6a09a52c01e62a50967b232d24264e3e197c537f3d86fb1d8643c36777",
-        "signature": "586741250580a4b849846a21ecc883e723ceea203e7154836af50d0728e4dccd",
+        "signature": "c0946f58625a02d80af34bf301124cc75ba2dd92c15bd1337d509520898f9a11",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/password.ts": {
@@ -8112,12 +8112,12 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/definitions.ts": {
-        "version": "80489e718e18f0171ce82df824aa830dd060b4cc62ee834d763fc29889adea03",
-        "signature": "51d0c59f30386e9e0e37c685c7f086cbe4dcf43dcad99c2ebfafd103c91de4a8",
+        "version": "b17dc0ba19fa8dbdd49dec76bbbce230708caf94b55edc67295b416f96a37694",
+        "signature": "2a363f2c1b725c012536cac780783f56704d951c503a9b45ebaa6f47f1190641",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/publishevent.ts": {
-        "version": "0f5ea8237f4c5dd7cd82809c7a35f8a6c200fc423773900b58758aa933e3e0ce",
+        "version": "e0b8bf9cdaadef3f3a8735f901e23c677f2d6125d87f31f4449f047f239964a1",
         "signature": "8557caf70bfa855097b7abfe745397939230204410c3382a99e8812f18458b12",
         "affectsGlobalScope": false
       },
@@ -8188,12 +8188,12 @@
       },
       "./src/store/lib/w3bstream/schema/publisher.ts": {
         "version": "4c7d60776806e9ddf65472cd643e0c9ecdd28abbecc81a75836985e1d3f09e8c",
-        "signature": "a0c189d23c6ce92a6e6a58e379c3ce361c6865c144596d249753c94b2b7f8568",
+        "signature": "8216297a1e2148166a9cd4fa4cf149c7f10299d143d97d8b45e286b91bcc30a0",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/strategy.ts": {
         "version": "b6dbdf856c267af2884d48abde5739336b66cba5b6bc560540dc10da5d0c91ff",
-        "signature": "344d3322fa8da477e1e02f211d6dc345896a60ff81ed591aae4784eea6a7e885",
+        "signature": "897f6eca17190aa208ee2162ca86743899b6800e02a34f5b42e8fb4c4431e426",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/applet.tsx": {
@@ -8208,27 +8208,27 @@
       },
       "./src/store/lib/w3bstream/schema/postman.ts": {
         "version": "870a2d7102414c5f1da5c80398d37729ae84c88b295ca5aa59fb7bbeb32edf22",
-        "signature": "c2d03ece44114b2618b9a7cb0de8a8012a4c14e97b79f49f1a639c3ce1e51b21",
+        "signature": "d47e4fde0bdecde16ebd130ae3cf70480bab0e68d87f386079b487c20da476a9",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/contractlog.ts": {
-        "version": "2484fd1f91353cc1df62834abeeb792fd87a6d2795cbb5dc99379fa60addc808",
-        "signature": "41ca2e2c5f65e9a0fa95824001287ddd0d87e43dcbcd9a757486ad9d765d3cd7",
+        "version": "82cf731716bb678838dc556ce36a64a92d93f24a9ef32160c4511ee66d7baa4c",
+        "signature": "4d0c8e23e1a88803e894720ffc8aa34079c784655f350647b53f5c0827358a10",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/chaintx.tsx": {
-        "version": "8d41a76ac286178068083bd9bb2bf5555063ec34875797b700b54991283faa6a",
-        "signature": "02e62ef0380b900deb8c7d198b310792a97296b921f446996a3f2e83ff58d718",
+        "version": "5c5e7d2656664300587f85ff7dac52ee189e3b8fd94cf773fe4a7a605fafbf34",
+        "signature": "2a69a162c9da9af9300f90e651d97aff72db3c7803f08e3784efe2597528e1a0",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/chainheight.ts": {
-        "version": "4d1e30d3fb981196e8f46968f8739b31a423dc00a65323dde051e57763893c24",
-        "signature": "b690c9568d514e02c9dd6382c8a962d61b5d7f9cbf80e8cfd3710f50390e14e4",
+        "version": "9ea664bf3818f016b5ba0ff1fe420907b810e5269e5e0316738f13f2a0e0ffe9",
+        "signature": "2715a8ba76e35c9405ea408ffe7701bafd8f28d97b919404d7e3c4311a649212",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
         "version": "1b528bd37923e22f265c3688d8aae587d1cde62a841cb69b5931cc7ff1731a10",
-        "signature": "9ed1efdfb11338b1d63e1d2aefa6f0c3387035482c163c99e60623b3bceeb937",
+        "signature": "59e80fc740e11060447466cda0e012d67d764b01a22e695bae8de7ab61067ba2",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -8292,12 +8292,12 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/header/index.tsx": {
-        "version": "42b2aeaa923d1092414b0162ab6cf309ea0dba2cdd313048ebf5381f53e98363",
+        "version": "2bddac1aa2b8fffef4e8098ade86863ed951890c8e5afbe86aaabd3559e75732",
         "signature": "dd98811e38ab92b2069f13bfe91c856f7f0a52a15c19487c43f5784c51adea28",
         "affectsGlobalScope": false
       },
       "./src/components/ide/toolbar/index.tsx": {
-        "version": "317c826fbf1cee5e59cf5add735650d8e24a4231a27b016e6839840c5bb313d1",
+        "version": "e4c1953746540b20a5674999e56512a31c0c1afa1fc00a2f2277f4b688c05fb5",
         "signature": "0c4a283d2cfe8a37165000659f2d9adec6db97665a4c74bdf6cab418800f3c7a",
         "affectsGlobalScope": false
       },
@@ -8347,7 +8347,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "524dd60561a162443bda43af27aabca77b505d246046063ccf45a6a7b93c9a25",
+        "version": "a16532ede051ffbf195d7165a2e9d276d714e2ce795218acfcdb2687cf3516ed",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
@@ -8417,7 +8417,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/index.tsx": {
-        "version": "8b4f6ae82d18b24cefc8432bd70e4f096177654fd5fae580c08325c8e3376f82",
+        "version": "e9cfaa56d455e635e61d41baffc34794c9ebbbafe6286cb597e23ab4658175a0",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
         "affectsGlobalScope": false
       },
@@ -24361,7 +24361,8 @@
       ],
       "./src/server/routers/template.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
-        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
+        "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts",
+        "./node_modules/@generated/monitor/index.d.ts"
       ],
       "./src/server/routers/w3bstream.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
