@@ -35,6 +35,12 @@ const AddBtn = observer(() => {
               projectID: w3s.curProject?.f_project_id.toString()
             });
           }
+          const allPublishers = w3s.publisher.table.dataSource;
+          if (allPublishers.length === 1) {
+            w3s.publishEvent.form.value.set({
+              publisher: allPublishers[0].f_publisher_id.toString()
+            });
+          }
           w3s.publishEvent.modal.set({
             show: true
           });

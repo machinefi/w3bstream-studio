@@ -87,10 +87,12 @@ const IDE = observer(() => {
           color="#6FB2FF"
           onClick={() => {
             const { projectID, payload } = w3s.publishEvent.form.formData;
-            let data = { payload: '' };
+            let data: any = { payload: '' };
             try {
               data = JSON.parse(payload);
-            } catch (error) {}
+            } catch (error) {
+              data = payload.replace(/\n/g, '').replace(/\t/g, '');
+            }
             if (!projectID) {
               toast.error('Please select the project first');
               return;
