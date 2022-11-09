@@ -4,9 +4,7 @@
  * @type {import('next').NextConfig}
  **/
 const nextConfig = {
-  experimental: {
-    outputStandalone: true
-  },
+  output: 'standalone',
   publicRuntimeConfig: {
     NEXT_PUBLIC_API_URL: 'http://localhost:8888'
   },
