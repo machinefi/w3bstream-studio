@@ -3,7 +3,7 @@ import MonacoEditor from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 let asc: typeof import('assemblyscript/dist/asc');
 import { useStore } from '@/store/index';
-import { Box, Flex, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Center, Flex, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
@@ -37,7 +37,7 @@ const Editor = observer(() => {
           runtime: 'stub'
           // debug: true
         });
-        // console.log(binary, text);
+        console.log(binary, text);
         if (error) console.log(error);
         const currentFolder = curFilesListSchema.findCurFolder(curFilesListSchema.files);
         const wasmFileName = filesItem?.label.replace('.ts', '') + '.wasm';
@@ -102,17 +102,6 @@ const Editor = observer(() => {
       }
       this.curPreviewRawData = window.btoa(this.getCompileScript(arr) + filesItem.data.code);
       this.showPreviewMode = true;
-    },
-    getLanguage(filesItem: FilesItemType) {
-      if (filesItem.label.endsWith('.go')) {
-        return 'go';
-      }
-      if (filesItem.label.endsWith('.html')) {
-        return 'html';
-      }
-      if (filesItem.label.endsWith('.ts')) {
-        return 'typescript';
-      }
     }
   }));
 
@@ -185,7 +174,7 @@ const Editor = observer(() => {
                 });
                 //@ts-ignore
                 w3s.applet.form.value.set({
-                  file: `data:application/wasm;name=${curActiveFile.label};base64,${Buffer.from(curActiveFile.data.extraData.raw, 'binary').toString('base64')}`,
+                  file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label, curActiveFile.data.extraData.raw),
                   projectID: w3s.curProject.f_project_id,
                   appletName: ''
                 } as IChangeEvent);
@@ -210,20 +199,29 @@ const Editor = observer(() => {
                 curFilesListSchema.lockedFile();
               }}
             >
-              <MonacoEditor
+              {curActiveFile.label.endsWith('.wasm') ? (
+                <Center  
+                bg={'#1e1e1e'}
                 width={'100%'}
                 height={400}
-                theme="vs-dark"
-                language={store.getLanguage(curActiveFile)}
-                defaultValue="export function test(): void {}"
-                value={curActiveFile?.data?.code}
-                beforeMount={(monaco) => {
-                  if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
-                }}
-                onChange={(e) => {
-                  curFilesListSchema.setCurFileCode(e);
-                }}
-              />
+                color="white"
+                >This file is a binary file and cannot be opened in the editor!</Center>
+              ) : (
+                <MonacoEditor
+                  width={'100%'}
+                  height={400}
+                  theme="vs-dark"
+                  language={curActiveFile.data?.language}
+                  defaultValue="export function test(): void {}"
+                  value={curActiveFile?.data?.code}
+                  beforeMount={(monaco) => {
+                    if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
+                  }}
+                  onChange={(e) => {
+                    curFilesListSchema.setCurFileCode(e);
+                  }}
+                />
+              )}
             </div>
           )}
           {/* <Box mt={4} w="100%" h="200px" p="10px" bg="#1D262D" color="#98AABA" whiteSpace="pre-line" overflowY="auto" dangerouslySetInnerHTML={{ __html: '123123' }} /> */}

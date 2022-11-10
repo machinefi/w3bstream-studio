@@ -1,22 +1,28 @@
 import { ProjectType } from '@/server/routers/w3bstream';
 import { makeAutoObservable } from 'mobx';
-import { Type } from 'class-transformer';
 import { MappingState } from '@/store/standard/MappingState';
 import { FilesListSchema } from './schema/filesList';
 import _ from 'lodash';
 import { rootStore } from '../../index';
-// import RootStore from '@/store/root';
-import { helper } from '@/lib/helper';
 import { IndexDb } from '@/lib/dexie';
-import { JSONValue } from '@/store/standard/JSONSchemaState';
+import { config } from '@/lib/config';
+import { createClient, SubscribePayload, Client } from 'graphql-ws';
+import { v4 as uuidv4 } from 'uuid';
 
+export type VSCodeFilesType = {
+  name: string;
+  path: string;
+  content: string;
+};
 export class ProjectManager {
   projects: ProjectType[] = [];
-  rightClickLock:boolean = false;
+  rightClickLock: boolean = false;
   files: MappingState<FilesListSchema> = new MappingState({
     currentId: '',
     map: {}
   });
+  wsClient: Client;
+  isWSConnect = false;
 
   get curFilesList() {
     this.files.setCurrentId(String(rootStore?.w3s.curProject?.f_project_id));
@@ -32,6 +38,42 @@ export class ProjectManager {
     makeAutoObservable(this);
   }
 
+  async connectWs() {
+    const query = `subscription{
+      files {
+        name
+        path
+        content
+      }
+  }`;
+    this.wsClient = createClient({
+      url: config.VSCODE_GRAPHQL_WS_ENDPOINT
+    });
+    await this.executeSubscribe({ query });
+  }
+
+  async executeSubscribe<T>(payload: SubscribePayload) {
+    return new Promise<T>((resolve, reject) => {
+      let result: any;
+      this.wsClient.subscribe<T>(payload, {
+        // @ts-ignore
+        next: (data: {
+          data: {
+            files: VSCodeFilesType[];
+          };
+        }) => {
+          this.curFilesListSchema.setVscodeRemotFile(data.data.files);
+          result = data;
+          this.isWSConnect = true
+        },
+        error: ()=>{
+          this.isWSConnect = false
+          reject()
+        },
+        complete: () => resolve(result)
+      });
+    });
+  }
   sync() {
     _.each(rootStore?.w3s.allProjects.value, async (v: ProjectType, k) => {
       const IndexDbFile = await IndexDb.findFilesById(String(v.f_project_id));

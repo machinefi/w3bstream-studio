@@ -16,6 +16,10 @@ export const FilesItem = observer(() => {
     }
   }));
 
+  useEffect(() => {
+    w3s.projectManager.connectWs();
+  }, []);
+
   const cm = useRef(null);
 
   const menu: any = [
