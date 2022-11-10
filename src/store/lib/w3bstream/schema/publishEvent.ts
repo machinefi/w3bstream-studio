@@ -52,16 +52,19 @@ export default class PublishEventModule {
       payload: {
         'ui:widget': EditorWidget,
         'ui:options': {
-          emptyValue: `{"payload":""}`
+          emptyValue: `{"payload":""}`,
+          editorHeight: '250px'
         }
       }
     },
     afterSubmit: async (e) => {
       const { projectID, payload } = e.formData;
-      let data = { payload: '' };
+      let data: any = { payload: '' };
       try {
         data = JSON.parse(payload);
-      } catch (error) {}
+      } catch (error) {
+        data = payload.replace(/\n/g, '').replace(/\t/g, '');
+      }
 
       const p = rootStore.w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
 
@@ -76,8 +79,6 @@ export default class PublishEventModule {
       if (res.data) {
         await showNotification({ message: 'publish event successed' });
         eventBus.emit('applet.publish-event');
-        this.form.reset();
-        this.modal.set({ show: false });
       }
     },
     value: new JSONValue<SchemaType>({
@@ -86,7 +87,15 @@ export default class PublishEventModule {
         publisher: '',
         payload: JSON.stringify(
           {
-            payload: ''
+            header: {
+              event_type: 'ANY',
+              pub_id: '',
+              token: '',
+              pub_time: Date.now()
+            },
+            payload: {
+              example: 'This is an example payload'
+            }
           },
           null,
           2
@@ -100,21 +109,31 @@ export default class PublishEventModule {
             let json = { payload: '' };
             try {
               json = JSON.parse(this.value.payload);
-            } catch (error) {}
-
-            e.payload = JSON.stringify(
-              {
-                ...json,
-                header: {
-                  token: pub.f_token,
-                  event_type: 'ANY',
-                  pub_id: pub.f_key,
-                  pub_time: Date.now()
-                }
-              },
-              null,
-              2
-            );
+              e.payload = JSON.stringify(
+                {
+                  ...json,
+                  header: {
+                    event_type: 'ANY',
+                    pub_id: pub.f_key,
+                    token: pub.f_token,
+                    pub_time: Date.now()
+                  }
+                },
+                null,
+                2
+              );
+            } catch (error) {
+              let [head, tail] = this.value.payload.split('"payload":');
+              let eventType = 'ANY';
+              try {
+                const json = JSON.parse(head.split('},')[0] + '}}');
+                eventType = json.header.event_type;
+              } catch (error) {}
+              if (!tail) {
+                tail = `"" \n}`;
+              }
+              e.payload = `{\n\t"header":{\n\t\t"event_type":"${eventType}",\n\t\t"pub_id":"${pub.f_key}",\n\t\t"token":"${pub.f_token}",\n\t\t"pub_time":${Date.now()}\n\t},\n\t"payload":${tail}`;
+            }
           }
         }
 
@@ -127,7 +146,7 @@ export default class PublishEventModule {
     default: {
       show: false,
       title: 'Publish Event',
-      autoReset: true
+      autoReset: false
     }
   });
 
