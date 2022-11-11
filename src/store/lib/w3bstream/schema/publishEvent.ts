@@ -53,6 +53,7 @@ export default class PublishEventModule {
         'ui:widget': EditorWidget,
         'ui:options': {
           emptyValue: `{"payload":""}`,
+          showLanguageSelector: true,
           onChangeLanguage: (language) => {
             console.log('language:', language);
             if (language === 'text') {
