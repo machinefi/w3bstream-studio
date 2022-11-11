@@ -1,13 +1,11 @@
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query, body, headers } = req;
   const { a, b, c, ...params } = query;
 
-  const url = `${publicRuntimeConfig.SERVER_BASE_PATH}/${a}/${b}/${c}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${a}/${b}/${c}`;
 
   try {
     const axiosResponse = await axios.request({

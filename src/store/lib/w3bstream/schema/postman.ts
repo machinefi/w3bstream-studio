@@ -12,8 +12,8 @@ import { UiSchema } from '@rjsf/utils';
 export const schema = {
   type: 'object',
   properties: {
-    url: { type: 'string' },
     api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor'].map((i) => `/api/w3bapp/${i}`) },
+    url: { type: 'string' },
     method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
     headers: {
       type: 'object',
@@ -52,7 +52,7 @@ export default class PostmanModule {
     },
     value: new JSONValue<SchemaType>({
       default: {
-        url: config.NEXT_PUBLIC_API_URL,
+        url: '',
         method: 'post',
         headers: {
           Authorization: ''
@@ -67,7 +67,7 @@ export default class PostmanModule {
           if (!template) {
             return;
           }
-          e.url = config.NEXT_PUBLIC_API_URL + api + template[method].suffix;
+          e.url = window.location.origin + api + template[method].suffix;
           e.body = template[method].body;
         }
 

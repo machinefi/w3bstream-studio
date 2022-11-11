@@ -5,10 +5,7 @@
  **/
 const nextConfig = {
   output: 'standalone',
-  publicRuntimeConfig: {
-    NEXT_PUBLIC_API_URL: 'http://localhost:3000',
-    SERVER_BASE_PATH: 'http://localhost:8888/srv-applet-mgr/v0'
-  },
+  publicRuntimeConfig: {},
   webpack: (config, { isServer }) => {
     config.experiments = {
       topLevelAwait: true,

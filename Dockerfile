@@ -12,7 +12,7 @@ COPY prisma ./prisma
 RUN pnpm i --frozen-lockfile;
 COPY . .
 RUN pnpm build:standalone
-RUN sed -i 's,"http://localhost:8888",process.env.NEXT_PUBLIC_API_URL,g' .next/standalone/server.js
+RUN sed -i 's,"http://localhost:8888/srv-applet-mgr/v0",process.env.NEXT_PUBLIC_API_URL,g' .next/standalone/server.js
 
 
 #run
