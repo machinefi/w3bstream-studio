@@ -6,7 +6,7 @@
 const nextConfig = {
   output: 'standalone',
   publicRuntimeConfig: {
-    NEXT_PUBLIC_API_URL: 'http://localhost:3001',
+    NEXT_PUBLIC_API_URL: 'http://localhost:3000',
     SERVER_BASE_PATH: 'http://localhost:8888/srv-applet-mgr/v0'
   },
   webpack: (config, { isServer }) => {

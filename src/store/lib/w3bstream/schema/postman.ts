@@ -61,7 +61,7 @@ export default class PostmanModule {
       },
       onSet(e) {
         const { api, method } = e;
-        if ((api && api != this.value.api) || (method && method != this.value.method)) {
+        if ((api && api != this.value.api) || (api && method && method != this.value.method)) {
           const name = api.split('/api/w3bapp/')[1];
           const template = TEMPLATES[name];
           if (!template) {
