@@ -120,6 +120,10 @@ export default class AppletModule {
         label: 'Project Name'
       },
       {
+        key: 'f_wasm_name',
+        label: 'Wasm Name'
+      },
+      {
         key: 'actions',
         label: 'Actions',
         actions: (item) => {
