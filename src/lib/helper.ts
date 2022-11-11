@@ -185,5 +185,48 @@ export const helper = {
       return srcValue || valMap[srcValue];
     });
     return newVal;
+  },
+  getFileLanguage(fileName: string) {
+    if (fileName.indexOf('.js') != -1) {
+      return 'javascript';
+    }
+    if (fileName.indexOf('.ts') != -1) {
+      return 'typescript';
+    }
+    if (fileName.indexOf('.json') != -1) {
+      return 'json';
+    }
+    if (fileName.indexOf('.html') != -1) {
+      return 'html';
+    }
+    if (fileName.indexOf('.css') != -1) {
+      return 'css';
+    }
+    if (fileName.indexOf('.md') != -1) {
+      return 'markdown';
+    }
+    if (fileName.indexOf('.go') != -1) {
+      return 'go';
+    }
+    if (fileName.indexOf('.cpp') != -1) {
+      return 'cpp';
+    }
+    if (fileName.indexOf('.wat') != -1) {
+      return 'XML';
+    }
+    if (fileName.indexOf('.wasm') != -1) {
+      return 'wasm';
+    }
+  },
+  stringToBase64(str:string){
+    return btoa(str);
+  },
+  bufferUTF8ToUint8Array(bufferUTF8: string):Uint8Array {
+    const buffer = new TextEncoder().encode(bufferUTF8);
+    return new Uint8Array(buffer);
+  },
+  Uint8ArrayToWasmBase64FileData(name:string,raw:Uint8Array):string{
+    //@ts-ignore
+    return `data:application/wasm;name=${name};base64,${Buffer.from(raw, 'binary').toString('base64')}`
   }
 };

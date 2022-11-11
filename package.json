@@ -53,6 +53,8 @@
     "dexie-react-hooks": "^1.1.1",
     "events": "^3.3.0",
     "framer-motion": "^7.5.3",
+    "graphql": "^16.3.0",
+    "graphql-ws": "^5.11.2",
     "i18next": "^21.8.4",
     "icons^1.0.9": "link:@chakra-ui/icons^1.0.9",
     "json-schema": "^0.4.0",
