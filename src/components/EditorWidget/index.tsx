@@ -1,10 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
 import MonacoEditor from '@monaco-editor/react';
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Select, Text } from '@chakra-ui/react';
 
 type Options = {
   emptyValue?: string;
+  editorHeight?: string;
+  onChangeLanguage?: (v: 'json' | 'text') => void;
 };
 
 export interface EditorWidgetProps extends WidgetProps {
@@ -18,18 +20,33 @@ export type EditorWidgetUIOptions = {
 
 const EditorWidget = ({ id, label, options = {}, value, required, onChange }: EditorWidgetProps) => {
   const handleChange = useCallback((value) => onChange(value === '' ? options.emptyValue : value), [onChange, options.emptyValue]);
-
+  const [language, setLanguage] = useState('json');
+  const { editorHeight = '200px', onChangeLanguage } = options;
   return (
     <Flex flexDir="column">
-      <Flex alignItems="center" mb="10px">
-        <Text>{label}</Text>
-        {required && (
-          <Text ml="0.25rem" color="#D34B46">
-            *
-          </Text>
-        )}
+      <Flex justifyContent="space-between" alignItems="center" mb="10px">
+        <Flex alignItems="center">
+          <Text>{label}</Text>
+          {required && (
+            <Text ml="0.25rem" color="#D34B46">
+              *
+            </Text>
+          )}
+        </Flex>
+        <Select
+          w="100px"
+          size="sm"
+          onChange={(v) => {
+            const language = v.target.value as 'json' | 'text';
+            setLanguage(language);
+            onChangeLanguage && onChangeLanguage(language);
+          }}
+        >
+          <option value="json">JSON</option>
+          <option value="text">Text</option>
+        </Select>
       </Flex>
-      <MonacoEditor height="200px" theme="vs-dark" defaultLanguage="json" value={value} onChange={handleChange} />
+      <MonacoEditor height={editorHeight} theme="vs-dark" language={language} value={value} onChange={handleChange} />
     </Flex>
   );
 };

@@ -52,22 +52,35 @@ export default class PublishEventModule {
       payload: {
         'ui:widget': EditorWidget,
         'ui:options': {
-          emptyValue: `{"payload":"xxx yyy zzz"}`
+          emptyValue: `{"payload":""}`,
+          onChangeLanguage: (language) => {
+            console.log('language:', language);
+            if (language === 'text') {
+              this.form.value.set({
+                payload: `{"example": "This is an example payload"}`
+              });
+            } else {
+              this.form.value.set({
+                payload: JSON.stringify(
+                  {
+                    payload: `{"example": "This is an example payload"}`
+                  },
+                  null,
+                  2
+                )
+              });
+            }
+          }
         }
       }
     },
     afterSubmit: async (e) => {
-      const { projectID, payload } = e.formData;
-      let data = { payload: 'xxx yyy zzz' };
-      try {
-        data = JSON.parse(payload);
-      } catch (error) {}
-
-      const p = rootStore.w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
-
+      const { projectID } = e.formData;
+      const project = rootStore.w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
+      const data = this.generateBody();
       const res = await axios.request({
         method: 'post',
-        url: `/api/w3bapp/event/${p.f_name}`,
+        url: `/api/w3bapp/event/${project.f_name}`,
         headers: {
           'Content-Type': 'text/plain'
         },
@@ -76,8 +89,6 @@ export default class PublishEventModule {
       if (res.data) {
         await showNotification({ message: 'publish event successed' });
         eventBus.emit('applet.publish-event');
-        this.form.reset();
-        this.modal.set({ show: false });
       }
     },
     value: new JSONValue<SchemaType>({
@@ -86,39 +97,11 @@ export default class PublishEventModule {
         publisher: '',
         payload: JSON.stringify(
           {
-            payload: 'xxx yyy zzz'
+            payload: `{"example": "This is an example payload"}`
           },
           null,
           2
         )
-      },
-      onSet(e) {
-        if (e.publisher && e.publisher != this.value.publisher) {
-          const allPublishers = rootStore.w3s.publisher.table.dataSource;
-          const pub = allPublishers.find((item) => String(item.f_publisher_id) === e.publisher);
-          if (pub) {
-            let json = { payload: 'xxx yyy zzz' };
-            try {
-              json = JSON.parse(this.value.payload);
-            } catch (error) {}
-
-            e.payload = JSON.stringify(
-              {
-                ...json,
-                header: {
-                  token: pub.f_token,
-                  event_type: 'ANY',
-                  pub_id: pub.f_key,
-                  pub_time: Date.now()
-                }
-              },
-              null,
-              2
-            );
-          }
-        }
-
-        return e;
       }
     })
   });
@@ -127,11 +110,43 @@ export default class PublishEventModule {
     default: {
       show: false,
       title: 'Publish Event',
-      autoReset: true
+      autoReset: false
     }
   });
 
   set(v: Partial<PublishEventModule>) {
     Object.assign(this, v);
+  }
+
+  generateBody() {
+    const { publisher, payload } = this.form.formData;
+    const allPublishers = rootStore.w3s.publisher.table.dataSource;
+    const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
+    const header = {
+      event_type: 'ANY',
+      pub_id: pub.f_key,
+      token: pub.f_token,
+      pub_time: Date.now()
+    };
+
+    try {
+      const body = JSON.parse(payload);
+      if (body.payload) {
+        return {
+          header,
+          ...body
+        };
+      } else {
+        return {
+          header,
+          payload: JSON.stringify(body)
+        };
+      }
+    } catch (error) {
+      return {
+        header,
+        payload: `${payload}`
+      };
+    }
   }
 }

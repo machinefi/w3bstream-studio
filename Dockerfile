@@ -7,9 +7,10 @@ RUN apk add --no-cache curl
 RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm
 RUN chmod +x /bin/pnpm
 
-COPY . .
-RUN pnpm install --no-frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+COPY prisma ./prisma
 RUN pnpm i --frozen-lockfile;
+COPY . .
 RUN pnpm build:standalone
 RUN sed -i 's,"http://localhost:8888",process.env.NEXT_PUBLIC_API_URL,g' .next/standalone/server.js
 

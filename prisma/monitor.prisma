@@ -16,24 +16,6 @@ model t_blockchain {
   f_updated_at    BigInt @default(0)
 }
 
-model t_contractlog {
-  f_id               BigInt @id @default(autoincrement())
-  f_contractlog_id   BigInt @unique(map: "t_contractlog_ui_contract_log_id")
-  f_project_name     String @db.VarChar(255)
-  f_event_type       String @db.VarChar(255)
-  f_chain_id         BigInt
-  f_contract_address String @db.VarChar(255)
-  f_block_start      BigInt
-  f_block_current    BigInt
-  f_block_end        BigInt @default(0)
-  f_topic0           String @default("") @db.VarChar(255)
-  f_topic1           String @default("") @db.VarChar(255)
-  f_topic2           String @default("") @db.VarChar(255)
-  f_topic3           String @default("") @db.VarChar(255)
-  f_created_at       BigInt @default(0)
-  f_updated_at       BigInt @default(0)
-}
-
 model t_sql_meta_enum {
   f_table_name  String @db.VarChar(64)
   f_column_name String @db.VarChar(64)
@@ -46,25 +28,52 @@ model t_sql_meta_enum {
 }
 
 model t_chain_height {
-  f_id              BigInt  @id @default(autoincrement())
-  f_chain_height_id BigInt  @unique(map: "t_chain_height_ui_chain_height_id")
-  f_project_name    String  @db.VarChar(255)
-  f_finished        Boolean @default(false)
-  f_event_type      String  @db.VarChar(255)
+  f_id              BigInt @id @default(autoincrement())
+  f_chain_height_id BigInt @unique(map: "t_chain_height_ui_chain_height_id")
+  f_project_name    String @db.VarChar(255)
+  f_finished        Int    @default(2)
+  f_uniq            BigInt @default(0)
+  f_event_type      String @db.VarChar(255)
   f_chain_id        BigInt
   f_height          BigInt
-  f_created_at      BigInt  @default(0)
-  f_updated_at      BigInt  @default(0)
+  f_created_at      BigInt @default(0)
+  f_updated_at      BigInt @default(0)
+
+  @@unique([f_project_name, f_event_type, f_chain_id, f_height, f_uniq], map: "t_chain_height_ui_chain_height_uniq")
 }
 
-model t_chaintx {
-  f_id           BigInt  @id @default(autoincrement())
-  f_chaintx_id   BigInt  @unique(map: "t_chaintx_ui_chain_tx_id")
-  f_project_name String  @db.VarChar(255)
-  f_finished     Boolean @default(false)
-  f_event_type   String  @db.VarChar(255)
+model t_chain_tx {
+  f_id           BigInt @id @default(autoincrement())
+  f_chaintx_id   BigInt @unique(map: "t_chain_tx_ui_chain_tx_id")
+  f_project_name String @db.VarChar(255)
+  f_finished     Int    @default(2)
+  f_uniq         BigInt @default(0)
+  f_event_type   String @db.VarChar(255)
   f_chain_id     BigInt
-  f_tx_address   String  @db.VarChar(255)
-  f_created_at   BigInt  @default(0)
-  f_updated_at   BigInt  @default(0)
+  f_tx_address   String @db.VarChar(255)
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
+
+  @@unique([f_project_name, f_event_type, f_chain_id, f_tx_address, f_uniq], map: "t_chain_tx_ui_chain_tx_uniq")
+}
+
+model t_contract_log {
+  f_id               BigInt @id @default(autoincrement())
+  f_contractlog_id   BigInt @unique(map: "t_contract_log_ui_contract_log_id")
+  f_project_name     String @db.VarChar(255)
+  f_uniq             BigInt @default(0)
+  f_event_type       String @db.VarChar(255)
+  f_chain_id         BigInt
+  f_contract_address String @db.VarChar(255)
+  f_block_start      BigInt
+  f_block_current    BigInt
+  f_block_end        BigInt @default(0)
+  f_topic0           String @default("") @db.VarChar(255)
+  f_topic1           String @default("") @db.VarChar(255)
+  f_topic2           String @default("") @db.VarChar(255)
+  f_topic3           String @default("") @db.VarChar(255)
+  f_created_at       BigInt @default(0)
+  f_updated_at       BigInt @default(0)
+
+  @@unique([f_project_name, f_event_type, f_chain_id, f_contract_address, f_topic0, f_topic1, f_topic2, f_topic3, f_uniq], map: "t_contract_log_ui_contract_log_uniq")
 }

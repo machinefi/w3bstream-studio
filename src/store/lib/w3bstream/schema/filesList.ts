@@ -3,11 +3,12 @@ import _ from 'lodash';
 import { toJS, makeAutoObservable } from 'mobx';
 import { v4 as uuidv4 } from 'uuid';
 import { templatecode } from '../../../../lib/templatecode';
+import { VSCodeFilesType } from '../project';
+import { helper } from '@/lib/helper';
 
 type FileItemDataType<T = any> = {
   code?: string;
-  language?: 'typescript' | 'scheme' | 'html';
-
+  language?: string;
   extraData?: T;
 };
 
@@ -20,6 +21,8 @@ export type FilesItemType = {
   data?: FileItemDataType;
   children?: FilesItemType[];
 };
+
+export const VSCodeRemoteFolderName = 'VSCode Files';
 
 //todo create file in value
 export class FilesListSchema {
@@ -38,41 +41,49 @@ export class FilesListSchema {
           key: uuidv4(),
           label: `module.ts`,
           data: { code: templatecode['module.ts'], language: 'typescript' }
-        },
-        { type: 'file', key: uuidv4(), label: `index.html`, data: { code: templatecode['index.html'], language: 'html' } }
-      ]
-    },
-    {
-      key: uuidv4(),
-      type: 'folder',
-      label: 'Example',
-      children: [
-        {
-          type: 'file',
-          key: uuidv4(),
-          label: `module.ts`,
-          data: { code: templatecode['interferenceExample.ts'], language: 'typescript' }
-        },
-        { type: 'file', key: uuidv4(), label: `index.html`, data: { code: templatecode['interferenceExample.html'], language: 'html' } }
-      ]
-    },
-    {
-      key: uuidv4(),
-      label: 'Remote Files',
-      type: 'folder',
-      children: [
-        {
-          type: 'file',
-          key: uuidv4(),
-          label: `module.ts`
         }
       ]
+    },
+    {
+      key: uuidv4(),
+      type: 'folder',
+      label: VSCodeRemoteFolderName,
+      children: []
     }
   ];
 
   constructor(args: Partial<FilesListSchema>) {
     Object.assign(this, args);
     makeAutoObservable(this);
+  }
+
+  setVscodeRemotFile(files: VSCodeFilesType[]) {
+    const hasVscodeFileFolder = this.files.find((i) => i.label == VSCodeRemoteFolderName);
+    if (hasVscodeFileFolder) {
+      hasVscodeFileFolder.children = [];
+      if (!files) return;
+      files.forEach((file) => {
+        hasVscodeFileFolder.children.push({
+          type: 'file',
+          key: helper.stringToBase64(VSCodeRemoteFolderName + file.name),
+          isOpen: true,
+          label: file.name,
+          //todo resolve buffer base64 data to buffer
+          data: { code: file.content, language: helper.getFileLanguage(file.name),extraData:{
+            raw:helper.bufferUTF8ToUint8Array(file.content)
+          }}
+        });
+      });
+    } else {
+      this.files.push({
+        key: uuidv4(),
+        type: 'folder',
+        label: 'VSCode Files',
+        children: []
+      });
+      this.setVscodeRemotFile(files);
+    }
+    this.syncToIndexDb();
   }
 
   findFile(objects: FilesItemType[], key: string): FilesItemType {
@@ -100,7 +111,7 @@ export class FilesListSchema {
   }
 
   get curActiveFile() {
-    return this.findFile(this.files, this.curActiveFileId);
+    return this.findFile(this.files, this.curActiveFileId) || null;
   }
 
   createFileFormFolder(file: FilesItemType, action: 'file' | 'folder') {
