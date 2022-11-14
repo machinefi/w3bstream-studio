@@ -221,11 +221,15 @@ export const helper = {
   stringToBase64(str:string){
     return btoa(str);
   },
-  bufferUTF8ToUint8Array(bufferUTF8: string):Uint8Array {
-    const buffer = new TextEncoder().encode(bufferUTF8);
-    return new Uint8Array(buffer);
+  base64ToUint8Array(base64: string):Uint8Array {
+    const buff = Buffer.from(base64, "base64");
+    return new Uint8Array(buff);
   },
-  Uint8ArrayToWasmBase64FileData(name:string,raw:Uint8Array):string{
+  base64ToUTF8(base64: string):string {
+    const buff = Buffer.from(base64, "base64");
+    return buff.toString("utf8");
+  },
+  Uint8ArrayToWasmBase64FileData(name:string,raw:Uint8Array|string ):string{
     //@ts-ignore
     return `data:application/wasm;name=${name};base64,${Buffer.from(raw, 'binary').toString('base64')}`
   }

@@ -69,8 +69,8 @@ export class FilesListSchema {
           isOpen: true,
           label: file.name,
           //todo resolve buffer base64 data to buffer
-          data: { code: file.content, language: helper.getFileLanguage(file.name),extraData:{
-            raw:helper.bufferUTF8ToUint8Array(file.content)
+          data: { code:helper.base64ToUTF8(file.content), language: helper.getFileLanguage(file.name),extraData:{
+            raw:helper.base64ToUint8Array(file.content)
           }}
         });
       });
