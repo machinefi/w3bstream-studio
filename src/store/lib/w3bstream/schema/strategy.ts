@@ -57,7 +57,7 @@ export default class StrategyModule {
       if (strategyID) {
         res = await axios.request({
           method: 'put',
-          url: `/srv-applet-mgr/v0/strategy/${applet.project_name}/${strategyID}`,
+          url: `/api/w3bapp/strategy/${applet.project_name}/${strategyID}`,
           data: {
             appletID,
             eventType,
@@ -67,7 +67,7 @@ export default class StrategyModule {
       } else {
         res = await axios.request({
           method: 'post',
-          url: `/srv-applet-mgr/v0/strategy/${applet.project_name}`,
+          url: `/api/w3bapp/strategy/${applet.project_name}`,
           data: {
             strategies: [
               {
@@ -174,7 +174,7 @@ export default class StrategyModule {
                       }
                       await axios.request({
                         method: 'delete',
-                        url: `/srv-applet-mgr/v0/strategy/${p.f_name}?strategyID=${item.f_strategy_id}`
+                        url: `/api/w3bapp/strategy/${p.f_name}?strategyID=${item.f_strategy_id}`
                       });
                       eventBus.emit('strategy.delete');
                       toast.success('Deleted successfully');

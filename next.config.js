@@ -5,9 +5,7 @@
  **/
 const nextConfig = {
   output: 'standalone',
-  publicRuntimeConfig: {
-    NEXT_PUBLIC_API_URL: 'http://localhost:8888'
-  },
+  publicRuntimeConfig: {},
   webpack: (config, { isServer }) => {
     config.experiments = {
       topLevelAwait: true,

@@ -44,6 +44,7 @@
     "@trpc/react": "10.0.0-proxy-beta.15",
     "@trpc/server": "10.0.0-proxy-beta.15",
     "assemblyscript": "^0.21.4",
+    "async-mqtt": "^2.6.3",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "class-transformer": "^0.5.1",

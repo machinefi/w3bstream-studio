@@ -6,6 +6,7 @@ import { Flex, Select, Text } from '@chakra-ui/react';
 type Options = {
   emptyValue?: string;
   editorHeight?: string;
+  showLanguageSelector?: boolean;
   onChangeLanguage?: (v: 'json' | 'text') => void;
 };
 
@@ -21,7 +22,7 @@ export type EditorWidgetUIOptions = {
 const EditorWidget = ({ id, label, options = {}, value, required, onChange }: EditorWidgetProps) => {
   const handleChange = useCallback((value) => onChange(value === '' ? options.emptyValue : value), [onChange, options.emptyValue]);
   const [language, setLanguage] = useState('json');
-  const { editorHeight = '200px', onChangeLanguage } = options;
+  const { editorHeight = '200px', showLanguageSelector = false, onChangeLanguage } = options;
   return (
     <Flex flexDir="column">
       <Flex justifyContent="space-between" alignItems="center" mb="10px">
@@ -33,18 +34,20 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
             </Text>
           )}
         </Flex>
-        <Select
-          w="100px"
-          size="sm"
-          onChange={(v) => {
-            const language = v.target.value as 'json' | 'text';
-            setLanguage(language);
-            onChangeLanguage && onChangeLanguage(language);
-          }}
-        >
-          <option value="json">JSON</option>
-          <option value="text">Text</option>
-        </Select>
+        {showLanguageSelector && (
+          <Select
+            w="100px"
+            size="sm"
+            onChange={(v) => {
+              const language = v.target.value as 'json' | 'text';
+              setLanguage(language);
+              onChangeLanguage && onChangeLanguage(language);
+            }}
+          >
+            <option value="json">JSON</option>
+            <option value="text">Text</option>
+          </Select>
+        )}
       </Flex>
       <MonacoEditor height={editorHeight} theme="vs-dark" language={language} value={value} onChange={handleChange} />
     </Flex>

@@ -96,7 +96,7 @@ export default class ContractLogModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/srv-applet-mgr/v0/monitor/contract_log/${project?.f_project_id}`,
+                          url: `/api/w3bapp/monitor/contract_log/${project?.f_project_id}`,
                           data: {
                             contractlogID: item.f_contractlog_id
                           }
@@ -137,7 +137,7 @@ export default class ContractLogModule {
     afterSubmit: async (e) => {
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/monitor/contract_log/${e.formData.projectID}`,
+        url: `/api/w3bapp/monitor/contract_log/${e.formData.projectID}`,
         data: e.formData
       });
       if (res.data) {

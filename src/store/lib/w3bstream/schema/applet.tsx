@@ -75,7 +75,7 @@ export default class AppletModule {
       );
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/applet/${e.formData.projectID}`,
+        url: `/api/w3bapp/applet/${e.formData.projectID}`,
         headers: {
           'Content-Type': 'multipart/form-data'
         },

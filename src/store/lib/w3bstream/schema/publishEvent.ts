@@ -53,6 +53,7 @@ export default class PublishEventModule {
         'ui:widget': EditorWidget,
         'ui:options': {
           emptyValue: `{"payload":""}`,
+          showLanguageSelector: true,
           onChangeLanguage: (language) => {
             console.log('language:', language);
             if (language === 'text') {
@@ -80,7 +81,7 @@ export default class PublishEventModule {
       const data = this.generateBody();
       const res = await axios.request({
         method: 'post',
-        url: `/srv-applet-mgr/v0/event/${project.f_name}`,
+        url: `/api/w3bapp/event/${project.f_name}`,
         headers: {
           'Content-Type': 'text/plain'
         },

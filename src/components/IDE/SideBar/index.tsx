@@ -250,7 +250,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
                   async onOk() {
                     await axios.request({
                       method: 'delete',
-                      url: `/srv-applet-mgr/v0/project/${project.f_name}`
+                      url: `/api/w3bapp/project/${project.f_name}`
                     });
                     eventBus.emit('project.delete');
                     toast.success('Deleted successfully');
