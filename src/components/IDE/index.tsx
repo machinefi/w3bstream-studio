@@ -86,19 +86,18 @@ const IDE = observer(() => {
           borderColor="#6FB2FF"
           color="#6FB2FF"
           onClick={() => {
-            const { projectID, payload } = w3s.publishEvent.form.formData;
-            let data: any = { payload: '' };
-            try {
-              data = JSON.parse(payload);
-            } catch (error) {
-              data = payload.replace(/\n/g, '').replace(/\t/g, '');
-            }
+            const { projectID, publisher } = w3s.publishEvent.form.formData;
             if (!projectID) {
               toast.error('Please select the project first');
               return;
             }
-            const p = w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
-            copy(`curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${p?.f_name}' --header 'Content-Type: text/plain' --data-raw '${JSON.stringify(data)}'`);
+            if (!publisher) {
+              toast.error('Please select the publisher first');
+              return;
+            }
+            const project = w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
+            const data = w3s.publishEvent.generateBody();
+            copy(`curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${project?.f_name}' --header 'Content-Type: text/plain' --data-raw '${JSON.stringify(data)}'`);
             toast.success('Copied');
           }}
         >

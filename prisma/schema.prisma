@@ -30,6 +30,7 @@ model t_applet {
   f_name       String       @unique(map: "t_applet_ui_name") @db.VarChar(255)
   f_path       String       @db.VarChar(255)
   f_md5        String       @db.VarChar(255)
+  f_wasm_name  String
   f_created_at BigInt       @default(0)
   f_updated_at BigInt       @default(0)
   project      t_project    @relation(fields: [f_project_id], references: [f_project_id])

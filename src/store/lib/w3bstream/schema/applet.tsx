@@ -68,6 +68,7 @@ export default class AppletModule {
       formData.append(
         'info',
         JSON.stringify({
+          wasmName: file.name,
           projectID: e.formData.projectID,
           appletName: e.formData.appletName
         })
@@ -117,6 +118,10 @@ export default class AppletModule {
       {
         key: 'project_name',
         label: 'Project Name'
+      },
+      {
+        key: 'f_wasm_name',
+        label: 'Wasm Name'
       },
       {
         key: 'actions',
