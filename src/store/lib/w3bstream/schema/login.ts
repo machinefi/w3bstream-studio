@@ -35,7 +35,7 @@ export default class LoginModule {
     async afterSubmit(e) {
       const res = await axios.request({
         method: 'put',
-        url: '/srv-applet-mgr/v0/login',
+        url: '/api/w3bapp/login',
         data: e.formData
       });
       if (res.data.token) {

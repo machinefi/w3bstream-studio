@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import { rootStore } from '../store/index';
 import { showNotification } from '@mantine/notifications';
-import { config } from './config';
 
 export const axios = Axios.create({});
 
@@ -22,7 +21,6 @@ function checkErr(err) {
   }
 }
 axios.interceptors.request.use((req) => {
-  req.baseURL = config['NEXT_PUBLIC_API_URL'];
   if (rootStore.w3s.config.form.formData.token) {
     req.headers['Authorization'] = `${rootStore.w3s.config.form.formData.token}`;
   }

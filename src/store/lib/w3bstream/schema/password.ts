@@ -34,7 +34,7 @@ export default class PasswordModule {
     afterSubmit: async (e) => {
       const res = await axios.request({
         method: 'put',
-        url: `/srv-applet-mgr/v0/account/${rootStore.w3s.config.form.formData.accountID}`,
+        url: `/api/w3bapp/account/${rootStore.w3s.config.form.formData.accountID}`,
         data: e.formData
       });
       showNotification({ message: 'update password successed' });

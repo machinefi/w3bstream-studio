@@ -2,7 +2,6 @@ import { JSONSchemaFormState, JSONValue, JSONModalValue } from '@/store/standard
 import { FromSchema } from 'json-schema-to-ts';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/EditorWidget/index';
 import { gradientButtonStyle } from '@/lib/theme';
-import { config } from '@/lib/config';
 import { rootStore } from '../../../index';
 import { showNotification } from '@mantine/notifications';
 import { axios } from '@/lib/axios';
@@ -12,19 +11,39 @@ import { UiSchema } from '@rjsf/utils';
 export const schema = {
   type: 'object',
   properties: {
-    url: { type: 'string' },
-    api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor'].map((i) => `/srv-applet-mgr/v0/${i}`) },
-    method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
-    headers: {
-      type: 'object',
-      title: '',
-      properties: {
-        Authorization: { type: 'string' }
-      }
-    },
-    body: { type: 'string' }
+    protocol: { type: 'string', enum: ['http/https', 'mqtt'], default: 'http/https' }
   },
-  required: ['url', 'method', 'headers', 'body']
+  dependencies: {
+    protocol: {
+      oneOf: [
+        {
+          properties: {
+            protocol: { enum: ['http/https'] },
+            api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor'].map((i) => `/api/w3bapp/${i}`) },
+            url: { type: 'string' },
+            method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
+            headers: {
+              type: 'object',
+              title: '',
+              properties: {
+                Authorization: { type: 'string' }
+              }
+            },
+            body: { type: 'string' }
+          },
+          required: ['url', 'method', 'headers', 'body']
+        },
+        {
+          properties: {
+            protocol: { enum: ['mqtt'] },
+            topic: { type: 'string' },
+            message: { type: 'string' }
+          },
+          required: ['topic', 'message']
+        }
+      ]
+    }
+  }
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -48,42 +67,74 @@ export default class PostmanModule {
         'ui:options': {
           emptyValue: '{}'
         }
+      },
+      message: {
+        'ui:widget': EditorWidget,
+        'ui:options': {
+          emptyValue: '{}'
+        }
       }
     },
     value: new JSONValue<SchemaType>({
       default: {
-        url: config.NEXT_PUBLIC_API_URL,
+        url: '',
         method: 'post',
         headers: {
           Authorization: ''
         },
-        body: JSON.stringify({ foo: 'bar' }, null, 2)
+        body: JSON.stringify({ foo: 'bar' }, null, 2),
+        topic: '$PROJECTNAME',
+        message: JSON.stringify(
+          {
+            header: {
+              event_type: 'ANY',
+              pub_id: '',
+              token: '',
+              pub_time: Date.now()
+            },
+            payload: ''
+          },
+          null,
+          2
+        )
       },
-      onSet(e) {
+      onSet(e: any) {
         const { api, method } = e;
-        if ((api && api != this.value.api) || (method && method != this.value.method)) {
-          const name = api.split('/srv-applet-mgr/v0/')[1];
+        if ((api && api != this.value.api) || (api && method && method != this.value.method)) {
+          const name = api.split('/api/w3bapp/')[1];
           const template = TEMPLATES[name];
           if (!template) {
             return;
           }
-          e.url = config.NEXT_PUBLIC_API_URL + api + template[method].suffix;
+          e.url = window.location.origin + api + template[method].suffix;
           e.body = template[method].body;
         }
-
         return e;
       }
     }),
-    afterSubmit: async (e) => {
-      const res = await axios.request({
-        url: e.formData.url,
-        method: e.formData.method,
-        data: JSON.parse(e.formData.body)
-      });
+    afterSubmit: async (e: any) => {
+      const { protocol } = e.formData;
+      if (protocol === 'http/https') {
+        await axios.request({
+          url: e.formData.url,
+          method: e.formData.method,
+          data: JSON.parse(e.formData.body)
+        });
+      }
+
+      if (protocol === 'mqtt') {
+        await axios.request({
+          url: '/api/mqtt',
+          method: 'post',
+          data: {
+            topic: e.formData.topic,
+            message: JSON.parse(e.formData.message)
+          }
+        });
+      }
+
       await showNotification({ message: 'requset successed' });
       eventBus.emit('postman.request');
-      // this.form.reset();
-      // this.modal.set({ show: false });
     }
   });
 
