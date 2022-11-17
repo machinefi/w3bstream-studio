@@ -17,8 +17,7 @@ const Editor = observer(() => {
     w3s,
     w3s: {
       projectManager: {
-        curFilesListSchema,
-        curFilesListSchema: { curActiveFile, activeFiles }
+        curFilesListSchema
       }
     }
   } = useStore();
@@ -93,7 +92,7 @@ const Editor = observer(() => {
     },
     genHTMLRawData(filesItem: FilesItemType) {
       const curWasmIndex = _.findIndex(curFilesListSchema?.activeFiles, (i) => i?.label.endsWith('.wasm'));
-      console.log(curFilesListSchema?.activeFiles, curWasmIndex, activeFiles[curWasmIndex]);
+      console.log(curFilesListSchema?.activeFiles, curWasmIndex, curFilesListSchema?.activeFiles[curWasmIndex]);
       if (curWasmIndex == -1) return toast.error('No wasm file find!');
       const arr = [];
       console.log(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw);
@@ -116,7 +115,7 @@ const Editor = observer(() => {
     <Box>
       {/* Active Bar Headers  */}
       <Flex w="full" bg="#2f3030" alignItems={'center'}>
-        {activeFiles?.map((i) => {
+        {curFilesListSchema?.activeFiles.map((i) => {
           return (
             <>
               {i?.label && (
@@ -128,9 +127,9 @@ const Editor = observer(() => {
                   display="flex"
                   py={2}
                   px={2}
-                  background={i?.key == curActiveFile?.key ? '#1e1e1e' : 'none'}
+                  background={i?.key == curFilesListSchema?.curActiveFile?.key ? '#1e1e1e' : 'none'}
                   fontSize="sm"
-                  color={i?.key == curActiveFile?.key ? '#a9dc76' : 'white'}
+                  color={i?.key == curFilesListSchema?.curActiveFile?.key ? '#a9dc76' : 'white'}
                   cursor="pointer"
                   alignItems={'center'}
                 >
@@ -145,19 +144,19 @@ const Editor = observer(() => {
           );
         })}
 
-        {curActiveFile?.label.endsWith('.html') && (
+        {curFilesListSchema?.curActiveFile?.label.endsWith('.html') && (
           <Tooltip label="Preview in html" placement="top">
-            <Text ml="auto" cursor="pointer" mr={4} className="pi pi-play" color="white" onClick={() => store.genHTMLRawData(curActiveFile)}></Text>
+            <Text ml="auto" cursor="pointer" mr={4} className="pi pi-play" color="white" onClick={() => store.genHTMLRawData(curFilesListSchema?.curActiveFile)}></Text>
           </Tooltip>
         )}
 
-        {curActiveFile?.label.endsWith('.ts') && (
+        {curFilesListSchema?.curActiveFile?.label.endsWith('.ts') && (
           <Tooltip label="Compile to wasm" placement="top">
-            <Text ml="auto" cursor="pointer" mr={4} className="pi pi-bolt" color="white" onClick={() => store.compile(curActiveFile)}></Text>
+            <Text ml="auto" cursor="pointer" mr={4} className="pi pi-bolt" color="white" onClick={() => store.compile(curFilesListSchema?.curActiveFile)}></Text>
           </Tooltip>
         )}
 
-        {curActiveFile?.label.endsWith('.wasm') && (
+        {curFilesListSchema?.curActiveFile?.label.endsWith('.wasm') && (
           <Tooltip label={`Upload to ${w3s.curProject.f_name}`} placement="top">
             <Text
               ml="auto"
@@ -174,7 +173,7 @@ const Editor = observer(() => {
                 });
                 //@ts-ignore
                 w3s.applet.form.value.set({
-                  file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label, curActiveFile.data.extraData.raw),
+                  file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw),
                   projectID: w3s.curProject.f_project_id,
                   appletName: ''
                 } as IChangeEvent);
@@ -185,7 +184,7 @@ const Editor = observer(() => {
       </Flex>
 
       {/* Editor Body  */}
-      {curActiveFile ? (
+      {curFilesListSchema?.curActiveFile ? (
         <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           {store.showPreviewMode ? (
             <iframe style={{ background: '#1e1e1e' }} frameBorder="0" height={400} src={`data:text/html;base64,${store.curPreviewRawData}`} sandbox="allow-scripts allow-pointer-lock"></iframe>
@@ -199,21 +198,18 @@ const Editor = observer(() => {
                 curFilesListSchema.lockedFile();
               }}
             >
-              {curActiveFile.label.endsWith('.wasm') ? (
-                <Center  
-                bg={'#1e1e1e'}
-                width={'100%'}
-                height={400}
-                color="white"
-                >This file is a binary file and cannot be opened in the editor!</Center>
+              {curFilesListSchema?.curActiveFile.label.endsWith('.wasm') ? (
+                <Center bg={'#1e1e1e'} width={'100%'} height={400} color="white">
+                  This file is a binary file and cannot be opened in the editor!
+                </Center>
               ) : (
                 <MonacoEditor
                   width={'100%'}
                   height={400}
                   theme="vs-dark"
-                  language={curActiveFile.data?.language}
+                  language={curFilesListSchema?.curActiveFile.data?.language}
                   defaultValue="export function test(): void {}"
-                  value={curActiveFile?.data?.code}
+                  value={curFilesListSchema?.curActiveFile?.data?.code}
                   beforeMount={(monaco) => {
                     if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
                   }}

@@ -13,6 +13,11 @@ export type VSCodeFilesType = {
   name: string;
   path: string;
   content: string;
+  studioOptions: {
+    dev: boolean;
+    projectName: string;
+    payload: string;
+  };
 };
 export class ProjectManager {
   projects: ProjectType[] = [];
@@ -44,6 +49,11 @@ export class ProjectManager {
         name
         path
         content
+        studioOptions {
+          dev
+          projectName
+          payload
+        }
       }
   }`;
     this.wsClient = createClient({
@@ -63,12 +73,13 @@ export class ProjectManager {
           };
         }) => {
           this.curFilesListSchema.setVscodeRemotFile(data.data.files);
+          this.curFilesListSchema.runAutoDevActions(data.data.files);
           result = data;
-          this.isWSConnect = true
+          this.isWSConnect = true;
         },
-        error: ()=>{
-          this.isWSConnect = false
-          reject()
+        error: () => {
+          this.isWSConnect = false;
+          reject();
         },
         complete: () => resolve(result)
       });

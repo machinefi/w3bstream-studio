@@ -209,7 +209,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
         key={index}
         p={2}
         cursor="pointer"
-        sx={getSelectedStyles(w3s.showContent === 'CURRENT_APPLETS' && w3s.curProjectIndex == index)}
+        sx={getSelectedStyles((w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'EDITOR') && w3s.curProjectIndex == index)}
         onClick={(e) => {
           w3s.curProjectIndex = index;
           if (w3s.showContent != 'EDITOR' && w3s.showContent != 'CURRENT_APPLETS') {
