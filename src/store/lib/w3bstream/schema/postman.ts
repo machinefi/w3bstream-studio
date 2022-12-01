@@ -19,7 +19,7 @@ export const schema = {
         {
           properties: {
             protocol: { enum: ['http/https'] },
-            api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor'].map((i) => `/api/w3bapp/${i}`) },
+            api: { type: 'string', enum: ['account', 'applet', 'project', 'strategy', 'publisher', 'monitor/contract_log', 'monitor/chain_tx', 'monitor/chain_height'].map((i) => `/api/w3bapp/${i}`) },
             url: { type: 'string' },
             method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
             headers: {
@@ -279,17 +279,82 @@ const TEMPLATES: TEMPLATES_TYPE = {
       body: JSON.stringify({ name: '', key: '' }, null, 2)
     }
   },
-  monitor: {
+  'monitor/contract_log': {
     get: {
       suffix: '',
       body: '{}'
     },
     delete: {
-      suffix: '/$PROJECTID',
+      suffix: '/$PROJECTNAME',
       body: JSON.stringify(
         {
-          contractlogID: '',
-          chaintxID: '',
+          contractlogID: ''
+        },
+        null,
+        2
+      )
+    },
+    post: {
+      suffix: '/$PROJECTNAME',
+      body: JSON.stringify(
+        {
+          eventType: 'DEFAULT',
+          chainID: 4690,
+          contractAddress: '${contractAddress}',
+          blockStart: '${blockStart}',
+          blockEnd: '${blockEnd}',
+          topic0: '${topic0}'
+        },
+        null,
+        2
+      )
+    },
+    put: {
+      suffix: '/$PROJECTNAME',
+      body: JSON.stringify({}, null, 2)
+    }
+  },
+  'monitor/chain_tx': {
+    get: {
+      suffix: '',
+      body: '{}'
+    },
+    delete: {
+      suffix: '/$PROJECTNAME',
+      body: JSON.stringify(
+        {
+          chaintxID: ''
+        },
+        null,
+        2
+      )
+    },
+    post: {
+      suffix: '/$PROJECTNAME',
+      body: JSON.stringify(
+        {
+          eventType: 'DEFAULT',
+          chainID: 4690,
+          txAddress: '${txAddress}'
+        },
+        null,
+        2
+      )
+    },
+    put: {
+      suffix: '/$PROJECTNAME',
+      body: JSON.stringify({}, null, 2)
+    }
+  },
+  'monitor/chain_height': {
+    get: {
+      suffix: '',
+      body: '{}'
+    },
+    delete: {
+      suffix: '/$PROJECTNAME',
+      body: JSON.stringify(
+        {
           chainHeightID: ''
         },
         null,
@@ -297,34 +362,19 @@ const TEMPLATES: TEMPLATES_TYPE = {
       )
     },
     post: {
-      suffix: '/$PROJECTID',
+      suffix: '/$PROJECTNAME',
       body: JSON.stringify(
         {
-          contractLog: {
-            eventType: 'DEFAULT',
-            chainID: 4690,
-            contractAddress: '${contractAddress}',
-            blockStart: '${blockStart}',
-            blockEnd: '${blockEnd}',
-            topic0: '${topic0}'
-          },
-          chainTx: {
-            eventType: 'DEFAULT',
-            chainID: 4690,
-            txAddress: '${txAddress}'
-          },
-          chainHeight: {
-            eventType: 'DEFAULT',
-            chainID: 4690,
-            height: '${height}'
-          }
+          eventType: 'DEFAULT',
+          chainID: 4690,
+          height: '${height}'
         },
         null,
         2
       )
     },
     put: {
-      suffix: '/$PROJECTID',
+      suffix: '/$PROJECTNAME',
       body: JSON.stringify({}, null, 2)
     }
   }
