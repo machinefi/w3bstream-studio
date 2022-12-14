@@ -1,5 +1,5 @@
 #build studio
-FROM node:16-alpine AS build-nodejs
+FROM node:16 AS build-nodejs
 
 WORKDIR /w3bstream-studio
 

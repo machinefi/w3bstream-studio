@@ -3012,8 +3012,8 @@
         "affectsGlobalScope": false
       },
       "./src/components/editorwidget/index.tsx": {
-        "version": "a68bb1b0b8a86f3a38817ac0056450689df14dcf730ac6b2666b750728133927",
-        "signature": "9f7aedef8228377383725702303e6a6a72e0e261d15a76aac03ce3f9fd60d337",
+        "version": "9da2b2ead9c3983b0808a69f159b4c1b04110d7fc52b7f2c2b47873466de267e",
+        "signature": "0da6e6fb877d847f795a1f299667a0254212fea271cd53edae812ff6c7cd7181",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/file-selector@0.6.0/node_modules/file-selector/dist/file.d.ts": {
@@ -5726,23 +5726,8 @@
         "signature": "b532622314df1db2f51d8271bbd7605e86076314a27d66be227d6b448e80b12e",
         "affectsGlobalScope": false
       },
-      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/runtime-config.d.ts": {
-        "version": "b7fff2d004c5879cae335db8f954eb1d61242d9f2d28515e67902032723caeab",
-        "signature": "b7fff2d004c5879cae335db8f954eb1d61242d9f2d28515e67902032723caeab",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts": {
-        "version": "8303df69e9d100e3df8f2d67ec77348cb6494dc406356fdd9b56e61aa7c3c758",
-        "signature": "8303df69e9d100e3df8f2d67ec77348cb6494dc406356fdd9b56e61aa7c3c758",
-        "affectsGlobalScope": false
-      },
-      "./src/lib/config.ts": {
-        "version": "618e4bcd144e4153b084749e6fc3946a769eaf02e813f0d246de0928aca8b367",
-        "signature": "cd9aba433d0d2502e6712144fd8b0897baf2a2a495a0be4e852b8ef0d23d49f8",
-        "affectsGlobalScope": false
-      },
       "./src/lib/axios.ts": {
-        "version": "1324a7fb970d1eb7bb690cfd92483824397def5df781b46950b46c09e2a5f35d",
+        "version": "0cf24f7b61cf4f7cecbe0bb4a3c51de243e9b5e0af5c063cb9f64c0eb6a12b57",
         "signature": "30dab881c5dfb35fbb810b013184fc84913cc3177a2e0929921f59c917d80106",
         "affectsGlobalScope": false
       },
@@ -6297,8 +6282,8 @@
         "affectsGlobalScope": false
       },
       "./src/lib/helper.ts": {
-        "version": "449b34b6f6fc186483aadea681899985705c3214c67084eca8eb9e5cc1d9eeb9",
-        "signature": "63106d1158e20f31b776af3a628ab8b18301576f23889335d4cfba3f8f95a5a7",
+        "version": "70fe5d6d49298aeba0ada95cfb02454f251d99796eb7159a1b095178b785fe32",
+        "signature": "caf09ac51d4e7c1f5f5027708f9a8f4dd76195b4e805b40bacc8165cd3d701b2",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/ajv@6.12.6/node_modules/ajv/lib/ajv.d.ts": {
@@ -6352,8 +6337,23 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/fileslist.ts": {
-        "version": "677ff985c91154430fb6dada75d6a90bb653f324bfbbb7a8ed148118763892f7",
+        "version": "7d9d8a4ac4a9d748b996b16b0eb9aaa5de8772626e362e0315967cc8964880b2",
         "signature": "f0086c1aeb7fe992de9cc6021d80e121e151b1d0c7b33eeb2d2115f6360f4c85",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/runtime-config.d.ts": {
+        "version": "b7fff2d004c5879cae335db8f954eb1d61242d9f2d28515e67902032723caeab",
+        "signature": "b7fff2d004c5879cae335db8f954eb1d61242d9f2d28515e67902032723caeab",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts": {
+        "version": "8303df69e9d100e3df8f2d67ec77348cb6494dc406356fdd9b56e61aa7c3c758",
+        "signature": "8303df69e9d100e3df8f2d67ec77348cb6494dc406356fdd9b56e61aa7c3c758",
+        "affectsGlobalScope": false
+      },
+      "./src/lib/config.ts": {
+        "version": "a30861378acffe6359e42724af08759fcdae893005e86f22c5a125ddc676027e",
+        "signature": "925402dc26c8b194ce182779d51f5287b71d85b469c19c03dc4a56c241cb0940",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/graphql@16.6.0/node_modules/graphql/version.d.ts": {
@@ -8472,7 +8472,7 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/config.ts": {
-        "version": "32886f6c908134ff5fea66e4fa0cc15f6dcb9d68e95ef59b1a97d42bec3252c1",
+        "version": "e4fd101116f21e20f29f4daab5e42d9634fcb6e3fb2326930ae36eae04747d78",
         "signature": "5e4ea8e9301c2cb9cf3f2590ca5743622c21950e6afe360518bc711e86efbdb9",
         "affectsGlobalScope": false
       },
@@ -8482,17 +8482,17 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/login.ts": {
-        "version": "3a82cf6a09a52c01e62a50967b232d24264e3e197c537f3d86fb1d8643c36777",
-        "signature": "c0946f58625a02d80af34bf301124cc75ba2dd92c15bd1337d509520898f9a11",
+        "version": "a8b2c26ab4b5d0ef4c03b5ffe42cb88491fad15ad890b1a7e404b4fe0bbd1990",
+        "signature": "586741250580a4b849846a21ecc883e723ceea203e7154836af50d0728e4dccd",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/password.ts": {
-        "version": "f61cdcb54e7efb5c0f482575165f1c1cd7ea0ab03e10906a3af7570aab0f16bf",
+        "version": "221bfcf51e22e76d943bfb3946e0e29d4cea30e2293f13802222bbd92fad7946",
         "signature": "183a0122080399445e438e6a5622ebc179db8c193fc9758f23bbe9efc6172ab8",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/project.ts": {
-        "version": "fcade2c2ee8eacdfe8ebc1fc0b1c74ecd3cdf14ecc649abae15094a7033aed97",
+        "version": "42848c7298a6a94c57967442c8da3ec4a27712696fa4e41d4b56a7e41374eba9",
         "signature": "9933b3b420c1e2596a033e68e16a6a296dd9d4281b558c74026be084950630d8",
         "affectsGlobalScope": false
       },
@@ -8502,8 +8502,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/publishevent.ts": {
-        "version": "08e28bac727e338a45083b93f8d384f5c52d28808caa6ad3ebc60e9225ac51c2",
-        "signature": "b2898ff1eb9b79a11eb04d93dc7c397e828288e075aad0b6eeb16992d5f3a660",
+        "version": "246c49255546ec20d44a4467f3e398d2ca265c3392c5710101a41d91ba87b7a9",
+        "signature": "bc82fab48f5355264e9d605415b062dca822d6d2aed50b221243ebfa119e15e3",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/copy-to-clipboard@3.3.1/node_modules/copy-to-clipboard/index.d.ts": {
@@ -8572,17 +8572,17 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/publisher.ts": {
-        "version": "4c7d60776806e9ddf65472cd643e0c9ecdd28abbecc81a75836985e1d3f09e8c",
-        "signature": "8216297a1e2148166a9cd4fa4cf149c7f10299d143d97d8b45e286b91bcc30a0",
+        "version": "14e8973e81a072618a7b04dd58924bb8dcbcca495bbe8a79c3b7e2ad609434e0",
+        "signature": "4efe9441119e3c42fc20c5671c6840202bda84af38d8311d689d653ce51a81fa",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/strategy.ts": {
-        "version": "b6dbdf856c267af2884d48abde5739336b66cba5b6bc560540dc10da5d0c91ff",
+        "version": "06602ea42f6e40e2c044e67d7b6e157e49dcaa3811099d925dc4a0ac45406685",
         "signature": "bbcb60cc388aa8993aea7e7fc174f59f45cfea1db51dd13baae55a9b42fe7da3",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/applet.tsx": {
-        "version": "998085463c4714092d11bc88dc7e20c0e76bb7e8ab015916b25962a9951873cd",
+        "version": "c79fdab9514d4d70415aed59342effd8b9e3ead196636c075da8bb3d0c5c839c",
         "signature": "8d4a2bb78b457516e35dfa8d45e16f9f0f36bff628133df20e972a386208ce50",
         "affectsGlobalScope": false
       },
@@ -8592,27 +8592,27 @@
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/postman.ts": {
-        "version": "870a2d7102414c5f1da5c80398d37729ae84c88b295ca5aa59fb7bbeb32edf22",
-        "signature": "d47e4fde0bdecde16ebd130ae3cf70480bab0e68d87f386079b487c20da476a9",
+        "version": "aef6608b8f37adff372036345db785620853cf432a13fb9c57499b1e312121f2",
+        "signature": "808b524f1d2ab3ddfa9f48021ff9fede8548596dfd63d687d3f98b8204c8f530",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/contractlog.ts": {
-        "version": "82cf731716bb678838dc556ce36a64a92d93f24a9ef32160c4511ee66d7baa4c",
-        "signature": "cc7fb25a45da0feb9af053f864a3b6f3b06da85b334b34f46c267f4691411562",
+        "version": "d5fbff03bb5b03cc91f46edbf68e4893d0bc6e2fa4ce99f6a1c231fbb8bd2261",
+        "signature": "77f59e87ff30ec8b911356aa45c8513aeecce1253ae421b585532c0f3568bfcb",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/chaintx.tsx": {
-        "version": "5c5e7d2656664300587f85ff7dac52ee189e3b8fd94cf773fe4a7a605fafbf34",
+        "version": "e81cd9bc8fd172b8542df2e8e9ceee480fa434cbb36924c332fc116658ff8887",
         "signature": "7cc9e44827edbf740bf76a5f526f04dfaa83709b35b189640c2160479ff07873",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/chainheight.ts": {
-        "version": "9ea664bf3818f016b5ba0ff1fe420907b810e5269e5e0316738f13f2a0e0ffe9",
-        "signature": "79d3a6e839e98845d806867bbf9d91fac881e8377ff781263e2bd448bcd61939",
+        "version": "1f7560520736a72b3386326c315c465869413770f1e23d29d7589812682e1b15",
+        "signature": "0ae321b1bb72082c76c9d0f8e4bd7c0201a0bcae4a153096a2eb21fabcf10fa7",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "1b528bd37923e22f265c3688d8aae587d1cde62a841cb69b5931cc7ff1731a10",
+        "version": "78733ba4601c1befd802bfcf03060958ed2d54f606751ec93ab7e357d6eac0ff",
         "signature": "59e80fc740e11060447466cda0e012d67d764b01a22e695bae8de7ab61067ba2",
         "affectsGlobalScope": false
       },
@@ -8732,7 +8732,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "a16532ede051ffbf195d7165a2e9d276d714e2ce795218acfcdb2687cf3516ed",
+        "version": "19e3e367f25fa18033bd2501a84daa513bc32a419e7259e73e741a1cdb372545",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
@@ -9068,7 +9068,7 @@
       },
       "./src/pages/_app.tsx": {
         "version": "b69cc49461840861c083106fae13ff75a0901ab0c0ed9ba2e4f6bf49553a32f4",
-        "signature": "4bdbc51e424008e76f1ffce92bf0c884cba3656d3bc13a0d586a5a302fcb1b35",
+        "signature": "9d7b81bc5ed9393205a2c26c3f3bb4811c06a63b0db10e6da0974b1aba3c7553",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts": {
@@ -9096,9 +9096,144 @@
         "signature": "491ebea4d6e717d7db942fbb2aefbfda833e02fcda75a80bfcad93c11fc5e0de",
         "affectsGlobalScope": false
       },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/css.d.ts": {
+        "version": "0990a7576222f248f0a3b888adcb7389f957928ce2afb1cd5128169086ff4d29",
+        "signature": "0990a7576222f248f0a3b888adcb7389f957928ce2afb1cd5128169086ff4d29",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/index.d.ts": {
+        "version": "cc69795d9954ee4ad57545b10c7bf1a7260d990231b1685c147ea71a6faa265c",
+        "signature": "cc69795d9954ee4ad57545b10c7bf1a7260d990231b1685c147ea71a6faa265c",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/macro.d.ts": {
+        "version": "54bd71c625e111b058159fc737c8f9a7170acfdb63cdb9a178558fb70e9fa9e9",
+        "signature": "54bd71c625e111b058159fc737c8f9a7170acfdb63cdb9a178558fb70e9fa9e9",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/style.d.ts": {
+        "version": "1b61d259de5350f8b1e5db06290d31eaebebc6baafd5f79d314b5af9256d7153",
+        "signature": "1b61d259de5350f8b1e5db06290d31eaebebc6baafd5f79d314b5af9256d7153",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts": {
+        "version": "57194e1f007f3f2cbef26fa299d4c6b21f4623a2eddc63dfeef79e38e187a36e",
+        "signature": "57194e1f007f3f2cbef26fa299d4c6b21f4623a2eddc63dfeef79e38e187a36e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts": {
+        "version": "0f6666b58e9276ac3a38fdc80993d19208442d6027ab885580d93aec76b4ef00",
+        "signature": "0f6666b58e9276ac3a38fdc80993d19208442d6027ab885580d93aec76b4ef00",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts": {
+        "version": "05fd364b8ef02fb1e174fbac8b825bdb1e5a36a016997c8e421f5fab0a6da0a0",
+        "signature": "05fd364b8ef02fb1e174fbac8b825bdb1e5a36a016997c8e421f5fab0a6da0a0",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts": {
+        "version": "7e3327a4bd457a8949d15cc317b76fc394732519b09facac6836a726b58f277e",
+        "signature": "7e3327a4bd457a8949d15cc317b76fc394732519b09facac6836a726b58f277e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts": {
+        "version": "a2d648d333cf67b9aeac5d81a1a379d563a8ffa91ddd61c6179f68de724260ff",
+        "signature": "a2d648d333cf67b9aeac5d81a1a379d563a8ffa91ddd61c6179f68de724260ff",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts": {
+        "version": "c3a905a7fa93ca648349e934fb19356cf7b40e48d65658de3e0c77d67696fd40",
+        "signature": "c3a905a7fa93ca648349e934fb19356cf7b40e48d65658de3e0c77d67696fd40",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts": {
+        "version": "a3f41ed1b4f2fc3049394b945a68ae4fdefd49fa1739c32f149d32c0545d67f5",
+        "signature": "a3f41ed1b4f2fc3049394b945a68ae4fdefd49fa1739c32f149d32c0545d67f5",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts": {
+        "version": "c2489c80994d62e5b51370a6f02f537db4c37af5f914fcb5b2755b81f1906cae",
+        "signature": "c2489c80994d62e5b51370a6f02f537db4c37af5f914fcb5b2755b81f1906cae",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts": {
+        "version": "47699512e6d8bebf7be488182427189f999affe3addc1c87c882d36b7f2d0b0e",
+        "signature": "47699512e6d8bebf7be488182427189f999affe3addc1c87c882d36b7f2d0b0e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts": {
+        "version": "b24b3b6eb34fa0375274f5d294091d5ab4cf822e117bca371acb55a7a6a132aa",
+        "signature": "b24b3b6eb34fa0375274f5d294091d5ab4cf822e117bca371acb55a7a6a132aa",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts": {
+        "version": "42c686ce08bf5576ed178f4a6a62d1b580d941334fb53bdff7054e0980f2dc75",
+        "signature": "42c686ce08bf5576ed178f4a6a62d1b580d941334fb53bdff7054e0980f2dc75",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts": {
+        "version": "26a451bf3a5f87ebaaa7694c5b664c3d9cec296f3fa8b797b872aee0f302b3a0",
+        "signature": "26a451bf3a5f87ebaaa7694c5b664c3d9cec296f3fa8b797b872aee0f302b3a0",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts": {
+        "version": "5835a6e0d7cd2738e56b671af0e561e7c1b4fb77751383672f4b009f4e161d70",
+        "signature": "5835a6e0d7cd2738e56b671af0e561e7c1b4fb77751383672f4b009f4e161d70",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/user-agent.d.ts": {
+        "version": "c0eeaaa67c85c3bb6c52b629ebbfd3b2292dc67e8c0ffda2fc6cd2f78dc471e6",
+        "signature": "c0eeaaa67c85c3bb6c52b629ebbfd3b2292dc67e8c0ffda2fc6cd2f78dc471e6",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/@edge-runtime/primitives/url.d.ts": {
+        "version": "4b7f74b772140395e7af67c4841be1ab867c11b3b82a51b1aeb692822b76c872",
+        "signature": "4b7f74b772140395e7af67c4841be1ab867c11b3b82a51b1aeb692822b76c872",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts": {
+        "version": "b57b61d9a3f3e4243d1bc307a14f7e678057a86710f2c30ec0cd254a55f36948",
+        "signature": "b57b61d9a3f3e4243d1bc307a14f7e678057a86710f2c30ec0cd254a55f36948",
+        "affectsGlobalScope": true
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts": {
+        "version": "4303e97019b0af715ba7bc53f45ce9eeafb0c46ccb216500d2b0de203ffdf818",
+        "signature": "4303e97019b0af715ba7bc53f45ce9eeafb0c46ccb216500d2b0de203ffdf818",
+        "affectsGlobalScope": true
+      },
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts": {
+        "version": "9c00f78ac4e60d1c34d0fb415df6b2fea5f6eea200076dff4d782256a4c2802d",
+        "signature": "9c00f78ac4e60d1c34d0fb415df6b2fea5f6eea200076dff4d782256a4c2802d",
+        "affectsGlobalScope": false
+      },
+      "./src/pages/api/file.ts": {
+        "version": "fac040dffada63a0dea55d83219b197848619707abf97229e2cd19cc7735fab1",
+        "signature": "7f86ff36dce1acab8ca0020380a144ef5ad36071c98c8ee9b0cfb24064061b50",
+        "affectsGlobalScope": false
+      },
+      "./src/pages/api/mqtt.ts": {
+        "version": "df3538baa15448382c605b6363c2872283ce12b925a0816df0d6e9ac8d008f64",
+        "signature": "2bd47f9f1f5c677e45132f34bde815200157fe9b14d2074da096b5013814e0b3",
+        "affectsGlobalScope": false
+      },
       "./src/pages/api/trpc/[trpc].ts": {
         "version": "2da4367b3b93d183c787d553bb8591b1d36752636a140c87e9266006605ae40b",
         "signature": "4451cc704911df1b376acc6ad19cd9646190b95b12f85de5d730731623472afb",
+        "affectsGlobalScope": false
+      },
+      "./src/pages/api/w3bapp/[a]/index.ts": {
+        "version": "91a011089a8b8aab08a144b1f5e6293e24d751776420085e4cf125d54c2a0bb3",
+        "signature": "2bd47f9f1f5c677e45132f34bde815200157fe9b14d2074da096b5013814e0b3",
+        "affectsGlobalScope": false
+      },
+      "./src/pages/api/w3bapp/[a]/[b]/index.ts": {
+        "version": "88740a187a933d37c060abcc9a02eb5fd738280b26aa1329b4e51d6e1970b5aa",
+        "signature": "2bd47f9f1f5c677e45132f34bde815200157fe9b14d2074da096b5013814e0b3",
+        "affectsGlobalScope": false
+      },
+      "./src/pages/api/w3bapp/[a]/[b]/[c]/index.ts": {
+        "version": "8aa6eb1e307a37e837f683a93895a37f4843b6ae8a31033df0426566efa339b3",
+        "signature": "2bd47f9f1f5c677e45132f34bde815200157fe9b14d2074da096b5013814e0b3",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/teamplates/teamplate.ts": {
@@ -14577,6 +14712,9 @@
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/types/type-utils.d.ts": [
         "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/internal.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_app.d.ts"
       ],
@@ -14609,6 +14747,10 @@
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/subresource-integrity-plugin.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/webpack/webpack.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/image-config.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/index.d.ts",
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/url.d.ts",
@@ -14627,6 +14769,9 @@
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/router/router.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts",
@@ -14643,6 +14788,10 @@
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
       ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/api-utils/index.d.ts": [
@@ -14860,6 +15009,12 @@
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/font-loader-manifest-plugin.d.ts",
@@ -14903,14 +15058,70 @@
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/router/router.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/css.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/macro.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/style.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts",
+        "./node_modules/.pnpm/react-i18next@11.17.3_vth7g6zw6lco7clwxal23of2km/node_modules/react-i18next/ts4.1/index.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/index.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
       ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts"
       ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts": [
+        "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/async_hooks.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/@edge-runtime/primitives/url.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/fetch-event.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/user-agent.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/types.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts": [
+        "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/index.d.ts"
       ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/http.d.ts",
@@ -14922,6 +15133,7 @@
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/config.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/next.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts",
         "./node_modules/.pnpm/react-i18next@11.17.3_vth7g6zw6lco7clwxal23of2km/node_modules/react-i18next/ts4.1/index.d.ts"
       ],
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/animations/generators/decay.d.ts": [
@@ -15070,6 +15282,7 @@
       "./node_modules/.pnpm/react-i18next@11.17.3_vth7g6zw6lco7clwxal23of2km/node_modules/react-i18next/ts4.1/index.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/i18next@21.8.11/node_modules/i18next/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
       ],
       "./node_modules/.pnpm/react-icons@4.4.0_react@18.2.0/node_modules/react-icons/lib/cjs/iconbase.d.ts": [
@@ -17260,7 +17473,6 @@
       "./src/lib/axios.ts": [
         "./node_modules/.pnpm/@mantine+notifications@4.2.11_n5fi23fjjzlwcbqhnnpdtjftw4/node_modules/@mantine/notifications/lib/index.d.ts",
         "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts",
-        "./src/lib/config.ts",
         "./src/store/index.ts"
       ],
       "./src/lib/config.ts": [
@@ -17337,10 +17549,29 @@
       "./src/pages/_document.tsx": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts"
       ],
+      "./src/pages/api/file.ts": [
+        "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+      ],
+      "./src/pages/api/mqtt.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+      ],
       "./src/pages/api/trpc/[trpc].ts": [
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/adapters/next/index.d.ts",
         "./src/server/context.ts",
         "./src/server/routers/_app.ts"
+      ],
+      "./src/pages/api/w3bapp/[a]/[b]/[c]/index.ts": [
+        "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+      ],
+      "./src/pages/api/w3bapp/[a]/[b]/index.ts": [
+        "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+      ],
+      "./src/pages/api/w3bapp/[a]/index.ts": [
+        "./node_modules/.pnpm/axios@0.21.4/node_modules/axios/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
       ],
       "./src/pages/index.tsx": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
@@ -17532,7 +17763,6 @@
         "./node_modules/.pnpm/json-schema-to-ts@2.5.5/node_modules/json-schema-to-ts/lib/index.d.ts",
         "./src/components/editorwidget/index.tsx",
         "./src/lib/axios.ts",
-        "./src/lib/config.ts",
         "./src/lib/event.ts",
         "./src/lib/theme.ts",
         "./src/store/index.ts",
@@ -23035,6 +23265,9 @@
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/types/type-utils.d.ts": [
         "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/internal.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_app.d.ts"
       ],
@@ -23067,6 +23300,10 @@
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/subresource-integrity-plugin.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/webpack/webpack.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/image-config.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/index.d.ts",
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/url.d.ts",
@@ -23085,6 +23322,9 @@
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/router/router.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts",
@@ -23101,6 +23341,10 @@
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts"
       ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/api-utils/index.d.ts": [
@@ -23318,6 +23562,12 @@
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts": [
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/font-loader-manifest-plugin.d.ts",
@@ -23361,14 +23611,70 @@
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/router/router.d.ts",
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
       ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/css.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/macro.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/style.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts",
+        "./node_modules/.pnpm/react-i18next@11.17.3_vth7g6zw6lco7clwxal23of2km/node_modules/react-i18next/ts4.1/index.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/index.d.ts": [
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts"
+      ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
       ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts"
       ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts": [
+        "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/async_hooks.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/@edge-runtime/primitives/url.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/fetch-event.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/user-agent.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/types.d.ts"
+      ],
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts": [
+        "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/index.d.ts"
       ],
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts": [
         "./node_modules/.pnpm/@types+node@14.18.21/node_modules/@types/node/http.d.ts",
@@ -25571,14 +25877,29 @@
         "./node_modules/.pnpm/@trpc+server@10.0.0-proxy-beta.15/node_modules/@trpc/server/dist/index.d.ts"
       ],
       "./src/pages/_app.tsx": [
-        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts",
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts",
         "./src/lib/superjson.ts"
       ],
       "./src/pages/_document.tsx": [
         "./node_modules/.pnpm/next@12.1.6_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts"
       ],
+      "./src/pages/api/file.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+      ],
+      "./src/pages/api/mqtt.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+      ],
       "./src/pages/api/trpc/[trpc].ts": [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts"
+      ],
+      "./src/pages/api/w3bapp/[a]/[b]/[c]/index.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+      ],
+      "./src/pages/api/w3bapp/[a]/[b]/index.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
+      ],
+      "./src/pages/api/w3bapp/[a]/index.ts": [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts"
       ],
       "./src/server/context.ts": [
         "./node_modules/.pnpm/@prisma+client@4.4.0_prisma@4.4.0/node_modules/@prisma/client/index.d.ts",
@@ -27027,6 +27348,7 @@
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/utils/global.d.ts",
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/utils/iterable.d.ts",
       "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/utils/utils.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/config.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/analysis/get-page-static-info.d.ts",
@@ -27036,15 +27358,19 @@
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/middleware-plugin.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/pages-manifest-plugin.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/build/webpack/plugins/subresource-integrity-plugin.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/page-loader.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/route-loader.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/router.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/@edge-runtime/primitives/url.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/webpack/webpack.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/lib/load-custom-routes.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_app.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/api-utils/index.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/base-http/index.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/base-http/node.d.ts",
@@ -27074,8 +27400,12 @@
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/fetch-event.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/request.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/response.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/user-agent.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/types.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/constants.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/html-context.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/image-config.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/mitt.d.ts",
@@ -27086,9 +27416,22 @@
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/router/utils/route-regex.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/runtime-config.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/utils.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/css.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/index.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/macro.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/style.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/link.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts",
+      "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts",
       "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/index.d.ts",
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/animations/generators/decay.d.ts",
       "./node_modules/.pnpm/popmotion@11.0.5/node_modules/popmotion/lib/animations/generators/keyframes.d.ts",
@@ -27524,7 +27867,12 @@
       "./src/pages/500.tsx",
       "./src/pages/_app.tsx",
       "./src/pages/_document.tsx",
+      "./src/pages/api/file.ts",
+      "./src/pages/api/mqtt.ts",
       "./src/pages/api/trpc/[trpc].ts",
+      "./src/pages/api/w3bapp/[a]/[b]/[c]/index.ts",
+      "./src/pages/api/w3bapp/[a]/[b]/index.ts",
+      "./src/pages/api/w3bapp/[a]/index.ts",
       "./src/pages/index.tsx",
       "./src/pages/login.tsx",
       "./src/server/context.ts",
@@ -38909,6 +39257,10 @@
         1
       ],
       [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/amp.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/app.d.ts",
         1
       ],
@@ -38945,6 +39297,10 @@
         1
       ],
       [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/image.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/link.d.ts",
         1
       ],
@@ -38961,7 +39317,15 @@
         1
       ],
       [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/script.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/client/with-router.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/compiled/@edge-runtime/primitives/url.d.ts",
         1
       ],
       [
@@ -38978,6 +39342,10 @@
       ],
       [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_document.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/pages/_error.d.ts",
         1
       ],
       [
@@ -39097,11 +39465,27 @@
         1
       ],
       [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/spec-extension/user-agent.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/server/web/types.d.ts",
         1
       ],
       [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/amp.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/constants.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/dynamic.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/shared/lib/head.d.ts",
         1
       ],
       [
@@ -39145,7 +39529,47 @@
         1
       ],
       [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/css.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/global.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/index.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/macro.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dist/styled-jsx/types/style.d.ts",
+        1
+      ],
+      [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/document.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/dynamic.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/error.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/head.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/image.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/index.d.ts",
         1
       ],
       [
@@ -39154,6 +39578,18 @@
       ],
       [
         "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/router.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/script.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/server.d.ts",
+        1
+      ],
+      [
+        "./node_modules/.pnpm/next@13.0.0_biqbaboplfbrettd7655fr4n2y/node_modules/next/types/global.d.ts",
         1
       ],
       [
@@ -41849,11 +42285,31 @@
         1
       ],
       [
+        "./src/pages/api/file.ts",
+        1
+      ],
+      [
         "./src/pages/api/graphql.ts",
         1
       ],
       [
+        "./src/pages/api/mqtt.ts",
+        1
+      ],
+      [
         "./src/pages/api/trpc/[trpc].ts",
+        1
+      ],
+      [
+        "./src/pages/api/w3bapp/[a]/[b]/[c]/index.ts",
+        1
+      ],
+      [
+        "./src/pages/api/w3bapp/[a]/[b]/index.ts",
+        1
+      ],
+      [
+        "./src/pages/api/w3bapp/[a]/index.ts",
         1
       ],
       [
