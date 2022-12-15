@@ -74,13 +74,7 @@ export class W3bStream {
             });
             strategies = strategies.concat(a.strategies);
           });
-          p.publishers.forEach((pub) => {
-            publishers.push({
-              ...pub,
-              project_id: p.f_project_id,
-              project_name: p.f_name
-            });
-          });
+          publishers = publishers.concat(p.publishers);
         });
 
         console.log(toJS(res));

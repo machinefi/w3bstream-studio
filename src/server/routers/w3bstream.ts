@@ -22,6 +22,8 @@ export const w3bstreamRouter = t.router({
           publishers: {
             select: {
               f_publisher_id: true,
+              f_project_id: true,
+              f_project_name: true,
               f_name: true,
               f_key: true,
               f_created_at: true,
@@ -107,7 +109,7 @@ export type ProjectOriginalType = inferProcedureOutput<W3bstreamRouter['projects
 export type AppletType = ProjectOriginalType['applets'][0] & { project_name: string };
 export type StrategyType = AppletType['strategies'][0];
 export type InstanceType = AppletType['instances'][0] & { project_name: string; applet_name: string };
-export type PublisherType = ProjectOriginalType['publishers'][0] & { project_id: string; project_name: string };
+export type PublisherType = ProjectOriginalType['publishers'][0];
 export type ProjectType = ProjectOriginalType & {
   applets: AppletType[];
   publishers: PublisherType[];

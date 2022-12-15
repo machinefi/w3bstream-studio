@@ -91,6 +91,7 @@ model t_project {
 model t_publisher {
   f_id           BigInt @id @default(autoincrement())
   f_project_id   BigInt
+  f_project_name String @db.VarChar(255)
   f_publisher_id BigInt @unique(map: "t_publisher_ui_publisher_id")
   f_name         String @db.VarChar(255)
   f_key          String @unique(map: "t_publisher_ui_publisher_key") @db.VarChar(255)

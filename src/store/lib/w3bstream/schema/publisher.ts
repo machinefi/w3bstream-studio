@@ -103,6 +103,10 @@ export default class PublisherModule {
   table = new JSONSchemaTableState<PublisherType>({
     columns: [
       {
+        key: 'f_project_name',
+        label: 'Project Name'
+      },
+      {
         key: 'f_publisher_id',
         label: 'Publisher ID'
       },
@@ -112,7 +116,7 @@ export default class PublisherModule {
       },
       {
         key: 'f_key',
-        label: 'Publisher ID'
+        label: 'Publisher key'
       },
       {
         key: 'f_created_at',
@@ -134,9 +138,9 @@ export default class PublisherModule {
                 color: '#fff',
                 onClick: () => {
                   this.form.value.set({
-                    publisherID: item.f_publisher_id,
-                    projectName: item.project_name,
-                    projectID: item.project_id,
+                    publisherID: item.f_publisher_id.toString(),
+                    projectName: item.f_project_name,
+                    projectID: item.f_publisher_id.toString(),
                     name: item.f_name,
                     key: item.f_key
                   });
@@ -157,7 +161,7 @@ export default class PublisherModule {
                     async onOk() {
                       await axios.request({
                         method: 'delete',
-                        url: `/api/w3bapp/publisher/${item.project_name}?publisherID=${item.f_publisher_id}`
+                        url: `/api/w3bapp/publisher/${item.f_project_name}?publisherID=${item.f_publisher_id}`
                       });
                       eventBus.emit('strategy.delete');
                       toast.success('Deleted successfully');
