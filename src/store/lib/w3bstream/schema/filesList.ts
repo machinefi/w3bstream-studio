@@ -5,6 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { templatecode } from '../../../../lib/templatecode';
 import { VSCodeFilesType } from '../project';
 import { helper } from '@/lib/helper';
+import { rootStore } from '@/store/index';
+import { ProjectType } from '@/server/routers/w3bstream';
+import { axios } from '@/lib/axios';
+import { eventBus } from '@/lib/event';
+import { dataURItoBlob } from '@rjsf/utils';
+import { StorageState } from '@/store/standard/StorageState';
 
 type FileItemDataType<T = any> = {
   code?: string;
@@ -23,6 +29,8 @@ export type FilesItemType = {
 };
 
 export const VSCodeRemoteFolderName = 'VSCode Files';
+
+const tempVScodeFilesStorage = new StorageState<FilesItemType[]>({ key: 'tempVScodeFiles', default: [] });
 
 //todo create file in value
 export class FilesListSchema {
@@ -69,9 +77,13 @@ export class FilesListSchema {
           isOpen: true,
           label: file.name,
           //todo resolve buffer base64 data to buffer
-          data: { code:helper.base64ToUTF8(file.content), language: helper.getFileLanguage(file.name),extraData:{
-            raw:helper.base64ToUint8Array(file.content)
-          }}
+          data: {
+            code: helper.base64ToUTF8(file.content),
+            language: helper.getFileLanguage(file.name),
+            extraData: {
+              raw: helper.base64ToUint8Array(file.content)
+            }
+          }
         });
       });
     } else {
@@ -84,6 +96,85 @@ export class FilesListSchema {
       this.setVscodeRemotFile(files);
     }
     this.syncToIndexDb();
+  }
+
+  async runAutoDevActions(files: VSCodeFilesType[]) {
+    if (files.some((i) => !i.studioOptions.dev)) return;
+    const tempVScodeFiles = tempVScodeFilesStorage.value;
+    const compareTempVScodeFiles = _.isEqual(
+      toJS(tempVScodeFiles),
+      files.filter((i) => i.name.endsWith('.wasm'))
+    );
+    console.log('sameWASM', compareTempVScodeFiles);
+    if (compareTempVScodeFiles) return;
+    tempVScodeFilesStorage.set(files.filter((i) => i.name.endsWith('.wasm')));
+    files
+      ?.filter((i) => i.name.endsWith('.wasm'))
+      .map(async (file) => {
+        const projectName = file.studioOptions.projectName;
+        const payload = file.studioOptions.payload;
+        const raw = helper.base64ToUint8Array(file.content);
+        //find projectName in project list
+        const project = rootStore.w3s.allProjects.value.find((i: ProjectType) => i.f_name == projectName);
+        //if project not exist, create project
+        console.log('project', project);
+        if (project) {
+          //delete project
+          await axios.request({
+            method: 'delete',
+            url: `/api/w3bapp/project/${project.f_name}`
+          });
+          await axios.request({
+            method: 'get',
+            url: '/api/w3bapp/project'
+          });
+        }
+        const projectRes = await axios.request({
+          method: 'post',
+          url: '/api/w3bapp/project',
+          data: {
+            name: projectName
+          }
+        });
+        eventBus.emit('project.create');
+        // create applet in project
+        let formData = new FormData();
+        console.log(helper.Uint8ArrayToWasmBase64FileData(file.name, raw));
+        const fileBlob = dataURItoBlob(helper.Uint8ArrayToWasmBase64FileData(file.name, raw));
+        formData.append('file', fileBlob.blob);
+        formData.append(
+          'info',
+          JSON.stringify({
+            wasmName: file.name,
+            projectID: projectRes.data.projectID,
+            appletName: file.name.replace('.wasm', '')
+          })
+        );
+        const appletRes = await axios.request({
+          method: 'post',
+          //todo wait fixed !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          url: `http://localhost:8888/srv-applet-mgr/v0/applet/${projectRes.data.projectID}`,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          data: formData
+        });
+        eventBus.emit('applet.create');
+        const deployRes = await rootStore.w3s.deployApplet.call({ appletID: appletRes.data.appletID });
+        console.log('deployRes', deployRes);
+        const startRes = await rootStore.w3s.handleInstance.call({ instaceID: deployRes.instanceID, event: 'START' });
+        //send event
+        await axios.request({
+          method: 'post',
+          url: `/api/w3bapp/event/${projectRes.data.name}`,
+          headers: {
+            'Content-Type': 'text/plain'
+          },
+          data: {
+            payload
+          }
+        });
+      });
   }
 
   findFile(objects: FilesItemType[], key: string): FilesItemType {
