@@ -115,10 +115,6 @@ export default class PublisherModule {
         label: 'name'
       },
       {
-        key: 'f_key',
-        label: 'Publisher key'
-      },
-      {
         key: 'f_created_at',
         label: 'created at'
       },
