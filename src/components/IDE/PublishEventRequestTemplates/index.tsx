@@ -109,7 +109,7 @@ const getTemplate = (curTemplateKey: string, { projectName, data }: { projectNam
   if (curTemplateKey === 'Rust') {
     return {
       language: 'rust',
-      code: ``
+      code: `use std::collections::HashMap;\nuse reqwest::header::HeaderMap;\nuse serde_json::value::Value;\n\nasync fn publish_event() -> Result<HashMap<String, Value>, reqwest::Error>{\n  let client = reqwest::Client::new();\n\n  let mut headers = HeaderMap::new();\n  headers.insert("Content-Type", "text/plain".parse().unwrap());\n\n  let mut header = HashMap::new();\n  header.insert("event_type", "${data.header.event_type}")\n  header.insert("pub_id", "${data.header.pub_id}")\n  header.insert("token", "${data.header.token}")\n  header.insert("pub_time", "${data.header.pub_time}")\n  let mut data = HashMap::new();\n  data.insert("header", header)\n  data.insert("payload", ${JSON.stringify(data.payload)});\n  Ok(client.post("http://localhost:8888/srv-applet-mgr/v0/event/${projectName}").headers(headers).json(&data).send().await?.json::<HashMap<String, Value>>().await?);\n}\n\nasync fn main() {\n  if let Ok(res) = publish_event().await {\n    println!("{:#?}", res);\n  }\n}`
     };
   }
 
