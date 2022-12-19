@@ -93,7 +93,7 @@ const getTemplate = (curTemplateKey: string, { projectName, data }: { projectNam
       language: 'javascript',
       code: `const url = 'http://localhost:8888/srv-applet-mgr/v0/event/${projectName}'\nconst data = ${JSON.stringify(
         data
-      )}\n\nfetch(url, { \n  method: 'POST',\n  headers: {\n    'Content-Type': 'text/plain' \n  },\n  body: JSON.stringify(data)\n}).then(data => {\n  response.json();\n}).then(data => {\n  console.log(data);\n});`
+      )}\n\nfetch(url, { \n  method: 'POST',\n  headers: {\n    'Content-Type': 'text/plain' \n  },\n  body: JSON.stringify(data)\n}).then(response => {\n  return response.json();\n}).then(data => {\n  console.log(data);\n});`
     };
   }
 
