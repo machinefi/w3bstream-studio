@@ -10,7 +10,6 @@ import { hooks } from '@/lib/hooks';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { AppletType, ChainHeightType, ChainTxType, ContractLogType, ProjectType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
-import { FilesListSchema } from './schema/filesList';
 import W3bstreamConfigModule from './schema/config';
 import LoginModule from './schema/login';
 import PasswordModule from './schema/password';
@@ -184,6 +183,8 @@ export class W3bStream {
     'CURRENT_APPLETS';
 
   isReady = false;
+
+  showPublishEventRequestTemplates = false;
 
   get isLogin() {
     return !!this.config.form.formData.token;
