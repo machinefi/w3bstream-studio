@@ -19,7 +19,7 @@ import AllContractLogs from './AllContractLogs';
 import AllChainTx from './AllChainTx';
 import AllChainHeight from './AllChainHeight';
 import toast from 'react-hot-toast';
-import copy from 'copy-to-clipboard';
+import PublishEventRequestTemplates from './PublishEventRequestTemplates';
 
 const IDE = observer(() => {
   const {
@@ -95,13 +95,10 @@ const IDE = observer(() => {
               toast.error('Please select the publisher first');
               return;
             }
-            const project = w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
-            const data = w3s.publishEvent.generateBody();
-            copy(`curl --location --request POST 'localhost:8888/srv-applet-mgr/v0/event/${project?.f_name}' --header 'Content-Type: text/plain' --data-raw '${JSON.stringify(data)}'`);
-            toast.success('Copied');
+            w3s.showPublishEventRequestTemplates = true;
           }}
         >
-          Copy Curl
+          Show Request Templates
         </Button>
       </JSONModal>
       <JSONModal jsonstate={w3s.postman}>
@@ -116,6 +113,7 @@ const IDE = observer(() => {
           Reset
         </Button>
       </JSONModal>
+      <PublishEventRequestTemplates />
     </Box>
   );
 });
