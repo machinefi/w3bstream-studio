@@ -4,8 +4,9 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
+import initTemplates from '@/constants/initTemplates.json';
 
-export const schema = {
+export const defaultSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', title: 'Name' }
@@ -13,12 +14,21 @@ export const schema = {
   required: ['name']
 } as const;
 
-type SchemaType = FromSchema<typeof schema>;
+export const initializationTemplateSchema = {
+  type: 'object',
+  properties: {
+    template: { type: 'string', title: 'Select a template', enum: initTemplates.templates.map((t) => t.name) }
+  },
+  required: ['template']
+} as const;
+
+type DefaultSchemaType = FromSchema<typeof defaultSchema>;
+type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
 
 export default class ProjectModule {
-  form = new JSONSchemaFormState<SchemaType>({
+  form = new JSONSchemaFormState<DefaultSchemaType>({
     //@ts-ignore
-    schema,
+    schema: defaultSchema,
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
@@ -43,12 +53,57 @@ export default class ProjectModule {
         this.modal.set({ show: false });
       }
     },
-    value: new JSONValue<SchemaType>({
+    value: new JSONValue<DefaultSchemaType>({
       default: {
         name: 'project_01'
       }
     })
   });
+
+  formList = [
+    {
+      label: 'Default',
+      form: this.form
+    },
+    {
+      label: 'Initialization Template',
+      form: new JSONSchemaFormState<InitializationTemplateSchemaType>({
+        //@ts-ignore
+        schema: initializationTemplateSchema,
+        uiSchema: {
+          'ui:submitButtonOptions': {
+            norender: false,
+            submitText: 'Submit',
+            props: {
+              w: '100%',
+              h: '32px',
+              ...gradientButtonStyle
+            }
+          }
+        },
+        afterSubmit: async (e) => {
+          const { template } = e.formData;
+          const data = initTemplates.templates.find((i) => i.name === template);
+          const res = await axios.request({
+            method: 'post',
+            url: `/api/init?adminKey=iotex.W3B.admin`,
+            data
+          });
+          if (res.data) {
+            await showNotification({ message: 'create project successed' });
+            eventBus.emit('project.create');
+            this.form.reset();
+            this.modal.set({ show: false });
+          }
+        },
+        value: new JSONValue<InitializationTemplateSchemaType>({
+          default: {
+            template: ''
+          }
+        })
+      })
+    }
+  ];
 
   modal = new JSONModalValue({
     default: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalBody, Box, ModalHeader, ModalCloseButton } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalBody, Box, ModalHeader, ModalCloseButton, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { JSONForm } from '@/components/JSONForm';
 import { JSONSchemaFormState, JSONModalValue } from '@/store/standard/JSONSchemaState';
@@ -8,12 +8,16 @@ interface Props {
   jsonstate: {
     form: JSONSchemaFormState<any>;
     modal: JSONModalValue;
+    formList?: {
+      label: string;
+      form: JSONSchemaFormState<any>;
+    }[];
   };
   children?: any;
 }
 
 const JSONModal = observer((props: Props) => {
-  const { form, modal } = props.jsonstate;
+  const { form, modal, formList } = props.jsonstate;
   const { children } = props;
 
   return (
@@ -36,10 +40,30 @@ const JSONModal = observer((props: Props) => {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Box p="20px 30px">
-            <JSONForm jsonstate={form} />
-            {children && children}
-          </Box>
+          {formList ? (
+            <Tabs>
+              <TabList>
+                {formList.map((item) => (
+                  <Tab key={item.label}>{item.label}</Tab>
+                ))}
+              </TabList>
+              <TabPanels>
+                {formList.map((item) => (
+                  <TabPanel key={item.label}>
+                    <Box>
+                      <JSONForm jsonstate={item.form} />
+                      {children && children}
+                    </Box>
+                  </TabPanel>
+                ))}
+              </TabPanels>
+            </Tabs>
+          ) : (
+            <Box p="20px 30px">
+              <JSONForm jsonstate={form} />
+              {children && children}
+            </Box>
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>

@@ -1,0 +1,54 @@
+{
+  "templates": [
+    {
+      "name": "easyjson",
+      "project": [
+        {
+          "projectName": "project_001",
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/easyjson/easyjson.wasm", "appletName": "applet_01" }],
+          "datas": []
+        }
+      ]
+    },
+    {
+      "name": "word_count",
+      "project": [
+        {
+          "projectName": "project_002",
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/word_count/word_count.wasm", "appletName": "applet_01" }],
+          "datas": []
+        }
+      ]
+    },
+    {
+      "name": "log",
+      "project": [
+        {
+          "projectName": "project_003",
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/log/log.wasm", "appletName": "applet_01" }],
+          "datas": []
+        }
+      ]
+    },
+    {
+      "name": "gjson",
+      "project": [
+        {
+          "projectName": "project_004",
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/gjson/gjson.wasm", "appletName": "applet_01" }],
+          "datas": []
+        }
+      ]
+    },
+    {
+      "name": "token_distribute",
+      "project": [
+        {
+          "projectName": "project_005",
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/token_distribute/token_distribute.wasm", "appletName": "applet_01" }],
+          "datas": []
+        }
+      ]
+    }
+  ]
+}
