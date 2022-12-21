@@ -111,8 +111,8 @@ export default class PublisherModule {
         label: 'name'
       },
       {
-        key: 'f_key',
-        label: 'Publisher ID'
+        key: 'project_name',
+        label: 'Project Name'
       },
       {
         key: 'f_created_at',
