@@ -1,6 +1,7 @@
 import React from 'react';
-import { Flex, Box, Portal, Stack, Text, FlexProps } from '@chakra-ui/react';
+import { Flex, Box, Portal, Stack, Text, FlexProps, useDisclosure, Collapse } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { MdAddBox, MdRefresh } from 'react-icons/md';
 import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { observer } from 'mobx-react-lite';
@@ -16,6 +17,15 @@ interface SideBarProps extends FlexProps {}
 
 const SideBar = observer((props: SideBarProps) => {
   const { w3s } = useStore();
+  const projectCollaspeState = useDisclosure({
+    defaultIsOpen: true
+  });
+  const otherCollaspeState = useDisclosure({
+    defaultIsOpen: false
+  });
+  const monitorCollaspeState = useDisclosure({
+    defaultIsOpen: false
+  });
 
   const showOtherTab = () => {
     switch (w3s.showContent) {
@@ -36,123 +46,165 @@ const SideBar = observer((props: SideBarProps) => {
           <>
             <Flex
               alignItems="center"
-              justifyContent="space-between"
               h="60px"
               p={2}
-              borderTop="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(w3s.showContent === 'ALL_APPLETS')}
+              borderBottom="1px solid rgba(0, 0, 0, 0.06)"
               cursor="pointer"
               onClick={() => {
-                w3s.showContent = 'ALL_APPLETS';
+                otherCollaspeState.onToggle();
               }}
             >
+              <Icon as={otherCollaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
               <Text fontSize="16px" fontWeight={700}>
-                Applets
+                Other
               </Text>
             </Flex>
+            <Collapse in={otherCollaspeState.isOpen}>
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                h="60px"
+                py="2"
+                px="6"
+                borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+                sx={getSelectedStyles(w3s.showContent === 'ALL_APPLETS')}
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'ALL_APPLETS';
+                }}
+              >
+                <Text fontSize="16px" fontWeight={700}>
+                  Applets
+                </Text>
+              </Flex>
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                h="60px"
+                py="2"
+                px="6"
+                borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+                sx={getSelectedStyles(w3s.showContent === 'ALL_INSTANCES')}
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'ALL_INSTANCES';
+                }}
+              >
+                <Text fontSize="16px" fontWeight={700}>
+                  Instances
+                </Text>
+              </Flex>
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                h="60px"
+                py="2"
+                px="6"
+                borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+                sx={getSelectedStyles(w3s.showContent === 'ALL_STRATEGIES')}
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'ALL_STRATEGIES';
+                }}
+              >
+                <Text fontSize="16px" fontWeight={700}>
+                  Strategies
+                </Text>
+              </Flex>
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                h="60px"
+                py="2"
+                px="6"
+                borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+                sx={getSelectedStyles(w3s.showContent === 'ALL_PUBLISHERS')}
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'ALL_PUBLISHERS';
+                }}
+              >
+                <Text fontSize="16px" fontWeight={700}>
+                  Publishers
+                </Text>
+              </Flex>
+            </Collapse>
+
             <Flex
               alignItems="center"
-              justifyContent="space-between"
               h="60px"
               p={2}
-              borderTop="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(w3s.showContent === 'ALL_INSTANCES')}
               cursor="pointer"
+              borderBottom="1px solid rgba(0, 0, 0, 0.06)"
               onClick={() => {
-                w3s.showContent = 'ALL_INSTANCES';
+                monitorCollaspeState.onToggle();
               }}
             >
+              <Icon as={monitorCollaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
               <Text fontSize="16px" fontWeight={700}>
-                Instances
+                Monitor
               </Text>
             </Flex>
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              h="60px"
-              p={2}
-              borderTop="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(w3s.showContent === 'ALL_STRATEGIES')}
-              cursor="pointer"
-              onClick={() => {
-                w3s.showContent = 'ALL_STRATEGIES';
-              }}
-            >
-              <Text fontSize="16px" fontWeight={700}>
-                Strategies
-              </Text>
-            </Flex>
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              h="60px"
-              p={2}
-              borderTop="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(w3s.showContent === 'ALL_PUBLISHERS')}
-              cursor="pointer"
-              onClick={() => {
-                w3s.showContent = 'ALL_PUBLISHERS';
-              }}
-            >
-              <Text fontSize="16px" fontWeight={700}>
-                Publishers
-              </Text>
-            </Flex>
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              h="60px"
-              p={2}
-              borderTop="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(w3s.showContent === 'ALL_CONTRACT_LOGS')}
-              cursor="pointer"
-              onClick={() => {
-                w3s.showContent = 'ALL_CONTRACT_LOGS';
-              }}
-            >
-              <Text fontSize="16px" fontWeight={700}>
-                Smart Contract Monitor
-              </Text>
-            </Flex>
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              h="60px"
-              p={2}
-              borderTop="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_TX')}
-              cursor="pointer"
-              onClick={() => {
-                w3s.showContent = 'All_CHAIN_TX';
-              }}
-            >
-              <Text fontSize="16px" fontWeight={700}>
-                Chain Transaction Monitor
-              </Text>
-            </Flex>
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              h="60px"
-              p={2}
-              borderTop="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_HEIGHT')}
-              cursor="pointer"
-              onClick={() => {
-                w3s.showContent = 'All_CHAIN_HEIGHT';
-              }}
-            >
-              <Text fontSize="16px" fontWeight={700}>
-                Chain Height Monitor
-              </Text>
-            </Flex>
+            <Collapse in={monitorCollaspeState.isOpen}>
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                h="60px"
+                py="2"
+                px="6"
+                borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+                sx={getSelectedStyles(w3s.showContent === 'ALL_CONTRACT_LOGS')}
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'ALL_CONTRACT_LOGS';
+                }}
+              >
+                <Text fontSize="16px" fontWeight={700}>
+                  Smart Contract Monitor
+                </Text>
+              </Flex>
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                h="60px"
+                py="2"
+                px="6"
+                borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+                sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_TX')}
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'All_CHAIN_TX';
+                }}
+              >
+                <Text fontSize="16px" fontWeight={700}>
+                  Chain Transaction Monitor
+                </Text>
+              </Flex>
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                h="60px"
+                py="2"
+                px="6"
+                borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+                sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_HEIGHT')}
+                cursor="pointer"
+                onClick={() => {
+                  w3s.showContent = 'All_CHAIN_HEIGHT';
+                }}
+              >
+                <Text fontSize="16px" fontWeight={700}>
+                  Chain Height Monitor
+                </Text>
+              </Flex>
+            </Collapse>
           </>
         );
     }
   };
   return (
     <Flex h="100%" direction="column" flexDirection="column" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
-      <Flex alignItems="center" justifyContent="space-between" h="80px" p={2} borderBottom="1px solid rgba(0, 0, 0, 0.06)">
+      <Flex alignItems="center" justifyContent="space-between" h="60px" p={2} borderBottom="1px solid rgba(0, 0, 0, 0.06)">
         <Text fontSize="16px" fontWeight={700}>
           W3bstream Studio
         </Text>
@@ -187,11 +239,28 @@ const SideBar = observer((props: SideBarProps) => {
         </Flex>
       </Flex>
 
-      <Box h="350px" overflowY="auto">
-        {w3s.allProjects.value.map((i, index) => {
-          return <ProjectItem project={i} index={index} />;
-        })}
-      </Box>
+      <Flex
+        alignItems="center"
+        h="60px"
+        p={2}
+        borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+        cursor="pointer"
+        onClick={() => {
+          projectCollaspeState.onToggle();
+        }}
+      >
+        <Icon as={projectCollaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
+        <Text fontSize="16px" fontWeight={700}>
+          Projects
+        </Text>
+      </Flex>
+      <Collapse in={projectCollaspeState.isOpen}>
+        <Box h="250px" overflowY="auto" borderBottom="1px solid rgba(0, 0, 0, 0.06)">
+          {w3s.allProjects.value.map((i, index) => {
+            return <ProjectItem project={i} index={index} />;
+          })}
+        </Box>
+      </Collapse>
 
       {showOtherTab()}
     </Flex>
@@ -207,8 +276,10 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
     <ContextMenuTrigger id={`ProjectItemContext${project.f_project_id}`} holdToDisplay={-1}>
       <Box
         key={index}
-        p={2}
+        py="2"
+        px="6"
         cursor="pointer"
+        borderBottom="1px solid rgba(0, 0, 0, 0.06)"
         sx={getSelectedStyles((w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'EDITOR') && w3s.curProjectIndex == index)}
         onClick={(e) => {
           w3s.curProjectIndex = index;
@@ -218,7 +289,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
           console.log(helper.log(w3s.projectManager.curFilesListSchema));
         }}
       >
-        <Text lineHeight="28px" fontSize="14px">
+        <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
           {project.f_name}
         </Text>
       </Box>
@@ -274,8 +345,7 @@ function getSelectedStyles(selected: boolean) {
         bg: '#EDF3FA'
       }
     : {
-        color: '#283241',
-        bg: '#FAFAFA'
+        color: '#283241'
       };
 }
 
