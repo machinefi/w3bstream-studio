@@ -84,14 +84,14 @@ const getTemplate = (curTemplateKey: string, { projectName, data }: { projectNam
   if (curTemplateKey === 'cURL') {
     return {
       language: 'batch',
-      code: `curl --location --request POST 'localhost:3000/api/w3bapp/event/${projectName}' --header 'Content-Type: text/plain' --data-raw '${JSON.stringify(data)}'`
+      code: `curl --location --request POST '${window.location.origin}/api/w3bapp/event/${projectName}' --header 'Content-Type: text/plain' --data-raw '${JSON.stringify(data)}'`
     };
   }
 
   if (curTemplateKey === 'JS') {
     return {
       language: 'javascript',
-      code: `const url = 'http://localhost:3000/api/w3bapp/event/${projectName}'\nconst data = ${JSON.stringify(
+      code: `const url = '${window.location.origin}/api/w3bapp/event/${projectName}'\nconst data = ${JSON.stringify(
         data
       )}\n\nfetch(url, { \n  method: 'POST',\n  headers: {\n    'Content-Type': 'text/plain' \n  },\n  body: JSON.stringify(data)\n}).then(response => {\n  return response.json();\n}).then(data => {\n  console.log(data);\n});`
     };
@@ -100,7 +100,7 @@ const getTemplate = (curTemplateKey: string, { projectName, data }: { projectNam
   if (curTemplateKey === 'Go') {
     return {
       language: 'go',
-      code: `package main\n\nimport (\n  "fmt"\n  "net/http"\n  "io/ioutil"\n)\n\nfunc main() {\n  url:= "http://localhost:3000/api/w3bapp/event/${projectName}"\n  jsonStr :=[]byte(\`${JSON.stringify(
+      code: `package main\n\nimport (\n  "fmt"\n  "net/http"\n  "io/ioutil"\n)\n\nfunc main() {\n  url:= "${window.location.origin}/api/w3bapp/event/${projectName}"\n  jsonStr :=[]byte(\`${JSON.stringify(
         data
       )}\`)\n  req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))\n  req.Header.Set("Content-Type", "text/plain")\n  client := &http.Client{}\n  resp, err := client.Do(req)\n  if err != nil {\n    fmt.Println("Request failed:", err)\n    return\n  }\n  defer resp.Body.Close()\n  body, err := ioutil.ReadAll(rsps.Body)\n  if err != nil {\n    fmt.Println("Read body failed:", err)\n    return\n  }\n  fmt.Println(string(body))\n}`
     };
@@ -109,7 +109,7 @@ const getTemplate = (curTemplateKey: string, { projectName, data }: { projectNam
   if (curTemplateKey === 'Rust') {
     return {
       language: 'rust',
-      code: `use std::collections::HashMap;\nuse reqwest::header::HeaderMap;\nuse serde_json::value::Value;\n\nasync fn publish_event() -> Result<HashMap<String, Value>, reqwest::Error>{\n  let client = reqwest::Client::new();\n\n  let mut headers = HeaderMap::new();\n  headers.insert("Content-Type", "text/plain".parse().unwrap());\n\n  let mut header = HashMap::new();\n  header.insert("event_type", "${data.header.event_type}")\n  header.insert("pub_id", "${data.header.pub_id}")\n  header.insert("token", "${data.header.token}")\n  header.insert("pub_time", "${data.header.pub_time}")\n  let mut data = HashMap::new();\n  data.insert("header", header)\n  data.insert("payload", ${JSON.stringify(data.payload)});\n  Ok(client.post("http://localhost:3000/api/w3bapp/event/${projectName}").headers(headers).json(&data).send().await?.json::<HashMap<String, Value>>().await?);\n}\n\nasync fn main() {\n  if let Ok(res) = publish_event().await {\n    println!("{:#?}", res);\n  }\n}`
+      code: `use std::collections::HashMap;\nuse reqwest::header::HeaderMap;\nuse serde_json::value::Value;\n\nasync fn publish_event() -> Result<HashMap<String, Value>, reqwest::Error>{\n  let client = reqwest::Client::new();\n\n  let mut headers = HeaderMap::new();\n  headers.insert("Content-Type", "text/plain".parse().unwrap());\n\n  let mut header = HashMap::new();\n  header.insert("event_type", "${data.header.event_type}")\n  header.insert("pub_id", "${data.header.pub_id}")\n  header.insert("token", "${data.header.token}")\n  header.insert("pub_time", "${data.header.pub_time}")\n  let mut data = HashMap::new();\n  data.insert("header", header)\n  data.insert("payload", ${JSON.stringify(data.payload)});\n  Ok(client.post("${window.location.origin}/api/w3bapp/event/${projectName}").headers(headers).json(&data).send().await?.json::<HashMap<String, Value>>().await?);\n}\n\nasync fn main() {\n  if let Ok(res) = publish_event().await {\n    println!("{:#?}", res);\n  }\n}`
     };
   }
 
