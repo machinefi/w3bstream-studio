@@ -24,7 +24,7 @@ export const schema = {
     publisher: { $ref: '#/definitions/publishers', title: 'Publisher' },
     payload: { type: 'string', title: 'Payload' }
   },
-  required: ['projectID', 'publisher', 'payload']
+  required: ['projectID', 'payload']
 } as const;
 
 //@ts-ignore
@@ -123,12 +123,19 @@ export default class PublishEventModule {
     const { publisher, payload } = this.form.formData;
     const allPublishers = rootStore.w3s.publisher.table.dataSource;
     const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
-    const header = {
-      event_type: 'ANY',
-      pub_id: pub.f_key,
-      token: pub.f_token,
-      pub_time: Date.now()
-    };
+    const header = pub
+      ? {
+          event_type: 'ANY',
+          pub_id: pub.f_key,
+          token: pub.f_token,
+          pub_time: Date.now()
+        }
+      : {
+          event_type: 'ANY',
+          pub_id: '',
+          token: '',
+          pub_time: Date.now()
+        };
 
     try {
       const body = JSON.parse(payload);

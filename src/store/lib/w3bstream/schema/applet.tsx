@@ -127,17 +127,16 @@ export default class AppletModule {
         key: 'actions',
         label: 'Actions',
         actions: (item) => {
+          if (item.instances.length) {
+            return [];
+          }
           return [
             {
               props: {
                 colorScheme: 'blue',
                 size: 'xs',
                 onClick: () => {
-                  if (item.instances.length === 0) {
-                    rootStore.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
-                  } else {
-                    toast.success('Deployed');
-                  }
+                  rootStore.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
                 }
               },
               text: 'Deploy'

@@ -86,13 +86,9 @@ const IDE = observer(() => {
           borderColor="#6FB2FF"
           color="#6FB2FF"
           onClick={() => {
-            const { projectID, publisher } = w3s.publishEvent.form.formData;
+            const { projectID } = w3s.publishEvent.form.formData;
             if (!projectID) {
               toast.error('Please select the project first');
-              return;
-            }
-            if (!publisher) {
-              toast.error('Please select the publisher first');
               return;
             }
             w3s.showPublishEventRequestTemplates = true;

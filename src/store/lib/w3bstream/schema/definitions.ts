@@ -23,22 +23,22 @@ export const definitions = {
     type: 'string',
     get enum() {
       const allPublishers = rootStore.w3s.publisher.table.dataSource;
-      return allPublishers.map((i) => `${i.f_publisher_id}`) || [];
+      return allPublishers.length ? allPublishers.map((i) => `${i.f_publisher_id}`) : [''];
     },
     get enumNames() {
       const allPublishers = rootStore.w3s.publisher.table.dataSource;
-      return allPublishers.map((i) => `${i.f_name}`) || [];
+      return allPublishers.length ? allPublishers.map((i) => `${i.f_name}`) : [''];
     }
   },
   applets: {
     type: 'string',
     get enum() {
       const allApplets = rootStore.w3s.applet.allData;
-      return allApplets.map((i) => i.f_applet_id) || [];
+      return allApplets.map((i) => i.f_applet_id);
     },
     get enumNames() {
       const allApplets = rootStore.w3s.applet.allData;
-      return allApplets.map((i) => `${i.f_name}`) || [];
+      return allApplets.map((i) => `${i.f_name}`);
     }
   }
 };
