@@ -4,12 +4,10 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
 import { AppletType } from '@/server/routers/w3bstream';
-import { rootStore } from '@/store/index';
 import { JSONModalValue, JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
-import toast from 'react-hot-toast';
 import { definitions } from './definitions';
 
 export const schema = {
@@ -105,7 +103,7 @@ export default class AppletModule {
     }
   });
 
-  table = new JSONSchemaTableState<AppletType>({
+  defaultTable = new JSONSchemaTableState<AppletType>({
     columns: [
       {
         key: 'f_applet_id',
@@ -136,7 +134,7 @@ export default class AppletModule {
                 colorScheme: 'blue',
                 size: 'xs',
                 onClick: () => {
-                  rootStore.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
+                  globalThis.store.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
                 }
               },
               text: 'Deploy'
@@ -168,7 +166,7 @@ export default class AppletModule {
                     bg: '#37A169',
                     color: '#fff',
                     onClick() {
-                      rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' });
+                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' });
                     }
                   },
                   text: 'Start'
@@ -179,7 +177,7 @@ export default class AppletModule {
                     bg: '#FAB400',
                     color: '#fff',
                     onClick() {
-                      rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' });
+                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' });
                     }
                   },
                   text: 'Restart'
@@ -190,7 +188,7 @@ export default class AppletModule {
                     bg: '#E53E3E',
                     color: '#fff',
                     onClick() {
-                      rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' });
+                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' });
                     }
                   },
                   text: 'Stop'
@@ -221,6 +219,112 @@ export default class AppletModule {
     rowKey: 'f_applet_id',
     containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
   });
+
+  generalTable = new JSONSchemaTableState<AppletType>({
+    columns: [
+      {
+        key: 'f_applet_id',
+        label: 'Applet ID'
+      },
+      {
+        key: 'f_name',
+        label: 'Name'
+      },
+      {
+        key: 'project_name',
+        label: 'Project Name'
+      },
+      {
+        key: 'f_wasm_name',
+        label: 'Wasm Name'
+      },
+      {
+        key: 'instance_id',
+        label: 'Instance ID',
+        render: (item) => {
+          if (item.instances.length) {
+            return item.instances[0].f_instance_id;
+          }
+
+          return null;
+        }
+      },
+      {
+        key: 'state',
+        label: 'Status',
+        render: (item) => {
+          if (item.instances.length) {
+            return InstanceStatusRender(item.instances[0]);
+          }
+
+          return null;
+        }
+      },
+      {
+        key: 'actions',
+        label: 'Actions',
+        actions: (item) => {
+          if (item.instances.length) {
+            const instance = item.instances[0];
+            if (globalThis.store.user.userMode.value === 'general') {
+              return [
+                {
+                  props: {
+                    bg: '#37A169',
+                    color: '#fff',
+                    onClick() {
+                      globalThis.store.w3s.handleInstance.call({ instaceID: instance.f_instance_id.toString(), event: 'START' });
+                    }
+                  },
+                  text: 'Start'
+                },
+                {
+                  props: {
+                    ml: '8px',
+                    bg: '#FAB400',
+                    color: '#fff',
+                    onClick() {
+                      globalThis.store.w3s.handleInstance.call({ instaceID: instance.f_instance_id.toString(), event: 'Restart' });
+                    }
+                  },
+                  text: 'Restart'
+                },
+                {
+                  props: {
+                    ml: '8px',
+                    bg: '#E53E3E',
+                    color: '#fff',
+                    onClick() {
+                      globalThis.store.w3s.handleInstance.call({ instaceID: instance.f_instance_id.toString(), event: 'STOP' });
+                    }
+                  },
+                  text: 'Stop'
+                }
+              ];
+            }
+            return [];
+          }
+
+          return [
+            {
+              props: {
+                colorScheme: 'blue',
+                size: 'xs',
+                onClick: () => {
+                  globalThis.store.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
+                }
+              },
+              text: 'Deploy'
+            }
+          ];
+        }
+      }
+    ],
+    rowKey: 'f_applet_id',
+    containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
+  });
+
+  table = this.defaultTable;
 
   allData: AppletType[] = [];
 

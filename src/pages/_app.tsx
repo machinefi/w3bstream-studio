@@ -16,12 +16,23 @@ import superjson from 'superjson';
 import { SpotlightProvider } from '@mantine/spotlight';
 
 import '@/lib/superjson';
+
 function MyApp({ Component, pageProps }: AppProps) {
-  const { lang, w3s } = useStore();
+  const { lang, w3s, user } = useStore();
   const { token } = w3s.config.form.formData;
 
   useEffect(() => {
     lang.init();
+
+    if (NextRouter.query.mode === 'general') {
+      user.userMode.save('general');
+    }
+    if (user.userMode.value === 'general') {
+      w3s.applet.table = w3s.applet.generalTable;
+    } else {
+      w3s.applet.table = w3s.applet.defaultTable;
+    }
+
     eventBus.emit('app.ready');
   }, []);
 

@@ -23,7 +23,7 @@ export const INSTANCE_STATUS = {
   }
 };
 
-export const InstanceStatusRender = (item: InstanceType) => {
+export const InstanceStatusRender = (item: Partial<{ f_state: number }>) => {
   const state = item.f_state;
   return (
     <Badge variant="outline" colorScheme={INSTANCE_STATUS[state].colorScheme}>
