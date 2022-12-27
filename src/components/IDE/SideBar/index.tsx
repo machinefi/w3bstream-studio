@@ -20,7 +20,7 @@ const SideBar = observer((props: SideBarProps) => {
   const projectCollaspeState = useDisclosure({
     defaultIsOpen: true
   });
-  const otherCollaspeState = useDisclosure({
+  const collectionCollaspeState = useDisclosure({
     defaultIsOpen: false
   });
   const monitorCollaspeState = useDisclosure({
@@ -51,15 +51,15 @@ const SideBar = observer((props: SideBarProps) => {
               borderBottom="1px solid rgba(0, 0, 0, 0.06)"
               cursor="pointer"
               onClick={() => {
-                otherCollaspeState.onToggle();
+                collectionCollaspeState.onToggle();
               }}
             >
-              <Icon as={otherCollaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
+              <Icon as={collectionCollaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
               <Text fontSize="16px" fontWeight={700}>
-                Other
+                Collection
               </Text>
             </Flex>
-            <Collapse in={otherCollaspeState.isOpen}>
+            <Collapse in={collectionCollaspeState.isOpen}>
               <Flex
                 alignItems="center"
                 justifyContent="space-between"
@@ -214,13 +214,7 @@ const SideBar = observer((props: SideBarProps) => {
               p={2}
               variant="ghost"
               onClick={(e) => {
-                w3s.project.form.uiSchema['ui:submitButtonOptions'].norender = false;
-                w3s.project.form.uiSchema.name = {
-                  'ui:disabled': false
-                };
-                w3s.project.form.reset();
-                w3s.project.setFormList('add');
-                w3s.project.setEnvs('add');
+                w3s.project.setMode('add');
                 w3s.project.modal.set({
                   show: true,
                   title: 'Create Project'
@@ -310,12 +304,7 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
                 w3s.project.form.value.set({
                   name: w3s.curProject.f_name
                 });
-                w3s.project.form.uiSchema['ui:submitButtonOptions'].norender = true;
-                w3s.project.form.uiSchema.name = {
-                  'ui:disabled': true
-                };
-                w3s.project.setFormList('edit');
-                w3s.project.setEnvs('edit');
+                w3s.project.setMode('edit');
                 w3s.project.modal.set({
                   show: true,
                   title: 'Project Details'

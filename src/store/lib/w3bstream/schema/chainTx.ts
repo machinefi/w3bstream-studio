@@ -6,7 +6,6 @@ import { axios } from '@/lib/axios';
 import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
 import { ChainTxType } from '@/server/routers/w3bstream';
-import { rootStore } from '@/store/index';
 import toast from 'react-hot-toast';
 
 export const schema = {
@@ -62,7 +61,7 @@ export default class ChainTxModule {
       {
         key: 'f_updated_at',
         label: 'Updated At'
-      },
+      }
       // {
       //   key: 'actions',
       //   label: 'Actions',
@@ -73,11 +72,11 @@ export default class ChainTxModule {
       //           bg: '#E53E3E',
       //           color: '#fff',
       //           onClick() {
-      //             rootStore.base.confirm.show({
+      //             globalThis.store.base.confirm.show({
       //               title: 'Warning',
       //               description: 'Are you sure you want to delete it?',
       //               async onOk() {
-      //                 const project = rootStore.w3s.allProjects.value.find((p) => p.f_name === item.f_project_name);
+      //                 const project = globalThis.store.w3s.allProjects.value.find((p) => p.f_name === item.f_project_name);
       //                 try {
       //                   await axios.request({
       //                     method: 'delete',

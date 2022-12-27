@@ -60,12 +60,11 @@ export default class ProjectModule {
           data: e.formData
         });
         if (res.data) {
-          await this.onSaveEnv();
-          await showNotification({ message: 'create project successed' });
           eventBus.emit('project.create');
-          this.form.reset();
-          this.modal.set({ show: false });
+          await showNotification({ message: 'create project successed' });
         }
+
+        await this.onSaveEnv();
       } catch (error) {}
     },
     value: new JSONValue<DefaultSchemaType>({
@@ -98,7 +97,7 @@ export default class ProjectModule {
         data
       });
       if (res.data) {
-        await showNotification({ message: 'create project successed' });
+        await showNotification({ message: 'Create project successed' });
         eventBus.emit('project.create');
         this.form.reset();
         this.modal.set({ show: false });
@@ -111,9 +110,11 @@ export default class ProjectModule {
     })
   });
 
+  formMode: 'add' | 'edit' = 'add';
+
   formList = undefined;
-  setFormList(mode: 'add' | 'edit') {
-    if (mode === 'add') {
+  setFormList() {
+    if (this.formMode === 'add') {
       this.formList = [
         {
           label: 'Default',
@@ -150,8 +151,8 @@ export default class ProjectModule {
       }
     }
   }
-  async setEnvs(mode: 'add' | 'edit') {
-    if (mode === 'edit') {
+  async setEnvs() {
+    if (this.formMode === 'edit') {
       this.envs = [];
       const projectName = globalThis.store.w3s.curProject.f_name;
       try {
@@ -181,10 +182,30 @@ export default class ProjectModule {
       try {
         await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { values });
         await showNotification({ message: 'Save environment variables successfully' });
+        this.form.reset();
+        this.modal.set({ show: false });
       } catch (error) {
         throw error;
       }
     }
+  }
+
+  setMode(mode: 'add' | 'edit') {
+    if (mode === 'add') {
+      this.form.reset();
+      this.form.uiSchema['ui:submitButtonOptions'].norender = false;
+      this.form.uiSchema.name = {
+        'ui:disabled': false
+      };
+    } else {
+      this.form.uiSchema['ui:submitButtonOptions'].norender = true;
+      this.form.uiSchema.name = {
+        'ui:disabled': true
+      };
+    }
+    this.formMode = mode;
+    this.setFormList();
+    this.setEnvs();
   }
 
   modal = new JSONModalValue({
@@ -197,7 +218,8 @@ export default class ProjectModule {
 
   constructor() {
     makeObservable(this, {
-      envs: observable
+      envs: observable,
+      formMode: observable
     });
   }
 }

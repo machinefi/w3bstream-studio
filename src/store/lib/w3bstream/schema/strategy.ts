@@ -5,7 +5,6 @@ import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
-import { rootStore } from '@/store/index';
 import { StrategyType } from '@/server/routers/w3bstream';
 import toast from 'react-hot-toast';
 
@@ -48,7 +47,7 @@ export default class StrategyModule {
     },
     afterSubmit: async (e) => {
       const { appletID, eventType, handler, strategyID } = e.formData;
-      const allApplets = rootStore.w3s.applet.allData;
+      const allApplets = globalThis.store.w3s.applet.allData;
       const applet = allApplets.find((item) => String(item.f_applet_id) === appletID);
       if (!applet) {
         return;
@@ -164,11 +163,11 @@ export default class StrategyModule {
                 bg: '#E53E3E',
                 color: '#fff',
                 onClick() {
-                  rootStore.base.confirm.show({
+                  globalThis.store.base.confirm.show({
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
-                      const p = rootStore.w3s.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
+                      const p = globalThis.store.w3s.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
                       if (!p) {
                         return;
                       }

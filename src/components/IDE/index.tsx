@@ -18,7 +18,6 @@ import JSONTable from '../JSONTable';
 import AllContractLogs from './AllContractLogs';
 import AllChainTx from './AllChainTx';
 import AllChainHeight from './AllChainHeight';
-import toast from 'react-hot-toast';
 import PublishEventRequestTemplates from './PublishEventRequestTemplates';
 
 const IDE = observer(() => {
@@ -69,34 +68,14 @@ const IDE = observer(() => {
         )}
       </Box>
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />
+      <JSONModal jsonstate={w3s.user} />
       <JSONModal jsonstate={w3s.project} />
       <JSONModal jsonstate={w3s.applet} />
-      <JSONModal jsonstate={w3s.password} />
       <JSONModal jsonstate={w3s.publisher} />
       <JSONModal jsonstate={w3s.strategy} />
       <JSONModal jsonstate={w3s.contractLogs} />
       <JSONModal jsonstate={w3s.chainTx} />
       <JSONModal jsonstate={w3s.chainHeight} />
-      <JSONModal jsonstate={w3s.publishEvent}>
-        <Button
-          mt="10px"
-          w="100%"
-          h="32px"
-          variant="outline"
-          borderColor="#6FB2FF"
-          color="#6FB2FF"
-          onClick={() => {
-            const { projectID } = w3s.publishEvent.form.formData;
-            if (!projectID) {
-              toast.error('Please select the project first');
-              return;
-            }
-            w3s.showPublishEventRequestTemplates = true;
-          }}
-        >
-          Show Request Templates
-        </Button>
-      </JSONModal>
       <JSONModal jsonstate={w3s.postman}>
         <Button
           mt="10px"

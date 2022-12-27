@@ -7,7 +7,7 @@ export const ProjectEnvs = observer(() => {
   const {
     w3s: {
       project,
-      project: { envs }
+      project: { envs, formMode }
     }
   } = useStore();
 
@@ -57,15 +57,17 @@ export const ProjectEnvs = observer(() => {
         >
           Add Environment Variable
         </Button>
-        <Button
-          ml="10px"
-          fontWeight={400}
-          onClick={() => {
-            project.onSaveEnv();
-          }}
-        >
-          Save Changes
-        </Button>
+        {formMode === 'edit' && (
+          <Button
+            ml="10px"
+            fontWeight={400}
+            onClick={() => {
+              project.onSaveEnv();
+            }}
+          >
+            Save Changes
+          </Button>
+        )}
       </Flex>
     </Stack>
   );

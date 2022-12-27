@@ -11,10 +11,8 @@ import { PromiseState } from '@/store/standard/PromiseState';
 import { AppletType, ChainHeightType, ChainTxType, ContractLogType, ProjectType } from '@/server/routers/w3bstream';
 import { ProjectManager } from './project';
 import W3bstreamConfigModule from './schema/config';
-import LoginModule from './schema/login';
-import PasswordModule from './schema/password';
+import UserModule from './schema/user';
 import ProjectModule from './schema/project';
-import PublishEventModule from './schema/publishEvent';
 import PublisherModule from './schema/publisher';
 import StrategyModule from './schema/strategy';
 import AppletModule from './schema/applet';
@@ -31,16 +29,14 @@ configure({
 export class W3bStream {
   rootStore: RootStore;
   config = new W3bstreamConfigModule();
-  login = new LoginModule();
+  user = new UserModule();
   projectManager = new ProjectManager();
   project = new ProjectModule();
   applet = new AppletModule();
   instances = new InstancesModule();
-  password = new PasswordModule();
   publisher = new PublisherModule();
   postman = new PostmanModule();
   strategy = new StrategyModule();
-  publishEvent = new PublishEventModule();
   contractLogs = new ContractLogModule();
   chainTx = new ChainTxModule();
   chainHeight = new ChainHeightModule();
@@ -82,18 +78,11 @@ export class W3bStream {
           });
         });
 
-        console.log(toJS(res));
+        // console.log(toJS(res));
 
         this.applet.set({
           allData: applets
         });
-
-        // this.applet.form.getDymaicData = () => {
-        //   return {
-        //     ready: this.allProjects.value.length > 0
-        //   };
-        // };
-
         this.instances.table.set({
           dataSource: instances
         });
@@ -114,12 +103,6 @@ export class W3bStream {
     return this.allProjects.value ? this.allProjects.value[this.curProjectIndex] : null;
   }
 
-  // get curFilesList() {
-  //   return this.curProject ? this.curProject.project_files.extraData.files : [];
-  // }
-  // get curFilesListSchema() {
-  //   return this.curProject ? this.curProject.project_files : null;
-  // }
   deployApplet = new PromiseState({
     function: async ({ appletID }: { appletID: string }) => {
       const res = await axios.request({
@@ -184,8 +167,6 @@ export class W3bStream {
 
   isReady = false;
 
-  showPublishEventRequestTemplates = false;
-
   get isLogin() {
     return !!this.config.form.formData.token;
   }
@@ -202,6 +183,7 @@ export class W3bStream {
       this.initHook();
     }, 100);
   }
+
   initEvent() {
     eventBus
       .on('app.ready', async () => {

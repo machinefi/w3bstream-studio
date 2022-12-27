@@ -1,9 +1,8 @@
 import { InstanceStatusRender } from '@/components/JSONTableRender';
 import { InstanceType } from '@/server/routers/w3bstream';
-import { rootStore } from '@/store/index';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 
-export  default class InstancesModule {
+export default class InstancesModule {
   table = new JSONSchemaTableState<InstanceType>({
     columns: [
       {
@@ -21,7 +20,7 @@ export  default class InstancesModule {
                 bg: '#37A169',
                 color: '#fff',
                 onClick() {
-                  rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'START' });
+                  globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'START' });
                 }
               },
               text: 'Start'
@@ -32,7 +31,7 @@ export  default class InstancesModule {
                 bg: '#FAB400',
                 color: '#fff',
                 onClick() {
-                  rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'Restart' });
+                  globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'Restart' });
                 }
               },
               text: 'Restart'
@@ -43,7 +42,7 @@ export  default class InstancesModule {
                 bg: '#E53E3E',
                 color: '#fff',
                 onClick() {
-                  rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'STOP' });
+                  globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'STOP' });
                 }
               },
               text: 'Stop'
