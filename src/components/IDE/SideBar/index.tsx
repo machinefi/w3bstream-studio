@@ -224,7 +224,7 @@ const SideBar = observer((props: SideBarProps) => {
               <Icon as={MdAddBox} />
             </Button>
           </Tooltip>
-          <Tooltip hasArrow label="Add Project" placement="bottom">
+          <Tooltip hasArrow label="Reload Project" placement="bottom">
             <Button
               p={2}
               variant="ghost"

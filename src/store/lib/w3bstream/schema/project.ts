@@ -153,7 +153,13 @@ export default class ProjectModule {
   }
   async setEnvs() {
     if (this.formMode === 'edit') {
-      this.envs = [];
+      this.envs = [
+        {
+          id: uuidv4(),
+          key: '',
+          value: ''
+        }
+      ];
       const projectName = globalThis.store.w3s.curProject.f_name;
       try {
         const res = await axios.get(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`);
