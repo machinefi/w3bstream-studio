@@ -41,23 +41,23 @@ const JSONModal = observer((props: Props) => {
         <ModalCloseButton />
         <ModalBody>
           {formList ? (
-            <Tabs>
-              <TabList>
-                {formList.map((item) => (
-                  <Tab key={item.label}>{item.label}</Tab>
-                ))}
-              </TabList>
-              <TabPanels>
-                {formList.map((item) => (
-                  <TabPanel key={item.label}>
-                    <Box>
+            <>
+              <Tabs>
+                <TabList>
+                  {formList.map((item) => (
+                    <Tab key={item.label}>{item.label}</Tab>
+                  ))}
+                </TabList>
+                <TabPanels>
+                  {formList.map((item) => (
+                    <TabPanel key={item.label}>
                       <JSONForm jsonstate={item.form} />
-                      {children && children}
-                    </Box>
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </Tabs>
+                    </TabPanel>
+                  ))}
+                </TabPanels>
+              </Tabs>
+              <Box p="5px 15px">{children && children}</Box>
+            </>
           ) : (
             <Box p="20px 30px">
               <JSONForm jsonstate={form} />

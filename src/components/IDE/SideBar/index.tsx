@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Portal, Stack, Text, FlexProps, useDisclosure, Collapse } from '@chakra-ui/react';
+import { Flex, Box, Portal, Stack, Text, FlexProps, useDisclosure, Collapse, Tooltip, Button } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { MdAddBox, MdRefresh } from 'react-icons/md';
@@ -203,39 +203,46 @@ const SideBar = observer((props: SideBarProps) => {
     }
   };
   return (
-    <Flex h="100%" direction="column" flexDirection="column" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
+    <Box h="100%" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
       <Flex alignItems="center" justifyContent="space-between" h="60px" p={2} borderBottom="1px solid rgba(0, 0, 0, 0.06)">
         <Text fontSize="16px" fontWeight={700}>
           W3bstream Studio
         </Text>
         <Flex alignItems="center">
-          <Icon
-            as={MdAddBox}
-            ml={2}
-            w="22px"
-            h="19px"
-            cursor="pointer"
-            onClick={(e) => {
-              w3s.project.form.uiSchema['ui:submitButtonOptions'].norender = false;
-              w3s.project.form.reset();
-              w3s.project.modal.set({
-                show: true,
-                title: 'Create Project'
-              });
-            }}
-          />
-          <Icon
-            as={MdRefresh}
-            ml={2}
-            w="22px"
-            h="19px"
-            cursor="pointer"
-            onClick={async () => {
-              await w3s.allProjects.call();
-              w3s.projectManager.sync();
-              toast.success('Reloaded');
-            }}
-          />
+          <Tooltip hasArrow label="Add Project" placement="bottom">
+            <Button
+              p={2}
+              variant="ghost"
+              onClick={(e) => {
+                w3s.project.form.uiSchema['ui:submitButtonOptions'].norender = false;
+                w3s.project.form.uiSchema.name = {
+                  'ui:disabled': false
+                };
+                w3s.project.form.reset();
+                w3s.project.setFormList('add');
+                w3s.project.setEnvs('add');
+                w3s.project.modal.set({
+                  show: true,
+                  title: 'Create Project'
+                });
+              }}
+            >
+              <Icon as={MdAddBox} />
+            </Button>
+          </Tooltip>
+          <Tooltip hasArrow label="Add Project" placement="bottom">
+            <Button
+              p={2}
+              variant="ghost"
+              onClick={async () => {
+                await w3s.allProjects.call();
+                w3s.projectManager.sync();
+                toast.success('Reloaded');
+              }}
+            >
+              <Icon as={MdRefresh} />
+            </Button>
+          </Tooltip>
         </Flex>
       </Flex>
 
@@ -263,7 +270,7 @@ const SideBar = observer((props: SideBarProps) => {
       </Collapse>
 
       {showOtherTab()}
-    </Flex>
+    </Box>
   );
 });
 
@@ -304,6 +311,11 @@ const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: a
                   name: w3s.curProject.f_name
                 });
                 w3s.project.form.uiSchema['ui:submitButtonOptions'].norender = true;
+                w3s.project.form.uiSchema.name = {
+                  'ui:disabled': true
+                };
+                w3s.project.setFormList('edit');
+                w3s.project.setEnvs('edit');
                 w3s.project.modal.set({
                   show: true,
                   title: 'Project Details'
