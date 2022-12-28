@@ -39,6 +39,9 @@ export default class UserModule {
           h: '32px',
           ...gradientButtonStyle
         }
+      },
+      password: {
+        'ui:widget': 'password'
       }
     },
     async afterSubmit(e) {
