@@ -65,7 +65,7 @@ const Profile = observer(() => {
                 w="full"
                 bg="rgba(0, 0, 0, 0.03)"
                 onClick={() => {
-                  w3s.password.modal.set({ show: true });
+                  w3s.user.modal.set({ show: true });
                 }}
               >
                 Update password

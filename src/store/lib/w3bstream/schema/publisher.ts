@@ -1,16 +1,19 @@
 import { JSONSchemaFormState, JSONValue, JSONModalValue, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { definitions } from '@/store/lib/w3bstream/schema/definitions';
+import { definitions } from './definitions';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
 import { PublisherType } from '@/server/routers/w3bstream';
 import { PublisherTokenRender } from '@/components/JSONTableRender';
-import { rootStore } from '@/store/index';
 import toast from 'react-hot-toast';
+import { UiSchema } from '@rjsf/utils';
+import EditorWidget, { EditorWidgetUIOptions } from '@/components/EditorWidget';
+import { ShowRequestTemplatesButtonWidget } from '@/components/IDE/PublishEventRequestTemplates';
+import { makeObservable, observable } from 'mobx';
 
-export const schema = {
+export const createPublisherSchema = {
   definitions: {
     projects: {
       type: 'string'
@@ -25,17 +28,43 @@ export const schema = {
   required: ['projectID', 'name', 'key']
 } as const;
 
-type SchemaType = FromSchema<typeof schema>;
+export const publishEventSchema = {
+  definitions: {
+    projects: {
+      type: 'string'
+    },
+    publishers: {
+      type: 'string'
+    }
+  },
+  type: 'object',
+  properties: {
+    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    publisher: { $ref: '#/definitions/publishers', title: 'Publisher' },
+    payload: { type: 'string', title: 'Payload' },
+    showRequestTemplates: { type: 'string', title: '' }
+  },
+  required: ['projectID', 'payload']
+} as const;
+
+type CreatePublisherSchemaType = FromSchema<typeof createPublisherSchema>;
+type PublishEventSchemaType = FromSchema<typeof publishEventSchema>;
 
 //@ts-ignore
-schema.definitions = {
+createPublisherSchema.definitions = {
   projects: definitions.projects
 };
 
+//@ts-ignore
+publishEventSchema.definitions = {
+  projects: definitions.projects,
+  publishers: definitions.publishers
+};
+
 export default class PublisherModule {
-  form = new JSONSchemaFormState<SchemaType>({
+  createPublisherForm = new JSONSchemaFormState<CreatePublisherSchemaType>({
     //@ts-ignore
-    schema,
+    schema: createPublisherSchema,
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
@@ -49,9 +78,8 @@ export default class PublisherModule {
     },
     afterSubmit: async (e) => {
       const { publisherID, projectName, projectID, name, key } = e.formData;
-      let res;
       if (publisherID && projectName) {
-        res = await axios.request({
+        await axios.request({
           method: 'put',
           url: `/api/w3bapp/publisher/${projectName}/${publisherID}`,
           data: {
@@ -60,7 +88,7 @@ export default class PublisherModule {
           }
         });
       } else {
-        res = await axios.request({
+        await axios.request({
           method: 'post',
           url: `/api/w3bapp/publisher/${projectID}`,
           data: {
@@ -81,7 +109,7 @@ export default class PublisherModule {
       this.form.reset();
       this.modal.set({ show: false });
     },
-    value: new JSONValue<SchemaType>({
+    value: new JSONValue<CreatePublisherSchemaType>({
       default: {
         publisherID: '',
         projectName: '',
@@ -91,6 +119,120 @@ export default class PublisherModule {
       }
     })
   });
+
+  publishEventForm = new JSONSchemaFormState<PublishEventSchemaType, UiSchema & { payload: EditorWidgetUIOptions }>({
+    //@ts-ignore
+    schema: publishEventSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit',
+        props: {
+          w: '100%',
+          h: '32px',
+          ...gradientButtonStyle
+        }
+      },
+      payload: {
+        'ui:widget': EditorWidget,
+        'ui:options': {
+          emptyValue: `{"payload":""}`,
+          showLanguageSelector: true,
+          onChangeLanguage: (language) => {
+            console.log('language:', language);
+            if (language === 'text') {
+              this.form.value.set({
+                payload: `{"example": "This is an example payload"}`
+              });
+            } else {
+              this.form.value.set({
+                payload: JSON.stringify(
+                  {
+                    payload: `{"example": "This is an example payload"}`
+                  },
+                  null,
+                  2
+                )
+              });
+            }
+          }
+        }
+      },
+      showRequestTemplates: {
+        'ui:widget': ShowRequestTemplatesButtonWidget
+      }
+    },
+    afterSubmit: async (e) => {
+      const { projectID } = e.formData;
+      const project = globalThis.store.w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
+      const res = await axios.request({
+        method: 'post',
+        url: `/api/w3bapp/event/${project.f_name}`,
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        data: this.generateBody()
+      });
+      if (res.data) {
+        await showNotification({ message: 'publish event successed' });
+        eventBus.emit('applet.publish-event');
+      }
+    },
+    value: new JSONValue<PublishEventSchemaType>({
+      default: {
+        projectID: '',
+        payload: JSON.stringify(
+          {
+            payload: `{"example": "This is an example payload"}`
+          },
+          null,
+          2
+        )
+      }
+    })
+  });
+  generateBody() {
+    const { publisher, payload } = this.publishEventForm.formData;
+    const allPublishers = this.table.dataSource;
+    const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
+    const header = pub
+      ? {
+          event_type: 'ANY',
+          pub_id: pub.f_key,
+          token: pub.f_token,
+          pub_time: Date.now()
+        }
+      : {
+          event_type: 'ANY',
+          pub_id: '',
+          token: '',
+          pub_time: Date.now()
+        };
+
+    try {
+      const body = JSON.parse(payload);
+      if (body.payload) {
+        return {
+          header,
+          ...body
+        };
+      } else {
+        return {
+          header,
+          payload: JSON.stringify(body)
+        };
+      }
+    } catch (error) {
+      return {
+        header,
+        payload: `${payload}`
+      };
+    }
+  }
+
+  form: JSONSchemaFormState<CreatePublisherSchemaType | PublishEventSchemaType> = this.createPublisherForm;
+
+  showPublishEventRequestTemplates = false;
 
   modal = new JSONModalValue({
     default: {
@@ -151,7 +293,7 @@ export default class PublisherModule {
                 bg: '#E53E3E',
                 color: '#fff',
                 onClick() {
-                  rootStore.base.confirm.show({
+                  globalThis.store.base.confirm.show({
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
@@ -174,6 +316,10 @@ export default class PublisherModule {
     rowKey: 'f_publisher_id',
     containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
   });
-}
 
-export class PublishEventModule {}
+  constructor() {
+    makeObservable(this, {
+      showPublishEventRequestTemplates: observable
+    });
+  }
+}

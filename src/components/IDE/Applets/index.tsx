@@ -31,18 +31,14 @@ const AddBtn = observer(() => {
         {...gradientButtonStyle}
         onClick={(e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
-            w3s.publishEvent.form.value.set({
+            w3s.publisher.publishEventForm.value.set({
               projectID: w3s.curProject?.f_project_id.toString()
             });
           }
-          const allPublishers = w3s.publisher.table.dataSource;
-          if (allPublishers.length === 1) {
-            w3s.publishEvent.form.value.set({
-              publisher: allPublishers[0].f_publisher_id.toString()
-            });
-          }
-          w3s.publishEvent.modal.set({
-            show: true
+          w3s.publisher.form = w3s.publisher.publishEventForm;
+          w3s.publisher.modal.set({
+            show: true,
+            title: 'Publish Event'
           });
         }}
       >

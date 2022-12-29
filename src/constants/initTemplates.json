@@ -5,7 +5,7 @@
       "project": [
         {
           "projectName": "project_001",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/easyjson/easyjson.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/easyjson.wasm", "appletName": "applet_01" }],
           "datas": []
         }
       ]
@@ -15,7 +15,7 @@
       "project": [
         {
           "projectName": "project_002",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/word_count/word_count.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/word_count.wasm", "appletName": "applet_01" }],
           "datas": []
         }
       ]
@@ -25,7 +25,7 @@
       "project": [
         {
           "projectName": "project_003",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/log/log.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
           "datas": []
         }
       ]
@@ -35,7 +35,7 @@
       "project": [
         {
           "projectName": "project_004",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/gjson/gjson.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/gjson.wasm", "appletName": "applet_01" }],
           "datas": []
         }
       ]
@@ -45,7 +45,7 @@
       "project": [
         {
           "projectName": "project_005",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream/main/_examples/token_distribute/token_distribute.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/token_distribute.wasm", "appletName": "applet_01" }],
           "datas": []
         }
       ]

@@ -16,6 +16,7 @@ const AllPublishers = observer(() => {
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
           onClick={(e) => {
+            w3s.publisher.form = w3s.publisher.createPublisherForm;
             w3s.publisher.modal.set({ show: true, title: 'Create Publisher' });
           }}
         >

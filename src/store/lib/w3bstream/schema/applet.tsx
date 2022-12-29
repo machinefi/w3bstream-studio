@@ -4,12 +4,10 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
 import { AppletType } from '@/server/routers/w3bstream';
-import { rootStore } from '@/store/index';
 import { JSONModalValue, JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
-import toast from 'react-hot-toast';
 import { definitions } from './definitions';
 
 export const schema = {
@@ -136,7 +134,7 @@ export default class AppletModule {
                 colorScheme: 'blue',
                 size: 'xs',
                 onClick: () => {
-                  rootStore.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
+                  globalThis.store.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
                 }
               },
               text: 'Deploy'
@@ -168,7 +166,7 @@ export default class AppletModule {
                     bg: '#37A169',
                     color: '#fff',
                     onClick() {
-                      rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' });
+                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' });
                     }
                   },
                   text: 'Start'
@@ -179,7 +177,7 @@ export default class AppletModule {
                     bg: '#FAB400',
                     color: '#fff',
                     onClick() {
-                      rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' });
+                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' });
                     }
                   },
                   text: 'Restart'
@@ -190,7 +188,7 @@ export default class AppletModule {
                     bg: '#E53E3E',
                     color: '#fff',
                     onClick() {
-                      rootStore.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' });
+                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' });
                     }
                   },
                   text: 'Stop'

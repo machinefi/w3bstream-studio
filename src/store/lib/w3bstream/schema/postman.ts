@@ -2,7 +2,6 @@ import { JSONSchemaFormState, JSONValue, JSONModalValue } from '@/store/standard
 import { FromSchema } from 'json-schema-to-ts';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/EditorWidget/index';
 import { gradientButtonStyle } from '@/lib/theme';
-import { rootStore } from '../../../index';
 import { showNotification } from '@mantine/notifications';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
@@ -148,7 +147,7 @@ export default class PostmanModule {
       if (e.show) {
         this.form.value.set({
           headers: {
-            Authorization: `Bearer ${rootStore.w3s.config.form.formData.token}`
+            Authorization: `Bearer ${globalThis.store.w3s.config.form.formData.token}`
           }
         });
       }
