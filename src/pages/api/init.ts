@@ -5,6 +5,7 @@ interface Project {
   projectName: string;
   applets: Applet[];
   datas: [];
+  envs: string[][];
 }
 
 interface Applet {
@@ -30,7 +31,12 @@ const getToken = async () => {
   }
 };
 
-const createProject = async (project: Project): Promise<string> => {
+const createProject = async (
+  project: Project
+): Promise<{
+  projectID: string;
+  projectName: string;
+}> => {
   const token = await getToken();
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project`, {
     method: 'post',
@@ -40,7 +46,21 @@ const createProject = async (project: Project): Promise<string> => {
     headers: { Authorization: token }
   });
   const data: any = await response.json();
-  return data.projectID;
+  return {
+    projectID: data.projectID,
+    projectName: data.name
+  };
+};
+
+const saveEnvs = async (projectName: string, envs: string[][]): Promise<void> => {
+  const token = await getToken();
+  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project_config/${projectName}/PROJECT_ENV`, {
+    method: 'post',
+    body: JSON.stringify({
+      values: envs
+    }),
+    headers: { Authorization: token }
+  });
 };
 
 const createApplet = async ({ projectID, appletName, wasmURL }: Applet & { projectID: string }): Promise<string> => {
@@ -99,7 +119,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     try {
       for (const p of project) {
-        const projectID = await createProject(p);
+        const { projectID, projectName } = await createProject(p);
+        if (p.envs?.length > 0) {
+          await saveEnvs(projectName, p.envs);
+        }
         for (const a of p.applets) {
           const appletID = await createApplet({ ...a, projectID });
           const instanceID = await deployApplet(appletID);
