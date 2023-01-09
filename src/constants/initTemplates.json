@@ -1,12 +1,24 @@
 {
   "templates": [
     {
+      "name": "mint_nft",
+      "project": [
+        {
+          "projectName": "mint_nft_template",
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-ts-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
+          "datas": [],
+          "envs": [["key", "value"]]
+        }
+      ]
+    },
+    {
       "name": "easyjson",
       "project": [
         {
-          "projectName": "project_001",
+          "projectName": "easyjson_template",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/easyjson.wasm", "appletName": "applet_01" }],
-          "datas": []
+          "datas": [],
+          "envs": []
         }
       ]
     },
@@ -14,9 +26,10 @@
       "name": "word_count",
       "project": [
         {
-          "projectName": "project_002",
+          "projectName": "word_count_template",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/word_count.wasm", "appletName": "applet_01" }],
-          "datas": []
+          "datas": [],
+          "envs": []
         }
       ]
     },
@@ -24,9 +37,10 @@
       "name": "log",
       "project": [
         {
-          "projectName": "project_003",
+          "projectName": "log_template",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
-          "datas": []
+          "datas": [],
+          "envs": []
         }
       ]
     },
@@ -34,9 +48,10 @@
       "name": "gjson",
       "project": [
         {
-          "projectName": "project_004",
+          "projectName": "gjson_template",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/gjson.wasm", "appletName": "applet_01" }],
-          "datas": []
+          "datas": [],
+          "envs": []
         }
       ]
     },
@@ -44,9 +59,10 @@
       "name": "token_distribute",
       "project": [
         {
-          "projectName": "project_005",
+          "projectName": "token_distribute_template",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/token_distribute.wasm", "appletName": "applet_01" }],
-          "datas": []
+          "datas": [],
+          "envs": []
         }
       ]
     }
