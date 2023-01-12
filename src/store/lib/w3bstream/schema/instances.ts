@@ -1,6 +1,9 @@
 import { InstanceStatusRender } from '@/components/JSONTableRender';
+import { axios } from '@/lib/axios';
+import { eventBus } from '@/lib/event';
 import { InstanceType } from '@/server/routers/w3bstream';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { showNotification } from '@mantine/notifications';
 
 export default class InstancesModule {
   table = new JSONSchemaTableState<InstanceType>({
@@ -61,6 +64,37 @@ export default class InstancesModule {
       {
         key: 'applet_name',
         label: 'Applet Name'
+      },
+      {
+        key: 'tail-actions',
+        label: 'Actions',
+        actions: (item) => {
+          return [
+            {
+              props: {
+                colorScheme: 'red',
+                size: 'xs',
+                onClick: async () => {
+                  globalThis.store.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    async onOk() {
+                      try {
+                        await axios.request({
+                          method: 'put',
+                          url: `/api/w3bapp/deploy/${item.f_instance_id}/REMOVE`
+                        });
+                        await showNotification({ message: 'Deleted successfully' });
+                        eventBus.emit('instance.delete');
+                      } catch (error) {}
+                    }
+                  });
+                }
+              },
+              text: 'Delete'
+            }
+          ]
+        }
       }
     ],
     rowKey: 'f_instance_id',

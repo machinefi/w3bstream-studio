@@ -125,12 +125,39 @@ export default class AppletModule {
         key: 'actions',
         label: 'Actions',
         actions: (item) => {
+          const deleteBtn = {
+            props: {
+              colorScheme: 'red',
+              size: 'xs',
+              onClick: async () => {
+                globalThis.store.base.confirm.show({
+                  title: 'Warning',
+                  description: 'Are you sure you want to delete it?',
+                  async onOk() {
+                    try {
+                      await axios.request({
+                        method: 'delete',
+                        url: `/api/w3bapp/applet/${item.f_applet_id}`
+                      });
+                      await showNotification({ message: 'Deleted successfully' });
+                      eventBus.emit('applet.delete');
+                    } catch (error) {}
+                  }
+                });
+              }
+            },
+            text: 'Delete'
+          };
+
           if (item.instances.length) {
-            return [];
+            return [deleteBtn];
           }
+
           return [
+            deleteBtn,
             {
               props: {
+                ml: '10px',
                 colorScheme: 'blue',
                 size: 'xs',
                 onClick: () => {
@@ -192,6 +219,29 @@ export default class AppletModule {
                     }
                   },
                   text: 'Stop'
+                },
+                {
+                  props: {
+                    ml: '8px',
+                    colorScheme: 'red',
+                    onClick: async () => {
+                      globalThis.store.base.confirm.show({
+                        title: 'Warning',
+                        description: 'Are you sure you want to delete it?',
+                        async onOk() {
+                          try {
+                            await axios.request({
+                              method: 'put',
+                              url: `/api/w3bapp/deploy/${item.f_instance_id}/REMOVE`
+                            });
+                            await showNotification({ message: 'Deleted successfully' });
+                            eventBus.emit('instance.delete');
+                          } catch (error) {}
+                        }
+                      });
+                    }
+                  },
+                  text: 'Delete'
                 }
               ];
             }
