@@ -1,14 +1,11 @@
 import React from 'react';
-import { Flex, Box, Portal, Stack, Text, FlexProps, useDisclosure, Collapse, Tooltip, Button } from '@chakra-ui/react';
+import { Flex, Box, Stack, Text, FlexProps, useDisclosure, Collapse, Tooltip, Button } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronRightIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { MdAddBox, MdRefresh } from 'react-icons/md';
-import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { Menu, MenuItem } from '@/components/Menu';
 import { FilesItem } from './filesItem';
-import { helper } from '@/lib/helper';
 import toast from 'react-hot-toast';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
@@ -16,7 +13,10 @@ import { eventBus } from '@/lib/event';
 interface SideBarProps extends FlexProps {}
 
 const SideBar = observer((props: SideBarProps) => {
-  const { w3s } = useStore();
+  const {
+    w3s,
+    base: { confirm }
+  } = useStore();
   const projectCollaspeState = useDisclosure({
     defaultIsOpen: true
   });
@@ -257,85 +257,60 @@ const SideBar = observer((props: SideBarProps) => {
       </Flex>
       <Collapse in={projectCollaspeState.isOpen}>
         <Box h="250px" overflowY="auto" borderBottom="1px solid rgba(0, 0, 0, 0.06)">
-          {w3s.allProjects.value.map((i, index) => {
-            return <ProjectItem project={i} index={index} />;
+          {w3s.allProjects.value.map((p, index) => {
+            return (
+              <Flex alignItems="center" justifyContent="space-between" h="40px" py="2" px="6" bg="#FAFAFA" borderBottom="2px solid rgba(0, 0, 0, 0.06)">
+                <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
+                  {p.f_name}
+                </Text>
+                <Flex alignItems="center">
+                  <Tooltip hasArrow label="Edit Project" placement="bottom">
+                    <EditIcon
+                      boxSize={4}
+                      cursor="pointer"
+                      onClick={() => {
+                        w3s.curProjectIndex = index;
+                        w3s.project.form.value.set({
+                          name: w3s.curProject.f_name
+                        });
+                        w3s.project.setMode('edit');
+                        w3s.project.modal.set({
+                          show: true,
+                          title: 'Project Details'
+                        });
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip hasArrow label="Delete Project" placement="bottom">
+                    <DeleteIcon
+                      ml="12px"
+                      boxSize={4}
+                      cursor="pointer"
+                      onClick={() => {
+                        confirm.show({
+                          title: 'Warning',
+                          description: 'Are you sure you want to delete it?',
+                          async onOk() {
+                            await axios.request({
+                              method: 'delete',
+                              url: `/api/w3bapp/project/${p.f_name}`
+                            });
+                            eventBus.emit('project.delete');
+                            toast.success('Deleted successfully');
+                          }
+                        });
+                      }}
+                    />
+                  </Tooltip>
+                </Flex>
+              </Flex>
+            );
           })}
         </Box>
       </Collapse>
 
       {showOtherTab()}
     </Box>
-  );
-});
-
-const ProjectItem = observer(({ project, index }: { project: Partial<{ f_name: any; f_project_id: any; applets: any }>; index: number }) => {
-  const {
-    w3s,
-    base: { confirm }
-  } = useStore();
-  return (
-    <ContextMenuTrigger id={`ProjectItemContext${project.f_project_id}`} holdToDisplay={-1}>
-      <Box
-        key={index}
-        py="2"
-        px="6"
-        cursor="pointer"
-        borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-        sx={getSelectedStyles((w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'EDITOR') && w3s.curProjectIndex == index)}
-        onClick={(e) => {
-          w3s.curProjectIndex = index;
-          if (w3s.showContent != 'EDITOR' && w3s.showContent != 'CURRENT_APPLETS') {
-            w3s.showContent = 'CURRENT_APPLETS';
-          }
-          console.log(helper.log(w3s.projectManager.curFilesListSchema));
-        }}
-      >
-        <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
-          {project.f_name}
-        </Text>
-      </Box>
-      <Portal>
-        <ContextMenu id={`ProjectItemContext${project.f_project_id}`}>
-          <Menu w="150px" bordered>
-            <MenuItem
-              //TODO:  please make sure there has two state for create project and project detail
-              onItemSelect={() => {
-                w3s.curProjectIndex = index;
-                w3s.project.form.value.set({
-                  name: w3s.curProject.f_name
-                });
-                w3s.project.setMode('edit');
-                w3s.project.modal.set({
-                  show: true,
-                  title: 'Project Details'
-                });
-              }}
-            >
-              Detail
-            </MenuItem>
-            <MenuItem
-              color="red"
-              onItemSelect={() => {
-                confirm.show({
-                  title: 'Warning',
-                  description: 'Are you sure you want to delete it?',
-                  async onOk() {
-                    await axios.request({
-                      method: 'delete',
-                      url: `/api/w3bapp/project/${project.f_name}`
-                    });
-                    eventBus.emit('project.delete');
-                    toast.success('Deleted successfully');
-                  }
-                });
-              }}
-            >
-              Delete
-            </MenuItem>
-          </Menu>
-        </ContextMenu>
-      </Portal>
-    </ContextMenuTrigger>
   );
 });
 
