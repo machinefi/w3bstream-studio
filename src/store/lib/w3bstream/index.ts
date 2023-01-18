@@ -210,12 +210,20 @@ export class W3bStream {
         await this.allProjects.call();
         this.projectManager.sync();
       })
+      .on('applet.delete', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
+      })
       .on('applet.publish-event', () => {})
       .on('instance.deploy', async () => {
         await this.allProjects.call();
         this.projectManager.sync();
       })
       .on('instance.handle', async () => {
+        await this.allProjects.call();
+        this.projectManager.sync();
+      })
+      .on('instance.delete', async () => {
         await this.allProjects.call();
         this.projectManager.sync();
       })

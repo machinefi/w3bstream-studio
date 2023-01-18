@@ -18,9 +18,11 @@ interface MessageEvents {
   'project.delete': () => void;
   'applet.list': (data: any[]) => void;
   'applet.create': () => void;
+  'applet.delete': () => void;
   'applet.publish-event': () => void;
   'instance.deploy': () => void;
   'instance.handle': () => void;
+  'instance.delete': () => void;
   'publisher.create': () => void;
   'publisher.update': () => void;
   'publisher.delete': () => void;

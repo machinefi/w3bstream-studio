@@ -188,12 +188,12 @@ export default class ProjectModule {
       try {
         await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { values });
         await showNotification({ message: 'Save environment variables successfully' });
-        this.form.reset();
-        this.modal.set({ show: false });
       } catch (error) {
         throw error;
       }
     }
+    this.form.reset();
+    this.modal.set({ show: false });
   }
 
   setMode(mode: 'add' | 'edit') {
