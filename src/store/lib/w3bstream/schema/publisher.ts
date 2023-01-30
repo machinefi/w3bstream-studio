@@ -246,7 +246,7 @@ export default class PublisherModule {
                 return {
                     events: body.map((item) => ({
                         header,
-                        payload: helper.stringToBase64(JSON.stringify(item?.payload))
+                        payload: typeof item?.payload == 'string' ? helper.stringToBase64(item?.payload) : helper.stringToBase64(JSON.stringify(item?.payload))
                     }))
                 };
             }
