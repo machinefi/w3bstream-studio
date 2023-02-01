@@ -3,10 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query, body, headers } = req;
-  const { a, b, c, ...params } = query;
-
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/${a}/${b}/${c}`;
-
+  const { slug, ...params } = query;
+  const path = Array.isArray(slug) ? slug.join('/') : slug;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/${path}`;
   try {
     const axiosResponse = await axios.request({
       url,
