@@ -7,7 +7,7 @@ import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { loggerLink } from '@trpc/client/links/loggerLink';
 import { useStore } from '@/store/index';
 import { theme } from '@/lib/theme';
-import NextRouter from 'next/router';
+import NextRouter, { useRouter } from 'next/router';
 import type { AppRouter } from '@/server/routers/_app';
 import type { AppProps } from 'next/app';
 import { NotificationsProvider } from '@mantine/notifications';
@@ -19,6 +19,7 @@ import '@/lib/superjson';
 function MyApp({ Component, pageProps }: AppProps) {
   const { lang, w3s } = useStore();
   const { token } = w3s.config.form.formData;
+  const router = useRouter();
 
   useEffect(() => {
     lang.init();
@@ -26,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
-    if (!token) {
+    if (!token && !['/openapi'].includes(router.pathname)) {
       NextRouter.push('/login');
     }
   }, [token]);

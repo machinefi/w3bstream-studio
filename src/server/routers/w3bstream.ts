@@ -10,6 +10,7 @@ export const w3bstreamRouter = t.router({
       })
     )
     .query(async ({ ctx, input }) => {
+      // TODO: verify
       const res = await ctx.prisma.t_project.findMany({
         where: {
           f_account_id: {

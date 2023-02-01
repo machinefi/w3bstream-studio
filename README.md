@@ -1,11 +1,10 @@
-# W3bstream Studio 
+# W3bstream Studio
 
 - Managing your W3bstream node
 - Code and deploy Wasm Applets
 - Publisher management
 - Test events
 - Logs viewer
-
 
 ### Installation
 
@@ -24,4 +23,10 @@ pnpm dev
 
 ```bash
 pnpm build; pnpm start
+```
+
+### Build Image
+
+```bash
+docker build -f Dockerfile -t test/w3bstream-studio:main .
 ```
