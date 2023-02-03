@@ -16,7 +16,7 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    projectID: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type' },
     chainID: { type: 'number', title: 'Chain ID' },
     height: { type: 'number', title: 'Height' }

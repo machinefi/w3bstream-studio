@@ -22,17 +22,17 @@ export const schema = {
       type: 'string',
       title: 'Upload Single File'
     },
-    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     appletName: { type: 'string', title: 'Applet Name' }
   },
-  required: ['file', 'projectID', 'appletName']
+  required: ['file', 'projectName', 'appletName']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
 
 //@ts-ignore
 schema.definitions = {
-  projects: definitions.projects
+  projects: definitions.projectName
 };
 
 export default class AppletModule {
@@ -67,13 +67,13 @@ export default class AppletModule {
         'info',
         JSON.stringify({
           wasmName: file.name,
-          projectID: e.formData.projectID,
+          projectName: e.formData.projectName,
           appletName: e.formData.appletName
         })
       );
       const res = await axios.request({
         method: 'post',
-        url: `/api/file?api=applet/${e.formData.projectID}`,
+        url: `/api/file?api=applet/${e.formData.projectName}`,
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -89,7 +89,7 @@ export default class AppletModule {
     value: new JSONValue<SchemaType>({
       //@ts-ignore
       default: {
-        projectID: '',
+        projectName: '',
         appletName: 'app_01'
       }
     })

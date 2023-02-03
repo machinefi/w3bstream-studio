@@ -8,12 +8,17 @@ import initTemplates from '@/constants/initTemplates.json';
 import { makeObservable, observable } from 'mobx';
 import { ProjectEnvsWidget } from '@/components/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
+import { ProjectDBSchemaWidget } from '@/components/ProjectDBSchema';
+import EditorWidget from '@/components/EditorWidget';
+import { rootStore } from '@/store/index';
+import initDBSchema from '@/constants/initDBSchema.json';
 
 export const defaultSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', title: 'Name' },
-    envs: { type: 'string', title: '' }
+    envs: { type: 'string', title: '' },
+    dbSchema: { type: 'string', title: 'Project Database Schema' }
   },
   required: ['name']
 } as const;
@@ -50,6 +55,29 @@ export default class ProjectModule {
       },
       envs: {
         'ui:widget': ProjectEnvsWidget
+      },
+      dbSchema: {
+        'ui:widget': EditorWidget,
+        'ui:options': {
+          showSubmitButton: true,
+          afterSubmit: async (value: string) => {
+            console.log(value)
+            const projectName = globalThis.store.w3s.curProject.f_name;
+            try {
+              //post Content-Type  application/json
+              await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_SCHEMA`, value, {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+              await showNotification({ message: 'create database successed!' });
+              this.form.reset();
+              this.modal.set({ show: false });
+            } catch (error) {
+
+            }
+          }
+        }
       }
     },
     afterSubmit: async (e) => {
@@ -65,7 +93,7 @@ export default class ProjectModule {
         }
 
         await this.onSaveEnv();
-      } catch (error) {}
+      } catch (error) { }
     },
     value: new JSONValue<DefaultSchemaType>({
       default: {
@@ -130,6 +158,7 @@ export default class ProjectModule {
     }
   }
 
+
   envs: Env[] = [];
   onAddEnv() {
     this.envs.push({
@@ -153,24 +182,13 @@ export default class ProjectModule {
   }
   async setEnvs() {
     if (this.formMode === 'edit') {
-      this.envs = [
+      this.envs = globalThis.store.w3s.curProject?.config?.env || [
         {
           id: uuidv4(),
           key: '',
           value: ''
         }
       ];
-      const projectName = globalThis.store.w3s.curProject.f_name;
-      try {
-        const res = await axios.get(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`);
-        if (res.data) {
-          this.envs = res.data.values.map((item) => ({
-            id: uuidv4(),
-            key: item[0],
-            value: item[1]
-          }));
-        }
-      } catch (error) {}
     } else {
       this.envs = [
         {
@@ -196,22 +214,35 @@ export default class ProjectModule {
     this.modal.set({ show: false });
   }
 
-  setMode(mode: 'add' | 'edit') {
+  async setMode(mode: 'add' | 'edit') {
     if (mode === 'add') {
       this.form.reset();
       this.form.uiSchema['ui:submitButtonOptions'].norender = false;
       this.form.uiSchema.name = {
         'ui:disabled': false
       };
+      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
+      this.form.value.set({
+        dbSchema: ""
+      })
     } else {
       this.form.uiSchema['ui:submitButtonOptions'].norender = true;
       this.form.uiSchema.name = {
         'ui:disabled': true
       };
+      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = true;
+      await rootStore.w3s.allProjects.call();
+      this.setDBSchema();
     }
     this.formMode = mode;
     this.setFormList();
     this.setEnvs();
+  }
+
+  setDBSchema() {
+    this.form.value.set({
+      dbSchema: JSON.stringify((globalThis.store.w3s.curProject?.config?.schema || initDBSchema), null, 2)
+    })
   }
 
   modal = new JSONModalValue({
