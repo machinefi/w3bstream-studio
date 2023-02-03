@@ -59,24 +59,7 @@ export default class ProjectModule {
       dbSchema: {
         'ui:widget': EditorWidget,
         'ui:options': {
-          showSubmitButton: true,
-          afterSubmit: async (value: string) => {
-            console.log(value)
-            const projectName = globalThis.store.w3s.curProject.f_name;
-            try {
-              //post Content-Type  application/json
-              await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_SCHEMA`, value, {
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              });
-              await showNotification({ message: 'create database successed!' });
-              this.form.reset();
-              this.modal.set({ show: false });
-            } catch (error) {
-
-            }
-          }
+          'readOnly': false,
         }
       }
     },
@@ -91,8 +74,10 @@ export default class ProjectModule {
           eventBus.emit('project.create');
           await showNotification({ message: 'create project successed' });
         }
-
         await this.onSaveEnv();
+        await this.onSaveDBSchema();
+        this.form.reset();
+        this.modal.set({ show: false });
       } catch (error) { }
     },
     value: new JSONValue<DefaultSchemaType>({
@@ -202,6 +187,7 @@ export default class ProjectModule {
   async onSaveEnv() {
     const projectName = this.form.value.get().name;
     const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
+    console.log(projectName);
     if (values.length) {
       try {
         await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { values });
@@ -210,8 +196,19 @@ export default class ProjectModule {
         throw error;
       }
     }
-    this.form.reset();
-    this.modal.set({ show: false });
+  }
+
+  async onSaveDBSchema() {
+    const projectName = this.form.value.get().name;
+    const dbSchema = this.form.value.get().dbSchema;
+    console.log(projectName)
+    if (!dbSchema) return;
+    await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_SCHEMA`, dbSchema, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    await showNotification({ message: 'create database successed!' });
   }
 
   async setMode(mode: 'add' | 'edit') {
@@ -222,6 +219,7 @@ export default class ProjectModule {
         'ui:disabled': false
       };
       this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
+      this.form.uiSchema.dbSchema['ui:options'].readOnly = false;
       this.form.value.set({
         dbSchema: ""
       })
@@ -230,7 +228,6 @@ export default class ProjectModule {
       this.form.uiSchema.name = {
         'ui:disabled': true
       };
-      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = true;
       await rootStore.w3s.allProjects.call();
       this.setDBSchema();
     }
@@ -240,9 +237,24 @@ export default class ProjectModule {
   }
 
   setDBSchema() {
-    this.form.value.set({
-      dbSchema: JSON.stringify((globalThis.store.w3s.curProject?.config?.schema || initDBSchema), null, 2)
-    })
+    if (!globalThis.store.w3s.curProject?.config?.schema) {
+      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = true;
+      this.form.uiSchema.dbSchema['ui:options'].afterSubmit = (value: string) => {
+        this.form.value.set({
+          dbSchema: value
+        })
+        this.onSaveDBSchema();
+      }
+      this.form.value.set({
+        dbSchema: ''
+      })
+    } else {
+      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
+      this.form.uiSchema.dbSchema['ui:options'].readOnly = true;
+      this.form.value.set({
+        dbSchema: JSON.stringify((globalThis.store.w3s.curProject?.config?.schema), null, 2)
+      })
+    }
   }
 
   modal = new JSONModalValue({
