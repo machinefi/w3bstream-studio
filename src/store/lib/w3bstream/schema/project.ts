@@ -218,6 +218,7 @@ export default class ProjectModule {
       this.form.uiSchema.name = {
         'ui:disabled': false
       };
+      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
       this.form.uiSchema.dbSchema['ui:options'].readOnly = false;
       this.form.value.set({
         dbSchema: ""
