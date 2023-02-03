@@ -202,7 +202,7 @@ export default class ProjectModule {
     const projectName = this.form.value.get().name;
     const dbSchema = this.form.value.get().dbSchema;
     console.log(projectName)
-    if(!dbSchema) return;
+    if (!dbSchema) return;
     await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_SCHEMA`, dbSchema, {
       headers: {
         'Content-Type': 'application/json'
@@ -228,7 +228,6 @@ export default class ProjectModule {
         'ui:disabled': true
       };
       await rootStore.w3s.allProjects.call();
-      this.form.uiSchema.dbSchema['ui:options'].readOnly = true;
       this.setDBSchema();
     }
     this.formMode = mode;
@@ -237,9 +236,24 @@ export default class ProjectModule {
   }
 
   setDBSchema() {
-    this.form.value.set({
-      dbSchema: JSON.stringify((globalThis.store.w3s.curProject?.config?.schema), null, 2)
-    })
+    if (!globalThis.store.w3s.curProject?.config?.schema) {
+      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = true;
+      this.form.uiSchema.dbSchema['ui:options'].afterSubmit = (value: string) => {
+        this.form.value.set({
+          dbSchema: value
+        })
+        this.onSaveDBSchema();
+      }
+      this.form.value.set({
+        dbSchema: ''
+      })
+    } else {
+      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
+      this.form.uiSchema.dbSchema['ui:options'].readOnly = true;
+      this.form.value.set({
+        dbSchema: JSON.stringify((globalThis.store.w3s.curProject?.config?.schema), null, 2)
+      })
+    }
   }
 
   modal = new JSONModalValue({
