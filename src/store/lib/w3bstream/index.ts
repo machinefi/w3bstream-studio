@@ -198,7 +198,7 @@ export class W3bStream {
       .on('user.login', async () => {
         NextRouter.push('/');
       })
-      .on('user.update-pwd', () => {})
+      .on('user.update-pwd', () => { })
       .on('project.create', async () => {
         await this.allProjects.call();
         this.projectManager.sync();
@@ -214,7 +214,7 @@ export class W3bStream {
         await this.allProjects.call();
         this.projectManager.sync();
       })
-      .on('applet.publish-event', () => {})
+      .on('applet.publish-event', () => { })
       .on('instance.deploy', async () => {
         await this.allProjects.call();
         this.projectManager.sync();

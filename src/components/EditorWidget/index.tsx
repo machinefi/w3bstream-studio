@@ -1,13 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
 import MonacoEditor from '@monaco-editor/react';
-import { Flex, Select, Text } from '@chakra-ui/react';
+import { Button, Flex, Select, Text } from '@chakra-ui/react';
 
 type Options = {
   emptyValue?: string;
   editorHeight?: string;
   showLanguageSelector?: boolean;
+  showSubmitButton?: boolean;
   onChangeLanguage?: (v: 'json' | 'text') => void;
+  afterSubmit?: (v: string) => void;
 };
 
 export interface EditorWidgetProps extends WidgetProps {
@@ -22,7 +24,7 @@ export type EditorWidgetUIOptions = {
 const EditorWidget = ({ id, label, options = {}, value, required, onChange }: EditorWidgetProps) => {
   const handleChange = useCallback((value) => onChange(value === '' ? options.emptyValue : value), [onChange, options.emptyValue]);
   const [language, setLanguage] = useState('json');
-  const { editorHeight = '200px', showLanguageSelector = false, onChangeLanguage } = options;
+  const { editorHeight = '200px', showLanguageSelector = false, showSubmitButton = false, onChangeLanguage, afterSubmit } = options;
   return (
     <Flex flexDir="column">
       <Flex justifyContent="space-between" alignItems="center" mb="10px">
@@ -50,6 +52,19 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
         )}
       </Flex>
       <MonacoEditor height={editorHeight} theme="vs-dark" language={language} value={value} onChange={handleChange} />
+      {
+        showSubmitButton && <Flex mt={2} justifyContent="flex-end">
+          <Button
+            ml="10px"
+            fontWeight={400}
+            onClick={() => {
+              afterSubmit && afterSubmit(value);
+            }}
+          >
+            Save Changes
+          </Button>
+        </Flex>
+      }
     </Flex>
   );
 };

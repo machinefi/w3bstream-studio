@@ -86,7 +86,7 @@ const saveEnvs = async (projectName: string, envs: string[][]): Promise<void> =>
   });
 };
 
-const createApplet = async ({ projectID, appletName, wasmURL }: Applet & { projectID: string }): Promise<string> => {
+const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { projectName: string }): Promise<string> => {
   const response = await fetch(wasmURL);
   const blob = await response.blob();
   const formData = new FormData();
@@ -96,13 +96,13 @@ const createApplet = async ({ projectID, appletName, wasmURL }: Applet & { proje
   formData.set(
     'info',
     JSON.stringify({
-      projectID,
+      projectName,
       appletName,
       wasmName
     })
   );
   const token = await getToken();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${projectID}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${projectName}`, {
     method: 'post',
     headers: {
       Authorization: token
@@ -125,13 +125,13 @@ const deployApplet = async (appletID: string): Promise<string> => {
   return data.instanceID;
 };
 
-const createMonitor = async (projectID: string, monitor: Monitor): Promise<void> => {
+const createMonitor = async (projectName: string, monitor: Monitor): Promise<void> => {
   const token = await getToken();
   if (monitor.contractLog) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/contract_log/${projectID}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/contract_log/${projectName}`, {
       method: 'post',
       body: JSON.stringify({
-        projectID,
+        projectName,
         ...monitor.contractLog
       }),
       headers: { Authorization: token }
@@ -139,10 +139,10 @@ const createMonitor = async (projectID: string, monitor: Monitor): Promise<void>
   }
 
   if (monitor.chainTx) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/chain_tx/${projectID}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/chain_tx/${projectName}`, {
       method: 'post',
       body: JSON.stringify({
-        projectID,
+        projectName,
         ...monitor.chainTx
       }),
       headers: { Authorization: token }
@@ -150,10 +150,10 @@ const createMonitor = async (projectID: string, monitor: Monitor): Promise<void>
   }
 
   if (monitor.chainHeight) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/chain_height/${projectID}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/chain_height/${projectName}`, {
       method: 'post',
       body: JSON.stringify({
-        projectID,
+        projectName,
         ...monitor.chainHeight
       }),
       headers: { Authorization: token }
@@ -183,12 +183,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           await saveEnvs(projectName, p.envs);
         }
         for (const a of p.applets) {
-          const appletID = await createApplet({ ...a, projectID });
+          const appletID = await createApplet({ ...a, projectName });
           const instanceID = await deployApplet(appletID);
         }
         for (const d of p.datas) {
           if (d.monitor) {
-            await createMonitor(projectID, d.monitor);
+            await createMonitor(projectName, d.monitor);
           }
         }
       }

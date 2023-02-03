@@ -82,6 +82,7 @@ model t_project {
   f_deleted_at BigInt        @default(0)
   applets      t_applet[]
   publishers   t_publisher[]
+  configs      t_config[]
 
   @@unique([f_project_id])
   @@unique([f_project_id, f_deleted_at], map: "t_project_ui_project_id")
@@ -126,4 +127,19 @@ model t_strategy {
 
   @@unique([f_project_id, f_applet_id, f_event_type, f_handler, f_deleted_at], map: "t_strategy_ui_prj_app_event")
   @@unique([f_strategy_id, f_deleted_at], map: "t_strategy_ui_strategy_id")
+}
+
+model t_config {
+  f_id          BigInt     @id @default(autoincrement())
+  f_config_id   BigInt     @unique(map: "t_config_ui_config_id")
+  f_rel_id      BigInt
+  f_type        Int
+  f_value       Bytes      @default("")
+  f_created_at  BigInt     @default(0)
+  f_updated_at  BigInt     @default(0)
+  t_projectF_id BigInt?
+
+  project t_project @relation(fields: [f_rel_id], references: [f_project_id])
+
+  @@unique([f_rel_id, f_type], map: "t_config_ui_rel_type")
 }

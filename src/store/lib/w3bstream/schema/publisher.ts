@@ -22,11 +22,11 @@ export const createPublisherSchema = {
   },
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     name: { type: 'string', title: 'Name' },
     key: { type: 'string', title: 'Publisher ID' }
   },
-  required: ['projectID', 'name', 'key']
+  required: ['projectName', 'name', 'key']
 } as const;
 
 export const publishEventSchema = {
@@ -40,12 +40,12 @@ export const publishEventSchema = {
   },
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     publisher: { $ref: '#/definitions/publishers', title: 'Publisher' },
     payload: { type: 'string', title: 'Payload' },
     showRequestTemplates: { type: 'string', title: '' }
   },
-  required: ['projectID', 'payload']
+  required: ['projectName', 'payload']
 } as const;
 
 type CreatePublisherSchemaType = FromSchema<typeof createPublisherSchema>;
@@ -53,12 +53,12 @@ type PublishEventSchemaType = FromSchema<typeof publishEventSchema>;
 
 //@ts-ignore
 createPublisherSchema.definitions = {
-  projects: definitions.projects
+  projects: definitions.projectName
 };
 
 //@ts-ignore
 publishEventSchema.definitions = {
-  projects: definitions.projects,
+  projects: definitions.projectName,
   publishers: definitions.publishers
 };
 
@@ -91,7 +91,7 @@ export default class PublisherModule {
       } else {
         await axios.request({
           method: 'post',
-          url: `/api/w3bapp/publisher/${projectID}`,
+          url: `/api/w3bapp/publisher/${projectName}`,
           data: {
             name,
             key
@@ -202,7 +202,7 @@ export default class PublisherModule {
     },
     value: new JSONValue<PublishEventSchemaType>({
       default: {
-        projectID: '',
+        projectName: '',
         payload: JSON.stringify(
           [
             {
@@ -228,17 +228,17 @@ export default class PublisherModule {
     const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
     const header = pub
       ? {
-          event_type: 'ANY',
-          pub_id: pub.f_key,
-          token: pub.f_token,
-          pub_time: Date.now()
-        }
+        event_type: 'ANY',
+        pub_id: pub.f_key,
+        token: pub.f_token,
+        pub_time: Date.now()
+      }
       : {
-          event_type: 'ANY',
-          pub_id: '',
-          token: '',
-          pub_time: Date.now()
-        };
+        event_type: 'ANY',
+        pub_id: '',
+        token: '',
+        pub_time: Date.now()
+      };
 
     try {
       const body = JSON.parse(payload);
