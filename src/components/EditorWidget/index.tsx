@@ -8,6 +8,7 @@ type Options = {
   editorHeight?: string;
   showLanguageSelector?: boolean;
   showSubmitButton?: boolean;
+  readOnly?: boolean;
   onChangeLanguage?: (v: 'json' | 'text') => void;
   afterSubmit?: (v: string) => void;
 };
@@ -22,9 +23,9 @@ export type EditorWidgetUIOptions = {
 };
 
 const EditorWidget = ({ id, label, options = {}, value, required, onChange }: EditorWidgetProps) => {
-  const handleChange = useCallback((value) => onChange(value === '' ? options.emptyValue : value), [onChange, options.emptyValue]);
+  const handleChange = useCallback((value) => onChange(value === '' ? (options.emptyValue ? options.emptyValue : '') : value), [onChange, options.emptyValue]);
   const [language, setLanguage] = useState('json');
-  const { editorHeight = '200px', showLanguageSelector = false, showSubmitButton = false, onChangeLanguage, afterSubmit } = options;
+  const { editorHeight = '200px', showLanguageSelector = false, showSubmitButton = false, onChangeLanguage, afterSubmit, readOnly = false } = options;
   return (
     <Flex flexDir="column">
       <Flex justifyContent="space-between" alignItems="center" mb="10px">
@@ -51,7 +52,8 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
           </Select>
         )}
       </Flex>
-      <MonacoEditor height={editorHeight} theme="vs-dark" language={language} value={value} onChange={handleChange} />
+      {/* fix readonly issuse > https://github.com/suren-atoyan/monaco-react/issues/114  */}
+      <MonacoEditor options={{ readOnly }} height={editorHeight} theme="vs-dark" language={language} value={readOnly ? (value ? value : '') : value} onChange={handleChange} />
       {
         showSubmitButton && <Flex mt={2} justifyContent="flex-end">
           <Button

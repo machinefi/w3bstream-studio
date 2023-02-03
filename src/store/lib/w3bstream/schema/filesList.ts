@@ -152,7 +152,6 @@ export class FilesListSchema {
         );
         const appletRes = await axios.request({
           method: 'post',
-          //todo wait fixed !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           url: `http://localhost:8888/srv-applet-mgr/v0/applet/${projectRes.data.projectID}`,
           headers: {
             'Content-Type': 'multipart/form-data'
