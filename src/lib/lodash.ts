@@ -8,6 +8,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import keyBy from 'lodash/keyBy';
 import mergeWith from 'lodash/mergeWith';
+import cloneDeep from 'lodash/cloneDeep';
 
 export const _ = {
   throttle,
@@ -19,5 +20,6 @@ export const _ = {
   get,
   set,
   keyBy,
-  mergeWith
+  mergeWith,
+  cloneDeep
 };

@@ -17,7 +17,8 @@ const AddBtn = observer(() => {
         onClick={(e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
             w3s.applet.form.value.set({
-              projectID: w3s.curProject?.f_project_id.toString()
+              projectID: w3s.curProject?.f_project_id.toString(),
+              projectName: w3s.curProject?.f_name
             });
           }
           w3s.applet.modal.set({ show: true });
@@ -32,7 +33,8 @@ const AddBtn = observer(() => {
         onClick={(e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
             w3s.publisher.publishEventForm.value.set({
-              projectID: w3s.curProject?.f_project_id.toString()
+              projectID: w3s.curProject?.f_project_id.toString(),
+              projectName: w3s.curProject?.f_name
             });
           }
           w3s.publisher.form = w3s.publisher.publishEventForm;
