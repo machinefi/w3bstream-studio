@@ -1,7 +1,7 @@
 const { connectAsync } = require('async-mqtt');
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const client = await connectAsync(process.env.NEXT_PUBLIC_MQTT_URL);
+// const client = await connectAsync(process.env.NEXT_PUBLIC_MQTT_URL);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -11,11 +11,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
     try {
+      const client = await connectAsync(process.env.NEXT_PUBLIC_MQTT_URL);
       const result = await client.publish(topic, JSON.stringify(message));
       await client.end();
       res.status(200).json({ message: 'success' });
     } catch (error) {
-      res.status(500).send(error);
+      console.log(error);
+      res.status(500).send(error.stack);
     }
   } else {
     res.status(405).json({ message: 'Method Not Allowed' });
