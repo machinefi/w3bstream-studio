@@ -80,7 +80,7 @@ const saveEnvs = async (projectName: string, envs: string[][]): Promise<void> =>
   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project_config/${projectName}/PROJECT_ENV`, {
     method: 'post',
     body: JSON.stringify({
-      values: envs
+      env: envs
     }),
     headers: { Authorization: token }
   });

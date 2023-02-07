@@ -59,7 +59,7 @@ export default class ProjectModule {
       dbSchema: {
         'ui:widget': EditorWidget,
         'ui:options': {
-          'readOnly': false,
+          readOnly: false
         }
       }
     },
@@ -78,7 +78,7 @@ export default class ProjectModule {
         await this.onSaveDBSchema();
         this.form.reset();
         this.modal.set({ show: false });
-      } catch (error) { }
+      } catch (error) {}
     },
     value: new JSONValue<DefaultSchemaType>({
       default: {
@@ -143,7 +143,6 @@ export default class ProjectModule {
     }
   }
 
-
   envs: Env[] = [];
   onAddEnv() {
     this.envs.push({
@@ -190,7 +189,7 @@ export default class ProjectModule {
     console.log(projectName);
     if (values.length) {
       try {
-        await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { values });
+        await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
         await showNotification({ message: 'Save environment variables successfully' });
       } catch (error) {
         throw error;
@@ -201,7 +200,7 @@ export default class ProjectModule {
   async onSaveDBSchema() {
     const projectName = this.form.value.get().name;
     const dbSchema = this.form.value.get().dbSchema;
-    console.log(projectName)
+    console.log(projectName);
     if (!dbSchema) return;
     await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_SCHEMA`, dbSchema, {
       headers: {
@@ -221,8 +220,8 @@ export default class ProjectModule {
       this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
       this.form.uiSchema.dbSchema['ui:options'].readOnly = false;
       this.form.value.set({
-        dbSchema: ""
-      })
+        dbSchema: ''
+      });
     } else {
       this.form.uiSchema['ui:submitButtonOptions'].norender = true;
       this.form.uiSchema.name = {
@@ -242,18 +241,18 @@ export default class ProjectModule {
       this.form.uiSchema.dbSchema['ui:options'].afterSubmit = (value: string) => {
         this.form.value.set({
           dbSchema: value
-        })
+        });
         this.onSaveDBSchema();
-      }
+      };
       this.form.value.set({
         dbSchema: ''
-      })
+      });
     } else {
       this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
       this.form.uiSchema.dbSchema['ui:options'].readOnly = true;
       this.form.value.set({
-        dbSchema: JSON.stringify((globalThis.store.w3s.curProject?.config?.schema), null, 2)
-      })
+        dbSchema: JSON.stringify(globalThis.store.w3s.curProject?.config?.schema, null, 2)
+      });
     }
   }
 

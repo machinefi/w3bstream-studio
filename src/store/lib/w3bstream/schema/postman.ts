@@ -81,17 +81,17 @@ export default class PostmanModule {
         headers: {
           Authorization: ''
         },
-        body: JSON.stringify({ foo: 'bar' }, null, 2),
+        body: JSON.stringify(
+          {
+            events: [{ header: { event_type: 'ANY', pub_id: '', token: '', pub_time: 1675760176164 }, payload: 'eyJleGFtcGxlIjoiVGhpcyBpcyBpcyBhbiBleGFtcGxlIHBheWxvYWQxIn0=' }]
+          },
+          null,
+          2
+        ),
         topic: '$PROJECTNAME',
         message: JSON.stringify(
           {
-            header: {
-              event_type: 'ANY',
-              pub_id: '',
-              token: '',
-              pub_time: Date.now()
-            },
-            payload: ''
+            events: [{ header: { event_type: 'ANY', pub_id: '', token: '', pub_time: 1675760176164 }, payload: 'eyJleGFtcGxlIjoiVGhpcyBpcyBpcyBhbiBleGFtcGxlIHBheWxvYWQxIn0=' }]
           },
           null,
           2
