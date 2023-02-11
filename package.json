@@ -1,6 +1,6 @@
 {
   "name": "w3bstream-studio",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "license": "MIT",
   "description": "Starter pack using Nextjs, React, Typescript, tRPC, Mantine and Cypress",
   "keywords": [
@@ -19,7 +19,8 @@
     "test:ci": "cypress run --headless",
     "postinstall": "npm run gen",
     "gen": "prisma generate; prisma generate --schema ./prisma/monitor.prisma",
-    "db:pull": "npx prisma db pull"
+    "db:pull": "npx prisma db pull",
+    "semantic-release": "semantic-release"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.11",
@@ -105,9 +106,17 @@
     "@types/uuid": "^8.3.4",
     "concurrently": "^6.5.1",
     "prisma": "^4.4.0",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "semantic-release": "^20.1.0",
+    "@semantic-release/changelog": "^6.0.2",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^9.0.2"
   },
   "resolutions": {
     "graphql": "^16.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/machinefi/w3bstream-studio.git"
   }
 }
