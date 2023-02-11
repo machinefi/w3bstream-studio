@@ -1,6 +1,6 @@
 {
   "name": "w3bstream-studio",
-  "version": "0.0.0-development",
+  "version": "0.1.6",
   "license": "MIT",
   "description": "Starter pack using Nextjs, React, Typescript, tRPC, Mantine and Cypress",
   "keywords": [
