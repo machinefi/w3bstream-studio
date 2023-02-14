@@ -43,7 +43,7 @@ Interested in contributing to the doc? Please edit on [Github](https://github.co
 Make a path for w3bstream node. In the path, run the following command
 
 ```bash
-curl https://raw.githubusercontent.com/machinefi/w3bstream/main/docker-compose.yaml > docker-compose.yaml
+curl https://raw.githubusercontent.com/machinefi/w3bstream-studio/main/docker-compose.yaml > docker-compose.yaml
 ```
 
 Edit the config in the `yaml` file if needed. Then run
