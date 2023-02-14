@@ -25,6 +25,7 @@ services:
 
   w3bstream-studio:
     image: ghcr.io/machinefi/w3bstream-studio:stable
+    platform: linux/x86_64
     container_name: w3bstream-studio
     restart: always
     working_dir: /w3bstream-studio
