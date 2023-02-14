@@ -35,6 +35,7 @@ services:
     image: ${WS_STUDIO_IMAGE:-ghcr.io/machinefi/w3bstream-studio:v1.0.0}
     container_name: w3bstream-studio
     restart: always
+    platform: linux/x86_64
     working_dir: /w3bstream-studio
     command: ['node', 'server.js']
     depends_on:
