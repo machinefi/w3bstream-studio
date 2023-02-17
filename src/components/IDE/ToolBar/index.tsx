@@ -7,31 +7,59 @@ interface ToolBar extends BoxProps {}
 const ToolBar = (props: ToolBar) => {
   const { w3s } = useStore();
   const iconStyle = {
-    p: '0.5',
+    p: '1',
     h: '8',
     w: '8',
-    mb: '2',
+    borderRadius: '4px',
     cursor: 'pointer',
-    _hover: { background: 'gray.200', borderRadius: '4px' }
+    _hover: { background: 'gray.200', }
   };
 
   return (
     <Flex h="100%" direction="column" justify="space-between" align="center" py={2} {...props}>
       <Flex direction="column">
-        <Image mt="15px" mb="32px" w="30px" src="/favicon.svg" alt="logo" />
+        <Image mt="8px" mb="18px" w="30px" src="/favicon.svg" alt="logo" />
         <Tooltip label="Project" placement="right">
           <Image
-            src="/images/icons/home.svg"
+            src="/images/icons/project.svg"
             onClick={() => {
               w3s.showContent = 'CURRENT_APPLETS';
             }}
             {...iconStyle}
-            {...getSelectedStyles(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES')}
+            {...getSelectedStyles(w3s.showContent === 'CURRENT_APPLETS')}
           />
         </Tooltip>
 
-        <Tooltip label="Editor" placement="right">
+        <Tooltip label="Collection" placement="right">
           <Box position="relative">
+            <Image
+              mt="10px"
+              src="/images/icons/collection.svg"
+              onClick={() => {
+                w3s.showContent = 'ALL_APPLETS';
+              }}
+              {...iconStyle}
+              {...getSelectedStyles(w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES' || w3s.showContent === 'ALL_STRATEGIES' || w3s.showContent === 'ALL_PUBLISHERS')}
+            />
+          </Box>
+        </Tooltip>
+
+        <Tooltip label="Monitor" placement="right">
+          <Box position="relative">
+            <Image
+              mt="10px"
+              src="/images/icons/monitor.svg"
+              onClick={() => {
+                w3s.showContent = 'ALL_CONTRACT_LOGS';
+              }}
+              {...iconStyle}
+              {...getSelectedStyles(w3s.showContent === 'ALL_CONTRACT_LOGS' || w3s.showContent === 'All_CHAIN_TX' || w3s.showContent === 'All_CHAIN_HEIGHT')}
+            />
+          </Box>
+        </Tooltip>
+
+        <Tooltip label="Editor" placement="right">
+          <Box position="relative" mt="10px">
             <Image
               mt="10px"
               src="/images/icons/code.svg"
@@ -41,7 +69,9 @@ const ToolBar = (props: ToolBar) => {
               {...iconStyle}
               {...getSelectedStyles(w3s.showContent === 'EDITOR')}
             />
-            <Box fontSize="12px" color="white" bg="black" borderRadius="3px" px={1} position="absolute" right={'-2px'} top={'1px'}>Lab</Box>
+            <Box fontSize="12px" color="white" bg="black" borderRadius="3px" px={1} position="absolute" right={'-2px'} top={'1px'}>
+              Lab
+            </Box>
           </Box>
         </Tooltip>
 
