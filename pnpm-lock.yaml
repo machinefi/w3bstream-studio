@@ -35,6 +35,7 @@ specifiers:
   '@types/react-dom': ^17.0.0
   '@types/react-router-dom': ^5.1.7
   '@types/reflect-metadata': ^0.1.0
+  '@types/swagger-ui-react': ^4.11.0
   '@types/uuid': ^8.3.4
   assemblyscript: ^0.21.4
   async-mqtt: ^2.6.3
@@ -168,6 +169,7 @@ devDependencies:
   '@types/react-dom': 17.0.17
   '@types/react-router-dom': 5.3.3
   '@types/reflect-metadata': 0.1.0
+  '@types/swagger-ui-react': 4.11.0
   '@types/uuid': 8.3.4
   concurrently: 6.5.1
   prisma: 4.4.0
@@ -2214,6 +2216,12 @@ packages:
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
 
+  /@types/swagger-ui-react/4.11.0:
+    resolution: {integrity: sha512-WPMR+GWbLd7zvY/uOTGzGzP44zK2rIZSnU00+pDR2YANnEV6/qj0kqYfdSY1Vk6qdvI7dR0Tx8JEMgUUrUQDjw==}
+    dependencies:
+      '@types/react': 17.0.47
+    dev: true
+
   /@types/unist/2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
     dev: false
@@ -2806,8 +2814,8 @@ packages:
     resolution: {integrity: sha512-4Xn4ZVtc/2DEFtxY04lOVeF7yvxwXGVo0sN8FKRBnLhBcwQ78Hb56j+Z5yAXXUhoweVhzGeBeGWahS+af0/mcg==}
     engines: {node: '>= 0.8'}
     dependencies:
-      JSONStream: 0.10.0
       debug: 2.6.9
+      JSONStream: 0.10.0
       readable-stream: 1.0.34
       split-ca: 1.0.1
     transitivePeerDependencies:
