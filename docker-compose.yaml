@@ -32,7 +32,7 @@ services:
       - w3bstream_assets:/w3bstream/asserts
 
   w3bstream-studio:
-    image: ${WS_STUDIO_IMAGE:-ghcr.io/machinefi/w3bstream-studio:v1.0.0}
+    image: ${WS_STUDIO_IMAGE:-ghcr.io/machinefi/w3bstream-studio:nightly}
     container_name: w3bstream-studio
     restart: always
     platform: linux/x86_64
