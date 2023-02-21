@@ -6,6 +6,9 @@
 - Test events
 - Logs viewer
 
+![preview](https://user-images.githubusercontent.com/12439992/220250449-eb4fe29a-8184-400c-bf20-1a92dc40c218.png)
+
+
 
 ### DEV
 
