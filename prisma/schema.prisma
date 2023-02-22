@@ -1,3 +1,5 @@
+
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -137,9 +139,18 @@ model t_config {
   f_value       Bytes      @default("")
   f_created_at  BigInt     @default(0)
   f_updated_at  BigInt     @default(0)
-  t_projectF_id BigInt?
+  f_project_id  BigInt?
 
   project t_project @relation(fields: [f_rel_id], references: [f_project_id])
 
   @@unique([f_rel_id, f_type], map: "t_config_ui_rel_type")
+}
+
+model t_resource {
+  f_id          BigInt @id @default(autoincrement())
+  f_resource_id BigInt @unique(map: "t_resource_ui_resource_id")
+  f_path        String @default("") @db.VarChar(255)
+  f_md5         String @unique(map: "t_resource_ui_md5") @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
 }

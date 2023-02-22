@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
@@ -260,7 +260,47 @@ const SideBar = observer((props: SideBarProps) => {
           </Stack>
         </>
       )}
+      {w3s.showContent === 'DB_TABLE' && <DBTable />}
     </Box>
+  );
+});
+
+const DBTable = observer(() => {
+  const {
+    w3s: {
+      dbTable: { allTableNames }
+    }
+  } = useStore();
+
+  useEffect(() => {
+    if (!allTableNames.value.length) {
+      allTableNames.call();
+    }
+  }, []);
+
+  return (
+    <>
+      {allTableNames.value.map((item, index) => {
+        return (
+          <Flex
+            alignItems="center"
+            justifyContent="space-between"
+            py="1"
+            px="6"
+            borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+            sx={getSelectedStyles(allTableNames.currentIndex === index)}
+            cursor="pointer"
+            onClick={() => {
+              allTableNames.onSelect(index);
+            }}
+          >
+            <Text fontSize="16px" fontWeight={700}>
+              {item.tableName}
+            </Text>
+          </Flex>
+        );
+      })}
+    </>
   );
 });
 

@@ -11,10 +11,9 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
   autoAlert = true;
   context: any = undefined;
 
-  // collection usage
-  currentId = '';
+  currentIndex = 0;
   get current() {
-    return this.value[this.currentId];
+    return this.value[this.currentIndex];
   }
 
   constructor(args: Partial<PromiseState<T, U>> = {}) {
@@ -23,6 +22,10 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
       this.value = this.defaultValue;
     }
     makeAutoObservable(this);
+  }
+
+  onSelect(index: number) {
+    this.currentIndex = index;
   }
 
   async call(...args: Parameters<T>): Promise<Awaited<U>> {

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Button, Table as ChakraTable, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
-import { PaginationState } from '@/store/standard/PaginationState';
 import SimplePagination from '../Common/SimplePagination';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { ActionButtonType, Column, ExtendedTable, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
@@ -13,25 +12,19 @@ export interface JSONTableProps<T> {
 }
 
 const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
-  const { columns, dataSource, rowKey, extendedTables = [], initPagination = { page: 1, limit: 8 }, containerProps = {} } = props.jsonstate.table;
-
-  const store = useLocalObservable(() => ({
-    paginationState: new PaginationState(initPagination)
-  }));
+  const { columns, dataSource, rowKey, extendedTables = [], pagination, isServerPaging, containerProps = {} } = props.jsonstate.table;
 
   useEffect(() => {
-    store.paginationState.setData({
-      total: dataSource.length
-    });
-  }, [dataSource]);
-
-  // if (!dataSource.length) {
-  //   return null;
-  // }
+    if (!isServerPaging) {
+      pagination.setData({
+        total: dataSource.length
+      });
+    }
+  }, [dataSource, isServerPaging]);
 
   const needExtendedTable = !!extendedTables.length;
 
-  const data = dataSource.slice(store.paginationState.offset, store.paginationState.offset + store.paginationState.limit);
+  const data = isServerPaging ? dataSource : dataSource.slice(pagination.offset, pagination.offset + pagination.limit);
 
   return (
     <>
@@ -41,7 +34,7 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
             <Tr h="54px" bg="#F5F5F5">
               {needExtendedTable && <Th></Th>}
               {columns.map((item) => (
-                <Th key={item.key} fontSize="14px" fontWeight={700} color="#0F0F0F">
+                <Th key={item.key} fontSize="14px" fontWeight={700} color="#0F0F0F" textTransform="none">
                   {item.label}
                 </Th>
               ))}
@@ -56,11 +49,11 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
       </TableContainer>
       <SimplePagination
         mt="10px"
-        total={store.paginationState.total}
-        limit={store.paginationState.limit}
-        page={store.paginationState.page}
+        total={pagination.total}
+        limit={pagination.limit}
+        page={pagination.page}
         onPageChange={(currentPage) => {
-          store.paginationState.setData({
+          pagination.setData({
             page: currentPage
           });
         }}
@@ -138,7 +131,7 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
                     <Tr h="54px" bg="#F5F5F5">
                       {exColumns.map((exC) => {
                         return (
-                          <Th key={exC.key} fontSize="14px" fontWeight={700} color="#0F0F0F">
+                          <Th key={exC.key} fontSize="14px" fontWeight={700} color="#0F0F0F" textTransform="none">
                             {exC.label}
                           </Th>
                         );

@@ -58,6 +58,20 @@ const ToolBar = (props: ToolBar) => {
           </Box>
         </Tooltip>
 
+        <Tooltip label="Database Tables" placement="right">
+          <Box position="relative">
+            <Image
+              mt="10px"
+              src="/images/icons/table.svg"
+              onClick={() => {
+                w3s.showContent = 'DB_TABLE';
+              }}
+              {...iconStyle}
+              {...getSelectedStyles(w3s.showContent === 'DB_TABLE')}
+            />
+          </Box>
+        </Tooltip>
+
         <Tooltip label="Editor" placement="right">
           <Box position="relative" mt="10px">
             <Image

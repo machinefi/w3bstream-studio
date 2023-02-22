@@ -138,7 +138,76 @@ export const w3bstreamRouter = t.router({
         f_updated_at: true
       }
     });
-  })
+  }),
+  tableNames: t.procedure.query(async ({ ctx }) => {
+    const result = (await Promise.all([
+      ctx.prisma.$queryRaw`SELECT table_name FROM information_schema.tables WHERE table_schema = 'applet_management'`,
+      ctx.prisma.$queryRaw`SELECT table_name FROM information_schema.tables WHERE table_schema = 'monitor'`
+    ])) as [{ table_name: string }[], { table_name: string }[]];
+    const tables = [
+      ...result[0].map((i) => ({
+        tableSchema: 'applet_management',
+        tableName: i.table_name
+      })),
+      ...result[1].map((i) => ({
+        tableSchema: 'monitor',
+        tableName: i.table_name
+      }))
+    ].filter((i) => i.tableName !== 't_sql_meta_enum');
+    return tables;
+  }),
+  tableCols: t.procedure
+    .input(
+      z.object({
+        tableName: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const result = (await ctx.prisma.$queryRaw`SELECT column_name, data_type FROM information_schema.columns WHERE table_name = ${input.tableName}`) as { column_name: string; data_type: string }[];
+      return result;
+    }),
+  tableData: t.procedure
+    .input(
+      z.object({
+        tableSchema: z.string(),
+        tableName: z.string(),
+        page: z.number().optional(),
+        pageSize: z.number().optional()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const page = input.page || 1;
+      const pageSize = input.pageSize || 10;
+      if (input.tableSchema === 'applet_management') {
+        const result = await ctx.prisma[input.tableName].findMany({
+          take: pageSize,
+          skip: (page - 1) * pageSize
+        });
+        return result;
+      } else {
+        const result = await ctx.monitor[input.tableName].findMany({
+          take: pageSize,
+          skip: (page - 1) * pageSize
+        });
+        return result;
+      }
+    }),
+  tableDataCount: t.procedure
+    .input(
+      z.object({
+        tableSchema: z.string(),
+        tableName: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      if (input.tableSchema === 'applet_management') {
+        const result = await ctx.prisma[input.tableName].count();
+        return result;
+      } else {
+        const result = await ctx.monitor[input.tableName].count();
+        return result;
+      }
+    })
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
@@ -157,3 +226,4 @@ export type ProjectType = ProjectOriginalType & {
 export type ContractLogType = inferProcedureOutput<W3bstreamRouter['contractLogs']>[0];
 export type ChainTxType = inferProcedureOutput<W3bstreamRouter['chainTx']>[0];
 export type ChainHeightType = inferProcedureOutput<W3bstreamRouter['chainHeight']>[0];
+export type TableNameType = inferProcedureOutput<W3bstreamRouter['tableNames']>[0];

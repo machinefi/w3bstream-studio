@@ -4,6 +4,7 @@ import validator from '@rjsf/validator-ajv6';
 import { IChangeEvent } from '@rjsf/core';
 import { helper } from '@/lib/helper';
 import { ButtonProps, TableContainerProps } from '@chakra-ui/react';
+import { PaginationState } from './PaginationState';
 
 export class JSONSchemaFormState<T, U = UiSchema> {
   value: JSONValue<T> = new JSONValue();
@@ -122,13 +123,11 @@ export class JSONSchemaTableState<T = object> {
   dataSource: T[] = [];
   rowKey: string = '';
   extendedTables?: ExtendedTable<any>[] = [];
-  initPagination?: {
-    page: number;
-    limit: number;
-  } = {
+  pagination?: PaginationState = new PaginationState({
     page: 1,
     limit: 8
-  };
+  });
+  isServerPaging?: boolean = false;
   containerProps?: TableContainerProps = {};
 
   set(v: Partial<JSONSchemaTableState<T>>) {
@@ -138,7 +137,9 @@ export class JSONSchemaTableState<T = object> {
   constructor(args: Partial<JSONSchemaTableState<T>> = {}) {
     Object.assign(this, args);
     makeObservable(this, {
+      columns: observable,
       dataSource: observable,
+      pagination: observable,
       set: action
     });
   }
