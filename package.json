@@ -18,7 +18,7 @@
     "test": "concurrently \"yarn start \"",
     "test:ci": "cypress run --headless",
     "postinstall": "npm run gen",
-    "gen": "prisma generate; prisma generate --schema ./prisma/schema.prisma",
+    "gen": "prisma generate; prisma generate --schema ./prisma/monitor.prisma",
     "db:pull": "npx prisma db pull"
   },
   "dependencies": {

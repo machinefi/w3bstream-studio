@@ -6247,8 +6247,8 @@
         "affectsGlobalScope": false
       },
       "./src/server/routers/w3bstream.ts": {
-        "version": "ab7cc923f0e8bead72695cc63c032964463e9eb16e281112d2a294f439952f2e",
-        "signature": "603d46fd4dea2fd0a0a6b89ef74a9f8a4082389412fc901f115cc769d10d0f2c",
+        "version": "8eeed76ff4d0412333a557b8a26cefdb14f353d85db804411ad39a0c0b820cb6",
+        "signature": "5fa5952c6f4be189c22a9bdbdf3db150bc218d599f0d6e24fbd03011102b9137",
         "affectsGlobalScope": false
       },
       "./src/lib/superjson.ts": {
@@ -6263,7 +6263,7 @@
       },
       "./src/server/routers/_app.ts": {
         "version": "0593f43259f849445ab362d3c0c73d5871bd5756a01f2d5363b61a1572c7eeb4",
-        "signature": "8705ede23d61287c43b1be955c64c3f152d574385bce5260d00a08aa149ce958",
+        "signature": "18996f173a9d299ef9b82a2421154ebff602a40919ac422d1c595673c7f0a6cd",
         "affectsGlobalScope": false
       },
       "./src/lib/trpc.ts": {
@@ -6282,8 +6282,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/standard/promisestate.ts": {
-        "version": "377645a99347103a5625e559e1caa542643797728a584e99994a2fc29547d65f",
-        "signature": "2784feacf03c21c6bf73fa6a7e9f29c6f26082be91b46d2994bb4ee68699df82",
+        "version": "da376fba0251f6c8b70534a66ce350d8024a450fe83c25ea2be3e23dde917dac",
+        "signature": "8efb260d8b3c4f294fd96a9438627d3ad7a12d6bf09ca9574f5065338cd22447",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/bignumber.js@9.0.2/node_modules/bignumber.js/bignumber.d.ts": {
@@ -6298,7 +6298,7 @@
       },
       "./src/lib/helper.ts": {
         "version": "70fe5d6d49298aeba0ada95cfb02454f251d99796eb7159a1b095178b785fe32",
-        "signature": "7918fee308288d44efdbec31394ba4580d8e105c51074dfcbf0bce55794ebf3e",
+        "signature": "006245de9d7302d19bd7f1a975397c173e9077d10c843d6462a6dc1ced202726",
         "affectsGlobalScope": false
       },
       "./node_modules/.pnpm/ajv@6.12.6/node_modules/ajv/lib/ajv.d.ts": {
@@ -6316,9 +6316,14 @@
         "signature": "d41db84a071b3b54e4bf8b5ed4bd7debb433a35b0bdfac1b05469fa22252a5e3",
         "affectsGlobalScope": false
       },
+      "./src/store/standard/paginationstate.ts": {
+        "version": "4be9cb4af08ce03ab13a8bc2e64a0dedd92246e0358b29763c26c9c5cd0555f3",
+        "signature": "27ca89180f6f609cfdbd6ac74fb0ce35340444d4e811ef41d6f5a95edcbfe644",
+        "affectsGlobalScope": false
+      },
       "./src/store/standard/jsonschemastate.ts": {
-        "version": "67438de591ee77b4f40cfa1fcaa112095e6f6c1e1f75db2003fc4735d54f157d",
-        "signature": "4932e143581ab5f1de035f17785ef65683321effc30a18cfd061bb60af879495",
+        "version": "097afc474e1bf3ed4c2a5197776d06fe59e0f239f048f237f255e87fbfb7bc44",
+        "signature": "7bf1f1df775323d39a5b99d06d5bd53e2692eab3af4cc139c82cbb449555d2dd",
         "affectsGlobalScope": false
       },
       "./src/store/standard/storagestate.ts": {
@@ -8483,7 +8488,7 @@
       },
       "./src/store/lib/w3bstream/schema/config.ts": {
         "version": "e4fd101116f21e20f29f4daab5e42d9634fcb6e3fb2326930ae36eae04747d78",
-        "signature": "5e4ea8e9301c2cb9cf3f2590ca5743622c21950e6afe360518bc711e86efbdb9",
+        "signature": "9bef4753e363aa48087d171dafca3f7858fe0d16695b9af263b527667773cbd9",
         "affectsGlobalScope": false
       },
       "./src/lib/theme.ts": {
@@ -8493,7 +8498,7 @@
       },
       "./src/store/lib/w3bstream/schema/user.ts": {
         "version": "63bf3e1d885e69f89cc526c52c863dc72a771104f443e7e6855f40b5ae81b398",
-        "signature": "fbfbf7a6792c07f043e00f689ad96ce3a33de614616afacf39e664ca0dca5f75",
+        "signature": "a72286b30c39dd49497650804fb478a2acd8f822bc253892c4c8891650058c20",
         "affectsGlobalScope": false
       },
       "./src/constants/inittemplates.json": {
@@ -8598,17 +8603,17 @@
       },
       "./src/store/lib/w3bstream/schema/publisher.ts": {
         "version": "d9c66ca9acfa2e595f33130b53bda6cb22230cdde0957f2c68287c7464f304ad",
-        "signature": "bdadd05d6d18311874904731a1794499e257a8cb4cb48ebb7eb53203cdd3a952",
+        "signature": "57a42eb43916e5cf497c4ad5f95b2f81382a5eab3defbccfc6a2a7640fb31447",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/strategy.ts": {
         "version": "aaec752442478edd3b04e87c9cc94bba1f33d3728de87457930de09e5df62f02",
-        "signature": "bbcb60cc388aa8993aea7e7fc174f59f45cfea1db51dd13baae55a9b42fe7da3",
+        "signature": "14a706fb5d88de5b19c1290f43bce61ba2772dae2031bf9c105151717d09f385",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/applet.tsx": {
         "version": "1b54ba56f57836377eb8095ddc548981a35ce1d54e736f25c928ff13a792dc0c",
-        "signature": "0ed22c0dc521776a28a6150dd26adc7d7da21e87b1670c0c1a47d2c4988f79bb",
+        "signature": "8a8147d2a47bcc8512cc52b4f5f7b0cc0d596a2e04cb9b90b05db10ba295467b",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/instances.ts": {
@@ -8623,7 +8628,7 @@
       },
       "./src/store/lib/w3bstream/schema/contractlog.ts": {
         "version": "77ddaa4e5ff720cdc23b2eaa16b9e6681f32fcef39dd8b196c55527ad669d1bd",
-        "signature": "fc9ba80195e642d5ddbc78e0dd913d041500e087719783cb179735e35bbc9751",
+        "signature": "9cd0e3b610ed6b9739839d294b8ceae5d2efb208abd06ef049a2f9678c6d323d",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/schema/chaintx.ts": {
@@ -8633,12 +8638,17 @@
       },
       "./src/store/lib/w3bstream/schema/chainheight.ts": {
         "version": "55b7a18ad8c31e2eeb4ba36f4973f5346dc1d68f13ede93a385b9c91628c9652",
-        "signature": "77dc6b4b742220875decd054921d3d52befc2a933974809c93a04063612f24a3",
+        "signature": "47a1fe2f56ba4b7581255fb0ed94ea2d6b1bc58babb5221b58c9aeabb7afea25",
+        "affectsGlobalScope": false
+      },
+      "./src/store/lib/w3bstream/schema/dbtable.ts": {
+        "version": "43433d78850140afefc8a8b9e42420b7d762e645cd34f7c2e291a2db8a422cc6",
+        "signature": "7662e27cf1ff72f7468eb92ae330a9cf5871f446f71376db406c054f6cddc670",
         "affectsGlobalScope": false
       },
       "./src/store/lib/w3bstream/index.ts": {
-        "version": "2264a052702fe66f97bcee243dbc27c0d34867362197cc786f4000c7aa23a1a1",
-        "signature": "12ee956ce9c600b684eca927789a0c7a1908af0947f84fbbdb825bba25b6cac3",
+        "version": "23b39f0ba12601ccd22d3f2528608f52b6f7128027dc977398de55b625ec9f4c",
+        "signature": "a91e92df895d97a49f4d8f673e589ca538e0b2e62e8448e4185e104afc5d45cd",
         "affectsGlobalScope": false
       },
       "./src/store/root.ts": {
@@ -8707,7 +8717,7 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/toolbar/index.tsx": {
-        "version": "e4c1953746540b20a5674999e56512a31c0c1afa1fc00a2f2277f4b688c05fb5",
+        "version": "a2535adebc962632c844b99b205e8e030d7d76f9f380849215f5b894244b517d",
         "signature": "0c4a283d2cfe8a37165000659f2d9adec6db97665a4c74bdf6cab418800f3c7a",
         "affectsGlobalScope": false
       },
@@ -8757,17 +8767,12 @@
         "affectsGlobalScope": false
       },
       "./src/components/ide/sidebar/index.tsx": {
-        "version": "2d45b07a3a7952ec4bb9f6f0062eb85d3b2d905a43b020e734dc34d70117d4b9",
+        "version": "8ca555df979f4bffb424989b90cb5e6341db696e2c0de9e09af9149cae4ae994",
         "signature": "b0c85cae8655ab2804738a71aecd9dc88d883041f7ae2d35a1ad241cf674ba21",
         "affectsGlobalScope": false
       },
-      "./src/store/standard/paginationstate.ts": {
-        "version": "4be9cb4af08ce03ab13a8bc2e64a0dedd92246e0358b29763c26c9c5cd0555f3",
-        "signature": "27ca89180f6f609cfdbd6ac74fb0ce35340444d4e811ef41d6f5a95edcbfe644",
-        "affectsGlobalScope": false
-      },
       "./src/components/jsontable/index.tsx": {
-        "version": "1445f8859bac7675c6dae09aceba243ea41c9c9bfbe16b64267647fab1d84004",
+        "version": "878b96123748e31f99ad3a70f12e866c948a323ac173b9846c36f76e4fac9ac6",
         "signature": "16c724b9f7cba4c5de5543c865f780a64a3285a7154d24c79207fcf7f8835289",
         "affectsGlobalScope": false
       },
@@ -8826,8 +8831,13 @@
         "signature": "8a7e95ed1ae57a4437f5ef7d912c456973ecad072a046193d6284b8cacfe55fb",
         "affectsGlobalScope": false
       },
+      "./src/components/ide/currentdbtable/index.tsx": {
+        "version": "99503088c688480f9c0427b8baad593a945e539d2f9a4aa3e22fe1bf35257cd3",
+        "signature": "49a5314252e22b1b8d123abe1f27f79e432f538d5b5a966d56c1ed9b692ffcde",
+        "affectsGlobalScope": false
+      },
       "./src/components/ide/index.tsx": {
-        "version": "ef0c7b59ff8932458ea0f4b6d8f6cd25f412a5193636f51234f14549f04815cd",
+        "version": "def118df7d62a41e13ec0c8be6b08bcf19bfdd28387be4db7462cf80c2b17a12",
         "signature": "2ca9a63d7a22940b4efe5c276e59305ad5a80b7cc3e842647850488c40aff83c",
         "affectsGlobalScope": false
       },
@@ -17531,6 +17541,13 @@
         "./src/lib/theme.ts",
         "./src/store/index.ts"
       ],
+      "./src/components/ide/currentdbtable/index.tsx": [
+        "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
+        "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
+        "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
+        "./src/components/jsontable/index.tsx",
+        "./src/store/index.ts"
+      ],
       "./src/components/ide/dockerlogs/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@types+lodash@4.14.185/node_modules/@types/lodash/debounce.d.ts",
@@ -17571,6 +17588,7 @@
         "./src/components/ide/allpublishers/index.tsx",
         "./src/components/ide/allstrategies/index.tsx",
         "./src/components/ide/applets/index.tsx",
+        "./src/components/ide/currentdbtable/index.tsx",
         "./src/components/ide/dockerlogs/index.tsx",
         "./src/components/ide/editor/index.tsx",
         "./src/components/ide/header/index.tsx",
@@ -17634,8 +17652,7 @@
         "./node_modules/.pnpm/@types+react@17.0.47/node_modules/@types/react/index.d.ts",
         "./node_modules/.pnpm/mobx-react-lite@3.4.0_m26jawr67gnusmh4egzqtnhxru/node_modules/mobx-react-lite/dist/index.d.ts",
         "./src/components/common/simplepagination/index.tsx",
-        "./src/store/standard/jsonschemastate.ts",
-        "./src/store/standard/paginationstate.ts"
+        "./src/store/standard/jsonschemastate.ts"
       ],
       "./src/components/jsontablerender/index.tsx": [
         "./node_modules/.pnpm/@chakra-ui+icons@2.0.11_react@18.2.0/node_modules/@chakra-ui/icons/dist/index.d.ts",
@@ -17903,6 +17920,7 @@
         "./src/store/lib/w3bstream/schema/chaintx.ts",
         "./src/store/lib/w3bstream/schema/config.ts",
         "./src/store/lib/w3bstream/schema/contractlog.ts",
+        "./src/store/lib/w3bstream/schema/dbtable.ts",
         "./src/store/lib/w3bstream/schema/instances.ts",
         "./src/store/lib/w3bstream/schema/postman.ts",
         "./src/store/lib/w3bstream/schema/project.ts",
@@ -17974,6 +17992,13 @@
         "./src/server/routers/w3bstream.ts",
         "./src/store/lib/w3bstream/schema/definitions.ts",
         "./src/store/standard/jsonschemastate.ts"
+      ],
+      "./src/store/lib/w3bstream/schema/dbtable.ts": [
+        "./src/lib/trpc.ts",
+        "./src/server/routers/w3bstream.ts",
+        "./src/store/standard/jsonschemastate.ts",
+        "./src/store/standard/paginationstate.ts",
+        "./src/store/standard/promisestate.ts"
       ],
       "./src/store/lib/w3bstream/schema/fileslist.ts": [
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
@@ -18092,7 +18117,8 @@
         "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
         "./node_modules/.pnpm/@rjsf+validator-ajv6@5.0.0-beta.9_@rjsf+utils@5.0.0-beta.9/node_modules/@rjsf/validator-ajv6/dist/index.d.ts",
         "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/mobx.d.ts",
-        "./src/lib/helper.ts"
+        "./src/lib/helper.ts",
+        "./src/store/standard/paginationstate.ts"
       ],
       "./src/store/standard/mappingstate.ts": [
         "./node_modules/.pnpm/mobx@6.6.1/node_modules/mobx/dist/mobx.d.ts",
@@ -26294,6 +26320,7 @@
         "./src/store/lib/w3bstream/schema/chaintx.ts",
         "./src/store/lib/w3bstream/schema/config.ts",
         "./src/store/lib/w3bstream/schema/contractlog.ts",
+        "./src/store/lib/w3bstream/schema/dbtable.ts",
         "./src/store/lib/w3bstream/schema/instances.ts",
         "./src/store/lib/w3bstream/schema/postman.ts",
         "./src/store/lib/w3bstream/schema/project.ts",
@@ -26327,6 +26354,10 @@
       ],
       "./src/store/lib/w3bstream/schema/contractlog.ts": [
         "./src/store/standard/jsonschemastate.ts"
+      ],
+      "./src/store/lib/w3bstream/schema/dbtable.ts": [
+        "./src/store/standard/jsonschemastate.ts",
+        "./src/store/standard/promisestate.ts"
       ],
       "./src/store/lib/w3bstream/schema/fileslist.ts": [
         "./src/store/lib/w3bstream/project.ts"
@@ -26376,7 +26407,8 @@
       "./src/store/standard/jsonschemastate.ts": [
         "./node_modules/.pnpm/@chakra-ui+react@2.2.1_ae7dtvbdlj3vg56os4fyaxmgqy/node_modules/@chakra-ui/react/dist/chakra-ui-react.cjs.d.ts",
         "./node_modules/.pnpm/@rjsf+core@5.0.0-beta.9_xxggowvcxghin6obwjaqsepeeq/node_modules/@rjsf/core/dist/index.d.ts",
-        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts"
+        "./node_modules/.pnpm/@rjsf+utils@5.0.0-beta.9_react@18.2.0/node_modules/@rjsf/utils/dist/index.d.ts",
+        "./src/store/standard/paginationstate.ts"
       ],
       "./src/store/standard/mappingstate.ts": [
         "./src/store/standard/storagestate.ts"
@@ -28176,6 +28208,7 @@
       "./src/components/ide/allpublishers/index.tsx",
       "./src/components/ide/allstrategies/index.tsx",
       "./src/components/ide/applets/index.tsx",
+      "./src/components/ide/currentdbtable/index.tsx",
       "./src/components/ide/dockerlogs/index.tsx",
       "./src/components/ide/editor/index.tsx",
       "./src/components/ide/header/index.tsx",
@@ -28263,6 +28296,7 @@
       "./src/store/lib/w3bstream/schema/chaintx.ts",
       "./src/store/lib/w3bstream/schema/config.ts",
       "./src/store/lib/w3bstream/schema/contractlog.ts",
+      "./src/store/lib/w3bstream/schema/dbtable.ts",
       "./src/store/lib/w3bstream/schema/definitions.ts",
       "./src/store/lib/w3bstream/schema/fileslist.ts",
       "./src/store/lib/w3bstream/schema/instances.ts",
@@ -28360,7 +28394,7 @@
           },
           {
             "file": "./src/store/standard/promisestate.ts",
-            "start": 730,
+            "start": 777,
             "length": 7,
             "messageText": "Cannot find name 'Awaited'.",
             "category": 1,
@@ -42487,6 +42521,10 @@
         1
       ],
       [
+        "./src/components/ide/currentdbtable/index.tsx",
+        1
+      ],
+      [
         "./src/components/ide/dockerlogs/index.tsx",
         1
       ],
@@ -43044,6 +43082,10 @@
       ],
       [
         "./src/store/lib/w3bstream/schema/createstrategy.ts",
+        1
+      ],
+      [
+        "./src/store/lib/w3bstream/schema/dbtable.ts",
         1
       ],
       [
