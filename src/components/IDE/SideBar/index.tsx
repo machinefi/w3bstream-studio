@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button } from '@chakra-ui/react';
+import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button, useDisclosure, Collapse } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronRightIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { MdAddBox, MdRefresh } from 'react-icons/md';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -9,6 +9,7 @@ import { FilesItem } from './filesItem';
 import toast from 'react-hot-toast';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { TableNameType } from '@/store/lib/w3bstream/schema/dbTable';
 
 interface SideBarProps extends FlexProps {}
 
@@ -273,34 +274,76 @@ const DBTable = observer(() => {
   } = useStore();
 
   useEffect(() => {
-    if (!allTableNames.value.length) {
+    if (!allTableNames.value) {
       allTableNames.call();
     }
   }, []);
 
+  if (!allTableNames.value) {
+    return null;
+  }
+
   return (
     <>
-      {allTableNames.value.map((item, index) => {
-        return (
-          <Flex
-            alignItems="center"
-            justifyContent="space-between"
-            py="1"
-            px="6"
-            borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(allTableNames.currentIndex === index)}
-            cursor="pointer"
-            onClick={() => {
-              allTableNames.onSelect(index);
-            }}
-          >
-            <Text fontSize="16px" fontWeight={700}>
-              {item.tableName}
-            </Text>
-          </Flex>
-        );
+      {Object.keys(allTableNames.value).map((key) => {
+        return <TableNames key={key} tableSchema={key} tables={allTableNames.value[key]} />;
       })}
     </>
+  );
+});
+
+const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tables: TableNameType[] }) => {
+  const {
+    w3s: { dbTable }
+  } = useStore();
+  const collaspeState = useDisclosure({
+    defaultIsOpen: true
+  });
+
+  return (
+    <Box borderBottom="1px solid rgba(0, 0, 0, 0.06)" cursor="pointer">
+      <Flex
+        alignItems="center"
+        py={1}
+        px={2}
+        borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+        cursor="pointer"
+        onClick={() => {
+          collaspeState.onToggle();
+        }}
+      >
+        <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
+        <Text fontSize="16px" fontWeight={700}>
+          {tableSchema}
+        </Text>
+      </Flex>
+      <Collapse in={collaspeState.isOpen}>
+        {tables.map((item) => {
+          return (
+            <Flex
+              key={item.tableName}
+              alignItems="center"
+              justifyContent="space-between"
+              py={1}
+              px={6}
+              borderBottom="1px solid rgba(0, 0, 0, 0.06)"
+              sx={getSelectedStyles(dbTable.currentTable.tableSchema === tableSchema && dbTable.currentTable.tableName === item.tableName)}
+              cursor="pointer"
+              onClick={() => {
+                dbTable.setCurrentTable({
+                  tableSchema,
+                  tableName: item.tableName
+                });
+              }}
+            >
+              <Text fontSize="16px" fontWeight={700}>
+                {item.tableName}
+              </Text>
+            </Flex>
+          );
+        })}
+      </Collapse>
+    </Box>
   );
 });
 

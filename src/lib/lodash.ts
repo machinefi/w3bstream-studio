@@ -9,6 +9,7 @@ import set from 'lodash/set';
 import keyBy from 'lodash/keyBy';
 import mergeWith from 'lodash/mergeWith';
 import cloneDeep from 'lodash/cloneDeep';
+import groupBy from 'lodash/groupBy';
 
 export const _ = {
   throttle,
@@ -21,5 +22,6 @@ export const _ = {
   set,
   keyBy,
   mergeWith,
-  cloneDeep
+  cloneDeep,
+  groupBy
 };

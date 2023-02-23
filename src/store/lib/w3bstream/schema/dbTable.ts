@@ -1,18 +1,24 @@
 import { trpc } from '@/lib/trpc';
-import { TableNameType } from '@/server/routers/w3bstream';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { PaginationState } from '@/store/standard/PaginationState';
 import { PromiseState } from '@/store/standard/PromiseState';
+import { _ } from '@/lib/lodash';
+import { makeObservable, observable } from 'mobx';
+
+export type TableNameType = { tableSchema: string; tableName: string };
 
 export default class DBTableModule {
-  allTableNames = new PromiseState<() => Promise<any>, TableNameType[]>({
-    defaultValue: [],
+  allTableNames = new PromiseState<() => Promise<any>, { [x: string]: TableNameType[] }>({
     function: async () => {
-      const res = await trpc.api.tableNames.query();
-      if (res) {
-        return res;
+      try {
+        const res = await trpc.api.tableNames.query();
+        return _.groupBy(
+          res.filter((i) => i.tableName !== 't_sql_meta_enum'),
+          'tableSchema'
+        );
+      } catch (error) {
+        console.log('error', error.message);
       }
-      return [];
     }
   });
 
@@ -20,14 +26,28 @@ export default class DBTableModule {
     pagination: new PaginationState({
       page: 1,
       limit: 10,
+      onPageChange: (currentPage) => {
+        this.onPageChange();
+      }
     }),
     isServerPaging: true,
     rowKey: 'f_id',
     containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
   });
 
-  get currentTable() {
-    return this.allTableNames.current;
+  currentTable = {
+    tableSchema: '',
+    tableName: ''
+  };
+
+  constructor() {
+    makeObservable(this, {
+      currentTable: observable
+    });
+  }
+
+  setCurrentTable(v: TableNameType) {
+    this.currentTable = v;
   }
 
   async getCurrentTableCols() {
@@ -63,24 +83,19 @@ export default class DBTableModule {
   }
 
   async init() {
-    if (this.currentTable) {
-      this.table.pagination.setData({
-        page: 1
-      });
-
-      const [cols, count, data] = await Promise.all([this.getCurrentTableCols(), this.getCurrentTableDataCount(), this.getCurrentTableData()]);
-
+    if (this.currentTable.tableSchema && this.currentTable.tableName) {
+      const [cols, count] = await Promise.all([this.getCurrentTableCols(), this.getCurrentTableDataCount()]);
       this.table.set({
         columns: cols.map((item) => {
           return {
             key: item.column_name,
             label: item.column_name
           };
-        }),
-        dataSource: data
+        })
       });
       this.table.pagination.setData({
-        total: count
+        page: 1,
+        total: Number(count)
       });
     }
   }

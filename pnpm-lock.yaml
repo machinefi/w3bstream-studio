@@ -63,6 +63,7 @@ specifiers:
   node-docker-api: ^1.1.22
   node-fetch: ^3.3.0
   numeral: ^2.0.6
+  postgres: ^3.3.3
   primeicons: ^6.0.1
   prisma: ^4.4.0
   promise-retry: ^2.0.1
@@ -136,6 +137,7 @@ dependencies:
   node-docker-api: 1.1.22
   node-fetch: 3.3.0
   numeral: 2.0.6
+  postgres: 3.3.3
   primeicons: 6.0.1
   promise-retry: 2.0.1
   prop-types: 15.8.1
@@ -3873,6 +3875,10 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
+    dev: false
+
+  /postgres/3.3.3:
+    resolution: {integrity: sha512-FGLZOpZSXePRIQu6LJpJUDikzuhplWI80uyyfmKBiljpfO+Z4nuClwpq3/dsRnitxVDsgFN5duJ7eUTaC0meQQ==}
     dev: false
 
   /primeicons/6.0.1:

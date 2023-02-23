@@ -11,11 +11,7 @@ const CurrentDBTable = observer(() => {
 
   useEffect(() => {
     dbTable.init();
-  }, [dbTable.currentTable]);
-
-  useEffect(() => {
-    dbTable.onPageChange();
-  }, [dbTable.table.pagination.page]);
+  }, [dbTable.currentTable.tableSchema, dbTable.currentTable.tableName]);
 
   return (
     <>
