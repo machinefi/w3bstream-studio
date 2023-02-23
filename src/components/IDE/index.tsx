@@ -19,6 +19,7 @@ import AllContractLogs from './AllContractLogs';
 import AllChainTx from './AllChainTx';
 import AllChainHeight from './AllChainHeight';
 import PublishEventRequestTemplates from './PublishEventRequestTemplates';
+import CurrentDBTable from './CurrentDBTable';
 
 const IDE = observer(() => {
   const {
@@ -43,6 +44,7 @@ const IDE = observer(() => {
             {w3s.showContent === 'ALL_CONTRACT_LOGS' && <AllContractLogs />}
             {w3s.showContent === 'All_CHAIN_TX' && <AllChainTx />}
             {w3s.showContent === 'All_CHAIN_HEIGHT' && <AllChainHeight />}
+            {w3s.showContent === 'DB_TABLE' && <CurrentDBTable />}
           </Box>
         ) : (
           <LayoutCenter w="100%" h="calc(100vh - 100px)">

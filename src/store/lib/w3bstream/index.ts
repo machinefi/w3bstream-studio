@@ -21,6 +21,7 @@ import PostmanModule from './schema/postman';
 import ContractLogModule from './schema/contractLog';
 import ChainTxModule from './schema/chainTx';
 import ChainHeightModule from './schema/chainHeight';
+import DBTableModule from './schema/dbTable';
 
 configure({
   enforceActions: 'never'
@@ -40,6 +41,7 @@ export class W3bStream {
   contractLogs = new ContractLogModule();
   chainTx = new ChainTxModule();
   chainHeight = new ChainHeightModule();
+  dbTable = new DBTableModule();
 
   allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
@@ -162,8 +164,18 @@ export class W3bStream {
     }
   });
 
-  showContent: 'CURRENT_APPLETS' | 'ALL_APPLETS' | 'ALL_INSTANCES' | 'ALL_STRATEGIES' | 'ALL_PUBLISHERS' | 'EDITOR' | 'DOCKER_LOGS' | 'ALL_CONTRACT_LOGS' | 'All_CHAIN_TX' | 'All_CHAIN_HEIGHT' =
-    'CURRENT_APPLETS';
+  showContent:
+    | 'CURRENT_APPLETS'
+    | 'ALL_APPLETS'
+    | 'ALL_INSTANCES'
+    | 'ALL_STRATEGIES'
+    | 'ALL_PUBLISHERS'
+    | 'EDITOR'
+    | 'DOCKER_LOGS'
+    | 'ALL_CONTRACT_LOGS'
+    | 'All_CHAIN_TX'
+    | 'All_CHAIN_HEIGHT'
+    | 'DB_TABLE' = 'CURRENT_APPLETS';
 
   isReady = false;
 
@@ -198,7 +210,7 @@ export class W3bStream {
       .on('user.login', async () => {
         NextRouter.push('/');
       })
-      .on('user.update-pwd', () => { })
+      .on('user.update-pwd', () => {})
       .on('project.create', async () => {
         await this.allProjects.call();
         this.projectManager.sync();
@@ -214,7 +226,7 @@ export class W3bStream {
         await this.allProjects.call();
         this.projectManager.sync();
       })
-      .on('applet.publish-event', () => { })
+      .on('applet.publish-event', () => {})
       .on('instance.deploy', async () => {
         await this.allProjects.call();
         this.projectManager.sync();
