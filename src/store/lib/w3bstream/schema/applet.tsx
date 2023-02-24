@@ -80,7 +80,7 @@ export default class AppletModule {
         data: formData
       });
       if (res.data) {
-        await showNotification({ message: 'create applet successed' });
+        await showNotification({ message: 'create applet succeeded' });
         eventBus.emit('applet.create');
         this.form.reset();
         this.modal.set({ show: false });

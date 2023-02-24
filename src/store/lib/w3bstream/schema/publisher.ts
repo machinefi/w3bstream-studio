@@ -100,10 +100,10 @@ export default class PublisherModule {
       }
 
       if (publisherID) {
-        await showNotification({ message: 'update publisher successed' });
+        await showNotification({ message: 'update publisher succeeded' });
         eventBus.emit('publisher.update');
       } else {
-        await showNotification({ message: 'create publisher successed' });
+        await showNotification({ message: 'create publisher succeeded' });
         eventBus.emit('publisher.create');
       }
 
@@ -196,7 +196,7 @@ export default class PublisherModule {
       });
 
       if (res.data) {
-        await showNotification({ message: 'publish event successed' });
+        await showNotification({ message: 'publish event succeeded' });
         eventBus.emit('applet.publish-event');
       }
     },

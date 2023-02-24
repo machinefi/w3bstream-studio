@@ -80,16 +80,16 @@ export default class StrategyModule {
       }
 
       // if (res.data) {
-      //   await showNotification({ message: 'create strategy successed' });
+      //   await showNotification({ message: 'create strategy succeeded' });
       //   eventBus.emit('strategy.create');
       //   this.reset().extraValue.set({ modal: { show: false } });
       // }
 
       if (strategyID) {
-        await showNotification({ message: 'update strategy successed' });
+        await showNotification({ message: 'update strategy succeeded' });
         eventBus.emit('strategy.update');
       } else {
-        await showNotification({ message: 'create strategy successed' });
+        await showNotification({ message: 'create strategy succeeded' });
         eventBus.emit('strategy.create');
       }
 
