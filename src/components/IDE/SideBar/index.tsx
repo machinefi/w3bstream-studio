@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button, useDisclosure, Collapse } from '@chakra-ui/react';
+import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button, useDisclosure, Collapse, Spinner } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronRightIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { MdAddBox, MdRefresh } from 'react-icons/md';
@@ -9,7 +9,7 @@ import { FilesItem } from './filesItem';
 import toast from 'react-hot-toast';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
-import { TableNameType } from '@/store/lib/w3bstream/schema/dbTable';
+import { TableType } from '@/server/routers/pg';
 
 interface SideBarProps extends FlexProps {}
 
@@ -277,6 +277,14 @@ const DBTable = observer(() => {
     }
   }, []);
 
+  if (allTableNames.loading.value) {
+    return (
+      <Flex w="100%" h="100%" justify="center">
+        <Spinner mt="100px" />
+      </Flex>
+    );
+  }
+
   if (!allTableNames.value) {
     return null;
   }
@@ -290,7 +298,7 @@ const DBTable = observer(() => {
   );
 });
 
-const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tables: TableNameType[] }) => {
+const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tables: TableType[] }) => {
   const {
     w3s: { dbTable }
   } = useStore();
@@ -325,11 +333,12 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
               py={1}
               px={6}
               borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(dbTable.currentTable.tableSchema === tableSchema && dbTable.currentTable.tableName === item.tableName)}
+              sx={getSelectedStyles(dbTable.currentTable.tableId === item.tableId)}
               cursor="pointer"
               onClick={() => {
                 dbTable.setCurrentTable({
                   tableSchema,
+                  tableId: item.tableId,
                   tableName: item.tableName
                 });
               }}

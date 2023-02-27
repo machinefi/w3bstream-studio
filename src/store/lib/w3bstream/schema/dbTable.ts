@@ -4,18 +4,14 @@ import { PaginationState } from '@/store/standard/PaginationState';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { _ } from '@/lib/lodash';
 import { makeObservable, observable } from 'mobx';
-
-export type TableNameType = { tableSchema: string; tableName: string };
+import { TableType } from '@/server/routers/pg';
 
 export default class DBTableModule {
-  allTableNames = new PromiseState<() => Promise<any>, { [x: string]: TableNameType[] }>({
+  allTableNames = new PromiseState<() => Promise<any>, { [x: string]: TableType[] }>({
     function: async () => {
       try {
-        const res = await trpc.api.tableNames.query();
-        return _.groupBy(
-          res.filter((i) => i.tableName !== 't_sql_meta_enum'),
-          'tableSchema'
-        );
+        const data = await trpc.pg.tables.query();
+        return _.groupBy(data, 'tableSchema');
       } catch (error) {
         console.log('error', error.message);
       }
@@ -36,6 +32,7 @@ export default class DBTableModule {
   });
 
   currentTable = {
+    tableId: 0,
     tableSchema: '',
     tableName: ''
   };
@@ -46,40 +43,43 @@ export default class DBTableModule {
     });
   }
 
-  setCurrentTable(v: TableNameType) {
+  setCurrentTable(v: TableType) {
     this.currentTable = v;
   }
 
   async getCurrentTableCols() {
-    const res = await trpc.api.tableCols.query({
-      tableName: this.currentTable.tableName
-    });
-    if (res) {
-      return res;
+    try {
+      const cols = await trpc.pg.columns.query({
+        tableId: this.currentTable.tableId
+      });
+      return cols;
+    } catch (error) {
+      return [];
     }
-    return [];
   }
 
   async getCurrentTableDataCount() {
-    const res = await trpc.api.tableDataCount.query({
-      ...this.currentTable
-    });
-    if (res) {
-      return res;
+    try {
+      const count = await trpc.pg.tableDataCount.query({
+        ...this.currentTable
+      });
+      return count;
+    } catch (error) {
+      return 0;
     }
-    return 0;
   }
 
   async getCurrentTableData() {
-    const res = await trpc.api.tableData.query({
-      ...this.currentTable,
-      page: this.table.pagination.page,
-      pageSize: this.table.pagination.limit
-    });
-    if (res) {
-      return res;
+    try {
+      const data = await trpc.pg.tableData.query({
+        ...this.currentTable,
+        page: this.table.pagination.page,
+        pageSize: this.table.pagination.limit
+      });
+      return data;
+    } catch (error) {
+      return [];
     }
-    return [];
   }
 
   async init() {
@@ -88,8 +88,8 @@ export default class DBTableModule {
       this.table.set({
         columns: cols.map((item) => {
           return {
-            key: item.column_name,
-            label: item.column_name
+            key: item.name,
+            label: item.name
           };
         })
       });

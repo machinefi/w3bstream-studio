@@ -1,14 +1,14 @@
 import { t } from '../trpc';
 import { z } from 'zod';
-import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server';
+import { inferProcedureOutput } from '@trpc/server';
 import { v4 as uuidv4 } from 'uuid';
-import { sql } from '@/lib/db';
 
 enum ProjectConfigType {
   CONFIG_TYPE__PROJECT_SCHEMA = 1,
   CONFIG_TYPE__INSTANCE_CACHE = 2,
   CONFIG_TYPE__PROJECT_ENV = 3
 }
+
 export const w3bstreamRouter = t.router({
   projects: t.procedure
     .input(
@@ -139,48 +139,7 @@ export const w3bstreamRouter = t.router({
         f_updated_at: true
       }
     });
-  }),
-  tableNames: t.procedure.query(async ({ ctx }) => {
-    const result =
-      await sql`SELECT table_schema as "tableSchema", table_name as "tableName" FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema NOT IN ('pg_catalog', 'information_schema', 'hdb_catalog');`;
-    return result;
-  }),
-  tableCols: t.procedure
-    .input(
-      z.object({
-        tableName: z.string()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const result = await sql`SELECT column_name, data_type FROM information_schema.columns WHERE table_name = ${input.tableName}`;
-      return result;
-    }),
-  tableData: t.procedure
-    .input(
-      z.object({
-        tableSchema: z.string(),
-        tableName: z.string(),
-        page: z.number().optional(),
-        pageSize: z.number().optional()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const page = input.page || 1;
-      const pageSize = input.pageSize || 10;
-      const result = await sql`SELECT * FROM ${sql(`${input.tableSchema}.${input.tableName}`)} LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`;
-      return result;
-    }),
-  tableDataCount: t.procedure
-    .input(
-      z.object({
-        tableSchema: z.string(),
-        tableName: z.string()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const result = await sql`SELECT COUNT(*) FROM ${sql(`${input.tableSchema}.${input.tableName}`)}`;
-      return result[0]?.count || 0;
-    })
+  })
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
