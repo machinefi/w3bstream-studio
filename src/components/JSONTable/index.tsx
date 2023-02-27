@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { Button, Table as ChakraTable, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 import SimplePagination from '../Common/SimplePagination';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
@@ -31,7 +31,7 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
       <TableContainer {...containerProps}>
         <ChakraTable>
           <Thead>
-            <Tr h="54px" bg="#F5F5F5">
+            <Tr bg="#F5F5F5">
               {needExtendedTable && <Th></Th>}
               {columns.map((item) => (
                 <Th key={item.key} fontSize="14px" fontWeight={700} color="#0F0F0F" textTransform="none">
@@ -83,7 +83,7 @@ function ActionButton({ props, text }: ActionButtonType) {
 
 function Body<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
   return (
-    <Tr h="54px" fontSize="14px" color="#0F0F0F">
+    <Tr fontSize="14px" color="#0F0F0F">
       {columns.map((column) => {
         return (
           <Td key={column.key}>
@@ -102,7 +102,6 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
   return (
     <>
       <Tr
-        h="54px"
         fontSize="14px"
         color="#0F0F0F"
         cursor="pointer"
@@ -132,7 +131,7 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
               <TableContainer mb="10px">
                 <ChakraTable>
                   <Thead>
-                    <Tr h="54px" bg="#F5F5F5">
+                    <Tr bg="#F5F5F5">
                       {exColumns.map((exC) => {
                         return (
                           <Th key={exC.key} fontSize="14px" fontWeight={700} color="#0F0F0F" textTransform="none">
@@ -144,7 +143,7 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
                   </Thead>
                   <Tbody>
                     {exRow.map((exItem) => (
-                      <Tr h="54px" fontSize="14px" color="#0F0F0F">
+                      <Tr fontSize="14px" color="#0F0F0F">
                         {exColumns.map((exC) => {
                           return (
                             <Td key={exC.key}>

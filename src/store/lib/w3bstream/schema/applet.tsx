@@ -149,12 +149,28 @@ export default class AppletModule {
             text: 'Delete'
           };
 
+          const addStrategyBtn = {
+            props: {
+              ml: '10px',
+              colorScheme: 'blue',
+              size: 'xs',
+              onClick: () => {
+                globalThis.store.w3s.strategy.form.value.set({
+                  appletID: item.f_applet_id.toString(),
+                });
+                globalThis.store.w3s.strategy.modal.set({ show: true, title: 'Create Strategy' });
+              }
+            },
+            text: 'Add Strategy'
+          };
+
           if (item.instances.length) {
-            return [deleteBtn];
+            return [deleteBtn, addStrategyBtn];
           }
 
           return [
             deleteBtn,
+            addStrategyBtn,
             {
               props: {
                 ml: '10px',

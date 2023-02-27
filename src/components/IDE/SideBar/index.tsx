@@ -56,18 +56,11 @@ const SideBar = observer((props: SideBarProps) => {
           </Tooltip>
         </Flex>
       </Flex>
-      {w3s.showContent === 'CURRENT_APPLETS' && (
+      {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS') && (
         <Box h="calc(100vh - 100px)" overflowY="auto">
           {w3s.allProjects.value.map((p, index) => {
             return (
               <Flex
-                onClick={(e) => {
-                  w3s.curProjectIndex = index;
-                  if (w3s.showContent != 'EDITOR' && w3s.showContent != 'CURRENT_APPLETS') {
-                    w3s.showContent = 'CURRENT_APPLETS';
-                  }
-                }}
-                cursor={'pointer'}
                 alignItems="center"
                 justifyContent="space-between"
                 h="40px"
@@ -75,6 +68,11 @@ const SideBar = observer((props: SideBarProps) => {
                 px="6"
                 bg="#FAFAFA"
                 borderBottom="2px solid rgba(0, 0, 0, 0.06)"
+                cursor="pointer"
+                sx={getSelectedStyles(w3s.allProjects.currentIndex === index)}
+                onClick={(e) => {
+                  w3s.allProjects.onSelect(index);
+                }}
               >
                 <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
                   {p.f_name}
@@ -85,7 +83,7 @@ const SideBar = observer((props: SideBarProps) => {
                       boxSize={4}
                       cursor="pointer"
                       onClick={() => {
-                        w3s.curProjectIndex = index;
+                        w3s.allProjects.onSelect(index);
                         w3s.project.form.value.set({
                           name: w3s.curProject.f_name
                         });

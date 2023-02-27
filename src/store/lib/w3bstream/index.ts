@@ -72,11 +72,11 @@ export class W3bStream {
             strategies = strategies.concat(a.strategies);
           });
           p.publishers.forEach((pub) => {
-            publishers.push({
-              ...pub,
-              project_id: p.f_project_id,
-              project_name: p.f_name
-            });
+            // @ts-ignore
+            pub.project_id = p.f_project_id;
+            // @ts-ignore
+            pub.project_name = p.f_name;
+            publishers.push(pub);
           });
         });
 
@@ -85,14 +85,14 @@ export class W3bStream {
         this.applet.set({
           allData: applets
         });
+        this.publisher.set({
+          allData: publishers
+        });
         this.instances.table.set({
           dataSource: instances
         });
         this.strategy.table.set({
           dataSource: strategies
-        });
-        this.publisher.table.set({
-          dataSource: publishers
         });
       }
 
@@ -100,9 +100,8 @@ export class W3bStream {
     }
   });
 
-  curProjectIndex = 0;
   get curProject() {
-    return this.allProjects.value ? this.allProjects.value[this.curProjectIndex] : null;
+    return this.allProjects.current;
   }
 
   deployApplet = new PromiseState({
@@ -167,9 +166,10 @@ export class W3bStream {
   showContent:
     | 'CURRENT_APPLETS'
     | 'ALL_APPLETS'
+    | 'CURRENT_PUBLISHERS'
+    | 'ALL_PUBLISHERS'
     | 'ALL_INSTANCES'
     | 'ALL_STRATEGIES'
-    | 'ALL_PUBLISHERS'
     | 'EDITOR'
     | 'DOCKER_LOGS'
     | 'ALL_CONTRACT_LOGS'
