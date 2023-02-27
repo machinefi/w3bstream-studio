@@ -2,6 +2,7 @@ import { t } from '../trpc';
 import { z } from 'zod';
 import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server';
 import { v4 as uuidv4 } from 'uuid';
+import { sql } from '@/lib/db';
 
 enum ProjectConfigType {
   CONFIG_TYPE__PROJECT_SCHEMA = 1,
@@ -140,21 +141,9 @@ export const w3bstreamRouter = t.router({
     });
   }),
   tableNames: t.procedure.query(async ({ ctx }) => {
-    const result = (await Promise.all([
-      ctx.prisma.$queryRaw`SELECT table_name FROM information_schema.tables WHERE table_schema = 'applet_management'`,
-      ctx.prisma.$queryRaw`SELECT table_name FROM information_schema.tables WHERE table_schema = 'monitor'`
-    ])) as [{ table_name: string }[], { table_name: string }[]];
-    const tables = [
-      ...result[0].map((i) => ({
-        tableSchema: 'applet_management',
-        tableName: i.table_name
-      })),
-      ...result[1].map((i) => ({
-        tableSchema: 'monitor',
-        tableName: i.table_name
-      }))
-    ].filter((i) => i.tableName !== 't_sql_meta_enum');
-    return tables;
+    const result =
+      await sql`SELECT table_schema as "tableSchema", table_name as "tableName" FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema NOT IN ('pg_catalog', 'information_schema', 'hdb_catalog');`;
+    return result;
   }),
   tableCols: t.procedure
     .input(
@@ -163,7 +152,7 @@ export const w3bstreamRouter = t.router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const result = (await ctx.prisma.$queryRaw`SELECT column_name, data_type FROM information_schema.columns WHERE table_name = ${input.tableName}`) as { column_name: string; data_type: string }[];
+      const result = await sql`SELECT column_name, data_type FROM information_schema.columns WHERE table_name = ${input.tableName}`;
       return result;
     }),
   tableData: t.procedure
@@ -178,19 +167,8 @@ export const w3bstreamRouter = t.router({
     .query(async ({ ctx, input }) => {
       const page = input.page || 1;
       const pageSize = input.pageSize || 10;
-      if (input.tableSchema === 'applet_management') {
-        const result = await ctx.prisma[input.tableName].findMany({
-          take: pageSize,
-          skip: (page - 1) * pageSize
-        });
-        return result;
-      } else {
-        const result = await ctx.monitor[input.tableName].findMany({
-          take: pageSize,
-          skip: (page - 1) * pageSize
-        });
-        return result;
-      }
+      const result = await sql`SELECT * FROM ${sql(`${input.tableSchema}.${input.tableName}`)} LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`;
+      return result;
     }),
   tableDataCount: t.procedure
     .input(
@@ -200,13 +178,8 @@ export const w3bstreamRouter = t.router({
       })
     )
     .query(async ({ ctx, input }) => {
-      if (input.tableSchema === 'applet_management') {
-        const result = await ctx.prisma[input.tableName].count();
-        return result;
-      } else {
-        const result = await ctx.monitor[input.tableName].count();
-        return result;
-      }
+      const result = await sql`SELECT COUNT(*) FROM ${sql(`${input.tableSchema}.${input.tableName}`)}`;
+      return result[0]?.count || 0;
     })
 });
 
@@ -226,4 +199,3 @@ export type ProjectType = ProjectOriginalType & {
 export type ContractLogType = inferProcedureOutput<W3bstreamRouter['contractLogs']>[0];
 export type ChainTxType = inferProcedureOutput<W3bstreamRouter['chainTx']>[0];
 export type ChainHeightType = inferProcedureOutput<W3bstreamRouter['chainHeight']>[0];
-export type TableNameType = inferProcedureOutput<W3bstreamRouter['tableNames']>[0];

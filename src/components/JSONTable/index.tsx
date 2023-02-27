@@ -41,8 +41,12 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((item) =>
-              needExtendedTable ? <CollapseBody key={item[rowKey]} item={item} columns={columns} extendedTables={extendedTables} /> : <Body key={item[rowKey]} item={item} columns={columns} />
+            {data.map((item, index) =>
+              needExtendedTable ? (
+                <CollapseBody key={item[rowKey] || index} item={item} columns={columns} extendedTables={extendedTables} />
+              ) : (
+                <Body key={item[rowKey] || index} item={item} columns={columns} />
+              )
             )}
           </Tbody>
         </ChakraTable>

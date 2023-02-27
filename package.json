@@ -69,6 +69,7 @@
     "node-docker-api": "^1.1.22",
     "node-fetch": "^3.3.0",
     "numeral": "^2.0.6",
+    "postgres": "^3.3.3",
     "primeicons": "^6.0.1",
     "promise-retry": "^2.0.1",
     "prop-types": "^15.8.1",
