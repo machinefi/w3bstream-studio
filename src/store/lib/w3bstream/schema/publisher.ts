@@ -369,9 +369,15 @@ export default class PublisherModule {
     containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
   });
 
+  allData: PublisherType[] = [];
+
   constructor() {
     makeObservable(this, {
       showPublishEventRequestTemplates: observable
     });
+  }
+
+  set(v: Partial<PublisherModule>) {
+    Object.assign(this, v);
   }
 }

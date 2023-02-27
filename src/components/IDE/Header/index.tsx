@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react';
+import { Button, Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Tab, TabList, Tabs } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { MdHttp, MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
@@ -25,6 +25,28 @@ const Header = observer(() => {
         backgroundColor: 'rgba(255, 255, 255, 0.8)'
       }}
     >
+      {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS') && (
+        <Tabs
+          variant="unstyled"
+          onChange={(number) => {
+            if (number === 0) {
+              w3s.showContent = 'CURRENT_APPLETS';
+            }
+            if (number === 1) {
+              w3s.showContent = 'CURRENT_PUBLISHERS';
+            }
+          }}
+        >
+          <TabList>
+            <Tab w="60px" h="30px" borderRadius="md" fontSize="sm" _selected={{ color: 'white', bg: 'green.400' }}>
+              Applet
+            </Tab>
+            <Tab ml="20px" w="80px" h="30px" borderRadius="md" fontSize="sm" _selected={{ color: 'white', bg: 'green.400' }}>
+              Publisher
+            </Tab>
+          </TabList>
+        </Tabs>
+      )}
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
         <Icon
           as={MdHttp}
