@@ -155,7 +155,7 @@ export default class PostmanModule {
         });
       }
 
-      await showNotification({ message: 'requset successed' });
+      await showNotification({ message: 'requset succeeded' });
       eventBus.emit('postman.request');
     }
   });

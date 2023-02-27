@@ -72,7 +72,7 @@ export default class ProjectModule {
         });
         if (res.data) {
           eventBus.emit('project.create');
-          await showNotification({ message: 'create project successed' });
+          await showNotification({ message: 'create project succeeded' });
         }
         await this.onSaveEnv();
         await this.onSaveDBSchema();
@@ -110,7 +110,7 @@ export default class ProjectModule {
         data
       });
       if (res.data) {
-        await showNotification({ message: 'Create project successed' });
+        await showNotification({ message: 'Create project succeeded' });
         eventBus.emit('project.create');
         this.form.reset();
         this.modal.set({ show: false });
@@ -207,7 +207,7 @@ export default class ProjectModule {
         'Content-Type': 'application/json'
       }
     });
-    await showNotification({ message: 'create database successed!' });
+    await showNotification({ message: 'create database succeeded!' });
   }
 
   async setMode(mode: 'add' | 'edit') {

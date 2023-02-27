@@ -84,7 +84,7 @@ export default class UserModule {
         url: `/api/w3bapp/account/${globalThis.store.w3s.config.form.formData.accountID}`,
         data: e.formData
       });
-      showNotification({ message: 'update password successed' });
+      showNotification({ message: 'update password succeeded' });
       eventBus.emit('user.update-pwd');
       this.form.reset();
       this.modal.set({ show: false });
