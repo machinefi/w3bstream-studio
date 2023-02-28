@@ -4,7 +4,6 @@ import { definitions } from '@/store/lib/w3bstream/schema/definitions';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
-import { gradientButtonStyle } from '@/lib/theme';
 import { StrategyType } from '@/server/routers/w3bstream';
 import toast from 'react-hot-toast';
 import { hooks } from '@/lib/hooks';
@@ -38,12 +37,7 @@ export default class StrategyModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       }
     },
     afterSubmit: async (e) => {

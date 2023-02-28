@@ -3,14 +3,12 @@ import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
-import { gradientButtonStyle } from '@/lib/theme';
 import initTemplates from '@/constants/initTemplates.json';
 import { makeObservable, observable } from 'mobx';
 import { ProjectEnvsWidget } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
 import EditorWidget from '@/components/JSONFormWidgets/EditorWidget';
 import { rootStore } from '@/store/index';
-import { FormListType } from '@/store/base';
 import { hooks } from '@/lib/hooks';
 
 export const defaultSchema = {
@@ -46,12 +44,7 @@ export default class ProjectModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       },
       envs: {
         'ui:widget': ProjectEnvsWidget
@@ -80,12 +73,7 @@ export default class ProjectModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       }
     },
     afterSubmit: async (e) => {
@@ -215,7 +203,7 @@ export default class ProjectModule {
     this.setMode('add');
     const formData = await hooks.getFormData({
       title: 'Create Project',
-      size: 'md',
+      size: '2xl',
       formList: [
         {
           label: 'Default',
@@ -260,7 +248,7 @@ export default class ProjectModule {
     this.setMode('edit');
     await hooks.getFormData({
       title: 'Project Details',
-      size: 'md',
+      size: '2xl',
       formList: [
         {
           form: this.form

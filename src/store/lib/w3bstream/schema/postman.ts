@@ -1,7 +1,6 @@
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget/index';
-import { gradientButtonStyle } from '@/lib/theme';
 import { eventBus } from '@/lib/event';
 import { UiSchema } from '@rjsf/utils';
 import { _ } from '@/lib/lodash';
@@ -61,12 +60,7 @@ export default class PostmanModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       },
       body: {
         'ui:widget': EditorWidget,

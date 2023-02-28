@@ -44,7 +44,7 @@ const AddBtn = observer(() => {
           }
           const formData = await hooks.getFormData({
             title: 'Publish Event',
-            size: 'md',
+            size: '2xl',
             formList: [
               {
                 form: w3s.publisher.publishEventForm

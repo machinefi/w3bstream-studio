@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { TableType } from '@/server/routers/pg';
+import { hooks } from '@/lib/hooks';
 
 interface SideBarProps extends FlexProps {}
 
@@ -325,8 +326,19 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
             <Button
               p={0}
               variant="ghost"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.stopPropagation();
+                dbTable.resetWidgetColumns();
+                const formData = await hooks.getFormData({
+                  title: `Create a new table under '${tableSchema}'`,
+                  size: '6xl',
+                  formList: [
+                    {
+                      form: dbTable.createTableForm
+                    }
+                  ]
+                });
+                console.log(formData);
               }}
             >
               <Icon as={MdAddBox} />

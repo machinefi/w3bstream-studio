@@ -1,7 +1,6 @@
 import { JSONValue, JSONSchemaFormState, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
-import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
 import { ContractLogType } from '@/server/routers/w3bstream';
 
@@ -122,12 +121,7 @@ export default class ContractLogModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       }
     },
     afterSubmit: async (e) => {

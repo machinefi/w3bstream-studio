@@ -1,10 +1,52 @@
 import { trpc } from '@/lib/trpc';
-import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { PaginationState } from '@/store/standard/PaginationState';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { _ } from '@/lib/lodash';
 import { makeObservable, observable } from 'mobx';
 import { TableType } from '@/server/routers/pg';
+import { FromSchema } from 'json-schema-to-ts';
+import { eventBus } from '@/lib/event';
+import { v4 as uuidv4 } from 'uuid';
+import { TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
+
+export const createTableSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      title: 'Name'
+    },
+    comment: {
+      type: 'string',
+      title: 'Description'
+    },
+    rls_enabled: {
+      type: 'boolean',
+      title: 'Enable Row Level Security (RLS)',
+      default: true
+    },
+    columns: {
+      type: 'string',
+      title: 'Columns'
+    }
+  },
+  required: ['name']
+} as const;
+
+type CreateTableSchemaType = FromSchema<typeof createTableSchema>;
+
+export interface WidgetColumn {
+  id: string;
+  name: string;
+  type: string;
+  defaultValue?: string;
+  isPrimaryKey: boolean;
+  isUnique: boolean;
+  isNullable?: boolean;
+  isIdentity: boolean;
+  isDefineASArray?: boolean;
+}
 
 export default class DBTableModule {
   allTableNames = new PromiseState<() => Promise<any>, { [x: string]: TableType[] }>({
@@ -39,10 +81,89 @@ export default class DBTableModule {
 
   mode: 'EDIT_TABLE' | 'VIEW_DATA' = 'VIEW_DATA';
 
+  createTableForm = new JSONSchemaFormState<CreateTableSchemaType>({
+    //@ts-ignore
+    schema: createTableSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      rls_enabled: {
+        'ui:widget': 'checkbox'
+      },
+      columns: {
+        'ui:widget': TableColumnsWidget
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.createTableForm.reset();
+    },
+    value: new JSONValue<CreateTableSchemaType>({
+      default: {
+        name: '',
+        description: ''
+      }
+    })
+  });
+
+  widgetColumns: WidgetColumn[] = [];
+  onAddWidgetColumn() {
+    this.widgetColumns.push({
+      id: uuidv4(),
+      name: '',
+      type: '',
+      defaultValue: '',
+      isPrimaryKey: false,
+      isUnique: false,
+      isNullable: false,
+      isIdentity: false
+    });
+  }
+  onDeleteWidgetColumn(id: string) {
+    this.widgetColumns = this.widgetColumns.filter((i) => i.id !== id);
+  }
+  onChangeWidgetColumn(data: WidgetColumn) {
+    for (let i = 0; i < this.widgetColumns.length; i++) {
+      const item = this.widgetColumns[i];
+      if (item.id === data.id) {
+        Object.assign(item, data);
+        break;
+      }
+    }
+  }
+  setWidgetColumns(data: WidgetColumn[]) {
+    this.widgetColumns = data;
+  }
+  resetWidgetColumns() {
+    this.widgetColumns = [
+      {
+        id: uuidv4(),
+        name: 'id',
+        type: 'int8',
+        isPrimaryKey: true,
+        isUnique: true,
+        isIdentity: true
+      },
+      {
+        id: uuidv4(),
+        name: 'created_at',
+        type: 'timestamptz',
+        defaultValue: 'now()',
+        isIdentity: false,
+        isNullable: false,
+        isPrimaryKey: false,
+        isUnique: false
+      }
+    ];
+  }
+
   constructor() {
     makeObservable(this, {
       mode: observable,
-      currentTable: observable
+      currentTable: observable,
+      widgetColumns: observable
     });
   }
 

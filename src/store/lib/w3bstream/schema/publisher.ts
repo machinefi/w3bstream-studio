@@ -4,7 +4,6 @@ import { definitions } from './definitions';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
-import { gradientButtonStyle } from '@/lib/theme';
 import { PublisherType } from '@/server/routers/w3bstream';
 import { PublisherTokenRender } from '@/components/JSONTable/FieldRender';
 import toast from 'react-hot-toast';
@@ -70,12 +69,7 @@ export default class PublisherModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       }
     },
     afterSubmit: async (e) => {
@@ -97,12 +91,7 @@ export default class PublisherModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       },
       payload: {
         'ui:widget': EditorWidget,

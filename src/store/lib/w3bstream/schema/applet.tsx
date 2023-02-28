@@ -3,7 +3,6 @@ import { InstanceStatusRender } from '@/components/JSONTable/FieldRender';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { hooks } from '@/lib/hooks';
-import { gradientButtonStyle } from '@/lib/theme';
 import { AppletType } from '@/server/routers/w3bstream';
 import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
@@ -44,11 +43,6 @@ export default class AppletModule {
       'ui:submitButtonOptions': {
         norender: false,
         submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
       },
       file: {
         'ui:widget': FileWidget,
