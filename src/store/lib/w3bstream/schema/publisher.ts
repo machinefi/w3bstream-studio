@@ -1,4 +1,4 @@
-import { JSONSchemaFormState, JSONValue, JSONModalValue, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONValue, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from './definitions';
 import { axios } from '@/lib/axios';
@@ -6,13 +6,14 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { gradientButtonStyle } from '@/lib/theme';
 import { PublisherType } from '@/server/routers/w3bstream';
-import { PublisherTokenRender } from '@/components/JSONTableRender';
+import { PublisherTokenRender } from '@/components/JSONTable/FieldRender';
 import toast from 'react-hot-toast';
 import { UiSchema } from '@rjsf/utils';
-import EditorWidget, { EditorWidgetUIOptions } from '@/components/EditorWidget';
+import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
 import { ShowRequestTemplatesButtonWidget } from '@/components/IDE/PublishEventRequestTemplates';
 import { makeObservable, observable } from 'mobx';
 import { helper } from '@/lib/helper';
+import { hooks } from '@/lib/hooks';
 
 export const createPublisherSchema = {
   definitions: {
@@ -78,43 +79,12 @@ export default class PublisherModule {
       }
     },
     afterSubmit: async (e) => {
-      const { publisherID, projectName, projectID, name, key } = e.formData;
-      if (publisherID && projectName) {
-        await axios.request({
-          method: 'put',
-          url: `/api/w3bapp/publisher/${projectName}/${publisherID}`,
-          data: {
-            name,
-            key
-          }
-        });
-      } else {
-        await axios.request({
-          method: 'post',
-          url: `/api/w3bapp/publisher/${projectName}`,
-          data: {
-            name,
-            key
-          }
-        });
-      }
-
-      if (publisherID) {
-        await showNotification({ message: 'update publisher succeeded' });
-        eventBus.emit('publisher.update');
-      } else {
-        await showNotification({ message: 'create publisher succeeded' });
-        eventBus.emit('publisher.create');
-      }
-
-      this.form.reset();
-      this.modal.set({ show: false });
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.createPublisherForm.reset();
     },
     value: new JSONValue<CreatePublisherSchemaType>({
       default: {
-        publisherID: '',
         projectName: '',
-        projectID: '',
         name: '',
         key: ''
       }
@@ -142,7 +112,7 @@ export default class PublisherModule {
           onChangeLanguage: (language) => {
             console.log('language:', language);
             if (language === 'text') {
-              this.form.value.set({
+              this.publishEventForm.value.set({
                 payload: JSON.stringify(
                   [
                     {
@@ -157,7 +127,7 @@ export default class PublisherModule {
                 )
               });
             } else {
-              this.form.value.set({
+              this.publishEventForm.value.set({
                 payload: JSON.stringify(
                   [
                     {
@@ -184,21 +154,7 @@ export default class PublisherModule {
       }
     },
     afterSubmit: async (e) => {
-      const { projectID } = e.formData;
-      const project = globalThis.store.w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
-      const res = await axios.request({
-        method: 'post',
-        url: `/api/w3bapp/event/${project.f_name}`,
-        headers: {
-          'Content-Type': 'text/plain'
-        },
-        data: this.generateBody()
-      });
-
-      if (res.data) {
-        await showNotification({ message: 'publish event succeeded' });
-        eventBus.emit('applet.publish-event');
-      }
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
     },
     value: new JSONValue<PublishEventSchemaType>({
       default: {
@@ -228,17 +184,17 @@ export default class PublisherModule {
     const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
     const header = pub
       ? {
-        event_type: 'ANY',
-        pub_id: pub.f_key,
-        token: pub.f_token,
-        pub_time: Date.now()
-      }
+          event_type: 'ANY',
+          pub_id: pub.f_key,
+          token: pub.f_token,
+          pub_time: Date.now()
+        }
       : {
-        event_type: 'ANY',
-        pub_id: '',
-        token: '',
-        pub_time: Date.now()
-      };
+          event_type: 'ANY',
+          pub_id: '',
+          token: '',
+          pub_time: Date.now()
+        };
 
     try {
       const body = JSON.parse(payload);
@@ -282,17 +238,7 @@ export default class PublisherModule {
     }
   }
 
-  form: JSONSchemaFormState<CreatePublisherSchemaType | PublishEventSchemaType> = this.createPublisherForm;
-
   showPublishEventRequestTemplates = false;
-
-  modal = new JSONModalValue({
-    default: {
-      show: false,
-      title: 'Create Publisher',
-      autoReset: true
-    }
-  });
 
   table = new JSONSchemaTableState<PublisherType>({
     columns: [
@@ -326,15 +272,36 @@ export default class PublisherModule {
               props: {
                 bg: '#37A169',
                 color: '#fff',
-                onClick: () => {
-                  this.form.value.set({
-                    publisherID: item.f_publisher_id,
+                onClick: async () => {
+                  this.createPublisherForm.value.set({
                     projectName: item.project_name,
-                    projectID: item.project_id,
                     name: item.f_name,
                     key: item.f_key
                   });
-                  this.modal.set({ show: true, title: 'Edit Publisher' });
+                  const formData = await hooks.getFormData({
+                    title: 'Edit Publisher',
+                    size: 'md',
+                    formList: [
+                      {
+                        form: this.createPublisherForm
+                      }
+                    ]
+                  });
+                  const { projectName, name, key } = formData;
+                  if (projectName && name && key) {
+                    try {
+                      await axios.request({
+                        method: 'put',
+                        url: `/api/w3bapp/publisher/${projectName}/${item.f_publisher_id}`,
+                        data: {
+                          name,
+                          key
+                        }
+                      });
+                      await showNotification({ message: 'update publisher succeeded' });
+                      eventBus.emit('publisher.update');
+                    } catch (error) {}
+                  }
                 }
               },
               text: 'Edit'

@@ -16,7 +16,7 @@ const CurrentDBTable = observer(() => {
   return (
     <>
       <Flex alignItems="center"></Flex>
-      <JSONTable jsonstate={dbTable} />
+      {dbTable.mode === 'VIEW_DATA' && <JSONTable jsonstate={dbTable} />}
     </>
   );
 });

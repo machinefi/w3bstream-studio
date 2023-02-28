@@ -1,46 +1,36 @@
 import React from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalBody, Box, ModalHeader, ModalCloseButton, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalBody, ModalHeader, ModalCloseButton, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { JSONForm } from '@/components/JSONForm';
-import { JSONSchemaFormState, JSONModalValue } from '@/store/standard/JSONSchemaState';
+import { useStore } from '@/store/index';
+import { eventBus } from '@/lib/event';
 
-interface Props {
-  jsonstate: {
-    form: JSONSchemaFormState<any>;
-    modal: JSONModalValue;
-    formList?: {
-      label: string;
-      form: JSONSchemaFormState<any>;
-    }[];
-  };
-  children?: any;
-}
+const JSONModal = observer(() => {
+  const {
+    base: { formModal }
+  } = useStore();
+  const { formList, children } = formModal;
 
-const JSONModal = observer((props: Props) => {
-  const { form, modal, formList } = props.jsonstate;
-  const { children } = props;
+  if (formList.length === 0) {
+    return null;
+  }
 
   return (
     <Modal
-      isOpen={modal?.value.show}
+      isOpen={formModal.isOpen}
       onClose={() => {
-        if (modal.value.autoReset) {
-          form.reset({ force: true });
-        }
-        modal.set({
-          show: false
-        });
+        eventBus.emit('base.formModal.abort');
       }}
-      size="2xl"
+      size={formModal.size}
     >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader bg="#FAFAFA" borderBottom="1px solid #eee">
-          {modal.value.title}
+          {formModal.title}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {formList ? (
+          {formList.length > 1 ? (
             <>
               <Tabs>
                 <TabList>
@@ -51,18 +41,18 @@ const JSONModal = observer((props: Props) => {
                 <TabPanels>
                   {formList.map((item) => (
                     <TabPanel key={item.label}>
-                      <JSONForm jsonstate={item.form} />
+                      <JSONForm formState={item.form} />
                     </TabPanel>
                   ))}
                 </TabPanels>
               </Tabs>
-              <Box p="5px 15px">{children && children}</Box>
+              {children && children}
             </>
           ) : (
-            <Box p="20px 30px">
-              <JSONForm jsonstate={form} />
+            <>
+              <JSONForm formState={formList[0].form} />
               {children && children}
-            </Box>
+            </>
           )}
         </ModalBody>
       </ModalContent>

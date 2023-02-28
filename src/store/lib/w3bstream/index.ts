@@ -1,6 +1,5 @@
 import NextRouter from 'next/router';
-import { SpotlightAction } from '@mantine/spotlight';
-import { configure, makeAutoObservable, toJS } from 'mobx';
+import { configure, makeAutoObservable } from 'mobx';
 import RootStore from '@/store/root';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
@@ -182,11 +181,7 @@ export class W3bStream {
   get isLogin() {
     return !!this.config.form.formData.token;
   }
-
-  get actions(): SpotlightAction[] {
-    return [this.project, this.applet, this.publisher].map((i) => ({ title: i.modal.value.title, onTrigger: () => i.modal.set({ show: true }) }));
-  }
-
+  
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);

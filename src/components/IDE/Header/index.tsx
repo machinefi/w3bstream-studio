@@ -4,6 +4,11 @@ import { observer } from 'mobx-react-lite';
 import { MdHttp, MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
 import Link from 'next/link';
+import { hooks } from '@/lib/hooks';
+import { axios } from '@/lib/axios';
+import { showNotification } from '@mantine/notifications';
+import { eventBus } from '@/lib/event';
+import { helper } from '@/lib/helper';
 
 const Header = observer(() => {
   const { w3s } = useStore();
@@ -54,11 +59,58 @@ const Header = observer(() => {
           w="22px"
           h="21px"
           cursor="pointer"
-          onClick={() =>
-            w3s.postman.modal.set({
-              show: true
-            })
-          }
+          onClick={async () => {
+            w3s.postman.form.value.set({
+              headers: {
+                Authorization: `Bearer ${w3s.config.form.formData.token}`
+              }
+            });
+            const formData = await hooks.getFormData({
+              title: 'Postman',
+              size: '2xl',
+              formList: [
+                {
+                  form: w3s.postman.form
+                }
+              ],
+              children: (
+                <Button
+                  mt="10px"
+                  w="100%"
+                  h="32px"
+                  onClick={() => {
+                    w3s.postman.form.reset({ force: true });
+                  }}
+                >
+                  Reset
+                </Button>
+              )
+            });
+            const { url, method, body, protocol, topic } = formData;
+            if (protocol === 'http/https' && url) {
+              await axios.request({
+                url,
+                method,
+                data: JSON.parse(body)
+              });
+            }
+            if (protocol === 'mqtt' && topic) {
+              const message = JSON.parse(formData.message);
+              if (message.payload) {
+                message.payload = helper.stringToBase64(message.payload);
+              }
+              await axios.request({
+                url: '/api/mqtt',
+                method: 'post',
+                data: {
+                  topic,
+                  message
+                }
+              });
+            }
+            await showNotification({ message: 'requset succeeded' });
+            eventBus.emit('postman.request');
+          }}
         />
         <Profile />
       </Flex>
@@ -86,8 +138,26 @@ const Profile = observer(() => {
               <Button
                 w="full"
                 bg="rgba(0, 0, 0, 0.03)"
-                onClick={() => {
-                  w3s.user.modal.set({ show: true });
+                onClick={async () => {
+                  const formData = await hooks.getFormData({
+                    title: 'Update Password',
+                    size: 'md',
+                    formList: [
+                      {
+                        form: w3s.user.pwdForm
+                      }
+                    ]
+                  });
+                  if (formData.password) {
+                    await axios.request({
+                      method: 'put',
+                      url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
+                      data: formData
+                    });
+                    showNotification({ message: 'update password succeeded' });
+                    eventBus.emit('user.update-pwd');
+                    w3s.config.logout();
+                  }
                 }}
               >
                 Update password

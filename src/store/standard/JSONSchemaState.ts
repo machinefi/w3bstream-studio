@@ -48,6 +48,7 @@ export class JSONSchemaFormState<T, U = UiSchema> {
     }
     return this;
   }
+  customValidate = (formData: T, errors: any) => errors;
 
   constructor(args: Partial<JSONSchemaFormState<T, U>> = {}) {
     Object.assign(this, args);

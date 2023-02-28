@@ -38,12 +38,13 @@ export const pgRouter = t.router({
         includeSystemSchemas: false,
         tableId: Number(input.tableId)
       });
+      await pgMeta.end();
       if (error) {
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
       }
       return data;
     }),
-  tableData: t.procedure
+  data: t.procedure
     .input(
       z.object({
         tableSchema: z.string(),
@@ -62,12 +63,13 @@ export const pgRouter = t.router({
         limit: pageSize,
         offset: (page - 1) * pageSize
       });
+      await pgMeta.end();
       if (error) {
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
       }
       return data;
     }),
-  tableDataCount: t.procedure
+  dataCount: t.procedure
     .input(
       z.object({
         tableSchema: z.string(),
@@ -80,6 +82,7 @@ export const pgRouter = t.router({
         tableSchema: input.tableSchema,
         tableName: input.tableName
       });
+      await pgMeta.end();
       if (error) {
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
       }

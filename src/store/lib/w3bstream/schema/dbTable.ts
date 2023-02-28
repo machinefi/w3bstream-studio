@@ -37,14 +37,21 @@ export default class DBTableModule {
     tableName: ''
   };
 
+  mode: 'EDIT_TABLE' | 'VIEW_DATA' = 'VIEW_DATA';
+
   constructor() {
     makeObservable(this, {
+      mode: observable,
       currentTable: observable
     });
   }
 
   setCurrentTable(v: TableType) {
     this.currentTable = v;
+  }
+
+  setMode(v: 'EDIT_TABLE' | 'VIEW_DATA') {
+    this.mode = v;
   }
 
   async getCurrentTableCols() {
@@ -60,9 +67,7 @@ export default class DBTableModule {
 
   async getCurrentTableDataCount() {
     try {
-      const count = await trpc.pg.tableDataCount.query({
-        ...this.currentTable
-      });
+      const count = await trpc.pg.dataCount.query(this.currentTable);
       return count;
     } catch (error) {
       return 0;
@@ -71,7 +76,7 @@ export default class DBTableModule {
 
   async getCurrentTableData() {
     try {
-      const data = await trpc.pg.tableData.query({
+      const data = await trpc.pg.data.query({
         ...this.currentTable,
         page: this.table.pagination.page,
         pageSize: this.table.pagination.limit

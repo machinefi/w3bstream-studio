@@ -1,12 +1,9 @@
-import { JSONSchemaFormState, JSONValue, JSONModalValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import EditorWidget, { EditorWidgetUIOptions } from '@/components/EditorWidget/index';
+import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget/index';
 import { gradientButtonStyle } from '@/lib/theme';
-import { showNotification } from '@mantine/notifications';
-import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { UiSchema } from '@rjsf/utils';
-import { helper } from '@/lib/helper';
 import { _ } from '@/lib/lodash';
 import { definitions } from './definitions';
 
@@ -26,7 +23,7 @@ export const schema = {
             method: { type: 'string', enum: ['get', 'post', 'put', 'delete'] },
             headers: {
               type: 'object',
-              title: '',
+              title: 'Headers',
               properties: {
                 Authorization: { type: 'string' }
               }
@@ -118,7 +115,7 @@ export default class PostmanModule {
           e.url = window.location.origin + api + template[method].suffix;
           e.body = template[method].body;
         }
-        if (publisher) {
+        if (publisher && publisher != this.value.publisher) {
           const message = JSON.parse(e.message);
           const allPublishers = globalThis.store.w3s.publisher.table.dataSource;
           const token = allPublishers.find((i: any) => i.f_publisher_id === publisher)?.f_token;
@@ -131,51 +128,7 @@ export default class PostmanModule {
       }
     }),
     afterSubmit: async (e: any) => {
-      const { protocol } = e.formData;
-      if (protocol === 'http/https') {
-        await axios.request({
-          url: e.formData.url,
-          method: e.formData.method,
-          data: JSON.parse(e.formData.body)
-        });
-      }
-
-      if (protocol === 'mqtt') {
-        const message = JSON.parse(e.formData.message);
-        if (message.payload) {
-          message.payload = helper.stringToBase64(message.payload);
-        }
-        await axios.request({
-          url: '/api/mqtt',
-          method: 'post',
-          data: {
-            topic: e.formData.topic,
-            message: message
-          }
-        });
-      }
-
-      await showNotification({ message: 'requset succeeded' });
-      eventBus.emit('postman.request');
-    }
-  });
-
-  modal = new JSONModalValue({
-    default: {
-      show: false,
-      title: 'Postman',
-      autoReset: false
-    },
-    onSet: (e) => {
-      if (e.show) {
-        this.form.value.set({
-          headers: {
-            Authorization: `Bearer ${globalThis.store.w3s.config.form.formData.token}`
-          }
-        });
-      }
-
-      return e;
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
     }
   });
 }

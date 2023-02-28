@@ -24,7 +24,7 @@ const Login = observer(() => {
             <Text mb="60px" fontSize="30px" fontWeight={700} color="#1B1B1B">
               Login
             </Text>
-            <JSONForm jsonstate={w3s.user.loginForm} />
+            <JSONForm formState={w3s.user.loginForm} />
           </Box>
         </Flex>
       </Center>

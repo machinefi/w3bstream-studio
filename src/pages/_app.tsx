@@ -13,7 +13,6 @@ import type { AppProps } from 'next/app';
 import { NotificationsProvider } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import superjson from 'superjson';
-import { SpotlightProvider } from '@mantine/spotlight';
 
 import '@/lib/superjson';
 function MyApp({ Component, pageProps }: AppProps) {
@@ -35,12 +34,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   return useMemo(() => {
     return (
       <ChakraProvider theme={theme}>
-        <SpotlightProvider actions={w3s.actions}>
-          <NotificationsProvider>
-            <Toaster />
-            <Component {...pageProps} />
-          </NotificationsProvider>
-        </SpotlightProvider>
+        <NotificationsProvider>
+          <Toaster />
+          <Component {...pageProps} />
+        </NotificationsProvider>
       </ChakraProvider>
     );
   }, [Component, pageProps]);

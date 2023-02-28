@@ -1,4 +1,4 @@
-import { InstanceStatusRender } from '@/components/JSONTableRender';
+import { InstanceStatusRender } from '@/components/JSONTable/FieldRender';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { InstanceType } from '@/server/routers/w3bstream';
