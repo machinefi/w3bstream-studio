@@ -272,13 +272,13 @@ const DBTable = observer(() => {
     }
   }, []);
 
-  if (allTableNames.loading.value) {
-    return (
-      <Flex w="100%" h="100%" justify="center">
-        <Spinner mt="100px" />
-      </Flex>
-    );
-  }
+  // if (allTableNames.loading.value) {
+  //   return (
+  //     <Flex w="100%" h="100%" justify="center">
+  //       <Spinner mt="100px" />
+  //     </Flex>
+  //   );
+  // }
 
   if (!allTableNames.value) {
     return null;
@@ -338,7 +338,12 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                     }
                   ]
                 });
-                console.log(formData);
+                if (formData.name) {
+                  dbTable.submitData({
+                    tableSchema,
+                    formData
+                  });
+                }
               }}
             >
               <Icon as={MdAddBox} />
@@ -377,9 +382,14 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                     onClick={(e) => {
                       e.stopPropagation();
                       confirm.show({
-                        title: 'Warning',
-                        description: 'Are you sure you want to delete it?',
-                        async onOk() {}
+                        title: `Confirm deletion of table "${item.tableName}"`,
+                        description: 'Are you sure you want to delete the selected table?',
+                        async onOk() {
+                          await dbTable.deleteTable({
+                            tableId: item.tableId,
+                            cascade: true
+                          });
+                        }
                       });
                     }}
                   />

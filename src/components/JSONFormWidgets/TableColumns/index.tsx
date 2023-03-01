@@ -29,11 +29,11 @@ const getMenuValue = (type: string) => {
   if (type === 'text' || type === 'varchar') {
     return [
       {
-        value: 'Set as NULL',
+        value: 'NULL',
         desc: 'Set the default value as NULL value'
       },
       {
-        value: `Set as empty string`,
+        value: `Empty string`,
         desc: 'Set the default value as an empty string'
       }
     ];
@@ -60,32 +60,6 @@ const getMenuValue = (type: string) => {
   }
 
   return null;
-};
-
-const DefaultValueMenu = ({ type }: { type: string }) => {
-  const menuList = getMenuValue(type);
-  if (!menuList) {
-    return null;
-  }
-  return (
-    <Box pos="absolute" right="0" top="0">
-      <Menu>
-        <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
-        <MenuList>
-          {menuList.map((item) => {
-            return (
-              <MenuItem key={item.value}>
-                <Box>
-                  <Box fontWeight={700}>{item.value}</Box>
-                  <Box>{item.desc}</Box>
-                </Box>
-              </MenuItem>
-            );
-          })}
-        </MenuList>
-      </Menu>
-    </Box>
-  );
 };
 
 const getExtraOptions = (item: WidgetColumn) => {
@@ -162,11 +136,61 @@ const getExtraOptions = (item: WidgetColumn) => {
   return null;
 };
 
+const DefaultValueMenu = observer(({ column }: { column: WidgetColumn }) => {
+  const {
+    w3s: {
+      dbTable,
+      dbTable: { currentWidgetColumn }
+    }
+  } = useStore();
+  const columnData = column ? column : currentWidgetColumn;
+  const menuList = getMenuValue(columnData.type);
+  if (!menuList) {
+    return null;
+  }
+  return (
+    <Box pos="absolute" right="0" top="0">
+      <Menu>
+        <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
+        <MenuList>
+          {menuList.map((item) => {
+            return (
+              <MenuItem
+                key={item.value}
+                onClick={() => {
+                  if (column) {
+                    dbTable.onChangeWidgetColumn({
+                      ...column,
+                      defaultValue: item.value
+                    });
+                  } else {
+                    dbTable.setCurrentWidgetColumn({
+                      defaultValue: item.value
+                    });
+                  }
+                }}
+              >
+                <Box>
+                  <Box fontWeight={700}>{item.value}</Box>
+                  <Box>{item.desc}</Box>
+                </Box>
+              </MenuItem>
+            );
+          })}
+        </MenuList>
+      </Menu>
+    </Box>
+  );
+});
+
 const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
   const {
-    w3s: { dbTable }
+    w3s: {
+      dbTable,
+      dbTable: { currentWidgetColumn }
+    }
   } = useStore();
-  const options = getExtraOptions(column);
+  const options = getExtraOptions(column || currentWidgetColumn);
   if (!options) {
     return null;
   }
@@ -190,10 +214,16 @@ const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
                   fontWeight={700}
                   isChecked={item.value}
                   onChange={(e) => {
-                    dbTable.onChangeWidgetColumn({
-                      ...column,
-                      [item.field]: e.target.checked
-                    });
+                    if (column) {
+                      dbTable.onChangeWidgetColumn({
+                        ...column,
+                        [item.field]: e.target.checked
+                      });
+                    } else {
+                      dbTable.setCurrentWidgetColumn({
+                        [item.field]: e.target.checked
+                      });
+                    }
                   }}
                 >
                   {item.label}
@@ -208,6 +238,150 @@ const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
   );
 });
 
+const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: number }) => {
+  const {
+    w3s: {
+      dbTable,
+      dbTable: { currentWidgetColumn }
+    }
+  } = useStore();
+
+  const columnData = item ? item : currentWidgetColumn;
+
+  return (
+    <Flex w="100%">
+      <Input
+        w="200px"
+        placeholder="column_name"
+        size="md"
+        value={columnData.name}
+        onChange={(e) => {
+          if (item) {
+            dbTable.onChangeWidgetColumn({
+              ...item,
+              name: e.target.value
+            });
+          } else {
+            dbTable.setCurrentWidgetColumn({
+              name: e.target.value
+            });
+          }
+        }}
+      />
+      <Select
+        ml="10px"
+        w="300px"
+        placeholder=" --- "
+        value={columnData.type}
+        onChange={(e) => {
+          if (item) {
+            dbTable.onChangeWidgetColumn({
+              ...item,
+              type: e.target.value
+            });
+          } else {
+            dbTable.setCurrentWidgetColumn({
+              type: e.target.value
+            });
+          }
+        }}
+      >
+        <option value="int2">int2</option>
+        <option value="int4">int4</option>
+        <option value="int8">int8</option>
+        <option value="float4">float4</option>
+        <option value="float8">float8</option>
+        <option value="numeric">numeric</option>
+        <option value="json">json</option>
+        <option value="jsonb">jsonb</option>
+        <option value="text">text</option>
+        <option value="varchar">varchar</option>
+        <option value="uuid">uuid</option>
+        <option value="date">date</option>
+        <option value="time">time</option>
+        <option value="timetz">timetz</option>
+        <option value="timestamp">timestamp</option>
+        <option value="timestamptz">timestamptz</option>
+        <option value="bool">bool</option>
+        <option value="bytea">bytea</option>
+      </Select>
+      <Flex ml="10px" w="250px" pos="relative">
+        <Input
+          placeholder="NULL"
+          size="md"
+          disabled={index === 0}
+          value={columnData.defaultValue}
+          onChange={(e) => {
+            if (item) {
+              dbTable.onChangeWidgetColumn({
+                ...item,
+                defaultValue: e.target.value
+              });
+            } else {
+              dbTable.setCurrentWidgetColumn({
+                defaultValue: e.target.value
+              });
+            }
+          }}
+        />
+        <DefaultValueMenu column={item} />
+      </Flex>
+      <Flex justify="center" ml="10px" w="100px">
+        <Checkbox
+          isChecked={columnData.isPrimaryKey}
+          onChange={(e) => {
+            if (item) {
+              dbTable.onChangeWidgetColumn({
+                ...item,
+                isPrimaryKey: e.target.checked
+              });
+            } else {
+              dbTable.setCurrentWidgetColumn({
+                isPrimaryKey: e.target.checked
+              });
+            }
+          }}
+        />
+      </Flex>
+      <Flex justify="center" align="center" ml="10px" w="50px">
+        <ExtraOptions column={item} />
+      </Flex>
+      {item && (
+        <Button
+          ml="30px"
+          w="50px"
+          variant="outline"
+          onClick={() => {
+            dbTable.onDeleteWidgetColumn(item.id);
+          }}
+        >
+          <DeleteIcon />
+        </Button>
+      )}
+    </Flex>
+  );
+});
+
+const Header = () => {
+  return (
+    <Flex w="100%">
+      <Box w="200px" textAlign="center">
+        Name
+      </Box>
+      <Box ml="10px" w="300px" textAlign="center">
+        Type
+      </Box>
+      <Box ml="10px" w="250px" textAlign="center">
+        Default Value
+      </Box>
+      <Box ml="10px" w="100px" textAlign="center">
+        Primary
+      </Box>
+      <Box ml="10px" w="50px" textAlign="center"></Box>
+    </Flex>
+  );
+};
+
 export const TableColumns = observer(() => {
   const {
     w3s: {
@@ -217,107 +391,12 @@ export const TableColumns = observer(() => {
   } = useStore();
 
   return (
-    <Stack>
+    <Stack mt="10px">
       <Divider />
       <Box fontWeight={600}>Columns</Box>
-      <Flex w="100%">
-        <Box w="200px" textAlign="center">
-          Name
-        </Box>
-        <Box ml="10px" w="300px" textAlign="center">
-          Type
-        </Box>
-        <Box ml="10px" w="200px" textAlign="center">
-          Default Value
-        </Box>
-        <Box ml="10px" w="100px" textAlign="center">
-          Primary
-        </Box>
-        <Box ml="10px" w="50px" textAlign="center"></Box>
-      </Flex>
-      {widgetColumns.map((item) => (
-        <Flex w="100%" key={item.id}>
-          <Input
-            w="200px"
-            placeholder="Name"
-            size="md"
-            value={item.name}
-            onChange={(e) => {
-              dbTable.onChangeWidgetColumn({
-                ...item,
-                name: e.target.value
-              });
-            }}
-          />
-          <Select
-            ml="10px"
-            w="300px"
-            placeholder="Type"
-            value={item.type}
-            onChange={(e) => {
-              dbTable.onChangeWidgetColumn({
-                ...item,
-                type: e.target.value
-              });
-            }}
-          >
-            <option value="int2">int2</option>
-            <option value="int4">int4</option>
-            <option value="int8">int8</option>
-            <option value="float4">float4</option>
-            <option value="float8">float8</option>
-            <option value="numeric">numeric</option>
-            <option value="json">json</option>
-            <option value="jsonb">jsonb</option>
-            <option value="text">text</option>
-            <option value="varchar">varchar</option>
-            <option value="uuid">uuid</option>
-            <option value="date">date</option>
-            <option value="time">time</option>
-            <option value="timetz">timetz</option>
-            <option value="timestamp">timestamp</option>
-            <option value="timestamptz">timestamptz</option>
-            <option value="bool">bool</option>
-          </Select>
-          <Flex ml="10px" w="200px" pos="relative">
-            <Input
-              placeholder="Default Value"
-              size="md"
-              value={item.defaultValue}
-              onChange={(e) => {
-                dbTable.onChangeWidgetColumn({
-                  ...item,
-                  defaultValue: e.target.value
-                });
-              }}
-            />
-            <DefaultValueMenu type={item.type} />
-          </Flex>
-          <Flex justify="center" ml="10px" w="100px">
-            <Checkbox
-              isChecked={item.isPrimaryKey}
-              onChange={(e) => {
-                dbTable.onChangeWidgetColumn({
-                  ...item,
-                  isPrimaryKey: e.target.checked
-                });
-              }}
-            />
-          </Flex>
-          <Flex justify="center" align="center" ml="10px" w="50px">
-            <ExtraOptions column={item} />
-          </Flex>
-          <Button
-            ml="30px"
-            w="50px"
-            variant="outline"
-            onClick={() => {
-              dbTable.onDeleteWidgetColumn(item.id);
-            }}
-          >
-            <DeleteIcon />
-          </Button>
-        </Flex>
+      <Header />
+      {widgetColumns.map((item, index) => (
+        <ColumnItem key={item.id} item={item} index={index} />
       ))}
       <Flex>
         <Button
@@ -333,6 +412,17 @@ export const TableColumns = observer(() => {
     </Stack>
   );
 });
+
+export const ColumnItemWidget = () => {
+  return (
+    <>
+      <Box my="20px">
+        <Header />
+      </Box>
+      <ColumnItem />
+    </>
+  );
+};
 
 export const TableColumnsWidget = () => {
   return <TableColumns />;

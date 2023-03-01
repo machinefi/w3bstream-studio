@@ -27,7 +27,11 @@ const renderLayout = (layout: any[], fields: { [k: string]: React.ReactElement }
         </Flex>
       );
     } else {
-      return <Box mb="10px">{fields[item]}</Box>;
+      return (
+        <Box mb="10px" width="100%">
+          {fields[item]}
+        </Box>
+      );
     }
   });
 };

@@ -4,11 +4,12 @@ import { PaginationState } from '@/store/standard/PaginationState';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { _ } from '@/lib/lodash';
 import { makeObservable, observable } from 'mobx';
-import { TableType } from '@/server/routers/pg';
+import { ColumnType, TableType } from '@/server/routers/pg';
 import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { v4 as uuidv4 } from 'uuid';
-import { TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
+import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
+import { showNotification } from '@mantine/notifications';
 
 export const createTableSchema = {
   type: 'object',
@@ -34,7 +35,22 @@ export const createTableSchema = {
   required: ['name']
 } as const;
 
+export const columnSchema = {
+  type: 'object',
+  properties: {
+    column: {
+      type: 'string',
+      title: ''
+    },
+    comment: {
+      type: 'string',
+      title: 'Description'
+    }
+  }
+} as const;
+
 type CreateTableSchemaType = FromSchema<typeof createTableSchema>;
+type ColumnSchemaType = FromSchema<typeof columnSchema>;
 
 export interface WidgetColumn {
   id: string;
@@ -46,14 +62,19 @@ export interface WidgetColumn {
   isNullable?: boolean;
   isIdentity: boolean;
   isDefineASArray?: boolean;
+  comment?: string;
 }
 
 export default class DBTableModule {
   allTableNames = new PromiseState<() => Promise<any>, { [x: string]: TableType[] }>({
     function: async () => {
       try {
-        const data = await trpc.pg.tables.query();
-        return _.groupBy(data, 'tableSchema');
+        const res = await trpc.pg.tables.query();
+        const data = _.groupBy(res, 'tableSchema');
+        if (!data.public) {
+          data.public = [];
+        }
+        return data;
       } catch (error) {
         console.log('error', error.message);
       }
@@ -73,14 +94,6 @@ export default class DBTableModule {
     containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
   });
 
-  currentTable = {
-    tableId: 0,
-    tableSchema: '',
-    tableName: ''
-  };
-
-  mode: 'EDIT_TABLE' | 'VIEW_DATA' = 'VIEW_DATA';
-
   createTableForm = new JSONSchemaFormState<CreateTableSchemaType>({
     //@ts-ignore
     schema: createTableSchema,
@@ -94,7 +107,8 @@ export default class DBTableModule {
       },
       columns: {
         'ui:widget': TableColumnsWidget
-      }
+      },
+      layout: [['name', 'comment'], 'rls_enabled', 'columns']
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -103,12 +117,59 @@ export default class DBTableModule {
     value: new JSONValue<CreateTableSchemaType>({
       default: {
         name: '',
-        description: ''
+        comment: '',
+        rls_enabled: true
       }
     })
   });
 
+  columnForm = new JSONSchemaFormState<ColumnSchemaType>({
+    //@ts-ignore
+    schema: columnSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      column: {
+        'ui:widget': ColumnItemWidget
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.columnForm.reset();
+    },
+    value: new JSONValue<ColumnSchemaType>({
+      default: {
+        comment: ''
+      }
+    })
+  });
+
+  mode: 'EDIT_TABLE' | 'VIEW_DATA' = 'VIEW_DATA';
+
+  currentTable = {
+    tableId: 0,
+    tableSchema: '',
+    tableName: ''
+  };
+
+  currentColumns: ColumnType[] = [];
+
+  currentWidgetColumn: WidgetColumn = {
+    id: '-',
+    name: '',
+    type: '',
+    defaultValue: '',
+    isPrimaryKey: false,
+    isUnique: false,
+    isNullable: true,
+    isIdentity: false,
+    isDefineASArray: false
+  };
+
   widgetColumns: WidgetColumn[] = [];
+
   onAddWidgetColumn() {
     this.widgetColumns.push({
       id: uuidv4(),
@@ -117,7 +178,7 @@ export default class DBTableModule {
       defaultValue: '',
       isPrimaryKey: false,
       isUnique: false,
-      isNullable: false,
+      isNullable: true,
       isIdentity: false
     });
   }
@@ -149,7 +210,7 @@ export default class DBTableModule {
       {
         id: uuidv4(),
         name: 'created_at',
-        type: 'timestamptz',
+        type: 'timestamp',
         defaultValue: 'now()',
         isIdentity: false,
         isNullable: false,
@@ -158,17 +219,116 @@ export default class DBTableModule {
       }
     ];
   }
+  async createTable({ tableSchema = 'public', formData }: { tableSchema?: string; formData: CreateTableSchemaType }) {
+    let tableId = null;
+    try {
+      const tableRes = await trpc.pg.createTable.mutate({
+        schema: tableSchema,
+        name: formData.name,
+        comment: formData.comment
+      });
+
+      tableId = tableRes.id;
+
+      if (formData.rls_enabled) {
+        await trpc.pg.updateTable.mutate({
+          id: tableId,
+          rls_enabled: formData.rls_enabled
+        });
+      }
+
+      return tableId;
+    } catch (error) {
+      await showNotification({ message: error.message });
+      return tableId;
+    }
+  }
+  async deleteTable({ tableId, cascade }: { tableId: number; cascade?: boolean }) {
+    try {
+      await trpc.pg.deleteTable.mutate({
+        tableId,
+        cascade
+      });
+      this.allTableNames.call();
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+  async addColumn(tableId: number, column: Partial<WidgetColumn>) {
+    const { errorMsg } = await trpc.pg.createColumn.mutate({
+      tableId,
+      ...column
+    });
+    if (errorMsg) {
+      await showNotification({ message: `Failed to create column "${column.name}". Reason: ${errorMsg}` });
+    }
+    return errorMsg;
+  }
+  async updateColumn(columnId: string, column: Partial<WidgetColumn>) {
+    const { errorMsg } = await trpc.pg.updateColumn.mutate({
+      columnId,
+      ...column
+    });
+    if (errorMsg) {
+      await showNotification({ message: `Failed to update column "${column.name}". Reason: ${errorMsg}` });
+    }
+    return errorMsg;
+  }
+  async deleteColumn({ columnId, cascade }: { columnId: string; cascade?: boolean }) {
+    try {
+      const { errorMsg } = await trpc.pg.deleteColumn.mutate({
+        columnId,
+        cascade
+      });
+      if (errorMsg) {
+        await showNotification({ message: errorMsg });
+      } else {
+        const cols = await this.getCurrentTableCols();
+        this.setCurrentColumns(cols);
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+  async submitData({ tableSchema = 'public', formData }: { tableSchema?: string; formData: CreateTableSchemaType }) {
+    const tableId = await this.createTable({
+      tableSchema,
+      formData
+    });
+
+    if (!tableId) {
+      return;
+    }
+
+    const columns = formatColumns(this.widgetColumns);
+
+    for (const column of columns) {
+      await this.addColumn(tableId, column);
+    }
+
+    this.allTableNames.call();
+  }
 
   constructor() {
     makeObservable(this, {
       mode: observable,
       currentTable: observable,
-      widgetColumns: observable
+      currentColumns: observable,
+      widgetColumns: observable,
+      currentWidgetColumn: observable
     });
   }
 
   setCurrentTable(v: TableType) {
     this.currentTable = v;
+  }
+
+  setCurrentColumns(v: ColumnType[]) {
+    this.currentColumns = v;
+  }
+
+  setCurrentWidgetColumn(v: Partial<WidgetColumn>) {
+    this.currentWidgetColumn = Object.assign(this.currentWidgetColumn, v);
   }
 
   setMode(v: 'EDIT_TABLE' | 'VIEW_DATA') {
@@ -223,6 +383,8 @@ export default class DBTableModule {
         page: 1,
         total: Number(count)
       });
+
+      this.setCurrentColumns(cols);
     }
   }
 
@@ -233,3 +395,67 @@ export default class DBTableModule {
     });
   }
 }
+
+export const formatColumn = (column: WidgetColumn) => {
+  const { id, ...rest } = column;
+  if (column.defaultValue === 'NULL' || column.defaultValue === '') {
+    rest.defaultValue = null;
+  }
+  if (column.defaultValue === 'Empty string') {
+    rest.defaultValue = '';
+  }
+  if (column.defaultValue?.includes('now()') || column.defaultValue?.includes('uuid_generate_v4()')) {
+    // @ts-ignore
+    rest.defaultValueFormat = 'expression';
+  }
+  if (column.isDefineASArray) {
+    rest.type = `${column.type}[]`;
+    delete rest.isDefineASArray;
+  } else {
+    delete rest.isDefineASArray;
+  }
+  if (column.type === 'text' || column.type === 'varchar') {
+    // @ts-ignore
+    rest.comment = '';
+  }
+  return rest;
+};
+
+export const formatColumns = (columns: WidgetColumn[]) => {
+  return columns
+    .filter((item) => {
+      return item.name && item.type;
+    })
+    .map((item) => {
+      return formatColumn(item);
+    });
+};
+
+export const formatColumnType = (type: string) => {
+  switch (type) {
+    case 'bigint':
+      return 'int8';
+    case 'integer':
+      return 'int4';
+    case 'smallint':
+      return 'int2';
+    case 'character varying':
+      return 'varchar';
+    case 'timestamp without time zone':
+      return 'timestamp';
+    case 'timestamp with time zone':
+      return 'timestamptz';
+    case 'time without time zone':
+      return 'time';
+    case 'time with time zone':
+      return 'timetz';
+    case 'double precision':
+      return 'float8';
+    case 'real':
+      return 'float4';
+    case 'boolean':
+      return 'bool';
+    default:
+      return type;
+  }
+};
