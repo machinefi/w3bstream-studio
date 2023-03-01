@@ -7,7 +7,7 @@ import { gradientButtonStyle } from '@/lib/theme';
 import { MdRefresh } from 'react-icons/md';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { hooks } from '@/lib/hooks';
-import { formatColumn, formatColumnType } from '@/store/lib/w3bstream/schema/dbTable';
+import { formatColumn, creatColumnDataForm } from '@/store/lib/w3bstream/schema/dbTable';
 
 const CurrentDBTable = observer(() => {
   const {
@@ -24,7 +24,32 @@ const CurrentDBTable = observer(() => {
       {dbTable.mode === 'VIEW_DATA' && (
         <>
           <Flex alignItems="center">
-            <Button h="32px" leftIcon={<AddIcon />} {...gradientButtonStyle} onClick={async (e) => {}}>
+            <Button
+              h="32px"
+              leftIcon={<AddIcon />}
+              {...gradientButtonStyle}
+              onClick={async (e) => {
+                const form = creatColumnDataForm(dbTable.currentColumns);
+                const formData = await hooks.getFormData({
+                  title: `Insert data to '${dbTable.currentTable.tableName}'`,
+                  size: 'md',
+                  formList: [
+                    {
+                      form
+                    }
+                  ]
+                });
+                try {
+                  const errorMsg = await dbTable.createTableData(formData);
+                  if (!errorMsg) {
+                    const data = await dbTable.getCurrentTableData();
+                    dbTable.table.set({
+                      dataSource: data
+                    });
+                  }
+                } catch (error) {}
+              }}
+            >
               Insert
             </Button>
           </Flex>
@@ -99,7 +124,7 @@ const EditTable = observer(() => {
                     e.stopPropagation();
                     dbTable.setCurrentWidgetColumn({
                       name: column.name,
-                      type: formatColumnType(column.data_type),
+                      type: column.format,
                       // @ts-ignore
                       defaultValue: column.default_value,
                       isUnique: column.is_unique,

@@ -249,6 +249,24 @@ export const pgRouter = t.router({
       const { data, error } = await pgMeta.columns.remove(input.columnId, { cascade });
       await pgMeta.end();
       return { data, errorMsg: error?.message };
+    }),
+  createTableData: t.procedure
+    .input(
+      z.object({
+        tableSchema: z.string(),
+        tableName: z.string(),
+        data: z.any()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const { data, error } = await pgMeta.data.create({
+        tableSchema: input.tableSchema,
+        tableName: input.tableName,
+        data: input.data
+      });
+      await pgMeta.end();
+      return { data, errorMsg: error?.message };
     })
 });
 

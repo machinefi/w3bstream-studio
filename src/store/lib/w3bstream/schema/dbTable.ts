@@ -290,7 +290,7 @@ export default class DBTableModule {
       console.log('error', error);
     }
   }
-  async submitData({ tableSchema = 'public', formData }: { tableSchema?: string; formData: CreateTableSchemaType }) {
+  async createTableAndColumn({ tableSchema = 'public', formData }: { tableSchema?: string; formData: CreateTableSchemaType }) {
     const tableId = await this.createTable({
       tableSchema,
       formData
@@ -307,6 +307,18 @@ export default class DBTableModule {
     }
 
     this.allTableNames.call();
+  }
+  async createTableData(formData: any) {
+    const { tableSchema, tableName } = this.currentTable;
+    const { errorMsg } = await trpc.pg.createTableData.mutate({
+      tableSchema,
+      tableName,
+      data: formData
+    });
+    if (errorMsg) {
+      await showNotification({ message: errorMsg });
+    }
+    return errorMsg;
   }
 
   constructor() {
@@ -431,31 +443,64 @@ export const formatColumns = (columns: WidgetColumn[]) => {
     });
 };
 
-export const formatColumnType = (type: string) => {
-  switch (type) {
-    case 'bigint':
-      return 'int8';
-    case 'integer':
-      return 'int4';
-    case 'smallint':
-      return 'int2';
-    case 'character varying':
-      return 'varchar';
-    case 'timestamp without time zone':
-      return 'timestamp';
-    case 'timestamp with time zone':
-      return 'timestamptz';
-    case 'time without time zone':
-      return 'time';
-    case 'time with time zone':
-      return 'timetz';
-    case 'double precision':
-      return 'float8';
-    case 'real':
-      return 'float4';
-    case 'boolean':
-      return 'bool';
-    default:
-      return type;
-  }
+export const creatColumnDataForm = (columns: ColumnType[]) => {
+  const formatType = (type) => {
+    if (type.includes('int')) {
+      return 'number';
+    }
+    return 'string';
+  };
+  const fieldFormat = (type) => {
+    if (type.includes('time')) {
+      return 'date-time';
+    }
+    if (type.includes('date')) {
+      return 'date';
+    }
+    return '';
+  };
+  const schema = {
+    type: 'object',
+    properties: {},
+    required: []
+  };
+  const uiSchema = {
+    'ui:submitButtonOptions': {
+      norender: false,
+      submitText: 'Submit'
+    }
+  };
+  columns.forEach((item) => {
+    const { name, data_type, comment } = item;
+    schema.properties[name] = {
+      type: formatType(data_type),
+      title: name
+    };
+
+    const format = fieldFormat(data_type);
+    if (format) {
+      schema.properties[name].format = format;
+    }
+
+    if (comment) {
+      schema.properties[name].description = comment;
+    }
+    // if (!item.is_nullable) {
+    //   schema.required.push(name);
+    // }
+  });
+
+  // console.log('creatColumnDataForm [columns]', JSON.stringify(columns, null, 2));
+  // console.log('creatColumnDataForm [schema]', JSON.stringify(schema, null, 2));
+
+  const form = new JSONSchemaFormState<ColumnSchemaType>({
+    //@ts-ignore
+    schema,
+    uiSchema,
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+    }
+  });
+
+  return form;
 };

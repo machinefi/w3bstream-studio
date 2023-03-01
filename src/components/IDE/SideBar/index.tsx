@@ -339,7 +339,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                   ]
                 });
                 if (formData.name) {
-                  dbTable.submitData({
+                  dbTable.createTableAndColumn({
                     tableSchema,
                     formData
                   });
