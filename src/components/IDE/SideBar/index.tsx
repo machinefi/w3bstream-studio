@@ -364,69 +364,77 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
               sx={getSelectedStyles(dbTable.currentTable.tableId === item.tableId)}
               cursor="pointer"
               onClick={() => {
+                if (item.disabled && dbTable.mode !== 'VIEW_DATA') {
+                  dbTable.setMode('VIEW_DATA');
+                }
                 dbTable.setCurrentTable({
                   tableSchema,
                   tableId: item.tableId,
-                  tableName: item.tableName
+                  tableName: item.tableName,
+                  disabled: item.disabled
                 });
               }}
             >
               <Text fontSize="16px" fontWeight={700}>
                 {item.tableName}
               </Text>
-              <Flex alignItems="center">
-                <Tooltip hasArrow label="Delete Table" placement="bottom">
-                  <DeleteIcon
-                    boxSize={4}
-                    cursor="pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      confirm.show({
-                        title: `Confirm deletion of table "${item.tableName}"`,
-                        description: 'Are you sure you want to delete the selected table?',
-                        async onOk() {
-                          await dbTable.deleteTable({
-                            tableId: item.tableId,
-                            cascade: true
-                          });
-                        }
-                      });
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip hasArrow label="Edit Table" placement="bottom">
-                  <EditIcon
-                    ml="12px"
-                    boxSize={4}
-                    cursor="pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      dbTable.setCurrentTable({
-                        tableSchema,
-                        tableId: item.tableId,
-                        tableName: item.tableName
-                      });
-                      dbTable.setMode('EDIT_TABLE');
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip hasArrow label="View Data" placement="bottom">
-                  <ViewIcon
-                    ml="12px"
-                    boxSize={4}
-                    cursor="pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      dbTable.setCurrentTable({
-                        tableSchema,
-                        tableId: item.tableId,
-                        tableName: item.tableName
-                      });
-                      dbTable.setMode('VIEW_DATA');
-                    }}
-                  />
-                </Tooltip>
-              </Flex>
+              {!item.disabled && (
+                <Flex alignItems="center">
+                  <Tooltip hasArrow label="Delete Table" placement="bottom">
+                    <DeleteIcon
+                      boxSize={4}
+                      cursor="pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        confirm.show({
+                          title: `Confirm deletion of table "${item.tableName}"`,
+                          description: 'Are you sure you want to delete the selected table?',
+                          async onOk() {
+                            await dbTable.deleteTable({
+                              tableId: item.tableId,
+                              cascade: true
+                            });
+                          }
+                        });
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip hasArrow label="Edit Table" placement="bottom">
+                    <EditIcon
+                      ml="12px"
+                      boxSize={4}
+                      cursor="pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dbTable.setCurrentTable({
+                          tableSchema,
+                          tableId: item.tableId,
+                          tableName: item.tableName,
+                          disabled: item.disabled
+                        });
+                        dbTable.setMode('EDIT_TABLE');
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip hasArrow label="View Data" placement="bottom">
+                    <ViewIcon
+                      ml="12px"
+                      boxSize={4}
+                      cursor="pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dbTable.setCurrentTable({
+                          tableSchema,
+                          tableId: item.tableId,
+                          tableName: item.tableName,
+                          disabled: item.disabled
+                        });
+                        dbTable.setMode('VIEW_DATA');
+                      }}
+                    />
+                  </Tooltip>
+                </Flex>
+              )}
             </Flex>
           );
         })}

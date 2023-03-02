@@ -2,7 +2,7 @@ import { t } from '../trpc';
 import { z } from 'zod';
 import { inferProcedureOutput, TRPCError } from '@trpc/server';
 import { PostgresMeta } from '@/postgres-meta/index';
-import { DEFAULT_POOL_CONFIG, PG_CONNECTION } from '@/constants/postgres-meta';
+import { DEFAULT_POOL_CONFIG, DISABLED_TABLE_LIST, PG_CONNECTION } from '@/constants/postgres-meta';
 
 export const pgRouter = t.router({
   tables: t.procedure.query(async ({ ctx }) => {
@@ -22,7 +22,8 @@ export const pgRouter = t.router({
         return {
           tableId: item.id,
           tableSchema: item.schema,
-          tableName: item.name
+          tableName: item.name,
+          disabled: DISABLED_TABLE_LIST.includes(item.name)
         };
       });
   }),
