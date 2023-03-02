@@ -63,7 +63,6 @@ const Publishers = observer(() => {
                 eventBus.emit('publisher.create');
               } catch (error) {}
             }
-          }}
         >
           Add Publisher
         </Button>
