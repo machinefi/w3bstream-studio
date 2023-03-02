@@ -51,11 +51,6 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://w3bapp:8888}
       NEXT_PUBLIC_MQTT_URL: ${NEXT_PUBLIC_MQTT_URL:-mqtt://mqtt_server:1883}
       ADMIN_KEY: ${ADMIN_KEY:-iotex.W3B.admin}
-      PG_META_DB_HOST: ${PG_META_DB_HOST:-127.0.0.1}
-      PG_META_DB_NAME: ${PG_META_DB_NAME:-w3bstream}
-      PG_META_DB_USER: ${PG_META_DB_USER:-w3badmin}
-      PG_META_DB_PASSWORD: ${PG_META_DB_PASSWORD:-PaSsW0Rd}
-      PG_META_DB_PORT: ${PG_META_DB_PORT:-5432}
 
   mqtt_server:
     image: eclipse-mosquitto:1.6.15
