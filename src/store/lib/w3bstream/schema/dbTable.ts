@@ -152,7 +152,8 @@ export default class DBTableModule {
   currentTable = {
     tableId: 0,
     tableSchema: '',
-    tableName: ''
+    tableName: '',
+    disabled: true
   };
 
   currentColumns: ColumnType[] = [];
@@ -514,7 +515,9 @@ export default class DBTableModule {
         total: Number(count)
       });
 
-      this.setCurrentColumns(cols);
+      if (!this.currentTable.disabled) {
+        this.setCurrentColumns(cols);
+      }
     }
   }
 
