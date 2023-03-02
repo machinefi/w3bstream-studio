@@ -24,7 +24,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.11",
     "@chakra-ui/layout": "^2.0.1",
-    "@chakra-ui/react": "2.2.1",
+    "@chakra-ui/react": "^2.3.6",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mantine/core": "^4.1.4",
@@ -34,7 +34,7 @@
     "@monaco-editor/react": "^4.4.6",
     "@next/bundle-analyzer": "^12.3.1",
     "@prisma/client": "^4.4.0",
-    "@rjsf/chakra-ui": "5.0.0-beta.13",
+    "@rjsf/chakra-ui": "5.0.0-beta.9",
     "@rjsf/core": "5.0.0-beta.13",
     "@rjsf/utils": "5.0.0-beta.13",
     "@rjsf/validator-ajv6": "5.0.0-beta.13",
