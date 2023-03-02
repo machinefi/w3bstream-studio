@@ -1,64 +1,15 @@
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { Box, Button, Flex, Stack } from '@chakra-ui/react';
+import { Box, Button, Flex, Stack, Image } from '@chakra-ui/react';
 import JSONTable from '@/components/JSONTable';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gradientButtonStyle } from '@/lib/theme';
 import { MdRefresh } from 'react-icons/md';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { hooks } from '@/lib/hooks';
 import { formatColumn, creatColumnDataForm } from '@/store/lib/w3bstream/schema/dbTable';
-
-const CurrentDBTable = observer(() => {
-  const {
-    w3s: { dbTable }
-  } = useStore();
-
-  useEffect(() => {
-    dbTable.init();
-  }, [dbTable.currentTable.tableSchema, dbTable.currentTable.tableName]);
-
-  return (
-    <>
-      {dbTable.mode === 'EDIT_TABLE' && <EditTable />}
-      {dbTable.mode === 'VIEW_DATA' && (
-        <>
-          <Flex alignItems="center">
-            <Button
-              h="32px"
-              leftIcon={<AddIcon />}
-              {...gradientButtonStyle}
-              onClick={async (e) => {
-                const form = creatColumnDataForm(dbTable.currentColumns);
-                const formData = await hooks.getFormData({
-                  title: `Insert data to '${dbTable.currentTable.tableName}'`,
-                  size: 'md',
-                  formList: [
-                    {
-                      form
-                    }
-                  ]
-                });
-                try {
-                  const errorMsg = await dbTable.createTableData(formData);
-                  if (!errorMsg) {
-                    const data = await dbTable.getCurrentTableData();
-                    dbTable.table.set({
-                      dataSource: data
-                    });
-                  }
-                } catch (error) {}
-              }}
-            >
-              Insert
-            </Button>
-          </Flex>
-          <JSONTable jsonstate={dbTable} />
-        </>
-      )}
-    </>
-  );
-});
+import MonacoEditor from '@monaco-editor/react';
+import { _ } from '@/lib/lodash';
 
 const EditTable = observer(() => {
   const {
@@ -217,4 +168,112 @@ const EditTable = observer(() => {
   );
 });
 
-export default CurrentDBTable;
+const ViewData = observer(() => {
+  const {
+    w3s: { dbTable }
+  } = useStore();
+  return (
+    <>
+      <Flex alignItems="center">
+        <Button
+          h="32px"
+          leftIcon={<AddIcon />}
+          {...gradientButtonStyle}
+          onClick={async (e) => {
+            const form = creatColumnDataForm(dbTable.currentColumns);
+            const formData = await hooks.getFormData({
+              title: `Insert data to '${dbTable.currentTable.tableName}'`,
+              size: 'md',
+              formList: [
+                {
+                  form
+                }
+              ]
+            });
+            try {
+              const errorMsg = await dbTable.createTableData(formData);
+              if (!errorMsg) {
+                const data = await dbTable.getCurrentTableData();
+                dbTable.table.set({
+                  dataSource: data
+                });
+              }
+            } catch (error) {}
+          }}
+        >
+          Insert
+        </Button>
+      </Flex>
+      <JSONTable jsonstate={dbTable} />
+    </>
+  );
+});
+
+const QuerySQL = observer(() => {
+  const {
+    w3s: { dbTable }
+  } = useStore();
+
+  const changeCodeRef = useRef(
+    _.debounce((codeStr: string) => {
+      dbTable.setSQL(codeStr);
+    }, 800)
+  );
+
+  const [queryResult, setQueryResult] = useState('');
+
+  return (
+    <Box bg="#000">
+      <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
+        SQL:
+      </Box>
+      <Box pos="relative">
+        <MonacoEditor
+          height={300}
+          theme="vs-dark"
+          language={'sql'}
+          value={dbTable.sql}
+          onChange={(v) => {
+            changeCodeRef.current && changeCodeRef.current(v);
+          }}
+        />
+        <Box
+          pos="absolute"
+          bottom={4}
+          right={4}
+          cursor="pointer"
+          onClick={async () => {
+            const result = await dbTable.querySQL();
+            setQueryResult(JSON.stringify(result, null, 2));
+          }}
+        >
+          <Image p={1} h={6} w={6} borderRadius="4px" bg="gray.300" _hover={{ background: 'gray.400' }} src="/images/icons/execute.svg" />
+        </Box>
+      </Box>
+      <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
+        Query Result:
+      </Box>
+      <MonacoEditor height="calc(100vh - 480px)" theme="vs-dark" language="json" value={queryResult} options={{ readOnly: true }} />
+    </Box>
+  );
+});
+
+const DBTable = observer(() => {
+  const {
+    w3s: { dbTable }
+  } = useStore();
+
+  useEffect(() => {
+    dbTable.init();
+  }, [dbTable.currentTable.tableSchema, dbTable.currentTable.tableName]);
+
+  return (
+    <>
+      {dbTable.mode === 'EDIT_TABLE' && <EditTable />}
+      {dbTable.mode === 'VIEW_DATA' && <ViewData />}
+      {dbTable.mode === 'QUERY_SQL' && <QuerySQL />}
+    </>
+  );
+});
+
+export default DBTable;

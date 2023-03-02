@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Tab, TabList, Tabs } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Tab, TabList, Tabs, Tooltip, Image } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { MdHttp, MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
@@ -51,6 +51,19 @@ const Header = observer(() => {
             </Tab>
           </TabList>
         </Tabs>
+      )}
+      {w3s.showContent === 'DB_TABLE' && (
+        <Tooltip label="Query SQL" placement="bottom">
+          <Box
+            position="relative"
+            cursor="pointer"
+            onClick={() => {
+              w3s.dbTable.setMode('QUERY_SQL');
+            }}
+          >
+            <Image p={1} h={10} w={10} borderRadius="4px" _hover={{ background: 'gray.200' }} src="/images/icons/execute_sql.svg" />
+          </Box>
+        </Tooltip>
       )}
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
         <Icon

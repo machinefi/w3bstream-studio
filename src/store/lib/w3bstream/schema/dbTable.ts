@@ -147,7 +147,7 @@ export default class DBTableModule {
     })
   });
 
-  mode: 'EDIT_TABLE' | 'VIEW_DATA' = 'VIEW_DATA';
+  mode: 'EDIT_TABLE' | 'VIEW_DATA' | 'QUERY_SQL' = 'VIEW_DATA';
 
   currentTable = {
     tableId: 0,
@@ -171,6 +171,19 @@ export default class DBTableModule {
 
   widgetColumns: WidgetColumn[] = [];
 
+  sql = '';
+
+  constructor() {
+    makeObservable(this, {
+      mode: observable,
+      currentTable: observable,
+      currentColumns: observable,
+      widgetColumns: observable,
+      currentWidgetColumn: observable,
+      sql: observable
+    });
+  }
+
   onAddWidgetColumn() {
     this.widgetColumns.push({
       id: uuidv4(),
@@ -183,9 +196,11 @@ export default class DBTableModule {
       isIdentity: false
     });
   }
+
   onDeleteWidgetColumn(id: string) {
     this.widgetColumns = this.widgetColumns.filter((i) => i.id !== id);
   }
+
   onChangeWidgetColumn(data: WidgetColumn) {
     for (let i = 0; i < this.widgetColumns.length; i++) {
       const item = this.widgetColumns[i];
@@ -195,9 +210,11 @@ export default class DBTableModule {
       }
     }
   }
+
   setWidgetColumns(data: WidgetColumn[]) {
     this.widgetColumns = data;
   }
+
   resetWidgetColumns() {
     this.widgetColumns = [
       {
@@ -220,6 +237,54 @@ export default class DBTableModule {
       }
     ];
   }
+
+  setCurrentTable(v: TableType) {
+    this.currentTable = v;
+  }
+
+  setCurrentColumns(v: ColumnType[]) {
+    this.currentColumns = v;
+  }
+
+  setCurrentWidgetColumn(v: Partial<WidgetColumn>) {
+    this.currentWidgetColumn = Object.assign(this.currentWidgetColumn, v);
+  }
+
+  setMode(v: 'EDIT_TABLE' | 'VIEW_DATA' | 'QUERY_SQL') {
+    this.mode = v;
+  }
+
+  setSQL(v: string) {
+    this.sql = v;
+  }
+
+  async querySQL() {
+    if (!this.sql) {
+      return {
+        errorMsg: 'SQL is empty'
+      };
+    }
+    try {
+      const { data, errorMsg } = await trpc.pg.query.mutate({
+        sql: this.sql
+      });
+      if (errorMsg) {
+        await showNotification({ message: errorMsg });
+        return {
+          errorMsg
+        };
+      } else {
+        await showNotification({ message: 'This SQL was executed successfully' });
+        return data;
+      }
+    } catch (error) {
+      await showNotification({ message: error.message });
+      return {
+        errorMsg: error.message
+      };
+    }
+  }
+
   async createTable({ tableSchema = 'public', formData }: { tableSchema?: string; formData: CreateTableSchemaType }) {
     let tableId = null;
     try {
@@ -244,6 +309,7 @@ export default class DBTableModule {
       return tableId;
     }
   }
+
   async deleteTable({ tableId, cascade }: { tableId: number; cascade?: boolean }) {
     try {
       await trpc.pg.deleteTable.mutate({
@@ -255,6 +321,7 @@ export default class DBTableModule {
       console.log('error', error);
     }
   }
+
   async addColumn(tableId: number, column: Partial<WidgetColumn>) {
     const { errorMsg } = await trpc.pg.createColumn.mutate({
       tableId,
@@ -265,6 +332,7 @@ export default class DBTableModule {
     }
     return errorMsg;
   }
+
   async updateColumn(columnId: string, column: Partial<WidgetColumn>) {
     const { errorMsg } = await trpc.pg.updateColumn.mutate({
       columnId,
@@ -275,6 +343,7 @@ export default class DBTableModule {
     }
     return errorMsg;
   }
+
   async deleteColumn({ columnId, cascade }: { columnId: string; cascade?: boolean }) {
     try {
       const { errorMsg } = await trpc.pg.deleteColumn.mutate({
@@ -291,6 +360,7 @@ export default class DBTableModule {
       console.log('error', error);
     }
   }
+
   async createTableAndColumn({ tableSchema = 'public', formData }: { tableSchema?: string; formData: CreateTableSchemaType }) {
     const tableId = await this.createTable({
       tableSchema,
@@ -309,6 +379,7 @@ export default class DBTableModule {
 
     this.allTableNames.call();
   }
+
   async createTableData(formData: any) {
     const { tableSchema, tableName } = this.currentTable;
     const keys = Object.keys(formData);
@@ -325,32 +396,6 @@ export default class DBTableModule {
       await showNotification({ message: errorMsg });
     }
     return errorMsg;
-  }
-
-  constructor() {
-    makeObservable(this, {
-      mode: observable,
-      currentTable: observable,
-      currentColumns: observable,
-      widgetColumns: observable,
-      currentWidgetColumn: observable
-    });
-  }
-
-  setCurrentTable(v: TableType) {
-    this.currentTable = v;
-  }
-
-  setCurrentColumns(v: ColumnType[]) {
-    this.currentColumns = v;
-  }
-
-  setCurrentWidgetColumn(v: Partial<WidgetColumn>) {
-    this.currentWidgetColumn = Object.assign(this.currentWidgetColumn, v);
-  }
-
-  setMode(v: 'EDIT_TABLE' | 'VIEW_DATA') {
-    this.mode = v;
   }
 
   async getCurrentTableCols() {
@@ -463,6 +508,7 @@ export default class DBTableModule {
       this.table.set({
         columns
       });
+
       this.table.pagination.setData({
         page: 1,
         total: Number(count)

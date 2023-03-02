@@ -25,6 +25,8 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { WidgetColumn } from '@/store/lib/w3bstream/schema/dbTable';
 
+const ColumnTypes = ['int4', 'int8', 'float4', 'float8', 'numeric', 'json', 'jsonb', 'text', 'varchar', 'uuid', 'time', 'timetz', 'timestamp', 'timestamptz', 'date', 'bool', 'bytea'];
+
 const getMenuValue = (type: string) => {
   if (type === 'text' || type === 'varchar') {
     return [
@@ -286,24 +288,11 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
           }
         }}
       >
-        <option value="int2">int2</option>
-        <option value="int4">int4</option>
-        <option value="int8">int8</option>
-        <option value="float4">float4</option>
-        <option value="float8">float8</option>
-        <option value="numeric">numeric</option>
-        <option value="json">json</option>
-        <option value="jsonb">jsonb</option>
-        <option value="text">text</option>
-        <option value="varchar">varchar</option>
-        <option value="uuid">uuid</option>
-        <option value="date">date</option>
-        <option value="time">time</option>
-        <option value="timetz">timetz</option>
-        <option value="timestamp">timestamp</option>
-        <option value="timestamptz">timestamptz</option>
-        <option value="bool">bool</option>
-        <option value="bytea">bytea</option>
+        {ColumnTypes.map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
       </Select>
       <Flex ml="10px" w="250px" pos="relative">
         <Input
