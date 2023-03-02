@@ -26,68 +26,6 @@ export const pgRouter = t.router({
         };
       });
   }),
-  columns: t.procedure
-    .input(
-      z.object({
-        tableId: z.number()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
-      const { data, error } = await pgMeta.columns.list({
-        includeSystemSchemas: false,
-        tableId: Number(input.tableId)
-      });
-      await pgMeta.end();
-      if (error) {
-        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
-      }
-      return data;
-    }),
-  data: t.procedure
-    .input(
-      z.object({
-        tableSchema: z.string(),
-        tableName: z.string(),
-        page: z.number().optional(),
-        pageSize: z.number().optional()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const page = input.page || 1;
-      const pageSize = input.pageSize || 10;
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
-      const { data, error } = await pgMeta.data.list({
-        tableSchema: input.tableSchema,
-        tableName: input.tableName,
-        limit: pageSize,
-        offset: (page - 1) * pageSize
-      });
-      await pgMeta.end();
-      if (error) {
-        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
-      }
-      return data;
-    }),
-  dataCount: t.procedure
-    .input(
-      z.object({
-        tableSchema: z.string(),
-        tableName: z.string()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
-      const { data, error } = await pgMeta.data.count({
-        tableSchema: input.tableSchema,
-        tableName: input.tableName
-      });
-      await pgMeta.end();
-      if (error) {
-        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
-      }
-      return data[0]?.count || 0;
-    }),
   createTable: t.procedure
     .input(
       z.object({
@@ -173,6 +111,24 @@ export const pgRouter = t.router({
       }
       return data;
     }),
+  columns: t.procedure
+    .input(
+      z.object({
+        tableId: z.number()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const { data, error } = await pgMeta.columns.list({
+        includeSystemSchemas: false,
+        tableId: Number(input.tableId)
+      });
+      await pgMeta.end();
+      if (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+      }
+      return data;
+    }),
   createColumn: t.procedure
     .input(
       z.object({
@@ -250,21 +206,15 @@ export const pgRouter = t.router({
       await pgMeta.end();
       return { data, errorMsg: error?.message };
     }),
-  createTableData: t.procedure
+  query: t.procedure
     .input(
       z.object({
-        tableSchema: z.string(),
-        tableName: z.string(),
-        data: z.any()
+        sql: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
       const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
-      const { data, error } = await pgMeta.data.create({
-        tableSchema: input.tableSchema,
-        tableName: input.tableName,
-        data: input.data
-      });
+      const { data, error } = await pgMeta.query(input.sql);
       await pgMeta.end();
       return { data, errorMsg: error?.message };
     })

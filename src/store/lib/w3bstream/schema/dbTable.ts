@@ -1,5 +1,5 @@
 import { trpc } from '@/lib/trpc';
-import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { Column, JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { PaginationState } from '@/store/standard/PaginationState';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { _ } from '@/lib/lodash';
@@ -10,6 +10,7 @@ import { eventBus } from '@/lib/event';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
 import { showNotification } from '@mantine/notifications';
+import format from 'pg-format';
 
 export const createTableSchema = {
   type: 'object',
@@ -310,10 +311,15 @@ export default class DBTableModule {
   }
   async createTableData(formData: any) {
     const { tableSchema, tableName } = this.currentTable;
-    const { errorMsg } = await trpc.pg.createTableData.mutate({
-      tableSchema,
-      tableName,
-      data: formData
+    const keys = Object.keys(formData);
+    const values = Object.values(formData);
+    if (!keys.length) {
+      await showNotification({ message: 'No data provided' });
+      return 'No data provided';
+    }
+    const sql = format(`INSERT INTO %I.%I (%I) VALUES (%L)`, tableSchema, tableName, keys, values);
+    const { errorMsg } = await trpc.pg.query.mutate({
+      sql
     });
     if (errorMsg) {
       await showNotification({ message: errorMsg });
@@ -359,37 +365,103 @@ export default class DBTableModule {
   }
 
   async getCurrentTableDataCount() {
+    const { tableSchema, tableName } = this.currentTable;
     try {
-      const count = await trpc.pg.dataCount.query(this.currentTable);
-      return count;
+      const sql = `SELECT COUNT(*) FROM ${format.string(`${tableSchema}.${tableName}`)}`;
+      const { data, errorMsg } = await trpc.pg.query.mutate({ sql });
+      if (errorMsg) {
+        await showNotification({ message: errorMsg });
+        return 0;
+      } else {
+        return data[0].count;
+      }
     } catch (error) {
       return 0;
     }
   }
 
   async getCurrentTableData() {
+    const { tableSchema, tableName } = this.currentTable;
+    const page = this.table.pagination.page;
+    const pageSize = this.table.pagination.limit;
+    const offset = (page - 1) * pageSize;
     try {
-      const data = await trpc.pg.data.query({
-        ...this.currentTable,
-        page: this.table.pagination.page,
-        pageSize: this.table.pagination.limit
+      const sql = `SELECT * FROM ${format.string(`${tableSchema}.${tableName}`)} LIMIT ${pageSize} OFFSET ${offset}`;
+      const { data, errorMsg } = await trpc.pg.query.mutate({
+        sql
       });
-      return data;
+      if (errorMsg) {
+        await showNotification({ message: errorMsg });
+        return [];
+      } else {
+        return data;
+      }
     } catch (error) {
       return [];
     }
   }
 
+  async deleteTableData(name, value) {
+    if (!name || !value) {
+      await showNotification({ message: 'No data provided' });
+      return 'No data provided';
+    }
+    const { tableSchema, tableName } = this.currentTable;
+    const sql = format(`DELETE FROM %I.%I WHERE %I = %L`, tableSchema, tableName, name, value);
+    const { errorMsg } = await trpc.pg.query.mutate({
+      sql
+    });
+    if (errorMsg) {
+      await showNotification({ message: errorMsg });
+    }
+    return errorMsg;
+  }
+
   async init() {
     if (this.currentTable.tableSchema && this.currentTable.tableName) {
       const [cols, count] = await Promise.all([this.getCurrentTableCols(), this.getCurrentTableDataCount()]);
+      const columns: Column[] = cols.map((item) => {
+        return {
+          key: item.name,
+          label: item.name
+        };
+      });
+
+      const idName = cols[0].name;
+
+      columns.push({
+        key: 'action',
+        label: 'Action',
+        actions: (item) => {
+          return [
+            {
+              props: {
+                colorScheme: 'red',
+                size: 'xs',
+                onClick: async () => {
+                  globalThis.store.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    onOk: async () => {
+                      try {
+                        await this.deleteTableData(idName, item[idName]);
+                        const data = await this.getCurrentTableData();
+                        this.table.set({
+                          dataSource: data
+                        });
+                      } catch (error) {}
+                    }
+                  });
+                }
+              },
+              text: 'Delete'
+            }
+          ];
+        }
+      });
+
       this.table.set({
-        columns: cols.map((item) => {
-          return {
-            key: item.name,
-            label: item.name
-          };
-        })
+        columns
       });
       this.table.pagination.setData({
         page: 1,
