@@ -42,7 +42,10 @@
       "@/constants/*": [
         "constants/*"
       ],
-      "@/server/*":["server/*"]
+      "@/server/*":["server/*"],
+      "@/postgres-meta/*": [
+        "postgres-meta/*"
+      ],
     },
     "incremental": true
   },

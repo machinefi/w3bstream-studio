@@ -48,6 +48,7 @@ export class JSONSchemaFormState<T, U = UiSchema> {
     }
     return this;
   }
+  customValidate = (formData: T, errors: any) => errors;
 
   constructor(args: Partial<JSONSchemaFormState<T, U>> = {}) {
     Object.assign(this, args);
@@ -113,7 +114,7 @@ export type ActionButtonType = {
   props: ButtonProps;
   text: string;
 };
-export type Column<T> = { key: string; label: string; render?: (item: T) => any; actions?: (item: T) => ActionButtonType[] };
+export type Column<T = any> = { key: string; label: string; render?: (item: T) => any; actions?: (item: T) => ActionButtonType[] };
 export type ExtendedTable<U> = {
   key: string;
   columns: Column<U>[];

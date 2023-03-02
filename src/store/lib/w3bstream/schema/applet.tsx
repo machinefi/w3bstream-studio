@@ -1,10 +1,10 @@
-import FileWidget, { FileWidgetUIOptions } from '@/components/FileWidget';
-import { InstanceStatusRender } from '@/components/JSONTableRender';
+import FileWidget, { FileWidgetUIOptions } from '@/components/JSONFormWidgets/FileWidget';
+import { InstanceStatusRender } from '@/components/JSONTable/FieldRender';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
-import { gradientButtonStyle } from '@/lib/theme';
+import { hooks } from '@/lib/hooks';
 import { AppletType } from '@/server/routers/w3bstream';
-import { JSONModalValue, JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
@@ -43,11 +43,6 @@ export default class AppletModule {
       'ui:submitButtonOptions': {
         norender: false,
         submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
       },
       file: {
         'ui:widget': FileWidget,
@@ -60,31 +55,8 @@ export default class AppletModule {
       }
     },
     afterSubmit: async (e) => {
-      let formData = new FormData();
-      const file = dataURItoBlob(e.formData.file);
-      formData.append('file', file.blob);
-      formData.append(
-        'info',
-        JSON.stringify({
-          wasmName: file.name,
-          projectName: e.formData.projectName,
-          appletName: e.formData.appletName
-        })
-      );
-      const res = await axios.request({
-        method: 'post',
-        url: `/api/file?api=applet/${e.formData.projectName}`,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        data: formData
-      });
-      if (res.data) {
-        await showNotification({ message: 'create applet succeeded' });
-        eventBus.emit('applet.create');
-        this.form.reset();
-        this.modal.set({ show: false });
-      }
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.form.reset();
     },
     value: new JSONValue<SchemaType>({
       //@ts-ignore
@@ -93,14 +65,6 @@ export default class AppletModule {
         appletName: 'app_01'
       }
     })
-  });
-
-  modal = new JSONModalValue({
-    default: {
-      show: false,
-      title: 'Create Applet',
-      autoReset: true
-    }
   });
 
   table = new JSONSchemaTableState<AppletType>({
@@ -154,11 +118,11 @@ export default class AppletModule {
               ml: '10px',
               colorScheme: 'blue',
               size: 'xs',
-              onClick: () => {
+              onClick: async () => {
                 globalThis.store.w3s.strategy.form.value.set({
-                  appletID: item.f_applet_id.toString(),
+                  appletID: item.f_applet_id.toString()
                 });
-                globalThis.store.w3s.strategy.modal.set({ show: true, title: 'Create Strategy' });
+                globalThis.store.w3s.strategy.createStrategy();
               }
             },
             text: 'Add Strategy'
@@ -290,5 +254,42 @@ export default class AppletModule {
 
   set(v: Partial<AppletModule>) {
     Object.assign(this, v);
+  }
+
+  async createApplet() {
+    const formData = await hooks.getFormData({
+      title: 'Create Applet',
+      size: 'md',
+      formList: [
+        {
+          form: this.form
+        }
+      ]
+    });
+    if (formData.file) {
+      const data = new FormData();
+      const file = dataURItoBlob(formData.file);
+      data.append('file', file.blob);
+      data.append(
+        'info',
+        JSON.stringify({
+          wasmName: file.name,
+          projectName: formData.projectName,
+          appletName: formData.appletName
+        })
+      );
+      const res = await axios.request({
+        method: 'post',
+        url: `/api/file?api=applet/${formData.projectName}`,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        data
+      });
+      if (res.data) {
+        await showNotification({ message: 'create applet succeeded' });
+        eventBus.emit('applet.create');
+      }
+    }
   }
 }

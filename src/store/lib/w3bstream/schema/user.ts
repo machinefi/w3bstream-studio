@@ -1,9 +1,7 @@
-import { JSONModalValue, JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
-import { gradientButtonStyle } from '@/lib/theme';
-import { showNotification } from '@mantine/notifications';
 
 export const loginSchema = {
   // title: 'Login',
@@ -33,12 +31,7 @@ export default class UserModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Login',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Login'
       },
       password: {
         'ui:widget': 'password'
@@ -70,40 +63,17 @@ export default class UserModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Update',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Update'
       }
     },
     afterSubmit: async (e) => {
-      const res = await axios.request({
-        method: 'put',
-        url: `/api/w3bapp/account/${globalThis.store.w3s.config.form.formData.accountID}`,
-        data: e.formData
-      });
-      showNotification({ message: 'update password succeeded' });
-      eventBus.emit('user.update-pwd');
-      this.form.reset();
-      this.modal.set({ show: false });
-      globalThis.store.w3s.config.logout();
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.pwdForm.reset();
     },
     value: new JSONValue<PWDSchemaType>({
       default: {
         password: ''
       }
     })
-  });
-
-  form: JSONSchemaFormState<PWDSchemaType> = this.pwdForm;
-
-  modal = new JSONModalValue({
-    default: {
-      show: false,
-      title: 'Update Password',
-      autoReset: true
-    }
   });
 }

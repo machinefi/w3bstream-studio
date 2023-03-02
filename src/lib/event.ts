@@ -37,6 +37,8 @@ interface MessageEvents {
   'chainTx.delete': () => void;
   'chainHeight.create': () => void;
   'chainHeight.delete': () => void;
+  'base.formModal.abort': () => void;
+  'base.formModal.afterSubmit': (formData: any) => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;

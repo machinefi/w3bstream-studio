@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button, useDisclosure, Collapse } from '@chakra-ui/react';
+import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button, useDisclosure, Collapse, Spinner } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronRightIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronRightIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { MdAddBox, MdRefresh } from 'react-icons/md';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -9,7 +9,8 @@ import { FilesItem } from './filesItem';
 import toast from 'react-hot-toast';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
-import { TableNameType } from '@/store/lib/w3bstream/schema/dbTable';
+import { TableType } from '@/server/routers/pg';
+import { hooks } from '@/lib/hooks';
 
 interface SideBarProps extends FlexProps {}
 
@@ -30,12 +31,8 @@ const SideBar = observer((props: SideBarProps) => {
             <Button
               p={2}
               variant="ghost"
-              onClick={(e) => {
-                w3s.project.setMode('add');
-                w3s.project.modal.set({
-                  show: true,
-                  title: 'Create Project'
-                });
+              onClick={async (e) => {
+                w3s.project.createProject();
               }}
             >
               <Icon as={MdAddBox} />
@@ -82,16 +79,13 @@ const SideBar = observer((props: SideBarProps) => {
                     <EditIcon
                       boxSize={4}
                       cursor="pointer"
-                      onClick={() => {
+                      onClick={async (e) => {
+                        e.stopPropagation();
                         w3s.allProjects.onSelect(index);
                         w3s.project.form.value.set({
                           name: w3s.curProject.f_name
                         });
-                        w3s.project.setMode('edit');
-                        w3s.project.modal.set({
-                          show: true,
-                          title: 'Project Details'
-                        });
+                        w3s.project.editProject();
                       }}
                     />
                   </Tooltip>
@@ -100,7 +94,8 @@ const SideBar = observer((props: SideBarProps) => {
                       ml="12px"
                       boxSize={4}
                       cursor="pointer"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         confirm.show({
                           title: 'Warning',
                           description: 'Are you sure you want to delete it?',
@@ -277,6 +272,14 @@ const DBTable = observer(() => {
     }
   }, []);
 
+  // if (allTableNames.loading.value) {
+  //   return (
+  //     <Flex w="100%" h="100%" justify="center">
+  //       <Spinner mt="100px" />
+  //     </Flex>
+  //   );
+  // }
+
   if (!allTableNames.value) {
     return null;
   }
@@ -290,9 +293,10 @@ const DBTable = observer(() => {
   );
 });
 
-const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tables: TableNameType[] }) => {
+const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tables: TableType[] }) => {
   const {
-    w3s: { dbTable }
+    w3s: { dbTable },
+    base: { confirm }
   } = useStore();
   const collaspeState = useDisclosure({
     defaultIsOpen: true
@@ -302,6 +306,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
     <Box borderBottom="1px solid rgba(0, 0, 0, 0.06)" cursor="pointer">
       <Flex
         alignItems="center"
+        justifyContent="space-between"
         py={1}
         px={2}
         borderBottom="1px solid rgba(0, 0, 0, 0.06)"
@@ -310,10 +315,41 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
           collaspeState.onToggle();
         }}
       >
-        <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
-        <Text fontSize="16px" fontWeight={700}>
-          {tableSchema}
-        </Text>
+        <Flex alignItems="center">
+          <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
+          <Text fontSize="16px" fontWeight={700}>
+            {tableSchema}
+          </Text>
+        </Flex>
+        <Flex alignItems="center">
+          <Tooltip hasArrow label="Create a new table" placement="bottom">
+            <Button
+              p={0}
+              variant="ghost"
+              onClick={async (e) => {
+                e.stopPropagation();
+                dbTable.resetWidgetColumns();
+                const formData = await hooks.getFormData({
+                  title: `Create a new table under '${tableSchema}'`,
+                  size: '6xl',
+                  formList: [
+                    {
+                      form: dbTable.createTableForm
+                    }
+                  ]
+                });
+                if (formData.name) {
+                  dbTable.createTableAndColumn({
+                    tableSchema,
+                    formData
+                  });
+                }
+              }}
+            >
+              <Icon as={MdAddBox} />
+            </Button>
+          </Tooltip>
+        </Flex>
       </Flex>
       <Collapse in={collaspeState.isOpen}>
         {tables.map((item) => {
@@ -325,11 +361,12 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
               py={1}
               px={6}
               borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-              sx={getSelectedStyles(dbTable.currentTable.tableSchema === tableSchema && dbTable.currentTable.tableName === item.tableName)}
+              sx={getSelectedStyles(dbTable.currentTable.tableId === item.tableId)}
               cursor="pointer"
               onClick={() => {
                 dbTable.setCurrentTable({
                   tableSchema,
+                  tableId: item.tableId,
                   tableName: item.tableName
                 });
               }}
@@ -337,6 +374,59 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
               <Text fontSize="16px" fontWeight={700}>
                 {item.tableName}
               </Text>
+              <Flex alignItems="center">
+                <Tooltip hasArrow label="Delete Table" placement="bottom">
+                  <DeleteIcon
+                    boxSize={4}
+                    cursor="pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      confirm.show({
+                        title: `Confirm deletion of table "${item.tableName}"`,
+                        description: 'Are you sure you want to delete the selected table?',
+                        async onOk() {
+                          await dbTable.deleteTable({
+                            tableId: item.tableId,
+                            cascade: true
+                          });
+                        }
+                      });
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip hasArrow label="Edit Table" placement="bottom">
+                  <EditIcon
+                    ml="12px"
+                    boxSize={4}
+                    cursor="pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dbTable.setCurrentTable({
+                        tableSchema,
+                        tableId: item.tableId,
+                        tableName: item.tableName
+                      });
+                      dbTable.setMode('EDIT_TABLE');
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip hasArrow label="View Data" placement="bottom">
+                  <ViewIcon
+                    ml="12px"
+                    boxSize={4}
+                    cursor="pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dbTable.setCurrentTable({
+                        tableSchema,
+                        tableId: item.tableId,
+                        tableName: item.tableName
+                      });
+                      dbTable.setMode('VIEW_DATA');
+                    }}
+                  />
+                </Tooltip>
+              </Flex>
             </Flex>
           );
         })}

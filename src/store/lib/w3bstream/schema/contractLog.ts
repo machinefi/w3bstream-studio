@@ -1,12 +1,8 @@
-import { JSONValue, JSONSchemaFormState, JSONModalValue, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { JSONValue, JSONSchemaFormState, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
-import { axios } from '@/lib/axios';
-import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
 import { ContractLogType } from '@/server/routers/w3bstream';
-import toast from 'react-hot-toast';
 
 export const schema = {
   definitions: {
@@ -76,7 +72,7 @@ export default class ContractLogModule {
       {
         key: 'f_updated_at',
         label: 'Updated At'
-      },
+      }
       // {
       //   key: 'actions',
       //   label: 'Actions',
@@ -125,26 +121,12 @@ export default class ContractLogModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       }
     },
     afterSubmit: async (e) => {
-      const res = await axios.request({
-        method: 'post',
-        url: `/api/w3bapp/monitor/contract_log/${e.formData.projectID}`,
-        data: e.formData
-      });
-      if (res.data) {
-        await showNotification({ message: 'Smart Contract event monitor successfully created.' });
-        eventBus.emit('contractlog.create');
-        this.form.reset();
-        this.modal.set({ show: false });
-      }
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.form.reset();
     },
     value: new JSONValue<SchemaType>({
       default: {
@@ -157,13 +139,5 @@ export default class ContractLogModule {
         topic0: ''
       }
     })
-  });
-
-  modal = new JSONModalValue({
-    default: {
-      show: false,
-      title: 'Add Smart Contract event monitor',
-      autoReset: true
-    }
   });
 }

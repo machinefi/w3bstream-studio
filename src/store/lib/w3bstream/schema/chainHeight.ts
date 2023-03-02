@@ -1,12 +1,8 @@
-import { JSONValue, JSONSchemaFormState, JSONModalValue, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { JSONValue, JSONSchemaFormState, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
-import { axios } from '@/lib/axios';
-import { gradientButtonStyle } from '@/lib/theme';
 import { definitions } from './definitions';
 import { ChainHeightType } from '@/server/routers/w3bstream';
-import toast from 'react-hot-toast';
 
 export const schema = {
   definitions: {
@@ -111,25 +107,11 @@ export default class ChainHeightModule {
       'ui:submitButtonOptions': {
         norender: false,
         submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
       }
     },
     afterSubmit: async (e) => {
-      const res = await axios.request({
-        method: 'post',
-        url: `/api/w3bapp/monitor/chain_height/${e.formData.projectID}`,
-        data: e.formData
-      });
-      if (res.data) {
-        await showNotification({ message: 'Blockchain height monitor sucessfully created.' });
-        eventBus.emit('chainHeight.create');
-        this.form.reset();
-        this.modal.set({ show: false });
-      }
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.form.reset();
     },
     value: new JSONValue<SchemaType>({
       default: {
@@ -139,13 +121,5 @@ export default class ChainHeightModule {
         height: 0
       }
     })
-  });
-
-  modal = new JSONModalValue({
-    default: {
-      show: false,
-      title: 'Create blockchain height monitor',
-      autoReset: true
-    }
   });
 }

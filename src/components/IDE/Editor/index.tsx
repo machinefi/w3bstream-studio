@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 let asc: typeof import('assemblyscript/dist/asc');
@@ -8,17 +8,19 @@ import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
 import _ from 'lodash';
-import { IChangeEvent } from '@rjsf/core';
 import { FileIcon } from '@/components/Tree';
 import { toJS } from 'mobx';
+import { hooks } from '@/lib/hooks';
+import { dataURItoBlob } from '@rjsf/utils';
+import { axios } from '@/lib/axios';
+import { showNotification } from '@mantine/notifications';
+import { eventBus } from '@/lib/event';
 
 const Editor = observer(() => {
   const {
     w3s,
     w3s: {
-      projectManager: {
-        curFilesListSchema
-      }
+      projectManager: { curFilesListSchema }
     }
   } = useStore();
 
@@ -164,19 +166,14 @@ const Editor = observer(() => {
               mr={4}
               className="pi pi-cloud-upload"
               color="white"
-              onClick={() => {
+              onClick={async () => {
                 w3s.applet.form.value.set({
-                  projectID: w3s.curProject?.f_project_id.toString()
-                });
-                w3s.applet.modal.set({
-                  show: true
-                });
-                //@ts-ignore
-                w3s.applet.form.value.set({
+                  projectID: w3s.curProject?.f_project_id.toString(),
+                  projectName: w3s.curProject?.f_name,
                   file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw),
-                  projectID: w3s.curProject.f_project_id,
                   appletName: ''
-                } as IChangeEvent);
+                });
+                w3s.applet.createApplet();
               }}
             ></Text>
           </Tooltip>

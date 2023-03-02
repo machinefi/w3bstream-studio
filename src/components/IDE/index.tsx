@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Flex, Image, Text, Box, Button } from '@chakra-ui/react';
 import { Center as LayoutCenter } from '@chakra-ui/layout';
 import { observer } from 'mobx-react-lite';
@@ -58,9 +58,7 @@ const IDE = observer(() => {
                 h="32px"
                 {...gradientButtonStyle}
                 onClick={() => {
-                  w3s.project.modal.set({
-                    show: true
-                  });
+                  w3s.project.createProject();
                 }}
               >
                 Create a project now
@@ -70,26 +68,7 @@ const IDE = observer(() => {
         )}
       </Box>
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />
-      <JSONModal jsonstate={w3s.user} />
-      <JSONModal jsonstate={w3s.project} />
-      <JSONModal jsonstate={w3s.applet} />
-      <JSONModal jsonstate={w3s.publisher} />
-      <JSONModal jsonstate={w3s.strategy} />
-      <JSONModal jsonstate={w3s.contractLogs} />
-      <JSONModal jsonstate={w3s.chainTx} />
-      <JSONModal jsonstate={w3s.chainHeight} />
-      <JSONModal jsonstate={w3s.postman}>
-        <Button
-          mt="10px"
-          w="100%"
-          h="32px"
-          onClick={() => {
-            w3s.postman.form.reset({ force: true });
-          }}
-        >
-          Reset
-        </Button>
-      </JSONModal>
+      <JSONModal />
       <PublishEventRequestTemplates />
     </Box>
   );

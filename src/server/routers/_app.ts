@@ -2,12 +2,13 @@
  * This file contains the root router of your tRPC-backend
  */
 import { t } from '../trpc';
-import { templateRouter } from './template';
 import { w3bstreamRouter } from './w3bstream';
 
 import '@/lib/superjson';
 import { z } from 'zod';
 import { webhookRouter } from './webhook';
+import { pgRouter } from './pg';
+
 /**
  * Create your application's root router
  * If you want to use SSG, you need export this
@@ -16,7 +17,8 @@ import { webhookRouter } from './webhook';
  */
 export const appRouter = t.router({
   api: w3bstreamRouter,
-  webhook: webhookRouter
+  webhook: webhookRouter,
+  pg: pgRouter
 });
 /**
  * Add data transformers

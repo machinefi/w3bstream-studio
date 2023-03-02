@@ -1,12 +1,12 @@
-import { JSONSchemaFormState, JSONValue, JSONModalValue, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { JSONSchemaFormState, JSONValue, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from '@/store/lib/w3bstream/schema/definitions';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
-import { gradientButtonStyle } from '@/lib/theme';
 import { StrategyType } from '@/server/routers/w3bstream';
 import toast from 'react-hot-toast';
+import { hooks } from '@/lib/hooks';
 
 export const schema = {
   definitions: {
@@ -37,81 +37,20 @@ export default class StrategyModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       }
     },
     afterSubmit: async (e) => {
-      const { appletID, eventType, handler, strategyID } = e.formData;
-      const allApplets = globalThis.store.w3s.applet.allData;
-      const applet = allApplets.find((item) => String(item.f_applet_id) === appletID);
-      if (!applet) {
-        return;
-      }
-      let res;
-      if (strategyID) {
-        res = await axios.request({
-          method: 'put',
-          url: `/api/w3bapp/strategy/${applet.project_name}/${strategyID}`,
-          data: {
-            appletID,
-            eventType,
-            handler
-          }
-        });
-      } else {
-        res = await axios.request({
-          method: 'post',
-          url: `/api/w3bapp/strategy/${applet.project_name}`,
-          data: {
-            strategies: [
-              {
-                appletID,
-                eventType,
-                handler
-              }
-            ]
-          }
-        });
-      }
-
-      // if (res.data) {
-      //   await showNotification({ message: 'create strategy succeeded' });
-      //   eventBus.emit('strategy.create');
-      //   this.reset().extraValue.set({ modal: { show: false } });
-      // }
-
-      if (strategyID) {
-        await showNotification({ message: 'update strategy succeeded' });
-        eventBus.emit('strategy.update');
-      } else {
-        await showNotification({ message: 'create strategy succeeded' });
-        eventBus.emit('strategy.create');
-      }
-
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
       this.form.reset();
-      this.modal.set({ show: false });
     },
     value: new JSONValue<SchemaType>({
       default: {
-        strategyID: '',
         appletID: '',
         eventType: '',
         handler: ''
       }
     })
-  });
-
-  modal = new JSONModalValue({
-    default: {
-      show: false,
-      title: 'Create Strategy',
-      autoReset: true
-    }
   });
 
   table = new JSONSchemaTableState<StrategyType>({
@@ -145,14 +84,39 @@ export default class StrategyModule {
               props: {
                 bg: '#37A169',
                 color: '#fff',
-                onClick: () => {
+                onClick: async () => {
                   this.form.value.set({
-                    strategyID: item.f_strategy_id,
                     appletID: item.f_applet_id.toString(),
                     eventType: String(item.f_event_type),
                     handler: item.f_handler
                   });
-                  this.modal.set({ show: true, title: 'Edit Strategy' });
+                  const formData = await hooks.getFormData({
+                    title: 'Edit Strategy',
+                    size: 'md',
+                    formList: [
+                      {
+                        form: this.form
+                      }
+                    ]
+                  });
+                  const { appletID, eventType, handler } = formData;
+                  if (appletID && eventType && handler) {
+                    const allApplets = globalThis.store.w3s.applet.allData;
+                    const applet = allApplets.find((item) => String(item.f_applet_id) === appletID);
+                    try {
+                      await axios.request({
+                        method: 'put',
+                        url: `/api/w3bapp/strategy/${applet.project_name}/${item.f_strategy_id}`,
+                        data: {
+                          appletID,
+                          eventType,
+                          handler
+                        }
+                      });
+                      await showNotification({ message: 'update strategy succeeded' });
+                      eventBus.emit('strategy.update');
+                    } catch (error) {}
+                  }
                 }
               },
               text: 'Edit'
@@ -190,4 +154,41 @@ export default class StrategyModule {
     rowKey: 'f_strategy_id',
     containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
   });
+
+  async createStrategy() {
+    const formData = await hooks.getFormData({
+      title: 'Create Strategy',
+      size: 'md',
+      formList: [
+        {
+          form: this.form
+        }
+      ]
+    });
+    const { appletID, eventType, handler } = formData;
+    if (appletID && eventType && handler) {
+      const allApplets = globalThis.store.w3s.applet.allData;
+      const applet = allApplets.find((item) => String(item.f_applet_id) === appletID);
+      if (!applet) {
+        return;
+      }
+      try {
+        await axios.request({
+          method: 'post',
+          url: `/api/w3bapp/strategy/${applet.project_name}`,
+          data: {
+            strategies: [
+              {
+                appletID,
+                eventType,
+                handler
+              }
+            ]
+          }
+        });
+        await showNotification({ message: 'create strategy succeeded' });
+        eventBus.emit('strategy.create');
+      } catch (error) {}
+    }
+  }
 }

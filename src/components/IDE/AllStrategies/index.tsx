@@ -15,8 +15,8 @@ const AllStrategies = observer(() => {
           h="32px"
           leftIcon={<AddIcon />}
           {...gradientButtonStyle}
-          onClick={(e) => {
-            w3s.strategy.modal.set({ show: true, title: 'Create Strategy' });
+          onClick={async (e) => {
+            w3s.strategy.createStrategy();
           }}
         >
           Add Strategy

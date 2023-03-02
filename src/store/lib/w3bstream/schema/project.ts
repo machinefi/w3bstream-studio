@@ -1,17 +1,15 @@
-import { JSONValue, JSONSchemaFormState, JSONModalValue } from '@/store/standard/JSONSchemaState';
+import { JSONValue, JSONSchemaFormState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
-import { gradientButtonStyle } from '@/lib/theme';
 import initTemplates from '@/constants/initTemplates.json';
 import { makeObservable, observable } from 'mobx';
-import { ProjectEnvsWidget } from '@/components/ProjectEnvs';
+import { ProjectEnvsWidget } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
-import { ProjectDBSchemaWidget } from '@/components/ProjectDBSchema';
-import EditorWidget from '@/components/EditorWidget';
+import EditorWidget from '@/components/JSONFormWidgets/EditorWidget';
 import { rootStore } from '@/store/index';
-import initDBSchema from '@/constants/initDBSchema.json';
+import { hooks } from '@/lib/hooks';
 
 export const defaultSchema = {
   type: 'object',
@@ -46,12 +44,7 @@ export default class ProjectModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       },
       envs: {
         'ui:widget': ProjectEnvsWidget
@@ -64,21 +57,8 @@ export default class ProjectModule {
       }
     },
     afterSubmit: async (e) => {
-      try {
-        const res = await axios.request({
-          method: 'post',
-          url: '/api/w3bapp/project',
-          data: e.formData
-        });
-        if (res.data) {
-          eventBus.emit('project.create');
-          await showNotification({ message: 'create project succeeded' });
-        }
-        await this.onSaveEnv();
-        await this.onSaveDBSchema();
-        this.form.reset();
-        this.modal.set({ show: false });
-      } catch (error) {}
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.form.reset();
     },
     value: new JSONValue<DefaultSchemaType>({
       default: {
@@ -93,28 +73,12 @@ export default class ProjectModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
-        props: {
-          w: '100%',
-          h: '32px',
-          ...gradientButtonStyle
-        }
+        submitText: 'Submit'
       }
     },
     afterSubmit: async (e) => {
-      const { template } = e.formData;
-      const data = initTemplates.templates.find((i) => i.name === template);
-      const res = await axios.request({
-        method: 'post',
-        url: `/api/init?adminKey=iotex.W3B.admin`,
-        data
-      });
-      if (res.data) {
-        await showNotification({ message: 'Create project succeeded' });
-        eventBus.emit('project.create');
-        this.form.reset();
-        this.modal.set({ show: false });
-      }
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.initializationTemplateForm.reset();
     },
     value: new JSONValue<InitializationTemplateSchemaType>({
       default: {
@@ -124,26 +88,8 @@ export default class ProjectModule {
   });
 
   formMode: 'add' | 'edit' = 'add';
-
-  formList = undefined;
-  setFormList() {
-    if (this.formMode === 'add') {
-      this.formList = [
-        {
-          label: 'Default',
-          form: this.form
-        },
-        {
-          label: 'Initialization Template',
-          form: this.initializationTemplateForm
-        }
-      ];
-    } else {
-      this.formList = undefined;
-    }
-  }
-
   envs: Env[] = [];
+
   onAddEnv() {
     this.envs.push({
       id: uuidv4(),
@@ -186,7 +132,6 @@ export default class ProjectModule {
   async onSaveEnv() {
     const projectName = this.form.value.get().name;
     const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
-    console.log(projectName);
     if (values.length) {
       try {
         await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
@@ -200,7 +145,6 @@ export default class ProjectModule {
   async onSaveDBSchema() {
     const projectName = this.form.value.get().name;
     const dbSchema = this.form.value.get().dbSchema;
-    console.log(projectName);
     if (!dbSchema) return;
     await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_SCHEMA`, dbSchema, {
       headers: {
@@ -231,7 +175,6 @@ export default class ProjectModule {
       this.setDBSchema();
     }
     this.formMode = mode;
-    this.setFormList();
     this.setEnvs();
   }
 
@@ -256,13 +199,63 @@ export default class ProjectModule {
     }
   }
 
-  modal = new JSONModalValue({
-    default: {
-      show: false,
+  async createProject() {
+    this.setMode('add');
+    const formData = await hooks.getFormData({
       title: 'Create Project',
-      autoReset: true
+      size: '2xl',
+      formList: [
+        {
+          label: 'Default',
+          form: this.form
+        },
+        {
+          label: 'Initialization Template',
+          form: this.initializationTemplateForm
+        }
+      ]
+    });
+    if (formData.name) {
+      try {
+        const res = await axios.request({
+          method: 'post',
+          url: '/api/w3bapp/project',
+          data: formData
+        });
+        if (res.data) {
+          eventBus.emit('project.create');
+          await showNotification({ message: 'create project succeeded' });
+        }
+        await this.onSaveEnv();
+        await this.onSaveDBSchema();
+      } catch (error) {}
     }
-  });
+    if (formData.template) {
+      const data = initTemplates.templates.find((i) => i.name === formData.template);
+      const res = await axios.request({
+        method: 'post',
+        url: `/api/init?adminKey=iotex.W3B.admin`,
+        data
+      });
+      if (res.data) {
+        await showNotification({ message: 'Create project succeeded' });
+        eventBus.emit('project.create');
+      }
+    }
+  }
+
+  async editProject() {
+    this.setMode('edit');
+    await hooks.getFormData({
+      title: 'Project Details',
+      size: '2xl',
+      formList: [
+        {
+          form: this.form
+        }
+      ]
+    });
+  }
 
   constructor() {
     makeObservable(this, {
