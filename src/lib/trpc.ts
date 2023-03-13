@@ -6,7 +6,12 @@ import superjson from 'superjson';
 export const trpc = createTRPCProxyClient<AppRouter>({
   links: [
     httpBatchLink({
-      url: '/api/trpc'
+      url: '/api/trpc',
+      headers() {
+        return {
+          authorization: globalThis.store.w3s.config.form.formData.token ? `Bearer ${globalThis.store.w3s.config.form.formData.token}` : undefined
+        };
+      }
     })
   ],
   transformer: superjson

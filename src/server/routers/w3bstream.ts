@@ -1,4 +1,4 @@
-import { t } from '../trpc';
+import { authProcedure, t } from '../trpc';
 import { z } from 'zod';
 import { inferProcedureOutput } from '@trpc/server';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +10,7 @@ enum ProjectConfigType {
 }
 
 export const w3bstreamRouter = t.router({
-  projects: t.procedure
+  projects: authProcedure
     .input(
       z.object({
         accountID: z.string()
@@ -67,7 +67,6 @@ export const w3bstreamRouter = t.router({
           }
         }
       });
-      console.log(res);
       res.forEach((i: ProjectOriginalType) => {
         i.config = {};
         i.configs.forEach((c: ConfigsType) => {
@@ -95,7 +94,7 @@ export const w3bstreamRouter = t.router({
       });
       return res;
     }),
-  contractLogs: t.procedure.query(({ ctx, input }) => {
+  contractLogs: authProcedure.query(({ ctx, input }) => {
     return ctx.monitor.t_contract_log.findMany({
       select: {
         f_contractlog_id: true,
@@ -112,7 +111,7 @@ export const w3bstreamRouter = t.router({
       }
     });
   }),
-  chainTx: t.procedure.query(({ ctx, input }) => {
+  chainTx: authProcedure.query(({ ctx, input }) => {
     return ctx.monitor.t_chain_tx.findMany({
       select: {
         f_chaintx_id: true,
@@ -126,7 +125,7 @@ export const w3bstreamRouter = t.router({
       }
     });
   }),
-  chainHeight: t.procedure.query(({ ctx, input }) => {
+  chainHeight: authProcedure.query(({ ctx, input }) => {
     return ctx.monitor.t_chain_height.findMany({
       select: {
         f_chain_height_id: true,

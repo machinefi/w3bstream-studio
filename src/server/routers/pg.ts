@@ -1,11 +1,11 @@
-import { t } from '../trpc';
+import { authProcedure, t } from '../trpc';
 import { z } from 'zod';
 import { inferProcedureOutput, TRPCError } from '@trpc/server';
 import { PostgresMeta } from '@/postgres-meta/index';
 import { DEFAULT_POOL_CONFIG, DISABLED_TABLE_LIST, PG_CONNECTION } from '@/constants/postgres-meta';
 
 export const pgRouter = t.router({
-  tables: t.procedure.query(async ({ ctx }) => {
+  tables: authProcedure.query(async ({ ctx }) => {
     const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
     const { data, error } = await pgMeta.tables.list({
       includeSystemSchemas: false,
@@ -27,7 +27,7 @@ export const pgRouter = t.router({
         };
       });
   }),
-  createTable: t.procedure
+  createTable: authProcedure
     .input(
       z.object({
         schema: z.string(),
@@ -48,7 +48,7 @@ export const pgRouter = t.router({
       }
       return data;
     }),
-  updateTable: t.procedure
+  updateTable: authProcedure
     .input(
       z.object({
         id: z.number(),
@@ -95,7 +95,7 @@ export const pgRouter = t.router({
       }
       return data;
     }),
-  deleteTable: t.procedure
+  deleteTable: authProcedure
     .input(
       z.object({
         tableId: z.number(),
@@ -112,7 +112,7 @@ export const pgRouter = t.router({
       }
       return data;
     }),
-  columns: t.procedure
+  columns: authProcedure
     .input(
       z.object({
         tableId: z.number()
@@ -130,7 +130,7 @@ export const pgRouter = t.router({
       }
       return data;
     }),
-  createColumn: t.procedure
+  createColumn: authProcedure
     .input(
       z.object({
         tableId: z.number(),
@@ -163,7 +163,7 @@ export const pgRouter = t.router({
       await pgMeta.end();
       return { data, errorMsg: error?.message };
     }),
-  updateColumn: t.procedure
+  updateColumn: authProcedure
     .input(
       z.object({
         columnId: z.string(),
@@ -193,7 +193,7 @@ export const pgRouter = t.router({
       await pgMeta.end();
       return { data, errorMsg: error?.message };
     }),
-  deleteColumn: t.procedure
+  deleteColumn: authProcedure
     .input(
       z.object({
         columnId: z.string(),
@@ -207,7 +207,7 @@ export const pgRouter = t.router({
       await pgMeta.end();
       return { data, errorMsg: error?.message };
     }),
-  query: t.procedure
+  query: authProcedure
     .input(
       z.object({
         sql: z.string()

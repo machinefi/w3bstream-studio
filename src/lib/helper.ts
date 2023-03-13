@@ -218,19 +218,19 @@ export const helper = {
       return 'wasm';
     }
   },
-  stringToBase64(str:string){
+  stringToBase64(str: string) {
     return btoa(str);
   },
-  base64ToUint8Array(base64: string):Uint8Array {
-    const buff = Buffer.from(base64, "base64");
+  base64ToUint8Array(base64: string): Uint8Array {
+    const buff = Buffer.from(base64, 'base64');
     return new Uint8Array(buff);
   },
-  base64ToUTF8(base64: string):string {
-    const buff = Buffer.from(base64, "base64");
-    return buff.toString("utf8");
+  base64ToUTF8(base64: string): string {
+    const buff = Buffer.from(base64, 'base64');
+    return buff.toString('utf8');
   },
-  Uint8ArrayToWasmBase64FileData(name:string,raw:Uint8Array|string ):string{
+  Uint8ArrayToWasmBase64FileData(name: string, raw: Uint8Array | string): string {
     //@ts-ignore
-    return `data:application/wasm;name=${name};base64,${Buffer.from(raw, 'binary').toString('base64')}`
+    return `data:application/wasm;name=${name};base64,${Buffer.from(raw, 'binary').toString('base64')}`;
   }
 };
