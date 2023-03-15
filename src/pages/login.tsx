@@ -33,27 +33,38 @@ const signIn = async (connector: Providers) => {
     throw new Error('Address not found.');
   }
 
-  console.log('address', address);
-
-  // const nonce = await fetch('/api/nonce', { credentials: 'include' }).then((res) => res.text());
-  // const chainId = await provider.getNetwork().then(({ chainId }) => chainId);
-  // const message = new SiweMessage({
-  //   address,
-  //   chainId,
-  //   domain: document.location.host,
-  //   uri: document.location.origin,
-  //   statement: 'Sign in with Ethereum to the app.',
-  //   version: '1',
-  //   nonce
-  // });
-  // const signature = await provider.getSigner().signMessage(message.prepareMessage());
-  // const tokenRes = await await fetch(`/api/auth/jwt`, {
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     message,
-  //     signature
-  //   })
-  // });
+  try {
+    const chainId = await provider.getNetwork().then(({ chainId }) => chainId);
+    await fetch(`/api/w3bapp/register/eth`, {
+      method: 'POST',
+      body: JSON.stringify({
+        address
+      })
+    });
+    const nonceData = await fetch(`/api/w3bapp/nonce/${address}`).then((res) => res.json());
+    const nonce = nonceData.nonce;
+    const message = new SiweMessage({
+      address,
+      chainId,
+      nonce,
+      domain: document.location.host,
+      uri: document.location.origin,
+      statement: 'Sign in with Ethereum to the app.',
+      version: '1'
+    });
+    const signature = await provider.getSigner().signMessage(message.prepareMessage());
+    const tokenData = await fetch(`/api/w3bapp/login/eth`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        address,
+        nonce,
+        signature
+      })
+    }).then((res) => res.json());
+    return tokenData;
+  } catch (error) {
+    return null;
+  }
 };
 
 const Login = observer(() => {
@@ -82,7 +93,13 @@ const Login = observer(() => {
                   leftIcon={<Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />}
                   colorScheme="blue"
                   variant="outline"
-                  onClick={() => signIn(Providers.METAMASK)}
+                  onClick={async () => {
+                    const result = await signIn(Providers.METAMASK);
+                    console.log('tokenData', result);
+                    if (result) {
+                      w3s.config.form.value.set({ token: result.token, accountID: result.accountID });
+                    }
+                  }}
                 >
                   MetaMask
                 </Button>
