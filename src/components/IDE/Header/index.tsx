@@ -10,6 +10,19 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
 
+const getTabIndex = (showContent) => {
+  if (showContent === 'CURRENT_APPLETS') {
+    return 0;
+  }
+  if (showContent === 'CURRENT_PUBLISHERS') {
+    return 1;
+  }
+  if (showContent === 'CURRENT_EVENT_LOGS') {
+    return 2;
+  }
+  return 0;
+};
+
 const Header = observer(() => {
   const { w3s } = useStore();
   return (
@@ -30,9 +43,10 @@ const Header = observer(() => {
         backgroundColor: 'rgba(255, 255, 255, 0.8)'
       }}
     >
-      {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS') && (
+      {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'CURRENT_EVENT_LOGS') && (
         <Tabs
           variant="unstyled"
+          index={getTabIndex(w3s.showContent)}
           onChange={(number) => {
             if (number === 0) {
               w3s.showContent = 'CURRENT_APPLETS';
@@ -40,14 +54,26 @@ const Header = observer(() => {
             if (number === 1) {
               w3s.showContent = 'CURRENT_PUBLISHERS';
             }
+            if (number === 2) {
+              w3s.showContent = 'CURRENT_EVENT_LOGS';
+            }
+          }}
+          sx={{
+            '.chakra-tabs__tablist': {
+              border: '1px solid #000',
+              borderRadius: '10px'
+            }
           }}
         >
           <TabList>
-            <Tab w="60px" h="30px" borderRadius="md" fontSize="sm" _selected={{ color: 'white', bg: 'green.400' }}>
+            <Tab w="100px" fontSize="sm" borderLeftRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
               Applet
             </Tab>
-            <Tab ml="20px" w="80px" h="30px" borderRadius="md" fontSize="sm" _selected={{ color: 'white', bg: 'green.400' }}>
+            <Tab w="100px" fontSize="sm" borderLeft="1px solid #000" borderRight="1px solid #000" _selected={{ color: 'white', bg: 'gray.900' }}>
               Publisher
+            </Tab>
+            <Tab w="100px" fontSize="sm" borderRightRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
+              Log
             </Tab>
           </TabList>
         </Tabs>

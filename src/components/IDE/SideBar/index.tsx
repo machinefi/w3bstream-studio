@@ -53,7 +53,7 @@ const SideBar = observer((props: SideBarProps) => {
           </Tooltip>
         </Flex>
       </Flex>
-      {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS') && (
+      {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'CURRENT_EVENT_LOGS') && (
         <Box h="calc(100vh - 100px)" overflowY="auto">
           {w3s.allProjects.value.map((p, index) => {
             return (
