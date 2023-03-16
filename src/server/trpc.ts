@@ -16,7 +16,6 @@ export const getUserFromHeader = async (req: NextApiRequest) => {
     try {
       const token = req.headers.authorization.replace('Bearer ', '');
       const user = await jwt.verify(token, process.env.JWT_SIGN_KEY, { algorithms: ['HS256'] });
-      console.log('[decode token]:', user);
       return user;
     } catch (error) {
       return null;

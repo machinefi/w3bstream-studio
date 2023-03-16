@@ -10,90 +10,84 @@ enum ProjectConfigType {
 }
 
 export const w3bstreamRouter = t.router({
-  projects: authProcedure
-    .input(
-      z.object({
-        accountID: z.string()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      // TODO: verify
-      const res = await ctx.prisma.t_project.findMany({
-        where: {
-          f_account_id: {
-            equals: BigInt(input.accountID)
+  projects: authProcedure.query(async ({ ctx }) => {
+    const accountID = BigInt(ctx.user.Payload);
+    const res = await ctx.prisma.t_project.findMany({
+      where: {
+        f_account_id: {
+          equals: accountID
+        }
+      },
+      select: {
+        f_project_id: true,
+        f_name: true,
+        publishers: {
+          select: {
+            f_publisher_id: true,
+            f_name: true,
+            f_key: true,
+            f_created_at: true,
+            f_token: true
           }
         },
-        select: {
-          f_project_id: true,
-          f_name: true,
-          publishers: {
-            select: {
-              f_publisher_id: true,
-              f_name: true,
-              f_key: true,
-              f_created_at: true,
-              f_token: true
-            }
-          },
-          applets: {
-            select: {
-              f_name: true,
-              f_applet_id: true,
-              f_project_id: true,
-              f_wasm_name: true,
-              strategies: {
-                select: {
-                  f_strategy_id: true,
-                  f_applet_id: true,
-                  f_project_id: true,
-                  f_event_type: true,
-                  f_handler: true
-                }
-              },
-              instances: {
-                select: {
-                  f_instance_id: true,
-                  f_state: true
-                }
+        applets: {
+          select: {
+            f_name: true,
+            f_applet_id: true,
+            f_project_id: true,
+            f_wasm_name: true,
+            strategies: {
+              select: {
+                f_strategy_id: true,
+                f_applet_id: true,
+                f_project_id: true,
+                f_event_type: true,
+                f_handler: true
+              }
+            },
+            instances: {
+              select: {
+                f_instance_id: true,
+                f_state: true
               }
             }
-          },
-          configs: {
-            select: {
-              f_value: true,
-              f_type: true
-            }
+          }
+        },
+        configs: {
+          select: {
+            f_value: true,
+            f_type: true
           }
         }
-      });
-      res.forEach((i: ProjectOriginalType) => {
-        i.config = {};
-        i.configs.forEach((c: ConfigsType) => {
-          //buffer to string cause by prisma client parse error
-          c.f_value && (c.f_value = JSON.parse(c.f_value.toString()));
-          switch (c.f_type) {
-            case ProjectConfigType.CONFIG_TYPE__PROJECT_SCHEMA:
-              i.config.schema = c.f_value;
-              break;
-            case ProjectConfigType.CONFIG_TYPE__PROJECT_ENV:
-              const values = c.f_value.env as unknown as Array<Array<string>>;
-              i.config.env = [];
-              if (values) {
-                values.forEach((v) => {
-                  i.config.env.push({
-                    id: uuidv4(),
-                    key: v[0],
-                    value: v[1]
-                  });
+      }
+    });
+    res.forEach((i: ProjectOriginalType) => {
+      i.config = {};
+      i.configs.forEach((c: ConfigsType) => {
+        //buffer to string cause by prisma client parse error
+        c.f_value && (c.f_value = JSON.parse(c.f_value.toString()));
+        switch (c.f_type) {
+          case ProjectConfigType.CONFIG_TYPE__PROJECT_SCHEMA:
+            i.config.schema = c.f_value;
+            break;
+          case ProjectConfigType.CONFIG_TYPE__PROJECT_ENV:
+            const values = c.f_value.env as unknown as Array<Array<string>>;
+            i.config.env = [];
+            if (values) {
+              values.forEach((v) => {
+                i.config.env.push({
+                  id: uuidv4(),
+                  key: v[0],
+                  value: v[1]
                 });
-              }
-              break;
-          }
-        });
+              });
+            }
+            break;
+        }
       });
-      return res;
-    }),
+    });
+    return res;
+  }),
   contractLogs: authProcedure.query(({ ctx, input }) => {
     return ctx.monitor.t_contract_log.findMany({
       select: {
@@ -143,14 +137,12 @@ export const w3bstreamRouter = t.router({
     .input(
       z.object({
         projectName: z.string(),
-        page: z.number().optional().default(1),
-        pageSize: z.number().optional().default(10),
+        limit: z.number().optional().default(10),
+        offset: z.number().optional().default(0),
         createdAt: z.number().optional()
       })
     )
     .query(async ({ ctx, input }) => {
-      const limit = input.pageSize;
-      const offset = (input.page - 1) * limit;
       const where = {
         f_project_name: {
           equals: input.projectName
@@ -163,8 +155,8 @@ export const w3bstreamRouter = t.router({
       }
       return ctx.prisma.t_wasm_log.findMany({
         where,
-        take: limit,
-        skip: offset,
+        take: input.limit,
+        skip: input.offset,
         orderBy: {
           f_created_at: 'desc'
         },

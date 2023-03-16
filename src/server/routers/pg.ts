@@ -2,31 +2,41 @@ import { authProcedure, t } from '../trpc';
 import { z } from 'zod';
 import { inferProcedureOutput, TRPCError } from '@trpc/server';
 import { PostgresMeta } from '@/postgres-meta/index';
-import { DEFAULT_POOL_CONFIG, DISABLED_TABLE_LIST, PG_CONNECTION } from '@/constants/postgres-meta';
+import { DEFAULT_POOL_CONFIG, DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST, PG_CONNECTION } from '@/constants/postgres-meta';
 
 export const pgRouter = t.router({
-  tables: authProcedure.query(async ({ ctx }) => {
-    const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
-    const { data, error } = await pgMeta.tables.list({
-      includeSystemSchemas: false,
-      includeColumns: false,
-      excludedSchemas: ['pg_catalog', 'information_schema', 'hdb_catalog']
-    });
-    await pgMeta.end();
-    if (error) {
-      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
-    }
-    return data
-      .filter((item) => item.name !== 't_sql_meta_enum')
-      .map((item) => {
-        return {
-          tableId: item.id,
-          tableSchema: item.schema,
-          tableName: item.name,
-          disabled: DISABLED_TABLE_LIST.includes(item.name)
-        };
+  tables: authProcedure
+    .input(
+      z.object({
+        role: z.string().optional().default('DEVELOPER')
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      let excludedSchemas = ['pg_catalog', 'information_schema', 'hdb_catalog'];
+      if (input.role !== 'ADMIN') {
+        excludedSchemas = excludedSchemas.concat(DISABLED_SCHEMA_LIST);
+      }
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const { data, error } = await pgMeta.tables.list({
+        excludedSchemas,
+        includeSystemSchemas: false,
+        includeColumns: false
       });
-  }),
+      await pgMeta.end();
+      if (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+      }
+      return data
+        .filter((item) => item.name !== 't_sql_meta_enum')
+        .map((item) => {
+          return {
+            tableId: item.id,
+            tableSchema: item.schema,
+            tableName: item.name,
+            disabled: DISABLED_TABLE_LIST.includes(item.name)
+          };
+        });
+    }),
   createTable: authProcedure
     .input(
       z.object({

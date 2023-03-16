@@ -7,6 +7,7 @@ import { useStore } from '../store';
 import { Divider } from '@mantine/core';
 import { ethers } from 'ethers';
 import { SiweMessage } from 'siwe';
+import { eventBus } from '@/lib/event';
 
 const enum Providers {
   METAMASK = 'metamask'
@@ -35,33 +36,26 @@ const signIn = async (connector: Providers) => {
 
   try {
     const chainId = await provider.getNetwork().then(({ chainId }) => chainId);
-    await fetch(`/api/w3bapp/register/eth`, {
-      method: 'POST',
-      body: JSON.stringify({
-        address
-      })
-    });
-    const nonceData = await fetch(`/api/w3bapp/nonce/${address}`).then((res) => res.json());
-    const nonce = nonceData.nonce;
     const message = new SiweMessage({
       address,
       chainId,
-      nonce,
+      expirationTime: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
       domain: document.location.host,
       uri: document.location.origin,
-      statement: 'Sign in with Ethereum to the app.',
       version: '1'
     });
     const signature = await provider.getSigner().signMessage(message.prepareMessage());
-    const tokenData = await fetch(`/api/w3bapp/login/eth`, {
+    const data = await fetch(`/api/w3bapp/login/eth`, {
       method: 'PUT',
       body: JSON.stringify({
-        address,
-        nonce,
-        signature
+        signature,
+        message: message.toMessage()
       })
     }).then((res) => res.json());
-    return tokenData;
+    if (data.token) {
+      return data;
+    }
+    return null;
   } catch (error) {
     return null;
   }
@@ -95,9 +89,9 @@ const Login = observer(() => {
                   variant="outline"
                   onClick={async () => {
                     const result = await signIn(Providers.METAMASK);
-                    console.log('tokenData', result);
                     if (result) {
-                      w3s.config.form.value.set({ token: result.token, accountID: result.accountID });
+                      w3s.config.form.value.set({ token: result.token, accountID: result.accountID, accountRole: result.accountRole });
+                      eventBus.emit('user.login');
                     }
                   }}
                 >

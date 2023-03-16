@@ -267,9 +267,7 @@ const DBTable = observer(() => {
   } = useStore();
 
   useEffect(() => {
-    if (!allTableNames.value) {
-      allTableNames.call();
-    }
+    allTableNames.call();
   }, []);
 
   // if (allTableNames.loading.value) {
