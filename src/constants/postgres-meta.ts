@@ -18,5 +18,6 @@ export const DISABLED_TABLE_LIST = [
   't_blockchain',
   't_chain_height',
   't_chain_tx',
-  't_contract_log'
+  't_contract_log',
+  't_wasm_log',
 ];

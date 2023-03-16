@@ -37,10 +37,8 @@ const AddBtn = observer(() => {
         {...gradientButtonStyle}
         onClick={async (e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
-            w3s.publisher.publishEventForm.value.set({
-              projectID: w3s.curProject?.f_project_id.toString(),
-              projectName: w3s.curProject?.f_name
-            });
+            w3s.showContent = 'CURRENT_EVENT_LOGS';
+            return;
           }
           const formData = await hooks.getFormData({
             title: 'Publish Event',
@@ -51,12 +49,11 @@ const AddBtn = observer(() => {
               }
             ]
           });
-          const { projectID } = formData;
-          if (projectID) {
-            const project = w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
+          const { projectName  } = formData;
+          if (projectName) {
             const res = await axios.request({
               method: 'post',
-              url: `/api/w3bapp/event/${project.f_name}`,
+              url: `/api/w3bapp/event/${projectName}`,
               headers: {
                 'Content-Type': 'text/plain'
               },

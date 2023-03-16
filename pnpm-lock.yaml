@@ -83,6 +83,7 @@ specifiers:
   react-i18next: ^11.16.9
   react-icons: ^4.4.0
   react-query: ^3.34.19
+  react-virtualized: ^9.22.3
   reflect-metadata: ^0.1.13
   sleep-promise: ^9.1.0
   superjson: ^1.8.1
@@ -162,6 +163,7 @@ dependencies:
   react-i18next: 11.17.3_vth7g6zw6lco7clwxal23of2km
   react-icons: 4.4.0_react@18.2.0
   react-query: 3.39.1_biqbaboplfbrettd7655fr4n2y
+  react-virtualized: 9.22.3_biqbaboplfbrettd7655fr4n2y
   reflect-metadata: 0.1.13
   sleep-promise: 9.1.0
   superjson: 1.9.1
@@ -5069,6 +5071,10 @@ packages:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
 
+  /react-lifecycles-compat/3.0.4:
+    resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
+    dev: false
+
   /react-popper/2.3.0_ili5ylfne7i3hkfpsanzgkfu6m:
     resolution: {integrity: sha512-e1hj8lL3uM+sgSR4Lxzn5h1GxBlpa4CQz0XLF8kx4MDrDRWY0Ena4c97PUeSX9i5W3UAfDP0z0FXCTQkoXUl3Q==}
     peerDependencies:
@@ -5245,6 +5251,22 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /react-virtualized/9.22.3_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-MKovKMxWTcwPSxE1kK1HcheQTWfuCxAuBoSTf2gwyMM21NdX/PXUhnoP8Uc5dRKd+nKm8v41R36OellhdCpkrw==}
+    peerDependencies:
+      react: ^15.3.0 || ^16.0.0-alpha
+      react-dom: ^15.3.0 || ^16.0.0-alpha
+    dependencies:
+      '@babel/runtime': 7.18.6
+      clsx: 1.2.1
+      dom-helpers: 5.2.1
+      loose-envify: 1.4.0
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-lifecycles-compat: 3.0.4
     dev: false
 
   /react/18.2.0:
