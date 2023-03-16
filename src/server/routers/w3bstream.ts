@@ -138,7 +138,44 @@ export const w3bstreamRouter = t.router({
         f_updated_at: true
       }
     });
-  })
+  }),
+  wasmLogs: t.procedure
+    .input(
+      z.object({
+        projectName: z.string(),
+        page: z.number().optional().default(1),
+        pageSize: z.number().optional().default(10),
+        createdAt: z.number().optional()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.pageSize;
+      const offset = (input.page - 1) * limit;
+      const where = {
+        f_project_name: {
+          equals: input.projectName
+        }
+      };
+      if (input.createdAt) {
+        where['f_created_at'] = {
+          gte: input.createdAt
+        };
+      }
+      return ctx.prisma.t_wasm_log.findMany({
+        where,
+        take: limit,
+        skip: offset,
+        orderBy: {
+          f_created_at: 'desc'
+        },
+        select: {
+          f_id: true,
+          f_level: true,
+          f_msg: true,
+          f_created_at: true
+        }
+      });
+    })
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
@@ -157,3 +194,4 @@ export type ProjectType = ProjectOriginalType & {
 export type ContractLogType = inferProcedureOutput<W3bstreamRouter['contractLogs']>[0];
 export type ChainTxType = inferProcedureOutput<W3bstreamRouter['chainTx']>[0];
 export type ChainHeightType = inferProcedureOutput<W3bstreamRouter['chainHeight']>[0];
+export type WasmLogType = inferProcedureOutput<W3bstreamRouter['wasmLogs']>[0];

@@ -99,7 +99,6 @@ export default class PublisherModule {
           emptyValue: `{"payload":""}`,
           showLanguageSelector: true,
           onChangeLanguage: (language) => {
-            console.log('language:', language);
             if (language === 'text') {
               this.publishEventForm.value.set({
                 payload: JSON.stringify(
@@ -215,7 +214,6 @@ export default class PublisherModule {
         ]
       };
     } catch (error) {
-      console.log('text', payload);
       return {
         events: [
           {

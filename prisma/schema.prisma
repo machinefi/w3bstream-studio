@@ -1,5 +1,3 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -153,4 +151,17 @@ model t_resource {
   f_md5         String @unique(map: "t_resource_ui_md5") @db.VarChar(255)
   f_created_at  BigInt @default(0)
   f_updated_at  BigInt @default(0)
+}
+
+model t_wasm_log {
+  f_id           BigInt @id @default(autoincrement())
+  f_wasm_log_id  BigInt @unique(map: "t_wasm_log_ui_wasm_log_id")
+  f_project_name String @db.VarChar(255)
+  f_applet_name  String @default("") @db.VarChar(255)
+  f_instance_id  BigInt @default(0)
+  f_level        String @default("") @db.VarChar(255)
+  f_log_time     BigInt @default(0)
+  f_msg          String @default("") @db.VarChar(255)
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
 }

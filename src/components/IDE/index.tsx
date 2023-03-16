@@ -20,6 +20,7 @@ import AllChainTx from './AllChainTx';
 import AllChainHeight from './AllChainHeight';
 import PublishEventRequestTemplates from './PublishEventRequestTemplates';
 import DBTable from './DBTable';
+import EventLogs from './EventLogs';
 
 const IDE = observer(() => {
   const {
@@ -37,6 +38,7 @@ const IDE = observer(() => {
           <Box w="100%" h="100%">
             {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <Applets />}
             {(w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'ALL_PUBLISHERS') && <Publishers />}
+            {w3s.showContent === 'CURRENT_EVENT_LOGS' && <EventLogs />}
             {w3s.showContent === 'ALL_INSTANCES' && <JSONTable jsonstate={w3s.instances} />}
             {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
             {w3s.showContent === 'EDITOR' && <Editor />}

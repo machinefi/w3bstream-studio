@@ -167,6 +167,7 @@ export class W3bStream {
     | 'ALL_APPLETS'
     | 'CURRENT_PUBLISHERS'
     | 'ALL_PUBLISHERS'
+    | 'CURRENT_EVENT_LOGS'
     | 'ALL_INSTANCES'
     | 'ALL_STRATEGIES'
     | 'EDITOR'

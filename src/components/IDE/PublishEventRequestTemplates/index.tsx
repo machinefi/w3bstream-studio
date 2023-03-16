@@ -17,12 +17,11 @@ const PublishEventRequestTemplates = observer(() => {
     },
     templates: ['cURL', 'JS', 'Go', 'Rust'],
     requestData() {
-      const { projectID } = w3s.publisher.publishEventForm.formData;
-      const project = w3s.allProjects.value.find((item) => item.f_project_id.toString() === projectID);
+      const { projectName } = w3s.publisher.publishEventForm.formData;
       const data = w3s.publisher.generateBody();
       return {
         data,
-        projectName: project?.f_name
+        projectName
       };
     },
     setData(v: Partial<{ curTemplateKey: string; curTemplate: { language: string; code: string } }>) {
@@ -36,7 +35,7 @@ const PublishEventRequestTemplates = observer(() => {
       curTemplateKey,
       curTemplate: getTemplate(curTemplateKey, store.requestData())
     });
-  }, [w3s.publisher.publishEventForm.formData]);
+  }, [w3s.publisher.publishEventForm.formData.projectName]);
 
   const onClose = () => {
     w3s.publisher.showPublishEventRequestTemplates = false;
@@ -100,8 +99,8 @@ export const ShowRequestTemplatesButton = observer(() => {
       borderColor="#6FB2FF"
       color="#6FB2FF"
       onClick={() => {
-        const { projectID } = w3s.publisher.publishEventForm.formData;
-        if (!projectID) {
+        const { projectName } = w3s.publisher.publishEventForm.formData;
+        if (!projectName) {
           toast.error('Please select the project first');
           return;
         }
