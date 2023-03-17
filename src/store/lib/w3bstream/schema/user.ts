@@ -19,7 +19,7 @@ export const pwdSchema = {
     oldPassword: { type: 'string', title: 'Old password' },
     password: { type: 'string', title: 'New password' }
   },
-  required: ['password']
+  required: ['oldPassword', 'password']
 } as const;
 
 type LoginSchemaType = FromSchema<typeof loginSchema>;

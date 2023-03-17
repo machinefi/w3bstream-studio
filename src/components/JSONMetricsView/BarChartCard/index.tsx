@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Card, CardBody, CardHeader, Heading, Stack } from '@chakra-ui/react';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { SiSimpleanalytics } from 'react-icons/si';
+
 export interface BarChartCard {
   title: string;
   tips?: string;
