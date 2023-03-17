@@ -91,6 +91,7 @@
     "react-icons": "^4.4.0",
     "react-query": "^3.34.19",
     "react-virtualized": "^9.22.3",
+    "recharts": "^2.5.0",
     "reflect-metadata": "^0.1.13",
     "siwe": "^1.1.6",
     "sleep-promise": "^9.1.0",
