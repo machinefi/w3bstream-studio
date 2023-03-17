@@ -30,39 +30,83 @@ export default class MetricsModule {
       type: 'BarChartCard',
       data: {
         title: 'Total Requests',
-        tips: '10',
+        tips: '2',
         data: [
           {
             name: 'Mar 14, 2023, 07:00am',
-            amount: 0,
+            value: 0,
           },
           {
             name: '',
-            amount: 0,
+            value: 0,
           },
           {
             name: '',
-            amount: 0,
+            value: 1,
           },
           {
             name: '',
-            amount: 10,
+            value: 1,
           },
           {
             name: '',
-            amount: 0,
+            value: 0,
           },
           {
             name: '',
-            amount: 0,
+            value: 0,
           },
           {
             name: 'Mar 14, 2023, 07:00am',
-            amount: 0,
+            value: 0,
           }
         ],
       }
-    }
+    },
+    {
+      type: 'BarChartCard',
+      data: {
+        title: 'Response Errors',
+        data: []
+      }
+    },
+    {
+      type: 'BarChartCard',
+      data: {
+        title: 'Response Speed',
+        tips: '1059ms',
+        data: [
+          {
+            name: 'Mar 14, 2023, 07:00am',
+            value: 0,
+          },
+          {
+            name: '',
+            value: 0,
+          },
+          {
+            name: '',
+            value: 100,
+          },
+          {
+            name: '',
+            value: 1059,
+          },
+          {
+            name: '',
+            value: 0,
+          },
+          {
+            name: '',
+            value: 0,
+          },
+          {
+            name: 'Mar 14, 2023, 07:00am',
+            value: 0,
+          }
+        ],
+      }
+    },
   ];
 
   showContent: 'DATABASE' | 'API' = 'DATABASE';
