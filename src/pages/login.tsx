@@ -39,7 +39,7 @@ const signIn = async (connector: Providers) => {
     const message = new SiweMessage({
       address,
       chainId,
-      expirationTime: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+      expirationTime: new Date(Date.now() + 1 * 60 * 1000).toISOString(),
       domain: document.location.host,
       uri: document.location.origin,
       version: '1'
