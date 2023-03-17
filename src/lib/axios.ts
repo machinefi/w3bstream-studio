@@ -8,11 +8,15 @@ function checkErr(err) {
   if (err.response?.status == 401) {
     rootStore.w3s.config.logout();
   }
+  const message = err.response.data.desc || err.response.data.msg || err.response.data.key;
   if (err.response) {
     showNotification({
-      color: 'red',
-      message: err.response.data.desc || err.response.data.msg || err.response.data.key
+      message,
+      color: 'red'
     });
+    if (message.includes('UNAUTHORIZED')) {
+      globalThis.store.w3s.config.logout();
+    }
   } else {
     showNotification({
       color: 'red',

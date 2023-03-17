@@ -45,7 +45,7 @@ export class W3bStream {
   allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
     function: async () => {
-      const res = await trpc.api.projects.query({ accountID: this.config.form.formData.accountID });
+      const res = await trpc.api.projects.query();
       if (res) {
         const applets = [];
         const instances = [];

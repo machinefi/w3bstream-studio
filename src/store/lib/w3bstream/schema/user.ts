@@ -44,7 +44,7 @@ export default class UserModule {
         data: e.formData
       });
       if (res.data.token) {
-        globalThis.store.w3s.config.form.value.set({ token: res.data.token, accountID: res.data.accountID });
+        globalThis.store.w3s.config.form.value.set({ token: res.data.token, accountID: res.data.accountID, accountRole: 'ADMIN' });
         eventBus.emit('user.login');
         this.reset({ force: true });
       }

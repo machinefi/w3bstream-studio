@@ -16,18 +16,18 @@ type LocalStoreType = {
   loading: boolean;
   initialized: boolean;
   logs: WasmLogType[];
-  page: number;
-  pageSize: number;
+  offset: number;
+  limit: number;
   haveMore: boolean;
   setData: (data: Partial<LocalStoreType>) => void;
 };
 
-const fetchWasmLogs = async ({ projectName, page = 1, pageSize = 10 }: { projectName: string; page: number; pageSize: number }) => {
+const fetchWasmLogs = async ({ projectName, limit = 20, offset = 0 }: { projectName: string; limit: number; offset: number }) => {
   try {
     const res = await trpc.api.wasmLogs.query({
       projectName,
-      page,
-      pageSize
+      limit,
+      offset
     });
     return res;
   } catch (error) {
@@ -52,8 +52,8 @@ const EventLogs = observer(() => {
     loading: true,
     initialized: false,
     logs: [],
-    page: 1,
-    pageSize: 20,
+    limit: 20,
+    offset: 0,
     haveMore: true,
     setData(data: Partial<LocalStoreType>) {
       Object.assign(store, data);
@@ -63,12 +63,12 @@ const EventLogs = observer(() => {
   useEffect(() => {
     const projectName = curProject?.f_name;
     if (projectName) {
-      fetchWasmLogs({ projectName, page: 1, pageSize: store.pageSize }).then((res) => {
+      fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
         store.setData({
           logs: res,
-          page: 1,
+          offset: 0,
           loading: false,
-          haveMore: true,
+          haveMore: true
         });
       });
     }
@@ -112,9 +112,10 @@ const EventLogs = observer(() => {
                   store.setData({
                     loading: true
                   });
-                  fetchWasmLogs({ projectName, page: 1, pageSize: store.pageSize }).then((res) => {
+                  fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
                     store.setData({
                       logs: res.concat(logs),
+                      offset: store.offset + logs.length,
                       loading: false
                     });
                   });
@@ -141,8 +142,10 @@ const EventLogs = observer(() => {
                 const item = logs[index];
                 return (
                   <Flex px="20px" mb="10px" align="center" key={key} style={style} color="#fff">
-                    <Text size="sm">{dayjs(Number(item.f_created_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}</Text>
-                    <Text w="120px" ml="10px" size="sm" textAlign="center">
+                    <Text minW="160px" size="sm">
+                      {dayjs(Number(item.f_created_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}
+                    </Text>
+                    <Text minW="120px" ml="10px" size="sm" textAlign="center">
                       {item.f_level}
                     </Text>
                     <Text ml="10px" size="sm">
@@ -161,17 +164,17 @@ const EventLogs = observer(() => {
                     store.setData({
                       loading: true
                     });
-                    const page = store.page + 1;
+                    const offset = store.offset + store.limit;
                     const res = await fetchWasmLogs({
                       projectName,
-                      page,
-                      pageSize: store.pageSize
+                      offset,
+                      limit: store.limit
                     });
                     store.setData({
-                      page,
-                      logs: logs.concat(res),
+                      offset,
                       loading: false,
-                      haveMore: res.length === store.pageSize
+                      logs: logs.concat(res),
+                      haveMore: res.length === store.limit
                     });
                   }
                 }

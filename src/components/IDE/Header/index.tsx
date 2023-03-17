@@ -66,13 +66,13 @@ const Header = observer(() => {
           }}
         >
           <TabList>
-            <Tab w="100px" fontSize="sm" borderLeftRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderLeftRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
               Applet
             </Tab>
-            <Tab w="100px" fontSize="sm" borderLeft="1px solid #000" borderRight="1px solid #000" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab w="70px" h="30px" fontSize="xs" fontWeight={700} borderLeft="1px solid #000" borderRight="1px solid #000" _selected={{ color: 'white', bg: 'gray.900' }}>
               Publisher
             </Tab>
-            <Tab w="100px" fontSize="sm" borderRightRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderRightRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
               Log
             </Tab>
           </TabList>

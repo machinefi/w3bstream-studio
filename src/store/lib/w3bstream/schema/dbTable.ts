@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
 import { showNotification } from '@mantine/notifications';
 import format from 'pg-format';
+import { DISABLED_SCHEMA_LIST } from '@/constants/postgres-meta';
 
 export const createTableSchema = {
   type: 'object',
@@ -70,7 +71,9 @@ export default class DBTableModule {
   allTableNames = new PromiseState<() => Promise<any>, { [x: string]: TableType[] }>({
     function: async () => {
       try {
-        const res = await trpc.pg.tables.query();
+        const res = await trpc.pg.tables.query({
+          role: globalThis.store.w3s.config.form.formData.accountRole
+        });
         const data = _.groupBy(res, 'tableSchema');
         if (!data.public) {
           data.public = [];
@@ -265,6 +268,17 @@ export default class DBTableModule {
         errorMsg: 'SQL is empty'
       };
     }
+
+    if (globalThis.store.w3s.config.form.formData.accountRole !== 'ADMIN') {
+      for (const schema of DISABLED_SCHEMA_LIST) {
+        if (this.sql.includes(schema)) {
+          return {
+            errorMsg: `You don't have permission to access this table`
+          };
+        }
+      }
+    }
+
     try {
       const { data, errorMsg } = await trpc.pg.query.mutate({
         sql: this.sql

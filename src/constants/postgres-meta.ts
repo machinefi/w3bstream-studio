@@ -20,4 +20,11 @@ export const DISABLED_TABLE_LIST = [
   't_chain_tx',
   't_contract_log',
   't_wasm_log',
+  't_account_identity',
+  't_account_password',
 ];
+
+export const DISABLED_SCHEMA_LIST = [
+  'applet_management',
+  'monitor',
+]

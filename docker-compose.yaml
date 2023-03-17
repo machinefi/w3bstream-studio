@@ -51,6 +51,7 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://w3bapp:8888}
       NEXT_PUBLIC_MQTT_URL: ${NEXT_PUBLIC_MQTT_URL:-mqtt://mqtt_server:1883}
       ADMIN_KEY: ${ADMIN_KEY:-iotex.W3B.admin}
+      JWT_SIGN_KEY: ${JWT_SIGN_KEY:-xxxx}
 
   mqtt_server:
     image: eclipse-mosquitto:1.6.15
