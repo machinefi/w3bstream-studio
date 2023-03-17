@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Button, Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Tab, TabList, Tabs, Tooltip, Image } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Tab, TabList, Tabs, Tooltip, Image, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
+import { EditIcon } from '@chakra-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { MdHttp, MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
@@ -157,70 +158,67 @@ const Header = observer(() => {
   );
 });
 
+const accountAddressFormat = (address) => {
+  const len = address.length;
+  return `${address.substring(0, 10)}...${address.substring(len - 9, len)}`;
+};
+
 const Profile = observer(() => {
   const {
     w3s,
     base: { confirm }
   } = useStore();
-  const { accountID } = w3s.config.form.formData;
+  const { accountID, address } = w3s.config.form.formData;
 
   if (accountID) {
     return (
-      <>
-        <Popover isLazy matchWidth={true}>
-          <PopoverTrigger>
-            <Button bg="rgba(0, 0, 0, 0.03)">accountID: {accountID}</Button>
-          </PopoverTrigger>
-          <PopoverContent bg="white">
-            <PopoverArrow />
-            <PopoverBody>
-              <Button
-                w="full"
-                bg="rgba(0, 0, 0, 0.03)"
-                onClick={async () => {
-                  const formData = await hooks.getFormData({
-                    title: 'Update Password',
-                    size: 'md',
-                    formList: [
-                      {
-                        form: w3s.user.pwdForm
-                      }
-                    ]
+      <Menu>
+        <MenuButton>{address ? <Button bg="rgba(0, 0, 0, 0.03)">{accountAddressFormat(address)}</Button> : <Button bg="rgba(0, 0, 0, 0.03)">accountID: {accountID}</Button>}</MenuButton>
+        <MenuList py={0}>
+          {!address && (
+            <MenuItem
+              icon={<EditIcon />}
+              onClick={async () => {
+                const formData = await hooks.getFormData({
+                  title: 'Update Password',
+                  size: 'md',
+                  formList: [
+                    {
+                      form: w3s.user.pwdForm
+                    }
+                  ]
+                });
+                if (formData.password) {
+                  await axios.request({
+                    method: 'put',
+                    url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
+                    data: formData
                   });
-                  if (formData.password) {
-                    await axios.request({
-                      method: 'put',
-                      url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
-                      data: formData
-                    });
-                    showNotification({ message: 'update password succeeded' });
-                    eventBus.emit('user.update-pwd');
-                    w3s.config.logout();
-                  }
-                }}
-              >
-                Update password
-              </Button>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
-        <Icon
-          as={MdLogout}
-          ml="20px"
-          w="22px"
-          h="21px"
-          cursor="pointer"
-          onClick={() => {
-            confirm.show({
-              title: 'Warning',
-              description: 'Are you sure you want to log out?',
-              async onOk() {
-                w3s.config.logout();
-              }
-            });
-          }}
-        />
-      </>
+                  showNotification({ message: 'update password succeeded' });
+                  eventBus.emit('user.update-pwd');
+                  w3s.config.logout();
+                }
+              }}
+            >
+              Update password
+            </MenuItem>
+          )}
+          <MenuItem
+            icon={<MdLogout />}
+            onClick={() => {
+              confirm.show({
+                title: 'Warning',
+                description: 'Are you sure you want to log out?',
+                async onOk() {
+                  w3s.config.logout();
+                }
+              });
+            }}
+          >
+            Log out
+          </MenuItem>
+        </MenuList>
+      </Menu>
     );
   }
 

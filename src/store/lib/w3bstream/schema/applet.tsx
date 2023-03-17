@@ -1,5 +1,5 @@
 import FileWidget, { FileWidgetUIOptions } from '@/components/JSONFormWidgets/FileWidget';
-import { InstanceStatusRender } from '@/components/JSONTable/FieldRender';
+import { getInstanceButtonStatus, InstanceStatusRender } from '@/components/JSONTable/FieldRender';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { hooks } from '@/lib/hooks';
@@ -42,7 +42,7 @@ export default class AppletModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit',
+        submitText: 'Submit'
       },
       file: {
         'ui:widget': FileWidget,
@@ -167,11 +167,14 @@ export default class AppletModule {
             key: 'actions',
             label: 'Actions',
             actions: (item) => {
+              const buttonStatus = getInstanceButtonStatus(item);
               return [
                 {
                   props: {
                     bg: '#37A169',
                     color: '#fff',
+                    size: 'xs',
+                    isDisabled: buttonStatus.startBtn.isDisabled,
                     onClick() {
                       globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' });
                     }
@@ -183,6 +186,8 @@ export default class AppletModule {
                     ml: '8px',
                     bg: '#FAB400',
                     color: '#fff',
+                    size: 'xs',
+                    isDisabled: buttonStatus.restartBtn.isDisabled,
                     onClick() {
                       globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' });
                     }
@@ -194,6 +199,8 @@ export default class AppletModule {
                     ml: '8px',
                     bg: '#E53E3E',
                     color: '#fff',
+                    size: 'xs',
+                    isDisabled: buttonStatus.stopBtn.isDisabled,
                     onClick() {
                       globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' });
                     }
@@ -204,6 +211,7 @@ export default class AppletModule {
                   props: {
                     ml: '8px',
                     colorScheme: 'red',
+                    size: 'xs',
                     onClick: async () => {
                       globalThis.store.base.confirm.show({
                         title: 'Warning',
@@ -242,6 +250,82 @@ export default class AppletModule {
           {
             key: 'f_handler',
             label: 'handler'
+          },
+          {
+            key: 'actions',
+            label: 'Actions',
+            actions: (item) => {
+              return [
+                {
+                  props: {
+                    bg: '#37A169',
+                    color: '#fff',
+                    size: 'xs',
+                    onClick: async () => {
+                      globalThis.store.w3s.strategy.form.value.set({
+                        appletID: item.f_applet_id.toString(),
+                        eventType: String(item.f_event_type),
+                        handler: item.f_handler
+                      });
+                      const formData = await hooks.getFormData({
+                        title: 'Edit Strategy',
+                        size: 'md',
+                        formList: [
+                          {
+                            form: globalThis.store.w3s.strategy.form
+                          }
+                        ]
+                      });
+                      const { appletID, eventType, handler } = formData;
+                      if (appletID && eventType && handler) {
+                        const applet = this.allData.find((item) => String(item.f_applet_id) === appletID);
+                        try {
+                          await axios.request({
+                            method: 'put',
+                            url: `/api/w3bapp/strategy/${applet.project_name}/${item.f_strategy_id}`,
+                            data: {
+                              appletID,
+                              eventType,
+                              handler
+                            }
+                          });
+                          await showNotification({ message: 'update strategy succeeded' });
+                          eventBus.emit('strategy.update');
+                        } catch (error) {}
+                      }
+                    }
+                  },
+                  text: 'Edit'
+                },
+                {
+                  props: {
+                    ml: '8px',
+                    bg: '#E53E3E',
+                    color: '#fff',
+                    size: 'xs',
+                    onClick() {
+                      globalThis.store.base.confirm.show({
+                        title: 'Warning',
+                        description: 'Are you sure you want to delete it?',
+                        async onOk() {
+                          const p = globalThis.store.w3s.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
+                          if (!p) {
+                            return;
+                          }
+                          await axios.request({
+                            method: 'delete',
+                            url: `/api/w3bapp/strategy/${p.f_name}?strategyID=${item.f_strategy_id}`
+                          });
+                          await showNotification({ message: 'Deleted successfully' });
+                          eventBus.emit('strategy.delete');
+                        }
+                      });
+                    }
+                  },
+                  text: 'Delete'
+                }
+              ];
+            }
           }
         ]
       }

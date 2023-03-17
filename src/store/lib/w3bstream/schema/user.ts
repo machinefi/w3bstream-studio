@@ -16,7 +16,8 @@ export const loginSchema = {
 export const pwdSchema = {
   type: 'object',
   properties: {
-    password: { type: 'string', title: 'Password' }
+    oldPassword: { type: 'string', title: 'Old password' },
+    password: { type: 'string', title: 'New password' }
   },
   required: ['password']
 } as const;
@@ -72,6 +73,7 @@ export default class UserModule {
     },
     value: new JSONValue<PWDSchemaType>({
       default: {
+        oldPassword: '',
         password: ''
       }
     })
