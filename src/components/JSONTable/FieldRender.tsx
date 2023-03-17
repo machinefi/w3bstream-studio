@@ -23,6 +23,28 @@ export const INSTANCE_STATUS = {
   }
 };
 
+export const getInstanceButtonStatus = (item: InstanceType) => {
+  const state = item.f_state;
+  const buttonStatus = {
+    startBtn: {
+      isDisabled: false
+    },
+    restartBtn: {
+      isDisabled: false
+    },
+    stopBtn: {
+      isDisabled: false
+    }
+  };
+  if (state === 1 || state === 3) {
+    buttonStatus.stopBtn.isDisabled = true;
+  }
+  if (state === 2) {
+    buttonStatus.startBtn.isDisabled = true;
+  }
+  return buttonStatus;
+};
+
 export const InstanceStatusRender = (item: InstanceType) => {
   const state = item.f_state;
   return (

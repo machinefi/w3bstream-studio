@@ -6,7 +6,6 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { PublisherType } from '@/server/routers/w3bstream';
 import { PublisherTokenRender } from '@/components/JSONTable/FieldRender';
-import toast from 'react-hot-toast';
 import { UiSchema } from '@rjsf/utils';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
 import { ShowRequestTemplatesButtonWidget } from '@/components/IDE/PublishEventRequestTemplates';
@@ -259,6 +258,7 @@ export default class PublisherModule {
               props: {
                 bg: '#37A169',
                 color: '#fff',
+                size: 'xs',
                 onClick: async () => {
                   this.createPublisherForm.value.set({
                     projectName: item.project_name,
@@ -298,6 +298,7 @@ export default class PublisherModule {
                 ml: '8px',
                 bg: '#E53E3E',
                 color: '#fff',
+                size: 'xs',
                 onClick() {
                   globalThis.store.base.confirm.show({
                     title: 'Warning',
@@ -307,8 +308,8 @@ export default class PublisherModule {
                         method: 'delete',
                         url: `/api/w3bapp/publisher/${item.project_name}?publisherID=${item.f_publisher_id}`
                       });
+                      await showNotification({ message: 'Deleted successfully' });
                       eventBus.emit('strategy.delete');
-                      toast.success('Deleted successfully');
                     }
                   });
                 }

@@ -5,7 +5,6 @@ import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { StrategyType } from '@/server/routers/w3bstream';
-import toast from 'react-hot-toast';
 import { hooks } from '@/lib/hooks';
 
 export const schema = {
@@ -84,6 +83,7 @@ export default class StrategyModule {
               props: {
                 bg: '#37A169',
                 color: '#fff',
+                size: 'xs',
                 onClick: async () => {
                   this.form.value.set({
                     appletID: item.f_applet_id.toString(),
@@ -126,6 +126,7 @@ export default class StrategyModule {
                 ml: '8px',
                 bg: '#E53E3E',
                 color: '#fff',
+                size: 'xs',
                 onClick() {
                   globalThis.store.base.confirm.show({
                     title: 'Warning',
@@ -139,8 +140,8 @@ export default class StrategyModule {
                         method: 'delete',
                         url: `/api/w3bapp/strategy/${p.f_name}?strategyID=${item.f_strategy_id}`
                       });
+                      showNotification({ message: 'Deleted successfully' });
                       eventBus.emit('strategy.delete');
-                      toast.success('Deleted successfully');
                     }
                   });
                 }

@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
-    if (!token && !['/openapi'].includes(router.pathname)) {
+    if (!token && !['/openapi', '/admin-login'].includes(router.pathname)) {
       NextRouter.push('/login');
     }
   }, [token]);

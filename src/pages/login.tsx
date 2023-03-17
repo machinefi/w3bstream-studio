@@ -2,9 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Button, Flex, Image, Text } from '@chakra-ui/react';
 import { Center } from '@chakra-ui/layout';
-import { JSONForm } from '@/components/JSONForm';
 import { useStore } from '../store';
-import { Divider } from '@mantine/core';
 import { ethers } from 'ethers';
 import { SiweMessage } from 'siwe';
 import { eventBus } from '@/lib/event';
@@ -53,7 +51,10 @@ const signIn = async (connector: Providers) => {
       })
     }).then((res) => res.json());
     if (data.token) {
-      return data;
+      return {
+        ...data,
+        address
+      };
     }
     return null;
   } catch (error) {
@@ -77,12 +78,12 @@ const Login = observer(() => {
             </Text>
             <Image mt="120px" w="350px" src="/images/polygon_2.svg" alt="" />
           </Box>
-          <Box zIndex={9} ml="120px" w="580px" py="40px" px="40px" bg="#fff">
+          <Box zIndex={9} ml="120px" py="40px" px="40px" bg="#fff">
             <Box>
               <Text fontSize="lg" fontWeight={500}>
                 Welcome to W3bstream Studio, login with
               </Text>
-              <Flex my="20px" justify="center">
+              <Flex my="20px" justify="center" align="center">
                 <Button
                   leftIcon={<Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />}
                   colorScheme="blue"
@@ -90,7 +91,7 @@ const Login = observer(() => {
                   onClick={async () => {
                     const result = await signIn(Providers.METAMASK);
                     if (result) {
-                      w3s.config.form.value.set({ token: result.token, accountID: result.accountID, accountRole: result.accountRole });
+                      w3s.config.form.value.set({ token: result.token, accountID: result.accountID, accountRole: result.accountRole, address: result.address });
                       eventBus.emit('user.login');
                     }
                   }}
@@ -99,8 +100,6 @@ const Login = observer(() => {
                 </Button>
               </Flex>
             </Box>
-            <Divider mb="10px" label="Or continue with Username" labelPosition="center" />
-            <JSONForm formState={w3s.user.loginForm} />
           </Box>
         </Flex>
       </Center>

@@ -1,4 +1,4 @@
-import { InstanceStatusRender } from '@/components/JSONTable/FieldRender';
+import { getInstanceButtonStatus, InstanceStatusRender } from '@/components/JSONTable/FieldRender';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { InstanceType } from '@/server/routers/w3bstream';
@@ -17,11 +17,14 @@ export default class InstancesModule {
         key: 'actions',
         label: 'Actions',
         actions: (item) => {
+          const buttonStatus = getInstanceButtonStatus(item);
           return [
             {
               props: {
                 bg: '#37A169',
                 color: '#fff',
+                size: 'xs',
+                isDisabled: buttonStatus.startBtn.isDisabled,
                 onClick() {
                   globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'START' });
                 }
@@ -33,6 +36,8 @@ export default class InstancesModule {
                 ml: '8px',
                 bg: '#FAB400',
                 color: '#fff',
+                size: 'xs',
+                isDisabled: buttonStatus.restartBtn.isDisabled,
                 onClick() {
                   globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'Restart' });
                 }
@@ -44,6 +49,8 @@ export default class InstancesModule {
                 ml: '8px',
                 bg: '#E53E3E',
                 color: '#fff',
+                size: 'xs',
+                isDisabled: buttonStatus.stopBtn.isDisabled,
                 onClick() {
                   globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id.toString(), event: 'STOP' });
                 }
