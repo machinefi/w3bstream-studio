@@ -21,7 +21,7 @@ const Login = observer(() => {
             </Text>
             <Image mt="120px" w="350px" src="/images/polygon_2.svg" alt="" />
           </Box>
-          <Box zIndex={9} ml="120px" w="580px" py="40px" px="40px" bg="#fff">
+          <Box zIndex={9} ml="120px" w="580px" p="40px" bg="#fff" borderRadius="8px">
             <Text mb="30px" fontSize="30px" fontWeight={700} color="#1B1B1B">
               Login
             </Text>

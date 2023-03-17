@@ -78,8 +78,8 @@ const Login = observer(() => {
             </Text>
             <Image mt="120px" w="350px" src="/images/polygon_2.svg" alt="" />
           </Box>
-          <Box zIndex={9} ml="120px" py="40px" px="40px" bg="#fff">
-            <Box>
+          <Flex zIndex={9} ml="120px" align="center">
+            <Box p="20px" bg="#fff" borderRadius="8px">
               <Text fontSize="lg" fontWeight={500}>
                 Welcome to W3bstream Studio, login with
               </Text>
@@ -100,7 +100,7 @@ const Login = observer(() => {
                 </Button>
               </Flex>
             </Box>
-          </Box>
+          </Flex>
         </Flex>
       </Center>
     </Box>
