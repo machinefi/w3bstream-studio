@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
 import { showNotification } from '@mantine/notifications';
 import format from 'pg-format';
-import { DISABLED_SCHEMA_LIST } from '@/constants/postgres-meta';
+import { DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
 
 export const createTableSchema = {
   type: 'object',
@@ -487,38 +487,39 @@ export default class DBTableModule {
         };
       });
 
-      const idName = cols[0].name;
-
-      columns.push({
-        key: 'action',
-        label: 'Action',
-        actions: (item) => {
-          return [
-            {
-              props: {
-                colorScheme: 'red',
-                size: 'xs',
-                onClick: async () => {
-                  globalThis.store.base.confirm.show({
-                    title: 'Warning',
-                    description: 'Are you sure you want to delete it?',
-                    onOk: async () => {
-                      try {
-                        await this.deleteTableData(idName, item[idName]);
-                        const data = await this.getCurrentTableData();
-                        this.table.set({
-                          dataSource: data
-                        });
-                      } catch (error) {}
-                    }
-                  });
-                }
-              },
-              text: 'Delete'
-            }
-          ];
-        }
-      });
+      if (!DISABLED_TABLE_LIST.includes(this.currentTable.tableName)) {
+        const idName = cols[0].name;
+        columns.push({
+          key: 'action',
+          label: 'Action',
+          actions: (item) => {
+            return [
+              {
+                props: {
+                  colorScheme: 'red',
+                  size: 'xs',
+                  onClick: async () => {
+                    globalThis.store.base.confirm.show({
+                      title: 'Warning',
+                      description: 'Are you sure you want to delete it?',
+                      onOk: async () => {
+                        try {
+                          await this.deleteTableData(idName, item[idName]);
+                          const data = await this.getCurrentTableData();
+                          this.table.set({
+                            dataSource: data
+                          });
+                        } catch (error) {}
+                      }
+                    });
+                  }
+                },
+                text: 'Delete'
+              }
+            ];
+          }
+        });
+      }
 
       this.table.set({
         columns

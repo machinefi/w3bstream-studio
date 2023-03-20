@@ -10,6 +10,7 @@ import { hooks } from '@/lib/hooks';
 import { formatColumn, creatColumnDataForm } from '@/store/lib/w3bstream/schema/dbTable';
 import MonacoEditor from '@monaco-editor/react';
 import { _ } from '@/lib/lodash';
+import { DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
 
 const EditTable = observer(() => {
   const {
@@ -172,6 +173,11 @@ const ViewData = observer(() => {
   const {
     w3s: { dbTable }
   } = useStore();
+
+  if (DISABLED_TABLE_LIST.includes(dbTable.currentTable.tableName)) {
+    return <JSONTable jsonstate={dbTable} />;
+  }
+
   return (
     <>
       <Flex alignItems="center">
