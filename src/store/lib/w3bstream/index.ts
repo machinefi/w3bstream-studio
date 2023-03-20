@@ -21,6 +21,7 @@ import ContractLogModule from './schema/contractLog';
 import ChainTxModule from './schema/chainTx';
 import ChainHeightModule from './schema/chainHeight';
 import DBTableModule from './schema/dbTable';
+import MetricsModule from './schema/metrics';
 
 configure({
   enforceActions: 'never'
@@ -41,6 +42,7 @@ export class W3bStream {
   chainTx = new ChainTxModule();
   chainHeight = new ChainHeightModule();
   dbTable = new DBTableModule();
+  metrics = new MetricsModule();
 
   allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
@@ -175,6 +177,7 @@ export class W3bStream {
     | 'ALL_CONTRACT_LOGS'
     | 'All_CHAIN_TX'
     | 'All_CHAIN_HEIGHT'
+    | 'METRICS'
     | 'DB_TABLE' = 'CURRENT_APPLETS';
 
   isReady = false;
@@ -182,7 +185,7 @@ export class W3bStream {
   get isLogin() {
     return !!this.config.form.formData.token;
   }
-  
+
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);

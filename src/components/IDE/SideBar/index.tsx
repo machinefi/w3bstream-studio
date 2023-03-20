@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button, useDisclosure, Collapse, Spinner } from '@chakra-ui/react';
+import { Flex, Box, Stack, Text, FlexProps, Tooltip, Button, useDisclosure, Collapse } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronRightIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { MdAddBox, MdRefresh } from 'react-icons/md';
@@ -255,6 +255,46 @@ const SideBar = observer((props: SideBarProps) => {
         </>
       )}
       {w3s.showContent === 'DB_TABLE' && <DBTable />}
+      {w3s.showContent === 'METRICS' && (
+        <Box h="calc(100vh - 100px)" overflowY="auto">
+          <Flex
+            alignItems="center"
+            justifyContent="space-between"
+            h="40px"
+            py="2"
+            px="6"
+            bg="#FAFAFA"
+            borderBottom="2px solid rgba(0, 0, 0, 0.06)"
+            cursor="pointer"
+            sx={getSelectedStyles(w3s.metrics.showContent === 'DATABASE')}
+            onClick={(e) => {
+              w3s.metrics.showContent = 'DATABASE';
+            }}
+          >
+            <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
+              Database
+            </Text>
+          </Flex>
+          <Flex
+            alignItems="center"
+            justifyContent="space-between"
+            h="40px"
+            py="2"
+            px="6"
+            bg="#FAFAFA"
+            borderBottom="2px solid rgba(0, 0, 0, 0.06)"
+            cursor="pointer"
+            sx={getSelectedStyles(w3s.metrics.showContent === 'API')}
+            onClick={(e) => {
+              w3s.metrics.showContent = 'API';
+            }}
+          >
+            <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
+              API
+            </Text>
+          </Flex>
+        </Box>
+      )}
     </Box>
   );
 });

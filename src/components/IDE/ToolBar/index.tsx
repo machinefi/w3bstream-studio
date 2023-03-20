@@ -72,6 +72,20 @@ const ToolBar = (props: ToolBar) => {
           </Box>
         </Tooltip>
 
+        <Tooltip label="Metrics" placement="right">
+          <Box position="relative">
+            <Image
+              mt="10px"
+              src="/images/icons/metrics.svg"
+              onClick={() => {
+                w3s.showContent = 'METRICS';
+              }}
+              {...iconStyle}
+              {...getSelectedStyles(w3s.showContent === 'METRICS')}
+            />
+          </Box>
+        </Tooltip>
+
         <Tooltip label="Editor" placement="right">
           <Box position="relative" mt="10px">
             <Image

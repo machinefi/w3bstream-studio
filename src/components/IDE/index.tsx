@@ -21,6 +21,7 @@ import AllChainHeight from './AllChainHeight';
 import PublishEventRequestTemplates from './PublishEventRequestTemplates';
 import DBTable from './DBTable';
 import EventLogs from './EventLogs';
+import { JSONMetricsView } from '../JSONMetricsView';
 
 const IDE = observer(() => {
   const {
@@ -47,6 +48,7 @@ const IDE = observer(() => {
             {w3s.showContent === 'All_CHAIN_TX' && <AllChainTx />}
             {w3s.showContent === 'All_CHAIN_HEIGHT' && <AllChainHeight />}
             {w3s.showContent === 'DB_TABLE' && <DBTable />}
+            {w3s.showContent === 'METRICS' && <JSONMetricsView data={w3s.metrics.metricsData} />}
           </Box>
         ) : (
           <LayoutCenter w="100%" h="calc(100vh - 100px)">
