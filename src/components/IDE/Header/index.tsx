@@ -158,51 +158,46 @@ const Header = observer(() => {
   );
 });
 
-const accountAddressFormat = (address) => {
-  const len = address.length;
-  return `${address.substring(0, 10)}...${address.substring(len - 9, len)}`;
-};
-
 const Profile = observer(() => {
   const {
     w3s,
     base: { confirm }
   } = useStore();
-  const { accountID, address } = w3s.config.form.formData;
+  const { accountID } = w3s.config.form.formData;
 
   if (accountID) {
     return (
       <Menu>
-        <MenuButton>{address ? <Button bg="rgba(0, 0, 0, 0.03)">{accountAddressFormat(address)}</Button> : <Button bg="rgba(0, 0, 0, 0.03)">accountID: {accountID}</Button>}</MenuButton>
+        <MenuButton>
+          <Button bg="rgba(0, 0, 0, 0.03)">accountID: {accountID}</Button>
+        </MenuButton>
         <MenuList py={0}>
-          {!address && (
-            <MenuItem
-              icon={<EditIcon />}
-              onClick={async () => {
-                const formData = await hooks.getFormData({
-                  title: 'Update Password',
-                  size: 'md',
-                  formList: [
-                    {
-                      form: w3s.user.pwdForm
-                    }
-                  ]
+          <MenuItem
+            icon={<EditIcon />}
+            onClick={async () => {
+              const formData = await hooks.getFormData({
+                title: 'Update Password',
+                size: 'md',
+                formList: [
+                  {
+                    form: w3s.user.pwdForm
+                  }
+                ]
+              });
+              if (formData.password) {
+                await axios.request({
+                  method: 'put',
+                  url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
+                  data: formData
                 });
-                if (formData.password) {
-                  await axios.request({
-                    method: 'put',
-                    url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
-                    data: formData
-                  });
-                  showNotification({ message: 'update password succeeded' });
-                  eventBus.emit('user.update-pwd');
-                  w3s.config.logout();
-                }
-              }}
-            >
-              Update password
-            </MenuItem>
-          )}
+                showNotification({ message: 'update password succeeded' });
+                eventBus.emit('user.update-pwd');
+                w3s.config.logout();
+              }
+            }}
+          >
+            Update password
+          </MenuItem>
           <MenuItem
             icon={<MdLogout />}
             onClick={() => {

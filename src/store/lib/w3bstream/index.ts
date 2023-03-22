@@ -165,6 +165,8 @@ export class W3bStream {
   });
 
   showContent:
+    | 'CURRENT_PROJECT'
+    | 'ALL_PROJECTS'
     | 'CURRENT_APPLETS'
     | 'ALL_APPLETS'
     | 'CURRENT_PUBLISHERS'
@@ -185,6 +187,8 @@ export class W3bStream {
   get isLogin() {
     return !!this.config.form.formData.token;
   }
+
+  headerTabs: 'PROJECTS' | 'LABS' | 'SUPPORT' = 'PROJECTS';
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
