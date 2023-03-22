@@ -165,8 +165,6 @@ export class W3bStream {
   });
 
   showContent:
-    | 'CURRENT_PROJECT'
-    | 'ALL_PROJECTS'
     | 'CURRENT_APPLETS'
     | 'ALL_APPLETS'
     | 'CURRENT_PUBLISHERS'
@@ -180,6 +178,9 @@ export class W3bStream {
     | 'All_CHAIN_TX'
     | 'All_CHAIN_HEIGHT'
     | 'METRICS'
+    | 'DEVICES'
+    | 'TRIGGERS'
+    | 'SETTINGS'
     | 'DB_TABLE' = 'CURRENT_APPLETS';
 
   isReady = false;

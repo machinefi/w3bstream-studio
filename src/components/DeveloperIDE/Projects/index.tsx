@@ -1,36 +1,124 @@
 import React from 'react';
-import { Flex, Image, Text, Box, Button } from '@chakra-ui/react';
+import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Tag } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
-import { AiOutlinePauseCircle } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineLineChart, AiOutlinePauseCircle, AiOutlinePlus } from 'react-icons/ai';
+import { BsArrowUpRight } from 'react-icons/bs';
+import { axios } from '@/lib/axios';
+import { eventBus } from '@/lib/event';
+import toast from 'react-hot-toast';
 
 const Projects = observer(() => {
-  const { w3s } = useStore();
+  const {
+    w3s,
+    base: { confirm }
+  } = useStore();
+  const allProjects = w3s.allProjects.value;
 
-  return (
-    <Box w="100%" h="500px" bg="#fff" p="40px 30px">
-      <Flex justifyContent="space-between" alignItems="center">
-        <Button leftIcon={<AddIcon />} h="32px" {...defaultButtonStyle}>
-          Create New Project
-        </Button>
-        <Flex alignItems="center">
-          <Button leftIcon={<DeleteIcon />} h="32px" {...defaultOutlineButtonStyle}>
-            Delete
+  if (allProjects.length) {
+    return (
+      <Box w="100%" h="calc(100vh - 100px)" p="40px 30px" bg="#fff" borderRadius="8px">
+        <Flex justifyContent="space-between" alignItems="center">
+          <Button
+            leftIcon={<AiOutlinePlus />}
+            h="32px"
+            {...defaultButtonStyle}
+            onClick={() => {
+              w3s.project.createProject();
+            }}
+          >
+            Create New Project
           </Button>
-          <Button leftIcon={<AiOutlinePauseCircle />} ml="20px" h="32px" {...defaultOutlineButtonStyle}>
-            Pause
-          </Button>
+          <Flex alignItems="center">
+            <Button leftIcon={<AiOutlineDelete />} h="32px" {...defaultOutlineButtonStyle}>
+              Delete
+            </Button>
+            <Button leftIcon={<AiOutlinePauseCircle />} ml="20px" h="32px" {...defaultOutlineButtonStyle}>
+              Pause
+            </Button>
+          </Flex>
         </Flex>
-      </Flex>
-    </Box>
-  );
-});
+        <Grid mt="20px" gridTemplateRows="repeat(4, 1fr)" templateColumns="repeat(2, 1fr)" gap={6} h="calc(100vh - 210px)" overflow="auto">
+          {allProjects.map((project, index) => (
+            <GridItem w="100%" p="24px" bg="rgba(248, 248, 250, 0.5)" borderRadius="8px" key={project.f_name}>
+              <Flex alignItems="center">
+                <Box fontWeight={700} fontSize="16px">
+                  {project.f_name}
+                </Box>
+                <Icon as={BsArrowUpRight} ml="20px" color="#946FFF" />
+                <Tag ml="20px" size="md" variant="subtle" color="#00B87A" borderRadius="4px" fontSize="14px">
+                  Active
+                </Tag>
+              </Flex>
+              <Flex mt="12px" alignItems="center" fontSize="14px">
+                <Icon as={AiOutlineLineChart} color="#7A7A7A" />
+                <Box ml="5px" color="#7A7A7A">
+                  Requests per hour:
+                </Box>
+                <Box ml="10px" color="#000">
+                  2345667
+                </Box>
+              </Flex>
+              <Box mt="20px" fontSize="14px" color="#7A7A7A">
+                {/* {project.f_description} */}
+                {project.f_name}
+              </Box>
+              <Flex mt="10px" justifyContent="flex-end">
+                <Icon
+                  as={AiOutlineEdit}
+                  boxSize={5}
+                  color="#969696"
+                  cursor="pointer"
+                  _hover={{ color: '#946FFF' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    w3s.allProjects.onSelect(index);
+                  }}
+                />
+                <Icon
+                  ml="20px"
+                  as={AiOutlineDelete}
+                  boxSize={5}
+                  color="#969696"
+                  cursor="pointer"
+                  _hover={{ color: '#946FFF' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    confirm.show({
+                      title: 'Warning',
+                      description: 'Are you sure you want to delete it?',
+                      async onOk() {
+                        await axios.request({
+                          method: 'delete',
+                          url: `/api/w3bapp/project/${project.f_name}`
+                        });
+                        eventBus.emit('project.delete');
+                        toast.success('Deleted successfully');
+                      }
+                    });
+                  }}
+                />
+                <Icon
+                  ml="20px"
+                  as={AiOutlinePauseCircle}
+                  boxSize={5}
+                  color="#969696"
+                  cursor="pointer"
+                  _hover={{ color: '#946FFF' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                />
+              </Flex>
+            </GridItem>
+          ))}
+        </Grid>
+      </Box>
+    );
+  }
 
-export const Empty = observer(() => {
-  const { w3s } = useStore();
   return (
     <Center w="100%">
       <Flex flexDir="column" alignItems="center">
@@ -38,7 +126,14 @@ export const Empty = observer(() => {
         <Text mt="16px" fontSize="14px" color="#7A7A7A">
           You haven't created any project.
         </Text>
-        <Button mt="30px" h="32px" onClick={() => {}}>
+        <Button
+          mt="30px"
+          h="32px"
+          {...defaultButtonStyle}
+          onClick={() => {
+            w3s.project.createProject();
+          }}
+        >
           Create a project now
         </Button>
       </Flex>

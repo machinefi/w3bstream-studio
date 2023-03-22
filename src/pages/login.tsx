@@ -43,7 +43,7 @@ const signIn = async (connector: Providers) => {
       version: '1'
     });
     const signature = await provider.getSigner().signMessage(message.prepareMessage());
-    const data = await fetch(`/api/w3bapp/login/eth`, {
+    const data = await fetch(`/api/w3bapp/login/wallet`, {
       method: 'PUT',
       body: JSON.stringify({
         signature,

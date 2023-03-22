@@ -41,7 +41,7 @@ const Header = observer(() => {
         alignItems="center"
         cursor="pointer"
         onClick={() => {
-          w3s.showContent = 'ALL_PROJECTS';
+          w3s.allProjects.onSelect(-1);
         }}
       >
         <Image w="30px" src="/favicon.svg" alt="logo" />
