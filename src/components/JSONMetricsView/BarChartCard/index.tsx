@@ -43,7 +43,7 @@ export const BarChartCard = ({ title, tips, data, config = {} }: BarChartCard) =
                 }}
               >
                 {data.map((entry, index) => (
-                  <Cell cursor="pointer" fill={index === activeIndex ? '#8884d8' : '#82ca9d'} key={`cell-${index}`} />
+                  <Cell cursor="pointer" fill={index === activeIndex ? '#946FFF' : '#82ca9d'} key={`cell-${index}`} />
                 ))}
               </Bar>
             </BarChart>

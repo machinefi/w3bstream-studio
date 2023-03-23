@@ -125,7 +125,7 @@ const ToolBar = (props: ToolBar) => {
   );
 };
 
-function getSelectedStyles(selected: boolean) {
+export function getSelectedStyles(selected: boolean) {
   return selected
     ? {
         sx: {

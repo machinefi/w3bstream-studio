@@ -1,7 +1,6 @@
 import NextRouter from 'next/router';
 import { configure, makeAutoObservable } from 'mobx';
 import RootStore from '@/store/root';
-import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
 import { hooks } from '@/lib/hooks';
@@ -92,12 +91,7 @@ export class W3bStream {
     eventBus
       .on('app.ready', async () => {
         this.isReady = true;
-        if (this.config.isLogin) {
-          await axios.request({
-            method: 'get',
-            url: '/api/w3bapp/project'
-          });
-        }
+        this.project.allProjects.onSelect(-1);
       })
       .on('user.login', async () => {
         NextRouter.push('/');
@@ -176,10 +170,12 @@ export class W3bStream {
   initHook() {
     hooks.waitLogin().then(async () => {
       await this.project.allProjects.call();
-      this.projectManager.sync();
-      this.contractLogs.allContractLogs.call();
-      this.chainTx.allChainTx.call();
-      this.chainHeight.allChainHeight.call();
+      if (this.config.form.formData.accountRole === 'ADMIN') {
+        this.projectManager.sync();
+        this.contractLogs.allContractLogs.call();
+        this.chainTx.allChainTx.call();
+        this.chainHeight.allChainHeight.call();
+      }
     });
   }
 }

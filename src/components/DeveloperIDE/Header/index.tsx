@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
 import Link from 'next/link';
+import { defaultButtonStyle } from '@/lib/theme';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'PROJECTS') {
@@ -125,7 +126,19 @@ const Profile = observer(() => {
     );
   }
 
-  return <Link href="/login">Login</Link>;
+  return (
+    <Link href="/login">
+      <Button
+        h="32px"
+        {...defaultButtonStyle}
+        onClick={() => {
+          w3s.project.createProject();
+        }}
+      >
+        Login
+      </Button>
+    </Link>
+  );
 });
 
 export default Header;

@@ -7,6 +7,7 @@ import Header from './Header';
 import { ConfirmModal } from '../Common/Confirm';
 import Projects from './Projects';
 import CurrentProject from './CurrentProject';
+import Labs from './Labs';
 
 const DeveloperIDE = observer(() => {
   const {
@@ -19,7 +20,7 @@ const DeveloperIDE = observer(() => {
       <Header />
       <Box mt="80px" w="100%" px="30px">
         {w3s.headerTabs === 'PROJECTS' && <>{w3s.project.curProject ? <CurrentProject /> : <Projects />}</>}
-        {w3s.headerTabs === 'LABS' && <></>}
+        {w3s.headerTabs === 'LABS' && <Labs />}
         {w3s.headerTabs === 'SUPPORT' && <></>}
       </Box>
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />

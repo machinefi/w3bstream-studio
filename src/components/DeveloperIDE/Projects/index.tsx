@@ -181,7 +181,7 @@ const Projects = observer(() => {
   }
 
   return (
-    <Center w="100%">
+    <Center w="100%" h="calc(100vh - 100px)">
       <Flex flexDir="column" alignItems="center">
         <Image w="80px" src="/images/empty_box.svg" alt="" />
         <Text mt="16px" fontSize="14px" color="#7A7A7A">
