@@ -14,12 +14,12 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects', title: 'Project Name' },
+    projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type' },
     chainID: { type: 'number', title: 'Chain ID' },
     height: { type: 'number', title: 'Height' }
   },
-  required: ['projectID', 'eventType', 'chainID', 'height']
+  required: ['projectName', 'eventType', 'chainID', 'height']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -42,6 +42,12 @@ export default class ChainHeightModule {
       return res;
     }
   });
+
+  get curProjectChainHeight() {
+    const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
+    return this.allChainHeight.value.filter((c) => c.f_project_name === curProjectName);
+  }
+
   table = new JSONSchemaTableState<ChainHeightType>({
     columns: [
       {
@@ -111,7 +117,7 @@ export default class ChainHeightModule {
       // }
     ],
     rowKey: 'f_chain_height_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
+    containerProps: { mt: '10px' }
   });
 
   form = new JSONSchemaFormState<SchemaType>({
@@ -129,7 +135,7 @@ export default class ChainHeightModule {
     },
     value: new JSONValue<SchemaType>({
       default: {
-        projectID: '',
+        projectName: '',
         eventType: 'DEFAULT',
         chainID: 4690,
         height: 0

@@ -95,7 +95,7 @@ export default class DBTableModule {
     }),
     isServerPaging: true,
     rowKey: 'f_id',
-    containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
+    containerProps: { mt: 4 }
   });
 
   createTableForm = new JSONSchemaFormState<CreateTableSchemaType>({
@@ -330,6 +330,12 @@ export default class DBTableModule {
       await trpc.pg.deleteTable.mutate({
         tableId,
         cascade
+      });
+      this.setCurrentTable({
+        tableId: 0,
+        tableSchema: '',
+        tableName: '',
+        disabled: true
       });
       this.allTableNames.call();
     } catch (error) {

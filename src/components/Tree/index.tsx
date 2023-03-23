@@ -10,7 +10,7 @@ import { toast } from '@/lib/helper';
 export const FileIcon = (file: FilesItemType) => {
   const {
     w3s: { projectManager }
-  } = useStore( );
+  } = useStore();
   //https://github.com/PKief/vscode-material-icon-theme/tree/main/icons
   const s: ImageProps = {
     h: 5,
@@ -36,7 +36,15 @@ export const FileIcon = (file: FilesItemType) => {
   }
 
   if (file?.label == VSCodeRemoteFolderName) {
-    return <>{file.isOpen ? <Image {...s} src="/images/icons/folder-vscode-open.svg" filter={!projectManager.isWSConnect?'grayscale(100%)':''}></Image> : <Image filter={!projectManager.isWSConnect?'grayscale(100%)':''} {...s} src="/images/icons/folder-vscode.svg"></Image>}</>;
+    return (
+      <>
+        {file.isOpen ? (
+          <Image {...s} src="/images/icons/folder-vscode-open.svg" filter={!projectManager.isWSConnect ? 'grayscale(100%)' : ''}></Image>
+        ) : (
+          <Image filter={!projectManager.isWSConnect ? 'grayscale(100%)' : ''} {...s} src="/images/icons/folder-vscode.svg"></Image>
+        )}
+      </>
+    );
   }
 };
 
@@ -75,14 +83,15 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
       onClick: (item) => w3s.projectManager.curFilesListSchema.deleteFile(item)
     }
   ];
+
   return (
     <Flex flexDirection="column" cursor="pointer">
       {data?.map?.((item: FilesItemType) => {
         return (
           <>
             <Flex
-              pl={5}
               key={item.key}
+              pl={item.label === 'Browser Files' || item.label === 'VSCode Files' ? 0 : 5}
               flexDirection="column"
               onClick={(e) => {
                 e.stopPropagation();

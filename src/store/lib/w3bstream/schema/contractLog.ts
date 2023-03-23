@@ -14,7 +14,7 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects', title: 'Project Name' },
+    projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type' },
     chainID: { type: 'number', title: 'Chain ID' },
     contractAddress: { type: 'string', title: 'Contract Address' },
@@ -22,7 +22,7 @@ export const schema = {
     blockEnd: { type: 'number', title: 'Block End' },
     topic0: { type: 'string', title: 'topic0' }
   },
-  required: ['projectID', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
+  required: ['projectName', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -45,6 +45,12 @@ export default class ContractLogModule {
       return res;
     }
   });
+
+  get curProjectContractLogs() {
+    const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
+    return this.allContractLogs.value.filter((c) => c.f_project_name === curProjectName);
+  }
+
   table = new JSONSchemaTableState<ContractLogType>({
     columns: [
       {
@@ -126,7 +132,7 @@ export default class ContractLogModule {
       // }
     ],
     rowKey: 'f_contractlog_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
+    containerProps: { mt: '10px' }
   });
 
   form = new JSONSchemaFormState<SchemaType>({
@@ -144,7 +150,7 @@ export default class ContractLogModule {
     },
     value: new JSONValue<SchemaType>({
       default: {
-        projectID: '',
+        projectName: '',
         eventType: 'DEFAULT',
         chainID: 4690,
         contractAddress: '',

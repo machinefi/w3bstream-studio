@@ -2,15 +2,28 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Button, Flex } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
+import { useEffect } from 'react';
 
-const AllChainHeight = observer(() => {
+const ChainHeight = observer(() => {
   const { w3s } = useStore();
+
+  useEffect(() => {
+    if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
+      w3s.chainHeight.table.set({
+        dataSource: w3s.chainHeight.curProjectChainHeight
+      });
+    } else {
+      w3s.chainHeight.table.set({
+        dataSource: w3s.chainHeight.allChainHeight.value
+      });
+    }
+  }, [w3s.chainHeight.allChainHeight.value]);
 
   return (
     <>
@@ -18,8 +31,16 @@ const AllChainHeight = observer(() => {
         <Button
           h="32px"
           leftIcon={<AddIcon />}
-          {...gradientButtonStyle}
+          {...defaultButtonStyle}
           onClick={async (e) => {
+            if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
+              w3s.chainHeight.form.value.set({
+                projectName: w3s.project.curProject?.f_name
+              });
+              w3s.chainHeight.form.uiSchema.projectName = {
+                'ui:disabled': true
+              };
+            }
             const formData = await hooks.getFormData({
               title: ' Create blockchain height monitor',
               size: 'md',
@@ -29,10 +50,10 @@ const AllChainHeight = observer(() => {
                 }
               ]
             });
-            if (formData.projectID) {
+            if (formData.projectName) {
               const res = await axios.request({
                 method: 'post',
-                url: `/api/w3bapp/monitor/chain_height/${formData.projectID}`,
+                url: `/api/w3bapp/monitor/chain_height/${formData.projectName}`,
                 data: formData
               });
               if (res.data) {
@@ -50,4 +71,4 @@ const AllChainHeight = observer(() => {
   );
 });
 
-export default AllChainHeight;
+export default ChainHeight;

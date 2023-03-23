@@ -2,11 +2,10 @@ import { Button, Flex } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { AddIcon } from '@chakra-ui/icons';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 import { useEffect } from 'react';
 import { hooks } from '@/lib/hooks';
-import { dataURItoBlob } from '@rjsf/utils';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
@@ -18,7 +17,7 @@ const AddBtn = observer(() => {
       <Button
         h="32px"
         leftIcon={<AddIcon />}
-        {...gradientButtonStyle}
+        {...defaultButtonStyle}
         onClick={async (e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
             w3s.applet.form.value.set({
@@ -34,7 +33,7 @@ const AddBtn = observer(() => {
       <Button
         ml="20px"
         h="32px"
-        {...gradientButtonStyle}
+        {...defaultButtonStyle}
         onClick={async (e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
             w3s.showContent = 'CURRENT_EVENT_LOGS';

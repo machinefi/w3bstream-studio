@@ -11,6 +11,7 @@ import { hooks } from '@/lib/hooks';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { AppletType, ProjectType, PublisherType, InstanceType, StrategyType } from '@/server/routers/w3bstream';
 import { trpc } from '@/lib/trpc';
+import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
 
 export const defaultSchema = {
   type: 'object',
@@ -29,8 +30,20 @@ export const initializationTemplateSchema = {
   required: ['template']
 } as const;
 
+export const developerInitializationTemplateSchema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string', title: 'Name' },
+    description: { type: 'string', title: 'Description' },
+    template: { type: 'string', title: 'Explore Templates' }
+  },
+  required: ['template']
+} as const;
+
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
+type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;
+
 interface Env {
   id: string;
   key: string;
@@ -136,8 +149,42 @@ export default class ProjectModule {
     })
   });
 
+  developerInitializationTemplateForm = new JSONSchemaFormState<DeveloperInitializationTemplateSchemaType>({
+    //@ts-ignore
+    schema: developerInitializationTemplateSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      template: {
+        'ui:widget': InitializationTemplateWidget
+      },
+      layout: [['name', 'description'], 'template']
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.developerInitializationTemplateForm.reset();
+    },
+    customValidate(formData, errors) {
+      if (!formData.template) {
+        errors.template.addError('Please select a template');
+      }
+      return errors;
+    },
+    value: new JSONValue<DeveloperInitializationTemplateSchemaType>({
+      default: {
+        name: '',
+        description: '',
+        template: ''
+      }
+    })
+  });
+
   formMode: 'add' | 'edit' = 'add';
+
   envs: Env[] = [];
+
   onAddEnv() {
     this.envs.push({
       id: uuidv4(),
@@ -145,9 +192,11 @@ export default class ProjectModule {
       value: ''
     });
   }
+
   onDeleteEnv(id: string) {
     this.envs = this.envs.filter((i) => i.id !== id);
   }
+
   onChangeEnv(id: string, key: string, value: string) {
     for (let i = 0; i < this.envs.length; i++) {
       const item = this.envs[i];
@@ -158,6 +207,7 @@ export default class ProjectModule {
       }
     }
   }
+
   async setMode(mode: 'add' | 'edit') {
     if (mode === 'add') {
       this.form.reset();
@@ -174,6 +224,7 @@ export default class ProjectModule {
     this.formMode = mode;
     this.setEnvs();
   }
+
   async setEnvs() {
     if (this.formMode === 'edit') {
       this.envs = this.curProject?.config?.env || [
@@ -193,6 +244,7 @@ export default class ProjectModule {
       ];
     }
   }
+
   async onSaveEnv() {
     const projectName = this.form.value.get().name;
     const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
@@ -205,6 +257,7 @@ export default class ProjectModule {
       }
     }
   }
+
   async createProject() {
     this.setMode('add');
     const formData = await hooks.getFormData({
@@ -248,6 +301,7 @@ export default class ProjectModule {
       }
     }
   }
+
   async editProject() {
     this.setMode('edit');
     await hooks.getFormData({
@@ -261,11 +315,49 @@ export default class ProjectModule {
     });
   }
 
+  async createProjectForDeleveloper() {
+    const formData = await hooks.getFormData({
+      title: 'Create a New Project',
+      size: '6xl',
+      formList: [
+        {
+          form: this.developerInitializationTemplateForm
+        }
+      ]
+    });
+    if (formData.template) {
+      const data = initTemplates.templates.find((i) => i.name === formData.template);
+      const res = await axios.request({
+        method: 'post',
+        url: `/api/init`,
+        data
+      });
+      if (res.data) {
+        await showNotification({ message: 'Create project succeeded' });
+        eventBus.emit('project.create');
+      }
+    }
+  }
+
+  async saveEnvForDeleveloper() {
+    const projectName = this.curProject?.f_name;
+    const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
+    if (values.length) {
+      try {
+        await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
+        await showNotification({ message: 'Save environment variables successfully' });
+      } catch (error) {
+        throw error;
+      }
+    }
+  }
+
   get curProject() {
     return this.allProjects.current;
   }
 
   selectedNames = [];
+
   selectProjectName(projectName: string, checked: boolean) {
     const index = this.selectedNames.findIndex((i) => i === projectName);
     if (checked && index === -1) {
@@ -275,6 +367,7 @@ export default class ProjectModule {
       this.selectedNames.splice(index, 1);
     }
   }
+  
   resetSelectedNames() {
     this.selectedNames = [];
   }

@@ -3,6 +3,7 @@ import { getInstanceButtonStatus, InstanceStatusRender } from '@/components/JSON
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { hooks } from '@/lib/hooks';
+import { defaultButtonStyle } from '@/lib/theme';
 import { AppletType } from '@/server/routers/w3bstream';
 import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
@@ -116,8 +117,8 @@ export default class AppletModule {
           const addStrategyBtn = {
             props: {
               ml: '10px',
-              colorScheme: 'blue',
               size: 'xs',
+              ...defaultButtonStyle,
               onClick: async () => {
                 globalThis.store.w3s.strategy.form.value.set({
                   appletID: item.f_applet_id.toString()
@@ -138,8 +139,8 @@ export default class AppletModule {
             {
               props: {
                 ml: '10px',
-                colorScheme: 'blue',
                 size: 'xs',
+                ...defaultButtonStyle,
                 onClick: () => {
                   this.deployApplet({ appletID: item.f_applet_id.toString() });
                 }

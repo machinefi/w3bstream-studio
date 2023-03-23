@@ -61,19 +61,19 @@ const Header = observer(() => {
           }}
           sx={{
             '.chakra-tabs__tablist': {
-              border: '1px solid #000',
+              border: '1px solid rgba(148, 111, 255, 0.4)',
               borderRadius: '10px'
             }
           }}
         >
           <TabList>
-            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderLeftRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderLeftRadius="8px" _selected={{ color: 'white', bg: '#946FFF' }}>
               Applet
             </Tab>
-            <Tab w="70px" h="30px" fontSize="xs" fontWeight={700} borderLeft="1px solid #000" borderRight="1px solid #000" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab w="70px" h="30px" fontSize="xs" fontWeight={700} borderLeft="1px solid rgba(148, 111, 255, 0.4)" borderRight="1px solid rgba(148, 111, 255, 0.4)" _selected={{ color: 'white', bg: '#946FFF' }}>
               Publisher
             </Tab>
-            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderRightRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderRightRadius="8px" _selected={{ color: 'white', bg: '#946FFF' }}>
               Log
             </Tab>
           </TabList>

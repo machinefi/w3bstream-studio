@@ -14,12 +14,12 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    projectName: { $ref: '#/definitions/projects', title: 'Project ID' },
     eventType: { type: 'string', title: 'Event Type' },
     chainID: { type: 'number', title: 'Chain ID' },
     txAddress: { type: 'string', title: 'txAddress' }
   },
-  required: ['projectID', 'eventType', 'chainID', 'txAddress']
+  required: ['projectName', 'eventType', 'chainID', 'txAddress']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -42,6 +42,12 @@ export default class ChainTxModule {
       return res;
     }
   });
+
+  get curProjectChainTx() {
+    const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
+    return this.allChainTx.value.filter((c) => c.f_project_name === curProjectName);
+  }
+
   table = new JSONSchemaTableState<ChainTxType>({
     columns: [
       {
@@ -111,7 +117,7 @@ export default class ChainTxModule {
       // }
     ],
     rowKey: 'f_chaintx_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
+    containerProps: { mt: '10px' }
   });
 
   form = new JSONSchemaFormState<SchemaType>({
@@ -129,7 +135,7 @@ export default class ChainTxModule {
     },
     value: new JSONValue<SchemaType>({
       default: {
-        projectID: '',
+        projectName: '',
         eventType: 'DEFAULT',
         chainID: 4690,
         txAddress: ''

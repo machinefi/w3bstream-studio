@@ -69,8 +69,6 @@ export class W3bStream {
     | 'All_CHAIN_TX'
     | 'All_CHAIN_HEIGHT'
     | 'METRICS'
-    | 'DEVICES'
-    | 'TRIGGERS'
     | 'SETTINGS'
     | 'DB_TABLE' = 'CURRENT_APPLETS';
 
@@ -170,12 +168,10 @@ export class W3bStream {
   initHook() {
     hooks.waitLogin().then(async () => {
       await this.project.allProjects.call();
-      if (this.config.form.formData.accountRole === 'ADMIN') {
-        this.projectManager.sync();
-        this.contractLogs.allContractLogs.call();
-        this.chainTx.allChainTx.call();
-        this.chainHeight.allChainHeight.call();
-      }
+      this.projectManager.sync();
+      this.contractLogs.allContractLogs.call();
+      this.chainTx.allChainTx.call();
+      this.chainHeight.allChainHeight.call();
     });
   }
 }

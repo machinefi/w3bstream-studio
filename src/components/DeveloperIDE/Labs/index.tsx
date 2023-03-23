@@ -6,11 +6,11 @@ import Editor from '@/components/IDE/Editor';
 
 const Labs = () => {
   return (
-    <Flex w="100%" h="calc(100vh - 100px)">
-      <Flex minW="220px" h="100%" direction="column" align="center" py="20px" bg="#fff" borderRadius="8px" overflowY="auto">
+    <Flex w="100%" h="calc(100vh - 120px)">
+      <Box minW="300px" h="100%" p="20px 10px" bg="#fff" borderRadius="8px" overflowY="auto">
         <FilesItem />
-      </Flex>
-      <Box ml="10px" w="100%" h="100%" p="10px" bg="#fff" borderRadius="8px">
+      </Box>
+      <Box ml="10px" w="100%" h="100%" p="20px 10px" bg="#fff" borderRadius="8px">
         <Editor />
       </Box>
     </Flex>

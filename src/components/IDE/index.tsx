@@ -15,9 +15,9 @@ import Editor from './Editor';
 import DockerLogs from './DockerLogs';
 import { ConfirmModal } from '../Common/Confirm';
 import JSONTable from '../JSONTable';
-import AllContractLogs from './AllContractLogs';
-import AllChainTx from './AllChainTx';
-import AllChainHeight from './AllChainHeight';
+import ContractLogs from './Monitor/ContractLogs';
+import ChainTx from './Monitor/ChainTx';
+import ChainHeight from './Monitor/ChainHeight';
 import PublishEventRequestTemplates from './PublishEventRequestTemplates';
 import DBTable from './DBTable';
 import EventLogs from './EventLogs';
@@ -44,9 +44,9 @@ const IDE = observer(() => {
             {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
             {w3s.showContent === 'EDITOR' && <Editor />}
             {w3s.showContent === 'DOCKER_LOGS' && <DockerLogs />}
-            {w3s.showContent === 'ALL_CONTRACT_LOGS' && <AllContractLogs />}
-            {w3s.showContent === 'All_CHAIN_TX' && <AllChainTx />}
-            {w3s.showContent === 'All_CHAIN_HEIGHT' && <AllChainHeight />}
+            {w3s.showContent === 'ALL_CONTRACT_LOGS' && <ContractLogs />}
+            {w3s.showContent === 'All_CHAIN_TX' && <ChainTx />}
+            {w3s.showContent === 'All_CHAIN_HEIGHT' && <ChainHeight />}
             {w3s.showContent === 'DB_TABLE' && <DBTable />}
             {w3s.showContent === 'METRICS' && <JSONMetricsView data={w3s.metrics.metricsData} />}
           </Box>

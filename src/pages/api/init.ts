@@ -105,6 +105,17 @@ const deployApplet = async (appletID: string, token: string): Promise<string> =>
   return data.instanceID;
 };
 
+const startInstance = async (instanceID: string, token: string): Promise<any> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/${instanceID}/START`, {
+    method: 'put',
+    headers: {
+      Authorization: token
+    }
+  });
+  const data: any = await res.json();
+  return data;
+};
+
 const createMonitor = async (projectName: string, monitor: Monitor, token: string): Promise<void> => {
   if (monitor.contractLog) {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/contract_log/${projectName}`, {
@@ -159,6 +170,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         for (const a of p.applets) {
           const appletID = await createApplet({ ...a, projectName }, token);
           const instanceID = await deployApplet(appletID, token);
+          await startInstance(instanceID, token);
         }
         for (const d of p.datas) {
           if (d.monitor) {

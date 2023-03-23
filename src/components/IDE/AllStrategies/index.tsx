@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Button, Flex } from '@chakra-ui/react';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle } from '@/lib/theme';
 import { AddIcon } from '@chakra-ui/icons';
 import JSONTable from '@/components/JSONTable';
 
@@ -14,7 +14,7 @@ const AllStrategies = observer(() => {
         <Button
           h="32px"
           leftIcon={<AddIcon />}
-          {...gradientButtonStyle}
+          {...defaultButtonStyle}
           onClick={async (e) => {
             w3s.strategy.createStrategy();
           }}

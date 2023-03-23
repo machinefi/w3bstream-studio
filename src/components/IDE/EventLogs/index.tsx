@@ -4,7 +4,7 @@ import { useStore } from '@/store/index';
 import { Box, Button, Flex, Spinner, Text } from '@chakra-ui/react';
 import MonacoEditor from '@monaco-editor/react';
 import { _ } from '@/lib/lodash';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
@@ -95,7 +95,7 @@ const EventLogs = observer(() => {
           <Button
             type="submit"
             borderRadius="base"
-            {...gradientButtonStyle}
+            {...defaultOutlineButtonStyle}
             onClick={async () => {
               const projectName = curProject?.f_name;
               if (projectName) {

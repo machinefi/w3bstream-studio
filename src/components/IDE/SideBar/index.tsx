@@ -36,7 +36,7 @@ const SideBar = observer((props: SideBarProps) => {
                 w3s.project.createProject();
               }}
             >
-              <Icon as={MdAddBox} />
+              <Icon as={MdAddBox} color="#946FFF" />
             </Button>
           </Tooltip>
           <Tooltip hasArrow label="Reload Project" placement="bottom">
@@ -49,7 +49,7 @@ const SideBar = observer((props: SideBarProps) => {
                 toast.success('Reloaded');
               }}
             >
-              <Icon as={MdRefresh} />
+              <Icon as={MdRefresh} color="#946FFF" />
             </Button>
           </Tooltip>
         </Flex>
@@ -61,7 +61,7 @@ const SideBar = observer((props: SideBarProps) => {
               <Flex
                 alignItems="center"
                 justifyContent="space-between"
-                h="40px"
+                minH="40px"
                 py="2"
                 px="6"
                 bg="#FAFAFA"
@@ -72,9 +72,9 @@ const SideBar = observer((props: SideBarProps) => {
                   allProjects.onSelect(index);
                 }}
               >
-                <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
+                <Box maxW="200px" lineHeight="28px" fontSize="14px" fontWeight={700}>
                   {p.f_name}
-                </Text>
+                </Box>
                 <Flex alignItems="center">
                   <Tooltip hasArrow label="Edit Project" placement="bottom">
                     <EditIcon
@@ -255,7 +255,7 @@ const SideBar = observer((props: SideBarProps) => {
           </Stack>
         </>
       )}
-      {w3s.showContent === 'DB_TABLE' && <DBTable />}
+      {w3s.showContent === 'DB_TABLE' && <DBTableSideBar />}
       {w3s.showContent === 'METRICS' && (
         <Box h="calc(100vh - 100px)" overflowY="auto">
           <Flex
@@ -300,7 +300,7 @@ const SideBar = observer((props: SideBarProps) => {
   );
 });
 
-const DBTable = observer(() => {
+export const DBTableSideBar = observer(() => {
   const {
     w3s: {
       dbTable: { allTableNames }
@@ -385,7 +385,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                 }
               }}
             >
-              <Icon as={MdAddBox} />
+              <Icon as={MdAddBox} color="#946FFF" />
             </Button>
           </Tooltip>
         </Flex>
@@ -485,8 +485,8 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
 function getSelectedStyles(selected: boolean) {
   return selected
     ? {
-        color: '#4689F7',
-        bg: '#EDF3FA'
+        color: '#946FFF',
+        bg: 'rgba(148, 111, 255, 0.1)'
       }
     : {
         color: '#283241'

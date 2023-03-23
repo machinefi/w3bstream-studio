@@ -256,7 +256,7 @@ export default class PublisherModule {
           return [
             {
               props: {
-                bg: '#37A169',
+                bg: '#946FFF',
                 color: '#fff',
                 size: 'xs',
                 onClick: async () => {
@@ -321,7 +321,7 @@ export default class PublisherModule {
       }
     ],
     rowKey: 'f_publisher_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
+    containerProps: { mt: '10px', h: 'calc(100vh - 210px)' }
   });
 
   allData: PublisherType[] = [];

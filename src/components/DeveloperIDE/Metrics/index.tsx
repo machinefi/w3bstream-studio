@@ -11,9 +11,27 @@ const Metrics = () => {
   const { w3s } = useStore();
 
   return (
-    <Flex w="100%" h="calc(100vh - 100px)">
+    <Flex w="100%" h="calc(100vh - 150px)">
       <Flex minW="100px" direction="column" align="center" bg="#fff" borderRadius="8px" overflowY="auto">
         <Flex
+          w="100%"
+          p="18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.metrics.showContent === 'API')}
+          onClick={(e) => {
+            w3s.metrics.showContent = 'API';
+          }}
+        >
+          <Icon as={TbApi} boxSize={6} />
+          <Box ml="15px" fontSize="16px">
+            API
+          </Box>
+        </Flex>
+        <Flex
+          mt="16px"
           w="100%"
           p="18px"
           alignItems="center"
@@ -28,24 +46,6 @@ const Metrics = () => {
           <Icon as={HiOutlineDatabase} boxSize={6} />
           <Box ml="15px" fontSize="16px">
             Database
-          </Box>
-        </Flex>
-        <Flex
-          w="100%"
-          mt="16px"
-          p="18px"
-          alignItems="center"
-          cursor="pointer"
-          color="rgba(15, 15, 15, 0.75)"
-          borderRadius="8px"
-          {...getSelectedStyles(w3s.metrics.showContent === 'API')}
-          onClick={(e) => {
-            w3s.metrics.showContent = 'API';
-          }}
-        >
-          <Icon as={TbApi} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
-            API
           </Box>
         </Flex>
       </Flex>

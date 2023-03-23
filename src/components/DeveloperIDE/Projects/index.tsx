@@ -26,7 +26,7 @@ const Projects = observer(() => {
             h="32px"
             {...defaultButtonStyle}
             onClick={() => {
-              w3s.project.createProject();
+              w3s.project.createProjectForDeleveloper();
             }}
           >
             Create New Project
@@ -75,6 +75,7 @@ const Projects = observer(() => {
               onClick={(e) => {
                 e.stopPropagation();
                 allProjects.onSelect(index);
+                w3s.showContent = 'METRICS';
               }}
             >
               <Flex alignItems="center" justifyContent="space-between">
@@ -120,7 +121,7 @@ const Projects = observer(() => {
                   Requests per hour:
                 </Box>
                 <Box ml="10px" color="#000">
-                  2345667
+                  0
                 </Box>
               </Flex>
               <Box mt="20px" fontSize="14px" color="#7A7A7A">
@@ -135,7 +136,7 @@ const Projects = observer(() => {
                   cursor="pointer"
                   _hover={{ color: '#946FFF' }}
                   onClick={(e) => {
-                    e.stopPropagation();
+                    // e.stopPropagation();
                   }}
                 />
                 <Icon
