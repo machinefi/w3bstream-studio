@@ -8,7 +8,7 @@ function checkErr(err) {
   if (err.response?.status == 401) {
     rootStore.w3s.config.logout();
   }
-  const message = err.response.data.desc || err.response.data.msg || err.response.data.key;
+  const message = err.response.data.error?.message || err.response.data.message || err.response.data.code || '';
   if (err.response) {
     showNotification({
       message,
