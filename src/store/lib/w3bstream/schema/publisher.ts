@@ -321,7 +321,7 @@ export default class PublisherModule {
       }
     ],
     rowKey: 'f_publisher_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 210px)' }
+    containerProps: { mt: '10px' }
   });
 
   allData: PublisherType[] = [];

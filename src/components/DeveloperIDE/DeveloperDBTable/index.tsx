@@ -9,7 +9,7 @@ const DeveloperDBTable = () => {
   const { w3s } = useStore();
 
   return (
-    <Flex pos="relative" w="100%" h="calc(100vh - 150px)">
+    <Flex pos="relative" w="100%" h="calc(100vh - 140px)">
       <Box w="200px" border="1px solid rgba(230, 230, 230, 0.75)" overflowY="auto">
         <DBTableSideBar />
       </Box>

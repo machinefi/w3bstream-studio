@@ -11,10 +11,9 @@ const Triggers = () => {
   const { w3s } = useStore();
 
   return (
-    <Box w="100%" h="calc(100vh - 100px)">
+    <Box w="calc(100vw - 300px)" h="calc(100vh - 140px)">
       <Flex alignItems="center">
         <Flex
-          w="100%"
           p="18px"
           alignItems="center"
           cursor="pointer"
@@ -32,7 +31,6 @@ const Triggers = () => {
         </Flex>
         <Flex
           ml="16px"
-          w="100%"
           p="18px"
           alignItems="center"
           cursor="pointer"
@@ -50,7 +48,6 @@ const Triggers = () => {
         </Flex>
         <Flex
           ml="16px"
-          w="100%"
           p="18px"
           alignItems="center"
           cursor="pointer"
@@ -67,7 +64,7 @@ const Triggers = () => {
           </Box>
         </Flex>
       </Flex>
-      <Box mt="20px" flex={1} borderRadius="8px" overflowX="auto">
+      <Box mt="20px" w="100%" overflowX="auto">
         {w3s.showContent === 'ALL_CONTRACT_LOGS' && <ContractLogs />}
         {w3s.showContent === 'All_CHAIN_TX' && <ChainTx />}
         {w3s.showContent === 'All_CHAIN_HEIGHT' && <ChainHeight />}
