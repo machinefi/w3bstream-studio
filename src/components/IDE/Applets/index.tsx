@@ -22,8 +22,8 @@ const AddBtn = observer(() => {
         onClick={async (e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
             w3s.applet.form.value.set({
-              projectID: w3s.curProject?.f_project_id.toString(),
-              projectName: w3s.curProject?.f_name
+              projectID: w3s.project.curProject?.f_project_id.toString(),
+              projectName: w3s.project.curProject?.f_name
             });
           }
           w3s.applet.createApplet();
@@ -77,7 +77,7 @@ const Applets = observer(() => {
 
   useEffect(() => {
     if (w3s.showContent === 'CURRENT_APPLETS') {
-      const applets = w3s.curProject?.applets || [];
+      const applets = w3s.project.curProject?.applets || [];
       w3s.applet.table.set({
         dataSource: applets
       });
@@ -86,7 +86,7 @@ const Applets = observer(() => {
         dataSource: w3s.applet.allData
       });
     }
-  }, [w3s.curProject, w3s.showContent]);
+  }, [w3s.project.curProject, w3s.showContent]);
 
   return (
     <>

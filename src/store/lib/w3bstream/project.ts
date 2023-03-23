@@ -30,12 +30,12 @@ export class ProjectManager {
   isWSConnect = false;
 
   get curFilesList() {
-    this.files.setCurrentId(String(rootStore?.w3s.curProject?.f_project_id));
+    this.files.setCurrentId(String(rootStore?.w3s.project.curProject?.f_project_id));
     return this.files.current?.files;
   }
 
   get curFilesListSchema() {
-    this.files.setCurrentId(String(rootStore?.w3s.curProject?.f_project_id));
+    this.files.setCurrentId(String(rootStore?.w3s.project.curProject?.f_project_id));
     return this.files.current;
   }
 
@@ -86,7 +86,7 @@ export class ProjectManager {
     });
   }
   sync() {
-    _.each(rootStore?.w3s.allProjects.value, async (v: ProjectType, k) => {
+    _.each(rootStore?.w3s.project.allProjects.value, async (v: ProjectType, k) => {
       const IndexDbFile = await IndexDb.findFilesById(String(v.f_project_id));
       if (IndexDbFile[0]) {
         let filesListSchema = new FilesListSchema(IndexDbFile[0].data);

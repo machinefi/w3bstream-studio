@@ -141,7 +141,7 @@ export default class AppletModule {
                 colorScheme: 'blue',
                 size: 'xs',
                 onClick: () => {
-                  globalThis.store.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
+                  this.deployApplet({ appletID: item.f_applet_id.toString() });
                 }
               },
               text: 'Deploy'
@@ -176,7 +176,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.startBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' });
+                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'START' });
                     }
                   },
                   text: 'Start'
@@ -189,7 +189,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.restartBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' });
+                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'Restart' });
                     }
                   },
                   text: 'Restart'
@@ -202,7 +202,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.stopBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' });
+                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'STOP' });
                     }
                   },
                   text: 'Stop'
@@ -308,7 +308,7 @@ export default class AppletModule {
                         title: 'Warning',
                         description: 'Are you sure you want to delete it?',
                         async onOk() {
-                          const p = globalThis.store.w3s.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
+                          const p = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
                           if (!p) {
                             return;
                           }
@@ -375,5 +375,14 @@ export default class AppletModule {
         eventBus.emit('applet.create');
       }
     }
+  }
+
+  async deployApplet({ appletID }: { appletID: string }) {
+    const res = await axios.request({
+      method: 'post',
+      url: `/api/w3bapp/deploy/applet/${appletID}`
+    });
+    eventBus.emit('instance.deploy');
+    return res.data;
   }
 }

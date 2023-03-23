@@ -115,7 +115,7 @@ export class FilesListSchema {
         const payload = file.studioOptions.payload;
         const raw = helper.base64ToUint8Array(file.content);
         //find projectName in project list
-        const project = rootStore.w3s.allProjects.value.find((i: ProjectType) => i.f_name == projectName);
+        const project = rootStore.w3s.project.allProjects.value.find((i: ProjectType) => i.f_name == projectName);
         //if project not exist, create project
         console.log('project', project);
         if (project) {
@@ -159,9 +159,9 @@ export class FilesListSchema {
           data: formData
         });
         eventBus.emit('applet.create');
-        const deployRes = await rootStore.w3s.deployApplet.call({ appletID: appletRes.data.appletID });
+        const deployRes = await rootStore.w3s.applet.deployApplet({ appletID: appletRes.data.appletID });
         console.log('deployRes', deployRes);
-        const startRes = await rootStore.w3s.handleInstance.call({ instaceID: deployRes.instanceID, event: 'START' });
+        const startRes = await rootStore.w3s.instances.handleInstance({ instaceID: deployRes.instanceID, event: 'START' });
         //send event
         await axios.request({
           method: 'post',

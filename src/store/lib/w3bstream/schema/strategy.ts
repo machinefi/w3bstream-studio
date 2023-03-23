@@ -132,7 +132,7 @@ export default class StrategyModule {
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
-                      const p = globalThis.store.w3s.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
+                      const p = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
                       if (!p) {
                         return;
                       }

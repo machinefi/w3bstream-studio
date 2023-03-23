@@ -3,6 +3,8 @@ import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { definitions } from './definitions';
 import { ContractLogType } from '@/server/routers/w3bstream';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { trpc } from '@/lib/trpc';
 
 export const schema = {
   definitions: {
@@ -31,6 +33,18 @@ schema.definitions = {
 };
 
 export default class ContractLogModule {
+  allContractLogs = new PromiseState<() => Promise<any>, ContractLogType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.contractLogs.query();
+      if (res) {
+        this.table.set({
+          dataSource: res
+        });
+      }
+      return res;
+    }
+  });
   table = new JSONSchemaTableState<ContractLogType>({
     columns: [
       {
@@ -87,7 +101,7 @@ export default class ContractLogModule {
       //               title: 'Warning',
       //               description: 'Are you sure you want to delete it?',
       //               async onOk() {
-      //                 const project = globalThis.store.w3s.allProjects.value.find((p) => p.f_name === item.f_project_name);
+      //                 const project = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_name === item.f_project_name);
       //                 try {
       //                   await axios.request({
       //                     method: 'delete',

@@ -159,7 +159,7 @@ const Editor = observer(() => {
         )}
 
         {curFilesListSchema?.curActiveFile?.label.endsWith('.wasm') && (
-          <Tooltip label={`Upload to ${w3s.curProject.f_name}`} placement="top">
+          <Tooltip label={`Upload to ${w3s.project.curProject.f_name}`} placement="top">
             <Text
               ml="auto"
               cursor="pointer"
@@ -168,8 +168,8 @@ const Editor = observer(() => {
               color="white"
               onClick={async () => {
                 w3s.applet.form.value.set({
-                  projectID: w3s.curProject?.f_project_id.toString(),
-                  projectName: w3s.curProject?.f_name,
+                  projectID: w3s.project.curProject?.f_project_id.toString(),
+                  projectName: w3s.project.curProject?.f_name,
                   file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw),
                   appletName: ''
                 });

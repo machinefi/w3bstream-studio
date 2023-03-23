@@ -31,4 +31,8 @@ export default class W3bstreamConfigModule {
   logout() {
     this.form.reset();
   }
+
+  get isLogin() {
+    return !!this.form.formData.token;
+  }
 }

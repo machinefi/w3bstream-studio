@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Tag } from '@chakra-ui/react';
+import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Tag, Checkbox } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
@@ -15,9 +15,9 @@ const Projects = observer(() => {
     w3s,
     base: { confirm }
   } = useStore();
-  const allProjects = w3s.allProjects.value;
+  const { allProjects, selectedNames } = w3s.project;
 
-  if (allProjects.length) {
+  if (allProjects.value.length) {
     return (
       <Box w="100%" h="calc(100vh - 100px)" p="40px 30px" bg="#fff" borderRadius="8px">
         <Flex justifyContent="space-between" alignItems="center">
@@ -32,25 +32,87 @@ const Projects = observer(() => {
             Create New Project
           </Button>
           <Flex alignItems="center">
-            <Button leftIcon={<AiOutlineDelete />} h="32px" {...defaultOutlineButtonStyle}>
+            <Button
+              leftIcon={<AiOutlineDelete />}
+              h="32px"
+              {...defaultOutlineButtonStyle}
+              isDisabled={!selectedNames.length}
+              onClick={(e) => {
+                e.stopPropagation();
+                confirm.show({
+                  title: 'Warning',
+                  description: 'Are you sure you want to delete it?',
+                  async onOk() {
+                    for (const name of selectedNames) {
+                      await axios.request({
+                        method: 'delete',
+                        url: `/api/w3bapp/project/${name}`
+                      });
+                    }
+                    w3s.project.resetSelectedNames();
+                    eventBus.emit('project.delete');
+                    toast.success('Deleted successfully');
+                  }
+                });
+              }}
+            >
               Delete
             </Button>
-            <Button leftIcon={<AiOutlinePauseCircle />} ml="20px" h="32px" {...defaultOutlineButtonStyle}>
+            <Button leftIcon={<AiOutlinePauseCircle />} ml="20px" h="32px" {...defaultOutlineButtonStyle} isDisabled={!selectedNames.length}>
               Pause
             </Button>
           </Flex>
         </Flex>
         <Grid mt="20px" gridTemplateRows="repeat(4, 1fr)" templateColumns="repeat(2, 1fr)" gap={6} h="calc(100vh - 210px)" overflow="auto">
-          {allProjects.map((project, index) => (
-            <GridItem w="100%" p="24px" bg="rgba(248, 248, 250, 0.5)" borderRadius="8px" key={project.f_name}>
-              <Flex alignItems="center">
-                <Box fontWeight={700} fontSize="16px">
-                  {project.f_name}
+          {allProjects.value.map((project, index) => (
+            <GridItem
+              w="100%"
+              p="24px"
+              bg="rgba(248, 248, 250, 0.5)"
+              borderRadius="8px"
+              key={project.f_name}
+              cursor="pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                allProjects.onSelect(index);
+              }}
+            >
+              <Flex alignItems="center" justifyContent="space-between">
+                <Flex alignItems="center">
+                  <Box fontWeight={700} fontSize="16px">
+                    {project.f_name}
+                  </Box>
+                  <Icon as={BsArrowUpRight} ml="20px" color="#946FFF" />
+                  <Tag ml="20px" size="md" variant="subtle" color="#00B87A" borderRadius="4px" fontSize="14px">
+                    Active
+                  </Tag>
+                </Flex>
+                <Box
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <Checkbox
+                    size="md"
+                    sx={{
+                      '& > .chakra-checkbox__control[data-checked]': {
+                        background: '#946FFF',
+                        borderColor: '#946FFF',
+                        '&:hover': {
+                          background: '#946FFF',
+                          borderColor: '#946FFF'
+                        },
+                        '&[data-hover]': {
+                          background: '#946FFF',
+                          borderColor: '#946FFF'
+                        }
+                      }
+                    }}
+                    onChange={(e) => {
+                      w3s.project.selectProjectName(project.f_name, e.target.checked);
+                    }}
+                  />
                 </Box>
-                <Icon as={BsArrowUpRight} ml="20px" color="#946FFF" />
-                <Tag ml="20px" size="md" variant="subtle" color="#00B87A" borderRadius="4px" fontSize="14px">
-                  Active
-                </Tag>
               </Flex>
               <Flex mt="12px" alignItems="center" fontSize="14px">
                 <Icon as={AiOutlineLineChart} color="#7A7A7A" />
@@ -74,7 +136,6 @@ const Projects = observer(() => {
                   _hover={{ color: '#946FFF' }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    w3s.allProjects.onSelect(index);
                   }}
                 />
                 <Icon

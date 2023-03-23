@@ -2,19 +2,19 @@ export const definitions = {
   projects: {
     type: 'string',
     get enum() {
-      return globalThis.store.w3s.allProjects.value?.map((i) => `${i.f_project_id}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_project_id}`) || [];
     },
     get enumNames() {
-      return globalThis.store.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
     }
   },
   projectName: {
     type: 'string',
     get enum() {
-      return globalThis.store.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
     },
     get enumNames() {
-      return globalThis.store.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
     }
   },
   publishers: {

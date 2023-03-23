@@ -7,16 +7,16 @@ import initTemplates from '@/constants/initTemplates.json';
 import { makeObservable, observable } from 'mobx';
 import { ProjectEnvsWidget } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
-import EditorWidget from '@/components/JSONFormWidgets/EditorWidget';
-import { rootStore } from '@/store/index';
 import { hooks } from '@/lib/hooks';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { AppletType, ProjectType, PublisherType, InstanceType, StrategyType } from '@/server/routers/w3bstream';
+import { trpc } from '@/lib/trpc';
 
 export const defaultSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', title: 'Name' },
-    envs: { type: 'string', title: '' },
-    dbSchema: { type: 'string', title: 'Project Database Schema' }
+    envs: { type: 'string', title: '' }
   },
   required: ['name']
 } as const;
@@ -37,7 +37,62 @@ interface Env {
   value: string;
 }
 
+interface OnLoadCompletedProps {
+  applets: AppletType[];
+  publishers: PublisherType[];
+  instances: InstanceType[];
+  strategies: StrategyType[];
+}
+
 export default class ProjectModule {
+  allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.projects.query();
+      if (res) {
+        const applets = [];
+        const instances = [];
+        let strategies = [];
+        let publishers = [];
+        res.forEach((p: ProjectType) => {
+          // p.project_files = new FilesListSchema();
+          p.applets.forEach((a: AppletType) => {
+            a.project_name = p.f_name;
+            a.instances.forEach((i) => {
+              instances.push({
+                project_id: p.f_project_id,
+                project_name: p.f_name,
+                applet_id: a.f_applet_id,
+                applet_name: a.f_name,
+                ...i
+              });
+            });
+            applets.push({
+              ...a,
+              project_name: p.f_name
+            });
+            strategies = strategies.concat(a.strategies);
+          });
+          p.publishers.forEach((pub) => {
+            // @ts-ignore
+            pub.project_id = p.f_project_id;
+            // @ts-ignore
+            pub.project_name = p.f_name;
+            publishers.push(pub);
+          });
+        });
+        // console.log(toJS(res));
+        this.onLoadCompleted({
+          applets,
+          publishers,
+          instances,
+          strategies
+        });
+      }
+      return res;
+    }
+  });
+
   form = new JSONSchemaFormState<DefaultSchemaType>({
     //@ts-ignore
     schema: defaultSchema,
@@ -48,12 +103,6 @@ export default class ProjectModule {
       },
       envs: {
         'ui:widget': ProjectEnvsWidget
-      },
-      dbSchema: {
-        'ui:widget': EditorWidget,
-        'ui:options': {
-          readOnly: false
-        }
       }
     },
     afterSubmit: async (e) => {
@@ -89,7 +138,6 @@ export default class ProjectModule {
 
   formMode: 'add' | 'edit' = 'add';
   envs: Env[] = [];
-
   onAddEnv() {
     this.envs.push({
       id: uuidv4(),
@@ -110,9 +158,25 @@ export default class ProjectModule {
       }
     }
   }
+  async setMode(mode: 'add' | 'edit') {
+    if (mode === 'add') {
+      this.form.reset();
+      this.form.uiSchema['ui:submitButtonOptions'].norender = false;
+      this.form.uiSchema.name = {
+        'ui:disabled': false
+      };
+    } else {
+      this.form.uiSchema['ui:submitButtonOptions'].norender = true;
+      this.form.uiSchema.name = {
+        'ui:disabled': true
+      };
+    }
+    this.formMode = mode;
+    this.setEnvs();
+  }
   async setEnvs() {
     if (this.formMode === 'edit') {
-      this.envs = globalThis.store.w3s.curProject?.config?.env || [
+      this.envs = this.curProject?.config?.env || [
         {
           id: uuidv4(),
           key: '',
@@ -141,64 +205,6 @@ export default class ProjectModule {
       }
     }
   }
-
-  async onSaveDBSchema() {
-    const projectName = this.form.value.get().name;
-    const dbSchema = this.form.value.get().dbSchema;
-    if (!dbSchema) return;
-    await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_SCHEMA`, dbSchema, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    await showNotification({ message: 'create database succeeded!' });
-  }
-
-  async setMode(mode: 'add' | 'edit') {
-    if (mode === 'add') {
-      this.form.reset();
-      this.form.uiSchema['ui:submitButtonOptions'].norender = false;
-      this.form.uiSchema.name = {
-        'ui:disabled': false
-      };
-      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
-      this.form.uiSchema.dbSchema['ui:options'].readOnly = false;
-      this.form.value.set({
-        dbSchema: ''
-      });
-    } else {
-      this.form.uiSchema['ui:submitButtonOptions'].norender = true;
-      this.form.uiSchema.name = {
-        'ui:disabled': true
-      };
-      await rootStore.w3s.allProjects.call();
-      this.setDBSchema();
-    }
-    this.formMode = mode;
-    this.setEnvs();
-  }
-
-  setDBSchema() {
-    if (!globalThis.store.w3s.curProject?.config?.schema) {
-      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = true;
-      this.form.uiSchema.dbSchema['ui:options'].afterSubmit = (value: string) => {
-        this.form.value.set({
-          dbSchema: value
-        });
-        this.onSaveDBSchema();
-      };
-      this.form.value.set({
-        dbSchema: ''
-      });
-    } else {
-      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
-      this.form.uiSchema.dbSchema['ui:options'].readOnly = true;
-      this.form.value.set({
-        dbSchema: JSON.stringify(globalThis.store.w3s.curProject?.config?.schema, null, 2)
-      });
-    }
-  }
-
   async createProject() {
     this.setMode('add');
     const formData = await hooks.getFormData({
@@ -227,7 +233,6 @@ export default class ProjectModule {
           await showNotification({ message: 'create project succeeded' });
         }
         await this.onSaveEnv();
-        await this.onSaveDBSchema();
       } catch (error) {}
     }
     if (formData.template) {
@@ -243,7 +248,6 @@ export default class ProjectModule {
       }
     }
   }
-
   async editProject() {
     this.setMode('edit');
     await hooks.getFormData({
@@ -257,10 +261,39 @@ export default class ProjectModule {
     });
   }
 
-  constructor() {
+  get curProject() {
+    return this.allProjects.current;
+  }
+
+  selectedNames = [];
+  selectProjectName(projectName: string, checked: boolean) {
+    const index = this.selectedNames.findIndex((i) => i === projectName);
+    if (checked && index === -1) {
+      this.selectedNames.push(projectName);
+    }
+    if (!checked && index !== -1) {
+      this.selectedNames.splice(index, 1);
+    }
+  }
+  resetSelectedNames() {
+    this.selectedNames = [];
+  }
+
+  constructor({
+    onLoadCompleted
+  }: Partial<{
+    onLoadCompleted: (data: OnLoadCompletedProps) => void;
+  }> = {}) {
     makeObservable(this, {
       envs: observable,
-      formMode: observable
+      formMode: observable,
+      selectedNames: observable
     });
+
+    if (onLoadCompleted) {
+      this.onLoadCompleted = onLoadCompleted;
+    }
   }
+
+  onLoadCompleted(data: OnLoadCompletedProps) {}
 }

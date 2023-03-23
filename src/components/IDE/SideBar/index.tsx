@@ -19,6 +19,7 @@ const SideBar = observer((props: SideBarProps) => {
     w3s,
     base: { confirm }
   } = useStore();
+  const { allProjects, curProject } = w3s.project;
 
   return (
     <Box h="100%" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
@@ -43,7 +44,7 @@ const SideBar = observer((props: SideBarProps) => {
               p={2}
               variant="ghost"
               onClick={async () => {
-                await w3s.allProjects.call();
+                await allProjects.call();
                 w3s.projectManager.sync();
                 toast.success('Reloaded');
               }}
@@ -55,7 +56,7 @@ const SideBar = observer((props: SideBarProps) => {
       </Flex>
       {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'CURRENT_EVENT_LOGS') && (
         <Box h="calc(100vh - 100px)" overflowY="auto">
-          {w3s.allProjects.value.map((p, index) => {
+          {allProjects.value.map((p, index) => {
             return (
               <Flex
                 alignItems="center"
@@ -66,9 +67,9 @@ const SideBar = observer((props: SideBarProps) => {
                 bg="#FAFAFA"
                 borderBottom="2px solid rgba(0, 0, 0, 0.06)"
                 cursor="pointer"
-                sx={getSelectedStyles(w3s.allProjects.currentIndex === index)}
+                sx={getSelectedStyles(allProjects.currentIndex === index)}
                 onClick={(e) => {
-                  w3s.allProjects.onSelect(index);
+                  allProjects.onSelect(index);
                 }}
               >
                 <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
@@ -81,9 +82,9 @@ const SideBar = observer((props: SideBarProps) => {
                       cursor="pointer"
                       onClick={async (e) => {
                         e.stopPropagation();
-                        w3s.allProjects.onSelect(index);
+                        allProjects.onSelect(index);
                         w3s.project.form.value.set({
-                          name: w3s.curProject.f_name
+                          name: curProject?.f_name
                         });
                         w3s.project.editProject();
                       }}

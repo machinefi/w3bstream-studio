@@ -3,6 +3,8 @@ import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { definitions } from './definitions';
 import { ChainTxType } from '@/server/routers/w3bstream';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { trpc } from '@/lib/trpc';
 
 export const schema = {
   definitions: {
@@ -28,6 +30,18 @@ schema.definitions = {
 };
 
 export default class ChainTxModule {
+  allChainTx = new PromiseState<() => Promise<any>, ChainTxType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.chainTx.query();
+      if (res) {
+        this.table.set({
+          dataSource: res
+        });
+      }
+      return res;
+    }
+  });
   table = new JSONSchemaTableState<ChainTxType>({
     columns: [
       {
@@ -72,7 +86,7 @@ export default class ChainTxModule {
       //               title: 'Warning',
       //               description: 'Are you sure you want to delete it?',
       //               async onOk() {
-      //                 const project = globalThis.store.w3s.allProjects.value.find((p) => p.f_name === item.f_project_name);
+      //                 const project = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_name === item.f_project_name);
       //                 try {
       //                   await axios.request({
       //                     method: 'delete',

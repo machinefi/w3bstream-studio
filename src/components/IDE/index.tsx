@@ -35,7 +35,7 @@ const IDE = observer(() => {
       <ToolBar w="50px" h="100vh" pos="fixed" left="0px" top="0px" />
       <SideBar w="300px" h="100vh" pos="fixed" left="50px" top="0px" />
       <Box ml="350px" mt="60px" w="calc(100vw - 350px)" p="20px">
-        {w3s.allProjects.value.length ? (
+        {w3s.project.allProjects.value.length ? (
           <Box w="100%" h="100%">
             {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'ALL_APPLETS') && <Applets />}
             {(w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'ALL_PUBLISHERS') && <Publishers />}

@@ -41,7 +41,8 @@ const Header = observer(() => {
         alignItems="center"
         cursor="pointer"
         onClick={() => {
-          w3s.allProjects.onSelect(-1);
+          w3s.project.allProjects.onSelect(-1);
+          w3s.project.resetSelectedNames();
         }}
       >
         <Image w="30px" src="/favicon.svg" alt="logo" />
@@ -56,6 +57,7 @@ const Header = observer(() => {
           onChange={(number) => {
             if (number === 0) {
               w3s.headerTabs = 'PROJECTS';
+              w3s.project.resetSelectedNames();
             }
             if (number === 1) {
               w3s.headerTabs = 'LABS';

@@ -15,7 +15,7 @@ export const hooks = {
   },
   async waitLogin() {
     return new Promise<void>((res, rej) => {
-      if (rootStore.w3s.isLogin) {
+      if (rootStore.w3s.config.isLogin) {
         res();
       } else {
         eventBus.once('user.login', res);

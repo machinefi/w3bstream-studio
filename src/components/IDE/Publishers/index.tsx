@@ -15,7 +15,7 @@ const Publishers = observer(() => {
 
   useEffect(() => {
     if (w3s.showContent === 'CURRENT_PUBLISHERS') {
-      const publishers = w3s.curProject?.publishers || [];
+      const publishers = w3s.project.curProject?.publishers || [];
       w3s.publisher.table.set({
         dataSource: publishers
       });
@@ -24,7 +24,7 @@ const Publishers = observer(() => {
         dataSource: w3s.publisher.allData
       });
     }
-  }, [w3s.curProject, w3s.showContent]);
+  }, [w3s.project.curProject, w3s.showContent]);
 
   return (
     <>
@@ -36,7 +36,7 @@ const Publishers = observer(() => {
           onClick={async (e) => {
             if (w3s.showContent === 'CURRENT_PUBLISHERS') {
               w3s.publisher.createPublisherForm.value.set({
-                projectName: w3s.curProject?.f_name
+                projectName: w3s.project.curProject?.f_name
               });
             }
             const formData = await hooks.getFormData({

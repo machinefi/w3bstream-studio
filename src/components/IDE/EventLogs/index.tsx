@@ -37,7 +37,7 @@ const fetchWasmLogs = async ({ projectName, limit = 20, offset = 0 }: { projectN
 
 const EventLogs = observer(() => {
   const {
-    w3s: { publisher, curProject }
+    w3s: { publisher, project: { curProject } }
   } = useStore();
 
   const changeCodeRef = useRef(
