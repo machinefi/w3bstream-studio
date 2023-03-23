@@ -239,7 +239,7 @@ export default class ProjectModule {
       const data = initTemplates.templates.find((i) => i.name === formData.template);
       const res = await axios.request({
         method: 'post',
-        url: `/api/init?adminKey=iotex.W3B.admin`,
+        url: `/api/init`,
         data
       });
       if (res.data) {

@@ -36,35 +36,18 @@ interface Monitor {
   };
 }
 
-let _token = '';
-const getToken = async () => {
-  if (_token) {
-    return _token;
-  } else {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/login`, {
-      method: 'put',
-      body: JSON.stringify({
-        username: 'admin',
-        password: process.env.ADMIN_KEY
-      })
-    });
-    const data: any = await response.json();
-    _token = data.token;
-    return _token;
-  }
-};
-
 const createProject = async (
-  project: Project
+  project: Project,
+  token: string
 ): Promise<{
   projectID: string;
   projectName: string;
 }> => {
-  const token = await getToken();
+  const name = `${project.projectName}_${Date.now()}`;
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project`, {
     method: 'post',
     body: JSON.stringify({
-      name: project.projectName
+      name
     }),
     headers: { Authorization: token }
   });
@@ -75,8 +58,7 @@ const createProject = async (
   };
 };
 
-const saveEnvs = async (projectName: string, envs: string[][]): Promise<void> => {
-  const token = await getToken();
+const saveEnvs = async (projectName: string, envs: string[][], token: string): Promise<void> => {
   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project_config/${projectName}/PROJECT_ENV`, {
     method: 'post',
     body: JSON.stringify({
@@ -86,7 +68,7 @@ const saveEnvs = async (projectName: string, envs: string[][]): Promise<void> =>
   });
 };
 
-const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { projectName: string }): Promise<string> => {
+const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { projectName: string }, token: string): Promise<string> => {
   const response = await fetch(wasmURL);
   const blob = await response.blob();
   const formData = new FormData();
@@ -101,7 +83,6 @@ const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { pro
       wasmName
     })
   );
-  const token = await getToken();
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${projectName}`, {
     method: 'post',
     headers: {
@@ -113,8 +94,7 @@ const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { pro
   return data.appletID;
 };
 
-const deployApplet = async (appletID: string): Promise<string> => {
-  const token = await getToken();
+const deployApplet = async (appletID: string, token: string): Promise<string> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/applet/${appletID}`, {
     method: 'post',
     headers: {
@@ -125,8 +105,7 @@ const deployApplet = async (appletID: string): Promise<string> => {
   return data.instanceID;
 };
 
-const createMonitor = async (projectName: string, monitor: Monitor): Promise<void> => {
-  const token = await getToken();
+const createMonitor = async (projectName: string, monitor: Monitor, token: string): Promise<void> => {
   if (monitor.contractLog) {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/contract_log/${projectName}`, {
       method: 'post',
@@ -162,33 +141,28 @@ const createMonitor = async (projectName: string, monitor: Monitor): Promise<voi
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const {
-    method,
-    query: { adminKey }
-  } = req;
+  const { method } = req;
   if (method === 'POST') {
-    if (adminKey !== process.env.ADMIN_KEY) {
-      res.status(401).json({ message: 'Unauthorized' });
-      return;
-    }
+    const token = req.headers.authorization.replace('Bearer ', '');
     const project = req.body.project as Project[];
     if (!project) {
       res.status(400).json({ message: 'Bad Request' });
       return;
     }
+
     try {
       for (const p of project) {
-        const { projectID, projectName } = await createProject(p);
+        const { projectID, projectName } = await createProject(p, token);
         if (p.envs?.length > 0) {
-          await saveEnvs(projectName, p.envs);
+          await saveEnvs(projectName, p.envs, token);
         }
         for (const a of p.applets) {
-          const appletID = await createApplet({ ...a, projectName });
-          const instanceID = await deployApplet(appletID);
+          const appletID = await createApplet({ ...a, projectName }, token);
+          const instanceID = await deployApplet(appletID, token);
         }
         for (const d of p.datas) {
           if (d.monitor) {
-            await createMonitor(projectName, d.monitor);
+            await createMonitor(projectName, d.monitor, token);
           }
         }
       }
