@@ -246,14 +246,21 @@ export default class ProjectModule {
   }
 
   async onSaveEnv() {
-    const projectName = this.form.value.get().name;
     const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
     if (values.length) {
-      try {
-        await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
-        await showNotification({ message: 'Save environment variables successfully' });
-      } catch (error) {
-        throw error;
+      const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.f_name : this.form.value.get().name;
+      if (projectName) {
+        try {
+          await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
+          showNotification({ message: 'Save environment variables successfully' });
+        } catch (error) {
+          throw error;
+        }
+      } else {
+        showNotification({
+          color: 'red',
+          message: 'Project name is empty'
+        });
       }
     }
   }
@@ -339,19 +346,6 @@ export default class ProjectModule {
     }
   }
 
-  async saveEnvForDeleveloper() {
-    const projectName = this.curProject?.f_name;
-    const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
-    if (values.length) {
-      try {
-        await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
-        await showNotification({ message: 'Save environment variables successfully' });
-      } catch (error) {
-        throw error;
-      }
-    }
-  }
-
   get curProject() {
     return this.allProjects.current;
   }
@@ -367,7 +361,7 @@ export default class ProjectModule {
       this.selectedNames.splice(index, 1);
     }
   }
-  
+
   resetSelectedNames() {
     this.selectedNames = [];
   }
