@@ -37,13 +37,16 @@ const fetchWasmLogs = async ({ projectName, limit = 20, offset = 0 }: { projectN
 
 const EventLogs = observer(() => {
   const {
-    w3s: { publisher, project: { curProject } }
+    w3s: {
+      publisher,
+      project: { curProject }
+    }
   } = useStore();
 
   const changeCodeRef = useRef(
     _.debounce((codeStr: string) => {
       publisher.publishEventForm.value.set({
-        payload: codeStr
+        body: codeStr
       });
     }, 800)
   );
@@ -79,14 +82,14 @@ const EventLogs = observer(() => {
   return (
     <Box bg="#000">
       <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
-        Payload:
+        Body:
       </Box>
       <Box pos="relative">
         <MonacoEditor
           height={300}
           theme="vs-dark"
           language="json"
-          value={publisher.publishEventForm.formData.payload}
+          value={publisher.publishEventForm.formData.body}
           onChange={(v) => {
             changeCodeRef.current && changeCodeRef.current(v);
           }}
@@ -105,7 +108,7 @@ const EventLogs = observer(() => {
                   headers: {
                     'Content-Type': 'text/plain'
                   },
-                  data: publisher.generateBody()
+                  data: publisher.parseBody()
                 });
                 if (res.data) {
                   await showNotification({ message: 'publish event succeeded' });

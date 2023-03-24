@@ -42,10 +42,10 @@ export const publishEventSchema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     publisher: { $ref: '#/definitions/publishers', title: 'Publisher' },
-    payload: { type: 'string', title: 'Payload' },
+    body: { type: 'string', title: 'Body' },
     showRequestTemplates: { type: 'string', title: '' }
   },
-  required: ['projectName', 'payload']
+  required: ['projectName', 'body']
 } as const;
 
 type CreatePublisherSchemaType = FromSchema<typeof createPublisherSchema>;
@@ -85,7 +85,7 @@ export default class PublisherModule {
     })
   });
 
-  publishEventForm = new JSONSchemaFormState<PublishEventSchemaType, UiSchema & { payload: EditorWidgetUIOptions }>({
+  publishEventForm = new JSONSchemaFormState<PublishEventSchemaType, UiSchema & { body: EditorWidgetUIOptions }>({
     //@ts-ignore
     schema: publishEventSchema,
     uiSchema: {
@@ -93,47 +93,51 @@ export default class PublisherModule {
         norender: false,
         submitText: 'Submit'
       },
-      payload: {
+      body: {
         'ui:widget': EditorWidget,
         'ui:options': {
-          emptyValue: `{"payload":""}`,
+          editorHeight: '400px',
+          emptyValue: JSON.stringify({
+            header: {
+              event_type: 'ANY',
+              pub_id: '',
+              token: '',
+              pub_time: Date.now()
+            },
+            payload: ''
+          }),
           showLanguageSelector: true,
           onChangeLanguage: (language) => {
-            if (language === 'text') {
-              this.publishEventForm.value.set({
-                payload: JSON.stringify(
-                  [
+            const header = {
+              event_type: 'ANY',
+              pub_id: '',
+              token: '',
+              pub_time: Date.now()
+            };
+            const payload =
+              language === 'text'
+                ? [
                     {
-                      payload: 'This is is an example payload1'
-                    },
-                    {
-                      payload: 'This is is an example payload2'
+                      payload: 'This is is an example payload'
                     }
-                  ],
-                  null,
-                  2
-                )
-              });
-            } else {
-              this.publishEventForm.value.set({
-                payload: JSON.stringify(
-                  [
+                  ]
+                : [
                     {
                       payload: {
-                        example: 'This is is an example payload1'
-                      }
-                    },
-                    {
-                      payload: {
-                        example2: 'This is is an example payload2'
+                        example: 'This is is an example payload'
                       }
                     }
-                  ],
-                  null,
-                  2
-                )
-              });
-            }
+                  ];
+            this.publishEventForm.value.set({
+              body: JSON.stringify(
+                {
+                  header,
+                  payload
+                },
+                null,
+                2
+              )
+            });
           }
         }
       },
@@ -147,49 +151,60 @@ export default class PublisherModule {
     value: new JSONValue<PublishEventSchemaType>({
       default: {
         projectName: '',
-        payload: JSON.stringify(
-          [
-            {
-              payload: {
-                example: 'This is is an example payload1'
-              }
+        body: JSON.stringify(
+          {
+            header: {
+              event_type: 'ANY',
+              pub_id: '',
+              token: '',
+              pub_time: Date.now()
             },
-            {
-              payload: {
-                example2: 'This is is an example payload2'
+            payload: [
+              {
+                payload: {
+                  example: 'This is is an example payload'
+                }
               }
-            }
-          ],
+            ]
+          },
           null,
           2
         )
+      },
+      onSet(e: any) {
+        const { publisher } = e;
+        if (publisher && publisher != this.value.publisher) {
+          const allPublishers = globalThis.store.w3s.publisher.allData;
+          const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
+          if (pub) {
+            const header = {
+              event_type: 'ANY',
+              pub_id: pub.f_key,
+              token: pub.f_token,
+              pub_time: Date.now()
+            };
+            const body = JSON.parse(e.body);
+            e.body = JSON.stringify(
+              {
+                header,
+                payload: body.payload
+              },
+              null,
+              2
+            );
+          }
+        }
+        return e;
       }
     })
   });
-  generateBody() {
-    const { publisher, payload } = this.publishEventForm.formData;
-    const allPublishers = this.table.dataSource;
-    const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
-    const header = pub
-      ? {
-          event_type: 'ANY',
-          pub_id: pub.f_key,
-          token: pub.f_token,
-          pub_time: Date.now()
-        }
-      : {
-          event_type: 'ANY',
-          pub_id: '',
-          token: '',
-          pub_time: Date.now()
-        };
-
+  parseBody() {
     try {
-      const body = JSON.parse(payload);
-      if (Array.isArray(body)) {
+      const body = JSON.parse(this.publishEventForm.formData.body);
+      if (Array.isArray(body.payload)) {
         return {
-          events: body.map((item) => ({
-            header,
+          events: body.payload.map((item) => ({
+            header: body.header,
             payload: typeof item?.payload == 'string' ? helper.stringToBase64(item?.payload) : helper.stringToBase64(JSON.stringify(item?.payload))
           }))
         };
@@ -199,16 +214,17 @@ export default class PublisherModule {
         return {
           events: [
             {
-              header,
+              header: body.header,
               payload: helper.stringToBase64(body.payload)
             }
           ]
         };
       }
+
       return {
         events: [
           {
-            header,
+            header: body.header,
             payload: helper.stringToBase64(body)
           }
         ]
@@ -217,8 +233,13 @@ export default class PublisherModule {
       return {
         events: [
           {
-            header,
-            payload: helper.stringToBase64(payload)
+            header: {
+              event_type: 'ANY',
+              pub_id: '',
+              token: '',
+              pub_time: Date.now()
+            },
+            payload: helper.stringToBase64(this.publishEventForm.formData.body)
           }
         ]
       };

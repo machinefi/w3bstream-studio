@@ -138,13 +138,7 @@ const Profile = observer(() => {
 
   return (
     <Link href="/login">
-      <Button
-        h="32px"
-        {...defaultButtonStyle}
-        onClick={() => {
-          w3s.project.createProject();
-        }}
-      >
+      <Button h="32px" {...defaultButtonStyle}>
         Login
       </Button>
     </Link>

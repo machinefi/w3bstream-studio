@@ -10,7 +10,7 @@ import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
-import { defaultOutlineButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'CURRENT_APPLETS') {
@@ -236,7 +236,13 @@ const Profile = observer(() => {
     );
   }
 
-  return <Link href="/login">Login</Link>;
+  return (
+    <Link href="/login">
+      <Button h="32px" {...defaultButtonStyle}>
+        Login
+      </Button>
+    </Link>
+  );
 });
 
 export default Header;

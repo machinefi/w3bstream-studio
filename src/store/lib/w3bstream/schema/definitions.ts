@@ -20,11 +20,11 @@ export const definitions = {
   publishers: {
     type: 'string',
     get enum() {
-      const allPublishers = globalThis.store.w3s.publisher.table.dataSource;
+      const allPublishers = globalThis.store.w3s.publisher.allData;
       return allPublishers.length ? allPublishers.map((i) => `${i.f_publisher_id}`) : [''];
     },
     get enumNames() {
-      const allPublishers = globalThis.store.w3s.publisher.table.dataSource;
+      const allPublishers = globalThis.store.w3s.publisher.allData;
       return allPublishers.length ? allPublishers.map((i) => `${i.f_name}`) : [''];
     }
   },
