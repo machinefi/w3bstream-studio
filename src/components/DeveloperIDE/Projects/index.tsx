@@ -262,7 +262,7 @@ const Projects = observer(() => {
           h="32px"
           {...defaultButtonStyle}
           onClick={() => {
-            w3s.project.createProject();
+            w3s.project.createProjectForDeleveloper();
           }}
         >
           Create a project now
