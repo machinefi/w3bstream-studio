@@ -4,7 +4,6 @@ import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Box, Flex, Image, ImageProps, Portal } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import { Menu } from '@/components/Menu';
 import { toast } from '@/lib/helper';
 
 export const FileIcon = (file: FilesItemType) => {
@@ -152,7 +151,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                   }, 500);
                 }}
               >
-                <Menu bordered p={2}>
+                <Box p={2} bg="#fff" boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px">
                   {item.type == 'folder' ? (
                     <>
                       {FolderSetting.map((i) => {
@@ -182,7 +181,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                       })}
                     </>
                   )}
-                </Menu>
+                </Box>
               </ContextMenu>
             </Portal>
           </>

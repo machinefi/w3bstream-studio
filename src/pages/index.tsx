@@ -5,10 +5,20 @@ import IDE from '@/components/IDE';
 import DeveloperIDE from '@/components/DeveloperIDE';
 
 const HomePage = observer(() => {
-  const { w3s } = useStore();
-  if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
+  const {
+    w3s: {
+      config: {
+        form: {
+          formData: { accountRole }
+        }
+      }
+    }
+  } = useStore();
+
+  if (accountRole === 'DEVELOPER') {
     return <DeveloperIDE />;
   }
+
   return <IDE />;
 });
 

@@ -1,6 +1,7 @@
 import { getInstanceButtonStatus, InstanceStatusRender } from '@/components/JSONTable/FieldRender';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { InstanceType } from '@/server/routers/w3bstream';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
@@ -79,8 +80,8 @@ export default class InstancesModule {
           return [
             {
               props: {
-                colorScheme: 'red',
                 size: 'xs',
+                ...defaultOutlineButtonStyle,
                 onClick: async () => {
                   globalThis.store.base.confirm.show({
                     title: 'Warning',

@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, ButtonGroup } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ConfirmProps, OpenState } from './index';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 
 const Trigger = ({ trigger, openState }: { trigger?: React.ReactElement; openState: OpenState }) => {
   const triggerClone = trigger
@@ -50,7 +51,7 @@ export const ConfirmModal = observer((props: ConfirmProps) => {
           <ModalFooter>
             <ButtonGroup size="sm">
               <Button
-                variant="outline"
+                {...defaultOutlineButtonStyle}
                 onClick={() => {
                   openState.toggleOpen(false);
                   onCancel?.();
@@ -58,7 +59,7 @@ export const ConfirmModal = observer((props: ConfirmProps) => {
               >
                 {cancelText || 'Cancel'}
               </Button>
-              <Button colorScheme="red" onClick={handleApply}>
+              <Button {...defaultButtonStyle} onClick={handleApply}>
                 {okText || 'Apply'}
               </Button>
             </ButtonGroup>

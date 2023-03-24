@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Flex, Icon, Tab, TabList, Tabs, Tooltip, Image, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Tab, TabList, Tabs, Tooltip, Image, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { MdHttp, MdLogout } from 'react-icons/md';
@@ -10,6 +10,7 @@ import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'CURRENT_APPLETS') {
@@ -70,7 +71,15 @@ const Header = observer(() => {
             <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderLeftRadius="8px" _selected={{ color: 'white', bg: '#946FFF' }}>
               Applet
             </Tab>
-            <Tab w="70px" h="30px" fontSize="xs" fontWeight={700} borderLeft="1px solid rgba(148, 111, 255, 0.4)" borderRight="1px solid rgba(148, 111, 255, 0.4)" _selected={{ color: 'white', bg: '#946FFF' }}>
+            <Tab
+              w="70px"
+              h="30px"
+              fontSize="xs"
+              fontWeight={700}
+              borderLeft="1px solid rgba(148, 111, 255, 0.4)"
+              borderRight="1px solid rgba(148, 111, 255, 0.4)"
+              _selected={{ color: 'white', bg: '#946FFF' }}
+            >
               Publisher
             </Tab>
             <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderRightRadius="8px" _selected={{ color: 'white', bg: '#946FFF' }}>
@@ -167,53 +176,63 @@ const Profile = observer(() => {
 
   if (accountID) {
     return (
-      <Menu>
-        <MenuButton>
-          <Button bg="rgba(0, 0, 0, 0.03)">accountID: {accountID}</Button>
-        </MenuButton>
-        <MenuList py={0}>
-          <MenuItem
-            icon={<EditIcon />}
-            onClick={async () => {
-              const formData = await hooks.getFormData({
-                title: 'Update Password',
-                size: 'md',
-                formList: [
-                  {
-                    form: w3s.user.pwdForm
-                  }
-                ]
-              });
-              if (formData.password) {
-                await axios.request({
-                  method: 'put',
-                  url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
-                  data: formData
+      <Popover>
+        <PopoverTrigger>
+          <Button bg="#F3F3F3" borderRadius="60px">
+            accountID: {accountID}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent bg="#fff" w="260px">
+          <PopoverArrow bg="#fff" />
+          <PopoverBody mt="10px">
+            <Button
+              w="100%"
+              leftIcon={<EditIcon />}
+              {...defaultOutlineButtonStyle}
+              onClick={async () => {
+                const formData = await hooks.getFormData({
+                  title: 'Update Password',
+                  size: 'md',
+                  formList: [
+                    {
+                      form: w3s.user.pwdForm
+                    }
+                  ]
                 });
-                showNotification({ message: 'update password succeeded' });
-                eventBus.emit('user.update-pwd');
-                w3s.config.logout();
-              }
-            }}
-          >
-            Update password
-          </MenuItem>
-          <MenuItem
-            icon={<MdLogout />}
-            onClick={() => {
-              confirm.show({
-                title: 'Warning',
-                description: 'Are you sure you want to log out?',
-                async onOk() {
+                if (formData.password) {
+                  await axios.request({
+                    method: 'put',
+                    url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
+                    data: formData
+                  });
+                  showNotification({ message: 'update password succeeded' });
+                  eventBus.emit('user.update-pwd');
                   w3s.config.logout();
                 }
-              });
-            }}
-          >
-            Log out
-          </MenuItem>
-        </MenuList>
-      </Menu>
+              }}
+            >
+              Update password
+            </Button>
+            <Button
+              mt="10px"
+              w="100%"
+              leftIcon={<MdLogout />}
+              {...defaultOutlineButtonStyle}
+              onClick={() => {
+                confirm.show({
+                  title: 'Warning',
+                  description: 'Are you sure you want to log out?',
+                  async onOk() {
+                    w3s.config.logout();
+                  }
+                });
+              }}
+            >
+              Log out
+            </Button>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
     );
   }
 

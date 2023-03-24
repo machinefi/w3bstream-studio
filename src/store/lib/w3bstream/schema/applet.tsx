@@ -3,7 +3,7 @@ import { getInstanceButtonStatus, InstanceStatusRender } from '@/components/JSON
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { hooks } from '@/lib/hooks';
-import { defaultButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { AppletType } from '@/server/routers/w3bstream';
 import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
@@ -92,8 +92,8 @@ export default class AppletModule {
         actions: (item) => {
           const deleteBtn = {
             props: {
-              colorScheme: 'red',
               size: 'xs',
+              ...defaultOutlineButtonStyle,
               onClick: async () => {
                 globalThis.store.base.confirm.show({
                   title: 'Warning',
@@ -211,8 +211,8 @@ export default class AppletModule {
                 {
                   props: {
                     ml: '8px',
-                    colorScheme: 'red',
                     size: 'xs',
+                    ...defaultOutlineButtonStyle,
                     onClick: async () => {
                       globalThis.store.base.confirm.show({
                         title: 'Warning',
@@ -259,9 +259,8 @@ export default class AppletModule {
               return [
                 {
                   props: {
-                    bg: '#37A169',
-                    color: '#fff',
                     size: 'xs',
+                    ...defaultButtonStyle,
                     onClick: async () => {
                       globalThis.store.w3s.strategy.form.value.set({
                         appletID: item.f_applet_id.toString(),
@@ -301,9 +300,8 @@ export default class AppletModule {
                 {
                   props: {
                     ml: '8px',
-                    bg: '#E53E3E',
-                    color: '#fff',
                     size: 'xs',
+                    ...defaultOutlineButtonStyle,
                     onClick() {
                       globalThis.store.base.confirm.show({
                         title: 'Warning',

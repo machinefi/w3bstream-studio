@@ -6,6 +6,7 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { StrategyType } from '@/server/routers/w3bstream';
 import { hooks } from '@/lib/hooks';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const schema = {
   definitions: {
@@ -81,9 +82,8 @@ export default class StrategyModule {
           return [
             {
               props: {
-                bg: '#37A169',
-                color: '#fff',
                 size: 'xs',
+                ...defaultButtonStyle,
                 onClick: async () => {
                   this.form.value.set({
                     appletID: item.f_applet_id.toString(),
@@ -124,9 +124,8 @@ export default class StrategyModule {
             {
               props: {
                 ml: '8px',
-                bg: '#E53E3E',
-                color: '#fff',
                 size: 'xs',
+                ...defaultOutlineButtonStyle,
                 onClick() {
                   globalThis.store.base.confirm.show({
                     title: 'Warning',

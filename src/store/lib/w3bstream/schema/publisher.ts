@@ -12,6 +12,7 @@ import { ShowRequestTemplatesButtonWidget } from '@/components/IDE/PublishEventR
 import { makeObservable, observable } from 'mobx';
 import { helper } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const createPublisherSchema = {
   definitions: {
@@ -296,9 +297,8 @@ export default class PublisherModule {
             {
               props: {
                 ml: '8px',
-                bg: '#E53E3E',
-                color: '#fff',
                 size: 'xs',
+                ...defaultOutlineButtonStyle,
                 onClick() {
                   globalThis.store.base.confirm.show({
                     title: 'Warning',

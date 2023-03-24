@@ -12,6 +12,7 @@ import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidge
 import { showNotification } from '@mantine/notifications';
 import format from 'pg-format';
 import { DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const createTableSchema = {
   type: 'object',
@@ -502,8 +503,8 @@ export default class DBTableModule {
             return [
               {
                 props: {
-                  colorScheme: 'red',
                   size: 'xs',
+                  ...defaultOutlineButtonStyle,
                   onClick: async () => {
                     globalThis.store.base.confirm.show({
                       title: 'Warning',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Badge } from '@chakra-ui/react';
+import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Badge, Tooltip } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
@@ -10,6 +10,7 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import toast from 'react-hot-toast';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
+import { MdRefresh } from 'react-icons/md';
 
 const Projects = observer(() => {
   const {
@@ -34,6 +35,19 @@ const Projects = observer(() => {
           </Button>
           <Flex alignItems="center">
             <Button
+              leftIcon={<MdRefresh />}
+              h="32px"
+              {...defaultOutlineButtonStyle}
+              onClick={async () => {
+                await allProjects.call();
+                w3s.projectManager.sync();
+                toast.success('Reloaded');
+              }}
+            >
+              Refresh
+            </Button>
+            <Button
+              ml="20px"
               leftIcon={<AiOutlineDelete />}
               h="32px"
               {...defaultOutlineButtonStyle}
