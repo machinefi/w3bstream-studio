@@ -57,9 +57,9 @@ const ToolBar = (props: ToolBar) => {
         cursor="pointer"
         color="rgba(15, 15, 15, 0.75)"
         borderRadius="8px"
-        {...getSelectedStyles(w3s.showContent === 'ALL_CONTRACT_LOGS' || w3s.showContent === 'All_CHAIN_TX' || w3s.showContent === 'All_CHAIN_HEIGHT')}
+        {...getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT')}
         onClick={(e) => {
-          w3s.showContent = 'ALL_CONTRACT_LOGS';
+          w3s.showContent = 'CONTRACT_LOGS';
         }}
       >
         <Icon as={TbHandClick} boxSize={6} />

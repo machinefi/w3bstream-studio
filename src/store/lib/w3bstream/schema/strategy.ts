@@ -7,6 +7,7 @@ import { eventBus } from '@/lib/event';
 import { StrategyType } from '@/server/routers/w3bstream';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import { makeObservable, observable, set } from 'mobx';
 
 export const schema = {
   definitions: {
@@ -85,6 +86,11 @@ export default class StrategyModule {
                 size: 'xs',
                 ...defaultButtonStyle,
                 onClick: async () => {
+                  if (globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER') {
+                    this.form.uiSchema.appletID = {
+                      'ui:disabled': true
+                    };
+                  }
                   this.form.value.set({
                     appletID: item.f_applet_id.toString(),
                     eventType: String(item.f_event_type),
@@ -190,5 +196,17 @@ export default class StrategyModule {
         eventBus.emit('strategy.create');
       } catch (error) {}
     }
+  }
+
+  allData: StrategyType[] = [];
+
+  constructor() {
+    makeObservable(this, {
+      allData: observable
+    });
+  }
+
+  set(v: Partial<StrategyModule>) {
+    Object.assign(this, v);
   }
 }

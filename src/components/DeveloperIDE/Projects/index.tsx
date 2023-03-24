@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Badge, Tooltip } from '@chakra-ui/react';
+import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Badge } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';

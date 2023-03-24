@@ -10,7 +10,7 @@ import ToolBar from './ToolBar';
 import SideBar from './SideBar';
 import Applets from './Applets';
 import Publishers from './Publishers';
-import AllStrategies from './AllStrategies';
+import Strategies from './Strategies';
 import Editor from './Editor';
 import DockerLogs from './DockerLogs';
 import { ConfirmModal } from '../Common/Confirm';
@@ -41,12 +41,12 @@ const IDE = observer(() => {
             {(w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'ALL_PUBLISHERS') && <Publishers />}
             {w3s.showContent === 'CURRENT_EVENT_LOGS' && <EventLogs />}
             {w3s.showContent === 'ALL_INSTANCES' && <JSONTable jsonstate={w3s.instances} />}
-            {w3s.showContent === 'ALL_STRATEGIES' && <AllStrategies />}
+            {w3s.showContent === 'STRATEGIES' && <Strategies />}
             {w3s.showContent === 'EDITOR' && <Editor />}
             {w3s.showContent === 'DOCKER_LOGS' && <DockerLogs />}
-            {w3s.showContent === 'ALL_CONTRACT_LOGS' && <ContractLogs />}
-            {w3s.showContent === 'All_CHAIN_TX' && <ChainTx />}
-            {w3s.showContent === 'All_CHAIN_HEIGHT' && <ChainHeight />}
+            {w3s.showContent === 'CONTRACT_LOGS' && <ContractLogs />}
+            {w3s.showContent === 'CHAIN_TX' && <ChainTx />}
+            {w3s.showContent === 'CHAIN_HEIGHT' && <ChainHeight />}
             {w3s.showContent === 'DB_TABLE' && <DBTable />}
             {w3s.showContent === 'METRICS' && <JSONMetricsView data={w3s.metrics.metricsData} />}
           </Box>

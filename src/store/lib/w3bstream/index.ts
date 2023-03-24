@@ -39,8 +39,8 @@ export class W3bStream {
       this.instances.table.set({
         dataSource: instances
       });
-      this.strategy.table.set({
-        dataSource: strategies
+      this.strategy.set({
+        allData: strategies
       });
     }
   });
@@ -62,12 +62,12 @@ export class W3bStream {
     | 'ALL_PUBLISHERS'
     | 'CURRENT_EVENT_LOGS'
     | 'ALL_INSTANCES'
-    | 'ALL_STRATEGIES'
+    | 'STRATEGIES'
     | 'EDITOR'
     | 'DOCKER_LOGS'
-    | 'ALL_CONTRACT_LOGS'
-    | 'All_CHAIN_TX'
-    | 'All_CHAIN_HEIGHT'
+    | 'CONTRACT_LOGS'
+    | 'CHAIN_TX'
+    | 'CHAIN_HEIGHT'
     | 'METRICS'
     | 'SETTINGS'
     | 'DB_TABLE' = 'CURRENT_APPLETS';

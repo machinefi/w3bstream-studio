@@ -19,7 +19,7 @@ const CurrentProject = observer(() => {
       <Box ml="20px" w="100%" h="100%" p="20px" bg="#fff" borderRadius="8px">
         {w3s.showContent === 'METRICS' && <Metrics />}
         {w3s.showContent === 'CURRENT_PUBLISHERS' && <Publishers />}
-        {(w3s.showContent === 'ALL_CONTRACT_LOGS' || w3s.showContent === 'All_CHAIN_TX' || w3s.showContent === 'All_CHAIN_HEIGHT') && <Triggers />}
+        {(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT') && <Triggers />}
         {w3s.showContent === 'DB_TABLE' && <DBTable />}
         {w3s.showContent === 'CURRENT_EVENT_LOGS' && <EventLogs />}
         {w3s.showContent === 'SETTINGS' && <Settings />}

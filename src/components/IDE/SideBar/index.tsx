@@ -118,7 +118,7 @@ const SideBar = observer((props: SideBarProps) => {
           })}
         </Box>
       )}
-      {(w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES' || w3s.showContent === 'ALL_STRATEGIES' || w3s.showContent === 'ALL_PUBLISHERS') && (
+      {(w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES' || w3s.showContent === 'STRATEGIES' || w3s.showContent === 'ALL_PUBLISHERS') && (
         <>
           <Flex
             alignItems="center"
@@ -161,10 +161,10 @@ const SideBar = observer((props: SideBarProps) => {
             py="2"
             px="6"
             borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(w3s.showContent === 'ALL_STRATEGIES')}
+            sx={getSelectedStyles(w3s.showContent === 'STRATEGIES')}
             cursor="pointer"
             onClick={() => {
-              w3s.showContent = 'ALL_STRATEGIES';
+              w3s.showContent = 'STRATEGIES';
             }}
           >
             <Text fontSize="16px" fontWeight={700}>
@@ -190,7 +190,7 @@ const SideBar = observer((props: SideBarProps) => {
           </Flex>
         </>
       )}
-      {(w3s.showContent === 'ALL_CONTRACT_LOGS' || w3s.showContent === 'All_CHAIN_TX' || w3s.showContent === 'All_CHAIN_HEIGHT') && (
+      {(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT') && (
         <>
           <Flex
             alignItems="center"
@@ -199,10 +199,10 @@ const SideBar = observer((props: SideBarProps) => {
             py="2"
             px="6"
             borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(w3s.showContent === 'ALL_CONTRACT_LOGS')}
+            sx={getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS')}
             cursor="pointer"
             onClick={() => {
-              w3s.showContent = 'ALL_CONTRACT_LOGS';
+              w3s.showContent = 'CONTRACT_LOGS';
             }}
           >
             <Text fontSize="16px" fontWeight={700}>
@@ -216,10 +216,10 @@ const SideBar = observer((props: SideBarProps) => {
             py="2"
             px="6"
             borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_TX')}
+            sx={getSelectedStyles(w3s.showContent === 'CHAIN_TX')}
             cursor="pointer"
             onClick={() => {
-              w3s.showContent = 'All_CHAIN_TX';
+              w3s.showContent = 'CHAIN_TX';
             }}
           >
             <Text fontSize="16px" fontWeight={700}>
@@ -233,10 +233,10 @@ const SideBar = observer((props: SideBarProps) => {
             py="2"
             px="6"
             borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_HEIGHT')}
+            sx={getSelectedStyles(w3s.showContent === 'CHAIN_HEIGHT')}
             cursor="pointer"
             onClick={() => {
-              w3s.showContent = 'All_CHAIN_HEIGHT';
+              w3s.showContent = 'CHAIN_HEIGHT';
             }}
           >
             <Text fontSize="16px" fontWeight={700}>
