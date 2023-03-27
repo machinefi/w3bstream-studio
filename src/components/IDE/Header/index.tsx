@@ -11,6 +11,7 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import StarCount from '../StarCount';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'CURRENT_APPLETS') {
@@ -161,6 +162,7 @@ const Header = observer(() => {
             eventBus.emit('postman.request');
           }}
         />
+        <StarCount />
         <Profile />
       </Flex>
     </Flex>

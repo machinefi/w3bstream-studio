@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, Flex, Text, TabList, Tabs, Image, Tab, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, Link as ChakraLink } from '@chakra-ui/react';
+import { Button, Flex, Text, TabList, Tabs, Image, Tab, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
 import Link from 'next/link';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import StarCount from '@/components/IDE/StarCount';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'PROJECTS') {
@@ -82,9 +83,10 @@ const Header = observer(() => {
         </Tabs>
       </Flex>
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
-        <ChakraLink href="https://github.com/machinefi/w3bstream-studio" isExternal>
+        {/* <ChakraLink href="https://github.com/machinefi/w3bstream-studio" isExternal>
           <Image mr="20px" w="100px" src="https://img.shields.io/github/stars/machinefi/w3bstream-studio.svg?style=social&label=Star&maxAge=2592000" />
-        </ChakraLink>
+        </ChakraLink> */}
+        <StarCount />
         <Profile />
       </Flex>
     </Flex>
