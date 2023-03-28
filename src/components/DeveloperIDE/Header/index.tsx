@@ -39,14 +39,7 @@ const Header = observer(() => {
         backgroundColor: 'rgba(255, 255, 255, 0.8)'
       }}
     >
-      <Flex
-        alignItems="center"
-        cursor="pointer"
-        onClick={() => {
-          w3s.project.allProjects.onSelect(-1);
-          w3s.project.resetSelectedNames();
-        }}
-      >
+      <Flex alignItems="center">
         <Image w="30px" src="/favicon.svg" alt="logo" />
         <Text ml="10px" fontWeight={700}>
           W3bstream studio

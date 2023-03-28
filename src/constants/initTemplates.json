@@ -5,22 +5,10 @@
       "image": "/images/templates/nft.png",
       "project": [
         {
-          "projectName": "mint_nft_template",
+          "name": "mint_nft_template",
+          "description": "",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-ts-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
-          "datas": [],
-          "envs": [["key", "value"]]
-        }
-      ]
-    },
-    {
-      "name": "easyjson",
-      "image": "/images/templates/code.png",
-      "project": [
-        {
-          "projectName": "easyjson_template",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/easyjson.wasm", "appletName": "applet_01" }],
-          "datas": [],
-          "envs": []
+          "datas": []
         }
       ]
     },
@@ -29,10 +17,10 @@
       "image": "/images/templates/counter.png",
       "project": [
         {
-          "projectName": "word_count_template",
+          "name": "word_count_template",
+          "description": "",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/word_count.wasm", "appletName": "applet_01" }],
-          "datas": [],
-          "envs": []
+          "datas": []
         }
       ]
     },
@@ -41,34 +29,38 @@
       "image": "/images/templates/log.png",
       "project": [
         {
-          "projectName": "log_template",
+          "name": "log_template",
+          "description": "",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
           "datas": [],
-          "envs": []
-        }
-      ]
-    },
-    {
-      "name": "gjson",
-      "image": "/images/templates/code.png",
-      "project": [
-        {
-          "projectName": "gjson_template",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/gjson.wasm", "appletName": "applet_01" }],
-          "datas": [],
-          "envs": []
-        }
-      ]
-    },
-    {
-      "name": "Token Distribute",
-      "image": "/images/templates/token.png",
-      "project": [
-        {
-          "projectName": "token_distribute_template",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/token_distribute.wasm", "appletName": "applet_01" }],
-          "datas": [],
-          "envs": []
+          "envs": [["key1", "value1"]],
+          "schema": {
+            "tables": [
+              {
+                "name": "t_log_test",
+                "desc": "log test table",
+                "cols": [
+                  {
+                    "name": "f_test",
+                    "constrains": {
+                      "datatype": "TEXT",
+                      "length": 255,
+                      "desc": "user name"
+                    }
+                  }
+                ],
+                "keys": [
+                  {
+                    "name": "ui_test",
+                    "isUnique": true,
+                    "columnNames": ["f_test"]
+                  }
+                ],
+                "withSoftDeletion": true,
+                "withPrimaryKey": true
+              }
+            ]
+          }
         }
       ]
     }

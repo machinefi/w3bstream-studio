@@ -255,7 +255,11 @@ const SideBar = observer((props: SideBarProps) => {
           </Stack>
         </>
       )}
-      {w3s.showContent === 'DB_TABLE' && <DBTableSideBar />}
+      {w3s.showContent === 'DB_TABLE' && (
+        <Box h="calc(100vh - 60px)" overflowY="auto">
+          <DBTableSideBar />
+        </Box>
+      )}
       {w3s.showContent === 'METRICS' && (
         <Box h="calc(100vh - 100px)" overflowY="auto">
           <Flex
@@ -356,9 +360,9 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
       >
         <Flex alignItems="center">
           <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
-          <Text fontSize="16px" fontWeight={700}>
+          <Box w="220px" fontSize="16px" fontWeight={700}>
             {tableSchema}
-          </Text>
+          </Box>
         </Flex>
         <Flex alignItems="center">
           <Tooltip hasArrow label="Create a new table" placement="bottom">

@@ -6,6 +6,7 @@ import { BiBarChartSquare } from 'react-icons/bi';
 import { TbDeviceDesktop, TbHandClick, TbSettings } from 'react-icons/tb';
 import { HiOutlineDatabase } from 'react-icons/hi';
 import { AiOutlineFileText } from 'react-icons/ai';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 
 interface ToolBar extends BoxProps {}
 
@@ -14,6 +15,20 @@ const ToolBar = (props: ToolBar) => {
 
   return (
     <Flex minW="200px" h="100%" direction="column" align="center" p="16px" bg="#fff" {...props}>
+      <Flex
+        mb="30px"
+        alignItems="center"
+        color="#7A7A7A"
+        fontSize="14px"
+        cursor="pointer"
+        onClick={() => {
+          w3s.project.allProjects.onSelect(-1);
+          w3s.project.resetSelectedNames();
+        }}
+      >
+        <ChevronLeftIcon />
+        <Box ml="10px">Return to Projects</Box>
+      </Flex>
       <Flex
         w="100%"
         p="18px"
