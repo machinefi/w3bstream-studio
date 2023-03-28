@@ -10,7 +10,7 @@ const DeveloperDBTable = () => {
 
   return (
     <Flex pos="relative" w="100%" h="calc(100vh - 140px)">
-      <Box minW="200px" border="1px solid rgba(230, 230, 230, 0.75)">
+      <Box minW="200px" h="calc(100vh - 140px)" overflowY="auto" border="1px solid rgba(230, 230, 230, 0.75)">
         <DBTableSideBar />
       </Box>
       <Box ml="20px" flex={1} borderRadius="8px">

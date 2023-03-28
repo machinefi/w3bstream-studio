@@ -98,7 +98,7 @@ const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { pro
   if (data.appletID) {
     return data.appletID;
   }
-  throw new Error("Can't create applet");
+  throw data;
 };
 
 const deployApplet = async (appletID: string, token: string): Promise<string> => {
@@ -109,18 +109,19 @@ const deployApplet = async (appletID: string, token: string): Promise<string> =>
     }
   });
   const data: any = await res.json();
-  return data.instanceID;
+  if (data.instanceID) {
+    return data.instanceID;
+  }
+  throw data;
 };
 
 const startInstance = async (instanceID: string, token: string): Promise<any> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/${instanceID}/START`, {
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/${instanceID}/START`, {
     method: 'put',
     headers: {
       Authorization: token
     }
   });
-  const data: any = await res.json();
-  return data;
 };
 
 const createMonitor = async (projectName: string, monitor: Monitor, token: string): Promise<void> => {
