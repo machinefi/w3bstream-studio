@@ -3,6 +3,8 @@ import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { definitions } from './definitions';
 import { ContractLogType } from '@/server/routers/w3bstream';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { trpc } from '@/lib/trpc';
 
 export const schema = {
   definitions: {
@@ -12,7 +14,7 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects', title: 'Project Name' },
+    projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type' },
     chainID: { type: 'number', title: 'Chain ID' },
     contractAddress: { type: 'string', title: 'Contract Address' },
@@ -20,7 +22,7 @@ export const schema = {
     blockEnd: { type: 'number', title: 'Block End' },
     topic0: { type: 'string', title: 'topic0' }
   },
-  required: ['projectID', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
+  required: ['projectName', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -31,6 +33,24 @@ schema.definitions = {
 };
 
 export default class ContractLogModule {
+  allContractLogs = new PromiseState<() => Promise<any>, ContractLogType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.contractLogs.query();
+      if (res) {
+        this.table.set({
+          dataSource: res
+        });
+      }
+      return res;
+    }
+  });
+
+  get curProjectContractLogs() {
+    const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
+    return this.allContractLogs.value.filter((c) => c.f_project_name === curProjectName);
+  }
+
   table = new JSONSchemaTableState<ContractLogType>({
     columns: [
       {
@@ -87,7 +107,7 @@ export default class ContractLogModule {
       //               title: 'Warning',
       //               description: 'Are you sure you want to delete it?',
       //               async onOk() {
-      //                 const project = globalThis.store.w3s.allProjects.value.find((p) => p.f_name === item.f_project_name);
+      //                 const project = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_name === item.f_project_name);
       //                 try {
       //                   await axios.request({
       //                     method: 'delete',
@@ -112,7 +132,7 @@ export default class ContractLogModule {
       // }
     ],
     rowKey: 'f_contractlog_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
+    containerProps: { mt: '10px' }
   });
 
   form = new JSONSchemaFormState<SchemaType>({
@@ -130,7 +150,7 @@ export default class ContractLogModule {
     },
     value: new JSONValue<SchemaType>({
       default: {
-        projectID: '',
+        projectName: '',
         eventType: 'DEFAULT',
         chainID: 4690,
         contractAddress: '',

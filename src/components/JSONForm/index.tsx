@@ -5,7 +5,7 @@ import Form from '@rjsf/chakra-ui';
 import { Box, Flex, useDisclosure, Text, Collapse, Stack, Button } from '@chakra-ui/react';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import { ErrorListProps, FieldTemplateProps, getSubmitButtonOptions, ObjectFieldTemplateProps, SubmitButtonProps } from '@rjsf/utils';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle } from '@/lib/theme';
 
 const renderLayout = (layout: any[], fields: { [k: string]: React.ReactElement }, n = 1) => {
   n++;
@@ -121,11 +121,9 @@ const SubmitButton = ({ uiSchema }: SubmitButtonProps) => {
     return null;
   }
   return (
-    <Flex justify="flex-end">
-      <Button type="submit" borderRadius="base" {...gradientButtonStyle}>
-        {submitText}
-      </Button>
-    </Flex>
+    <Button w="100%" type="submit" borderRadius="base" {...defaultButtonStyle}>
+      {submitText}
+    </Button>
   );
 };
 

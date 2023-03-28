@@ -3,6 +3,7 @@ import { getInstanceButtonStatus, InstanceStatusRender } from '@/components/JSON
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { hooks } from '@/lib/hooks';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { AppletType } from '@/server/routers/w3bstream';
 import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
@@ -91,8 +92,8 @@ export default class AppletModule {
         actions: (item) => {
           const deleteBtn = {
             props: {
-              colorScheme: 'red',
               size: 'xs',
+              ...defaultOutlineButtonStyle,
               onClick: async () => {
                 globalThis.store.base.confirm.show({
                   title: 'Warning',
@@ -116,8 +117,8 @@ export default class AppletModule {
           const addStrategyBtn = {
             props: {
               ml: '10px',
-              colorScheme: 'blue',
               size: 'xs',
+              ...defaultButtonStyle,
               onClick: async () => {
                 globalThis.store.w3s.strategy.form.value.set({
                   appletID: item.f_applet_id.toString()
@@ -138,10 +139,10 @@ export default class AppletModule {
             {
               props: {
                 ml: '10px',
-                colorScheme: 'blue',
                 size: 'xs',
+                ...defaultButtonStyle,
                 onClick: () => {
-                  globalThis.store.w3s.deployApplet.call({ appletID: item.f_applet_id.toString() });
+                  this.deployApplet({ appletID: item.f_applet_id.toString() });
                 }
               },
               text: 'Deploy'
@@ -176,7 +177,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.startBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'START' });
+                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'START' });
                     }
                   },
                   text: 'Start'
@@ -189,7 +190,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.restartBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'Restart' });
+                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'Restart' });
                     }
                   },
                   text: 'Restart'
@@ -202,7 +203,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.stopBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.handleInstance.call({ instaceID: item.f_instance_id, event: 'STOP' });
+                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'STOP' });
                     }
                   },
                   text: 'Stop'
@@ -210,8 +211,8 @@ export default class AppletModule {
                 {
                   props: {
                     ml: '8px',
-                    colorScheme: 'red',
                     size: 'xs',
+                    ...defaultOutlineButtonStyle,
                     onClick: async () => {
                       globalThis.store.base.confirm.show({
                         title: 'Warning',
@@ -258,9 +259,8 @@ export default class AppletModule {
               return [
                 {
                   props: {
-                    bg: '#37A169',
-                    color: '#fff',
                     size: 'xs',
+                    ...defaultButtonStyle,
                     onClick: async () => {
                       globalThis.store.w3s.strategy.form.value.set({
                         appletID: item.f_applet_id.toString(),
@@ -300,15 +300,14 @@ export default class AppletModule {
                 {
                   props: {
                     ml: '8px',
-                    bg: '#E53E3E',
-                    color: '#fff',
                     size: 'xs',
+                    ...defaultOutlineButtonStyle,
                     onClick() {
                       globalThis.store.base.confirm.show({
                         title: 'Warning',
                         description: 'Are you sure you want to delete it?',
                         async onOk() {
-                          const p = globalThis.store.w3s.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
+                          const p = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
                           if (!p) {
                             return;
                           }
@@ -375,5 +374,14 @@ export default class AppletModule {
         eventBus.emit('applet.create');
       }
     }
+  }
+
+  async deployApplet({ appletID }: { appletID: string }) {
+    const res = await axios.request({
+      method: 'post',
+      url: `/api/w3bapp/deploy/applet/${appletID}`
+    });
+    eventBus.emit('instance.deploy');
+    return res.data;
   }
 }

@@ -19,6 +19,7 @@ const SideBar = observer((props: SideBarProps) => {
     w3s,
     base: { confirm }
   } = useStore();
+  const { allProjects, curProject } = w3s.project;
 
   return (
     <Box h="100%" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
@@ -35,7 +36,7 @@ const SideBar = observer((props: SideBarProps) => {
                 w3s.project.createProject();
               }}
             >
-              <Icon as={MdAddBox} />
+              <Icon as={MdAddBox} color="#946FFF" />
             </Button>
           </Tooltip>
           <Tooltip hasArrow label="Reload Project" placement="bottom">
@@ -43,37 +44,37 @@ const SideBar = observer((props: SideBarProps) => {
               p={2}
               variant="ghost"
               onClick={async () => {
-                await w3s.allProjects.call();
+                await allProjects.call();
                 w3s.projectManager.sync();
                 toast.success('Reloaded');
               }}
             >
-              <Icon as={MdRefresh} />
+              <Icon as={MdRefresh} color="#946FFF" />
             </Button>
           </Tooltip>
         </Flex>
       </Flex>
       {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'CURRENT_EVENT_LOGS') && (
         <Box h="calc(100vh - 100px)" overflowY="auto">
-          {w3s.allProjects.value.map((p, index) => {
+          {allProjects.value.map((p, index) => {
             return (
               <Flex
                 alignItems="center"
                 justifyContent="space-between"
-                h="40px"
+                minH="40px"
                 py="2"
                 px="6"
                 bg="#FAFAFA"
                 borderBottom="2px solid rgba(0, 0, 0, 0.06)"
                 cursor="pointer"
-                sx={getSelectedStyles(w3s.allProjects.currentIndex === index)}
+                sx={getSelectedStyles(allProjects.currentIndex === index)}
                 onClick={(e) => {
-                  w3s.allProjects.onSelect(index);
+                  allProjects.onSelect(index);
                 }}
               >
-                <Text lineHeight="28px" fontSize="14px" fontWeight={700}>
+                <Box maxW="200px" lineHeight="28px" fontSize="14px" fontWeight={700}>
                   {p.f_name}
-                </Text>
+                </Box>
                 <Flex alignItems="center">
                   <Tooltip hasArrow label="Edit Project" placement="bottom">
                     <EditIcon
@@ -81,9 +82,9 @@ const SideBar = observer((props: SideBarProps) => {
                       cursor="pointer"
                       onClick={async (e) => {
                         e.stopPropagation();
-                        w3s.allProjects.onSelect(index);
+                        allProjects.onSelect(index);
                         w3s.project.form.value.set({
-                          name: w3s.curProject.f_name
+                          name: curProject?.f_name
                         });
                         w3s.project.editProject();
                       }}
@@ -117,7 +118,7 @@ const SideBar = observer((props: SideBarProps) => {
           })}
         </Box>
       )}
-      {(w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES' || w3s.showContent === 'ALL_STRATEGIES' || w3s.showContent === 'ALL_PUBLISHERS') && (
+      {(w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES' || w3s.showContent === 'STRATEGIES' || w3s.showContent === 'ALL_PUBLISHERS') && (
         <>
           <Flex
             alignItems="center"
@@ -160,10 +161,10 @@ const SideBar = observer((props: SideBarProps) => {
             py="2"
             px="6"
             borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(w3s.showContent === 'ALL_STRATEGIES')}
+            sx={getSelectedStyles(w3s.showContent === 'STRATEGIES')}
             cursor="pointer"
             onClick={() => {
-              w3s.showContent = 'ALL_STRATEGIES';
+              w3s.showContent = 'STRATEGIES';
             }}
           >
             <Text fontSize="16px" fontWeight={700}>
@@ -189,7 +190,7 @@ const SideBar = observer((props: SideBarProps) => {
           </Flex>
         </>
       )}
-      {(w3s.showContent === 'ALL_CONTRACT_LOGS' || w3s.showContent === 'All_CHAIN_TX' || w3s.showContent === 'All_CHAIN_HEIGHT') && (
+      {(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT') && (
         <>
           <Flex
             alignItems="center"
@@ -198,10 +199,10 @@ const SideBar = observer((props: SideBarProps) => {
             py="2"
             px="6"
             borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(w3s.showContent === 'ALL_CONTRACT_LOGS')}
+            sx={getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS')}
             cursor="pointer"
             onClick={() => {
-              w3s.showContent = 'ALL_CONTRACT_LOGS';
+              w3s.showContent = 'CONTRACT_LOGS';
             }}
           >
             <Text fontSize="16px" fontWeight={700}>
@@ -215,10 +216,10 @@ const SideBar = observer((props: SideBarProps) => {
             py="2"
             px="6"
             borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_TX')}
+            sx={getSelectedStyles(w3s.showContent === 'CHAIN_TX')}
             cursor="pointer"
             onClick={() => {
-              w3s.showContent = 'All_CHAIN_TX';
+              w3s.showContent = 'CHAIN_TX';
             }}
           >
             <Text fontSize="16px" fontWeight={700}>
@@ -232,10 +233,10 @@ const SideBar = observer((props: SideBarProps) => {
             py="2"
             px="6"
             borderBottom="1px solid rgba(0, 0, 0, 0.06)"
-            sx={getSelectedStyles(w3s.showContent === 'All_CHAIN_HEIGHT')}
+            sx={getSelectedStyles(w3s.showContent === 'CHAIN_HEIGHT')}
             cursor="pointer"
             onClick={() => {
-              w3s.showContent = 'All_CHAIN_HEIGHT';
+              w3s.showContent = 'CHAIN_HEIGHT';
             }}
           >
             <Text fontSize="16px" fontWeight={700}>
@@ -254,7 +255,7 @@ const SideBar = observer((props: SideBarProps) => {
           </Stack>
         </>
       )}
-      {w3s.showContent === 'DB_TABLE' && <DBTable />}
+      {w3s.showContent === 'DB_TABLE' && <DBTableSideBar />}
       {w3s.showContent === 'METRICS' && (
         <Box h="calc(100vh - 100px)" overflowY="auto">
           <Flex
@@ -299,7 +300,7 @@ const SideBar = observer((props: SideBarProps) => {
   );
 });
 
-const DBTable = observer(() => {
+export const DBTableSideBar = observer(() => {
   const {
     w3s: {
       dbTable: { allTableNames }
@@ -384,7 +385,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                 }
               }}
             >
-              <Icon as={MdAddBox} />
+              <Icon as={MdAddBox} color="#946FFF" />
             </Button>
           </Tooltip>
         </Flex>
@@ -484,8 +485,8 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
 function getSelectedStyles(selected: boolean) {
   return selected
     ? {
-        color: '#4689F7',
-        bg: '#EDF3FA'
+        color: '#946FFF',
+        bg: 'rgba(148, 111, 255, 0.1)'
       }
     : {
         color: '#283241'

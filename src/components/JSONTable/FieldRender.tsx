@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 export const INSTANCE_STATUS = {
   0: {
     colorScheme: 'gray',
-    text: ''
+    text: 'Not activated'
   },
   1: {
     colorScheme: 'gray',

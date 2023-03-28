@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Button, Flex } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 import { useEffect } from 'react';
 import { hooks } from '@/lib/hooks';
@@ -15,7 +15,7 @@ const Publishers = observer(() => {
 
   useEffect(() => {
     if (w3s.showContent === 'CURRENT_PUBLISHERS') {
-      const publishers = w3s.curProject?.publishers || [];
+      const publishers = w3s.project.curProject?.publishers || [];
       w3s.publisher.table.set({
         dataSource: publishers
       });
@@ -24,7 +24,7 @@ const Publishers = observer(() => {
         dataSource: w3s.publisher.allData
       });
     }
-  }, [w3s.curProject, w3s.showContent]);
+  }, [w3s.project.curProject, w3s.showContent]);
 
   return (
     <>
@@ -32,12 +32,15 @@ const Publishers = observer(() => {
         <Button
           h="32px"
           leftIcon={<AddIcon />}
-          {...gradientButtonStyle}
+          {...defaultButtonStyle}
           onClick={async (e) => {
             if (w3s.showContent === 'CURRENT_PUBLISHERS') {
               w3s.publisher.createPublisherForm.value.set({
-                projectName: w3s.curProject?.f_name
+                projectName: w3s.project.curProject?.f_name
               });
+              w3s.publisher.createPublisherForm.uiSchema.projectName = {
+                'ui:disabled': true
+              };
             }
             const formData = await hooks.getFormData({
               title: 'Create Publisher',

@@ -34,33 +34,33 @@ export default class MetricsModule {
         data: [
           {
             name: 'Mar 14, 2023, 07:00am',
-            value: 0,
+            value: 0
           },
           {
             name: '',
-            value: 0,
+            value: 0
           },
           {
             name: '',
-            value: 1,
+            value: 1
           },
           {
             name: '',
-            value: 1,
+            value: 1
           },
           {
             name: '',
-            value: 0,
+            value: 0
           },
           {
             name: '',
-            value: 0,
+            value: 0
           },
           {
             name: 'Mar 14, 2023, 07:00am',
-            value: 0,
+            value: 0
           }
-        ],
+        ]
       }
     },
     {
@@ -78,38 +78,38 @@ export default class MetricsModule {
         data: [
           {
             name: 'Mar 14, 2023, 07:00am',
-            value: 0,
+            value: 0
           },
           {
             name: '',
-            value: 0,
+            value: 0
           },
           {
             name: '',
-            value: 100,
+            value: 100
           },
           {
             name: '',
-            value: 1059,
+            value: 1059
           },
           {
             name: '',
-            value: 0,
+            value: 0
           },
           {
             name: '',
-            value: 0,
+            value: 0
           },
           {
             name: 'Mar 14, 2023, 07:00am',
-            value: 0,
+            value: 0
           }
-        ],
+        ]
       }
-    },
+    }
   ];
 
-  showContent: 'DATABASE' | 'API' = 'DATABASE';
+  showContent: 'DATABASE' | 'API' = 'API';
 
   get metricsData() {
     if (this.showContent === 'DATABASE') {

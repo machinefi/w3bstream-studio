@@ -3,6 +3,8 @@ import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { definitions } from './definitions';
 import { ChainTxType } from '@/server/routers/w3bstream';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { trpc } from '@/lib/trpc';
 
 export const schema = {
   definitions: {
@@ -12,12 +14,12 @@ export const schema = {
   },
   type: 'object',
   properties: {
-    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    projectName: { $ref: '#/definitions/projects', title: 'Project ID' },
     eventType: { type: 'string', title: 'Event Type' },
     chainID: { type: 'number', title: 'Chain ID' },
     txAddress: { type: 'string', title: 'txAddress' }
   },
-  required: ['projectID', 'eventType', 'chainID', 'txAddress']
+  required: ['projectName', 'eventType', 'chainID', 'txAddress']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -28,6 +30,24 @@ schema.definitions = {
 };
 
 export default class ChainTxModule {
+  allChainTx = new PromiseState<() => Promise<any>, ChainTxType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.chainTx.query();
+      if (res) {
+        this.table.set({
+          dataSource: res
+        });
+      }
+      return res;
+    }
+  });
+
+  get curProjectChainTx() {
+    const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
+    return this.allChainTx.value.filter((c) => c.f_project_name === curProjectName);
+  }
+
   table = new JSONSchemaTableState<ChainTxType>({
     columns: [
       {
@@ -72,7 +92,7 @@ export default class ChainTxModule {
       //               title: 'Warning',
       //               description: 'Are you sure you want to delete it?',
       //               async onOk() {
-      //                 const project = globalThis.store.w3s.allProjects.value.find((p) => p.f_name === item.f_project_name);
+      //                 const project = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_name === item.f_project_name);
       //                 try {
       //                   await axios.request({
       //                     method: 'delete',
@@ -97,7 +117,7 @@ export default class ChainTxModule {
       // }
     ],
     rowKey: 'f_chaintx_id',
-    containerProps: { mt: '10px', h: 'calc(100vh - 200px)' }
+    containerProps: { mt: '10px' }
   });
 
   form = new JSONSchemaFormState<SchemaType>({
@@ -115,7 +135,7 @@ export default class ChainTxModule {
     },
     value: new JSONValue<SchemaType>({
       default: {
-        projectID: '',
+        projectName: '',
         eventType: 'DEFAULT',
         chainID: 4690,
         txAddress: ''

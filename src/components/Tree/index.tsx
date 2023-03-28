@@ -4,13 +4,12 @@ import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Box, Flex, Image, ImageProps, Portal } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import { Menu } from '@/components/Menu';
 import { toast } from '@/lib/helper';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
     w3s: { projectManager }
-  } = useStore( );
+  } = useStore();
   //https://github.com/PKief/vscode-material-icon-theme/tree/main/icons
   const s: ImageProps = {
     h: 5,
@@ -36,7 +35,15 @@ export const FileIcon = (file: FilesItemType) => {
   }
 
   if (file?.label == VSCodeRemoteFolderName) {
-    return <>{file.isOpen ? <Image {...s} src="/images/icons/folder-vscode-open.svg" filter={!projectManager.isWSConnect?'grayscale(100%)':''}></Image> : <Image filter={!projectManager.isWSConnect?'grayscale(100%)':''} {...s} src="/images/icons/folder-vscode.svg"></Image>}</>;
+    return (
+      <>
+        {file.isOpen ? (
+          <Image {...s} src="/images/icons/folder-vscode-open.svg" filter={!projectManager.isWSConnect ? 'grayscale(100%)' : ''}></Image>
+        ) : (
+          <Image filter={!projectManager.isWSConnect ? 'grayscale(100%)' : ''} {...s} src="/images/icons/folder-vscode.svg"></Image>
+        )}
+      </>
+    );
   }
 };
 
@@ -75,14 +82,15 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
       onClick: (item) => w3s.projectManager.curFilesListSchema.deleteFile(item)
     }
   ];
+
   return (
     <Flex flexDirection="column" cursor="pointer">
       {data?.map?.((item: FilesItemType) => {
         return (
           <>
             <Flex
-              pl={5}
               key={item.key}
+              pl={item.label === 'Browser Files' || item.label === 'VSCode Files' ? 0 : 5}
               flexDirection="column"
               onClick={(e) => {
                 e.stopPropagation();
@@ -143,7 +151,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                   }, 500);
                 }}
               >
-                <Menu bordered p={2}>
+                <Box p={2} bg="#fff" boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px">
                   {item.type == 'folder' ? (
                     <>
                       {FolderSetting.map((i) => {
@@ -173,7 +181,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                       })}
                     </>
                   )}
-                </Menu>
+                </Box>
               </ContextMenu>
             </Portal>
           </>

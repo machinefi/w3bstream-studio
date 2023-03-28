@@ -2,29 +2,29 @@ export const definitions = {
   projects: {
     type: 'string',
     get enum() {
-      return globalThis.store.w3s.allProjects.value?.map((i) => `${i.f_project_id}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_project_id}`) || [];
     },
     get enumNames() {
-      return globalThis.store.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
     }
   },
   projectName: {
     type: 'string',
     get enum() {
-      return globalThis.store.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
     },
     get enumNames() {
-      return globalThis.store.w3s.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
     }
   },
   publishers: {
     type: 'string',
     get enum() {
-      const allPublishers = globalThis.store.w3s.publisher.table.dataSource;
+      const allPublishers = globalThis.store.w3s.publisher.allData;
       return allPublishers.length ? allPublishers.map((i) => `${i.f_publisher_id}`) : [''];
     },
     get enumNames() {
-      const allPublishers = globalThis.store.w3s.publisher.table.dataSource;
+      const allPublishers = globalThis.store.w3s.publisher.allData;
       return allPublishers.length ? allPublishers.map((i) => `${i.f_name}`) : [''];
     }
   },

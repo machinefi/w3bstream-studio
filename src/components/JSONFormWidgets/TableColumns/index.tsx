@@ -215,6 +215,20 @@ const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
                   colorScheme="green"
                   fontWeight={700}
                   isChecked={item.value}
+                  sx={{
+                    '& > .chakra-checkbox__control[data-checked]': {
+                      background: '#946FFF',
+                      borderColor: '#946FFF',
+                      '&:hover': {
+                        background: '#946FFF',
+                        borderColor: '#946FFF'
+                      },
+                      '&[data-hover]': {
+                        background: '#946FFF',
+                        borderColor: '#946FFF'
+                      }
+                    }
+                  }}
                   onChange={(e) => {
                     if (column) {
                       dbTable.onChangeWidgetColumn({
@@ -318,6 +332,20 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
       <Flex justify="center" ml="10px" w="100px">
         <Checkbox
           isChecked={columnData.isPrimaryKey}
+          sx={{
+            '& > .chakra-checkbox__control[data-checked]': {
+              background: '#946FFF',
+              borderColor: '#946FFF',
+              '&:hover': {
+                background: '#946FFF',
+                borderColor: '#946FFF'
+              },
+              '&[data-hover]': {
+                background: '#946FFF',
+                borderColor: '#946FFF'
+              }
+            }
+          }}
           onChange={(e) => {
             if (item) {
               dbTable.onChangeWidgetColumn({

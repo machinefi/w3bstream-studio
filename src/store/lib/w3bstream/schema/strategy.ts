@@ -6,6 +6,8 @@ import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { StrategyType } from '@/server/routers/w3bstream';
 import { hooks } from '@/lib/hooks';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import { makeObservable, observable, set } from 'mobx';
 
 export const schema = {
   definitions: {
@@ -81,10 +83,14 @@ export default class StrategyModule {
           return [
             {
               props: {
-                bg: '#37A169',
-                color: '#fff',
                 size: 'xs',
+                ...defaultButtonStyle,
                 onClick: async () => {
+                  if (globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER') {
+                    this.form.uiSchema.appletID = {
+                      'ui:disabled': true
+                    };
+                  }
                   this.form.value.set({
                     appletID: item.f_applet_id.toString(),
                     eventType: String(item.f_event_type),
@@ -124,15 +130,14 @@ export default class StrategyModule {
             {
               props: {
                 ml: '8px',
-                bg: '#E53E3E',
-                color: '#fff',
                 size: 'xs',
+                ...defaultOutlineButtonStyle,
                 onClick() {
                   globalThis.store.base.confirm.show({
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
-                      const p = globalThis.store.w3s.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
+                      const p = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_project_id === item.f_project_id);
                       if (!p) {
                         return;
                       }
@@ -191,5 +196,17 @@ export default class StrategyModule {
         eventBus.emit('strategy.create');
       } catch (error) {}
     }
+  }
+
+  allData: StrategyType[] = [];
+
+  constructor() {
+    makeObservable(this, {
+      allData: observable
+    });
+  }
+
+  set(v: Partial<StrategyModule>) {
+    Object.assign(this, v);
   }
 }

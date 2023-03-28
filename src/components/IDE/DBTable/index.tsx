@@ -3,7 +3,7 @@ import { useStore } from '@/store/index';
 import { Box, Button, Flex, Stack, Image } from '@chakra-ui/react';
 import JSONTable from '@/components/JSONTable';
 import { useEffect, useRef, useState } from 'react';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { MdRefresh } from 'react-icons/md';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { hooks } from '@/lib/hooks';
@@ -21,10 +21,14 @@ const EditTable = observer(() => {
     }
   } = useStore();
 
+  if (!dbTable.currentTable.tableName) {
+    return null;
+  }
+
   return (
     <Box>
       <Flex alignItems="center">
-        <Button h="32px" leftIcon={<MdRefresh />} onClick={async (e) => {}}>
+        <Button h="32px" leftIcon={<MdRefresh />} {...defaultOutlineButtonStyle} onClick={async (e) => {}}>
           Refresh
         </Button>
       </Flex>
@@ -50,6 +54,7 @@ const EditTable = observer(() => {
                 <DeleteIcon
                   ml="12px"
                   boxSize={4}
+                  color="#946FFF"
                   cursor="pointer"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -68,10 +73,8 @@ const EditTable = observer(() => {
                 <EditIcon
                   ml="12px"
                   boxSize={4}
+                  color="#946FFF"
                   cursor="pointer"
-                  _hover={{
-                    color: 'blue.500'
-                  }}
                   onClick={async (e) => {
                     e.stopPropagation();
                     dbTable.setCurrentWidgetColumn({
@@ -123,6 +126,7 @@ const EditTable = observer(() => {
           <Button
             w="100px"
             size="sm"
+            {...defaultOutlineButtonStyle}
             leftIcon={<AddIcon />}
             onClick={async () => {
               dbTable.setCurrentWidgetColumn({
@@ -174,6 +178,10 @@ const ViewData = observer(() => {
     w3s: { dbTable }
   } = useStore();
 
+  if (!dbTable.currentTable.tableName) {
+    return null;
+  }
+
   if (DISABLED_TABLE_LIST.includes(dbTable.currentTable.tableName)) {
     return <JSONTable jsonstate={dbTable} />;
   }
@@ -184,7 +192,7 @@ const ViewData = observer(() => {
         <Button
           h="32px"
           leftIcon={<AddIcon />}
-          {...gradientButtonStyle}
+          {...defaultButtonStyle}
           onClick={async (e) => {
             const form = creatColumnDataForm(dbTable.currentColumns);
             const formData = await hooks.getFormData({
@@ -253,7 +261,7 @@ const QuerySQL = observer(() => {
             setQueryResult(JSON.stringify(result, null, 2));
           }}
         >
-          <Image p={1} h={6} w={6} borderRadius="4px" bg="gray.300" _hover={{ background: 'gray.400' }} src="/images/icons/execute.svg" />
+          <Image p={1} h={6} w={6} borderRadius="4px" bg="#946FFF" _hover={{ background: 'gray.200' }} src="/images/icons/execute.svg" />
         </Box>
       </Box>
       <Box p="1" fontSize="sm" fontWeight={700} color="#fff">

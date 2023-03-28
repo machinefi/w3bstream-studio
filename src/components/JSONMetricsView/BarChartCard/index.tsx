@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Box, Card, CardBody, CardHeader, Heading, Stack } from '@chakra-ui/react';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { SiSimpleanalytics } from 'react-icons/si';
@@ -16,7 +15,6 @@ export interface BarChartCard {
 }
 
 export const BarChartCard = ({ title, tips, data, config = {} }: BarChartCard) => {
-  const [activeIndex, setActiveIndex] = useState(0);
   const { containerWidth = '100%', containerHeight = 200, barWidth = 150, barHeight = 40 } = config;
   return (
     <Card>
@@ -36,14 +34,9 @@ export const BarChartCard = ({ title, tips, data, config = {} }: BarChartCard) =
               {/* <YAxis /> */}
               {/* <Tooltip /> */}
               {/* <Legend /> */}
-              <Bar
-                dataKey="value"
-                onClick={(data, index) => {
-                  setActiveIndex(index);
-                }}
-              >
+              <Bar dataKey="value" onClick={(data, index) => {}}>
                 {data.map((entry, index) => (
-                  <Cell cursor="pointer" fill={index === activeIndex ? '#8884d8' : '#82ca9d'} key={`cell-${index}`} />
+                  <Cell cursor="pointer" fill="#946FFF" key={`cell-${index}`} />
                 ))}
               </Bar>
             </BarChart>

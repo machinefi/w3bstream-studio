@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Flex, Icon, Tab, TabList, Tabs, Tooltip, Image, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Tab, TabList, Tabs, Tooltip, Image, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { MdHttp, MdLogout } from 'react-icons/md';
@@ -10,6 +10,8 @@ import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import StarCount from '../StarCount';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'CURRENT_APPLETS') {
@@ -61,19 +63,27 @@ const Header = observer(() => {
           }}
           sx={{
             '.chakra-tabs__tablist': {
-              border: '1px solid #000',
+              border: '1px solid rgba(148, 111, 255, 0.4)',
               borderRadius: '10px'
             }
           }}
         >
           <TabList>
-            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderLeftRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderLeftRadius="8px" _selected={{ color: 'white', bg: '#946FFF' }}>
               Applet
             </Tab>
-            <Tab w="70px" h="30px" fontSize="xs" fontWeight={700} borderLeft="1px solid #000" borderRight="1px solid #000" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab
+              w="70px"
+              h="30px"
+              fontSize="xs"
+              fontWeight={700}
+              borderLeft="1px solid rgba(148, 111, 255, 0.4)"
+              borderRight="1px solid rgba(148, 111, 255, 0.4)"
+              _selected={{ color: 'white', bg: '#946FFF' }}
+            >
               Publisher
             </Tab>
-            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderRightRadius="8px" _selected={{ color: 'white', bg: 'gray.900' }}>
+            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderRightRadius="8px" _selected={{ color: 'white', bg: '#946FFF' }}>
               Log
             </Tab>
           </TabList>
@@ -152,32 +162,35 @@ const Header = observer(() => {
             eventBus.emit('postman.request');
           }}
         />
+        <StarCount />
         <Profile />
       </Flex>
     </Flex>
   );
 });
 
-const accountAddressFormat = (address) => {
-  const len = address.length;
-  return `${address.substring(0, 10)}...${address.substring(len - 9, len)}`;
-};
-
 const Profile = observer(() => {
   const {
     w3s,
     base: { confirm }
   } = useStore();
-  const { accountID, address } = w3s.config.form.formData;
+  const { accountID } = w3s.config.form.formData;
 
   if (accountID) {
     return (
-      <Menu>
-        <MenuButton>{address ? <Button bg="rgba(0, 0, 0, 0.03)">{accountAddressFormat(address)}</Button> : <Button bg="rgba(0, 0, 0, 0.03)">accountID: {accountID}</Button>}</MenuButton>
-        <MenuList py={0}>
-          {!address && (
-            <MenuItem
-              icon={<EditIcon />}
+      <Popover>
+        <PopoverTrigger>
+          <Button bg="#F3F3F3" borderRadius="60px">
+            accountID: {accountID}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent bg="#fff" w="260px">
+          <PopoverArrow bg="#fff" />
+          <PopoverBody mt="10px">
+            <Button
+              w="100%"
+              leftIcon={<EditIcon />}
+              {...defaultOutlineButtonStyle}
               onClick={async () => {
                 const formData = await hooks.getFormData({
                   title: 'Update Password',
@@ -201,28 +214,37 @@ const Profile = observer(() => {
               }}
             >
               Update password
-            </MenuItem>
-          )}
-          <MenuItem
-            icon={<MdLogout />}
-            onClick={() => {
-              confirm.show({
-                title: 'Warning',
-                description: 'Are you sure you want to log out?',
-                async onOk() {
-                  w3s.config.logout();
-                }
-              });
-            }}
-          >
-            Log out
-          </MenuItem>
-        </MenuList>
-      </Menu>
+            </Button>
+            <Button
+              mt="10px"
+              w="100%"
+              leftIcon={<MdLogout />}
+              {...defaultOutlineButtonStyle}
+              onClick={() => {
+                confirm.show({
+                  title: 'Warning',
+                  description: 'Are you sure you want to log out?',
+                  async onOk() {
+                    w3s.config.logout();
+                  }
+                });
+              }}
+            >
+              Log out
+            </Button>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
     );
   }
 
-  return <Link href="/login">Login</Link>;
+  return (
+    <Link href="/login">
+      <Button h="32px" {...defaultButtonStyle}>
+        Login
+      </Button>
+    </Link>
+  );
 });
 
 export default Header;

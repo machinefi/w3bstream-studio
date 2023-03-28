@@ -7,16 +7,17 @@ import initTemplates from '@/constants/initTemplates.json';
 import { makeObservable, observable } from 'mobx';
 import { ProjectEnvsWidget } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
-import EditorWidget from '@/components/JSONFormWidgets/EditorWidget';
-import { rootStore } from '@/store/index';
 import { hooks } from '@/lib/hooks';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { AppletType, ProjectType, PublisherType, InstanceType, StrategyType } from '@/server/routers/w3bstream';
+import { trpc } from '@/lib/trpc';
+import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
 
 export const defaultSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', title: 'Name' },
-    envs: { type: 'string', title: '' },
-    dbSchema: { type: 'string', title: 'Project Database Schema' }
+    envs: { type: 'string', title: '' }
   },
   required: ['name']
 } as const;
@@ -29,15 +30,82 @@ export const initializationTemplateSchema = {
   required: ['template']
 } as const;
 
+export const developerInitializationTemplateSchema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string', title: 'Name' },
+    description: { type: 'string', title: 'Description' },
+    template: { type: 'string', title: 'Explore Templates' }
+  },
+  required: ['template']
+} as const;
+
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
+type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;
+
 interface Env {
   id: string;
   key: string;
   value: string;
 }
 
+interface OnLoadCompletedProps {
+  applets: AppletType[];
+  publishers: PublisherType[];
+  instances: InstanceType[];
+  strategies: StrategyType[];
+}
+
 export default class ProjectModule {
+  allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
+    defaultValue: [],
+    function: async () => {
+      const res = await trpc.api.projects.query();
+      if (res) {
+        const applets = [];
+        const instances = [];
+        let strategies = [];
+        let publishers = [];
+        res.forEach((p: ProjectType) => {
+          // p.project_files = new FilesListSchema();
+          p.applets.forEach((a: AppletType) => {
+            a.project_name = p.f_name;
+            a.instances.forEach((i) => {
+              instances.push({
+                project_id: p.f_project_id,
+                project_name: p.f_name,
+                applet_id: a.f_applet_id,
+                applet_name: a.f_name,
+                ...i
+              });
+            });
+            applets.push({
+              ...a,
+              project_name: p.f_name
+            });
+            strategies = strategies.concat(a.strategies);
+          });
+          p.publishers.forEach((pub) => {
+            // @ts-ignore
+            pub.project_id = p.f_project_id;
+            // @ts-ignore
+            pub.project_name = p.f_name;
+            publishers.push(pub);
+          });
+        });
+        // console.log(toJS(res));
+        this.onLoadCompleted({
+          applets,
+          publishers,
+          instances,
+          strategies
+        });
+      }
+      return res;
+    }
+  });
+
   form = new JSONSchemaFormState<DefaultSchemaType>({
     //@ts-ignore
     schema: defaultSchema,
@@ -48,12 +116,6 @@ export default class ProjectModule {
       },
       envs: {
         'ui:widget': ProjectEnvsWidget
-      },
-      dbSchema: {
-        'ui:widget': EditorWidget,
-        'ui:options': {
-          readOnly: false
-        }
       }
     },
     afterSubmit: async (e) => {
@@ -87,7 +149,40 @@ export default class ProjectModule {
     })
   });
 
+  developerInitializationTemplateForm = new JSONSchemaFormState<DeveloperInitializationTemplateSchemaType>({
+    //@ts-ignore
+    schema: developerInitializationTemplateSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      template: {
+        'ui:widget': InitializationTemplateWidget
+      },
+      layout: [['name', 'description'], 'template']
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.developerInitializationTemplateForm.reset();
+    },
+    customValidate(formData, errors) {
+      if (!formData.template) {
+        errors.template.addError('Please select a template');
+      }
+      return errors;
+    },
+    value: new JSONValue<DeveloperInitializationTemplateSchemaType>({
+      default: {
+        name: '',
+        description: '',
+        template: ''
+      }
+    })
+  });
+
   formMode: 'add' | 'edit' = 'add';
+
   envs: Env[] = [];
 
   onAddEnv() {
@@ -97,9 +192,11 @@ export default class ProjectModule {
       value: ''
     });
   }
+
   onDeleteEnv(id: string) {
     this.envs = this.envs.filter((i) => i.id !== id);
   }
+
   onChangeEnv(id: string, key: string, value: string) {
     for (let i = 0; i < this.envs.length; i++) {
       const item = this.envs[i];
@@ -110,9 +207,27 @@ export default class ProjectModule {
       }
     }
   }
+
+  async setMode(mode: 'add' | 'edit') {
+    if (mode === 'add') {
+      this.form.reset();
+      this.form.uiSchema['ui:submitButtonOptions'].norender = false;
+      this.form.uiSchema.name = {
+        'ui:disabled': false
+      };
+    } else {
+      this.form.uiSchema['ui:submitButtonOptions'].norender = true;
+      this.form.uiSchema.name = {
+        'ui:disabled': true
+      };
+    }
+    this.formMode = mode;
+    this.setEnvs();
+  }
+
   async setEnvs() {
     if (this.formMode === 'edit') {
-      this.envs = globalThis.store.w3s.curProject?.config?.env || [
+      this.envs = this.curProject?.config?.env || [
         {
           id: uuidv4(),
           key: '',
@@ -129,73 +244,24 @@ export default class ProjectModule {
       ];
     }
   }
+
   async onSaveEnv() {
-    const projectName = this.form.value.get().name;
     const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
     if (values.length) {
-      try {
-        await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
-        await showNotification({ message: 'Save environment variables successfully' });
-      } catch (error) {
-        throw error;
-      }
-    }
-  }
-
-  async onSaveDBSchema() {
-    const projectName = this.form.value.get().name;
-    const dbSchema = this.form.value.get().dbSchema;
-    if (!dbSchema) return;
-    await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_SCHEMA`, dbSchema, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    await showNotification({ message: 'create database succeeded!' });
-  }
-
-  async setMode(mode: 'add' | 'edit') {
-    if (mode === 'add') {
-      this.form.reset();
-      this.form.uiSchema['ui:submitButtonOptions'].norender = false;
-      this.form.uiSchema.name = {
-        'ui:disabled': false
-      };
-      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
-      this.form.uiSchema.dbSchema['ui:options'].readOnly = false;
-      this.form.value.set({
-        dbSchema: ''
-      });
-    } else {
-      this.form.uiSchema['ui:submitButtonOptions'].norender = true;
-      this.form.uiSchema.name = {
-        'ui:disabled': true
-      };
-      await rootStore.w3s.allProjects.call();
-      this.setDBSchema();
-    }
-    this.formMode = mode;
-    this.setEnvs();
-  }
-
-  setDBSchema() {
-    if (!globalThis.store.w3s.curProject?.config?.schema) {
-      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = true;
-      this.form.uiSchema.dbSchema['ui:options'].afterSubmit = (value: string) => {
-        this.form.value.set({
-          dbSchema: value
+      const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.f_name : this.form.value.get().name;
+      if (projectName) {
+        try {
+          await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
+          showNotification({ message: 'Save environment variables successfully' });
+        } catch (error) {
+          throw error;
+        }
+      } else {
+        showNotification({
+          color: 'red',
+          message: 'Project name is empty'
         });
-        this.onSaveDBSchema();
-      };
-      this.form.value.set({
-        dbSchema: ''
-      });
-    } else {
-      this.form.uiSchema.dbSchema['ui:options'].showSubmitButton = false;
-      this.form.uiSchema.dbSchema['ui:options'].readOnly = true;
-      this.form.value.set({
-        dbSchema: JSON.stringify(globalThis.store.w3s.curProject?.config?.schema, null, 2)
-      });
+      }
     }
   }
 
@@ -227,7 +293,6 @@ export default class ProjectModule {
           await showNotification({ message: 'create project succeeded' });
         }
         await this.onSaveEnv();
-        await this.onSaveDBSchema();
       } catch (error) {}
     }
     if (formData.template) {
@@ -257,10 +322,65 @@ export default class ProjectModule {
     });
   }
 
-  constructor() {
+  async createProjectForDeleveloper() {
+    const formData = await hooks.getFormData({
+      title: 'Create a New Project',
+      size: '6xl',
+      formList: [
+        {
+          form: this.developerInitializationTemplateForm
+        }
+      ]
+    });
+    if (formData.template) {
+      const data = initTemplates.templates.find((i) => i.name === formData.template);
+      const res = await axios.request({
+        method: 'post',
+        url: `/api/init`,
+        data
+      });
+      if (res.data) {
+        await showNotification({ message: 'Create project succeeded' });
+        eventBus.emit('project.create');
+      }
+    }
+  }
+
+  get curProject() {
+    return this.allProjects.current;
+  }
+
+  selectedNames = [];
+
+  selectProjectName(projectName: string, checked: boolean) {
+    const index = this.selectedNames.findIndex((i) => i === projectName);
+    if (checked && index === -1) {
+      this.selectedNames.push(projectName);
+    }
+    if (!checked && index !== -1) {
+      this.selectedNames.splice(index, 1);
+    }
+  }
+
+  resetSelectedNames() {
+    this.selectedNames = [];
+  }
+
+  constructor({
+    onLoadCompleted
+  }: Partial<{
+    onLoadCompleted: (data: OnLoadCompletedProps) => void;
+  }> = {}) {
     makeObservable(this, {
       envs: observable,
-      formMode: observable
+      formMode: observable,
+      selectedNames: observable
     });
+
+    if (onLoadCompleted) {
+      this.onLoadCompleted = onLoadCompleted;
+    }
   }
+
+  onLoadCompleted(data: OnLoadCompletedProps) {}
 }

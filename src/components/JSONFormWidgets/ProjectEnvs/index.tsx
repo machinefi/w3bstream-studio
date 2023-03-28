@@ -2,6 +2,7 @@ import { Box, Flex, Stack, Input, Button } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const ProjectEnvs = observer(() => {
   const {
@@ -51,6 +52,7 @@ export const ProjectEnvs = observer(() => {
         <Button
           variant="outline"
           fontWeight={400}
+          {...defaultOutlineButtonStyle}
           onClick={() => {
             project.onAddEnv();
           }}
@@ -61,6 +63,7 @@ export const ProjectEnvs = observer(() => {
           <Button
             ml="10px"
             fontWeight={400}
+            {...defaultButtonStyle}
             onClick={() => {
               project.onSaveEnv();
             }}

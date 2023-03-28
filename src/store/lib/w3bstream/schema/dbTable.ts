@@ -12,6 +12,7 @@ import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidge
 import { showNotification } from '@mantine/notifications';
 import format from 'pg-format';
 import { DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const createTableSchema = {
   type: 'object',
@@ -95,7 +96,7 @@ export default class DBTableModule {
     }),
     isServerPaging: true,
     rowKey: 'f_id',
-    containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
+    containerProps: { mt: 4 }
   });
 
   createTableForm = new JSONSchemaFormState<CreateTableSchemaType>({
@@ -331,6 +332,12 @@ export default class DBTableModule {
         tableId,
         cascade
       });
+      this.setCurrentTable({
+        tableId: 0,
+        tableSchema: '',
+        tableName: '',
+        disabled: true
+      });
       this.allTableNames.call();
     } catch (error) {
       console.log('error', error);
@@ -496,8 +503,8 @@ export default class DBTableModule {
             return [
               {
                 props: {
-                  colorScheme: 'red',
                   size: 'xs',
+                  ...defaultOutlineButtonStyle,
                   onClick: async () => {
                     globalThis.store.base.confirm.show({
                       title: 'Warning',

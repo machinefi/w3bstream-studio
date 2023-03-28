@@ -1,5 +1,24 @@
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
 
+export const defaultButtonStyle = {
+  bg: '#946FFF',
+  color: '#fff',
+  _hover: { background: '#9d7cfc' },
+  _active: {
+    background: '#8e68fc'
+  }
+};
+
+export const defaultOutlineButtonStyle = {
+  variant: 'outline',
+  borderColor: '#946FFF',
+  color: '#946FFF',
+  _hover: { background: '#9d7cfc', color: '#fff' },
+  _active: {
+    background: '#8e68fc'
+  }
+};
+
 export const gradientButtonStyle = {
   bg: 'linear-gradient(93.42deg, #6FB2FF 2.82%, #946FFF 97.18%)',
   color: '#fff',

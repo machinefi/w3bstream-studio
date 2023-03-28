@@ -7,7 +7,10 @@ import toast from 'react-hot-toast';
 import { useEffect } from 'react';
 
 const PublishEventRequestTemplates = observer(() => {
-  const { w3s } = useStore();
+  const {
+    w3s: { publisher }
+  } = useStore();
+  const { formData } = publisher.publishEventForm;
 
   const store = useLocalObservable(() => ({
     curTemplateKey: '',
@@ -17,8 +20,8 @@ const PublishEventRequestTemplates = observer(() => {
     },
     templates: ['cURL', 'JS', 'Go', 'Rust'],
     requestData() {
-      const { projectName } = w3s.publisher.publishEventForm.formData;
-      const data = w3s.publisher.generateBody();
+      const { projectName } = formData;
+      const data = publisher.parseBody();
       return {
         data,
         projectName
@@ -35,14 +38,14 @@ const PublishEventRequestTemplates = observer(() => {
       curTemplateKey,
       curTemplate: getTemplate(curTemplateKey, store.requestData())
     });
-  }, [w3s.publisher.publishEventForm.formData.projectName]);
+  }, [formData.projectName, formData.publisher]);
 
   const onClose = () => {
-    w3s.publisher.showPublishEventRequestTemplates = false;
+    publisher.showPublishEventRequestTemplates = false;
   };
 
   return (
-    <Drawer isOpen={w3s.publisher.showPublishEventRequestTemplates} placement="right" size="lg" onClose={onClose}>
+    <Drawer isOpen={publisher.showPublishEventRequestTemplates} placement="right" size="lg" onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
@@ -89,7 +92,9 @@ const PublishEventRequestTemplates = observer(() => {
 });
 
 export const ShowRequestTemplatesButton = observer(() => {
-  const { w3s } = useStore();
+  const {
+    w3s: { publisher }
+  } = useStore();
   return (
     <Button
       mt="10px"
@@ -99,12 +104,12 @@ export const ShowRequestTemplatesButton = observer(() => {
       borderColor="#6FB2FF"
       color="#6FB2FF"
       onClick={() => {
-        const { projectName } = w3s.publisher.publishEventForm.formData;
+        const { projectName } = publisher.publishEventForm.formData;
         if (!projectName) {
           toast.error('Please select the project first');
           return;
         }
-        w3s.publisher.showPublishEventRequestTemplates = true;
+        publisher.showPublishEventRequestTemplates = true;
       }}
     >
       Show Request Templates

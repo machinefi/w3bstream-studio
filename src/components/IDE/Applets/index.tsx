@@ -2,11 +2,10 @@ import { Button, Flex } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { AddIcon } from '@chakra-ui/icons';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 import { useEffect } from 'react';
 import { hooks } from '@/lib/hooks';
-import { dataURItoBlob } from '@rjsf/utils';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
@@ -18,12 +17,12 @@ const AddBtn = observer(() => {
       <Button
         h="32px"
         leftIcon={<AddIcon />}
-        {...gradientButtonStyle}
+        {...defaultButtonStyle}
         onClick={async (e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
             w3s.applet.form.value.set({
-              projectID: w3s.curProject?.f_project_id.toString(),
-              projectName: w3s.curProject?.f_name
+              projectID: w3s.project.curProject?.f_project_id.toString(),
+              projectName: w3s.project.curProject?.f_name
             });
           }
           w3s.applet.createApplet();
@@ -34,7 +33,7 @@ const AddBtn = observer(() => {
       <Button
         ml="20px"
         h="32px"
-        {...gradientButtonStyle}
+        {...defaultButtonStyle}
         onClick={async (e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
             w3s.showContent = 'CURRENT_EVENT_LOGS';
@@ -57,7 +56,7 @@ const AddBtn = observer(() => {
               headers: {
                 'Content-Type': 'text/plain'
               },
-              data: w3s.publisher.generateBody()
+              data: w3s.publisher.parseBody()
             });
             if (res.data) {
               await showNotification({ message: 'publish event succeeded' });
@@ -77,7 +76,7 @@ const Applets = observer(() => {
 
   useEffect(() => {
     if (w3s.showContent === 'CURRENT_APPLETS') {
-      const applets = w3s.curProject?.applets || [];
+      const applets = w3s.project.curProject?.applets || [];
       w3s.applet.table.set({
         dataSource: applets
       });
@@ -86,7 +85,7 @@ const Applets = observer(() => {
         dataSource: w3s.applet.allData
       });
     }
-  }, [w3s.curProject, w3s.showContent]);
+  }, [w3s.project.curProject, w3s.showContent]);
 
   return (
     <>

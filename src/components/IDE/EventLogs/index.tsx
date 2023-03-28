@@ -4,7 +4,7 @@ import { useStore } from '@/store/index';
 import { Box, Button, Flex, Spinner, Text } from '@chakra-ui/react';
 import MonacoEditor from '@monaco-editor/react';
 import { _ } from '@/lib/lodash';
-import { gradientButtonStyle } from '@/lib/theme';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
@@ -37,13 +37,16 @@ const fetchWasmLogs = async ({ projectName, limit = 20, offset = 0 }: { projectN
 
 const EventLogs = observer(() => {
   const {
-    w3s: { publisher, curProject }
+    w3s: {
+      publisher,
+      project: { curProject }
+    }
   } = useStore();
 
   const changeCodeRef = useRef(
     _.debounce((codeStr: string) => {
       publisher.publishEventForm.value.set({
-        payload: codeStr
+        body: codeStr
       });
     }, 800)
   );
@@ -79,14 +82,14 @@ const EventLogs = observer(() => {
   return (
     <Box bg="#000">
       <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
-        Payload:
+        Body:
       </Box>
       <Box pos="relative">
         <MonacoEditor
           height={300}
           theme="vs-dark"
           language="json"
-          value={publisher.publishEventForm.formData.payload}
+          value={publisher.publishEventForm.formData.body}
           onChange={(v) => {
             changeCodeRef.current && changeCodeRef.current(v);
           }}
@@ -95,7 +98,7 @@ const EventLogs = observer(() => {
           <Button
             type="submit"
             borderRadius="base"
-            {...gradientButtonStyle}
+            {...defaultOutlineButtonStyle}
             onClick={async () => {
               const projectName = curProject?.f_name;
               if (projectName) {
@@ -105,7 +108,7 @@ const EventLogs = observer(() => {
                   headers: {
                     'Content-Type': 'text/plain'
                   },
-                  data: publisher.generateBody()
+                  data: publisher.parseBody()
                 });
                 if (res.data) {
                   await showNotification({ message: 'publish event succeeded' });

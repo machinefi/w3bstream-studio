@@ -12,7 +12,7 @@ const ToolBar = (props: ToolBar) => {
     w: '8',
     borderRadius: '4px',
     cursor: 'pointer',
-    _hover: { background: 'gray.200', }
+    _hover: { background: 'gray.200' }
   };
 
   return (
@@ -39,7 +39,7 @@ const ToolBar = (props: ToolBar) => {
                 w3s.showContent = 'ALL_APPLETS';
               }}
               {...iconStyle}
-              {...getSelectedStyles(w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES' || w3s.showContent === 'ALL_STRATEGIES' || w3s.showContent === 'ALL_PUBLISHERS')}
+              {...getSelectedStyles(w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES' || w3s.showContent === 'STRATEGIES' || w3s.showContent === 'ALL_PUBLISHERS')}
             />
           </Box>
         </Tooltip>
@@ -50,10 +50,10 @@ const ToolBar = (props: ToolBar) => {
               mt="10px"
               src="/images/icons/monitor.svg"
               onClick={() => {
-                w3s.showContent = 'ALL_CONTRACT_LOGS';
+                w3s.showContent = 'CONTRACT_LOGS';
               }}
               {...iconStyle}
-              {...getSelectedStyles(w3s.showContent === 'ALL_CONTRACT_LOGS' || w3s.showContent === 'All_CHAIN_TX' || w3s.showContent === 'All_CHAIN_HEIGHT')}
+              {...getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT')}
             />
           </Box>
         </Tooltip>
