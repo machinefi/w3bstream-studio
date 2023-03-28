@@ -1,3 +1,4 @@
+import { StdIOType } from '@/server/wasmvm';
 import { EventEmitter } from 'events';
 import TypedEmitter from 'typed-emitter';
 class MyEmitter extends EventEmitter {
@@ -39,6 +40,8 @@ interface MessageEvents {
   'chainHeight.delete': () => void;
   'base.formModal.abort': () => void;
   'base.formModal.afterSubmit': (formData: any) => void;
+  'wasmvm.stdout': (message: StdIOType) => void;
+  'wasmvm.stderr': (message: StdIOType) => void;
 
   signer: (signer: any) => void;
   provider: (signer: any) => void;
