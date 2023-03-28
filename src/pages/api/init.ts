@@ -2,12 +2,16 @@ import fetch, { FormData, File } from 'node-fetch';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 interface Project {
-  projectName: string;
+  name: string;
+  description: string;
   applets: Applet[];
   datas: {
     monitor: Monitor;
   }[];
   envs: string[][];
+  schema: {
+    [x: string]: any;
+  };
 }
 
 interface Applet {
@@ -43,30 +47,30 @@ const createProject = async (
   projectID: string;
   projectName: string;
 }> => {
-  const name = `${project.projectName}_${Date.now()}`;
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project`, {
     method: 'post',
-    body: JSON.stringify({
-      name
-    }),
+    body: JSON.stringify(project),
     headers: { Authorization: token }
   });
   const data: any = await response.json();
-  return {
-    projectID: data.projectID,
-    projectName: data.name
-  };
+  if (data.project) {
+    return {
+      projectID: data.project.projectID,
+      projectName: data.project.name
+    };
+  }
+  throw data;
 };
 
-const saveEnvs = async (projectName: string, envs: string[][], token: string): Promise<void> => {
-  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project_config/${projectName}/PROJECT_ENV`, {
-    method: 'post',
-    body: JSON.stringify({
-      env: envs
-    }),
-    headers: { Authorization: token }
-  });
-};
+// const saveEnvs = async (projectName: string, envs: string[][], token: string): Promise<void> => {
+//   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project_config/${projectName}/PROJECT_ENV`, {
+//     method: 'post',
+//     body: JSON.stringify({
+//       env: envs
+//     }),
+//     headers: { Authorization: token }
+//   });
+// };
 
 const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { projectName: string }, token: string): Promise<string> => {
   const response = await fetch(wasmURL);
@@ -91,7 +95,10 @@ const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { pro
     body: formData
   });
   const data: any = await res.json();
-  return data.appletID;
+  if (data.appletID) {
+    return data.appletID;
+  }
+  throw new Error("Can't create applet");
 };
 
 const deployApplet = async (appletID: string, token: string): Promise<string> => {
@@ -164,9 +171,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       for (const p of project) {
         const { projectID, projectName } = await createProject(p, token);
-        if (p.envs?.length > 0) {
-          await saveEnvs(projectName, p.envs, token);
-        }
+        // if (p.envs?.length > 0) {
+        //   await saveEnvs(projectName, p.envs, token);
+        // }
         for (const a of p.applets) {
           const appletID = await createApplet({ ...a, projectName }, token);
           const instanceID = await deployApplet(appletID, token);

@@ -288,15 +288,18 @@ export default class ProjectModule {
           url: '/api/w3bapp/project',
           data: formData
         });
-        if (res.data) {
+        if (res.data?.project) {
           eventBus.emit('project.create');
           await showNotification({ message: 'create project succeeded' });
+          await this.onSaveEnv();
         }
-        await this.onSaveEnv();
       } catch (error) {}
     }
     if (formData.template) {
-      const data = initTemplates.templates.find((i) => i.name === formData.template);
+      const templateData = initTemplates.templates.find((i) => i.name === formData.template);
+      const data = JSON.parse(JSON.stringify(templateData));
+      const templateProjectName = templateData.project[0].name;
+      data.project[0].name = `${templateProjectName}_${uuidv4().slice(0, 4)}`;
       const res = await axios.request({
         method: 'post',
         url: `/api/init`,
@@ -325,7 +328,7 @@ export default class ProjectModule {
   async createProjectForDeleveloper() {
     const formData = await hooks.getFormData({
       title: 'Create a New Project',
-      size: '6xl',
+      size: '2xl',
       formList: [
         {
           form: this.developerInitializationTemplateForm
@@ -333,7 +336,18 @@ export default class ProjectModule {
       ]
     });
     if (formData.template) {
-      const data = initTemplates.templates.find((i) => i.name === formData.template);
+      const templateData = initTemplates.templates.find((i) => i.name === formData.template);
+      const data = JSON.parse(JSON.stringify(templateData));
+      if (formData.name) {
+        data.project[0].projectName = formData.name;
+      } else {
+        const templateProjectName = templateData.project[0].name;
+        const len = this.allProjects.value.filter((i) => i.f_name.includes(templateProjectName)).length;
+        data.project[0].name = `${templateProjectName}_${len + 1}`;
+      }
+      if (formData.description) {
+        data.project[0].description = formData.description;
+      }
       const res = await axios.request({
         method: 'post',
         url: `/api/init`,
