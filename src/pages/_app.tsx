@@ -13,6 +13,9 @@ import type { AppProps } from 'next/app';
 import { NotificationsProvider } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import superjson from 'superjson';
+import { Inspector, InspectParams } from 'react-dev-inspector';
+
+const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
 
 import '@/lib/superjson';
 function MyApp({ Component, pageProps }: AppProps) {
@@ -33,12 +36,25 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return useMemo(() => {
     return (
-      <ChakraProvider theme={theme}>
-        <NotificationsProvider>
-          <Toaster />
-          <Component {...pageProps} />
-        </NotificationsProvider>
-      </ChakraProvider>
+      <InspectorWrapper
+        // props see docs:
+        // https://github.com/zthxxx/react-dev-inspector#inspector-component-props
+        keys={['control', 'shift', 'z']}
+        disableLaunchEditor={true}
+        onClickElement={({ codeInfo }: InspectParams) => {
+          if (!codeInfo?.absolutePath) return;
+          const { absolutePath, lineNumber, columnNumber } = codeInfo;
+          // you can change the url protocol if you are using in Web IDE
+          window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`);
+        }}
+      >
+        <ChakraProvider theme={theme}>
+          <NotificationsProvider>
+            <Toaster />
+            <Component {...pageProps} />
+          </NotificationsProvider>
+        </ChakraProvider>
+      </InspectorWrapper>
     );
   }, [Component, pageProps]);
 }

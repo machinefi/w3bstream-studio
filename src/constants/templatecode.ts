@@ -21,7 +21,7 @@ export const templatecode = {
   }
   </script>
   `,
-  'interferenceExample.ts':`var width  = 320;
+  'interferenceExample.ts': `var width  = 320;
   var height = 200;
   
   // Let's utilize the entire heap as our image buffer
@@ -72,7 +72,7 @@ export const templatecode = {
     if (needed > actual) memory.grow(needed - actual);
   }
   `,
-  'interferenceExample.html':`<canvas id="canvas" style="width: 100%; height: 100%; background: #aff"></canvas>
+  'interferenceExample.html': `<canvas id="canvas" style="width: 100%; height: 100%; background: #aff"></canvas>
   <script type="module">
   const exports = await instantiate(await compile());
   const canvas = document.getElementById("canvas");
@@ -105,7 +105,81 @@ export const templatecode = {
     context.putImageData(image, 0, 0);
   })();
   </script>
+  `,
+  'json.ts': `
+//sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+export function start(rid: i32): i32 {
+  Log(rid.toString());
+  const message = GetDataByRID(rid);
+  Log(message);
+  let jsonObj: JSON.Obj = JSON.parse(
+     message
+  ) as JSON.Obj;
+  let employeesOrNull: JSON.Obj | null = jsonObj.getObj("employees");
+  if (employeesOrNull != null) {
+        let employees: JSON.Obj = employeesOrNull;
+        let employeeOrNull: JSON.Arr | null = employees.getArr("employee");
+        if (employeeOrNull != null) {
+            let employee: JSON.Arr = employeeOrNull;
+            let valueOfArray: JSON.Value[] = employee.valueOf();
+            for (let i = 0; i < valueOfArray.length; i++) {
+                let value: JSON.Value = valueOfArray[i];
+                let employeeObj: JSON.Obj = value as JSON.Obj;
+                let firstNameOrNull: JSON.Str | null =
+                    employeeObj.getString("firstName");
+                if (firstNameOrNull != null) {
+                    let firstName: string = firstNameOrNull.valueOf();
+                    Log("firstName:" + firstName);
+                }
+                let lastNameOrNull: JSON.Str | null = employeeObj.getString("lastName");
+                if (lastNameOrNull != null) {
+                    let lastName: string = lastNameOrNull.valueOf();
+                    Log("lastName:" + lastName);
+                }
+                let photoOrNull: JSON.Str | null = employeeObj.getString("photo");
+                if (photoOrNull != null) {
+                    let photo: string = photoOrNull.valueOf();
+                    Log("photo:" + photo);
+                }
+            }
+        }
+    }
+  return 0;
+}
+  `,
+  'log.ts': `
+  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+  export function start(rid: i32): i32 {
+    Log("start from typescript");
+    const message = GetDataByRID(rid);
+    Log("wasm received message:" + message);
+    return 0;
+  }
+  `,
+  'sendTx.ts': `
+//sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+export function start(rid: i32): i32 {
+  Log("Log:start from typescript123");
+  SendTx(
+      4690,
+      "0x4BF7916893DfA78834B2F8B535654682d36e1163",
+      "0",
+      \`6a627842000000000000000000000000${'0x9117f5EF4156709092f79740a97b1638cA399A00'.replace('0x', '')}\`
+    );
+  // const message = GetDataByRID(rid);
+  return rid;
+}
+`,
+  'setDB.ts': `
+  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+   export function start(rid: i32): i32 {
+     Log("Log:start from typescript123");
+     SetDB("count",1);
+     const count = GetDB("count");
+     if(count){
+        Log("count:"+count.toString());
+     }
+     return rid;
+   }
   `
-  ,
-
 };

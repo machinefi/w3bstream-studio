@@ -2,7 +2,7 @@ import { IndexDb } from '@/lib/dexie';
 import _ from 'lodash';
 import { toJS, makeAutoObservable } from 'mobx';
 import { v4 as uuidv4 } from 'uuid';
-import { templatecode } from '../../../../lib/templatecode';
+import { templatecode } from '../../../../constants/templatecode';
 import { VSCodeFilesType } from '../project';
 import { helper } from '@/lib/helper';
 import { rootStore } from '@/store/index';
@@ -11,6 +11,7 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { dataURItoBlob } from '@rjsf/utils';
 import { StorageState } from '@/store/standard/StorageState';
+import { examples } from '@/constants/initWASMExamples';
 
 type FileItemDataType<T = any> = {
   code?: string;
@@ -44,12 +45,7 @@ export class FilesListSchema {
       type: 'folder',
       label: 'Browser Files',
       children: [
-        {
-          type: 'file',
-          key: uuidv4(),
-          label: `module.ts`,
-          data: { code: templatecode['module.ts'], language: 'typescript' }
-        }
+        examples
       ]
     },
     {
@@ -202,6 +198,10 @@ export class FilesListSchema {
 
   get curActiveFile() {
     return this.findFile(this.files, this.curActiveFileId) || null;
+  }
+
+  curActiveFileIs(label: 'html' | 'ts' | 'wasm') {
+    return this?.curActiveFile?.label.endsWith(`.${label}`);
   }
 
   createFileFormFolder(file: FilesItemType, action: 'file' | 'folder') {
