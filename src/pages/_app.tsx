@@ -32,6 +32,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (!token && !['/openapi', '/admin-login'].includes(router.pathname)) {
       NextRouter.push('/login');
     }
+
+    if (token) {
+      w3s.init();
+    }
   }, [token]);
 
   return useMemo(() => {
