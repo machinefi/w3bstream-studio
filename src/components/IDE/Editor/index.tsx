@@ -3,7 +3,7 @@ import MonacoEditor from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 let asc: typeof import('assemblyscript/dist/asc');
 import { useStore } from '@/store/index';
-import { Box, Button, Center, Flex, Popover, PopoverBody, PopoverContent, PopoverTrigger, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Popover, PopoverBody, PopoverContent, PopoverTrigger, Portal, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
@@ -17,6 +17,8 @@ import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
 import dayjs from 'dayjs';
 import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
 import { defaultButtonStyle } from '@/lib/theme';
+import { SmallCloseIcon } from '@chakra-ui/icons';
+import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 
 const Editor = observer(() => {
   const {
@@ -172,35 +174,85 @@ const Editor = observer(() => {
     }
   }, [curFilesListSchema?.curActiveFile]);
 
+  const CurActiveFileRightClickMenu = observer(({ activeFile }: { activeFile: FilesItemType }) => {
+    return (
+      <>
+        <Portal>
+          <ContextMenu id={`ActiveFileContent${activeFile.key}`} onShow={() => {}} onHide={() => {}}>
+            <Box p={2} bg="#fff" boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px">
+              <MenuItem
+                onClick={() => {
+                  curFilesListSchema.deleteActiveFiles(activeFile);
+                }}
+              >
+                <Box cursor="pointer">Close</Box>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  curFilesListSchema.deleteOtherActiveFiles(activeFile);
+                }}
+              >
+                <Box cursor="pointer">Close Other</Box>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  curFilesListSchema.deleteRightActiveFiles(activeFile);
+                }}
+              >
+                <Box cursor="pointer">Close the TAB on the right</Box>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  curFilesListSchema.deleteLeftActiveFiles(activeFile);
+                }}
+              >
+                <Box cursor="pointer">Close the TAB on the left</Box>
+              </MenuItem>
+            </Box>
+          </ContextMenu>
+        </Portal>
+      </>
+    );
+  });
+
   return (
     <Box>
       {/* Active Bar Headers  */}
       <Flex w="full" bg="#2f3030" alignItems={'center'} position={'relative'}>
-        {curFilesListSchema?.activeFiles.map((i) => {
+        {curFilesListSchema?.activeFiles.map((i, index) => {
           return (
             <>
-              {i?.label && (
-                <Box
-                  onClick={() => {
-                    store.showPreviewMode = false;
-                    curFilesListSchema.setCurActiveFile(i);
-                  }}
-                  display="flex"
-                  py={2}
-                  px={2}
-                  background={i?.key == curFilesListSchema?.curActiveFile?.key ? '#1e1e1e' : 'none'}
-                  fontSize="sm"
-                  color={i?.key == curFilesListSchema?.curActiveFile?.key ? '#a9dc76' : 'white'}
-                  cursor="pointer"
-                  alignItems={'center'}
-                >
-                  {FileIcon(i)}
-                  <Text mr="4">{i?.label}</Text>
-                  {/* <SmallCloseIcon _hover={{ bg: '#3f3f3f' }} color="white" ml="auto" onClick={()=>{
-                  curFilesListSchema.deleteActiveFiles(i)
-                }}/> */}
-                </Box>
-              )}
+              <ContextMenuTrigger id={`ActiveFileContent${i.key}`} holdToDisplay={-1}>
+                {i?.label && (
+                  <Box
+                    onClick={() => {
+                      store.showPreviewMode = false;
+                      curFilesListSchema.setCurActiveFile(i);
+                    }}
+                    display="flex"
+                    py={2}
+                    px={2}
+                    background={i?.key == curFilesListSchema?.curActiveFile?.key ? '#1e1e1e' : 'none'}
+                    fontSize="sm"
+                    color={i?.key == curFilesListSchema?.curActiveFile?.key ? '#a9dc76' : 'white'}
+                    cursor="pointer"
+                    alignItems={'center'}
+                  >
+                    {FileIcon(i)}
+                    <Text mr="4">{i?.label}</Text>
+                    <SmallCloseIcon
+                      _hover={{ bg: '#3f3f3f' }}
+                      color="white"
+                      ml="auto"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        curFilesListSchema.deleteActiveFiles(i);
+                      }}
+                    />
+                  </Box>
+                )}
+              </ContextMenuTrigger>
+              <CurActiveFileRightClickMenu activeFile={i} />
             </>
           );
         })}
@@ -221,7 +273,7 @@ const Editor = observer(() => {
 
         {curFilesListSchema?.curActiveFileIs('wasm') && (
           <>
-            <Tooltip label={`Upload to ${w3s.project.curProject.f_name}`} placement="top">
+            <Tooltip label={`Upload to studio`} placement="top">
               <Text
                 ml="auto"
                 cursor="pointer"

@@ -50,7 +50,7 @@ const Metrics = () => {
         </Flex>
       </Flex>
       <Box ml="20px" flex={1} borderRadius="8px">
-        <JSONMetricsView data={w3s.metrics.metricsData} />
+        <JSONMetricsView data={w3s.metrics.metricsData} showContent={w3s.metrics.showContent}/>
       </Box>
     </Flex>
   );
