@@ -124,12 +124,16 @@ const Projects = observer(() => {
                 cursor="pointer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  allProjects.onSelect(index);
-                  w3s.showContent = 'METRICS';
+                  if (instance) {
+                    allProjects.onSelect(index);
+                    w3s.showContent = 'METRICS';
+                  } else {
+                    toast.error('No instance found, please create one first');
+                  }
                 }}
               >
                 <Flex alignItems="center" justifyContent="space-between">
-                  <Flex alignItems="center">
+                  <Flex alignItems="center" mr="5px">
                     <Box fontWeight={700} fontSize="16px">
                       {project.f_name}
                     </Box>
@@ -137,8 +141,29 @@ const Projects = observer(() => {
                     <Badge ml="10px" variant="outline" colorScheme={status.colorScheme}>
                       {status.text}
                     </Badge>
+                    {!instance && (
+                      <Button
+                        ml="20px"
+                        h="20px"
+                        {...defaultButtonStyle}
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          const appletID = await w3s.applet.createAppletForDeveloper({
+                            projectName: project.f_name
+                          });
+                          if (appletID) {
+                            const instanceID = await w3s.applet.deployApplet({ appletID, triggerEvent: false });
+                            if (instanceID) {
+                              w3s.instances.handleInstance({ instanceID, event: 'START' });
+                            }
+                          }
+                        }}
+                      >
+                        Create instance
+                      </Button>
+                    )}
                   </Flex>
-                  <Box
+                  <Flex
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
@@ -163,7 +188,7 @@ const Projects = observer(() => {
                         w3s.project.selectProjectName(project.f_name, e.target.checked);
                       }}
                     />
-                  </Box>
+                  </Flex>
                 </Flex>
                 <Flex mt="12px" alignItems="center" fontSize="14px">
                   <Icon as={AiOutlineLineChart} color="#7A7A7A" />
@@ -221,7 +246,6 @@ const Projects = observer(() => {
                     _hover={{ color: '#946FFF' }}
                     onClick={async (e) => {
                       e.stopPropagation();
-                      const instance = w3s.instances.table.dataSource.find((item) => item.project_name === project.f_name);
                       if (instance) {
                         if (instance.f_state === 2) {
                           await axios.request({

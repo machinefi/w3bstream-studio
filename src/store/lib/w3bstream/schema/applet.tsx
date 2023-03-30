@@ -29,7 +29,24 @@ export const schema = {
   required: ['file', 'projectName', 'appletName']
 } as const;
 
+export const developerSchema = {
+  definitions: {
+    projects: {
+      type: 'string'
+    }
+  },
+  type: 'object',
+  properties: {
+    file: {
+      type: 'string',
+      title: 'Upload a wasm file'
+    }
+  },
+  required: ['file']
+} as const;
+
 type SchemaType = FromSchema<typeof schema>;
+type DeveloperSchemaType = FromSchema<typeof developerSchema>;
 
 //@ts-ignore
 schema.definitions = {
@@ -66,6 +83,31 @@ export default class AppletModule {
         appletName: 'app_01'
       }
     })
+  });
+
+  developerForm = new JSONSchemaFormState<DeveloperSchemaType, UiSchema & { file: FileWidgetUIOptions }>({
+    //@ts-ignore
+    schema: developerSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      file: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          accept: {
+            'application/wasm': ['.wasm']
+          },
+          tips: `Drag 'n' drop a file here, or click to select a file`
+        }
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.developerForm.reset();
+    },
+    value: new JSONValue<DeveloperSchemaType>()
   });
 
   table = new JSONSchemaTableState<AppletType>({
@@ -177,7 +219,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.startBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'START' });
+                      globalThis.store.w3s.instances.handleInstance({ instanceID: item.f_instance_id, event: 'START' });
                     }
                   },
                   text: 'Start'
@@ -190,7 +232,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.restartBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'Restart' });
+                      globalThis.store.w3s.instances.handleInstance({ instanceID: item.f_instance_id, event: 'Restart' });
                     }
                   },
                   text: 'Restart'
@@ -203,7 +245,7 @@ export default class AppletModule {
                     size: 'xs',
                     isDisabled: buttonStatus.stopBtn.isDisabled,
                     onClick() {
-                      globalThis.store.w3s.instances.handleInstance({ instaceID: item.f_instance_id, event: 'STOP' });
+                      globalThis.store.w3s.instances.handleInstance({ instanceID: item.f_instance_id, event: 'STOP' });
                     }
                   },
                   text: 'Stop'
@@ -369,19 +411,66 @@ export default class AppletModule {
         },
         data
       });
-      if (res.data) {
-        await showNotification({ message: 'create applet succeeded' });
+      const appletID = res.data?.appletID;
+      if (appletID) {
+        showNotification({ message: 'create applet succeeded' });
         eventBus.emit('applet.create');
+        return appletID;
       }
+      return null;
     }
   }
 
-  async deployApplet({ appletID }: { appletID: string }) {
+  async deployApplet({ appletID, triggerEvent = true }: { appletID: string; triggerEvent?: boolean }) {
     const res = await axios.request({
       method: 'post',
       url: `/api/w3bapp/deploy/applet/${appletID}`
     });
-    eventBus.emit('instance.deploy');
-    return res.data;
+    const instanceID = res.data?.instanceID;
+    if (instanceID) {
+      if (triggerEvent) {
+        eventBus.emit('instance.deploy');
+      }
+      return instanceID;
+    }
+    return null;
+  }
+
+  async createAppletForDeveloper({ projectName, appletName = 'applet_1' }: { projectName: string; appletName?: string }) {
+    const formData = await hooks.getFormData({
+      title: 'Create instance',
+      size: 'md',
+      formList: [
+        {
+          form: this.developerForm
+        }
+      ]
+    });
+    if (formData.file) {
+      const data = new FormData();
+      const file = dataURItoBlob(formData.file);
+      data.append('file', file.blob);
+      data.append(
+        'info',
+        JSON.stringify({
+          projectName,
+          appletName,
+          wasmName: file.name
+        })
+      );
+      const res = await axios.request({
+        method: 'post',
+        url: `/api/file?api=applet/${projectName}`,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        data
+      });
+      const appletID = res.data?.appletID;
+      if (appletID) {
+        return appletID;
+      }
+      return null;
+    }
   }
 }

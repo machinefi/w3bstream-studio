@@ -348,15 +348,17 @@ export default class ProjectModule {
       if (formData.description) {
         data.project[0].description = formData.description;
       }
-      const res = await axios.request({
-        method: 'post',
-        url: `/api/init`,
-        data
-      });
-      if (res.data) {
-        await showNotification({ message: 'Create project succeeded' });
-        eventBus.emit('project.create');
-      }
+      try {
+        const res = await axios.request({
+          method: 'post',
+          url: `/api/init`,
+          data
+        });
+        if (res.data) {
+          await showNotification({ message: 'Create project succeeded' });
+        }
+      } catch (error) {}
+      eventBus.emit('project.create');
     }
   }
 
