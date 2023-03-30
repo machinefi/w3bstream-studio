@@ -158,6 +158,9 @@ export class W3bStream {
       })
       .on('chainHeight.delete', async () => {
         this.chainHeight.allChainHeight.call();
+      })
+      .on('metrics.timerange', async (startTime: Date, endTime: Date) => {
+        this.metrics.allMetrics.call(startTime, endTime);
       });
   }
 
@@ -167,5 +170,7 @@ export class W3bStream {
     this.contractLogs.allContractLogs.call();
     this.chainTx.allChainTx.call();
     this.chainHeight.allChainHeight.call();
+    this.metrics.allMetrics.call();
+    this.metrics.allDBState.call();
   }
 }

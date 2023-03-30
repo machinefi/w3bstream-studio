@@ -42,7 +42,7 @@ interface MessageEvents {
   'base.formModal.afterSubmit': (formData: any) => void;
   'wasmvm.stdout': (message: StdIOType) => void;
   'wasmvm.stderr': (message: StdIOType) => void;
-
+  'metrics.timerange': (startTime: Date, endTime: Date) => void;
   signer: (signer: any) => void;
   provider: (signer: any) => void;
 }

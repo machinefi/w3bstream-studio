@@ -205,11 +205,11 @@ const Editor = observer(() => {
           );
         })}
 
-        {curFilesListSchema?.curActiveFileIs('html') && (
+        {/* {curFilesListSchema?.curActiveFileIs('html') && (
           <Tooltip label="Preview in html" placement="top">
             <Text ml="auto" cursor="pointer" mr={4} className="pi pi-play" color="white" onClick={() => store.onGenHTMLRawData(curFilesListSchema?.curActiveFile)}></Text>
           </Tooltip>
-        )}
+        )} */}
 
         {curFilesListSchema?.curActiveFileIs('ts') && (
           <>
