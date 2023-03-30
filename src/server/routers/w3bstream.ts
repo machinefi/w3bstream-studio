@@ -167,7 +167,29 @@ export const w3bstreamRouter = t.router({
           f_created_at: true
         }
       });
-    })
+    }),
+  dbState: t.procedure.query(async ({ ctx }) => {
+    const result = await ctx.prisma.$queryRaw<{ size: bigint }[]>`SELECT pg_database_size(DATname) AS size FROM pg_database WHERE DATname != 'template1'`; //!=template1 tempalte0
+    console.log(result);
+    const sizes = result.map((r) => Number(r.size));
+    const usedSize = (sizes.reduce((acc, size) => acc + size, 0) / 1024 / 1024).toFixed(4); // mb
+
+    const stats = await ctx.prisma.$queryRaw`SELECT datname,
+    numbackends,
+    xact_commit,
+    xact_rollback,
+    blks_read,
+    blks_hit,
+    tup_returned,
+    tup_fetched,
+    tup_inserted,
+    tup_updated,
+    tup_deleted
+FROM pg_stat_database where DATname='w3bstream';
+`;
+
+    return { usedSize, stats };
+  })
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;

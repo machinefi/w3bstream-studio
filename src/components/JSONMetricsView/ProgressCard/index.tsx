@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardHeader, Flex, Heading, Progress, ProgressProps, Stack, StackDivider } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Flex, Heading, Progress, ProgressProps, Stack, StackDivider, Select } from '@chakra-ui/react';
 
 export interface ProgressCard {
   title: string;

@@ -205,11 +205,11 @@ const Editor = observer(() => {
           );
         })}
 
-        {curFilesListSchema?.curActiveFileIs('html') && (
+        {/* {curFilesListSchema?.curActiveFileIs('html') && (
           <Tooltip label="Preview in html" placement="top">
             <Text ml="auto" cursor="pointer" mr={4} className="pi pi-play" color="white" onClick={() => store.onGenHTMLRawData(curFilesListSchema?.curActiveFile)}></Text>
           </Tooltip>
-        )}
+        )} */}
 
         {curFilesListSchema?.curActiveFileIs('ts') && (
           <>
@@ -230,7 +230,6 @@ const Editor = observer(() => {
                 color="white"
                 onClick={async () => {
                   w3s.applet.form.value.set({
-                    projectID: w3s.project.curProject?.f_project_id.toString(),
                     projectName: w3s.project.curProject?.f_name,
                     file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw),
                     appletName: ''

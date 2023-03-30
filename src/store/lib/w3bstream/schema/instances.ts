@@ -27,7 +27,7 @@ export default class InstancesModule {
                 size: 'xs',
                 isDisabled: buttonStatus.startBtn.isDisabled,
                 onClick() {
-                  this.handleInstance({ instaceID: item.f_instance_id.toString(), event: 'START' });
+                  globalThis.store.w3s.instances.handleInstance({ instanceID: item.f_instance_id.toString(), event: 'START' });
                 }
               },
               text: 'Start'
@@ -40,7 +40,7 @@ export default class InstancesModule {
                 size: 'xs',
                 isDisabled: buttonStatus.restartBtn.isDisabled,
                 onClick() {
-                  this.handleInstance({ instaceID: item.f_instance_id.toString(), event: 'Restart' });
+                  globalThis.store.w3s.instances.handleInstance({ instanceID: item.f_instance_id.toString(), event: 'Restart' });
                 }
               },
               text: 'Restart'
@@ -53,7 +53,7 @@ export default class InstancesModule {
                 size: 'xs',
                 isDisabled: buttonStatus.stopBtn.isDisabled,
                 onClick() {
-                  this.handleInstance({ instaceID: item.f_instance_id.toString(), event: 'STOP' });
+                  globalThis.store.w3s.instances.handleInstance({ instanceID: item.f_instance_id.toString(), event: 'STOP' });
                 }
               },
               text: 'Stop'
@@ -113,10 +113,10 @@ export default class InstancesModule {
     Object.assign(this, args);
   }
 
-  async handleInstance({ instaceID, event }: { instaceID: string; event: string }) {
+  async handleInstance({ instanceID, event }: { instanceID: string; event: string }) {
     const res = await axios.request({
       method: 'put',
-      url: `/api/w3bapp/deploy/${instaceID}/${event}`
+      url: `/api/w3bapp/deploy/${instanceID}/${event}`
     });
     eventBus.emit('instance.handle');
     return res.data;
