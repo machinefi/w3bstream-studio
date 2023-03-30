@@ -72,10 +72,18 @@ export default class DBTableModule {
   allTableNames = new PromiseState<() => Promise<any>, { [x: string]: TableType[] }>({
     function: async () => {
       try {
+        const accountRole = globalThis.store.w3s.config.form.formData.accountRole;
         const res = await trpc.pg.tables.query({
-          role: globalThis.store.w3s.config.form.formData.accountRole
+          role: accountRole
         });
-        const data = _.groupBy(res, 'tableSchema');
+        let data;
+        if (accountRole === 'DEVELOPER') {
+          const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
+          const tables = res.filter((t) => t.tableSchema === 'public' || t.tableSchema.includes(curProjectName));
+          data = _.groupBy(tables, 'tableSchema');
+        } else {
+          data = _.groupBy(res, 'tableSchema');
+        }
         if (!data.public) {
           data.public = [];
         }
