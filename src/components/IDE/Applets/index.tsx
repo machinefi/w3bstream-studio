@@ -21,7 +21,6 @@ const AddBtn = observer(() => {
         onClick={async (e) => {
           if (w3s.showContent === 'CURRENT_APPLETS') {
             w3s.applet.form.value.set({
-              projectID: w3s.project.curProject?.f_project_id.toString(),
               projectName: w3s.project.curProject?.f_name
             });
           }

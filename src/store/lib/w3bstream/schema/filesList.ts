@@ -155,7 +155,7 @@ export class FilesListSchema {
         eventBus.emit('applet.create');
         const deployRes = await rootStore.w3s.applet.deployApplet({ appletID: appletRes.data.appletID });
         console.log('deployRes', deployRes);
-        const startRes = await rootStore.w3s.instances.handleInstance({ instaceID: deployRes.instanceID, event: 'START' });
+        const startRes = await rootStore.w3s.instances.handleInstance({ instanceID: deployRes.instanceID, event: 'START' });
         //send event
         await axios.request({
           method: 'post',
