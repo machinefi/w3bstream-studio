@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineLineChart, AiOutlinePauseCircle, AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineLineChart, AiOutlinePauseCircle, AiOutlinePlayCircle, AiOutlinePlus } from 'react-icons/ai';
 import { BsArrowUpRight } from 'react-icons/bs';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
@@ -144,7 +144,7 @@ const Projects = observer(() => {
                     {!instance && (
                       <Button
                         ml="20px"
-                        h="20px"
+                        h="25px"
                         {...defaultButtonStyle}
                         onClick={async (e) => {
                           e.stopPropagation();
@@ -207,9 +207,9 @@ const Projects = observer(() => {
                   <Icon
                     as={AiOutlineEdit}
                     boxSize={5}
-                    color="#969696"
+                    color="#946FFF"
                     cursor="pointer"
-                    _hover={{ color: '#946FFF' }}
+                    _hover={{ color: '#7D44FF' }}
                     onClick={async (e) => {
                       // e.stopPropagation();
                     }}
@@ -218,9 +218,9 @@ const Projects = observer(() => {
                     ml="20px"
                     as={AiOutlineDelete}
                     boxSize={5}
-                    color="#969696"
+                    color="#946FFF"
                     cursor="pointer"
-                    _hover={{ color: '#946FFF' }}
+                    _hover={{ color: '#7D44FF' }}
                     onClick={(e) => {
                       e.stopPropagation();
                       confirm.show({
@@ -237,34 +237,51 @@ const Projects = observer(() => {
                       });
                     }}
                   />
-                  <Icon
-                    ml="20px"
-                    as={AiOutlinePauseCircle}
-                    boxSize={5}
-                    color="#969696"
-                    cursor="pointer"
-                    _hover={{ color: '#946FFF' }}
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      if (instance) {
-                        if (instance.f_state === 2) {
-                          await axios.request({
-                            method: 'put',
-                            url: `/api/w3bapp/deploy/${instance.f_instance_id}/STOP`
-                          });
-                        } else {
-                          await axios.request({
-                            method: 'put',
-                            url: `/api/w3bapp/deploy/${instance.f_instance_id}/START`
-                          });
-                        }
-                        eventBus.emit('instance.handle');
-                        toast.success('Suspended successfully');
-                      } else {
-                        toast.error('Instance not found');
-                      }
-                    }}
-                  />
+                  {instance && (
+                    <>
+                      {instance.f_state === 2 ? (
+                        <Icon
+                          ml="20px"
+                          as={AiOutlinePauseCircle}
+                          boxSize={5}
+                          color="#946FFF"
+                          cursor="pointer"
+                          _hover={{ color: '#7D44FF' }}
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            try {
+                              await axios.request({
+                                method: 'put',
+                                url: `/api/w3bapp/deploy/${instance.f_instance_id}/STOP`
+                              });
+                              eventBus.emit('instance.handle');
+                              toast.success('Successfully suspended');
+                            } catch (error) {}
+                          }}
+                        />
+                      ) : (
+                        <Icon
+                          ml="20px"
+                          as={AiOutlinePlayCircle}
+                          boxSize={5}
+                          color="#946FFF"
+                          cursor="pointer"
+                          _hover={{ color: '#7D44FF' }}
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            try {
+                              await axios.request({
+                                method: 'put',
+                                url: `/api/w3bapp/deploy/${instance.f_instance_id}/START`
+                              });
+                              eventBus.emit('instance.handle');
+                              toast.success('Successfully started');
+                            } catch (error) {}
+                          }}
+                        />
+                      )}
+                    </>
+                  )}
                 </Flex>
               </GridItem>
             );
