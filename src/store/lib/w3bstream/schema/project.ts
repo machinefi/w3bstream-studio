@@ -60,23 +60,6 @@ export const createProjectByWasmSchema = {
   required: ['file', 'projectName']
 } as const;
 
-export const createProjectByWasmSchema = {
-  definitions: {
-    projects: {
-      type: 'string'
-    }
-  },
-  type: 'object',
-  properties: {
-    file: {
-      type: 'string',
-      title: 'Upload Single File'
-    },
-    projectName: { type: 'string', title: 'Project Name' }
-  },
-  required: ['file', 'projectName']
-} as const;
-
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
 type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;
@@ -398,7 +381,6 @@ export default class ProjectModule {
     //   "datas": []
     // }
     if (formData.file && formData.projectName) {
-      console.log(formData.file)
       const initProjectData: { project: Project[] } = {
         project: [
           {
@@ -420,6 +402,7 @@ export default class ProjectModule {
       }
     }
   }
+
   async editProject() {
     this.setMode('edit');
     await hooks.getFormData({
@@ -446,13 +429,7 @@ export default class ProjectModule {
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
-      if (formData.name) {
-        data.project[0].name = formData.name;
-      } else {
-        const templateProjectName = templateData.project[0].name;
-        const len = this.allProjects.value.filter((i) => i.f_name.includes(templateProjectName)).length;
-        data.project[0].name = `${templateProjectName}_${len + 1}`;
-      }
+      data.project[0].name = formData.name;
       if (formData.description) {
         data.project[0].description = formData.description;
       }
