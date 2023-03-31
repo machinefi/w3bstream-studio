@@ -1,21 +1,23 @@
 import fetch, { FormData, File } from 'node-fetch';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import Blob from 'cross-blob';
 
-interface Project {
+export interface Project {
   name: string;
   description: string;
   applets: Applet[];
-  datas: {
+  datas?: {
     monitor: Monitor;
   }[];
-  envs: string[][];
-  schema: {
+  envs?: string[][];
+  schema?: {
     [x: string]: any;
   };
 }
 
 interface Applet {
-  wasmURL: string;
+  wasmURL?: string;
+  wasmRaw?: string;
   appletName: string;
 }
 
@@ -72,13 +74,22 @@ const createProject = async (
 //   });
 // };
 
-const createApplet = async ({ projectName, appletName, wasmURL }: Applet & { projectName: string }, token: string): Promise<string> => {
-  const response = await fetch(wasmURL);
-  const blob = await response.blob();
+const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Applet & { projectName: string }, token: string): Promise<string> => {
   const formData = new FormData();
-  const wasmName = wasmURL.split('/').pop();
-  const file = new File([blob], wasmName, { type: 'application/wasm' });
-  formData.set('file', file, wasmName);
+  let wasmName = '';
+  if (wasmURL) {
+    const response = await fetch(wasmURL);
+    const blob = await response.blob();
+    wasmName = wasmURL.split('/').pop();
+    const file = new File([blob], wasmName, { type: 'application/wasm' });
+    formData.set('file', file, wasmName);
+  } else {
+    // const file = dataURItoBlob(wasmRaw);
+    const buffer = Buffer.from(wasmRaw.replace('data:application/wasm;name=json.wasm;base64,', ''), 'base64');
+    wasmName = 'wasm_01';
+    formData.set('file', new Blob([buffer], { type: 'application/wasm' }));
+  }
+
   formData.set(
     'info',
     JSON.stringify({
@@ -188,7 +199,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       res.status(200).json({ message: 'OK' });
     } catch (error) {
-      res.status(500).send(error);
+      console.log(error.message);
+      res.status(500).send(error.message);
     }
   } else {
     res.status(405).json({ message: 'Method Not Allowed' });
