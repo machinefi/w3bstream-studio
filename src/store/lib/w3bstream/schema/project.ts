@@ -381,7 +381,6 @@ export default class ProjectModule {
     //   "datas": []
     // }
     if (formData.file && formData.projectName) {
-      console.log(formData.file)
       const initProjectData: { project: Project[] } = {
         project: [
           {
@@ -430,13 +429,7 @@ export default class ProjectModule {
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
-      if (formData.name) {
-        data.project[0].name = formData.name;
-      } else {
-        const templateProjectName = templateData.project[0].name;
-        const len = this.allProjects.value.filter((i) => i.f_name.includes(templateProjectName)).length;
-        data.project[0].name = `${templateProjectName}_${len + 1}`;
-      }
+      data.project[0].name = formData.name;
       if (formData.description) {
         data.project[0].description = formData.description;
       }
