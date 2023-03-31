@@ -381,6 +381,7 @@ export default class ProjectModule {
     //   "datas": []
     // }
     if (formData.file && formData.projectName) {
+      console.log(formData.file)
       const initProjectData: { project: Project[] } = {
         project: [
           {

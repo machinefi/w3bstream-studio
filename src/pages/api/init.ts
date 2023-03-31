@@ -199,6 +199,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       res.status(200).json({ message: 'OK' });
     } catch (error) {
+      console.log(error.message);
       res.status(500).send(error.message);
     }
   } else {
