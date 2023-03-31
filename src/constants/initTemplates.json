@@ -7,41 +7,8 @@
         {
           "name": "mint_nft_template",
           "description": "",
-          "applets": [
-            {
-              "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/mint_nft.wasm",
-              "appletName": "applet_01"
-            }
-          ],
-          "datas": [],
-          "schema": {
-            "name": "mint_nft",
-            "tables": [
-              {
-                "name": "t_mint_nft",
-                "desc": "mint_nft table",
-                "cols": [
-                  {
-                    "name": "f_address",
-                    "constrains": {
-                      "datatype": "TEXT",
-                      "length": 255,
-                      "desc": ""
-                    }
-                  }
-                ],
-                "keys": [
-                  {
-                    "name": "ui_address",
-                    "isUnique": false,
-                    "columnNames": ["f_address"]
-                  }
-                ],
-                "withSoftDeletion": true,
-                "withPrimaryKey": true
-              }
-            ]
-          }
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
+          "datas": []
         }
       ]
     },
@@ -53,35 +20,7 @@
           "name": "word_count_template",
           "description": "",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/word_count.wasm", "appletName": "applet_01" }],
-          "datas": [],
-          "schema": {
-            "name": "word_count",
-            "tables": [
-              {
-                "name": "t_word_count",
-                "desc": "word_count table",
-                "cols": [
-                  {
-                    "name": "f_word",
-                    "constrains": {
-                      "datatype": "TEXT",
-                      "length": 255,
-                      "desc": ""
-                    }
-                  }
-                ],
-                "keys": [
-                  {
-                    "name": "ui_word",
-                    "isUnique": false,
-                    "columnNames": ["f_word"]
-                  }
-                ],
-                "withSoftDeletion": true,
-                "withPrimaryKey": true
-              }
-            ]
-          }
+          "datas": []
         }
       ]
     },
