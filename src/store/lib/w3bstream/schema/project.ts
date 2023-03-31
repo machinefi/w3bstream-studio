@@ -60,6 +60,7 @@ export const createProjectByWasmSchema = {
   required: ['file', 'projectName']
 } as const;
 
+
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
 type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;
@@ -381,6 +382,7 @@ export default class ProjectModule {
     //   "datas": []
     // }
     if (formData.file && formData.projectName) {
+      console.log(formData.file)
       const initProjectData: { project: Project[] } = {
         project: [
           {
@@ -402,7 +404,6 @@ export default class ProjectModule {
       }
     }
   }
-
   async editProject() {
     this.setMode('edit');
     await hooks.getFormData({
