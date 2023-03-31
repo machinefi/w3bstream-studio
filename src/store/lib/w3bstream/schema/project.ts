@@ -339,7 +339,7 @@ export default class ProjectModule {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
       if (formData.name) {
-        data.project[0].projectName = formData.name;
+        data.project[0].name = formData.name;
       } else {
         const templateProjectName = templateData.project[0].name;
         const len = this.allProjects.value.filter((i) => i.f_name.includes(templateProjectName)).length;

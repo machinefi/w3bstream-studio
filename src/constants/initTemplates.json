@@ -7,7 +7,7 @@
         {
           "name": "mint_nft_template",
           "description": "",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-ts-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
           "datas": []
         }
       ]
@@ -19,7 +19,7 @@
         {
           "name": "word_count_template",
           "description": "",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/word_count.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/word_count.wasm", "appletName": "applet_01" }],
           "datas": []
         }
       ]
@@ -31,7 +31,7 @@
         {
           "name": "log_template",
           "description": "",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
           "datas": [],
           "envs": [["key1", "value1"]],
           "schema": {
