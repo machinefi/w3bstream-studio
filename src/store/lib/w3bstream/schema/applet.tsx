@@ -45,6 +45,8 @@ export const developerSchema = {
   required: ['file']
 } as const;
 
+
+
 type SchemaType = FromSchema<typeof schema>;
 type DeveloperSchemaType = FromSchema<typeof developerSchema>;
 
