@@ -36,7 +36,7 @@ const tempVScodeFilesStorage = new StorageState<FilesItemType[]>({ key: 'tempVSc
 //todo create file in value
 export class FilesListSchema {
   lockFile: boolean = true;
-  project_id: string;
+  project_id: string = 'GLOBAL';
   activeFileIds: string[] = [];
   curActiveFileId: string = '';
   files: FilesItemType[] = [
@@ -44,9 +44,7 @@ export class FilesListSchema {
       key: uuidv4(),
       type: 'folder',
       label: 'Browser Files',
-      children: [
-        examples
-      ]
+      children: [examples]
     },
     {
       key: uuidv4(),
@@ -209,9 +207,9 @@ export class FilesListSchema {
       file.children.push({
         type: 'file',
         key: uuidv4(),
-        label: `New File`,
+        label: `NewFile.ts`,
         isRename: true,
-        data: { code: '', language: 'typescript' }
+        data: { code: templatecode['log.ts'], language: 'typescript' }
       });
       file.isOpen = true;
     }
@@ -247,12 +245,34 @@ export class FilesListSchema {
 
   deleteActiveFiles(activeFile: FilesItemType) {
     const index = _.findIndex(this.activeFileIds, (i) => i == activeFile.key);
+    console.log(this.activeFileIds, activeFile, index);
     if (index != -1) {
+      // _.remove(this.activeFileIds, (i) => i == activeFile.key);
+      this.activeFileIds.splice(index, 1);
       if (this.activeFileIds[index] == this.curActiveFileId) {
         this.curActiveFileId = '';
-        console.log('curActiveFileId null', this.curActiveFileId);
       }
-      _.remove(this.activeFileIds, (i) => i == activeFile.key);
+    }
+    this.syncToIndexDb();
+  }
+
+  deleteOtherActiveFiles(activeFile: FilesItemType) {
+    this.activeFileIds = [activeFile.key];
+    this.syncToIndexDb();
+  }
+
+  deleteRightActiveFiles(activeFile: FilesItemType) {
+    const index = _.findIndex(this.activeFileIds, (i) => i == activeFile.key);
+    if (index != -1) {
+      this.activeFileIds.splice(index + 1, this.activeFileIds.length - index - 1);
+    }
+    this.syncToIndexDb();
+  }
+
+  deleteLeftActiveFiles(activeFile: FilesItemType) {
+    const index = _.findIndex(this.activeFileIds, (i) => i == activeFile.key);
+    if (index != -1) {
+      this.activeFileIds.splice(0, index);
     }
     this.syncToIndexDb();
   }

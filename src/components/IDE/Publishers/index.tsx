@@ -43,7 +43,7 @@ const Publishers = observer(() => {
               };
             }
             const formData = await hooks.getFormData({
-              title: 'Create Publisher',
+              title: 'Create Device',
               size: 'md',
               formList: [
                 {
@@ -68,7 +68,7 @@ const Publishers = observer(() => {
             }
           }}
         >
-          Add Publisher
+          Add Device
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.publisher} />
