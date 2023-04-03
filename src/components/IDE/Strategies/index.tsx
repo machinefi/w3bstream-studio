@@ -45,7 +45,7 @@ const Strategies = observer(() => {
             w3s.strategy.createStrategy();
           }}
         >
-          Add Strategy
+          Create
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.strategy} />

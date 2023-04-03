@@ -16,9 +16,9 @@ const Triggers = () => {
       <Box>
         <Tabs>
           <TabList>
-            <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Source</Tab>
+            <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Monitor</Tab>
             <Tab ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-              Message Routing
+              Event Rounting
             </Tab>
           </TabList>
           <TabPanels>

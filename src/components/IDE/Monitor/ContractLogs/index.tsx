@@ -63,7 +63,7 @@ const ContractLogs = observer(() => {
             }
           }}
         >
-          Add Smart Contract event monitor
+          Create
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.contractLogs} />

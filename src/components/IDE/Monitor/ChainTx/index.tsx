@@ -63,7 +63,7 @@ const ChainTx = observer(() => {
             }
           }}
         >
-          Add blockchain transaction monitor
+          Create
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.chainTx} />
