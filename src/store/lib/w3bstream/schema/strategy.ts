@@ -56,18 +56,18 @@ export default class StrategyModule {
 
   table = new JSONSchemaTableState<StrategyType>({
     columns: [
-      {
-        key: 'f_strategy_id',
-        label: 'Strategy ID'
-      },
-      {
-        key: 'f_applet_id',
-        label: 'Applet ID'
-      },
-      {
-        key: 'f_project_id',
-        label: 'Project ID'
-      },
+      // {
+      //   key: 'f_strategy_id',
+      //   label: 'Strategy ID'
+      // },
+      // {
+      //   key: 'f_applet_id',
+      //   label: 'Applet ID'
+      // },
+      // {
+      //   key: 'f_project_id',
+      //   label: 'Project ID'
+      // },
       {
         key: 'f_event_type',
         label: 'Event Type'

@@ -83,9 +83,9 @@ export default class DBTableModule {
           data = _.groupBy(tables, 'tableSchema');
         } else {
           data = _.groupBy(res, 'tableSchema');
-        }
-        if (!data.public) {
-          data.public = [];
+          if (!data.public) {
+            data.public = [];
+          }
         }
         return data;
       } catch (error) {

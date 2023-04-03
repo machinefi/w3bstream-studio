@@ -7,8 +7,41 @@
         {
           "name": "mint_nft_template",
           "description": "",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-ts-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
-          "datas": []
+          "applets": [
+            {
+              "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/mint_nft.wasm",
+              "appletName": "applet_01"
+            }
+          ],
+          "datas": [],
+          "schema": {
+            "name": "mint_nft",
+            "tables": [
+              {
+                "name": "t_mint_nft",
+                "desc": "mint_nft table",
+                "cols": [
+                  {
+                    "name": "f_address",
+                    "constrains": {
+                      "datatype": "TEXT",
+                      "length": 255,
+                      "desc": ""
+                    }
+                  }
+                ],
+                "keys": [
+                  {
+                    "name": "ui_address",
+                    "isUnique": false,
+                    "columnNames": ["f_address"]
+                  }
+                ],
+                "withSoftDeletion": true,
+                "withPrimaryKey": true
+              }
+            ]
+          }
         }
       ]
     },
@@ -19,8 +52,36 @@
         {
           "name": "word_count_template",
           "description": "",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/word_count.wasm", "appletName": "applet_01" }],
-          "datas": []
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/word_count.wasm", "appletName": "applet_01" }],
+          "datas": [],
+          "schema": {
+            "name": "word_count",
+            "tables": [
+              {
+                "name": "t_word_count",
+                "desc": "word_count table",
+                "cols": [
+                  {
+                    "name": "f_word",
+                    "constrains": {
+                      "datatype": "TEXT",
+                      "length": 255,
+                      "desc": ""
+                    }
+                  }
+                ],
+                "keys": [
+                  {
+                    "name": "ui_word",
+                    "isUnique": false,
+                    "columnNames": ["f_word"]
+                  }
+                ],
+                "withSoftDeletion": true,
+                "withPrimaryKey": true
+              }
+            ]
+          }
         }
       ]
     },
@@ -31,29 +92,30 @@
         {
           "name": "log_template",
           "description": "",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-golang-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
+          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
           "datas": [],
           "envs": [["key1", "value1"]],
           "schema": {
+            "name": "log",
             "tables": [
               {
-                "name": "t_log_test",
-                "desc": "log test table",
+                "name": "t_log",
+                "desc": "log table",
                 "cols": [
                   {
-                    "name": "f_test",
+                    "name": "f_log",
                     "constrains": {
                       "datatype": "TEXT",
                       "length": 255,
-                      "desc": "user name"
+                      "desc": ""
                     }
                   }
                 ],
                 "keys": [
                   {
-                    "name": "ui_test",
-                    "isUnique": true,
-                    "columnNames": ["f_test"]
+                    "name": "ui_log",
+                    "isUnique": false,
+                    "columnNames": ["f_log"]
                   }
                 ],
                 "withSoftDeletion": true,

@@ -12,6 +12,9 @@ import { PromiseState } from '@/store/standard/PromiseState';
 import { AppletType, ProjectType, PublisherType, InstanceType, StrategyType } from '@/server/routers/w3bstream';
 import { trpc } from '@/lib/trpc';
 import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
+import { UiSchema } from '@rjsf/utils';
+import FileWidget, { FileWidgetUIOptions } from '@/components/JSONFormWidgets/FileWidget';
+import { Project } from 'pages/api/init';
 
 export const defaultSchema = {
   type: 'object',
@@ -37,12 +40,30 @@ export const developerInitializationTemplateSchema = {
     description: { type: 'string', title: 'Description' },
     template: { type: 'string', title: 'Explore Templates' }
   },
-  required: ['template']
+  required: ['name']
+} as const;
+
+export const createProjectByWasmSchema = {
+  definitions: {
+    projects: {
+      type: 'string'
+    }
+  },
+  type: 'object',
+  properties: {
+    file: {
+      type: 'string',
+      title: 'Upload Single File'
+    },
+    projectName: { type: 'string', title: 'Project Name' }
+  },
+  required: ['file', 'projectName']
 } as const;
 
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
 type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;
+type CreateProjectByWasmSchemaType = FromSchema<typeof createProjectByWasmSchema>;
 
 interface Env {
   id: string;
@@ -166,17 +187,47 @@ export default class ProjectModule {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
       this.developerInitializationTemplateForm.reset();
     },
-    customValidate(formData, errors) {
-      if (!formData.template) {
-        errors.template.addError('Please select a template');
-      }
-      return errors;
-    },
+    // customValidate(formData, errors) {
+    //   if (!formData.template) {
+    //     errors.template.addError('Please select a template');
+    //   }
+    //   return errors;
+    // },
     value: new JSONValue<DeveloperInitializationTemplateSchemaType>({
       default: {
         name: '',
         description: '',
         template: ''
+      }
+    })
+  });
+
+  createProjectByWasmForm = new JSONSchemaFormState<CreateProjectByWasmSchemaType, UiSchema & { file: FileWidgetUIOptions }>({
+    //@ts-ignore
+    schema: createProjectByWasmSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      file: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          accept: {
+            'application/wasm': ['.wasm']
+          },
+          tips: `Drag 'n' drop a file here, or click to select a file`
+        }
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.form.reset();
+    },
+    value: new JSONValue<CreateProjectByWasmSchemaType>({
+      //@ts-ignore
+      default: {
+        projectName: ''
       }
     })
   });
@@ -312,6 +363,46 @@ export default class ProjectModule {
     }
   }
 
+  async createProjectByWasm() {
+    const formData = await hooks.getFormData({
+      title: 'Create Project By Wasm',
+      size: 'md',
+      formList: [
+        {
+          form: this.createProjectByWasmForm
+        }
+      ]
+    });
+    // formData.file
+    // {
+    //   "name": "mint_nft_template",
+    //   "description": "",
+    //   "applets": [{ "wasmRaw": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-ts-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
+    //   "datas": []
+    // }
+    if (formData.file && formData.projectName) {
+      const initProjectData: { project: Project[] } = {
+        project: [
+          {
+            name: formData.projectName,
+            description: '',
+            applets: [{ wasmRaw: formData.file, appletName: 'applet_01' }],
+            datas: []
+          }
+        ]
+      };
+      const res = await axios.request({
+        method: 'post',
+        url: `/api/init`,
+        data: initProjectData
+      });
+      if (res.data) {
+        await showNotification({ message: 'Create project succeeded' });
+        eventBus.emit('project.create');
+      }
+    }
+  }
+
   async editProject() {
     this.setMode('edit');
     await hooks.getFormData({
@@ -338,13 +429,7 @@ export default class ProjectModule {
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
-      if (formData.name) {
-        data.project[0].projectName = formData.name;
-      } else {
-        const templateProjectName = templateData.project[0].name;
-        const len = this.allProjects.value.filter((i) => i.f_name.includes(templateProjectName)).length;
-        data.project[0].name = `${templateProjectName}_${len + 1}`;
-      }
+      data.project[0].name = formData.name;
       if (formData.description) {
         data.project[0].description = formData.description;
       }
@@ -355,10 +440,24 @@ export default class ProjectModule {
           data
         });
         if (res.data) {
-          await showNotification({ message: 'Create project succeeded' });
+          showNotification({ message: 'Create project succeeded' });
         }
       } catch (error) {}
       eventBus.emit('project.create');
+    } else {
+      try {
+        const res = await axios.request({
+          method: 'post',
+          url: '/api/w3bapp/project',
+          data: {
+            name: formData.name
+          }
+        });
+        if (res.data?.project) {
+          eventBus.emit('project.create');
+          showNotification({ message: 'create project succeeded' });
+        }
+      } catch (error) {}
     }
   }
 

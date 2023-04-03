@@ -27,4 +27,5 @@ export const DISABLED_TABLE_LIST = [
 export const DISABLED_SCHEMA_LIST = [
   'applet_management',
   'monitor',
+  'public',
 ]

@@ -281,12 +281,12 @@ const Editor = observer(() => {
                 className="pi pi-cloud-upload"
                 color="white"
                 onClick={async () => {
-                  w3s.applet.form.value.set({
-                    projectName: w3s.project.curProject?.f_name,
+                  w3s.project.createProjectByWasmForm.value.set({
+                    // projectName: w3s.project.curProject?.f_name,
                     file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw),
-                    appletName: ''
+                    // appletName: ''
                   });
-                  w3s.applet.createApplet();
+                  w3s.project.createProjectByWasm();
                 }}
               ></Text>
             </Tooltip>

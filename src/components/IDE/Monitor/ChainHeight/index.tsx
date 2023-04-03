@@ -63,7 +63,7 @@ const ChainHeight = observer(() => {
             }
           }}
         >
-          Create blockchain height monitor
+          Create
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.chainHeight} />
