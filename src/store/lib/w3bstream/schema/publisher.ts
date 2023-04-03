@@ -116,16 +116,10 @@ export default class PublisherModule {
             };
             const payload =
               language === 'text'
-                ? [
-                    {
-                      payload: 'This is is an example payload'
-                    }
-                  ]
+                ? ['This is is an example payload']
                 : [
                     {
-                      payload: {
-                        example: 'This is is an example payload'
-                      }
+                      example: 'This is is an example payload'
                     }
                   ];
             this.publishEventForm.value.set({
@@ -161,9 +155,7 @@ export default class PublisherModule {
             },
             payload: [
               {
-                payload: {
-                  example: 'This is is an example payload'
-                }
+                example: 'This is is an example payload'
               }
             ]
           },
@@ -205,7 +197,7 @@ export default class PublisherModule {
         return {
           events: body.payload.map((item) => ({
             header: body.header,
-            payload: typeof item?.payload == 'string' ? helper.stringToBase64(item?.payload) : helper.stringToBase64(JSON.stringify(item?.payload))
+            payload: typeof item == 'string' ? helper.stringToBase64(item) : helper.stringToBase64(JSON.stringify(item))
           }))
         };
       }
@@ -225,7 +217,7 @@ export default class PublisherModule {
         events: [
           {
             header: body.header,
-            payload: helper.stringToBase64(body)
+            payload: helper.stringToBase64('')
           }
         ]
       };
@@ -239,7 +231,7 @@ export default class PublisherModule {
               token: '',
               pub_time: Date.now()
             },
-            payload: helper.stringToBase64(this.publishEventForm.formData.body)
+            payload: helper.stringToBase64('')
           }
         ]
       };
