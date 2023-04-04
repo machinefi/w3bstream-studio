@@ -23,10 +23,9 @@ export const createPublisherSchema = {
   type: 'object',
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
-    name: { type: 'string', title: 'Name' },
-    key: { type: 'string', title: 'Publisher ID' }
+    key: { type: 'string', title: 'Publisher Key' }
   },
-  required: ['projectName', 'name', 'key']
+  required: ['projectName', 'key']
 } as const;
 
 export const publishEventSchema = {
@@ -79,7 +78,6 @@ export default class PublisherModule {
     value: new JSONValue<CreatePublisherSchemaType>({
       default: {
         projectName: '',
-        name: '',
         key: ''
       }
     })
@@ -243,20 +241,8 @@ export default class PublisherModule {
   table = new JSONSchemaTableState<PublisherType>({
     columns: [
       {
-        key: 'f_publisher_id',
-        label: 'Publisher ID'
-      },
-      {
-        key: 'f_name',
-        label: 'name'
-      },
-      {
-        key: 'project_name',
-        label: 'Project Name'
-      },
-      {
-        key: 'f_created_at',
-        label: 'created at'
+        key: 'f_key',
+        label: 'Publisher Key'
       },
       {
         key: 'f_token',
@@ -274,9 +260,13 @@ export default class PublisherModule {
                 color: '#fff',
                 size: 'xs',
                 onClick: async () => {
+                  if (globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER') {
+                    this.createPublisherForm.uiSchema.projectName = {
+                      'ui:disabled': true
+                    };
+                  }
                   this.createPublisherForm.value.set({
                     projectName: item.project_name,
-                    name: item.f_name,
                     key: item.f_key
                   });
                   const formData = await hooks.getFormData({
@@ -288,15 +278,15 @@ export default class PublisherModule {
                       }
                     ]
                   });
-                  const { projectName, name, key } = formData;
-                  if (projectName && name && key) {
+                  const { projectName, key } = formData;
+                  if (projectName && key) {
                     try {
                       await axios.request({
                         method: 'put',
                         url: `/api/w3bapp/publisher/${projectName}/${item.f_publisher_id}`,
                         data: {
-                          name,
-                          key
+                          key,
+                          name: key
                         }
                       });
                       await showNotification({ message: 'update publisher succeeded' });
