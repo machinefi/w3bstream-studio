@@ -2,7 +2,6 @@ import { trpc } from '@/lib/trpc';
 import { Column, JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { PaginationState } from '@/store/standard/PaginationState';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { _ } from '@/lib/lodash';
 import { makeObservable, observable } from 'mobx';
 import { ColumnType, TableType } from '@/server/routers/pg';
 import { FromSchema } from 'json-schema-to-ts';
@@ -25,11 +24,11 @@ export const createTableSchema = {
       type: 'string',
       title: 'Description'
     },
-    rls_enabled: {
-      type: 'boolean',
-      title: 'Enable Row Level Security (RLS)',
-      default: true
-    },
+    // rls_enabled: {
+    //   type: 'boolean',
+    //   title: 'Enable Row Level Security (RLS)',
+    //   default: true
+    // },
     columns: {
       type: 'string',
       title: 'Columns'
@@ -69,25 +68,31 @@ export interface WidgetColumn {
 }
 
 export default class DBTableModule {
-  allTableNames = new PromiseState<() => Promise<any>, { [x: string]: TableType[] }>({
+  allTables = new PromiseState<() => Promise<any>, { schemaName: string; tables: TableType[] }[]>({
+    defaultValue: [],
     function: async () => {
+      const accountRole = globalThis.store.w3s.config.form.formData.accountRole;
+      const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
       try {
-        const accountRole = globalThis.store.w3s.config.form.formData.accountRole;
-        const res = await trpc.pg.tables.query({
-          role: accountRole
+        const schemaName = accountRole === 'DEVELOPER' ? `wasm_project__${curProjectName}` : '';
+        const schemas = await trpc.pg.schemas.query({
+          accountRole,
+          schemaName
         });
-        let data;
-        if (accountRole === 'DEVELOPER') {
-          const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
-          const tables = res.filter((t) => t.tableSchema === 'public' || t.tableSchema.includes(curProjectName));
-          data = _.groupBy(tables, 'tableSchema');
-        } else {
-          data = _.groupBy(res, 'tableSchema');
-          if (!data.public) {
-            data.public = [];
-          }
+        if (schemas?.length) {
+          const includedSchemas = schemas.map((s) => s.name);
+          const tables = await trpc.pg.tables.query({
+            includedSchemas
+          });
+          const data = includedSchemas.map((schemaName) => {
+            const tablesInSchema = tables.filter((t) => t.tableSchema === schemaName);
+            return {
+              schemaName,
+              tables: tablesInSchema
+            };
+          });
+          return data;
         }
-        return data;
       } catch (error) {
         console.log('error', error.message);
       }
@@ -115,13 +120,13 @@ export default class DBTableModule {
         norender: false,
         submitText: 'Submit'
       },
-      rls_enabled: {
-        'ui:widget': 'checkbox'
-      },
+      // rls_enabled: {
+      //   'ui:widget': 'checkbox'
+      // },
       columns: {
         'ui:widget': TableColumnsWidget
       },
-      layout: [['name', 'comment'], 'rls_enabled', 'columns']
+      layout: [['name', 'comment'], 'columns']
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -130,8 +135,8 @@ export default class DBTableModule {
     value: new JSONValue<CreateTableSchemaType>({
       default: {
         name: '',
-        comment: '',
-        rls_enabled: true
+        comment: ''
+        // rls_enabled: true
       }
     })
   });
@@ -320,12 +325,12 @@ export default class DBTableModule {
 
       tableId = tableRes.id;
 
-      if (formData.rls_enabled) {
-        await trpc.pg.updateTable.mutate({
-          id: tableId,
-          rls_enabled: formData.rls_enabled
-        });
-      }
+      // if (formData.rls_enabled) {
+      //   await trpc.pg.updateTable.mutate({
+      //     id: tableId,
+      //     rls_enabled: formData.rls_enabled
+      //   });
+      // }
 
       return tableId;
     } catch (error) {
@@ -346,7 +351,7 @@ export default class DBTableModule {
         tableName: '',
         disabled: true
       });
-      this.allTableNames.call();
+      this.allTables.call();
     } catch (error) {
       console.log('error', error);
     }
@@ -407,7 +412,7 @@ export default class DBTableModule {
       await this.addColumn(tableId, column);
     }
 
-    this.allTableNames.call();
+    this.allTables.call();
   }
 
   async createTableData(formData: any) {

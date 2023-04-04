@@ -307,15 +307,15 @@ const SideBar = observer((props: SideBarProps) => {
 export const DBTableSideBar = observer(() => {
   const {
     w3s: {
-      dbTable: { allTableNames }
+      dbTable: { allTables }
     }
   } = useStore();
 
   useEffect(() => {
-    allTableNames.call();
+    allTables.call();
   }, []);
 
-  // if (allTableNames.loading.value) {
+  // if (allTables.loading.value) {
   //   return (
   //     <Flex w="100%" h="100%" justify="center">
   //       <Spinner mt="100px" />
@@ -323,14 +323,14 @@ export const DBTableSideBar = observer(() => {
   //   );
   // }
 
-  if (!allTableNames.value) {
+  if (!allTables.value) {
     return null;
   }
 
   return (
     <>
-      {Object.keys(allTableNames.value).map((key) => {
-        return <TableNames key={key} tableSchema={key} tables={allTableNames.value[key]} />;
+      {allTables.value.map((item) => {
+        return <TableNames key={item.schemaName} tableSchema={item.schemaName} tables={item.tables} />;
       })}
     </>
   );

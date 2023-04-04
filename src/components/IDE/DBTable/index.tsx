@@ -217,6 +217,17 @@ const ViewData = observer(() => {
         >
           Insert
         </Button>
+        <Button
+          ml="20px"
+          h="32px"
+          leftIcon={<MdRefresh />}
+          {...defaultOutlineButtonStyle}
+          onClick={async (e) => {
+            dbTable.init();
+          }}
+        >
+          Refresh
+        </Button>
       </Flex>
       <JSONTable jsonstate={dbTable} />
     </>
