@@ -1,7 +1,8 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect, useRef } from 'react';
 import { useStore } from '@/store/index';
-import { Box, Button, Flex, Spinner, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Spinner, Text, useDisclosure } from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import MonacoEditor from '@monaco-editor/react';
 import { _ } from '@/lib/lodash';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
@@ -63,6 +64,10 @@ const EventLogs = observer(() => {
     }
   }));
 
+  const collaspeState = useDisclosure({
+    defaultIsOpen: false
+  });
+
   useEffect(() => {
     const projectName = curProject?.f_name;
     if (projectName) {
@@ -81,10 +86,21 @@ const EventLogs = observer(() => {
 
   return (
     <Box bg="#000">
-      <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
-        Body:
-      </Box>
-      <Box pos="relative">
+      <Flex
+        alignItems="center"
+        color="#fff"
+        cursor="pointer"
+        borderBottom="1px solid #1E1E1E"
+        onClick={() => {
+          collaspeState.onToggle();
+        }}
+      >
+        <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
+        <Box fontSize="sm" fontWeight={700}>
+          Request Body
+        </Box>
+      </Flex>
+      <Box pos="relative" display={collaspeState.isOpen ? 'block' : 'none'}>
         <MonacoEditor
           height={300}
           theme="vs-dark"
@@ -130,10 +146,10 @@ const EventLogs = observer(() => {
           </Button>
         </Box>
       </Box>
-      <Flex align="center" p="1" fontSize="sm" fontWeight={700} color="#fff">
+      <Flex align="center" p="10px 20px" fontSize="sm" fontWeight={700} color="#fff">
         Logs: {loading && <Spinner ml="10px" size="sm" color="#fff" />}
       </Flex>
-      <Box height="calc(100vh - 480px)">
+      <Box height={collaspeState.isOpen ? 'calc(100vh - 520px)' : 'calc(100vh - 220px)'}>
         <AutoSizer>
           {({ width, height }) => (
             <List
