@@ -292,6 +292,17 @@ const DBTable = observer(() => {
     dbTable.init();
   }, [dbTable.currentTable.tableSchema, dbTable.currentTable.tableName]);
 
+  useEffect(() => {
+    return () => {
+      dbTable.setCurrentTable({
+        tableId: 0,
+        tableSchema: '',
+        tableName: '',
+        disabled: true
+      });
+    };
+  }, []);
+
   return (
     <>
       {dbTable.mode === 'EDIT_TABLE' && <EditTable />}

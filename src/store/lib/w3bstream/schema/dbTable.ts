@@ -507,8 +507,8 @@ export default class DBTableModule {
         };
       });
 
-      if (!DISABLED_TABLE_LIST.includes(this.currentTable.tableName)) {
-        const idName = cols[0].name;
+      const idName = cols[0]?.name;
+      if (!DISABLED_TABLE_LIST.includes(this.currentTable.tableName) && idName) {
         columns.push({
           key: 'action',
           label: 'Action',
