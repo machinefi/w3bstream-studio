@@ -49,19 +49,23 @@ const createProject = async (
   projectID: string;
   projectName: string;
 }> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project`, {
-    method: 'post',
-    body: JSON.stringify(project),
-    headers: { Authorization: token }
-  });
-  const data: any = await response.json();
-  if (data.project) {
-    return {
-      projectID: data.project.projectID,
-      projectName: data.project.name
-    };
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project`, {
+      method: 'post',
+      body: JSON.stringify(project),
+      headers: { Authorization: token }
+    });
+    const data: any = await response.json();
+    if (data.project) {
+      return {
+        projectID: data.project.projectID,
+        projectName: data.project.name
+      };
+    }
+  } catch (e) {
+    console.log(e);
+    throw new Error('create project failed:' + e.msg);
   }
-  throw data;
 };
 
 // const saveEnvs = async (projectName: string, envs: string[][], token: string): Promise<void> => {
@@ -75,64 +79,78 @@ const createProject = async (
 // };
 
 const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Applet & { projectName: string }, token: string): Promise<string> => {
-  const formData = new FormData();
-  let wasmName = '';
-  if (wasmURL) {
-    const response = await fetch(wasmURL);
-    const blob = await response.blob();
-    wasmName = wasmURL.split('/').pop();
-    const file = new File([blob], wasmName, { type: 'application/wasm' });
-    formData.set('file', file, wasmName);
-  } else {
-    // const file = dataURItoBlob(wasmRaw);
-    const buffer = Buffer.from(wasmRaw.replace('data:application/wasm;name=json.wasm;base64,', ''), 'base64');
-    wasmName = 'wasm_01';
-    formData.set('file', new Blob([buffer], { type: 'application/wasm' }));
-  }
+  try {
+    const formData = new FormData();
+    let wasmName = '';
+    if (wasmURL) {
+      const response = await fetch(wasmURL);
+      const blob = await response.blob();
+      wasmName = wasmURL.split('/').pop();
+      const file = new File([blob], wasmName, { type: 'application/wasm' });
+      formData.set('file', file, wasmName);
+    } else {
+      // const file = dataURItoBlob(wasmRaw);
+      const buffer = Buffer.from(wasmRaw.replace(/data:application\/wasm;(?:name=(.+)\.wasm);base64,/, ''), 'base64');
+      wasmName = 'wasm_01';
+      formData.set('file', new Blob([buffer], { type: 'application/wasm' }));
+    }
 
-  formData.set(
-    'info',
-    JSON.stringify({
-      projectName,
-      appletName,
-      wasmName
-    })
-  );
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${projectName}`, {
-    method: 'post',
-    headers: {
-      Authorization: token
-    },
-    body: formData
-  });
-  const data: any = await res.json();
-  if (data.appletID) {
-    return data.appletID;
+    formData.set(
+      'info',
+      JSON.stringify({
+        projectName,
+        appletName,
+        wasmName
+      })
+    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${projectName}`, {
+      method: 'post',
+      headers: {
+        Authorization: token
+      },
+      body: formData
+    });
+    const data: any = await res.json();
+    if (data.appletID) {
+      return data.appletID;
+    }
+  } catch (e) {
+    console.log(e);
+    throw new Error('create applet failed');
   }
-  throw data;
 };
 
 const deployApplet = async (appletID: string, token: string): Promise<string> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/applet/${appletID}`, {
-    method: 'post',
-    headers: {
-      Authorization: token
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/applet/${appletID}`, {
+      method: 'post',
+      headers: {
+        Authorization: token
+      }
+    });
+    const data: any = await res.json();
+    if (data.instanceID) {
+      return data.instanceID;
     }
-  });
-  const data: any = await res.json();
-  if (data.instanceID) {
-    return data.instanceID;
+    throw data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('deploy applet failed:' + error.msg);
   }
-  throw data;
 };
 
 const startInstance = async (instanceID: string, token: string): Promise<any> => {
-  fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/${instanceID}/START`, {
-    method: 'put',
-    headers: {
-      Authorization: token
-    }
-  });
+  try {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/${instanceID}/START`, {
+      method: 'put',
+      headers: {
+        Authorization: token
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error('start instance failed:'+error.msg);
+  }
 };
 
 const createMonitor = async (projectName: string, monitor: Monitor, token: string): Promise<void> => {
@@ -199,7 +217,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       res.status(200).json({ message: 'OK' });
     } catch (error) {
-      res.status(500).send(error.message);
+      console.log(error.message);
+      res.status(500).json({ message: error.message });
     }
   } else {
     res.status(405).json({ message: 'Method Not Allowed' });
