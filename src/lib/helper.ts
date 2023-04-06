@@ -87,6 +87,9 @@ export const helper = {
     }
   },
   string: {
+    firstUpperCase(str: string) {
+      return str.replace(/^\S/, (s) => s.toUpperCase());
+    },
     toFixString(str, length) {
       if (str && str.length > length) {
         return str.substr(0, length) + '...';
