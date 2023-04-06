@@ -89,6 +89,7 @@ export const helper = {
   string: {
     fristUpper(str: string) {
       return str.charAt(0).toUpperCase() + str.slice(1);
+    },
     firstUpperCase(str: string) {
       return str.replace(/^\S/, (s) => s.toUpperCase());
     },
