@@ -98,7 +98,12 @@ export type FileWidgetUIOptions = {
 
 const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: FileWidgetProps) => {
   const { accept, maxFiles = 0, multiple = false, tips, flexProps = {} } = options;
-  const extractedFilesInfo = useMemo(() => (Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value])), [value]);
+  const extractedFilesInfo = useMemo(() => {
+    if (!value) {
+      return [];
+    }
+    return Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value]);
+  }, [value]);
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>(extractedFilesInfo);
 
   const onDrop = useCallback(
@@ -152,7 +157,7 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
         {...flexProps}
       >
         <input id={id} name={id} disabled={readonly || disabled} autoFocus={autofocus} {...getInputProps()} />
-        <Icon mb="5px" boxSize={6} as={FiUploadCloud} color="#aaa"/>
+        <Icon mb="5px" boxSize={6} as={FiUploadCloud} color="#aaa" />
         {tips && (
           <Text fontSize="14px" color="#aaa">
             {tips}

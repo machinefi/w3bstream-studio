@@ -215,7 +215,8 @@ export default class ProjectModule {
       default: {
         name: '',
         tags: '',
-        template: ''
+        template: '',
+        file: ''
       }
     })
   });
