@@ -12,9 +12,10 @@ import { PromiseState } from '@/store/standard/PromiseState';
 import { AppletType, ProjectType, PublisherType, InstanceType, StrategyType } from '@/server/routers/w3bstream';
 import { trpc } from '@/lib/trpc';
 import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
-import { UiSchema } from '@rjsf/utils';
+import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import FileWidget, { FileWidgetUIOptions } from '@/components/JSONFormWidgets/FileWidget';
 import { Project } from 'pages/api/init';
+import SelectTagWidget, { SelectTagWidgetUIOptions } from '@/components/JSONFormWidgets/SelectTagWidget';
 
 export const defaultSchema = {
   type: 'object',
@@ -37,8 +38,9 @@ export const developerInitializationTemplateSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', title: 'Name' },
-    description: { type: 'string', title: 'Description' },
-    template: { type: 'string', title: 'Explore Templates' }
+    tags: { type: 'string', title: 'Tags' },
+    template: { type: 'string', title: 'Explore Templates' },
+    file: { type: 'string', title: 'Code Upload' }
   },
   required: ['name']
 } as const;
@@ -59,7 +61,6 @@ export const createProjectByWasmSchema = {
   },
   required: ['file', 'projectName']
 } as const;
-
 
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
@@ -171,7 +172,7 @@ export default class ProjectModule {
     })
   });
 
-  developerInitializationTemplateForm = new JSONSchemaFormState<DeveloperInitializationTemplateSchemaType>({
+  developerInitializationTemplateForm = new JSONSchemaFormState<DeveloperInitializationTemplateSchemaType, UiSchema & { file: FileWidgetUIOptions; tags: SelectTagWidgetUIOptions }>({
     //@ts-ignore
     schema: developerInitializationTemplateSchema,
     uiSchema: {
@@ -179,26 +180,43 @@ export default class ProjectModule {
         norender: false,
         submitText: 'Submit'
       },
-      template: {
-        'ui:widget': InitializationTemplateWidget
+      tags: {
+        'ui:widget': SelectTagWidget,
+        'ui:options': {
+          tags: ['Mobility', 'Energy', 'Environmental', 'Healthcare', 'General', 'Smart City', 'Smart Home', 'Geo-location']
+        }
       },
-      layout: [['name', 'description'], 'template']
+      template: {
+        'ui:widget': InitializationTemplateWidget,
+        flexProps: {
+          h: '200px'
+        }
+      },
+      file: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          accept: {
+            'application/wasm': ['.wasm']
+          },
+          tips: `Code Upload`,
+          flexProps: {
+            h: '200px',
+            borderRadius: '8px'
+          }
+        }
+      },
+      layout: [['name'], 'tags', ['template', 'file']]
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
       this.developerInitializationTemplateForm.reset();
     },
-    // customValidate(formData, errors) {
-    //   if (!formData.template) {
-    //     errors.template.addError('Please select a template');
-    //   }
-    //   return errors;
-    // },
     value: new JSONValue<DeveloperInitializationTemplateSchemaType>({
       default: {
         name: '',
-        description: '',
-        template: ''
+        tags: '',
+        template: '',
+        file: ''
       }
     })
   });
@@ -279,13 +297,17 @@ export default class ProjectModule {
 
   async setEnvs() {
     if (this.formMode === 'edit') {
-      this.envs = this.curProject?.config?.env || [
-        {
-          id: uuidv4(),
-          key: '',
-          value: ''
-        }
-      ];
+      const envs = this.curProject?.config?.env || [];
+      this.envs =
+        envs.length > 0
+          ? envs
+          : [
+              {
+                id: uuidv4(),
+                key: '',
+                value: ''
+              }
+            ];
     } else {
       this.envs = [
         {
@@ -427,6 +449,7 @@ export default class ProjectModule {
         }
       ]
     });
+
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
@@ -445,20 +468,55 @@ export default class ProjectModule {
         }
       } catch (error) {}
       eventBus.emit('project.create');
-    } else {
-      try {
-        const res = await axios.request({
-          method: 'post',
-          url: '/api/w3bapp/project',
-          data: {
-            name: formData.name
+      return;
+    }
+
+    const projectName = formData.name;
+    try {
+      const res = await axios.request({
+        method: 'post',
+        url: '/api/w3bapp/project',
+        data: {
+          name: projectName
+        }
+      });
+      if (res.data?.project) {
+        if (formData.file) {
+          const data = new FormData();
+          const file = dataURItoBlob(formData.file);
+          data.append('file', file.blob);
+          data.append(
+            'info',
+            JSON.stringify({
+              projectName,
+              appletName: 'applet_01',
+              wasmName: file.name
+            })
+          );
+          const res = await axios.request({
+            method: 'post',
+            url: `/api/file?api=applet/${projectName}`,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            data
+          });
+          const appletID = res.data?.appletID;
+          if (appletID) {
+            const instanceID = await globalThis.store.w3s.applet.deployApplet({ appletID, triggerEvent: false });
+            if (instanceID) {
+              globalThis.store.w3s.instances.handleInstance({ instanceID, event: 'START' });
+              eventBus.emit('project.create');
+              showNotification({ message: 'create project succeeded' });
+            }
           }
-        });
-        if (res.data?.project) {
+        } else {
           eventBus.emit('project.create');
           showNotification({ message: 'create project succeeded' });
         }
-      } catch (error) {}
+      }
+    } catch (error) {
+      showNotification({ color: 'red', message: error.message });
     }
   }
 

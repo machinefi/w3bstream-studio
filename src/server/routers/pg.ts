@@ -5,21 +5,43 @@ import { PostgresMeta } from '@/postgres-meta/index';
 import { DEFAULT_POOL_CONFIG, DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST, PG_CONNECTION } from '@/constants/postgres-meta';
 
 export const pgRouter = t.router({
-  tables: authProcedure
+  schemas: authProcedure
     .input(
       z.object({
-        role: z.string().optional().default('DEVELOPER')
+        accountRole: z.string().optional().default('DEVELOPER'),
+        schemaName: z.string().optional().default('')
       })
     )
     .query(async ({ ctx, input }) => {
-      let excludedSchemas = ['pg_catalog', 'information_schema', 'hdb_catalog'];
-      if (input.role !== 'ADMIN') {
-        excludedSchemas = excludedSchemas.concat(DISABLED_SCHEMA_LIST);
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const { data, error } = await pgMeta.schemas.list();
+      await pgMeta.end();
+      if (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
       }
+
+      if (input.accountRole === 'DEVELOPER') {
+        if (input.schemaName) {
+          return data.filter((item) => item.name === input.schemaName);
+        }
+
+        return data.filter((item) => {
+          return !DISABLED_SCHEMA_LIST.includes(item.name);
+        });
+      }
+
+      return data;
+    }),
+  tables: authProcedure
+    .input(
+      z.object({
+        includedSchemas: z.array(z.string())
+      })
+    )
+    .query(async ({ ctx, input }) => {
       const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
       const { data, error } = await pgMeta.tables.list({
-        excludedSchemas,
-        includeSystemSchemas: false,
+        includedSchemas: input.includedSchemas,
         includeColumns: false
       });
       await pgMeta.end();

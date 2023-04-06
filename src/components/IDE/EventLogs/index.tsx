@@ -1,16 +1,15 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useStore } from '@/store/index';
-import { Box, Button, Flex, Spinner, Text } from '@chakra-ui/react';
-import MonacoEditor from '@monaco-editor/react';
-import { _ } from '@/lib/lodash';
-import { defaultOutlineButtonStyle } from '@/lib/theme';
+import { Box, Flex, Icon, Spinner, Text } from '@chakra-ui/react';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
 import { WasmLogType } from '@/server/routers/w3bstream';
 import dayjs from '@/lib/dayjs';
 import { trpc } from '@/lib/trpc';
+import { VscDebugStart } from 'react-icons/vsc';
+import { hooks } from '@/lib/hooks';
 
 type LocalStoreType = {
   loading: boolean;
@@ -43,14 +42,6 @@ const EventLogs = observer(() => {
     }
   } = useStore();
 
-  const changeCodeRef = useRef(
-    _.debounce((codeStr: string) => {
-      publisher.publishEventForm.value.set({
-        body: codeStr
-      });
-    }, 800)
-  );
-
   const store = useLocalObservable<LocalStoreType>(() => ({
     loading: true,
     initialized: false,
@@ -80,60 +71,61 @@ const EventLogs = observer(() => {
   const { loading, logs } = store;
 
   return (
-    <Box bg="#000">
-      <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
-        Body:
-      </Box>
-      <Box pos="relative">
-        <MonacoEditor
-          height={300}
-          theme="vs-dark"
-          language="json"
-          value={publisher.publishEventForm.formData.body}
-          onChange={(v) => {
-            changeCodeRef.current && changeCodeRef.current(v);
-          }}
-        />
-        <Box pos="absolute" bottom={4} right={4} cursor="pointer">
-          <Button
-            type="submit"
-            borderRadius="base"
-            {...defaultOutlineButtonStyle}
-            onClick={async () => {
-              const projectName = curProject?.f_name;
-              if (projectName) {
-                const res = await axios.request({
-                  method: 'post',
-                  url: `/api/w3bapp/event/${projectName}`,
-                  headers: {
-                    'Content-Type': 'text/plain'
-                  },
-                  data: publisher.parseBody()
-                });
-                if (res.data) {
-                  await showNotification({ message: 'publish event succeeded' });
-                  store.setData({
-                    loading: true
-                  });
-                  fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
-                    store.setData({
-                      logs: res.concat(logs),
-                      offset: store.offset + logs.length,
-                      loading: false
-                    });
-                  });
-                }
+    <Box pos="relative" bg="#000" borderRadius="8px">
+      <Icon
+        as={VscDebugStart}
+        pos="absolute"
+        right="10px"
+        top="10px"
+        color="white"
+        cursor="pointer"
+        _hover={{
+          color: '#946FFF'
+        }}
+        onClick={async () => {
+          const formData = await hooks.getFormData({
+            title: '',
+            size: 'xl',
+            formList: [
+              {
+                form: publisher.developerPublishEventForm
               }
-            }}
-          >
-            Submit
-          </Button>
-        </Box>
-      </Box>
-      <Flex align="center" p="1" fontSize="sm" fontWeight={700} color="#fff">
+            ]
+          });
+          const projectName = curProject?.f_name;
+          if (projectName) {
+            try {
+              const res = await axios.request({
+                method: 'post',
+                url: `/api/w3bapp/event/${projectName}`,
+                headers: {
+                  'Content-Type': 'text/plain'
+                },
+                data: publisher.parseBody(formData.body)
+              });
+              const wasmResult = res.data?.[0].wasmResults?.[0];
+              if (wasmResult && wasmResult.code === 0) {
+                store.setData({
+                  loading: true
+                });
+                fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+                  store.setData({
+                    logs: res.concat(logs),
+                    offset: store.offset + logs.length,
+                    loading: false
+                  });
+                });
+              } else {
+                showNotification({ color: 'red', message: wasmResult?.errMsg || 'Failed' });
+              }
+            } catch (error) {}
+          }
+        }}
+      />
+      <Flex align="center" p="10px 20px" fontSize="sm" fontWeight={700} color="#fff">
         Logs: {loading && <Spinner ml="10px" size="sm" color="#fff" />}
       </Flex>
-      <Box height="calc(100vh - 480px)">
+      <Box height="calc(100vh - 180px)">
         <AutoSizer>
           {({ width, height }) => (
             <List

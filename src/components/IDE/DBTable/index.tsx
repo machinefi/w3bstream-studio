@@ -217,6 +217,17 @@ const ViewData = observer(() => {
         >
           Insert
         </Button>
+        <Button
+          ml="20px"
+          h="32px"
+          leftIcon={<MdRefresh />}
+          {...defaultOutlineButtonStyle}
+          onClick={async (e) => {
+            dbTable.init();
+          }}
+        >
+          Refresh
+        </Button>
       </Flex>
       <JSONTable jsonstate={dbTable} />
     </>
@@ -280,6 +291,17 @@ const DBTable = observer(() => {
   useEffect(() => {
     dbTable.init();
   }, [dbTable.currentTable.tableSchema, dbTable.currentTable.tableName]);
+
+  useEffect(() => {
+    return () => {
+      dbTable.setCurrentTable({
+        tableId: 0,
+        tableSchema: '',
+        tableName: '',
+        disabled: true
+      });
+    };
+  }, []);
 
   return (
     <>

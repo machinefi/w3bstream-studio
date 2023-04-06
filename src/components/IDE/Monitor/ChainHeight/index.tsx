@@ -27,47 +27,56 @@ const ChainHeight = observer(() => {
 
   return (
     <>
-      <Flex alignItems="center">
-        <Button
-          h="32px"
-          leftIcon={<AddIcon />}
-          {...defaultButtonStyle}
-          onClick={async (e) => {
-            if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-              w3s.chainHeight.form.value.set({
-                projectName: w3s.project.curProject?.f_name
-              });
-              w3s.chainHeight.form.uiSchema.projectName = {
-                'ui:disabled': true
-              };
-            }
-            const formData = await hooks.getFormData({
-              title: ' Create blockchain height monitor',
-              size: 'md',
-              formList: [
-                {
-                  form: w3s.chainHeight.form
-                }
-              ]
-            });
-            if (formData.projectName) {
-              const res = await axios.request({
-                method: 'post',
-                url: `/api/w3bapp/monitor/chain_height/${formData.projectName}`,
-                data: formData
-              });
-              if (res.data) {
-                await showNotification({ message: 'Blockchain height monitor sucessfully created.' });
-                eventBus.emit('chainHeight.create');
-              }
-            }
-          }}
-        >
-          Create
-        </Button>
-      </Flex>
+      {w3s.config.form.formData.accountRole === 'ADMIN' && (
+        <Flex alignItems="center">
+          <CreateChainHeightButton />
+        </Flex>
+      )}
       <JSONTable jsonstate={w3s.chainHeight} />
     </>
+  );
+});
+
+export const CreateChainHeightButton = observer(() => {
+  const { w3s } = useStore();
+  return (
+    <Button
+      h="32px"
+      leftIcon={<AddIcon />}
+      {...defaultButtonStyle}
+      onClick={async (e) => {
+        if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
+          w3s.chainHeight.form.value.set({
+            projectName: w3s.project.curProject?.f_name
+          });
+          w3s.chainHeight.form.uiSchema.projectName = {
+            'ui:disabled': true
+          };
+        }
+        const formData = await hooks.getFormData({
+          title: ' Create blockchain height monitor',
+          size: 'md',
+          formList: [
+            {
+              form: w3s.chainHeight.form
+            }
+          ]
+        });
+        if (formData.projectName) {
+          const res = await axios.request({
+            method: 'post',
+            url: `/api/w3bapp/monitor/chain_height/${formData.projectName}`,
+            data: formData
+          });
+          if (res.data) {
+            await showNotification({ message: 'Blockchain height monitor sucessfully created.' });
+            eventBus.emit('chainHeight.create');
+          }
+        }
+      }}
+    >
+      Create
+    </Button>
   );
 });
 

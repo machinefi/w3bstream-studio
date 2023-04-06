@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Flex, chakra, Box, Text, Stack } from '@chakra-ui/react';
+import { Flex, chakra, Box, Text, Stack, FlexProps, Icon } from '@chakra-ui/react';
 import { dataURItoBlob, WidgetProps } from '@rjsf/utils';
 import { Accept, useDropzone } from 'react-dropzone';
+import { FiUploadCloud } from 'react-icons/fi';
 
 function addNameToDataURL(dataURL: string, name: string) {
   if (dataURL === null) {
@@ -83,6 +84,7 @@ type Options = {
   maxFiles?: number; // Maximum accepted number of files The default value is 0 which means there is no limitation to how many files are accepted.
   multiple?: boolean; // Allow drag 'n' drop (or selection from the file dialog) of multiple files
   tips?: string;
+  flexProps?: FlexProps;
 };
 
 export interface FileWidgetProps extends WidgetProps {
@@ -95,8 +97,13 @@ export type FileWidgetUIOptions = {
 };
 
 const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: FileWidgetProps) => {
-  const { accept, maxFiles = 0, multiple = false, tips } = options;
-  const extractedFilesInfo = useMemo(() => (Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value])), [value]);
+  const { accept, maxFiles = 0, multiple = false, tips, flexProps = {} } = options;
+  const extractedFilesInfo = useMemo(() => {
+    if (!value) {
+      return [];
+    }
+    return Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value]);
+  }, [value]);
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>(extractedFilesInfo);
 
   const onDrop = useCallback(
@@ -137,9 +144,20 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
           </chakra.span>
         )}
       </Flex>
-      <Flex mt="10px" w="100%" h="100px" flexDirection="column" justifyContent="center" alignItems="center" border="2px dashed #eee" mb="20px" {...getRootProps({ className: 'dropzone' })}>
+      <Flex
+        mt="10px"
+        w="100%"
+        h="100px"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        border="2px dashed #eee"
+        mb="20px"
+        {...getRootProps({ className: 'dropzone' })}
+        {...flexProps}
+      >
         <input id={id} name={id} disabled={readonly || disabled} autoFocus={autofocus} {...getInputProps()} />
-        <Text>{label}</Text>
+        <Icon mb="5px" boxSize={6} as={FiUploadCloud} color="#aaa" />
         {tips && (
           <Text fontSize="14px" color="#aaa">
             {tips}

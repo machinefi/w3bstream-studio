@@ -51,15 +51,15 @@ const Publishers = observer(() => {
                 }
               ]
             });
-            const { projectName, name, key } = formData;
-            if (projectName && name && key) {
+            const { projectName, key } = formData;
+            if (projectName && key) {
               try {
                 await axios.request({
                   method: 'post',
                   url: `/api/w3bapp/publisher/${projectName}`,
                   data: {
-                    name,
-                    key
+                    key,
+                    name: key,
                   }
                 });
                 await showNotification({ message: 'create publisher succeeded' });

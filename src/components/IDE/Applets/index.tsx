@@ -55,7 +55,7 @@ const AddBtn = observer(() => {
               headers: {
                 'Content-Type': 'text/plain'
               },
-              data: w3s.publisher.parseBody()
+              data: w3s.publisher.parseBody(formData.body)
             });
             if (res.data) {
               await showNotification({ message: 'publish event succeeded' });
