@@ -25,10 +25,14 @@ const JSONModal = observer(() => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader bg="#FAFAFA" borderBottom="1px solid #eee">
-          {formModal.title}
-        </ModalHeader>
-        <ModalCloseButton />
+        {formModal.title && (
+          <>
+            <ModalHeader bg="#FAFAFA" borderBottom="1px solid #eee">
+              {formModal.title}
+            </ModalHeader>
+            <ModalCloseButton />
+          </>
+        )}
         <ModalBody>
           {formList.length > 1 ? (
             <>

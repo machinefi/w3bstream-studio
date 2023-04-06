@@ -47,8 +47,17 @@ export const publishEventSchema = {
   required: ['projectName', 'body']
 } as const;
 
+export const developerPublishEventSchema = {
+  type: 'object',
+  properties: {
+    body: { type: 'string', title: '' }
+  },
+  required: []
+} as const;
+
 type CreatePublisherSchemaType = FromSchema<typeof createPublisherSchema>;
 type PublishEventSchemaType = FromSchema<typeof publishEventSchema>;
+type DeveloperPublishEventSchemaType = FromSchema<typeof developerPublishEventSchema>;
 
 //@ts-ignore
 createPublisherSchema.definitions = {
@@ -102,7 +111,11 @@ export default class PublisherModule {
               token: '',
               pub_time: Date.now()
             },
-            payload: ''
+            payload: [
+              {
+                example: 'This is is an example payload'
+              }
+            ]
           }),
           showLanguageSelector: true,
           onChangeLanguage: (language) => {
@@ -188,9 +201,66 @@ export default class PublisherModule {
       }
     })
   });
-  parseBody() {
+
+  developerPublishEventForm = new JSONSchemaFormState<DeveloperPublishEventSchemaType, UiSchema & { body: EditorWidgetUIOptions }>({
+    //@ts-ignore
+    schema: developerPublishEventSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      body: {
+        'ui:widget': EditorWidget,
+        'ui:options': {
+          editorHeight: '400px',
+          emptyValue: JSON.stringify({
+            header: {
+              event_type: 'ANY',
+              pub_id: '',
+              token: '',
+              pub_time: Date.now()
+            },
+            payload: [
+              {
+                example: 'This is is an example payload'
+              }
+            ]
+          }),
+          showLanguageSelector: false
+        }
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.developerPublishEventForm.reset();
+    },
+    value: new JSONValue<DeveloperPublishEventSchemaType>({
+      default: {
+        body: JSON.stringify(
+          {
+            header: {
+              event_type: 'ANY',
+              pub_id: '',
+              token: '',
+              pub_time: Date.now()
+            },
+            payload: [
+              {
+                example: 'This is is an example payload'
+              }
+            ]
+          },
+          null,
+          2
+        )
+      }
+    })
+  });
+
+  parseBody(bodyStr: string) {
     try {
-      const body = JSON.parse(this.publishEventForm.formData.body);
+      const body = JSON.parse(bodyStr);
       if (Array.isArray(body.payload)) {
         return {
           events: body.payload.map((item) => ({

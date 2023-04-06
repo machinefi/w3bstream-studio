@@ -1,17 +1,15 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useStore } from '@/store/index';
-import { Box, Button, Flex, Icon, Spinner, Text, useDisclosure } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import MonacoEditor from '@monaco-editor/react';
-import { _ } from '@/lib/lodash';
-import { defaultOutlineButtonStyle } from '@/lib/theme';
+import { Box, Flex, Icon, Spinner, Text } from '@chakra-ui/react';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
 import { WasmLogType } from '@/server/routers/w3bstream';
 import dayjs from '@/lib/dayjs';
 import { trpc } from '@/lib/trpc';
+import { VscDebugStart } from 'react-icons/vsc';
+import { hooks } from '@/lib/hooks';
 
 type LocalStoreType = {
   loading: boolean;
@@ -44,14 +42,6 @@ const EventLogs = observer(() => {
     }
   } = useStore();
 
-  const changeCodeRef = useRef(
-    _.debounce((codeStr: string) => {
-      publisher.publishEventForm.value.set({
-        body: codeStr
-      });
-    }, 800)
-  );
-
   const store = useLocalObservable<LocalStoreType>(() => ({
     loading: true,
     initialized: false,
@@ -63,10 +53,6 @@ const EventLogs = observer(() => {
       Object.assign(store, data);
     }
   }));
-
-  const collaspeState = useDisclosure({
-    defaultIsOpen: false
-  });
 
   useEffect(() => {
     const projectName = curProject?.f_name;
@@ -85,71 +71,58 @@ const EventLogs = observer(() => {
   const { loading, logs } = store;
 
   return (
-    <Box bg="#000">
-      <Flex
-        alignItems="center"
-        color="#fff"
+    <Box pos="relative" bg="#000" borderRadius="8px">
+      <Icon
+        as={VscDebugStart}
+        pos="absolute"
+        right="10px"
+        top="10px"
+        color="white"
         cursor="pointer"
-        borderBottom="1px solid #1E1E1E"
-        onClick={() => {
-          collaspeState.onToggle();
+        _hover={{
+          color: '#946FFF'
         }}
-      >
-        <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
-        <Box fontSize="sm" fontWeight={700}>
-          Request Body
-        </Box>
-      </Flex>
-      <Box pos="relative" display={collaspeState.isOpen ? 'block' : 'none'}>
-        <MonacoEditor
-          height={300}
-          theme="vs-dark"
-          language="json"
-          value={publisher.publishEventForm.formData.body}
-          onChange={(v) => {
-            changeCodeRef.current && changeCodeRef.current(v);
-          }}
-        />
-        <Box pos="absolute" bottom={4} right={4} cursor="pointer">
-          <Button
-            type="submit"
-            borderRadius="base"
-            {...defaultOutlineButtonStyle}
-            onClick={async () => {
-              const projectName = curProject?.f_name;
-              if (projectName) {
-                const res = await axios.request({
-                  method: 'post',
-                  url: `/api/w3bapp/event/${projectName}`,
-                  headers: {
-                    'Content-Type': 'text/plain'
-                  },
-                  data: publisher.parseBody()
-                });
-                if (res.data) {
-                  await showNotification({ message: 'publish event succeeded' });
-                  store.setData({
-                    loading: true
-                  });
-                  fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
-                    store.setData({
-                      logs: res.concat(logs),
-                      offset: store.offset + logs.length,
-                      loading: false
-                    });
-                  });
-                }
+        onClick={async () => {
+          const formData = await hooks.getFormData({
+            title: '',
+            size: 'xl',
+            formList: [
+              {
+                form: publisher.developerPublishEventForm
               }
-            }}
-          >
-            Submit
-          </Button>
-        </Box>
-      </Box>
+            ]
+          });
+          console.log('parseBody', publisher.parseBody(formData.body));
+          const projectName = curProject?.f_name;
+          if (projectName) {
+            const res = await axios.request({
+              method: 'post',
+              url: `/api/w3bapp/event/${projectName}`,
+              headers: {
+                'Content-Type': 'text/plain'
+              },
+              data: publisher.parseBody(formData.body)
+            });
+            if (res.data) {
+              showNotification({ message: 'publish event succeeded' });
+              store.setData({
+                loading: true
+              });
+              fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+                store.setData({
+                  logs: res.concat(logs),
+                  offset: store.offset + logs.length,
+                  loading: false
+                });
+              });
+            }
+          }
+        }}
+      />
       <Flex align="center" p="10px 20px" fontSize="sm" fontWeight={700} color="#fff">
         Logs: {loading && <Spinner ml="10px" size="sm" color="#fff" />}
       </Flex>
-      <Box height={collaspeState.isOpen ? 'calc(100vh - 520px)' : 'calc(100vh - 220px)'}>
+      <Box height="calc(100vh - 180px)">
         <AutoSizer>
           {({ width, height }) => (
             <List

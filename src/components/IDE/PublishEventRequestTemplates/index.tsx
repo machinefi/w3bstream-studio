@@ -19,14 +19,6 @@ const PublishEventRequestTemplates = observer(() => {
       code: ''
     },
     templates: ['cURL', 'JS', 'Go', 'Rust'],
-    requestData() {
-      const { projectName } = formData;
-      const data = publisher.parseBody();
-      return {
-        data,
-        projectName
-      };
-    },
     setData(v: Partial<{ curTemplateKey: string; curTemplate: { language: string; code: string } }>) {
       Object.assign(store, v);
     }
@@ -36,9 +28,12 @@ const PublishEventRequestTemplates = observer(() => {
     const curTemplateKey = store.curTemplateKey || 'JS';
     store.setData({
       curTemplateKey,
-      curTemplate: getTemplate(curTemplateKey, store.requestData())
+      curTemplate: getTemplate(curTemplateKey, {
+        projectName: formData.projectName,
+        data: publisher.parseBody(formData.body)
+      })
     });
-  }, [formData.projectName, formData.publisher]);
+  }, [formData.projectName, formData.body]);
 
   const onClose = () => {
     publisher.showPublishEventRequestTemplates = false;
@@ -61,7 +56,10 @@ const PublishEventRequestTemplates = observer(() => {
                 if (curTemplateKey) {
                   store.setData({
                     curTemplateKey,
-                    curTemplate: getTemplate(curTemplateKey, store.requestData())
+                    curTemplate: getTemplate(curTemplateKey, {
+                      projectName: formData.projectName,
+                      data: publisher.parseBody(formData.body)
+                    })
                   });
                 }
               }}
