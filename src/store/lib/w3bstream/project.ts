@@ -8,6 +8,19 @@ import { IndexDb } from '@/lib/dexie';
 import { config } from '@/lib/config';
 import { createClient, SubscribePayload, Client } from 'graphql-ws';
 import { v4 as uuidv4 } from 'uuid';
+import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { FromSchema } from 'json-schema-to-ts';
+import InitWasmTemplateWidget from '@/components/JSONFormWidgets/InitWasmTemplateWidget';
+import { eventBus } from '@/lib/event';
+
+export const initWasmTemplateFormSchema = {
+  type: 'object',
+  properties: {
+    template: { type: 'string', title: 'Explore Templates' }
+  },
+  required: ['template']
+} as const;
+type InitWasmTemplateFormSchemaType = FromSchema<typeof initWasmTemplateFormSchema>;
 
 export type VSCodeFilesType = {
   name: string;
@@ -25,6 +38,29 @@ export class ProjectManager {
   files: MappingState<FilesListSchema> = new MappingState({
     currentId: 'GLOBAL',
     map: {}
+  });
+  initWasmTemplateForm = new JSONSchemaFormState<InitWasmTemplateFormSchemaType>({
+    //@ts-ignore
+    schema: initWasmTemplateFormSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      template: {
+        'ui:widget': InitWasmTemplateWidget
+      },
+      layout: [['name', 'description'], 'template']
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.initWasmTemplateForm.reset();
+    },
+    value: new JSONValue<InitWasmTemplateFormSchemaType>({
+      default: {
+        template: ''
+      }
+    })
   });
   wsClient: Client;
   isWSConnect = false;
