@@ -42,7 +42,7 @@ export class WebhookNode extends BaseNode {
     nodeType: 'webhook',
     icon: 'TbWebhook',
     group: 'trigger',
-    groupIcon: '/icons/icon_trigger.png',
+    groupIcon: '/images/icons/icon_trigger.png',
     version: '1.0',
     description: 'Webhook node description',
     withTargetHandle: false,

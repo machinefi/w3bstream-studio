@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Flex, Text, Box, Button } from '@mantine/core';
+import { Flex, Text, Box, Button } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import MonacoEditor from '@monaco-editor/react';
 import { JSONRenderComponent, JSONRenderStoreCtx } from '..';
@@ -16,7 +16,7 @@ export const WebhookSubmitWidget = observer(({ store, templateValue }: { store: 
   }, []);
 
   return (
-    <Flex direction={'column'} mt={20}>
+    <Flex direction={'column'} mt={2}>
       <Text sx={{ fontWeight: 700 }}>Example Event</Text>
       <Box mt={4}>
         <MonacoEditor

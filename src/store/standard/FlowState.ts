@@ -7,8 +7,11 @@ import { FlowNode } from './Node';
 import { PromiseState } from './PromiseState';
 import { _ } from '@/lib/lodash';
 import { v4 as uuid } from 'uuid';
+import { IndexDb } from '@/lib/dexie';
 
 export class FlowState {
+  curFlowId: number = null;
+  curEditNodeId: string = '';
   reactFlowInstance: null | ReactFlowInstance<FlowNodeData, any> = null;
   nodes: Node<FlowNodeData>[] = [];
   edges: Edge<any>[] = [];
@@ -32,7 +35,7 @@ export class FlowState {
         this.nodeInstances.push(new FlowNode(i as INodeType));
       });
       return res.data;
-    },
+    }
   });
 
   onInit = (reactFlowInstance: ReactFlowInstance<FlowNodeData, any>) => {
@@ -52,13 +55,14 @@ export class FlowState {
       {
         ...connection,
         animated: true,
-        markerEnd: { type: MarkerType.ArrowClosed },
+        markerEnd: { type: MarkerType.ArrowClosed }
       },
-      this.edges,
+      this.edges
     );
   };
 
   addNodes = (newNode: Node<FlowNodeData> | Node<FlowNodeData>[]) => {
+    console.log('addNodes');
     this.nodes = this.nodes.concat(newNode);
     this.onDataChange();
   };
@@ -113,6 +117,16 @@ export class FlowState {
     });
   };
 
+  async syncToIndexDb() {
+    if (!this.curFlowId) return;
+    const data = this.exportData();
+    console.log('sync to db', data);
+    const flow = await IndexDb.findFlowsById(this.curFlowId);
+    console.log('flow', flow, this.curFlowId);
+    const res = await IndexDb.updateFlowById(this.curFlowId, flow[0].name, data);
+    console.log('res', res);
+  }
+
   exportData = () => {
     const nodes = this.nodes.map((node) => {
       return {
@@ -120,15 +134,15 @@ export class FlowState {
         type: node.type,
         position: {
           x: Math.floor(node.position.x),
-          y: Math.floor(node.position.y),
+          y: Math.floor(node.position.y)
         },
-        data: node.data,
+        data: node.data
       };
     });
     const edges = this.edges.map((edge) => {
       return {
         source: edge.source,
-        target: edge.target,
+        target: edge.target
       };
     });
     return { nodes, edges };
@@ -146,7 +160,7 @@ export class FlowState {
         ...edge,
         id: `reactflow__edge-${edge.source}-${edge.target}`,
         animated: true,
-        markerEnd: { type: MarkerType.ArrowClosed },
+        markerEnd: { type: MarkerType.ArrowClosed }
       };
     });
   };
@@ -188,7 +202,7 @@ export class FlowState {
       // Set the position of the new node
       newNode.position = {
         x: node.position.x + 100,
-        y: node.position.y + 100,
+        y: node.position.y + 100
       };
       // Set the id of the webhook node
       if (newNode.type === 'WebhookNode') {
@@ -207,7 +221,7 @@ export class FlowState {
         source: newSource,
         target: newTarget,
         animated: true,
-        markerEnd: { type: MarkerType.ArrowClosed },
+        markerEnd: { type: MarkerType.ArrowClosed }
       };
     });
     this.addEdges(newEdges);
