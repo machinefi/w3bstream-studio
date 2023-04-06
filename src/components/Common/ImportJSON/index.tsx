@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from '@mantine/core';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -35,8 +35,8 @@ const ImportJSON = ({ displayType = 'button', tipLabel = '', onJSON }: ImportJSO
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
-      'application/json': ['.json'],
-    },
+      'application/json': ['.json']
+    }
   });
 
   if (displayType === 'button') {
@@ -44,15 +44,12 @@ const ImportJSON = ({ displayType = 'button', tipLabel = '', onJSON }: ImportJSO
       <Box {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
         <Button
-          compact
-          sx={(theme) => ({
-            background: theme.colorScheme === 'dark' ? '#fff' : '#000',
-            color: theme.colorScheme === 'dark' ? '#000' : '#fff',
-            cursor: 'pointer',
-            ':hover': {
-              background: theme.colorScheme === 'dark' ? theme.colors.gray[4] : theme.colors.dark[4],
-            },
-          })}
+          background={'#000'}
+          color="#fff"
+          cursor={'pointer'}
+          _hover={{
+            background: '#000'
+          }}
         >
           {tipLabel}
         </Button>
@@ -60,35 +57,12 @@ const ImportJSON = ({ displayType = 'button', tipLabel = '', onJSON }: ImportJSO
     );
   } else {
     return (
-      <Flex
-        mb="20px"
-        w="100%"
-        h="100px"
-        p="10px"
-        direction="column"
-        justify="center"
-        align="center"
-        sx={(theme) => ({
-          border: '2px dashed #eee',
-          background: theme.colorScheme === 'dark' ? '#fff' : '#000',
-        })}
-        {...getRootProps({ className: 'dropzone' })}
-      >
+      <Flex mb="20px" w="100%" h="100px" p="10px" direction="column" justify="center" align="center" border="2px dashed #eee" background="#000" {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
-        <Text
-          sx={(theme) => ({
-            fontSize: '16px',
-            color: theme.colorScheme === 'dark' ? '#000' : '#fff',
-          })}
-        >
+        <Text fontSize={'16px'} color="#fff">
           Upload a JSON file
         </Text>
-        <Text
-          sx={(theme) => ({
-            fontSize: '14px',
-            color: theme.colorScheme === 'dark' ? '#000' : '#fff',
-          })}
-        >
+        <Text fontSize={'16px'} color="#fff">
           Drag 'n' drop a file here, or click to select a file
         </Text>
       </Flex>

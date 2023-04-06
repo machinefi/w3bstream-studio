@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActionIcon, Input, Box, Button, Collapse, createStyles, Flex, Indicator, Text } from '@mantine/core';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
@@ -14,61 +13,78 @@ import { hooks } from '@/lib/hooks';
 // import LogView from '@/components/LogView';
 import { _ } from '@/lib/lodash';
 // import { IconArrowLeft } from '@tabler/icons';
-import { v4 as uuid } from 'uuid';
-import ImportJSON from '@/components/Common/ImportJSON';
-import { showNotification } from '@mantine/notifications';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { defaultButtonStyle } from '@/lib/theme';
+import { Flows, IndexDb } from '@/lib/dexie';
+import { Box, Button, Collapse, Flex, Text } from '@chakra-ui/react';
+import { getSelectedStyles } from '../ToolBar';
 
-const useStyles = createStyles((theme) => ({
-  menuBox: {
-    width: '300px',
-    padding: '10px 20px',
-    borderRadius: '8px',
-    background: theme.colorScheme === 'dark' ? theme.colors.gray[8] : '#eee',
-    boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'
-  },
-  menuItem: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '5px 10px',
-    cursor: 'pointer',
-    borderRadius: '8px',
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[0]
-    }
-  },
-  subMenu: {
-    alignItems: 'center',
-    padding: '6px 40px',
-    cursor: 'pointer',
-    borderRadius: '8px',
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[0]
-    }
-  }
-}));
+// const useStyles = createStyles((theme) => ({
+//   menuBox: {
+//     width: '300px',
+//     padding: '10px 20px',
+//     borderRadius: '8px',
+//     background: theme.colorScheme === 'dark' ? theme.colors.gray[8] : '#eee',
+//     boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'
+//   },
+//   menuItem: {
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//     padding: '5px 10px',
+//     cursor: 'pointer',
+//     borderRadius: '8px',
+//     '&:hover': {
+//       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[0]
+//     }
+//   },
+//   subMenu: {
+//     alignItems: 'center',
+//     padding: '6px 40px',
+//     cursor: 'pointer',
+//     borderRadius: '8px',
+//     '&:hover': {
+//       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[0]
+//     }
+//   }
+// }));
 
 const MenuItemCollapse = ({ nodeMenuItem, addNode }: { nodeMenuItem: NodeMenuItem; addNode: (event: any, nodeInstance: INodeType) => void }) => {
-  const { classes } = useStyles();
+  // const { classes } = useStyles();
   const [opened, setOpened] = useState(true);
   return (
     <>
-      <Flex className={classes.menuItem} onClick={() => setOpened((o) => !o)}>
+      <Flex
+        style={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '5px 10px',
+          cursor: 'pointer',
+          borderRadius: '8px'
+        }}
+        onClick={() => setOpened((o) => !o)}
+      >
         <Flex align="center">
           <NodeIcon icon={nodeMenuItem.icon} size={20} />
-          <Text ml="10px" fw={700}>
-            {helper.string.fristUpper(nodeMenuItem.group)}
-          </Text>
+          <Text ml="10px">{helper.string.fristUpper(nodeMenuItem.group)}</Text>
         </Flex>
         {opened ? <BiChevronUp size={20} /> : <BiChevronDown size={20} />}
       </Flex>
       <Collapse in={opened}>
         {nodeMenuItem.children.map((node) => (
           <MenuItem key={node.description.name} data={node} onClick={addNode}>
-            <Flex className={classes.subMenu}>
+            <Flex
+              style={{
+                alignItems: 'center',
+                padding: '6px 40px',
+                cursor: 'pointer',
+                borderRadius: '8px'
+              }}
+              _hover={{
+                backgroundColor: '#ffffff!important'
+              }}
+            >
               <NodeIcon icon={node.description.icon} size={20} />
-              <Text ml="10px" fw={700}>
-                {node.description.displayName}
-              </Text>
+              <Text ml="10px">{node.description.displayName}</Text>
             </Flex>
           </MenuItem>
         ))}
@@ -78,11 +94,14 @@ const MenuItemCollapse = ({ nodeMenuItem, addNode }: { nodeMenuItem: NodeMenuIte
 };
 
 type LocalStoreType = {
+  selectFlow: (id: number) => void;
   currentFlowInfo: any;
   nodeTypes: NodeTypes;
   nodeMenu: NodeMenuItem[];
   flowHasChanged: boolean;
   init: () => void;
+  flows: Flows[];
+  initFlow: () => void;
 };
 
 const Flow = observer(() => {
@@ -92,13 +111,14 @@ const Flow = observer(() => {
       flowModule: { flow }
     }
   } = useStore();
-  const { classes } = useStyles();
+  // const { classes } = useStyles();
   const reactFlowWrapper = useRef(null);
   const contextMenuWrapper = useRef(null);
   // const router = useRouter();
   // const { id } = router.query;
 
   const store = useLocalObservable<LocalStoreType>(() => ({
+    flows: [],
     nodeTypes: {},
     nodeMenu: [],
     currentFlowInfo: {},
@@ -107,6 +127,23 @@ const Flow = observer(() => {
       await flowModule.flow.initNodes.call();
       this.nodeTypes = generateReactFlowNode(flowModule.flow.nodeInstances);
       this.nodeMenu = generateNodeGroupMenu(flowModule.flow.nodeInstances);
+    },
+    async initFlow() {
+      this.flows = await IndexDb.findFlows();
+      if (this.flows.length > 0) {
+        this.selectFlow(this.flows[0].id);
+      }
+    },
+    async selectFlow(id: number) {
+      // this.init();
+      this.flows = await IndexDb.findFlows();
+      const curFlow = this.flows.find((f) => f.id === id);
+      console.log(curFlow);
+      if (curFlow) {
+        flow.curFlowId = id;
+        this.currentFlowInfo = curFlow;
+        flowModule.flow.importJSON(curFlow.data);
+      }
     }
   }));
 
@@ -116,12 +153,12 @@ const Flow = observer(() => {
     //     store.currentFlowInfo = flow;
     //   });
     // }
-
     flow.onDataChange = () => {
       const flowData = flow.exportData();
       if (!_.isEqual(flowData, store.currentFlowInfo?.data)) {
         store.flowHasChanged = true;
       }
+      flow.syncToIndexDb();
     };
 
     flow.onConnectEnd = (event) => {
@@ -141,7 +178,7 @@ const Flow = observer(() => {
         });
       }
     };
-
+    store.initFlow();
     store.init();
   }, []);
 
@@ -199,41 +236,81 @@ const Flow = observer(() => {
   );
 
   return (
-    <Box w="100%" h='calc(100vh - 100px)'>
-      <Box
-        pos="relative"
-        w="100%"
-        h="100%"
-        sx={(theme) => ({
-          background: theme.colorScheme === 'dark' ? theme.colors.dark[6] : '#fff'
-        })}
-      >
-        <ContextMenuTrigger id="flow-box" holdToDisplay={-1}>
-          <Box pos="absolute" top="0" left="0" w="100%"  h="100%" ref={reactFlowWrapper}>
-            <ReactFlow
-              fitView
-              selectNodesOnDrag={false}
-              minZoom={0.8}
-              maxZoom={1.5}
-              onInit={flow.onInit}
-              nodes={flow.nodes}
-              edges={flow.edges}
-              onNodesChange={flow.onNodesChange}
-              onEdgesChange={flow.onEdgesChange}
-              onConnect={flow.onConnect}
-              nodeTypes={store.nodeTypes}
-              onConnectStart={flow.onConnectStart}
-              onConnectEnd={flow.onConnectEnd}
-              onEdgeUpdateStart={flow.onEdgeUpdateStart}
-              onEdgeUpdate={flow.onEdgeUpdate}
-              onEdgeUpdateEnd={flow.onEdgeUpdateEnd}
+    <Flex w="100%" h="calc(100vh - 100px)">
+      {/* left menu  */}
+      <Flex overflowY="auto" direction={'column'} w="250px" h="100%" p="20px 10px" bg="#fff" mr={8} style={{ borderRadius: '12px' }}>
+        <Box>
+          <Button
+            leftIcon={<AiOutlinePlus />}
+            h="32px"
+            {...defaultButtonStyle}
+            onClick={async () => {
+              const { name } = await hooks.getFormData({
+                title: 'New Flow',
+                size: 'md',
+                formList: [
+                  {
+                    form: flowModule.createFlowForm
+                  }
+                ]
+              });
+              await IndexDb.insertFlow(name, { nodes: [], edges: [] });
+              store.initFlow();
+            }}
+          >
+            Create New Flow
+          </Button>
+        </Box>
+
+        <Flex direction={'column'} mt={4}>
+          {store.flows.map((flowItem) => (
+            <Flex
+              key={flowItem.id}
+              direction={'column'}
+              p="18px"
+              bg="#f7f7f7"
+              mt={2}
+              borderRadius="8px"
+              {...getSelectedStyles(Number(flowItem.id) === Number(flow.curFlowId))}
+              onClick={() => {
+                store.selectFlow(Number(flowItem.id));
+              }}
             >
-              <Background />
-              <Controls />
-            </ReactFlow>
-          </Box>
-        </ContextMenuTrigger>
-        {/* <Flex pos="absolute" top="20px" right="20px">
+              <Text>{flowItem.name}</Text>
+            </Flex>
+          ))}
+        </Flex>
+      </Flex>
+
+      <Box pos="relative" w="100%" h="100%">
+        {flow.curFlowId ? (
+          <>
+            <ContextMenuTrigger id="flow-box" holdToDisplay={-1}>
+              <Box pos="absolute" top="0" left="0" w="100%" h="100%" ref={reactFlowWrapper}>
+                <ReactFlow
+                  fitView
+                  selectNodesOnDrag={false}
+                  minZoom={0.8}
+                  maxZoom={1.5}
+                  onInit={flow.onInit}
+                  nodes={flow.nodes}
+                  edges={flow.edges}
+                  onNodesChange={flow.onNodesChange}
+                  onEdgesChange={flow.onEdgesChange}
+                  onConnect={flow.onConnect}
+                  nodeTypes={store.nodeTypes}
+                  onConnectStart={flow.onConnectStart}
+                  onConnectEnd={flow.onConnectEnd}
+                  onEdgeUpdateStart={flow.onEdgeUpdateStart}
+                  onEdgeUpdate={flow.onEdgeUpdate}
+                  onEdgeUpdateEnd={flow.onEdgeUpdateEnd}
+                >
+                  <Background />
+                  <Controls />
+                </ReactFlow>
+              </Box>
+            </ContextMenuTrigger>
+            {/* <Flex pos="absolute" top="20px" right="20px">
           {flow.copiedNodes.length > 0 && (
             <Button
               compact
@@ -368,26 +445,35 @@ const Flow = observer(() => {
             </Button>
           </Indicator>
         </Flex> */}
+          </>
+        ) : (
+          <>No Flow</>
+        )}
       </Box>
 
-     <ContextMenu
+      <ContextMenu
         id="flow-box"
         hideOnLeave
         ref={contextMenuWrapper}
         onMouseLeave={() => {
           flow.isDropConnecting = false;
         }}
+        style={{
+          width: '300px',
+          padding: '10px 20px',
+          borderRadius: '8px',
+          background: '#eee',
+          boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'
+        }}
       >
-        <Box className={classes.menuBox}>
-          <Box mb="10px" >
-            Add Node
-          </Box>
+        <Box>
+          <Box mb="10px">Add Node</Box>
           {store.nodeMenu.map((nodeMenuItem: NodeMenuItem) => (
             <MenuItemCollapse key={nodeMenuItem.group} nodeMenuItem={nodeMenuItem} addNode={addNode} />
           ))}
         </Box>
-      </ContextMenu> 
-    </Box>
+      </ContextMenu>
+    </Flex>
   );
 });
 

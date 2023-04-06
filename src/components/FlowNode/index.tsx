@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Box, Flex, Text, Image, Tooltip, Tabs } from '@mantine/core';
 import { TbWebhook } from 'react-icons/tb';
 import { AiOutlineCar, AiOutlineCode, AiOutlineClockCircle } from 'react-icons/ai';
@@ -14,6 +14,7 @@ import { hooks } from '@/lib/hooks';
 import { FlowNode } from '@/store/standard/Node';
 import { Radar2 } from 'tabler-icons-react';
 import { JSONRender, JSONRenderComponentsMap, jsonRenderGlobalStore } from '../JSONRender';
+import { toJS } from 'mobx';
 
 export type FlowNodeData = {
   [x: string]: any;
@@ -30,9 +31,9 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
 
   useEffect(() => {
     function handleKeyDown(event) {
-      console.log(nodeInstance.getJSONFormValue());
-      if (id) {
-        flow.editNode(id, nodeInstance.getJSONFormValue() as any);
+      if (id == flow.curEditNodeId) {
+        flow.editNode(id, toJS(nodeInstance.getJSONFormValue()) as any);
+        console.log(id, nodeInstance.getJSONFormValue());
       }
     }
     document.addEventListener('keyup', handleKeyDown);
@@ -40,6 +41,16 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
       document.removeEventListener('keyup', handleKeyDown);
     };
   }, []);
+
+  // useEffect(() => {
+  //   console.log(flow.curFlowId, 'flow.curFlowId)', data);
+  //   if (flow.curFlowId) {
+  //     nodeInstance.reInit();
+  //     data && nodeInstance.setJSONFormValue(data);
+  //     // flow.editNode(id, formData as any);
+  //   }
+  // }, [flow.curFlowId]);
+
   return (
     <Flex
       pos="relative"
@@ -63,6 +74,10 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
       })}
       style={{
         border: copied ? '2px solid green' : 'none'
+      }}
+      onClick={(e) => {
+        flow.curEditNodeId = id;
+        console.log('click', id);
       }}
       onDoubleClick={async (e) => {
         // @ts-ignore
@@ -188,7 +203,7 @@ export const NodeLayout = memo(
             <Box
               sx={{
                 '& > .react-flow__handle-right': {
-                  right: '-10px',
+                  right: '-10px'
                 }
               }}
             >

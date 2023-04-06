@@ -1,11 +1,11 @@
 import React, { AllHTMLAttributes } from 'react';
 import { useLocalObservable, observer } from 'mobx-react-lite';
-import { Box, Button } from '@mantine/core';
 import { _ } from '@/lib/lodash';
 import { extendObservable, makeAutoObservable, toJS } from 'mobx';
 import { JSONForm } from '../JSONForm';
 import WebhookSubmitWidget from './WebhookSubmitWidget';
 import { helper } from '@/lib/helper';
+import { Box } from '@chakra-ui/react';
 
 export const JSONRenderComponentsMap = {
   JSONForm: JSONForm,

@@ -11,6 +11,7 @@ type Options = {
   readOnly?: boolean;
   onChangeLanguage?: (v: 'json' | 'text') => void;
   afterSubmit?: (v: string) => void;
+  lang?: string;
 };
 
 export interface EditorWidgetProps extends WidgetProps {
@@ -25,7 +26,7 @@ export type EditorWidgetUIOptions = {
 const EditorWidget = ({ id, label, options = {}, value, required, onChange }: EditorWidgetProps) => {
   const handleChange = useCallback((value) => onChange(value === '' ? (options.emptyValue ? options.emptyValue : '') : value), [onChange, options.emptyValue]);
   const [language, setLanguage] = useState('json');
-  const { editorHeight = '200px', showLanguageSelector = false, showSubmitButton = false, onChangeLanguage, afterSubmit, readOnly = false } = options;
+  const { editorHeight = '200px', showLanguageSelector = false, showSubmitButton = false, onChangeLanguage, afterSubmit, readOnly = false, lang = 'json' } = options;
   return (
     <Flex flexDir="column">
       <Flex justifyContent="space-between" alignItems="center" mb="10px">
@@ -53,9 +54,16 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
         )}
       </Flex>
       {/* fix readonly issuse > https://github.com/suren-atoyan/monaco-react/issues/114  */}
-      <MonacoEditor options={{ readOnly }} height={editorHeight} theme="vs-dark" language={language} value={readOnly ? (value ? value : '') : value} onChange={handleChange} />
-      {
-        showSubmitButton && <Flex mt={2} justifyContent="flex-end">
+      <MonacoEditor
+        options={{ readOnly }}
+        height={editorHeight}
+        theme="vs-dark"
+        language={showLanguageSelector ? language : lang}
+        value={readOnly ? (value ? value : '') : value}
+        onChange={handleChange}
+      />
+      {showSubmitButton && (
+        <Flex mt={2} justifyContent="flex-end">
           <Button
             ml="10px"
             fontWeight={400}
@@ -66,7 +74,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
             Save Changes
           </Button>
         </Flex>
-      }
+      )}
     </Flex>
   );
 };
