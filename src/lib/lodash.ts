@@ -10,7 +10,7 @@ import keyBy from 'lodash/keyBy';
 import mergeWith from 'lodash/mergeWith';
 import cloneDeep from 'lodash/cloneDeep';
 import groupBy from 'lodash/groupBy';
-
+import isEqual from 'lodash/isEqual';
 export const _ = {
   throttle,
   debounce,
@@ -23,5 +23,6 @@ export const _ = {
   keyBy,
   mergeWith,
   cloneDeep,
-  groupBy
+  groupBy,
+  isEqual
 };

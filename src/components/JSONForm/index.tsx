@@ -6,6 +6,8 @@ import { Box, Flex, useDisclosure, Text, Collapse, Stack, Button } from '@chakra
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import { ErrorListProps, FieldTemplateProps, getSubmitButtonOptions, ObjectFieldTemplateProps, SubmitButtonProps } from '@rjsf/utils';
 import { defaultButtonStyle } from '@/lib/theme';
+import PrefixWidget from '../JSONFormWidgets/PerfixWidget';
+import EditorWidget from '../JSONFormWidgets/EditorWidget';
 
 const renderLayout = (layout: any[], fields: { [k: string]: React.ReactElement }, n = 1) => {
   n++;
@@ -143,6 +145,7 @@ export const JSONForm = observer(({ children, formState }: Props) => {
         ErrorListTemplate,
         ButtonTemplates: { SubmitButton }
       }}
+      widgets={{ EditorWidget, PrefixWidget}}
       formData={formState.formData}
       readonly={formState.readonly}
       uiSchema={formState.uiSchema}
