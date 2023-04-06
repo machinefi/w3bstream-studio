@@ -17,6 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     res.status(axiosResponse.status).json(axiosResponse.data);
   } catch (error) {
+    console.log(error.response.data)
     res.status(error.response.status).send(error.response.data);
   }
 };

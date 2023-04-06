@@ -4,6 +4,7 @@ import axios from 'axios';
 import { makeObservable, observable } from 'mobx';
 import dayjs from 'dayjs';
 import { trpc } from '@/lib/trpc';
+import { rootStore } from '@/store/index';
 
 export enum MetricsLabel {
   w3b_register_publisher_metrics = 'w3b_register_publisher_metrics',
@@ -26,7 +27,7 @@ export default class MetricsModule {
     function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 600) => {
       const { data } = await axios.request({
         method: 'GET',
-        url: `/api/metrics/query_range?query={project=%22testing%22}&start=${startTime.toISOString()}&end=${endTime.toISOString()}&step=${step}s`
+        url: `/api/metrics/query_range?query={project=%22${rootStore.w3s.project.curProject.f_name}%22}&start=${startTime.toISOString()}&end=${endTime.toISOString()}&step=${step}s`
       });
       console.log(data.data.result);
       return data.data.result;
