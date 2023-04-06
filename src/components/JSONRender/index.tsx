@@ -10,7 +10,7 @@ import { Box } from '@chakra-ui/react';
 export const JSONRenderComponentsMap = {
   JSONForm: JSONForm,
   div: Box,
-  WebhookSubmitWidget: WebhookSubmitWidget,
+  WebhookSubmitWidget: WebhookSubmitWidget
 };
 // @ts-ignore
 export type JSONRenderComponent = keyof typeof JSONRenderComponentsMap;
@@ -85,11 +85,13 @@ export const JSONRender = observer((props: Props) => {
     return (
       // {...toJS(store[json.key])} if toJs then JSONForm will not display
       // {...store[json.key]} if Storestore[json.key] then JSONForm will not work
-      <Comp {...json.props} store={store}>
-        {['string', 'number', 'boolean', 'undefined'].includes(typeof json.children)
-          ? json.children
-          : (json.children as any[]).map((c) => <JSONRender json={c} data={data} eventBus={eventBus} componentMaps={componentMaps} store={store} />)}
-      </Comp>
+      <>
+        <Comp {...json.props} store={store}>
+          {['string', 'number', 'boolean', 'undefined'].includes(typeof json.children)
+            ? json.children
+            : (json.children as any[]).map((c) => <JSONRender json={c} data={data} eventBus={eventBus} componentMaps={componentMaps} store={store} />)}
+        </Comp>
+      </>
     );
   }
   return <></>;
