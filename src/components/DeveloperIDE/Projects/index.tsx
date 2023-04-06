@@ -116,12 +116,16 @@ const Projects = observer(() => {
             const status = INSTANCE_STATUS[instance?.f_state || 0];
             return (
               <GridItem
+                key={project.f_name}
                 w="100%"
                 p="24px"
                 bg="rgba(248, 248, 250, 0.5)"
+                border="1px solid #EDEDED"
                 borderRadius="8px"
-                key={project.f_name}
                 cursor="pointer"
+                _hover={{
+                  boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (instance) {
