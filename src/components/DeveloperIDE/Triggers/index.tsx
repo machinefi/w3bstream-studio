@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Flex, Box, Tabs, TabList, TabPanels, TabPanel, Tab, Input } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-// import { useStore } from '@/store/index';
+import { useStore } from '@/store/index';
 import ContractLogs, { CreateContractLogButton } from '@/components/IDE/Monitor/ContractLogs';
 import ChainHeight, { CreateChainHeightButton } from '@/components/IDE/Monitor/ChainHeight';
 import Strategies, { CreateStrategyButton } from '@/components/IDE/Strategies';
 
 const Triggers = () => {
+  const {
+    w3s: {
+      project: { curProject }
+    }
+  } = useStore();
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -18,19 +23,31 @@ const Triggers = () => {
         HTTP
       </Box>
       <Flex mt="10px" alignItems="center">
-        <Box fontSize="16px" color="#0F0F0F">
+        <Box w="60px" fontSize="16px" color="#0F0F0F">
           Route:
         </Box>
-        <Input ml="16px" placeholder="" size="sm" value="https://dev.w3bstream.com/" />
+        <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+          https://dev.w3bstream.com
+        </Box>
       </Flex>
       <Box mt="20px" fontSize="14px" color="#7A7A7A">
         MQTT
       </Box>
       <Flex mt="10px" alignItems="center">
-        <Box fontSize="16px" color="#0F0F0F">
+        <Box w="60px" fontSize="16px" color="#0F0F0F">
+          URL:
+        </Box>
+        <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+          mqtt://dev.w3bstream.com
+        </Box>
+      </Flex>
+      <Flex mt="10px" alignItems="center">
+        <Box w="60px" fontSize="16px" color="#0F0F0F">
           Topic:
         </Box>
-        <Input ml="16px" placeholder="" size="sm" value="w3bstream" />
+        <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+          {curProject?.f_name}
+        </Box>
       </Flex>
 
       <Tabs mt="20px" isLazy index={tabIndex} onChange={(index) => setTabIndex(index)}>
