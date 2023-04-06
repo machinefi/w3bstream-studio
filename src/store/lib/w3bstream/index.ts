@@ -172,7 +172,6 @@ export class W3bStream {
       this.contractLogs.allContractLogs.call();
       this.chainTx.allChainTx.call();
       this.chainHeight.allChainHeight.call();
-      this.metrics.allMetrics.call();
       this.metrics.allDBState.call();
     });
   }

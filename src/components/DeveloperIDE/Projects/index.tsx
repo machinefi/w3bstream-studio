@@ -127,6 +127,7 @@ const Projects = observer(() => {
                   if (instance) {
                     allProjects.onSelect(index);
                     w3s.showContent = 'METRICS';
+                    w3s.metrics.allMetrics.call();
                   } else {
                     toast.error('No instance found, please create one first');
                   }
