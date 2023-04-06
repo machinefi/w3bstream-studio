@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
-import { Text, Flex, Image, chakra, Box } from '@chakra-ui/react';
+import { Text, Flex, Image, chakra, Box, FlexProps } from '@chakra-ui/react';
 import initTemplates from '@/constants/initTemplates.json';
 
-type Options = {};
+type Options = {
+  flexProps?: FlexProps;
+};
 
 export interface InitializationTemplateWidgetProps extends WidgetProps {
   options: Options;
@@ -16,6 +18,7 @@ export interface InitializationTemplateWidgetUIOptions {
 
 function InitializationTemplateWidget({ id, options, value, required, label, onChange }: InitializationTemplateWidgetProps) {
   const [templateName, setTemplateName] = useState('');
+  const { flexProps = {} } = options;
   return (
     <>
       <Flex alignItems="center">
@@ -42,7 +45,7 @@ function InitializationTemplateWidget({ id, options, value, required, label, onC
             flexDir="column"
             justifyContent="center"
             alignItems="center"
-            w="200px"
+            w="100%"
             h="200px"
             border="2px solid #EDEDED"
             borderRadius="8px"
@@ -59,6 +62,7 @@ function InitializationTemplateWidget({ id, options, value, required, label, onC
                 setTemplateName(template.name);
               }
             }}
+            {...flexProps}
           >
             <Image w="40px" src={template.image} />
             <Box mt="10px" fontWeight={700} fontSize="16px">

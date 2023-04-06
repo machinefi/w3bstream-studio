@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineLineChart, AiOutlinePauseCircle, AiOutlinePlayCircle, AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineLineChart, AiOutlinePauseCircle, AiOutlinePlayCircle, AiOutlinePlus } from 'react-icons/ai';
 import { BsArrowUpRight } from 'react-icons/bs';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
@@ -200,43 +200,9 @@ const Projects = observer(() => {
                   </Box>
                 </Flex>
                 <Box mt="20px" fontSize="14px" color="#7A7A7A">
-                  {/* {project.f_description} */}
                   {project.f_name}
                 </Box>
                 <Flex mt="10px" justifyContent="flex-end">
-                  <Icon
-                    as={AiOutlineEdit}
-                    boxSize={5}
-                    color="#946FFF"
-                    cursor="pointer"
-                    _hover={{ color: '#7D44FF' }}
-                    onClick={async (e) => {
-                      // e.stopPropagation();
-                    }}
-                  />
-                  <Icon
-                    ml="20px"
-                    as={AiOutlineDelete}
-                    boxSize={5}
-                    color="#946FFF"
-                    cursor="pointer"
-                    _hover={{ color: '#7D44FF' }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      confirm.show({
-                        title: 'Warning',
-                        description: 'Are you sure you want to delete it?',
-                        async onOk() {
-                          await axios.request({
-                            method: 'delete',
-                            url: `/api/w3bapp/project/${project.f_name}`
-                          });
-                          eventBus.emit('project.delete');
-                          toast.success('Deleted successfully');
-                        }
-                      });
-                    }}
-                  />
                   {instance && (
                     <>
                       {instance.f_state === 2 ? (
