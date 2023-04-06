@@ -92,30 +92,33 @@ const EventLogs = observer(() => {
               }
             ]
           });
-          console.log('parseBody', publisher.parseBody(formData.body));
           const projectName = curProject?.f_name;
           if (projectName) {
-            const res = await axios.request({
-              method: 'post',
-              url: `/api/w3bapp/event/${projectName}`,
-              headers: {
-                'Content-Type': 'text/plain'
-              },
-              data: publisher.parseBody(formData.body)
-            });
-            if (res.data) {
-              showNotification({ message: 'publish event succeeded' });
-              store.setData({
-                loading: true
+            try {
+              const res = await axios.request({
+                method: 'post',
+                url: `/api/w3bapp/event/${projectName}`,
+                headers: {
+                  'Content-Type': 'text/plain'
+                },
+                data: publisher.parseBody(formData.body)
               });
-              fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+              const wasmResult = res.data?.[0].wasmResults?.[0];
+              if (wasmResult && wasmResult.code === 0) {
                 store.setData({
-                  logs: res.concat(logs),
-                  offset: store.offset + logs.length,
-                  loading: false
+                  loading: true
                 });
-              });
-            }
+                fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+                  store.setData({
+                    logs: res.concat(logs),
+                    offset: store.offset + logs.length,
+                    loading: false
+                  });
+                });
+              } else {
+                showNotification({ color: 'red', message: wasmResult?.errMsg || 'Failed' });
+              }
+            } catch (error) {}
           }
         }}
       />
