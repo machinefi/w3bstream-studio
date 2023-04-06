@@ -88,7 +88,7 @@ export const w3bstreamRouter = t.router({
     });
     return res;
   }),
-  contractLogs: authProcedure.query(({ ctx, input }) => {
+  contractLogs: t.procedure.query(({ ctx, input }) => {
     return ctx.monitor.t_contract_log.findMany({
       select: {
         f_contractlog_id: true,
@@ -105,7 +105,7 @@ export const w3bstreamRouter = t.router({
       }
     });
   }),
-  chainTx: authProcedure.query(({ ctx, input }) => {
+  chainTx: t.procedure.query(({ ctx, input }) => {
     return ctx.monitor.t_chain_tx.findMany({
       select: {
         f_chaintx_id: true,
@@ -119,7 +119,7 @@ export const w3bstreamRouter = t.router({
       }
     });
   }),
-  chainHeight: authProcedure.query(({ ctx, input }) => {
+  chainHeight: t.procedure.query(({ ctx, input }) => {
     return ctx.monitor.t_chain_height.findMany({
       select: {
         f_chain_height_id: true,

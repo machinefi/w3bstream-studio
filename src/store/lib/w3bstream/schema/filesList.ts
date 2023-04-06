@@ -202,14 +202,14 @@ export class FilesListSchema {
     return this?.curActiveFile?.label.endsWith(`.${label}`);
   }
 
-  createFileFormFolder(file: FilesItemType, action: 'file' | 'folder') {
+  createFileFormFolder(file: FilesItemType, action: 'file' | 'folder', code = templatecode['log.ts']) {
     if (file.type == 'folder' && action == 'file') {
       file.children.push({
         type: 'file',
         key: uuidv4(),
         label: `NewFile.ts`,
         isRename: true,
-        data: { code: templatecode['log.ts'], language: 'typescript' }
+        data: { code, language: 'typescript' }
       });
       file.isOpen = true;
     }

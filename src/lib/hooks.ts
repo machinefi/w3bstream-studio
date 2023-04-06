@@ -1,6 +1,5 @@
 import { FormListType } from '@/store/base';
 import { rootStore } from '@/store/index';
-import { JSONSchemaFormState } from '@/store/standard/JSONSchemaState';
 import { eventBus } from './event';
 
 export const hooks = {

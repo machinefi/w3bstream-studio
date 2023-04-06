@@ -3,6 +3,7 @@ import { configure, makeAutoObservable } from 'mobx';
 import RootStore from '@/store/root';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
+import { hooks } from '@/lib/hooks';
 import { ProjectManager } from './project';
 import W3bstreamConfigModule from './schema/config';
 import UserModule from './schema/user';
@@ -167,12 +168,14 @@ export class W3bStream {
   }
 
   async init() {
-    await this.project.allProjects.call();
-    this.projectManager.sync();
-    this.contractLogs.allContractLogs.call();
-    this.chainTx.allChainTx.call();
-    this.chainHeight.allChainHeight.call();
-    this.metrics.allMetrics.call();
-    this.metrics.allDBState.call();
+    hooks.waitLogin().then(async () => {
+      await this.project.allProjects.call();
+      this.projectManager.sync();
+      this.contractLogs.allContractLogs.call();
+      this.chainTx.allChainTx.call();
+      this.chainHeight.allChainHeight.call();
+      this.metrics.allMetrics.call();
+      this.metrics.allDBState.call();
+    });
   }
 }

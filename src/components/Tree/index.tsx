@@ -5,6 +5,7 @@ import { Box, Flex, Image, ImageProps, Portal } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { toast } from '@/lib/helper';
+import { hooks } from '@/lib/hooks';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -60,7 +61,19 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
   const FolderSetting = [
     {
       name: 'New File',
-      onClick: (item) => w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file')
+      onClick: async (item) => {
+        const formData = await hooks.getFormData({
+          title: 'Create a File',
+          size: '2xl',
+          formList: [
+            {
+              form: w3s.projectManager.initWasmTemplateForm
+            }
+          ]
+        });
+        console.log(formData)
+        w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file',formData.template);
+      }
     },
     {
       name: 'New Folder',
