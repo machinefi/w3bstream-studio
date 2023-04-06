@@ -7,7 +7,7 @@ import { MdDeleteOutline, MdOutlineCopyAll, MdOutlineHttp } from 'react-icons/md
 import { GrRaspberry } from 'react-icons/gr';
 import { ImEqualizer } from 'react-icons/im';
 import { Handle, NodeTypes, Position } from 'reactflow';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { INodeGroup, INodeIconType, INodeType } from '@/server/nodes/types';
 import { hooks } from '@/lib/hooks';
@@ -27,13 +27,17 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
       flowModule: { flow }
     }
   } = useStore();
+
+  const store = useLocalObservable(() => ({
+    realNodeInstance: new FlowNode(flow.nodeAbstracts.find((node) => node.description.nodeType == nodeInstance.description.nodeType))
+  }));
+
   const copied = flow.copiedNodes.findIndex((node) => node.id === id) > -1;
 
   useEffect(() => {
     function handleKeyDown(event) {
       if (id == flow.curEditNodeId) {
-        flow.editNode(id, toJS(nodeInstance.getJSONFormValue()) as any);
-        console.log(id, nodeInstance.getJSONFormValue());
+        flow.editNode(id, toJS(store.realNodeInstance.getJSONFormValue()) as any);
       }
     }
     document.addEventListener('keyup', handleKeyDown);
@@ -42,14 +46,9 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log(flow.curFlowId, 'flow.curFlowId)', data);
-  //   if (flow.curFlowId) {
-  //     nodeInstance.reInit();
-  //     data && nodeInstance.setJSONFormValue(data);
-  //     // flow.editNode(id, formData as any);
-  //   }
-  // }, [flow.curFlowId]);
+  useEffect(() => {
+    store.realNodeInstance?.setJSONFormValue(data);
+  }, [flow.curFlowId]);
 
   return (
     <Flex
@@ -77,26 +76,17 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
       }}
       onClick={(e) => {
         flow.curEditNodeId = id;
-        console.log('click', id);
-      }}
-      onDoubleClick={async (e) => {
-        // @ts-ignore
-        // if (e.target?.nodeName !== 'DIV') return;
-        // nodeInstance.reInit();
-        // data && nodeInstance.setJSONFormValue(data);
-        // const formData = await hooks.getFormData<typeof nodeInstance.form>({ ...nodeInstance.form, autoSubmission: true });
-        // if (id) {
-        //   flow.editNode(id, formData as any);
-        // }
       }}
     >
       <Flex sx={(theme) => ({ borderRadius: '6px 6px 0 0' })} bg="#d1d1d1" h="30px" w="100%" justify={'center'} align={'center'}>
-        <NodeIcon icon={nodeInstance.description.icon} size={10} />
-        <Box ml="4">{data?.label}</Box>
+        <NodeIcon icon={store.realNodeInstance?.description?.icon} size={10} />
+        <Box ml="4">
+          {data?.label}
+        </Box>
       </Flex>
       {/* <Flex>{JSON.stringify(data)}</Flex> */}
       <Box style={{ fontSize: '12px' }} p={8}>
-        {nodeInstance.form.formList?.length > 1 ? (
+        {store.realNodeInstance?.form.formList?.length > 1 ? (
           <>
             <Tabs defaultValue={nodeInstance.form.formList[0].label}>
               <Tabs.List>
@@ -127,10 +117,11 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
         ) : (
           <>
             <JSONRender
+              key={id}
               json={{
-                key: 'JSONRenderContainer',
+                key: 'JSONRenderContainer' + id,
                 component: 'div',
-                children: nodeInstance.form.formList[0].form
+                children: store.realNodeInstance?.form.formList[0].form
               }}
               data={null}
               // eventBus={eventBus}

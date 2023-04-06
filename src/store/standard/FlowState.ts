@@ -16,6 +16,7 @@ export class FlowState {
   nodes: Node<FlowNodeData>[] = [];
   edges: Edge<any>[] = [];
   nodeInstances: FlowNode[] = [];
+  nodeAbstracts: INodeType[] = [];
   edgeUpdateSuccessful = false;
   connectingNodeId = '';
   isDropConnecting = false;
@@ -34,6 +35,7 @@ export class FlowState {
       res?.data?.forEach((i) => {
         this.nodeInstances.push(new FlowNode(i as INodeType));
       });
+      this.nodeAbstracts = res.data;
       return res.data;
     }
   });

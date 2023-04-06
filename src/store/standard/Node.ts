@@ -32,6 +32,7 @@ export class FlowNode {
         form: item.form.map((form) => {
           // form.key = uuid();
           if (form.component == 'JSONForm') {
+            form.key = uuid();
             form.props.formState = new JSONSchemaFormState({
               schema: form.props.formState?.schema,
               uiSchema: form.props.formState?.uiSchema,
@@ -100,7 +101,7 @@ export class FlowNode {
   }
 
   templateSyntaxInterpreter = (str: string): string => {
-    return str.replace(/=\{\{(.+?)\}\}/g, (match, expression) => {
+    return str?.replace(/=\{\{(.+?)\}\}/g, (match, expression) => {
       try {
         console.log(new Function(`return ${expression}`)());
         return new Function(`return ${this.mountScope(expression)}`)();
