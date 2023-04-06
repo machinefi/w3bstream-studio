@@ -90,6 +90,9 @@ export const helper = {
     firstUpperCase(str: string) {
       return str.replace(/^\S/, (s) => s.toUpperCase());
     },
+    fristUpper(str: string) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    },
     toFixString(str, length) {
       if (str && str.length > length) {
         return str.substr(0, length) + '...';

@@ -17,6 +17,9 @@ const getTabIndex = (showContent) => {
   if (showContent === 'SUPPORT') {
     return 2;
   }
+  if (showContent === 'FLOW') {
+    return 3;
+  }
   return 0;
 };
 
@@ -60,6 +63,9 @@ const Header = observer(() => {
             if (number === 2) {
               w3s.headerTabs = 'SUPPORT';
             }
+            if (number === 3) {
+              w3s.headerTabs = 'FLOW';
+            }
           }}
         >
           <TabList>
@@ -71,6 +77,9 @@ const Header = observer(() => {
             </Tab>
             <Tab ml="60px" w="80px" h="30px" fontSize="xs" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Support
+            </Tab>
+            <Tab ml="60px" w="60px" h="30px" fontSize="xs" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+              Flow
             </Tab>
           </TabList>
         </Tabs>
