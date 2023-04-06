@@ -89,8 +89,22 @@ services:
       HASURA_GRAPHQL_DEV_MODE: 'true'
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ADMIN_SECRET: ${ADMIN_SECRET:-w3baAdmiNsecrEtkey}
-
+      
+  prometheus:
+    image: imoocc/prometheus:latest
+    depends_on:
+      - "w3bapp"
+    user: root
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    container_name: prometheus
+    restart: always
+    volumes:
+      - prometheus:/prometheus
+    ports:
+      - "9090:9090"
+      
 volumes:
   mqtt:
   postgres:
   w3bstream_assets:
+  prometheus:
