@@ -58,10 +58,6 @@ export default class ContractLogModule {
         label: 'Contract Log ID'
       },
       {
-        key: 'f_project_name',
-        label: 'Project Name'
-      },
-      {
         key: 'f_event_type',
         label: 'Event Type'
       },
@@ -89,10 +85,6 @@ export default class ContractLogModule {
         key: 'f_topic0',
         label: 'Topic0'
       },
-      {
-        key: 'f_updated_at',
-        label: 'Updated At'
-      }
       // {
       //   key: 'actions',
       //   label: 'Actions',

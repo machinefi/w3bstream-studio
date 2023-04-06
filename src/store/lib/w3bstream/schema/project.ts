@@ -60,7 +60,6 @@ export const createProjectByWasmSchema = {
   required: ['file', 'projectName']
 } as const;
 
-
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
 type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;

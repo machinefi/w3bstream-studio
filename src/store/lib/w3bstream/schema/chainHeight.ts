@@ -55,10 +55,6 @@ export default class ChainHeightModule {
         label: 'ChainTx ID'
       },
       {
-        key: 'f_project_name',
-        label: 'Project Name'
-      },
-      {
         key: 'f_finished',
         label: 'Finished'
       },
@@ -73,10 +69,6 @@ export default class ChainHeightModule {
       {
         key: 'f_height',
         label: 'Height'
-      },
-      {
-        key: 'f_updated_at',
-        label: 'Updated At'
       }
       // {
       //   key: 'actions',

@@ -27,47 +27,56 @@ const ContractLogs = observer(() => {
 
   return (
     <>
-      <Flex alignItems="center">
-        <Button
-          h="32px"
-          leftIcon={<AddIcon />}
-          {...defaultButtonStyle}
-          onClick={async (e) => {
-            if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-              w3s.contractLogs.form.value.set({
-                projectName: w3s.project.curProject?.f_name
-              });
-              w3s.contractLogs.form.uiSchema.projectName = {
-                'ui:disabled': true
-              };
-            }
-            const formData = await hooks.getFormData({
-              title: 'Add Smart Contract event monitor',
-              size: 'md',
-              formList: [
-                {
-                  form: w3s.contractLogs.form
-                }
-              ]
-            });
-            if (formData.projectName) {
-              const res = await axios.request({
-                method: 'post',
-                url: `/api/w3bapp/monitor/contract_log/${formData.projectName}`,
-                data: formData
-              });
-              if (res.data) {
-                await showNotification({ message: 'Smart Contract event monitor successfully created.' });
-                eventBus.emit('contractlog.create');
-              }
-            }
-          }}
-        >
-          Create
-        </Button>
-      </Flex>
+      {w3s.config.form.formData.accountRole === 'ADMIN' && (
+        <Flex alignItems="center">
+          <CreateContractLogButton />
+        </Flex>
+      )}
       <JSONTable jsonstate={w3s.contractLogs} />
     </>
+  );
+});
+
+export const CreateContractLogButton = observer(() => {
+  const { w3s } = useStore();
+  return (
+    <Button
+      h="32px"
+      leftIcon={<AddIcon />}
+      {...defaultButtonStyle}
+      onClick={async (e) => {
+        if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
+          w3s.contractLogs.form.value.set({
+            projectName: w3s.project.curProject?.f_name
+          });
+          w3s.contractLogs.form.uiSchema.projectName = {
+            'ui:disabled': true
+          };
+        }
+        const formData = await hooks.getFormData({
+          title: 'Add Smart Contract event monitor',
+          size: 'md',
+          formList: [
+            {
+              form: w3s.contractLogs.form
+            }
+          ]
+        });
+        if (formData.projectName) {
+          const res = await axios.request({
+            method: 'post',
+            url: `/api/w3bapp/monitor/contract_log/${formData.projectName}`,
+            data: formData
+          });
+          if (res.data) {
+            await showNotification({ message: 'Smart Contract event monitor successfully created.' });
+            eventBus.emit('contractlog.create');
+          }
+        }
+      }}
+    >
+      Create
+    </Button>
   );
 });
 

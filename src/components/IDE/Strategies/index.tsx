@@ -24,32 +24,41 @@ const Strategies = observer(() => {
 
   return (
     <>
-      <Flex alignItems="center">
-        <Button
-          h="32px"
-          leftIcon={<AddIcon />}
-          {...defaultButtonStyle}
-          onClick={async (e) => {
-            if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-              const applets = w3s.project.curProject?.applets || [];
-              const applet = applets[0];
-              if (applet) {
-                w3s.strategy.form.value.set({
-                  appletID: applet.f_applet_id.toString()
-                });
-                w3s.strategy.form.uiSchema.appletID = {
-                  'ui:disabled': true
-                };
-              }
-            }
-            w3s.strategy.createStrategy();
-          }}
-        >
-          Create
-        </Button>
-      </Flex>
+      {w3s.config.form.formData.accountRole === 'ADMIN' && (
+        <Flex alignItems="center">
+          <CreateStrategyButton />
+        </Flex>
+      )}
       <JSONTable jsonstate={w3s.strategy} />
     </>
+  );
+});
+
+export const CreateStrategyButton = observer(() => {
+  const { w3s } = useStore();
+  return (
+    <Button
+      h="32px"
+      leftIcon={<AddIcon />}
+      {...defaultButtonStyle}
+      onClick={async (e) => {
+        if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
+          const applets = w3s.project.curProject?.applets || [];
+          const applet = applets[0];
+          if (applet) {
+            w3s.strategy.form.value.set({
+              appletID: applet.f_applet_id.toString()
+            });
+            w3s.strategy.form.uiSchema.appletID = {
+              'ui:disabled': true
+            };
+          }
+        }
+        w3s.strategy.createStrategy();
+      }}
+    >
+      Create
+    </Button>
   );
 });
 
