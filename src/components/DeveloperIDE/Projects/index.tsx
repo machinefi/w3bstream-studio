@@ -56,7 +56,7 @@ const Projects = observer(() => {
                 e.stopPropagation();
                 confirm.show({
                   title: 'Warning',
-                  description: 'Are you sure you want to delete it?',
+                  description: 'Deleting a project is permanent and will erase all database data, triggers, and events routing. Are you sure you want to delete it?',
                   async onOk() {
                     for (const name of selectedNames) {
                       await axios.request({
