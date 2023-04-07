@@ -9,7 +9,6 @@ import { eventBus } from '@/lib/event';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
 import { showNotification } from '@mantine/notifications';
-import format from 'pg-format';
 import { DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 
@@ -293,25 +292,25 @@ export default class DBTableModule {
       }
     }
 
-    try {
-      const { data, errorMsg } = await trpc.pg.query.mutate({
-        sql: this.sql
-      });
-      if (errorMsg) {
-        await showNotification({ message: errorMsg });
-        return {
-          errorMsg
-        };
-      } else {
-        await showNotification({ message: 'This SQL was executed successfully' });
-        return data;
-      }
-    } catch (error) {
-      await showNotification({ message: error.message });
-      return {
-        errorMsg: error.message
-      };
-    }
+    // try {
+    //   const { data, errorMsg } = await trpc.pg.query.mutate({
+    //     sql: this.sql
+    //   });
+    //   if (errorMsg) {
+    //     await showNotification({ message: errorMsg });
+    //     return {
+    //       errorMsg
+    //     };
+    //   } else {
+    //     await showNotification({ message: 'This SQL was executed successfully' });
+    //     return data;
+    //   }
+    // } catch (error) {
+    //   await showNotification({ message: error.message });
+    //   return {
+    //     errorMsg: error.message
+    //   };
+    // }
   }
 
   async createTable({ tableSchema = 'public', formData }: { tableSchema?: string; formData: CreateTableSchemaType }) {
@@ -423,9 +422,11 @@ export default class DBTableModule {
       await showNotification({ message: 'No data provided' });
       return 'No data provided';
     }
-    const sql = format(`INSERT INTO %I.%I (%I) VALUES (%L)`, tableSchema, tableName, keys, values);
-    const { errorMsg } = await trpc.pg.query.mutate({
-      sql
+    const { errorMsg } = await trpc.pg.createTableData.mutate({
+      tableSchema,
+      tableName,
+      keys,
+      values
     });
     if (errorMsg) {
       await showNotification({ message: errorMsg });
@@ -447,8 +448,7 @@ export default class DBTableModule {
   async getCurrentTableDataCount() {
     const { tableSchema, tableName } = this.currentTable;
     try {
-      const sql = `SELECT COUNT(*) FROM ${format.string(`${tableSchema}.${tableName}`)}`;
-      const { data, errorMsg } = await trpc.pg.query.mutate({ sql });
+      const { data, errorMsg } = await trpc.pg.dataCount.query({ tableSchema, tableName });
       if (errorMsg) {
         await showNotification({ message: errorMsg });
         return 0;
@@ -462,13 +462,12 @@ export default class DBTableModule {
 
   async getCurrentTableData() {
     const { tableSchema, tableName } = this.currentTable;
-    const page = this.table.pagination.page;
-    const pageSize = this.table.pagination.limit;
-    const offset = (page - 1) * pageSize;
     try {
-      const sql = `SELECT * FROM ${format.string(`${tableSchema}.${tableName}`)} LIMIT ${pageSize} OFFSET ${offset}`;
-      const { data, errorMsg } = await trpc.pg.query.mutate({
-        sql
+      const { data, errorMsg } = await trpc.pg.tableData.query({
+        tableSchema,
+        tableName,
+        page: this.table.pagination.page,
+        pageSize: this.table.pagination.limit
       });
       if (errorMsg) {
         await showNotification({ message: errorMsg });
@@ -487,9 +486,11 @@ export default class DBTableModule {
       return 'No data provided';
     }
     const { tableSchema, tableName } = this.currentTable;
-    const sql = format(`DELETE FROM %I.%I WHERE %I = %L`, tableSchema, tableName, name, value);
-    const { errorMsg } = await trpc.pg.query.mutate({
-      sql
+    const { errorMsg } = await trpc.pg.deleteTableData.mutate({
+      tableSchema,
+      tableName,
+      name,
+      value
     });
     if (errorMsg) {
       await showNotification({ message: errorMsg });
