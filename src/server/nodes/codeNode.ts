@@ -48,7 +48,7 @@ export class CodeNode extends BaseNode {
   description: INodeTypeDescription = {
     displayName: 'Code',
     name: 'CodeNode',
-    nodeType: 'code',
+    // nodeType: 'code',
     group: 'code',
     groupIcon: 'AiOutlineCode',
     version: '1.0',
@@ -58,7 +58,7 @@ export class CodeNode extends BaseNode {
     withSourceHandle: true,
   };
 
-  static node_type = 'code';
+  // static node_type = 'code';
   static async execute({ input, output, node, callStack, callStackCurIdx, flow, webhookCtx }) {
     const previousNodeInstance = callStack[callStackCurIdx - 1];
     node.input = previousNodeInstance.output;
@@ -107,7 +107,7 @@ export class CodeNode extends BaseNode {
                 schema: codeNodeSchema,
                 uiSchema: {
                   'ui:submitButtonOptions': {
-                    norender: false,
+                    norender: true,
                     submitText: 'OK',
                   },
                   code: {

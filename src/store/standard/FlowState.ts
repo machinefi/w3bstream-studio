@@ -8,6 +8,7 @@ import { PromiseState } from './PromiseState';
 import { _ } from '@/lib/lodash';
 import { v4 as uuid } from 'uuid';
 import { IndexDb } from '@/lib/dexie';
+import { nodeManager } from '@/server/nodes';
 
 export class FlowState {
   curFlowId: number = null;
@@ -233,4 +234,68 @@ export class FlowState {
     // Clear the copied edges
     this.copiedEdges = [];
   };
+
+  executeFlow() {
+    this.nodes = this.nodes.map((node) => ({ ...node, input: {}, output: {} }));
+    const triggerNodes = this.nodes.filter((node) => node.type === 'SimulationNode');
+    console.log(triggerNodes);
+    triggerNodes.forEach(async (node) => {
+      await this.executeFlowByTriggerId(node.id);
+    });
+    // let nextId = webhook_id ? flowData.nodes.find((i) => i.data?.id == webhook_id)?.id : node_id;
+  }
+
+  async executeFlowByTriggerId(nodeId: string) {
+    const nodeMap = _.keyBy(this.nodes, 'id');
+    const edgeMap = _.keyBy(this.edges, 'source');
+    let nextId = nodeId ? this.nodes.find((i) => i?.id == nodeId)?.id : nodeId;
+    const callStack = [nodeMap[nextId]];
+
+    do {
+      nextId = edgeMap[nextId]?.target;
+      if (nextId) {
+        callStack.push(nodeMap[nextId]);
+      }
+    } while (!!edgeMap[nextId]);
+
+    if (callStack.length <= 1) return { null_job: true };
+
+    for await (const [index, node] of callStack.entries()) {
+      // instance.jsonSchema.value.set(instance.data);
+      // console.log(nodeInstance);
+      const NodeClass = nodeManager.getClass(node.type);
+      // log('NodeClass', NodeClass, node.type);
+      console.log(NodeClass?.node_type)
+      if (NodeClass?.node_type == 'SimulationNode') {
+        await NodeClass.execute({
+          input: {},
+          output: {},
+          node,
+          callStack,
+          callStackCurIdx: index
+        });
+        continue;
+      }
+      if (NodeClass?.node_type == 'WasmNode') {
+        await NodeClass.execute({
+          input: {},
+          output: {},
+          node,
+          callStack,
+          callStackCurIdx: index
+        });
+        continue;
+      }
+
+      if (NodeClass?.node_type == 'VmRunTimeNode') {
+        await NodeClass.execute({
+          input: {},
+          output: {},
+          node,
+          callStack,
+          callStackCurIdx: index
+        });
+      }
+    }
+  }
 }
