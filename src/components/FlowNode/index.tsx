@@ -29,7 +29,7 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
   } = useStore();
 
   const store = useLocalObservable(() => ({
-    realNodeInstance: new FlowNode(flow.nodeAbstracts.find((node) => node.description.nodeType == nodeInstance.description.nodeType))
+    realNodeInstance: new FlowNode(flow.nodeAbstracts.find((node) => node.description.name == nodeInstance.description.name))
   }));
 
   const copied = flow.copiedNodes.findIndex((node) => node.id === id) > -1;
@@ -88,22 +88,22 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
       <Box style={{ fontSize: '12px' }} p={8}>
         {store.realNodeInstance?.form.formList?.length > 1 ? (
           <>
-            <Tabs defaultValue={nodeInstance.form.formList[0].label}>
+            <Tabs defaultValue={store.realNodeInstance.form.formList[0].label}>
               <Tabs.List>
-                {nodeInstance.form.formList.map((item) => (
+                {store.realNodeInstance.form.formList.map((item) => (
                   <Tabs.Tab key={item.label} value={item.label}>
                     {item.label}
                   </Tabs.Tab>
                 ))}
               </Tabs.List>
-              {nodeInstance.form.formList.map((item, index) => (
+              {store.realNodeInstance.form.formList.map((item, index) => (
                 <Tabs.Panel key={item.label} value={item.label}>
                   <Box mt={10}>
                     <JSONRender
                       json={{
                         key: 'JSONRenderContainer',
                         component: 'div',
-                        children: nodeInstance.form.formList[index].form
+                        children: store.realNodeInstance.form.formList[index].form
                       }}
                       data={null}
                       store={jsonRenderGlobalStore}

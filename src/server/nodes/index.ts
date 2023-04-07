@@ -3,6 +3,9 @@ import { CodeNode } from './codeNode';
 import { WebhookNode } from './webhookNode';
 import { CarNode } from './Trigger/SmartCar';
 import { RadarNode } from './Trigger/Radar';
+import { SimulationNode } from './Trigger/SimulationNode';
+import { WasmNode } from './Code/wasmNode';
+import { VmRunTimeNode } from './Runtime/vmRunTimeNode';
 
 export class NodeManager {
   nodes: INodeType[] = [];
@@ -28,10 +31,12 @@ export class NodeManager {
 
   registerNode() {
     this.nodeClassMap = {
-      WebhookNode,
-      CodeNode,
-      CarNode,
-      RadarNode,
+      // WebhookNode,
+      SimulationNode,
+      WasmNode,
+      VmRunTimeNode
+      // CarNode,
+      // RadarNode,
     };
 
     //@ts-ignore
