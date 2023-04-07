@@ -160,8 +160,8 @@ export class W3bStream {
       .on('chainHeight.delete', async () => {
         this.chainHeight.allChainHeight.call();
       })
-      .on('metrics.timerange', async (startTime: Date, endTime: Date) => {
-        this.metrics.allMetrics.call(startTime, endTime);
+      .on('metrics.timerange', async (startTime: Date, endTime: Date, step: number) => {
+        this.metrics.allMetrics.call(startTime, endTime, step);
       });
   }
 

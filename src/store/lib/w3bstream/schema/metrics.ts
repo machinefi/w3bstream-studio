@@ -24,7 +24,7 @@ export type Metrics = {
 export default class MetricsModule {
   allMetrics = new PromiseState<any, Metrics[]>({
     defaultValue: [],
-    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 600) => {
+    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
       const { data } = await axios.request({
         method: 'GET',
         url: `/api/metrics/query_range?query={project=%22${rootStore.w3s.project.curProject.f_name}%22}&start=${startTime.toISOString()}&end=${endTime.toISOString()}&step=${step}s`
