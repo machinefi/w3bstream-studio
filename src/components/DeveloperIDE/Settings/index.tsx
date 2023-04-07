@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Button, Flex, Stack } from '@chakra-ui/react';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { ProjectEnvs } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
@@ -9,9 +9,16 @@ import { eventBus } from '@/lib/event';
 
 const Settings = () => {
   const {
-    w3s: { project },
+    w3s: { project, applet },
     base: { confirm }
   } = useStore();
+
+  const store = useLocalObservable(() => ({
+    get wasmName() {
+      const applets = applet.allData.find((item) => item.project_name === project.curProject?.f_name);
+      return applets?.f_wasm_name;
+    }
+  }));
 
   useEffect(() => {
     project.setMode('edit');
@@ -22,9 +29,15 @@ const Settings = () => {
       <Box mt="20px" fontSize="18px" fontWeight={700}>
         General
       </Box>
-      <Box mt="10px" w="100%">
+      <Stack mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
+        <Flex mb="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
+          <Box>WASM file name:</Box>
+          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+            {store.wasmName}
+          </Box>
+        </Flex>
         <ProjectEnvs />
-      </Box>
+      </Stack>
       <Box mt="60px" fontSize="18px" fontWeight={700}>
         Danger Zone
       </Box>
