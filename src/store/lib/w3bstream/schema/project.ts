@@ -145,6 +145,15 @@ export default class ProjectModule {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
       this.form.reset();
     },
+    customValidate: (formData, errors) => {
+      if (formData.name) {
+        const re = /^\S+$/;
+        if (!re.test(formData.name)) {
+          errors.name.addError('Name cannot contain spaces');
+        }
+      }
+      return errors;
+    },
     value: new JSONValue<DefaultSchemaType>({
       default: {
         name: 'project_01'
@@ -210,6 +219,15 @@ export default class ProjectModule {
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
       this.developerInitializationTemplateForm.reset();
+    },
+    customValidate: (formData, errors) => {
+      if (formData.name) {
+        const re = /^\S+$/;
+        if (!re.test(formData.name)) {
+          errors.name.addError('cannot contain spaces');
+        }
+      }
+      return errors;
     },
     value: new JSONValue<DeveloperInitializationTemplateSchemaType>({
       default: {
