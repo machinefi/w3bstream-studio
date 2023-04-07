@@ -414,10 +414,8 @@ export default class DBTableModule {
     this.allTables.call();
   }
 
-  async createTableData(formData: any) {
+  async createTableData(keys: string[], values: any[]) {
     const { tableSchema, tableName } = this.currentTable;
-    const keys = Object.keys(formData);
-    const values = Object.values(formData);
     if (!keys.length) {
       await showNotification({ message: 'No data provided' });
       return 'No data provided';

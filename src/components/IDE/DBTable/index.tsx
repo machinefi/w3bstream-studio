@@ -6,11 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { MdRefresh } from 'react-icons/md';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { FiUpload } from 'react-icons/fi';
 import { hooks } from '@/lib/hooks';
 import { formatColumn, creatColumnDataForm } from '@/store/lib/w3bstream/schema/dbTable';
 import MonacoEditor from '@monaco-editor/react';
 import { _ } from '@/lib/lodash';
 import { DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
+import CSVReader from 'react-csv-reader';
+import toast from 'react-hot-toast';
 
 const EditTable = observer(() => {
   const {
@@ -188,46 +191,93 @@ const ViewData = observer(() => {
 
   return (
     <>
-      <Flex alignItems="center">
-        <Button
-          h="32px"
-          leftIcon={<AddIcon />}
-          {...defaultButtonStyle}
-          onClick={async (e) => {
-            const form = creatColumnDataForm(dbTable.currentColumns);
-            const formData = await hooks.getFormData({
-              title: `Insert data to '${dbTable.currentTable.tableName}'`,
-              size: 'md',
-              formList: [
-                {
-                  form
+      <Flex alignItems="center" justifyContent="space-between">
+        <Flex alignItems="center">
+          <Button
+            h="32px"
+            leftIcon={<AddIcon />}
+            {...defaultButtonStyle}
+            onClick={async (e) => {
+              const form = creatColumnDataForm(dbTable.currentColumns);
+              const formData = await hooks.getFormData({
+                title: `Insert data to '${dbTable.currentTable.tableName}'`,
+                size: 'md',
+                formList: [
+                  {
+                    form
+                  }
+                ]
+              });
+              try {
+                const keys = Object.keys(formData);
+                const values = Object.values(formData);
+                const errorMsg = await dbTable.createTableData(keys, values);
+                if (!errorMsg) {
+                  const data = await dbTable.getCurrentTableData();
+                  dbTable.table.set({
+                    dataSource: data
+                  });
                 }
-              ]
-            });
-            try {
-              const errorMsg = await dbTable.createTableData(formData);
-              if (!errorMsg) {
+              } catch (error) {}
+            }}
+          >
+            Insert
+          </Button>
+          <Button
+            ml="20px"
+            h="32px"
+            leftIcon={<MdRefresh />}
+            {...defaultOutlineButtonStyle}
+            onClick={async (e) => {
+              dbTable.init();
+            }}
+          >
+            Refresh
+          </Button>
+        </Flex>
+        <label>
+          <CSVReader
+            label=""
+            onFileLoaded={async (csvData, fileInfo, originalFile) => {
+              if (csvData?.length) {
+                const keys = Object.keys(csvData[0]);
+                let errorMsg = '';
+                for (const item of csvData) {
+                  const values = Object.values(item);
+                  errorMsg = await dbTable.createTableData(keys, values);
+                  if (errorMsg) {
+                    toast.error(errorMsg);
+                  }
+                }
+                if (!errorMsg) {
+                  toast.success('Upload CSV success');
+                }
                 const data = await dbTable.getCurrentTableData();
                 dbTable.table.set({
                   dataSource: data
                 });
+              } else {
+                toast.error('CSV file is empty');
               }
-            } catch (error) {}
-          }}
-        >
-          Insert
-        </Button>
-        <Button
-          ml="20px"
-          h="32px"
-          leftIcon={<MdRefresh />}
-          {...defaultOutlineButtonStyle}
-          onClick={async (e) => {
-            dbTable.init();
-          }}
-        >
-          Refresh
-        </Button>
+            }}
+            onError={(error) => {
+              toast.error(error.message);
+            }}
+            parserOptions={{
+              header: true,
+              dynamicTyping: true,
+              skipEmptyLines: true
+              // transformHeader: (header) => header.toLowerCase().replace(/\W/g, '_')
+            }}
+            inputId="csv-input"
+            inputName="csv-input"
+            inputStyle={{ display: 'none' }}
+          />
+          <Flex alignItems="center" p="6px 20px" borderRadius="4px" cursor="pointer" {...defaultButtonStyle}>
+            <FiUpload />
+            <Box ml="10px">Upload CSV</Box>
+          </Flex>
+        </label>
       </Flex>
       <JSONTable jsonstate={dbTable} />
     </>
