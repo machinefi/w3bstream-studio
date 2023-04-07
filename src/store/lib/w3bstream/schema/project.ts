@@ -214,7 +214,7 @@ export default class ProjectModule {
           }
         }
       },
-      layout: [['name'], 'tags', ['template', 'file']]
+      layout: ['name', 'tags', ['template', 'file']]
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -458,23 +458,31 @@ export default class ProjectModule {
   }
 
   async createProjectForDeleveloper() {
-    const formData = await hooks.getFormData({
-      title: 'Create a New Project',
-      size: '2xl',
-      formList: [
-        {
-          form: this.developerInitializationTemplateForm
-        }
-      ]
-    });
+    let formData = {
+      name: '',
+      tags: '',
+      template: '',
+      file: ''
+    };
+    try {
+      formData = await hooks.getFormData({
+        title: 'Create a New Project',
+        size: '2xl',
+        formList: [
+          {
+            form: this.developerInitializationTemplateForm
+          }
+        ]
+      });
+    } catch (error) {
+      this.developerInitializationTemplateForm.reset();
+      return;
+    }
 
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
       data.project[0].name = formData.name;
-      if (formData.description) {
-        data.project[0].description = formData.description;
-      }
       try {
         const res = await axios.request({
           method: 'post',

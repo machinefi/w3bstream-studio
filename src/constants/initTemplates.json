@@ -6,7 +6,6 @@
       "project": [
         {
           "name": "hello_world",
-          "description": "",
           "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
           "datas": [],
           "envs": [["key1", "value1"]],
