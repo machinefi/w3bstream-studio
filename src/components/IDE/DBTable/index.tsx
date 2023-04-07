@@ -238,7 +238,7 @@ const ViewData = observer(() => {
         <label>
           <CSVReader
             label=""
-            onFileLoaded={async (csvData, fileInfo, originalFile) => {
+            onFileLoaded={async (csvData) => {
               if (csvData?.length) {
                 const keys = Object.keys(csvData[0]);
                 let errorMsg = '';
@@ -246,19 +246,22 @@ const ViewData = observer(() => {
                   const values = Object.values(item);
                   errorMsg = await dbTable.createTableData(keys, values);
                   if (errorMsg) {
-                    toast.error(errorMsg);
+                    break;
                   }
                 }
-                if (!errorMsg) {
+                if (errorMsg) {
+                  toast.error(errorMsg);
+                } else {
+                  const data = await dbTable.getCurrentTableData();
+                  dbTable.table.set({
+                    dataSource: data
+                  });
                   toast.success('Upload CSV success');
                 }
-                const data = await dbTable.getCurrentTableData();
-                dbTable.table.set({
-                  dataSource: data
-                });
               } else {
                 toast.error('CSV file is empty');
               }
+              (document.getElementById('csv-input') as HTMLInputElement).value = '';
             }}
             onError={(error) => {
               toast.error(error.message);
