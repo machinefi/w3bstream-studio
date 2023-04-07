@@ -89,10 +89,11 @@ const Login = observer(() => {
           </Box>
           <Box zIndex={9} ml="130px" w="600px" p="80px 50px" bg="linear-gradient(180deg, rgba(255, 255, 255, 0.79) 0%, rgba(255, 255, 255, 0.35) 100%)" backdropFilter="blur(2px)" borderRadius="15px">
             <Text fontSize="24px" fontWeight={700}>
-              Welcome to W3bstream Studio, login with
+              Login with
             </Text>
             <Flex mt="60px" justify="center" align="center">
               <Button
+                w="100%"
                 {...defaultOutlineButtonStyle}
                 leftIcon={<Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />}
                 onClick={async () => {

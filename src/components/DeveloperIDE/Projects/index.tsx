@@ -110,7 +110,7 @@ const Projects = observer(() => {
             </Button>
           </Flex>
         </Flex>
-        <Grid mt="20px" gridTemplateRows="repeat(4, 1fr)" templateColumns="repeat(2, 1fr)" gap={6} h="calc(100vh - 210px)" overflow="auto">
+        <Grid mt="20px" gridTemplateRows="repeat(6, 1fr)" templateColumns="repeat(2, 1fr)" gap={6} h="calc(100vh - 210px)" overflow="auto">
           {allProjects.value.map((project, index) => {
             const instance = w3s.instances.table.dataSource.find((item) => item.project_name === project.f_name);
             const status = INSTANCE_STATUS[instance?.f_state || 0];
@@ -195,7 +195,7 @@ const Projects = observer(() => {
                     />
                   </Flex>
                 </Flex>
-                <Flex mt="12px" alignItems="center" fontSize="14px">
+                {/* <Flex mt="12px" alignItems="center" fontSize="14px">
                   <Icon as={AiOutlineLineChart} color="#7A7A7A" />
                   <Box ml="5px" color="#7A7A7A">
                     Requests per hour:
@@ -203,7 +203,7 @@ const Projects = observer(() => {
                   <Box ml="10px" color="#000">
                     0
                   </Box>
-                </Flex>
+                </Flex> */}
                 <Box mt="20px" fontSize="14px" color="#7A7A7A">
                   {project.f_name}
                 </Box>

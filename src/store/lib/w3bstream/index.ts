@@ -98,6 +98,9 @@ export class W3bStream {
       })
       .on('project.delete', async () => {
         await this.project.allProjects.call();
+        this.contractLogs.allContractLogs.call();
+        this.chainTx.allChainTx.call();
+        this.chainHeight.allChainHeight.call();
       })
       .on('applet.create', async () => {
         await this.project.allProjects.call();

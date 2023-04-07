@@ -5,6 +5,9 @@ import { definitions } from './definitions';
 import { ChainHeightType } from '@/server/routers/w3bstream';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { trpc } from '@/lib/trpc';
+import { axios } from '@/lib/axios';
+import toast from 'react-hot-toast';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const schema = {
   definitions: {
@@ -69,7 +72,7 @@ export default class ChainHeightModule {
       {
         key: 'f_height',
         label: 'Height'
-      }
+      },
       // {
       //   key: 'actions',
       //   label: 'Actions',
@@ -77,19 +80,19 @@ export default class ChainHeightModule {
       //     return [
       //       {
       //         props: {
-      //           bg: '#E53E3E',
-      //           color: '#fff',
+      //           size: 'xs',
+      //           ...defaultOutlineButtonStyle,
       //           onClick() {
       //             globalThis.store.base.confirm.show({
       //               title: 'Warning',
       //               description: 'Are you sure you want to delete it?',
       //               async onOk() {
-      //                 const project = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_name === item.f_project_name);
       //                 try {
       //                   await axios.request({
       //                     method: 'delete',
-      //                     url: `/api/w3bapp/monitor/chain_height/${project?.f_name}`,
+      //                     url: `/api/w3bapp/monitor/chain_height/${item.f_project_name}`,
       //                     data: {
+      //                       projectName: item.f_project_name,
       //                       chainHeightID: item.f_chain_height_id
       //                     }
       //                   });

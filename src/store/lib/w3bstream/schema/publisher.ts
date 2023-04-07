@@ -12,7 +12,7 @@ import { ShowRequestTemplatesButtonWidget } from '@/components/IDE/PublishEventR
 import { makeObservable, observable } from 'mobx';
 import { helper } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
-import { defaultOutlineButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const createPublisherSchema = {
   definitions: {
@@ -348,9 +348,8 @@ export default class PublisherModule {
           return [
             {
               props: {
-                bg: '#946FFF',
-                color: '#fff',
                 size: 'xs',
+                ...defaultButtonStyle,
                 onClick: async () => {
                   if (globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER') {
                     this.createPublisherForm.uiSchema.projectName = {

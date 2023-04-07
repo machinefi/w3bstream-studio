@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { inferProcedureOutput, TRPCError } from '@trpc/server';
 import { PostgresMeta } from '@/postgres-meta/index';
 import { DEFAULT_POOL_CONFIG, DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST, PG_CONNECTION } from '@/constants/postgres-meta';
+import format from 'pg-format';
 
 export const pgRouter = t.router({
   schemas: authProcedure
@@ -239,17 +240,80 @@ export const pgRouter = t.router({
       await pgMeta.end();
       return { data, errorMsg: error?.message };
     }),
-  query: authProcedure
+  // query: authProcedure
+  //   .input(
+  //     z.object({
+  //       sql: z.string()
+  //     })
+  //   )
+  //   .mutation(async ({ ctx, input }) => {
+  //     const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+  //     const { data, error } = await pgMeta.query(input.sql);
+  //     await pgMeta.end();
+  //     return { data, errorMsg: error?.message };
+  //   }),
+  dataCount: authProcedure
     .input(
       z.object({
-        sql: z.string()
+        tableSchema: z.string(),
+        tableName: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const sql = `SELECT COUNT(*) FROM ${format.string(`${input.tableSchema}.${input.tableName}`)}`;
+      const { data, error } = await pgMeta.query(sql);
+      await pgMeta.end();
+      return { data, errorMsg: error?.message };
+    }),
+  tableData: authProcedure
+    .input(
+      z.object({
+        tableSchema: z.string(),
+        tableName: z.string(),
+        page: z.number().optional().default(1),
+        pageSize: z.number().optional().default(10)
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const offset = (input.page - 1) * input.pageSize;
+      const sql = `SELECT * FROM ${format.string(`${input.tableSchema}.${input.tableName}`)} LIMIT ${input.pageSize} OFFSET ${offset}`;
+      const { data, error } = await pgMeta.query(sql);
+      await pgMeta.end();
+      return { data, errorMsg: error?.message };
+    }),
+  createTableData: authProcedure
+    .input(
+      z.object({
+        tableSchema: z.string(),
+        tableName: z.string(),
+        keys: z.array(z.string()),
+        values: z.array(z.any())
       })
     )
     .mutation(async ({ ctx, input }) => {
       const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
-      const { data, error } = await pgMeta.query(input.sql);
+      const sql = format(`INSERT INTO %I.%I (%I) VALUES (%L)`, input.tableSchema, input.tableName, input.keys, input.values);
+      const { error } = await pgMeta.query(sql);
       await pgMeta.end();
-      return { data, errorMsg: error?.message };
+      return { errorMsg: error?.message };
+    }),
+  deleteTableData: authProcedure
+    .input(
+      z.object({
+        tableSchema: z.string(),
+        tableName: z.string(),
+        name: z.string(),
+        value: z.any()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const sql = format(`DELETE FROM %I.%I WHERE %I = %L`, input.tableSchema, input.tableName, input.name, input.value);
+      const { error } = await pgMeta.query(sql);
+      await pgMeta.end();
+      return { errorMsg: error?.message };
     })
 });
 

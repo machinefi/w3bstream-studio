@@ -10,6 +10,8 @@ import dayjs from '@/lib/dayjs';
 import { trpc } from '@/lib/trpc';
 import { VscDebugStart } from 'react-icons/vsc';
 import { hooks } from '@/lib/hooks';
+import { AiOutlineClear } from 'react-icons/ai';
+import { TrueExpression } from 'types:assemblyscript/src/index-js';
 
 type LocalStoreType = {
   loading: boolean;
@@ -56,9 +58,10 @@ const EventLogs = observer(() => {
 
   useEffect(() => {
     const projectName = curProject?.f_name;
-    if (projectName) {
+    if (projectName && !store.initialized) {
       fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
         store.setData({
+          initialized: true,
           logs: res,
           offset: 0,
           loading: false,
@@ -66,12 +69,31 @@ const EventLogs = observer(() => {
         });
       });
     }
-  }, [curProject]);
+  }, [curProject, store.initialized]);
 
   const { loading, logs } = store;
 
   return (
     <Box pos="relative" bg="#000" borderRadius="8px">
+      <Icon
+        as={AiOutlineClear}
+        pos="absolute"
+        right="50px"
+        top="10px"
+        color="white"
+        cursor="pointer"
+        _hover={{
+          color: '#946FFF'
+        }}
+        onClick={() => {
+          store.setData({
+            logs: [],
+            offset: 0,
+            haveMore: true,
+            limit: 3
+          });
+        }}
+      />
       <Icon
         as={VscDebugStart}
         pos="absolute"
