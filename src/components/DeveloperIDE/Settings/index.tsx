@@ -45,7 +45,7 @@ const Settings = () => {
         <Flex justifyContent="space-between" alignItems="center">
           <Stack>
             <Box fontWeight={700}>Delete this project</Box>
-            <Box>Once you delete a project, there is no going back. Please be certain.</Box>
+            <Box>Deleting a project is permanent and will erase all database data, triggers, and events routing. Please proceed with caution.</Box>
           </Stack>
           <Button
             ml="20px"
