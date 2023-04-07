@@ -5,6 +5,7 @@ import { useStore } from '@/store/index';
 import ContractLogs, { CreateContractLogButton } from '@/components/IDE/Monitor/ContractLogs';
 import ChainHeight, { CreateChainHeightButton } from '@/components/IDE/Monitor/ChainHeight';
 import Strategies, { CreateStrategyButton } from '@/components/IDE/Strategies';
+import { publicConfig } from '@/constants/config';
 
 const Triggers = () => {
   const {
@@ -27,7 +28,7 @@ const Triggers = () => {
           Route:
         </Box>
         <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-          https://dev.w3bstream.com
+          {publicConfig.httpURL}
         </Box>
       </Flex>
       <Box mt="20px" fontSize="14px" color="#7A7A7A">
@@ -38,7 +39,7 @@ const Triggers = () => {
           URL:
         </Box>
         <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-          mqtt://dev.w3bstream.com
+          {publicConfig.mqttURL}
         </Box>
       </Flex>
       <Flex mt="10px" alignItems="center">

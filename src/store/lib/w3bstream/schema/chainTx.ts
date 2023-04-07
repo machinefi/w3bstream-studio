@@ -5,6 +5,9 @@ import { definitions } from './definitions';
 import { ChainTxType } from '@/server/routers/w3bstream';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { trpc } from '@/lib/trpc';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
+import { axios } from '@/lib/axios';
+import toast from 'react-hot-toast';
 
 export const schema = {
   definitions: {
@@ -77,7 +80,7 @@ export default class ChainTxModule {
       {
         key: 'f_updated_at',
         label: 'Updated At'
-      }
+      },
       // {
       //   key: 'actions',
       //   label: 'Actions',
@@ -85,20 +88,19 @@ export default class ChainTxModule {
       //     return [
       //       {
       //         props: {
-      //           bg: '#E53E3E',
-      //           color: '#fff',
+      //           size: 'xs',
+      //           ...defaultOutlineButtonStyle,
       //           onClick() {
       //             globalThis.store.base.confirm.show({
       //               title: 'Warning',
       //               description: 'Are you sure you want to delete it?',
       //               async onOk() {
-      //                 const project = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_name === item.f_project_name);
       //                 try {
       //                   await axios.request({
       //                     method: 'delete',
-      //                     url: `/api/w3bapp/monitor/chain_tx/${project?.f_name}`,
+      //                     url: `/api/w3bapp/monitor/chain_tx/${item.f_project_name}`,
       //                     data: {
-      //                       chaintxID: item.f_chaintx_id
+      //                       chainTxID: item.f_chaintx_id
       //                     }
       //                   });
       //                   eventBus.emit('chainTx.delete');

@@ -5,6 +5,9 @@ import { definitions } from './definitions';
 import { ContractLogType } from '@/server/routers/w3bstream';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { trpc } from '@/lib/trpc';
+import { axios } from '@/lib/axios';
+import toast from 'react-hot-toast';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const schema = {
   definitions: {
@@ -92,20 +95,20 @@ export default class ContractLogModule {
       //     return [
       //       {
       //         props: {
-      //           bg: '#E53E3E',
-      //           color: '#fff',
+      //           size: 'xs',
+      //           ...defaultOutlineButtonStyle,
       //           onClick() {
       //             globalThis.store.base.confirm.show({
       //               title: 'Warning',
       //               description: 'Are you sure you want to delete it?',
       //               async onOk() {
-      //                 const project = globalThis.store.w3s.project.allProjects.value.find((p) => p.f_name === item.f_project_name);
       //                 try {
       //                   await axios.request({
       //                     method: 'delete',
-      //                     url: `/api/w3bapp/monitor/contract_log/${project?.f_project_id}`,
+      //                     url: `/api/w3bapp/monitor/contract_log/${item.f_project_name}`,
       //                     data: {
-      //                       contractlogID: item.f_contractlog_id
+      //                       projectName: item.f_project_name,
+      //                       contractLogID: item.f_contractlog_id
       //                     }
       //                   });
       //                   eventBus.emit('contractlog.delete');

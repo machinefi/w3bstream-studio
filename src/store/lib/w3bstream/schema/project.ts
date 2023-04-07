@@ -38,7 +38,7 @@ export const developerInitializationTemplateSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', title: 'Name' },
-    tags: { type: 'string', title: 'Tags' },
+    tags: { type: 'string', title: 'Description Tags' },
     template: { type: 'string', title: 'Explore Templates' },
     file: { type: 'string', title: 'Code Upload' }
   },
