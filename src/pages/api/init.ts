@@ -62,8 +62,8 @@ const createProject = async (
         projectName: data.project.name
       };
     }
+    throw data;
   } catch (e) {
-    console.log(e);
     throw new Error('create project failed:' + e.msg);
   }
 };
@@ -114,8 +114,8 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
     if (data.appletID) {
       return data.appletID;
     }
+    throw data;
   } catch (e) {
-    console.log(e);
     throw new Error('create applet failed');
   }
 };
@@ -134,7 +134,6 @@ const deployApplet = async (appletID: string, token: string): Promise<string> =>
     }
     throw data;
   } catch (error) {
-    console.log(error);
     throw new Error('deploy applet failed:' + error.msg);
   }
 };
@@ -148,8 +147,7 @@ const startInstance = async (instanceID: string, token: string): Promise<any> =>
       }
     });
   } catch (error) {
-    console.log(error);
-    throw new Error('start instance failed:'+error.msg);
+    throw new Error('start instance failed:' + error.msg);
   }
 };
 
@@ -217,7 +215,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       res.status(200).json({ message: 'OK' });
     } catch (error) {
-      console.log(error.message);
       res.status(500).json({ message: error.message });
     }
   } else {
