@@ -20,13 +20,13 @@ const TimeRangePick = () => {
         const v = e.target.value;
         switch (v) {
           case '1':
-            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 24 * 60 * 60 * 1000), new Date());
+            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 24 * 60 * 60 * 1000), new Date(), 3600);
             break;
           case '2':
-            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), new Date());
+            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), new Date(), 3600 * 6);
             break;
           case '3':
-            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), new Date());
+            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), new Date(), 3600 * 24);
             break;
           default:
             break;

@@ -104,19 +104,23 @@ const EventLogs = observer(() => {
                 data: publisher.parseBody(formData.body)
               });
               const wasmResult = res.data?.[0].wasmResults?.[0];
-              if (wasmResult && wasmResult.code === 0) {
-                store.setData({
-                  loading: true
-                });
-                fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+              if (wasmResult) {
+                if (wasmResult.errMsg) {
+                  showNotification({ color: 'red', message: wasmResult.errMsg });
+                } else {
                   store.setData({
-                    logs: res.concat(logs),
-                    offset: store.offset + logs.length,
-                    loading: false
+                    loading: true
                   });
-                });
+                  fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+                    store.setData({
+                      logs: res.concat(logs),
+                      offset: store.offset + logs.length,
+                      loading: false
+                    });
+                  });
+                }
               } else {
-                showNotification({ color: 'red', message: wasmResult?.errMsg || 'Failed' });
+                showNotification({ color: 'red', message: 'Failed' });
               }
             } catch (error) {}
           }
