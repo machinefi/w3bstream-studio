@@ -11,6 +11,7 @@ import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidge
 import { showNotification } from '@mantine/notifications';
 import { DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
+import EditorWidget from '@/components/JSONFormWidgets/EditorWidget';
 
 export const createTableSchema = {
   type: 'object',
@@ -640,9 +641,24 @@ export const creatColumnDataForm = (columns: ColumnType[]) => {
     if (comment) {
       schema.properties[name].description = comment;
     }
+
     // if (!item.is_nullable) {
     //   schema.required.push(name);
     // }
+
+    if (data_type === 'jsonb' || data_type === 'json') {
+      schema.properties[name] = {
+        ...schema.properties[name],
+        default: JSON.stringify({}, null, 2)
+      };
+      uiSchema[name] = {
+        'ui:widget': EditorWidget,
+        'ui:options': {
+          editorHeight: '400px',
+          emptyValue: JSON.stringify({}, null, 2)
+        }
+      };
+    }
   });
 
   // console.log('creatColumnDataForm [columns]', JSON.stringify(columns, null, 2));

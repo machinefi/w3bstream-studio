@@ -81,13 +81,21 @@ function ActionButton({ props, text }: ActionButtonType) {
   );
 }
 
+function renderFieldValue(v: any) {
+  return typeof v == 'string' ? v : JSON.stringify(v);
+}
+
 function Body<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
   return (
     <Tr fontSize="14px" color="#0F0F0F">
       {columns.map((column) => {
         return (
-          <Td key={column.key}>
-            {column.actions ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />) : column.render ? column.render(item) : item[column.key]}
+          <Td key={column.key} border="1px solid #F5F5F5" maxW="200px" overflowX="auto">
+            {column.actions
+              ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
+              : column.render
+              ? column.render(item)
+              : renderFieldValue(item[column.key])}
           </Td>
         );
       })}
@@ -115,8 +123,12 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
         <Td w="40px">{isOpen ? <ChevronDownIcon w={6} h={6} /> : <ChevronRightIcon w={6} h={6} />}</Td>
         {columns.map((column) => {
           return (
-            <Td key={column.key}>
-              {column.actions ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />) : column.render ? column.render(item) : item[column.key]}
+            <Td key={column.key} border="1px solid #F5F5F5" maxW="200px" overflowX="auto">
+              {column.actions
+                ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
+                : column.render
+                ? column.render(item)
+                : renderFieldValue(item[column.key])}
             </Td>
           );
         })}
@@ -146,12 +158,12 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
                       <Tr fontSize="14px" color="#0F0F0F">
                         {exColumns.map((exC) => {
                           return (
-                            <Td key={exC.key}>
+                            <Td key={exC.key} border="1px solid #F5F5F5" maxW="200px" overflowX="auto">
                               {exC.actions
                                 ? exC.actions(exItem).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
                                 : exC.render
                                 ? exC.render(exItem)
-                                : exItem[exC.key]}
+                                : renderFieldValue(exItem[exC.key])}
                             </Td>
                           );
                         })}
