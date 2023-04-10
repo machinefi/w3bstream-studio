@@ -478,7 +478,6 @@ export default class ProjectModule {
       this.developerInitializationTemplateForm.reset();
       return;
     }
-    return;
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
