@@ -222,9 +222,9 @@ export default class ProjectModule {
     },
     customValidate: (formData, errors) => {
       if (formData.name) {
-        const re = /^\S+$/;
+        const re = /^[a-z][a-z0-9_-]*$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('cannot contain spaces');
+          errors.name.addError('field starts with a lowercase letter and includes only lowercase letters, numbers, and no spaces');
         }
       }
       return errors;
@@ -478,7 +478,7 @@ export default class ProjectModule {
       this.developerInitializationTemplateForm.reset();
       return;
     }
-
+    return;
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
