@@ -71,18 +71,19 @@ model t_instance {
 }
 
 model t_project {
-  f_id         BigInt        @id @default(autoincrement())
-  f_project_id BigInt
-  f_account_id BigInt
-  f_name       String        @db.VarChar(255)
-  f_version    String        @default("") @db.VarChar(255)
-  f_proto      Int           @default(0)
-  f_created_at BigInt        @default(0)
-  f_updated_at BigInt        @default(0)
-  f_deleted_at BigInt        @default(0)
-  applets      t_applet[]
-  publishers   t_publisher[]
-  configs      t_config[]
+  f_id          BigInt        @id @default(autoincrement())
+  f_project_id  BigInt
+  f_account_id  BigInt
+  f_name        String        @db.VarChar(255)
+  f_description String        @default("") @db.VarChar(255)
+  f_version     String        @default("") @db.VarChar(255)
+  f_proto       Int           @default(0)
+  f_created_at  BigInt        @default(0)
+  f_updated_at  BigInt        @default(0)
+  f_deleted_at  BigInt        @default(0)
+  applets       t_applet[]
+  publishers    t_publisher[]
+  configs       t_config[]
 
   @@unique([f_project_id])
   @@unique([f_project_id, f_deleted_at], map: "t_project_ui_project_id")
