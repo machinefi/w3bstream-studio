@@ -109,7 +109,7 @@ export class WASM {
           return 0;
         },
         ws_get_data(rid: number, data_ptr: number, data_size: number): number {
-          const data = _this.ctxData
+          const data = _this.ctxData;
           console.log(data, 'ctxData', data_ptr, data_size);
           try {
             _this.copyToWasm(data, data_ptr, data_size);
@@ -135,6 +135,7 @@ export class WASM {
             });
 
             const tx = await provider.request({
+              // @ts-ignore
               method: 'eth_sendTransaction',
               params: [
                 {

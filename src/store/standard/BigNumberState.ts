@@ -24,13 +24,16 @@ export class BigNumberState {
       decimals: fixed
     });
   }
+
   setDecimals(decimals: number) {
     this.decimals = decimals;
   }
+
   setValue(value: BigNumber) {
     this.value = value;
     this.setLoading(false);
   }
+
   setLoading(val) {
     this.loading = val;
   }

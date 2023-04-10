@@ -25,7 +25,7 @@ export default class W3bstreamConfigModule {
         submitText: 'Update'
       }
     },
-    value: new StorageState<SchemaType>({ key: 'w3bstream-config', default: { apiUrl: '', token: '', accountID: '', accountRole: '', address: '' } })
+    value: new StorageState<SchemaType>({ key: 'w3bstream-config', default: { apiUrl: '', token: '', accountID: '', accountRole: '' } })
   });
 
   logout() {

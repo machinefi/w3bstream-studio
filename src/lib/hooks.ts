@@ -42,5 +42,12 @@ export const hooks = {
         reject('abort');
       });
     });
+  },
+  async delay(ms: number) {
+    return new Promise<void>((res) => {
+      setTimeout(() => {
+        res();
+      }, ms);
+    });
   }
 };
