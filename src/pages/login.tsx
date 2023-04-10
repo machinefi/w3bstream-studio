@@ -1,71 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '../store';
-import { Box, Button, Flex, Icon, Image, Link, Text } from '@chakra-ui/react';
-import { ethers } from 'ethers';
-import { SiweMessage } from 'siwe';
-import { eventBus } from '@/lib/event';
+import { Box, Flex, Icon, Image, Link, Text } from '@chakra-ui/react';
 import { BsArrowRight } from 'react-icons/bs';
-import { defaultOutlineButtonStyle } from '@/lib/theme';
-
-const enum Providers {
-  METAMASK = 'metamask'
-}
-
-const signIn = async (connector: Providers) => {
-  let provider: ethers.providers.Web3Provider;
-  if (connector === 'metamask') {
-    // @ts-ignore
-    if (window.ethereum == null) {
-      console.log('MetaMask not installed; using read-only defaults');
-    } else {
-      // @ts-ignore
-      const metamask = window.ethereum;
-      await metamask.request({
-        method: 'eth_requestAccounts'
-      });
-      provider = new ethers.providers.Web3Provider(metamask);
-    }
-  }
-
-  const [address] = await provider.listAccounts();
-  if (!address) {
-    throw new Error('Address not found.');
-  }
-
-  try {
-    const chainId = await provider.getNetwork().then(({ chainId }) => chainId);
-    const message = new SiweMessage({
-      address,
-      chainId,
-      expirationTime: new Date(Date.now() + 1 * 60 * 1000).toISOString(),
-      domain: document.location.host,
-      uri: document.location.origin,
-      version: '1'
-    });
-    const signature = await provider.getSigner().signMessage(message.prepareMessage());
-    const data = await fetch(`/api/w3bapp/login/wallet`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        signature,
-        message: message.toMessage()
-      })
-    }).then((res) => res.json());
-    if (data.token) {
-      return {
-        ...data,
-        address
-      };
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
-};
+import { WalletConnectButton } from '@/components/WalletConnectButton';
 
 const Login = observer(() => {
-  const { w3s } = useStore();
-
   return (
     <Box w="100vw" h="100vh" minW="1440px" bg={`center / cover no-repeat url("../images/bg.png")`}>
       <Flex w="100%" h="100%" justifyContent="center" alignItems="center">
@@ -92,20 +31,7 @@ const Login = observer(() => {
               Login with
             </Text>
             <Flex mt="60px" justify="center" align="center">
-              <Button
-                w="100%"
-                {...defaultOutlineButtonStyle}
-                leftIcon={<Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />}
-                onClick={async () => {
-                  const result = await signIn(Providers.METAMASK);
-                  if (result) {
-                    w3s.config.form.value.set({ token: result.token, accountID: result.accountID, accountRole: result.accountRole, address: result.address });
-                    eventBus.emit('user.login');
-                  }
-                }}
-              >
-                MetaMask
-              </Button>
+              <WalletConnectButton />
             </Flex>
           </Box>
         </Flex>

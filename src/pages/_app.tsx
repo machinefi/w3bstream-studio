@@ -14,10 +14,11 @@ import { NotificationsProvider } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import superjson from 'superjson';
 import { Inspector, InspectParams } from 'react-dev-inspector';
+import { WagmiProvider } from '@/components/WagmiProvider';
+import '@/lib/superjson';
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
 
-import '@/lib/superjson';
 function MyApp({ Component, pageProps }: AppProps) {
   const { lang, w3s } = useStore();
   const { token } = w3s.config.form.formData;
@@ -55,7 +56,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ChakraProvider theme={theme}>
           <NotificationsProvider>
             <Toaster />
-            <Component {...pageProps} />
+            <WagmiProvider>
+              <Component {...pageProps} />
+            </WagmiProvider>
           </NotificationsProvider>
         </ChakraProvider>
       </InspectorWrapper>

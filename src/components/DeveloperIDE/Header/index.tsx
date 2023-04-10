@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Flex, Text, TabList, Tabs, Image, Tab, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
+import { Button, Flex, Text, TabList, Tabs, Image, Tab } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
 import Link from 'next/link';
-import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle } from '@/lib/theme';
 import StarCount from '@/components/IDE/StarCount';
+import { WalletConnectButton } from '@/components/WalletConnectButton';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'PROJECTS') {
@@ -92,43 +92,11 @@ const accountAddressFormat = (address) => {
 };
 
 const Profile = observer(() => {
-  const {
-    w3s,
-    base: { confirm }
-  } = useStore();
-  const { accountID, address } = w3s.config.form.formData;
+  const { w3s } = useStore();
+  const { accountID } = w3s.config.form.formData;
 
   if (accountID) {
-    return (
-      <Popover>
-        <PopoverTrigger>
-          <Button leftIcon={<Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />} bg="#F3F3F3" borderRadius="60px">
-            {accountAddressFormat(address)}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent bg="#fff" w="260px">
-          <PopoverArrow bg="#fff" />
-          <PopoverBody mt="10px">
-            <Button
-              w="100%"
-              leftIcon={<MdLogout />}
-              {...defaultOutlineButtonStyle}
-              onClick={() => {
-                confirm.show({
-                  title: 'Warning',
-                  description: 'Are you sure you want to log out?',
-                  async onOk() {
-                    w3s.config.logout();
-                  }
-                });
-              }}
-            >
-              Log out
-            </Button>
-          </PopoverBody>
-        </PopoverContent>
-      </Popover>
-    );
+    return <WalletConnectButton />;
   }
 
   return (
