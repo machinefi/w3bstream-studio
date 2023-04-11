@@ -6,7 +6,13 @@ import { Avatar, Box, Button, Flex, Image } from '@chakra-ui/react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { observer } from 'mobx-react-lite';
 
-export const WalletConnectButton = observer(() => {
+interface WalletConnectButtonProps {
+  name?: string;
+  hideIcon?: boolean;
+  customStyle?: any;
+}
+
+export const WalletConnectButton = observer(({name, hideIcon, customStyle}: WalletConnectButtonProps) => {
   const { god } = useStore();
 
   return (
@@ -23,8 +29,9 @@ export const WalletConnectButton = observer(() => {
 
         if (!connected) {
           return (
-            <Button leftIcon={<Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />} {...defaultOutlineButtonStyle} onClick={openConnectModal}>
-              Connect a Wallet
+            <Button leftIcon={hideIcon ? '' : <Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />}
+              {...defaultOutlineButtonStyle} {...customStyle} onClick={openConnectModal}>
+              {name ? name : 'Connect a Wallet'}
             </Button>
           );
         }
