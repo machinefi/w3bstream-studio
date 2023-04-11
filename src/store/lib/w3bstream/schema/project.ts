@@ -38,7 +38,7 @@ export const developerInitializationTemplateSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', title: 'Name' },
-    tags: { type: 'string', title: 'Description Tags' },
+    description: { type: 'string', title: 'Description Tags' },
     template: { type: 'string', title: 'Explore Templates' },
     file: { type: 'string', title: 'Code Upload' }
   },
@@ -181,7 +181,7 @@ export default class ProjectModule {
     })
   });
 
-  developerInitializationTemplateForm = new JSONSchemaFormState<DeveloperInitializationTemplateSchemaType, UiSchema & { file: FileWidgetUIOptions; tags: SelectTagWidgetUIOptions }>({
+  developerInitializationTemplateForm = new JSONSchemaFormState<DeveloperInitializationTemplateSchemaType, UiSchema & { file: FileWidgetUIOptions; description: SelectTagWidgetUIOptions }>({
     //@ts-ignore
     schema: developerInitializationTemplateSchema,
     uiSchema: {
@@ -189,7 +189,7 @@ export default class ProjectModule {
         norender: false,
         submitText: 'Submit'
       },
-      tags: {
+      description: {
         'ui:widget': SelectTagWidget,
         'ui:options': {
           tags: ['Mobility', 'Energy', 'Environmental', 'Healthcare', 'General', 'Smart City', 'Smart Home', 'Geo-location']
@@ -214,7 +214,7 @@ export default class ProjectModule {
           }
         }
       },
-      layout: ['name', 'tags', ['template', 'file']]
+      layout: ['name', 'description', ['template', 'file']]
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -232,7 +232,7 @@ export default class ProjectModule {
     value: new JSONValue<DeveloperInitializationTemplateSchemaType>({
       default: {
         name: '',
-        tags: '',
+        description: '',
         template: '',
         file: ''
       }
@@ -460,7 +460,7 @@ export default class ProjectModule {
   async createProjectForDeleveloper() {
     let formData = {
       name: '',
-      tags: '',
+      description: '',
       template: '',
       file: ''
     };
@@ -482,6 +482,7 @@ export default class ProjectModule {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
       data.project[0].name = formData.name;
+      data.project[0].description = formData.description;
       try {
         const res = await axios.request({
           method: 'post',
@@ -502,7 +503,8 @@ export default class ProjectModule {
         method: 'post',
         url: '/api/w3bapp/project',
         data: {
-          name: projectName
+          name: projectName,
+          description: formData.description
         }
       });
       if (res.data?.project) {
