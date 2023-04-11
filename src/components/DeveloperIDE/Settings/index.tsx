@@ -19,7 +19,10 @@ const Settings = () => {
       return applets?.f_wasm_name;
     },
     get tags() {
-      return project.curProject?.f_description.split(',') || [];
+      if (project.curProject?.f_description) {
+        return project.curProject.f_description.split(',');
+      }
+      return [];
     }
   }));
 

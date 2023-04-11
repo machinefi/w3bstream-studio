@@ -19,7 +19,11 @@ const HomePage = observer(() => {
     return <DeveloperIDE />;
   }
 
-  return <IDE />;
+  if (accountRole === 'ADMIN') {
+    return <IDE />;
+  }
+
+  return null;
 });
 
 export default HomePage;
