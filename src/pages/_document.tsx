@@ -4,7 +4,7 @@ export default class _Document extends Document {
     return (
       <Html>
         <Head>
-          <title>W3bstream Studio</title>
+          <title>W3bstream DevNet</title>
           <link href="https://fonts.googleapis.com/css2?family=Oxanium&display=swap" rel="stylesheet" />
           <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css" />
           <link rel="icon" href="favicon.svg" sizes="any" type="image/svg+xml" />

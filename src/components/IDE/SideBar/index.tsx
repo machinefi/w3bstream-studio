@@ -25,7 +25,7 @@ const SideBar = observer((props: SideBarProps) => {
     <Box h="100%" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
       <Flex alignItems="center" justifyContent="space-between" h="60px" p={2} borderBottom="1px solid rgba(0, 0, 0, 0.06)">
         <Text fontSize="16px" fontWeight={700}>
-          W3bstream Studio
+          W3bstream DevNet
         </Text>
         <Flex alignItems="center">
           <Tooltip hasArrow label="Add Project" placement="bottom">

@@ -79,7 +79,7 @@ const Support = () => {
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>W3bstream studio</ModalHeader>
+          <ModalHeader>W3bstream DevNet</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb="30px">
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>

@@ -2,17 +2,16 @@ import { helper } from '@/lib/helper';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { useStore } from '@/store/index';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Button, Flex, Image } from '@chakra-ui/react';
+import { Avatar, Box, Button, ButtonProps, Flex, Image } from '@chakra-ui/react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { observer } from 'mobx-react-lite';
 
 interface WalletConnectButtonProps {
   name?: string;
-  hideIcon?: boolean;
-  customStyle?: any;
+  customStyle?: ButtonProps;
 }
 
-export const WalletConnectButton = observer(({name, hideIcon, customStyle}: WalletConnectButtonProps) => {
+export const WalletConnectButton = observer(({ name, customStyle }: WalletConnectButtonProps) => {
   const { god } = useStore();
 
   return (
@@ -29,8 +28,11 @@ export const WalletConnectButton = observer(({name, hideIcon, customStyle}: Wall
 
         if (!connected) {
           return (
-            <Button leftIcon={hideIcon ? '' : <Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />}
-              {...defaultOutlineButtonStyle} {...customStyle} onClick={openConnectModal}>
+            <Button
+              {...defaultOutlineButtonStyle}
+              {...customStyle}
+              onClick={openConnectModal}
+            >
               {name ? name : 'Connect a Wallet'}
             </Button>
           );

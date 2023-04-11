@@ -16,7 +16,7 @@ const Login = observer(() => {
             <Flex alignItems="center">
               <Image w="60px" src="/favicon.svg" alt="logo" />
               <Box ml="20px" fontWeight={700} fontSize="30px">
-                W3bstream studio
+                W3bstream DevNet
               </Box>
             </Flex>
             <Box mt="100px" fontWeight={700} fontSize="24px">

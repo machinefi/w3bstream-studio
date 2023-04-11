@@ -42,7 +42,7 @@ const Header = observer(() => {
       <Flex alignItems="center">
         <Image w="30px" src="/favicon.svg" alt="logo" />
         <Text ml="10px" fontWeight={700}>
-          W3bstream studio
+          W3bstream DevNet
         </Text>
       </Flex>
       <Flex ml="100px" alignItems="center">
@@ -96,7 +96,13 @@ const Profile = observer(() => {
   const { accountID } = w3s.config.form.formData;
 
   if (accountID) {
-    return <WalletConnectButton />;
+    return (
+      <WalletConnectButton
+        customStyle={{
+          leftIcon: <Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />
+        }}
+      />
+    );
   }
 
   return (
