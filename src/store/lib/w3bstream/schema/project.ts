@@ -147,9 +147,12 @@ export default class ProjectModule {
     },
     customValidate: (formData, errors) => {
       if (formData.name) {
-        const re = /^\S+$/;
+        if (formData.name.length > 128) {
+          errors.name.addError('field cannot be longer than 128 characters');
+        }
+        const re = /^[a-z][a-z0-9_-]*$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('Name cannot contain spaces');
+          errors.name.addError('field starts with a lowercase letter and includes only lowercase letters, numbers, and no spaces');
         }
       }
       return errors;
@@ -222,6 +225,9 @@ export default class ProjectModule {
     },
     customValidate: (formData, errors) => {
       if (formData.name) {
+        if (formData.name.length > 128) {
+          errors.name.addError('field cannot be longer than 128 characters');
+        }
         const re = /^[a-z][a-z0-9_-]*$/;
         if (!re.test(formData.name)) {
           errors.name.addError('field starts with a lowercase letter and includes only lowercase letters, numbers, and no spaces');

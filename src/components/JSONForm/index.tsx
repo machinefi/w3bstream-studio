@@ -102,13 +102,11 @@ const FieldTemplate = (props: FieldTemplateProps) => {
 
 const ErrorListTemplate = ({ errors }: ErrorListProps) => {
   return (
-    <Box>
+    <Box mt="10px">
       <Text fontWeight={700}>Errors</Text>
       <Stack mt="10px">
         {errors.map((error) => (
-          <Text ml="10px" color="red">
-            {error.stack}
-          </Text>
+          <Text color="red">{error.stack}</Text>
         ))}
       </Stack>
     </Box>
