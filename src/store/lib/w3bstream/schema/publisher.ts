@@ -231,26 +231,14 @@ export default class PublisherModule {
         'ui:widget': EditorWidget,
         'ui:options': {
           editorHeight: '400px',
-          emptyValue: JSON.stringify({
-            header: {
-              event_type: 'ANY',
-              pub_id: '',
-              token: '',
-              pub_time: Date.now()
-            },
-            payload: [
-              {
-                example: 'This is is an example payload'
-              }
-            ]
-          }),
+          emptyValue: `[]`,
           showLanguageSelector: false
         }
       }
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
-      this.developerPublishEventForm.reset();
+      // this.developerPublishEventForm.reset();
     },
     value: new JSONValue<DeveloperPublishEventSchemaType>({
       default: {
