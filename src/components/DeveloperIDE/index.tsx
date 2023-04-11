@@ -9,6 +9,7 @@ import Projects from './Projects';
 import CurrentProject from './CurrentProject';
 import Labs from './Labs';
 import Support from './Support';
+import PublishEventRequestTemplates from '../IDE/PublishEventRequestTemplates';
 
 const DeveloperIDE = observer(() => {
   const {
@@ -26,6 +27,7 @@ const DeveloperIDE = observer(() => {
       </Box>
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />
       <JSONModal />
+      <PublishEventRequestTemplates />
     </Box>
   );
 });
