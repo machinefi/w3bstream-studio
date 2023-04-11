@@ -4,8 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
-import { AiOutlineDelete, AiOutlineLineChart, AiOutlinePauseCircle, AiOutlinePlayCircle, AiOutlinePlus } from 'react-icons/ai';
-import { BsArrowUpRight } from 'react-icons/bs';
+import { AiOutlineDelete, AiOutlinePauseCircle, AiOutlinePlayCircle, AiOutlinePlus } from 'react-icons/ai';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import toast from 'react-hot-toast';
@@ -142,8 +141,7 @@ const Projects = observer(() => {
                     <Box fontWeight={700} fontSize="16px">
                       {project.f_name}
                     </Box>
-                    <Icon as={BsArrowUpRight} ml="20px" color="#946FFF" />
-                    <Badge ml="10px" variant="outline" colorScheme={status.colorScheme}>
+                    <Badge ml="10px" variant="outline" colorScheme={status.colorScheme} textTransform="none">
                       {status.text}
                     </Badge>
                     {!instance && (
@@ -204,9 +202,18 @@ const Projects = observer(() => {
                     0
                   </Box>
                 </Flex> */}
-                <Box mt="20px" fontSize="14px" color="#7A7A7A">
-                  {project.f_name}
-                </Box>
+                {project.f_description && (
+                  <Flex mt="20px" flexWrap="wrap">
+                    {project.f_description.split(',').map((tag) => {
+                      return (
+                        <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#000" fontSize="xs" border="1px solid #EDEDED" borderRadius="6px">
+                          {tag}
+                        </Box>
+                      );
+                    })}
+                  </Flex>
+                )}
+
                 <Flex mt="10px" justifyContent="flex-end">
                   {instance && (
                     <>

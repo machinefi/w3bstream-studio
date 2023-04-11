@@ -44,7 +44,7 @@ const Settings = () => {
           <Flex ml="10px" flexWrap="wrap">
             {store.tags.map((tag) => {
               return (
-                <Flex key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#000" border="1px solid #EDEDED" borderRadius="6px">
+                <Flex key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#000" fontSize="xs" border="1px solid #EDEDED" borderRadius="6px">
                   {tag}
                 </Flex>
               );
