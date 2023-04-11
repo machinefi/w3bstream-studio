@@ -76,7 +76,7 @@ export default class StrategyModule {
                 onClick: async () => {
                   if (globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER') {
                     this.form.uiSchema.appletID = {
-                      'ui:disabled': true
+                      'ui:widget': 'hidden'
                     };
                   }
                   this.form.value.set({

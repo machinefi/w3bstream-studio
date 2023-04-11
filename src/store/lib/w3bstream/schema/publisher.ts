@@ -353,7 +353,7 @@ export default class PublisherModule {
                 onClick: async () => {
                   if (globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER') {
                     this.createPublisherForm.uiSchema.projectName = {
-                      'ui:disabled': true
+                      'ui:widget': 'hidden'
                     };
                   }
                   this.createPublisherForm.value.set({

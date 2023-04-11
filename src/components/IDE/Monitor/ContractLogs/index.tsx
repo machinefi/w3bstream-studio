@@ -50,7 +50,7 @@ export const CreateContractLogButton = observer(() => {
             projectName: w3s.project.curProject?.f_name
           });
           w3s.contractLogs.form.uiSchema.projectName = {
-            'ui:disabled': true
+            'ui:widget': 'hidden'
           };
         }
         const formData = await hooks.getFormData({

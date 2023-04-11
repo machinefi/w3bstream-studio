@@ -39,7 +39,8 @@ const Publishers = observer(() => {
                 projectName: w3s.project.curProject?.f_name
               });
               w3s.publisher.createPublisherForm.uiSchema.projectName = {
-                'ui:disabled': true
+                // 'ui:disabled': true,
+                'ui:widget': 'hidden'
               };
             }
             const formData = await hooks.getFormData({
@@ -59,7 +60,7 @@ const Publishers = observer(() => {
                   url: `/api/w3bapp/publisher/${projectName}`,
                   data: {
                     key,
-                    name: key,
+                    name: key
                   }
                 });
                 await showNotification({ message: 'create publisher succeeded' });

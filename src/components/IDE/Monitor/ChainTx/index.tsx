@@ -38,7 +38,7 @@ const ChainTx = observer(() => {
                 projectName: w3s.project.curProject?.f_name
               });
               w3s.chainTx.form.uiSchema.projectName = {
-                'ui:disabled': true
+                'ui:widget': 'hidden'
               };
             }
             const formData = await hooks.getFormData({

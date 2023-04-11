@@ -50,7 +50,7 @@ export const CreateChainHeightButton = observer(() => {
             projectName: w3s.project.curProject?.f_name
           });
           w3s.chainHeight.form.uiSchema.projectName = {
-            'ui:disabled': true
+            'ui:widget': 'hidden'
           };
         }
         const formData = await hooks.getFormData({

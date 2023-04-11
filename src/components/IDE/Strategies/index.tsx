@@ -50,7 +50,7 @@ export const CreateStrategyButton = observer(() => {
               appletID: applet.f_applet_id.toString()
             });
             w3s.strategy.form.uiSchema.appletID = {
-              'ui:disabled': true
+              'ui:widget': 'hidden'
             };
           }
         }
