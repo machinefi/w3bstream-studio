@@ -6,6 +6,7 @@ import ContractLogs, { CreateContractLogButton } from '@/components/IDE/Monitor/
 import ChainHeight, { CreateChainHeightButton } from '@/components/IDE/Monitor/ChainHeight';
 import Strategies, { CreateStrategyButton } from '@/components/IDE/Strategies';
 import { publicConfig } from '@/constants/config';
+import { ShowRequestTemplatesButton } from '@/components/IDE/PublishEventRequestTemplates';
 
 const Triggers = () => {
   const {
@@ -17,9 +18,17 @@ const Triggers = () => {
 
   return (
     <Box w="calc(100vw - 300px)" h="calc(100vh - 140px)" overflowY="auto">
-      <Box fontSize="18px" color="#0F0F0F" fontWeight={700}>
-        Event Source
-      </Box>
+      <Flex alignItems="center">
+        <Box fontSize="18px" color="#0F0F0F" fontWeight={700}>
+          Event Source
+        </Box>
+        <ShowRequestTemplatesButton
+          props={{
+            ml: '10px',
+            size: 'xs'
+          }}
+        />
+      </Flex>
       <Box mt="20px" fontSize="14px" color="#7A7A7A">
         HTTP
       </Box>
