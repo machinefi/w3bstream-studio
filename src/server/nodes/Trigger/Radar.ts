@@ -140,6 +140,7 @@ export class RadarNode extends WebhookNode {
   description: INodeTypeDescription = {
     displayName: 'Radar',
     name: 'RadarNode',
+    //@ts-ignore
     nodeType: 'webhook',
     icon: 'Radar2',
     group: 'trigger',
@@ -147,7 +148,7 @@ export class RadarNode extends WebhookNode {
     version: '1.0',
     description: 'Webhook node description',
     withTargetHandle: false,
-    withSourceHandle: true,
+    withSourceHandle: true
   };
 
   constructor() {

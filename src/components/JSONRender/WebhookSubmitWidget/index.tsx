@@ -8,6 +8,7 @@ import { StorageState } from '@/store/standard/StorageState';
 
 export const WebhookSubmitWidget = observer(({ store, templateValue }: { store: JSONRenderStoreCtx; templateValue: string }) => {
   let localTemplateValue = new StorageState({
+    //@ts-ignore
     key: `webhookTemplateValue-${store?.JSONForm?.formState?.value?.value?.id}`
   });
 
@@ -23,6 +24,7 @@ export const WebhookSubmitWidget = observer(({ store, templateValue }: { store: 
           height={200}
           theme="vs-dark"
           language={'json'}
+          //@ts-ignore
           value={localTemplateValue.value ?? templateValue}
           onChange={(e) => {
             console.log(e);
@@ -34,13 +36,16 @@ export const WebhookSubmitWidget = observer(({ store, templateValue }: { store: 
       <Button
         mt={20}
         onClick={async () => {
+          //@ts-ignore
           console.log(store?.JSONForm?.formState?.value?.value);
+          //@ts-ignore
           const formData = store?.JSONForm?.formState?.value?.value;
           const id = formData.id;
           console.log(templateValue);
           if (id) {
             try {
               axios.post(`${window.location.origin}/api/openapi/webhook/${id}`, {
+                //@ts-ignore
                 ...JSON.parse(localTemplateValue.value ?? templateValue),
                 id,
                 extra: {

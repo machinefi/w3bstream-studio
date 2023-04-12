@@ -7,7 +7,7 @@ import { JSONSchemaRenderData } from '@/components/JSONRender';
 export const webhookNodeSchema = {
   type: 'object',
   properties: {
-    id: { type: 'string', title: 'ID', readonly: true },
+    id: { type: 'string', title: 'ID', readonly: true }
     // authentication: {
     //   type: 'string',
     //   title: 'Authentication',
@@ -39,6 +39,7 @@ export class WebhookNode extends BaseNode {
   description: INodeTypeDescription = {
     displayName: 'Webhook',
     name: 'WebhookNode',
+    //@ts-ignore
     nodeType: 'webhook',
     icon: 'TbWebhook',
     group: 'trigger',
@@ -122,8 +123,8 @@ export class WebhookNode extends BaseNode {
                 schema: webhookNodeSettingSchema,
                 uiSchema: {
                   'ui:submitButtonOptions': {
-                    norender: true,
-                  },
+                    norender: true
+                  }
                 },
                 value: {
                   label: 'Webhook'

@@ -59,6 +59,7 @@ export class CarNode extends WebhookNode {
   description: INodeTypeDescription = {
     displayName: 'SmartCar',
     name: 'CarNode',
+    //@ts-ignore
     nodeType: 'webhook',
     icon: 'AiOutlineCar',
     group: 'trigger',
@@ -66,7 +67,7 @@ export class CarNode extends WebhookNode {
     version: '1.0',
     description: 'Webhook node description',
     withTargetHandle: false,
-    withSourceHandle: true,
+    withSourceHandle: true
   };
 
   constructor() {

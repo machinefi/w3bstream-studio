@@ -85,6 +85,7 @@ export const JSONRender = observer((props: Props) => {
   // store[json.key] = helper.deepAssign(store?.[json.key] || {}, json.props);
   store[json.key] = json.props;
 
+  //@ts-ignore
   const Comp = componentMaps[json.component];
 
   if (typeof Comp !== 'undefined') {
