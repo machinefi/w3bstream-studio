@@ -1,24 +1,14 @@
-const headers = {
-  'Content-Type': 'text/plain'
+import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
+
+const getRequestBody = (body: PublishEventRequestBody) => {
+  return Object.entries(body)
+    .map(([key, value]) => {
+      return `"${key}": ${JSON.stringify(value)}`;
+    })
+    .join(',');
 };
 
-const getRequestBody = (body) => {
-  if (Object.entries(body).length > 0) {
-    return `"${Object.entries(body)
-      .map(([key, value]) => {
-        return `${key}": ${JSON.stringify(value)}`;
-      })
-      .join(', ')}`;
-  }
-  return '';
-};
-
-const getRustTemplate = (
-  projectName: string,
-  body: {
-    [x: string]: any;
-  }
-) => `extern crate reqwest;
+const getRustTemplate = (projectName: string, body: PublishEventRequestBody) => `extern crate reqwest;
 extern crate serde;
 extern crate serde_json;
 
@@ -33,9 +23,6 @@ let request_body = json!({
 let request_url = "${window.location.origin}/api/w3bapp/event/${projectName}";
 let response = Client::new()
   .post(request_url)
-  ${Object.entries(headers).map(([key, value]) => {
-    return `.header("${key}", "${value}")`;
-  })}
   .json(&request_body)
   .send().await?;
 

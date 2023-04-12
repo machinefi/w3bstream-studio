@@ -52,9 +52,6 @@ const AddBtn = observer(() => {
             const res = await axios.request({
               method: 'post',
               url: `/api/w3bapp/event/${projectName}`,
-              headers: {
-                'Content-Type': 'text/plain'
-              },
               data: w3s.publisher.parseBody(formData.body)
             });
             if (res.data) {

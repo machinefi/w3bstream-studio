@@ -14,6 +14,18 @@ import { helper } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 
+export interface PublishEventRequestBody {
+  events: {
+    header: {
+      event_type: string;
+      pub_id: string;
+      token: string;
+      pub_time: number;
+    };
+    payload: string;
+  }[];
+}
+
 export const createPublisherSchema = {
   definitions: {
     projects: {
@@ -263,7 +275,7 @@ export default class PublisherModule {
     })
   });
 
-  parseBody(bodyStr: string) {
+  parseBody(bodyStr: string): PublishEventRequestBody {
     try {
       const body = JSON.parse(bodyStr);
       if (Array.isArray(body)) {

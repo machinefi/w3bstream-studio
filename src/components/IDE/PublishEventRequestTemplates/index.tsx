@@ -102,12 +102,8 @@ const PublishEventRequestTemplates = observer(() => {
         <DrawerBody>
           <Tabs variant="unstyled">
             <TabList>
-              <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-                HTTP
-              </Tab>
-              <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-                MQTT
-              </Tab>
+              <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>HTTP</Tab>
+              <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>MQTT</Tab>
             </TabList>
             <TabPanels>
               <TabPanel p="10px 0px">
@@ -158,7 +154,7 @@ const PublishEventRequestTemplates = observer(() => {
                   </TabList>
                   <TabPanels p="0px">
                     {languages.map((item) => {
-                      const codeStr = getMQTTRequestTemplate(item, projectName, '');
+                      const codeStr = getMQTTRequestTemplate(item, projectName, JSON.stringify(JSON.stringify(store.body), null, 2));
                       return (
                         <TabPanel key={item}>
                           <Box pos="relative" width="100%" height="calc(100vh - 180px)">

@@ -1,20 +1,39 @@
-const getJavascriptTemplate = (
-  projectName: string,
-  body: {
-    [x: string]: any;
-  }
-) => `const data = ${JSON.stringify(body, null, 2)}
+import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
+
+const getJavascriptTemplate = (projectName: string, body: PublishEventRequestBody) => {
+  const { events } = body;
+  return `
+const data = {
+  "events": [
+    ${events.map((item) => {
+      return `{ 
+        ${Object.entries(item)
+          .map(([key, value]) => {
+            if (key === 'payload') {
+              return `"${key}": btoa(JSON.stringify(${JSON.stringify(
+                {
+                  example: 'This is is an example payload'
+                },
+                null,
+                2
+              )}))`;
+            }
+            return `"${key}": ${JSON.stringify(value)}`;
+          })
+          .join(',')}
+      }`;
+    })}
+  ]
+}
 
 fetch('${window.location.origin}/api/w3bapp/event/${projectName}', { 
   method: 'POST',
-  headers: {
-    'Content-Type': 'text/plain' 
-  },
   body: JSON.stringify(data)
 })
 .then(response => response.json())
 .then(console.log)
 .catch(console.error)
   `;
+};
 
 export default getJavascriptTemplate;

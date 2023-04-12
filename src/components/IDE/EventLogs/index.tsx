@@ -120,9 +120,6 @@ const EventLogs = observer(() => {
               const res = await axios.request({
                 method: 'post',
                 url: `/api/w3bapp/event/${projectName}`,
-                headers: {
-                  'Content-Type': 'text/plain'
-                },
                 data: publisher.parseBody(formData.body)
               });
               const wasmResult = res.data?.[0].wasmResults?.[0];

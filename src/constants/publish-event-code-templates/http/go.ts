@@ -1,12 +1,8 @@
-const headers = {
-  'Content-Type': 'text/plain'
-};
+import { PublishEventRequestBody } from "@/store/lib/w3bstream/schema/publisher";
 
 const getGolangTemplate = (
   projectName: string,
-  body: {
-    [x: string]: any;
-  }
+  body: PublishEventRequestBody
 ) => `package main
 
 import (
@@ -32,15 +28,6 @@ func main() {
   if err != nil {
     fmt.Println(err)
     return
-  }
-
-  ${
-    Object.entries(headers).length > 0 &&
-    Object.entries(headers)
-      .map(([key, value]) => {
-        return `req.Header.Add("${key}", "${value}");`;
-      })
-      .join('')
   }
 
   res, err := client.Do(req)
