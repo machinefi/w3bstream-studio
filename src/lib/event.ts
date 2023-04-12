@@ -43,6 +43,7 @@ interface MessageEvents {
   'wasmvm.stdout': (message: StdIOType) => void;
   'wasmvm.stderr': (message: StdIOType) => void;
   'metrics.timerange': (startTime: Date, endTime: Date) => void;
+  'flow.run.result': ({ flowId, success, errMsg, extra }: { flowId: string; success: boolean; errMsg?: string; extra?: { [key: string]: any } }) => void;
   signer: (signer: any) => void;
   provider: (signer: any) => void;
 }

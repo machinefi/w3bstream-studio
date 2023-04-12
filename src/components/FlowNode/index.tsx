@@ -1,5 +1,4 @@
 import { memo, useEffect, useState } from 'react';
-import { Box, Flex, Text, Image, Tooltip, Tabs } from '@mantine/core';
 import { TbWebhook } from 'react-icons/tb';
 import { AiOutlineCar, AiOutlineCode, AiOutlineClockCircle } from 'react-icons/ai';
 import { SiAiohttp } from 'react-icons/si';
@@ -13,8 +12,13 @@ import { INodeGroup, INodeIconType, INodeType } from '@/server/nodes/types';
 import { hooks } from '@/lib/hooks';
 import { FlowNode } from '@/store/standard/Node';
 import { Radar2 } from 'tabler-icons-react';
-import { JSONRender, JSONRenderComponentsMap, jsonRenderGlobalStore } from '../JSONRender';
+import { JSONRender, jsonRenderGlobalStore } from '../JSONRender';
 import { toJS } from 'mobx';
+import React from 'react';
+import { JSONForm } from '../JSONForm';
+import { eventBus } from '@/lib/event';
+import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
+import { Box, Flex, Tab, TabList, TabPanels, Tabs, Tooltip, Image, TabPanel } from '@chakra-ui/react';
 
 export type FlowNodeData = {
   [x: string]: any;
@@ -29,12 +33,21 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
   } = useStore();
 
   const store = useLocalObservable(() => ({
-    realNodeInstance: new FlowNode(flow.nodeAbstracts.find((node) => node.description.nodeType == nodeInstance.description.nodeType))
+    realNodeInstance: new FlowNode(flow.nodeAbstracts.find((node) => node.description.name == nodeInstance.description.name)),
+    curFlowNodeResult: null,
+    onFlowRunResult(result) {
+      console.log(result);
+      if (result.flowId == id) {
+        store.curFlowNodeResult = result;
+      }
+    }
   }));
 
   const copied = flow.copiedNodes.findIndex((node) => node.id === id) > -1;
 
   useEffect(() => {
+    eventBus.on('flow.run.result', store.onFlowRunResult);
+
     function handleKeyDown(event) {
       if (id == flow.curEditNodeId) {
         flow.editNode(id, toJS(store.realNodeInstance.getJSONFormValue()) as any);
@@ -43,6 +56,7 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
     document.addEventListener('keyup', handleKeyDown);
     return () => {
       document.removeEventListener('keyup', handleKeyDown);
+      eventBus.off('flow.run.result', store.onFlowRunResult);
     };
   }, []);
 
@@ -53,24 +67,18 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
   return (
     <Flex
       pos="relative"
-      // align="center"
-      // justify="center"
       direction="column"
-      w="350px"
+      w="450px"
       h="max-content"
-      sx={(theme) => ({
-        fontFamily: 'monospace',
-        borderRadius: '6px',
-        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-        background: '#ffffff',
-        // '&:hover': {
-        //   backgroundColor: theme.colorScheme === 'dark' ? theme.colors.gray[8] : theme.colors.gray[3]
-        // },
-        '&:hover .actionBox': {
+      bg="#ffffff"
+      borderRadius={6}
+      boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"
+      _hover={{
+        '.actionBox': {
           display: 'flex',
           zIndex: 99
         }
-      })}
+      }}
       style={{
         border: copied ? '2px solid green' : 'none'
       }}
@@ -78,40 +86,54 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
         flow.curEditNodeId = id;
       }}
     >
-      <Flex sx={(theme) => ({ borderRadius: '6px 6px 0 0' })} bg="#d1d1d1" h="30px" w="100%" justify={'center'} align={'center'}>
-        <NodeIcon icon={store.realNodeInstance?.description?.icon} size={10} />
-        <Box ml="4">
-          {data?.label}
-        </Box>
+      <Flex bg="#d1d1d1" h="30px" w="100%" justify={'center'} align={'center'}>
+        <Flex justify={'center'} align={'center'} flex={1} className="drag-handle">
+          <NodeIcon icon={store.realNodeInstance?.description?.icon} size={10} />
+          <Box ml="4">{data?.label}</Box>
+        </Flex>
+        {store.curFlowNodeResult && (
+          <>
+            {store.curFlowNodeResult?.success ? (
+              <CheckIcon ml="auto" color="green" boxSize={4} mr={4} />
+            ) : (
+              <Tooltip label={store.curFlowNodeResult?.errMsg}>
+                <WarningTwoIcon ml="auto" color="red" boxSize={4} mr={4} />
+              </Tooltip>
+            )}
+          </>
+        )}
       </Flex>
       {/* <Flex>{JSON.stringify(data)}</Flex> */}
-      <Box style={{ fontSize: '12px' }} p={8}>
+      <Box style={{ fontSize: '12px' }} p={2}>
         {store.realNodeInstance?.form.formList?.length > 1 ? (
           <>
-            <Tabs defaultValue={nodeInstance.form.formList[0].label}>
-              <Tabs.List>
-                {nodeInstance.form.formList.map((item) => (
-                  <Tabs.Tab key={item.label} value={item.label}>
-                    {item.label}
-                  </Tabs.Tab>
+            <Tabs defaultValue={store.realNodeInstance.form.formList[0].label}>
+              <TabList>
+                {store.realNodeInstance.form.formList.map((item) => (
+                  <Tab>{item.label}</Tab>
                 ))}
-              </Tabs.List>
-              {nodeInstance.form.formList.map((item, index) => (
-                <Tabs.Panel key={item.label} value={item.label}>
-                  <Box mt={10}>
-                    <JSONRender
-                      json={{
-                        key: 'JSONRenderContainer',
-                        component: 'div',
-                        children: nodeInstance.form.formList[index].form
-                      }}
-                      data={null}
-                      store={jsonRenderGlobalStore}
-                      componentMaps={JSONRenderComponentsMap}
-                    />
-                  </Box>
-                </Tabs.Panel>
-              ))}
+              </TabList>
+              <TabPanels>
+                {store.realNodeInstance.form.formList.map((item, index) => (
+                  <TabPanel key={item.label}>
+                    <Box mt={1}>
+                      <JSONRender
+                        json={{
+                          key: 'JSONRenderContainer',
+                          component: 'div',
+                          children: store.realNodeInstance.form.formList[index].form
+                        }}
+                        data={null}
+                        store={jsonRenderGlobalStore}
+                        componentMaps={{
+                          div: Box,
+                          JSONForm: JSONForm
+                        }}
+                      />
+                    </Box>
+                  </TabPanel>
+                ))}
+              </TabPanels>
             </Tabs>
           </>
         ) : (
@@ -126,7 +148,10 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
               data={null}
               // eventBus={eventBus}
               store={jsonRenderGlobalStore}
-              componentMaps={JSONRenderComponentsMap}
+              componentMaps={{
+                div: Box,
+                JSONForm: JSONForm
+              }}
             />
           </>
         )}
@@ -134,7 +159,7 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
 
       {/* <NodeIcon icon={nodeInstance.description.icon} size={30} /> */}
       <Box className="actionBox" display="none" pos="absolute" top="8px" left="0">
-        <Tooltip withArrow label="Delete">
+        <Tooltip label="Delete">
           <Box
             ml="5px"
             onClick={(e) => {
@@ -145,7 +170,7 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
             <MdDeleteOutline color="red" />
           </Box>
         </Tooltip>
-        <Tooltip withArrow label="Copy">
+        <Tooltip label="Copy">
           <Box
             ml="5px"
             onClick={(e) => {
@@ -161,10 +186,20 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
   );
 });
 
+export const NodeContext = React.createContext('NodeContext');
 //node style , write in backand
 export const NodeLayout = memo(
   ({ id, data, nodeInstance, children }: { id: string; data: FlowNodeData; nodeInstance: FlowNode; children: any }) => {
     const handleStyle = {
+      width: '16px',
+      height: '16px',
+      borderRadius: '2px',
+      backgroundColor: '#e8864b',
+      // border: '4px solid #784be8',
+      zIndex: 99
+    };
+
+    const handleVariableStyle = {
       width: '16px',
       height: '16px',
       borderRadius: '50px',
@@ -176,29 +211,77 @@ export const NodeLayout = memo(
     return (
       <>
         {nodeInstance?.description?.withTargetHandle && (
-          <Box
-            sx={{
-              '& > .react-flow__handle-left': {
-                left: '-10px'
-              }
-            }}
-          >
-            <Handle type="target" position={Position.Left} style={handleStyle} />
-          </Box>
+          <>
+            <Box
+              sx={{
+                '& > .react-flow__handle-left': {
+                  left: '-10px',
+                  top: '14px'
+                }
+              }}
+            >
+              <Handle
+                isValidConnection={(connection) => {
+                  return connection.sourceHandle == 'flow-source';
+                }}
+                id="flow-target"
+                type="target"
+                position={Position.Left}
+                style={handleStyle}
+              />
+            </Box>
+            {nodeInstance?.description?.withVariableHandle?.map((i, index) => {
+              return (
+                <Box
+                  sx={{
+                    '& > .react-flow__handle-left': {
+                      left: '-10px',
+                      top: `${90 + index * 30}px`
+                    }
+                  }}
+                >
+                  <Tooltip label={i}>
+                    <Handle
+                      isValidConnection={(connection) => {
+                        return connection.targetHandle == 'variable-source';
+                      }}
+                      id={`variable-target-${i}`}
+                      type="target"
+                      position={Position.Left}
+                      style={handleVariableStyle}
+                    />
+                  </Tooltip>
+                </Box>
+              );
+            })}
+          </>
         )}
 
-        {children}
+        <NodeContext.Provider value={id}> {children} </NodeContext.Provider>
 
-        {nodeInstance?.description?.withSourceHandle && (
+        {(nodeInstance?.description?.withSourceHandle || nodeInstance?.description?.isVariableNode) && (
           <>
             <Box
               sx={{
                 '& > .react-flow__handle-right': {
-                  right: '-10px'
+                  right: '-10px',
+                  top: '14px'
                 }
               }}
             >
-              <Handle id="a" type="source" position={Position.Right} style={handleStyle} />
+              <Handle
+                isValidConnection={(connection) => {
+                  if (nodeInstance?.description?.isVariableNode) {
+                    return connection.targetHandle.includes('variable-target');
+                  } else {
+                    return connection.targetHandle === 'flow-target';
+                  }
+                }}
+                id={!nodeInstance?.description?.isVariableNode ? 'flow-source' : 'variable-source'}
+                type="source"
+                position={Position.Right}
+                style={!nodeInstance?.description?.isVariableNode ? handleStyle : handleVariableStyle}
+              />
             </Box>
           </>
         )}
@@ -263,6 +346,7 @@ export type NodeMenu = NodeMenuItem[];
 
 export const generateNodeGroupMenu = (nodeInstances: INodeType[]): NodeMenu => {
   const nodeMenu: NodeMenu = [];
+  console.log('nodeInstances', nodeInstances);
   nodeInstances.forEach((node) => {
     const group = nodeMenu.find((item) => item.group === node.description.group);
     if (group) {

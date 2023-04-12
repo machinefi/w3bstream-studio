@@ -9,6 +9,7 @@ specifiers:
   '@chakra-ui/react': ^2.3.6
   '@emotion/react': ^11.10.4
   '@emotion/styled': ^11.10.4
+  '@faker-js/faker': 8.0.0-alpha.1
   '@mantine/core': ^5.9.5
   '@mantine/hooks': ^5.9.5
   '@mantine/notifications': ^5.9.5
@@ -111,6 +112,7 @@ dependencies:
   '@chakra-ui/react': 2.5.5_mx6mwrs3s3vhlpcdrmw2vihegm
   '@emotion/react': 11.10.6_wyqbzksu7rd2gsxemnqyxhqbve
   '@emotion/styled': 11.10.6_4qit2nreyzfb54p3w6sbvdro7a
+  '@faker-js/faker': 8.0.0-alpha.1
   '@mantine/core': 5.10.5_nfnphtpzh3eupyksf632g3rs4m
   '@mantine/hooks': 5.10.5_react@18.2.0
   '@mantine/notifications': 5.10.5_7l7cohgiq6l4ncfy2pvlz3brzy
@@ -2165,6 +2167,11 @@ packages:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
+    dev: false
+
+  /@faker-js/faker/8.0.0-alpha.1:
+    resolution: {integrity: sha512-0kfSscVJgiqqRuoNbLxiUd0GhOyCzXPrydzqUon5J/CMrXMHpi3n8rdxmUXO5HUot7ahrEuW8thu2m4Txkf8Gg==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: false
 
   /@floating-ui/core/1.2.5:

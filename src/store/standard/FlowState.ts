@@ -8,6 +8,7 @@ import { PromiseState } from './PromiseState';
 import { _ } from '@/lib/lodash';
 import { v4 as uuid } from 'uuid';
 import { IndexDb } from '@/lib/dexie';
+import { nodeManager } from '@/server/nodes';
 
 export class FlowState {
   curFlowId: number = null;
@@ -141,12 +142,7 @@ export class FlowState {
         data: node.data
       };
     });
-    const edges = this.edges.map((edge) => {
-      return {
-        source: edge.source,
-        target: edge.target
-      };
-    });
+    const edges = this.edges;
     return { nodes, edges };
   };
 
@@ -233,4 +229,102 @@ export class FlowState {
     // Clear the copied edges
     this.copiedEdges = [];
   };
+
+  executeFlow() {
+    console.log(JSON.parse(JSON.stringify(this.nodes)));
+    console.log(JSON.parse(JSON.stringify(this.edges)));
+    this.nodes = this.nodes.map((node) => ({ ...node, input: {}, output: {} }));
+    const triggerNodes = this.nodes.filter((node) => node.type === 'SimulationNode');
+    console.log(triggerNodes);
+    triggerNodes.forEach(async (node) => {
+      await this.executeFlowByTriggerId(node.id);
+    });
+    // let nextId = webhook_id ? flowData.nodes.find((i) => i.data?.id == webhook_id)?.id : node_id;
+  }
+
+  async handleVariable(curFlowId: string): Promise<{ [key: string]: any }> {
+    const variablesFlows = this.edges
+      .filter((edge) => edge.target === curFlowId && edge.targetHandle)
+      .map((i) => i.source)
+      .map((i) => {
+        const variableNode = this.nodes.find((node) => node.id === i);
+        // console.log(variableNode, 'variableNode');
+        return variableNode;
+      });
+    console.log(JSON.parse(JSON.stringify(variablesFlows)), 'variablesFlows');
+    let vars = {};
+    await Promise.all(
+      variablesFlows.map(async (i, index) => {
+        const NodeClass2 = nodeManager.getClass(i.type);
+        if (NodeClass2?.node_type == 'WasmNode') {
+          console.log('variable wasm');
+          await NodeClass2.execute({
+            input: {},
+            output: {},
+            node: i,
+            callStack: [],
+            callStackCurIdx: index
+          });
+          //@ts-ignore
+          console.log(i?.output, 'output');
+          //@ts-ignore
+          Object.assign(vars, i?.output);
+        }
+      })
+    );
+    return vars;
+  }
+
+  async executeFlowByTriggerId(nodeId: string) {
+    const nodeMap = _.keyBy(this.nodes, 'id');
+    const edgeMap = _.keyBy(this.edges, 'source');
+    let nextId = nodeId ? this.nodes.find((i) => i?.id == nodeId)?.id : nodeId;
+    const callStack = [nodeMap[nextId]];
+
+    do {
+      nextId = edgeMap[nextId]?.target;
+      if (nextId) {
+        callStack.push(nodeMap[nextId]);
+      }
+    } while (!!edgeMap[nextId]);
+
+    if (callStack.length <= 1) return { null_job: true };
+    for await (const [index, node] of callStack.entries()) {
+      const variables = await this.handleVariable(node.id);
+      console.log(variables, 'variablesEdge');
+      const NodeClass = nodeManager.getClass(node.type);
+      console.log(node);
+      if (NodeClass?.node_type == 'SimulationNode') {
+        await NodeClass.execute({
+          input: {},
+          output: {},
+          node,
+          callStack,
+          callStackCurIdx: index
+        });
+        continue;
+      }
+      if (NodeClass?.node_type == 'WasmNode') {
+        await NodeClass.execute({
+          input: {},
+          output: {},
+          node,
+          callStack,
+          callStackCurIdx: index
+        });
+        continue;
+      }
+
+      if (NodeClass?.node_type == 'VmRunTimeNode') {
+        await NodeClass.execute({
+          input: {},
+          output: {},
+          node,
+          variables,
+          callStack,
+          callStackCurIdx: index
+        });
+      }
+    }
+  }
 }

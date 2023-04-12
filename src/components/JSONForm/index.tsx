@@ -8,6 +8,7 @@ import { ErrorListProps, FieldTemplateProps, getSubmitButtonOptions, ObjectField
 import { defaultButtonStyle } from '@/lib/theme';
 import PrefixWidget from '../JSONFormWidgets/PerfixWidget';
 import EditorWidget from '../JSONFormWidgets/EditorWidget';
+import RuntimeConsoleWidget from '../JSONFormWidgets/RuntimeConsoleWidget';
 
 const renderLayout = (layout: any[], fields: { [k: string]: React.ReactElement }, n = 1) => {
   n++;
@@ -93,9 +94,18 @@ const ObjectFieldTemplate = ({ title, idSchema: { $id }, properties, uiSchema: {
 };
 
 const FieldTemplate = (props: FieldTemplateProps) => {
+  const handleVariableStyle = {
+    width: '16px',
+    height: '16px',
+    borderRadius: '50px',
+    backgroundColor: 'white',
+    border: '4px solid #784be8',
+    zIndex: 99
+  };
+
   const { id, classNames, label, help, required, description, errors, children } = props;
   return (
-    <Flex direction="column" className={classNames}>
+    <Flex direction="column" className={classNames} position={'relative'}>
       {children}
       {help}
     </Flex>
@@ -145,7 +155,7 @@ export const JSONForm = observer(({ children, formState }: Props) => {
         ErrorListTemplate,
         ButtonTemplates: { SubmitButton }
       }}
-      widgets={{ EditorWidget, PrefixWidget}}
+      widgets={{ EditorWidget, PrefixWidget, RuntimeConsoleWidget }}
       formData={formState.formData}
       readonly={formState.readonly}
       uiSchema={formState.uiSchema}

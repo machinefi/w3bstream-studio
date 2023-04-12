@@ -16,6 +16,7 @@ import superjson from 'superjson';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
+export let asc: typeof import('assemblyscript/dist/asc');
 
 import '@/lib/superjson';
 function MyApp({ Component, pageProps }: AppProps) {
@@ -26,7 +27,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     lang.init();
     eventBus.emit('app.ready');
+    const asyncImportASC = async () => {
+      asc = await import('assemblyscript/dist/asc');
+    };
+    asyncImportASC();
   }, []);
+
 
   useEffect(() => {
     if (!token && !['/openapi', '/admin-login'].includes(router.pathname)) {

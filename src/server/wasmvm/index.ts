@@ -109,7 +109,7 @@ export class WASM {
           return 0;
         },
         ws_get_data(rid: number, data_ptr: number, data_size: number): number {
-          const data = _this.ctxData
+          const data = _this.ctxData;
           console.log(data, 'ctxData', data_ptr, data_size);
           try {
             _this.copyToWasm(data, data_ptr, data_size);
@@ -211,19 +211,19 @@ export class WASM {
     };
   }
 
-  async start(): Promise<{ stdout: StdIOType[]; stderr: StdIOType[] }> {
+  async start(start_func = 'start'): Promise<{ stdout: StdIOType[]; stderr: StdIOType[] }> {
     this.wasmModule = await WebAssembly.compile(this.wasmModuleBytes);
     this.instance = await WebAssembly.instantiate(this.wasmModule, this.vmImports);
     console.log(this.instance);
     this.memory = this.instance.exports.memory as WebAssembly.Memory;
-
     try {
       //@ts-ignore
-      const res = this.instance.exports?.start(this.rid);
+      const res = eval(`this.instance.exports?.${start_func}(this.rid)`);
       // this.writeStdout({ message: `rid:${res}` });
     } catch (error) {
       console.log(error);
       this.writeStderr(error.message);
+      throw new Error(error);
     }
     return {
       stdout: this.stdout,

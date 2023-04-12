@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-let asc: typeof import('assemblyscript/dist/asc');
 import { useStore } from '@/store/index';
 import { Box, Button, Center, Flex, Popover, PopoverBody, PopoverContent, PopoverTrigger, Portal, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
@@ -19,6 +18,7 @@ import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
 import { defaultButtonStyle } from '@/lib/theme';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
+import { asc } from 'pages/_app';
 
 const Editor = observer(() => {
   const {
@@ -148,11 +148,6 @@ const Editor = observer(() => {
   }));
 
   useEffect(() => {
-    const asyncImportASC = async () => {
-      asc = await import('assemblyscript/dist/asc');
-    };
-    asyncImportASC();
-
     const handleSave = (event) => {
       if (event.ctrlKey && event.key === 's') {
         console.log('ctrl+s pressed');
@@ -448,7 +443,7 @@ const Editor = observer(() => {
                         'sdk/index.d.ts'
                       );
                       monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-                      asc = await import('assemblyscript/dist/asc');
+                      // asc = await import('assemblyscript/dist/asc');
                       console.log(asc);
                       if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
                     }}

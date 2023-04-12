@@ -18,35 +18,8 @@ import { defaultButtonStyle } from '@/lib/theme';
 import { Flows, IndexDb } from '@/lib/dexie';
 import { Box, Button, Collapse, Flex, Text } from '@chakra-ui/react';
 import { getSelectedStyles } from '../ToolBar';
-
-// const useStyles = createStyles((theme) => ({
-//   menuBox: {
-//     width: '300px',
-//     padding: '10px 20px',
-//     borderRadius: '8px',
-//     background: theme.colorScheme === 'dark' ? theme.colors.gray[8] : '#eee',
-//     boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'
-//   },
-//   menuItem: {
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     padding: '5px 10px',
-//     cursor: 'pointer',
-//     borderRadius: '8px',
-//     '&:hover': {
-//       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[0]
-//     }
-//   },
-//   subMenu: {
-//     alignItems: 'center',
-//     padding: '6px 40px',
-//     cursor: 'pointer',
-//     borderRadius: '8px',
-//     '&:hover': {
-//       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[0]
-//     }
-//   }
-// }));
+import { DeleteIcon } from '@chakra-ui/icons';
+import { VscDebugStart } from 'react-icons/vsc';
 
 const MenuItemCollapse = ({ nodeMenuItem, addNode }: { nodeMenuItem: NodeMenuItem; addNode: (event: any, nodeInstance: INodeType) => void }) => {
   // const { classes } = useStyles();
@@ -177,6 +150,7 @@ const Flow = observer(() => {
           }
         });
       }
+      flow.syncToIndexDb();
     };
     store.initFlow();
     store.init();
@@ -266,7 +240,6 @@ const Flow = observer(() => {
           {store.flows.map((flowItem) => (
             <Flex
               key={flowItem.id}
-              direction={'column'}
               p="18px"
               bg="#f7f7f7"
               mt={2}
@@ -277,6 +250,14 @@ const Flow = observer(() => {
               }}
             >
               <Text>{flowItem.name}</Text>
+              <DeleteIcon
+                ml="auto"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  IndexDb.deleteFlow(flowItem.id);
+                  store.flows = await IndexDb.findFlows();
+                }}
+              ></DeleteIcon>
             </Flex>
           ))}
         </Flex>
@@ -290,10 +271,10 @@ const Flow = observer(() => {
                 <ReactFlow
                   fitView
                   selectNodesOnDrag={false}
-                  minZoom={0.8}
+                  minZoom={0.5}
                   maxZoom={1.5}
                   onInit={flow.onInit}
-                  nodes={flow.nodes}
+                  nodes={flow.nodes.map((i) => ({ ...i, dragHandle:".drag-handle" }))}
                   edges={flow.edges}
                   onNodesChange={flow.onNodesChange}
                   onEdgesChange={flow.onEdgesChange}
@@ -310,144 +291,42 @@ const Flow = observer(() => {
                 </ReactFlow>
               </Box>
             </ContextMenuTrigger>
-            {/* <Flex pos="absolute" top="20px" right="20px">
-          {flow.copiedNodes.length > 0 && (
-            <Button
-              compact
-              mr="10px"
-              sx={(theme) => ({
-                background: theme.colorScheme === 'dark' ? '#fff' : '#000',
-                color: theme.colorScheme === 'dark' ? '#000' : '#fff',
-                cursor: 'pointer',
-                ':hover': {
-                  background: theme.colorScheme === 'dark' ? theme.colors.gray[4] : theme.colors.dark[4]
-                }
-              })}
-              onClick={() => {
-                flow.pasteNodes();
-              }}
-            >
-              Paste Nodes
-            </Button>
-          )}
-          <ImportJSON
-            tipLabel="Import"
-            onJSON={(json) => {
-              try {
-                const { nodes, edges } = json;
-                if (!nodes) {
-                  showNotification({
-                    color: 'red',
-                    message: 'Invalid JSON'
-                  });
-                  return;
-                }
-                nodes.forEach((node: any) => {
-                  if (node.type === 'WebhookNode') {
-                    node.data.id = uuid();
-                  }
-                });
-                flow.importJSON({ nodes, edges });
-                store.flowHasChanged = true;
-              } catch (error) {
-                showNotification({
-                  color: 'red',
-                  message: error.message
-                });
-              }
-            }}
-          />
-          <Button
-            compact
-            ml="10px"
-            sx={(theme) => ({
-              background: theme.colorScheme === 'dark' ? '#fff' : '#000',
-              color: theme.colorScheme === 'dark' ? '#000' : '#fff',
-              cursor: 'pointer',
-              ':hover': {
-                background: theme.colorScheme === 'dark' ? theme.colors.gray[4] : theme.colors.dark[4]
-              }
-            })}
-            onClick={() => {
-              if (store.currentFlowInfo) {
-                helper.download.downloadJSON(`flow_data_${store.currentFlowInfo.name}`, flow.exportData());
-              }
-            }}
-          >
-            Export
-          </Button>
-          <Button
-            compact
-            ml="10px"
-            sx={(theme) => ({
-              background: theme.colorScheme === 'dark' ? '#fff' : '#000',
-              color: theme.colorScheme === 'dark' ? '#000' : '#fff',
-              cursor: 'pointer',
-              ':hover': {
-                background: theme.colorScheme === 'dark' ? theme.colors.gray[4] : theme.colors.dark[4]
-              }
-            })}
-            onClick={async () => {
-              const initEnv = store.currentFlowInfo?.env || {
-                API_URL: '',
-                SECRET: ''
-              };
-              flowModule.envForm.value.set({
-                env: JSON.stringify(initEnv, null, 2)
-              });
-              const formData = await hooks.getFormData({
-                title: 'Set environment variables',
-                size: 'xl',
-                formList: [
-                  {
-                    form: flowModule.envForm.JSONRenderComponent
-                  }
-                ],
-                autoSubmission: false
-              });
-              const { env } = formData;
-              if (env) {
-                try {
-                  const envdata = JSON.parse(env);
-                  await flowModule.setEnv(Number(id), JSON.stringify(envdata));
-                  store.currentFlowInfo.env = envdata;
-                } catch (error) {
-                  showNotification({
-                    color: 'red',
-                    message: error.message
-                  });
-                }
-              }
-            }}
-          >
-            Set environment variables
-          </Button>
-
-          <Indicator inline dot processing color="red" size={16} disabled={!store.flowHasChanged}>
-            <Button
-              compact
-              ml="10px"
-              sx={(theme) => ({
-                background: theme.colorScheme === 'dark' ? '#fff' : '#000',
-                color: theme.colorScheme === 'dark' ? '#000' : '#fff',
-                cursor: 'pointer',
-                ':hover': {
-                  background: theme.colorScheme === 'dark' ? theme.colors.gray[4] : theme.colors.dark[4]
-                }
-              })}
-              onClick={async () => {
-                await flowModule.saveFlow(Number(id));
-                store.flowHasChanged = false;
-                store.currentFlowInfo.data = flow.exportData();
-              }}
-            >
-              Save
-            </Button>
-          </Indicator>
-        </Flex> */}
+            <Flex pos="absolute" top="20px" right="20px">
+              {flow.copiedNodes.length > 0 && (
+                <Button
+                  mr="10px"
+                  style={{
+                    background: '#000',
+                    color: '#fff',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => {
+                    flow.pasteNodes();
+                  }}
+                >
+                  Paste Nodes
+                </Button>
+              )}
+              <Button
+                mr="0px"
+                style={{
+                  background: '#000',
+                  color: '#fff',
+                  cursor: 'pointer'
+                }}
+                rightIcon={<VscDebugStart color="white" />}
+                onClick={() => {
+                  flow.executeFlow();
+                }}
+              >
+                Start
+              </Button>
+            </Flex>
           </>
         ) : (
-          <>No Flow</>
+          <Box textAlign={'center'} mt="20%">
+            No Flow
+          </Box>
         )}
       </Box>
 
