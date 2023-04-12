@@ -24,8 +24,10 @@ interface INodeTypeDescription {
   icon: INodeIconType;
   withTargetHandle: boolean;
   withSourceHandle: boolean;
+  withVariableHandle?: string[];
   version?: string;
   description?: string;
+  isVariableNode?: boolean;
 }
 
 interface INodeType {

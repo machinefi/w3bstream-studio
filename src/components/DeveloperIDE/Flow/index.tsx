@@ -150,6 +150,7 @@ const Flow = observer(() => {
           }
         });
       }
+      flow.syncToIndexDb();
     };
     store.initFlow();
     store.init();
@@ -270,10 +271,10 @@ const Flow = observer(() => {
                 <ReactFlow
                   fitView
                   selectNodesOnDrag={false}
-                  minZoom={0.8}
+                  minZoom={0.5}
                   maxZoom={1.5}
                   onInit={flow.onInit}
-                  nodes={flow.nodes}
+                  nodes={flow.nodes.map((i) => ({ ...i, dragHandle:".drag-handle" }))}
                   edges={flow.edges}
                   onNodesChange={flow.onNodesChange}
                   onEdgesChange={flow.onEdgesChange}
@@ -313,11 +314,7 @@ const Flow = observer(() => {
                   color: '#fff',
                   cursor: 'pointer'
                 }}
-                rightIcon={
-                  <VscDebugStart
-                    color="white"
-                  />
-                }
+                rightIcon={<VscDebugStart color="white" />}
                 onClick={() => {
                   flow.executeFlow();
                 }}

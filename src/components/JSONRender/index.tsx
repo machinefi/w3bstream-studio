@@ -1,4 +1,4 @@
-import React, { AllHTMLAttributes } from 'react';
+import React, { AllHTMLAttributes, useEffect } from 'react';
 import { useLocalObservable, observer } from 'mobx-react-lite';
 import { _ } from '@/lib/lodash';
 import { extendObservable, makeAutoObservable, toJS } from 'mobx';
@@ -7,11 +7,11 @@ import WebhookSubmitWidget from './WebhookSubmitWidget';
 import { helper } from '@/lib/helper';
 import { Box } from '@chakra-ui/react';
 
-export const JSONRenderComponentsMap = {
-  JSONForm: JSONForm,
-  div: Box,
-  WebhookSubmitWidget: WebhookSubmitWidget
-};
+// export let JSONRenderComponentsMap = {
+//   div: Box,
+//   WebhookSubmitWidget: WebhookSubmitWidget,
+//   JSONForm: JSONForm,
+// };
 // @ts-ignore
 export type JSONRenderComponent = keyof typeof JSONRenderComponentsMap;
 
@@ -51,6 +51,12 @@ export const jsonRenderGlobalStore = new JSONRenderGlobalStore().store;
 //@ts-ignore
 export const JSONRender = observer((props: Props) => {
   const { json, data = {}, eventBus, componentMaps, store } = props;
+  // useEffect(() => {
+  //   if(JSONForm){
+  //     componentMaps['JSONForm'] = JSONForm;
+  //   }
+
+  // }, [JSONForm]);
   if (!json.props) json.props = {};
 
   console.log('render');

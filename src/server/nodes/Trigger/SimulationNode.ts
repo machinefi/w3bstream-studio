@@ -1,24 +1,36 @@
 import { FromSchema } from 'json-schema-to-ts';
 import { v4 as uuid } from 'uuid';
 import { JSONSchemaRenderData } from '@/components/JSONRender';
-import { BaseNode } from '../baseNode';
+import { BaseNode, BaseNodeForm } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
+import { eventBus } from '@/lib/event';
+import { faker } from '@faker-js/faker';
 
+const template = `
+//https://github.com/faker-js/faker
+function createRandomUser() {
+  return {
+    userId: faker.datatype.uuid(),
+    username: faker.internet.userName(),
+    email: faker.internet.email(),
+    avatar: faker.image.avatar(),
+    password: faker.internet.password(),
+    birthdate: faker.date.birthdate(),
+    registeredAt: faker.date.past(),
+  };
+}
+
+return faker.helpers.multiple(createRandomUser, {
+  count: 5,
+});
+
+`;
 export const dataSimulationNodeSchema = {
   type: 'object',
   properties: {
-    id: { type: 'string', title: 'ID', readonly: true },
     code: { type: 'string', title: 'Code' }
   },
   required: ['id', 'code']
-} as const;
-
-export const dataSimulationNodeSettingSchema = {
-  type: 'object',
-  properties: {
-    label: { type: 'string', title: 'Node Label' }
-  },
-  required: ['label']
 } as const;
 
 export type dataSimulationNodeSchemaType = FromSchema<typeof dataSimulationNodeSchema>;
@@ -40,12 +52,24 @@ export class SimulationNode extends BaseNode {
 
   static node_type = 'SimulationNode';
   static async execute({ input, output, node, callStack, callStackCurIdx }) {
-    node.input = {};
-    node.output = {
-      code: node.data.code
-    };
-    console.log('simulation', node);
-    //sdk https://github.com/nuysoft/Mock/wiki/Getting-Started mockjs
+    try {
+      node.input = {};
+      //sdk https://github.com/nuysoft/Mock/wiki/Getting-Started mockjs
+      const res = new Function('faker', node.data.code)(faker);
+      node.output = res;
+      console.log('simulation', res);
+      eventBus.emit('flow.run.result', {
+        flowId: node.id,
+        success: true
+      });
+    } catch (e) {
+      console.log(e.message, 'simulation');
+      eventBus.emit('flow.run.result', {
+        flowId: node.id,
+        success: false,
+        errMsg: e.message
+      });
+    }
   }
 
   form: IFormType = {
@@ -81,40 +105,19 @@ export class SimulationNode extends BaseNode {
                   }
                 },
                 value: {
-                  id: '={{uuid()}}',
-                  code: 'template'
+                  code: ''
                 }
               }
             }
           }
         ]
       },
-      {
-        label: 'Setting',
-        form: [
-          {
-            key: 'JSONForm',
-            component: 'JSONForm',
-            props: {
-              formState: {
-                schema: dataSimulationNodeSettingSchema,
-                uiSchema: {
-                  'ui:submitButtonOptions': {
-                    norender: true
-                  }
-                },
-                value: {
-                  label: 'Simulation'
-                }
-              }
-            }
-          }
-        ]
-      }
+      BaseNodeForm({ label: 'Simulation' })
     ]
   };
 
   constructor() {
     super();
+    this.form.formList[0].form[0].props.formState.value.code = template;
   }
 }
