@@ -4,7 +4,7 @@ import { JSONSchemaRenderData } from '@/components/JSONRender';
 import { BaseNode, BaseNodeForm } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
 import { eventBus } from '@/lib/event';
-// @ts-ignore 
+//@ts-ignore
 import { faker } from '@faker-js/faker';
 
 const template = `

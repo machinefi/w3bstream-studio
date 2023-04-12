@@ -80,7 +80,8 @@ export const JSONRender = observer((props: Props) => {
   //todo: fix if same node ,the value will be override,but if the same jsonRender in one page show two same , it will be ok
   // store[json.key] = helper.deepAssign(store?.[json.key] || {}, json.props);
   store[json.key] = json.props;
-  // @ts-ignore
+
+  //@ts-ignore
   const Comp = componentMaps[json.component];
 
   if (typeof Comp !== 'undefined') {
