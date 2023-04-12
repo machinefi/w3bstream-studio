@@ -18,6 +18,7 @@ import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
+export let asc: typeof import('assemblyscript/dist/asc');
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { lang, w3s } = useStore();
@@ -27,7 +28,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     lang.init();
     eventBus.emit('app.ready');
+    const asyncImportASC = async () => {
+      asc = await import('assemblyscript/dist/asc');
+    };
+    asyncImportASC();
   }, []);
+
 
   useEffect(() => {
     if (!token && !['/openapi', '/admin-login'].includes(router.pathname)) {

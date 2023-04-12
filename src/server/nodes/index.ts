@@ -4,8 +4,8 @@ import { WebhookNode } from './webhookNode';
 import { CarNode } from './Trigger/SmartCar';
 import { RadarNode } from './Trigger/Radar';
 import { SimulationNode } from './Trigger/SimulationNode';
-import { WasmNode } from './Code/wasmNode';
-import { VmRunTimeNode } from './Runtime/vmRunTimeNode';
+import { WasmNode } from './Code/WasmNode';
+import { VmRunTimeNode } from './Runtime/VmRunTimeNode';
 
 export class NodeManager {
   nodes: INodeType[] = [];

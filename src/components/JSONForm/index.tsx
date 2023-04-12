@@ -94,9 +94,18 @@ const ObjectFieldTemplate = ({ title, idSchema: { $id }, properties, uiSchema: {
 };
 
 const FieldTemplate = (props: FieldTemplateProps) => {
+  const handleVariableStyle = {
+    width: '16px',
+    height: '16px',
+    borderRadius: '50px',
+    backgroundColor: 'white',
+    border: '4px solid #784be8',
+    zIndex: 99
+  };
+
   const { id, classNames, label, help, required, description, errors, children } = props;
   return (
-    <Flex direction="column" className={classNames}>
+    <Flex direction="column" className={classNames} position={'relative'}>
       {children}
       {help}
     </Flex>

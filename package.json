@@ -27,6 +27,7 @@
     "@chakra-ui/react": "^2.3.6",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@faker-js/faker": "8.0.0-alpha.1",
     "@mantine/core": "^5.9.5",
     "@mantine/hooks": "^5.9.5",
     "@mantine/notifications": "^5.9.5",

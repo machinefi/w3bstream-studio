@@ -142,12 +142,7 @@ export class FlowState {
         data: node.data
       };
     });
-    const edges = this.edges.map((edge) => {
-      return {
-        source: edge.source,
-        target: edge.target
-      };
-    });
+    const edges = this.edges;
     return { nodes, edges };
   };
 
@@ -236,6 +231,8 @@ export class FlowState {
   };
 
   executeFlow() {
+    console.log(JSON.parse(JSON.stringify(this.nodes)));
+    console.log(JSON.parse(JSON.stringify(this.edges)));
     this.nodes = this.nodes.map((node) => ({ ...node, input: {}, output: {} }));
     const triggerNodes = this.nodes.filter((node) => node.type === 'SimulationNode');
     console.log(triggerNodes);
@@ -243,6 +240,39 @@ export class FlowState {
       await this.executeFlowByTriggerId(node.id);
     });
     // let nextId = webhook_id ? flowData.nodes.find((i) => i.data?.id == webhook_id)?.id : node_id;
+  }
+
+  async handleVariable(curFlowId: string): Promise<{ [key: string]: any }> {
+    const variablesFlows = this.edges
+      .filter((edge) => edge.target === curFlowId && edge.targetHandle)
+      .map((i) => i.source)
+      .map((i) => {
+        const variableNode = this.nodes.find((node) => node.id === i);
+        // console.log(variableNode, 'variableNode');
+        return variableNode;
+      });
+    console.log(JSON.parse(JSON.stringify(variablesFlows)), 'variablesFlows');
+    let vars = {};
+    await Promise.all(
+      variablesFlows.map(async (i, index) => {
+        const NodeClass2 = nodeManager.getClass(i.type);
+        if (NodeClass2?.node_type == 'WasmNode') {
+          console.log('variable wasm');
+          await NodeClass2.execute({
+            input: {},
+            output: {},
+            node: i,
+            callStack: [],
+            callStackCurIdx: index
+          });
+          //@ts-ignore
+          console.log(i?.output, 'output');
+          //@ts-ignore
+          Object.assign(vars, i?.output);
+        }
+      })
+    );
+    return vars;
   }
 
   async executeFlowByTriggerId(nodeId: string) {
@@ -259,13 +289,11 @@ export class FlowState {
     } while (!!edgeMap[nextId]);
 
     if (callStack.length <= 1) return { null_job: true };
-
     for await (const [index, node] of callStack.entries()) {
-      // instance.jsonSchema.value.set(instance.data);
-      // console.log(nodeInstance);
+      const variables = await this.handleVariable(node.id);
+      console.log(variables, 'variablesEdge');
       const NodeClass = nodeManager.getClass(node.type);
-      // log('NodeClass', NodeClass, node.type);
-      console.log(NodeClass?.node_type)
+      console.log(node);
       if (NodeClass?.node_type == 'SimulationNode') {
         await NodeClass.execute({
           input: {},
@@ -292,6 +320,7 @@ export class FlowState {
           input: {},
           output: {},
           node,
+          variables,
           callStack,
           callStackCurIdx: index
         });
