@@ -150,9 +150,9 @@ export default class ProjectModule {
         if (formData.name.length > 128) {
           errors.name.addError('field cannot be longer than 128 characters');
         }
-        const re = /^[a-z][a-z0-9_-]*$/;
+        const re = /^[a-z][a-z0-9_]*$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('field starts with a lowercase letter and includes only lowercase letters, numbers, and no spaces');
+          errors.name.addError('field starts with a lowercase letter and include only lowercase letters, numbers, underscores and no spaces');
         }
       }
       return errors;
@@ -228,9 +228,9 @@ export default class ProjectModule {
         if (formData.name.length > 128) {
           errors.name.addError('field cannot be longer than 128 characters');
         }
-        const re = /^[a-z][a-z0-9_-]*$/;
+        const re = /^[a-z][a-z0-9_]*$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('field starts with a lowercase letter and includes only lowercase letters, numbers, and no spaces');
+          errors.name.addError('field starts with a lowercase letter and include only lowercase letters, numbers, underscores and no spaces');
         }
       }
       return errors;
