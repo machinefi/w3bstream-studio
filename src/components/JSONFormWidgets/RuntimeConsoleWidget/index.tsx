@@ -59,16 +59,12 @@ const RuntimeConsole = observer(({ label, required, value, readonly, onChange, o
         return (
           <Flex userSelect={'text'}>
             <Flex color="#d892ff" mr={2} whiteSpace="nowrap">
-              [wasmvm
-              {/* {
-                <>
-                  <Box color="#ffd300" ml={1}>
-                    {dayjs(i?.['@ts']).format('hh:mm:ss')}
-                  </Box>
-                </>
-              } */}
-              ]
-            </Flex>{' '}
+              <>
+                <Box color="#ffd300" ml={1}>
+                  {dayjs(i?.['@ts']).format('hh:mm:ss')}
+                </Box>
+              </>
+            </Flex>
             <Flex wordBreak={'break-all'}>{JSON.stringify(i)}</Flex>
           </Flex>
         );

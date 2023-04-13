@@ -1,5 +1,5 @@
 import { eventBus } from '@/lib/event';
-import { IFormType, INodeType, INodeTypeDescription } from '@/server/nodes/types';
+import { IFormType, INodeType, INodeTypeDescription } from '@/lib/nodes/types';
 import { UiSchema } from '@rjsf/utils';
 import { JSONSchemaFormState, JSONValue } from './JSONSchemaState';
 import { v4 as uuid } from 'uuid';

@@ -8,7 +8,7 @@ import { ImEqualizer } from 'react-icons/im';
 import { Handle, NodeTypes, Position } from 'reactflow';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { INodeGroup, INodeIconType, INodeType } from '@/server/nodes/types';
+import { INodeGroup, INodeIconType, INodeType } from '@/lib/nodes/types';
 import { hooks } from '@/lib/hooks';
 import { FlowNode } from '@/store/standard/Node';
 import { Radar2 } from 'tabler-icons-react';
