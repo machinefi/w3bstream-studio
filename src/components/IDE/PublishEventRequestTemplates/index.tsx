@@ -44,6 +44,45 @@ export const ShowRequestTemplatesButtonWidget = () => {
   return <ShowRequestTemplatesButton props={{ mt: '10px', w: '100%', h: '32px' }} />;
 };
 
+const UseDefaultTemplateButton = observer(({ props = {} }: { props?: ButtonProps }) => {
+  const {
+    w3s: { publisher }
+  } = useStore();
+  return (
+    <Button
+      {...defaultOutlineButtonStyle}
+      {...props}
+      onClick={() => {
+        publisher.developerPublishEventForm.value.set({
+          body: JSON.stringify(
+            [
+              {
+                header: {
+                  event_type: 'ANY',
+                  pub_id: '',
+                  token: '',
+                  pub_time: Date.now()
+                },
+                payload: {
+                  example: 'This is is an example payload'
+                }
+              }
+            ],
+            null,
+            2
+          )
+        });
+      }}
+    >
+      Use the default template
+    </Button>
+  );
+});
+
+export const UseDefaultTemplateButtonWidget = () => {
+  return <UseDefaultTemplateButton />;
+};
+
 const PublishEventRequestTemplates = observer(() => {
   const {
     w3s: {

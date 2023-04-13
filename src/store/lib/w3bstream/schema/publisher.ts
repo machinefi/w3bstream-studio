@@ -8,7 +8,7 @@ import { PublisherType } from '@/server/routers/w3bstream';
 import { PublisherTokenRender } from '@/components/JSONTable/FieldRender';
 import { UiSchema } from '@rjsf/utils';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
-import { ShowRequestTemplatesButtonWidget } from '@/components/IDE/PublishEventRequestTemplates';
+import { ShowRequestTemplatesButtonWidget, UseDefaultTemplateButtonWidget } from '@/components/IDE/PublishEventRequestTemplates';
 import { makeObservable, observable } from 'mobx';
 import { helper } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
@@ -62,7 +62,8 @@ export const publishEventSchema = {
 export const developerPublishEventSchema = {
   type: 'object',
   properties: {
-    body: { type: 'string', title: '' }
+    body: { type: 'string', title: '' },
+    defaultTemplate: { type: 'string', title: '' }
   },
   required: []
 } as const;
@@ -243,9 +244,12 @@ export default class PublisherModule {
         'ui:widget': EditorWidget,
         'ui:options': {
           editorHeight: '400px',
-          emptyValue: `[]`,
+          // emptyValue: `[]`,
           showLanguageSelector: false
         }
+      },
+      defaultTemplate: {
+        'ui:widget': UseDefaultTemplateButtonWidget
       }
     },
     afterSubmit: async (e) => {
