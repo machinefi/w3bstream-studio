@@ -1,17 +1,18 @@
 import { FlowNodeData } from '@/components/FlowNode';
 import { makeAutoObservable } from 'mobx';
 import { addEdge, applyEdgeChanges, applyNodeChanges, Connection, Edge, EdgeChange, MarkerType, Node, NodeChange, OnConnectStartParams, ReactFlowInstance, updateEdge } from 'reactflow';
-import { INodeType } from '../../server/nodes/types';
+import { INodeType } from '../../lib/nodes/types';
 import { axios } from '@/lib/axios';
 import { FlowNode } from './Node';
 import { PromiseState } from './PromiseState';
 import { _ } from '@/lib/lodash';
 import { v4 as uuid } from 'uuid';
 import { IndexDb } from '@/lib/dexie';
-import { nodeManager } from '@/server/nodes';
+import { nodeManager } from '@/lib/nodes';
 
 export class FlowState {
   curFlowId: number = null;
+  curFlowRunning = false;
   curEditNodeId: string = '';
   reactFlowInstance: null | ReactFlowInstance<FlowNodeData, any> = null;
   nodes: Node<FlowNodeData>[] = [];
@@ -23,6 +24,7 @@ export class FlowState {
   isDropConnecting = false;
   copiedNodes: Node[] = [];
   copiedEdges: Edge[] = [];
+  flowIntervals: Record<string, any> = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -230,16 +232,30 @@ export class FlowState {
     this.copiedEdges = [];
   };
 
-  executeFlow() {
-    console.log(JSON.parse(JSON.stringify(this.nodes)));
-    console.log(JSON.parse(JSON.stringify(this.edges)));
+  async executeFlow() {
     this.nodes = this.nodes.map((node) => ({ ...node, input: {}, output: {} }));
     const triggerNodes = this.nodes.filter((node) => node.type === 'SimulationNode');
-    console.log(triggerNodes);
-    triggerNodes.forEach(async (node) => {
-      await this.executeFlowByTriggerId(node.id);
-    });
-    // let nextId = webhook_id ? flowData.nodes.find((i) => i.data?.id == webhook_id)?.id : node_id;
+    console.log(triggerNodes, 'triggerNodes');
+    await Promise.all(
+      triggerNodes.map(async (node) => {
+        if (node.data.triggerInterval >= 0) {
+          this.flowIntervals[node.id] = setInterval(async () => {
+            if (!this.curFlowRunning) {
+              clearInterval(this.flowIntervals[node.id]);
+              this.curFlowRunning = false;
+            } else {
+              await this.executeFlowByTriggerId(node.id);
+            }
+          }, node.data.triggerInterval * 1000);
+        } else {
+          await this.executeFlowByTriggerId(node.id);
+        }
+      })
+    );
+    // all flow finished
+    if (triggerNodes.every((i) => i.data.triggerInterval < 0)) {
+      this.curFlowRunning = false;
+    }
   }
 
   async handleVariable(curFlowId: string): Promise<{ [key: string]: any }> {
@@ -275,7 +291,7 @@ export class FlowState {
     return vars;
   }
 
-  async executeFlowByTriggerId(nodeId: string) {
+  async executeFlowByTriggerId(nodeId: string): Promise<{ is_run_over: boolean }> {
     const nodeMap = _.keyBy(this.nodes, 'id');
     const edgeMap = _.keyBy(this.edges, 'source');
     let nextId = nodeId ? this.nodes.find((i) => i?.id == nodeId)?.id : nodeId;
@@ -288,7 +304,7 @@ export class FlowState {
       }
     } while (!!edgeMap[nextId]);
 
-    if (callStack.length <= 1) return { null_job: true };
+    if (callStack.length <= 1) return { is_run_over: true };
     for await (const [index, node] of callStack.entries()) {
       const variables = await this.handleVariable(node.id);
       console.log(variables, 'variablesEdge');
@@ -325,6 +341,9 @@ export class FlowState {
           callStackCurIdx: index
         });
       }
+
+      let isLastNode = index === callStack.length - 1;
     }
+    return { is_run_over: true };
   }
 }

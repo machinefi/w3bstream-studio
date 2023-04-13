@@ -6,7 +6,7 @@ import ReactFlow, { Background, Controls, MarkerType, NodeTypes } from 'reactflo
 import { useStore } from '@/store/index';
 import { generateNodeGroupMenu, generateReactFlowNode, NodeIcon, NodeMenuItem } from '@/components/FlowNode';
 import 'reactflow/dist/style.css';
-import { INodeType } from '@/server/nodes/types';
+import { INodeType } from '@/lib/nodes/types';
 import { helper } from '@/lib/helper';
 import { FlowNode } from '@/store/standard/Node';
 import { hooks } from '@/lib/hooks';
@@ -19,7 +19,7 @@ import { Flows, IndexDb } from '@/lib/dexie';
 import { Box, Button, Collapse, Flex, Text } from '@chakra-ui/react';
 import { getSelectedStyles } from '../ToolBar';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { VscDebugStart } from 'react-icons/vsc';
+import { VscDebugStart, VscDebugPause } from 'react-icons/vsc';
 
 const MenuItemCollapse = ({ nodeMenuItem, addNode }: { nodeMenuItem: NodeMenuItem; addNode: (event: any, nodeInstance: INodeType) => void }) => {
   // const { classes } = useStyles();
@@ -274,7 +274,7 @@ const Flow = observer(() => {
                   minZoom={0.5}
                   maxZoom={1.5}
                   onInit={flow.onInit}
-                  nodes={flow.nodes.map((i) => ({ ...i, dragHandle:".drag-handle" }))}
+                  nodes={flow.nodes.map((i) => ({ ...i, dragHandle: '.drag-handle' }))}
                   edges={flow.edges}
                   onNodesChange={flow.onNodesChange}
                   onEdgesChange={flow.onEdgesChange}
@@ -314,12 +314,19 @@ const Flow = observer(() => {
                   color: '#fff',
                   cursor: 'pointer'
                 }}
-                rightIcon={<VscDebugStart color="white" />}
+                // VscDebugPause
+                rightIcon={flow.curFlowRunning ? <VscDebugPause /> : <VscDebugStart />}
                 onClick={() => {
-                  flow.executeFlow();
+                  if (flow.curFlowRunning) {
+                    flow.curFlowRunning = false;
+                    return;
+                  } else {
+                    flow.curFlowRunning = true;
+                    flow.executeFlow();
+                  }
                 }}
               >
-                Start
+                {flow.curFlowRunning ? 'Pause' : 'Start'}
               </Button>
             </Flex>
           </>

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { nodeManager } from '../../server/nodes/index';
+import { nodeManager } from '../../lib/nodes/index';
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   try {

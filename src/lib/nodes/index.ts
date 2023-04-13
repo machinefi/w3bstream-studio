@@ -12,21 +12,12 @@ export class NodeManager {
   nodeClassMap: Record<string, any> = {};
   nodesJSON: any[] = [];
 
-  // getNodeInstancesMap(): Record<string, INodeType> {
-  //   if (!this.nodes.length) this.registerNode();
-  //   return this.nodes.reduce((acc, cur) => {
-  //     acc[cur.description.name] = cur;
-  //     return acc;
-  //   }, {});
-  // }
-
   getClass(name: string) {
     return this.nodeClassMap[name];
   }
 
   constructor() {
     this.registerNode();
-    // console.log(this.nodes);
   }
 
   registerNode() {
@@ -42,9 +33,6 @@ export class NodeManager {
     //@ts-ignore
     this.nodes = Object.values(this.nodeClassMap).map((i) => new i());
     this.nodesJSON = this.nodes.map((node) => node.toJSON());
-
-    // console.log(this.nodes);
-    // console.log('nodesJSON', this.nodesJSON);
     return this.nodes;
   }
 
