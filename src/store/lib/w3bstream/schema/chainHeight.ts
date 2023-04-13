@@ -54,6 +54,39 @@ export default class ChainHeightModule {
   table = new JSONSchemaTableState<ChainHeightType>({
     columns: [
       {
+        key: 'actions',
+        label: 'Actions',
+        actions: (item) => {
+          return [
+            {
+              props: {
+                size: 'xs',
+                ...defaultOutlineButtonStyle,
+                onClick() {
+                  globalThis.store.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    async onOk() {
+                      try {
+                        await axios.request({
+                          method: 'delete',
+                          url: `/api/w3bapp/monitor/chain_height/${item.f_project_name}/${item.f_chain_height_id}`
+                        });
+                        eventBus.emit('chainHeight.delete');
+                        toast.success('Deleted successfully');
+                      } catch (error) {
+                        toast.error('Delete failed');
+                      }
+                    }
+                  });
+                }
+              },
+              text: 'Delete'
+            }
+          ];
+        }
+      },
+      {
         key: 'f_chain_height_id',
         label: 'ChainTx ID'
       },
@@ -72,44 +105,7 @@ export default class ChainHeightModule {
       {
         key: 'f_height',
         label: 'Height'
-      },
-      // {
-      //   key: 'actions',
-      //   label: 'Actions',
-      //   actions: (item) => {
-      //     return [
-      //       {
-      //         props: {
-      //           size: 'xs',
-      //           ...defaultOutlineButtonStyle,
-      //           onClick() {
-      //             globalThis.store.base.confirm.show({
-      //               title: 'Warning',
-      //               description: 'Are you sure you want to delete it?',
-      //               async onOk() {
-      //                 try {
-      //                   await axios.request({
-      //                     method: 'delete',
-      //                     url: `/api/w3bapp/monitor/chain_height/${item.f_project_name}`,
-      //                     data: {
-      //                       projectName: item.f_project_name,
-      //                       chainHeightID: item.f_chain_height_id
-      //                     }
-      //                   });
-      //                   eventBus.emit('chainHeight.delete');
-      //                   toast.success('Deleted successfully');
-      //                 } catch (error) {
-      //                   toast.error('Delete failed');
-      //                 }
-      //               }
-      //             });
-      //           }
-      //         },
-      //         text: 'Delete'
-      //       }
-      //     ];
-      //   }
-      // }
+      }
     ],
     rowKey: 'f_chain_height_id',
     containerProps: { mt: '10px' }

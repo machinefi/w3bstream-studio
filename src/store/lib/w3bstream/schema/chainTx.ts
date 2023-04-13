@@ -54,6 +54,39 @@ export default class ChainTxModule {
   table = new JSONSchemaTableState<ChainTxType>({
     columns: [
       {
+        key: 'actions',
+        label: 'Actions',
+        actions: (item) => {
+          return [
+            {
+              props: {
+                size: 'xs',
+                ...defaultOutlineButtonStyle,
+                onClick() {
+                  globalThis.store.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    async onOk() {
+                      try {
+                        await axios.request({
+                          method: 'delete',
+                          url: `/api/w3bapp/monitor/chain_tx/${item.f_project_name}/${item.f_chaintx_id}`
+                        });
+                        eventBus.emit('chainTx.delete');
+                        toast.success('Deleted successfully');
+                      } catch (error) {
+                        toast.error('Delete failed');
+                      }
+                    }
+                  });
+                }
+              },
+              text: 'Delete'
+            }
+          ];
+        }
+      },
+      {
         key: 'f_chaintx_id',
         label: 'ChainTx ID'
       },
@@ -80,43 +113,7 @@ export default class ChainTxModule {
       {
         key: 'f_updated_at',
         label: 'Updated At'
-      },
-      // {
-      //   key: 'actions',
-      //   label: 'Actions',
-      //   actions: (item) => {
-      //     return [
-      //       {
-      //         props: {
-      //           size: 'xs',
-      //           ...defaultOutlineButtonStyle,
-      //           onClick() {
-      //             globalThis.store.base.confirm.show({
-      //               title: 'Warning',
-      //               description: 'Are you sure you want to delete it?',
-      //               async onOk() {
-      //                 try {
-      //                   await axios.request({
-      //                     method: 'delete',
-      //                     url: `/api/w3bapp/monitor/chain_tx/${item.f_project_name}`,
-      //                     data: {
-      //                       chainTxID: item.f_chaintx_id
-      //                     }
-      //                   });
-      //                   eventBus.emit('chainTx.delete');
-      //                   toast.success('Deleted successfully');
-      //                 } catch (error) {
-      //                   toast.error('Delete failed');
-      //                 }
-      //               }
-      //             });
-      //           }
-      //         },
-      //         text: 'Delete'
-      //       }
-      //     ];
-      //   }
-      // }
+      }
     ],
     rowKey: 'f_chaintx_id',
     containerProps: { mt: '10px' }

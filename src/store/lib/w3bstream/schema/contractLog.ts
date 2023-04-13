@@ -57,6 +57,39 @@ export default class ContractLogModule {
   table = new JSONSchemaTableState<ContractLogType>({
     columns: [
       {
+        key: 'actions',
+        label: 'Actions',
+        actions: (item) => {
+          return [
+            {
+              props: {
+                size: 'xs',
+                ...defaultOutlineButtonStyle,
+                onClick() {
+                  globalThis.store.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    async onOk() {
+                      try {
+                        await axios.request({
+                          method: 'delete',
+                          url: `/api/w3bapp/monitor/contract_log/${item.f_project_name}/${item.f_contractlog_id}`
+                        });
+                        eventBus.emit('contractlog.delete');
+                        toast.success('Deleted successfully');
+                      } catch (error) {
+                        toast.error('Delete failed');
+                      }
+                    }
+                  });
+                }
+              },
+              text: 'Delete'
+            }
+          ];
+        }
+      },
+      {
         key: 'f_contractlog_id',
         label: 'Contract Log ID'
       },
@@ -87,44 +120,7 @@ export default class ContractLogModule {
       {
         key: 'f_topic0',
         label: 'Topic0'
-      },
-      // {
-      //   key: 'actions',
-      //   label: 'Actions',
-      //   actions: (item) => {
-      //     return [
-      //       {
-      //         props: {
-      //           size: 'xs',
-      //           ...defaultOutlineButtonStyle,
-      //           onClick() {
-      //             globalThis.store.base.confirm.show({
-      //               title: 'Warning',
-      //               description: 'Are you sure you want to delete it?',
-      //               async onOk() {
-      //                 try {
-      //                   await axios.request({
-      //                     method: 'delete',
-      //                     url: `/api/w3bapp/monitor/contract_log/${item.f_project_name}`,
-      //                     data: {
-      //                       projectName: item.f_project_name,
-      //                       contractLogID: item.f_contractlog_id
-      //                     }
-      //                   });
-      //                   eventBus.emit('contractlog.delete');
-      //                   toast.success('Deleted successfully');
-      //                 } catch (error) {
-      //                   toast.error('Delete failed');
-      //                 }
-      //               }
-      //             });
-      //           }
-      //         },
-      //         text: 'Delete'
-      //       }
-      //     ];
-      //   }
-      // }
+      }
     ],
     rowKey: 'f_contractlog_id',
     containerProps: { mt: '10px' }
