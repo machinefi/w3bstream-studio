@@ -1,6 +1,6 @@
 import { IFormType, INodeType, INodeTypeDescription } from './types';
 import { v4 as uuid } from 'uuid';
-import { FlowNode } from '../types';
+import { FlowNode } from '../../server/types';
 export const BaseNodeSettingSchema = {
   type: 'object',
   properties: {
@@ -53,4 +53,6 @@ export abstract class BaseNode implements INodeType {
     const jsonForm = this.form.formList[formIndex]?.form?.find((item) => item.component === 'JSONForm');
     jsonForm && (jsonForm.props.formState.value = value);
   };
+
+  
 }

@@ -29,9 +29,10 @@ return faker.helpers.multiple(createRandomUser, {
 export const dataSimulationNodeSchema = {
   type: 'object',
   properties: {
+    triggerInterval: { type: 'number', title: 'Trigger Interval (Seconds)' },
     code: { type: 'string', title: 'Code' }
   },
-  required: ['id', 'code']
+  required: ['triggerInterval', 'code']
 } as const;
 
 export type dataSimulationNodeSchemaType = FromSchema<typeof dataSimulationNodeSchema>;
@@ -106,7 +107,8 @@ export class SimulationNode extends BaseNode {
                   }
                 },
                 value: {
-                  code: ''
+                  code: '',
+                  triggerInterval: '2'
                 }
               }
             }
