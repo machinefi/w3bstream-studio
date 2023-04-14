@@ -450,6 +450,7 @@ export default class ProjectModule {
         await showNotification({ message: `Create project succeeded` });
         eventBus.emit('project.create');
         modals.openContextModal({
+          id: 'projectstration',
           modal: 'projectstration',
           title: 'Go to the project',
           centered: true,

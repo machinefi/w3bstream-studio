@@ -53,10 +53,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Text size="sm">{innerProps.modalBody}</Text>
       <Button fullWidth mt="md" onClick={(e) => {
         try {
+          modals.closeAll();
           w3s.headerTabs === 'PROJECTS'
           w3s.project.allProjects.onSelect(0)
           w3s.showContent = 'METRICS';
-          // w3s.metrics.allMetrics.call();
+          w3s.metrics.allMetrics.call();
         } catch (error) {
           toast.error(error.message)
         }
