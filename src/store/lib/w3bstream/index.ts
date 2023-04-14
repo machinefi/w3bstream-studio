@@ -18,6 +18,7 @@ import ChainTxModule from './schema/chainTx';
 import ChainHeightModule from './schema/chainHeight';
 import DBTableModule from './schema/dbTable';
 import MetricsModule from './schema/metrics';
+import FlowModule from './schema/flow';
 
 configure({
   enforceActions: 'never'
@@ -27,6 +28,7 @@ export class W3bStream {
   rootStore: RootStore;
   config = new W3bstreamConfigModule();
   user = new UserModule();
+  flowModule = new FlowModule();
   projectManager = new ProjectManager();
   project = new ProjectModule({
     onLoadCompleted: ({ applets, publishers, strategies, instances }) => {
@@ -72,7 +74,7 @@ export class W3bStream {
     | 'SETTINGS'
     | 'DB_TABLE' = 'CURRENT_APPLETS';
 
-  headerTabs: 'PROJECTS' | 'LABS' | 'SUPPORT' = 'PROJECTS';
+  headerTabs: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'FLOW' = 'PROJECTS';
 
   isReady = false;
 
