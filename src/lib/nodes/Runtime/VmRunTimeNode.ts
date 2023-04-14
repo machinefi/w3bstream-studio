@@ -92,7 +92,7 @@ export class VmRunTimeNode extends BaseNode {
                   console: {
                     'ui:widget': 'RuntimeConsoleWidget',
                     'ui:options': {
-                      id: '={{uuid()}}'
+                      // id: '={{uuid()}}='
                     }
                   },
                   fieldLabelLayout: {

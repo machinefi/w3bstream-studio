@@ -122,15 +122,15 @@ export class FlowState {
     });
   };
 
-  async syncToIndexDb() {
-    if (!this.curFlowId) return;
-    const data = this.exportData();
-    console.log('sync to db', data);
-    const flow = await IndexDb.findFlowsById(this.curFlowId);
-    console.log('flow', flow, this.curFlowId);
-    const res = await IndexDb.updateFlowById(this.curFlowId, flow[0].name, data);
-    console.log('res', res);
-  }
+  // async syncToIndexDb() {
+  //   if (!this.curFlowId) return;
+  //   const data = this.exportData();
+  //   console.log('sync to db', data);
+  //   const flow = await IndexDb.findFlowsById(this.curFlowId);
+  //   console.log('flow', flow, this.curFlowId);
+  //   const res = await IndexDb.updateFlowById(this.curFlowId, flow[0].name, data);
+  //   console.log('res', res);
+  // }
 
   exportData = () => {
     const nodes = this.nodes.map((node) => {

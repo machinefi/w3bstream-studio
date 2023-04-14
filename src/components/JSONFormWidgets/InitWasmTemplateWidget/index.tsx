@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
-import { Text, Flex, Image, chakra, Box } from '@chakra-ui/react';
-import { examples } from '@/constants/initWASMExamples';
+import { Text, Flex, Image, chakra, Box, Menu, MenuButton, Button, MenuList, MenuGroup, MenuItem, MenuDivider } from '@chakra-ui/react';
+import { assemblyScriptExample, flowExample, simulationExample } from '@/constants/initWASMExamples';
 import { helper } from '@/lib/helper';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 type Options = {};
 
@@ -15,8 +17,11 @@ export interface InitWasmTemplateWidgetUIOptions {
   'ui:options': Options;
 }
 
-function InitWasmTemplateWidget({ id, options, value, required, label, onChange }: InitWasmTemplateWidgetProps) {
+const InitWasmTemplate = observer(({ id, options, value, required, label, onChange }: InitWasmTemplateWidgetProps) => {
   const [templateName, setTemplateName] = useState('');
+  const store = useLocalObservable<{ curTemplate: typeof assemblyScriptExample }>(() => ({
+    curTemplate: null
+  }));
   return (
     <>
       <Flex alignItems="center">
@@ -37,7 +42,70 @@ function InitWasmTemplateWidget({ id, options, value, required, label, onChange 
           }
         }}
       >
-        {examples?.children?.map((template) => (
+        <Menu>
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            {store.curTemplate?.label || 'Select a template'}
+          </MenuButton>
+          <MenuList>
+            <MenuGroup title="Assemblyscript">
+              {assemblyScriptExample.children.map((item) => {
+                return (
+                  <MenuItem
+                    w="90%"
+                    ml={4}
+                    key={item.label}
+                    onClick={() => {
+                      onChange(JSON.stringify(item));
+                      store.curTemplate = item;
+                      setTemplateName(item.label);
+                    }}
+                  >
+                    {item.label}
+                  </MenuItem>
+                );
+              })}
+            </MenuGroup>
+            <MenuDivider />
+            <MenuGroup title="Flow">
+              {flowExample.children.map((item) => {
+                return (
+                  <MenuItem
+                    w="90%"
+                    ml={4}
+                    key={item.label}
+                    onClick={() => {
+                      onChange(JSON.stringify(item));
+                      store.curTemplate = item;
+                      setTemplateName(item.label);
+                    }}
+                  >
+                    {item.label}
+                  </MenuItem>
+                );
+              })}
+            </MenuGroup>
+            <MenuDivider />
+            <MenuGroup title="Simulation">
+              {simulationExample.children.map((item) => {
+                return (
+                  <MenuItem
+                    w="90%"
+                    ml={4}
+                    key={item.label}
+                    onClick={() => {
+                      onChange(JSON.stringify(item));
+                      store.curTemplate = item;
+                      setTemplateName(item.label);
+                    }}
+                  >
+                    {item.label}
+                  </MenuItem>
+                );
+              })}
+            </MenuGroup>
+          </MenuList>
+        </Menu>
+        {/* {store.examples?.children?.map((template) => (
           <Flex
             key={template.key}
             flexDir="column"
@@ -62,13 +130,17 @@ function InitWasmTemplateWidget({ id, options, value, required, label, onChange 
             }}
           >
             <Box mt="10px" fontWeight={700} fontSize="16px">
-              {helper.string.firstUpperCase(template.label.replace('.ts', ''))}
+              {helper.string.firstUpperCase(template.label.split('.')[0])}
             </Box>
           </Flex>
-        ))}
+        ))} */}
       </Flex>
     </>
   );
-}
+});
+
+const InitWasmTemplateWidget = (props: InitWasmTemplateWidgetProps) => {
+  return <InitWasmTemplate {...props} />;
+};
 
 export default InitWasmTemplateWidget;

@@ -1,4 +1,39 @@
+import _ from '@/lib/lodash';
+import { FilesItemType } from './filesList';
+
 export const definitions = {
+  wasmcodeFiles: {
+    type: 'string',
+    get enum() {
+      const files = [];
+      const findWasmCode = (arr: FilesItemType[]) => {
+        arr.forEach((i) => {
+          if (i.data?.dataType === 'assemblyscript') {
+            files.push(i.key);
+          } else if (i.type === 'folder') {
+            findWasmCode(i.children);
+          }
+        });
+      };
+      findWasmCode(globalThis.store.w3s.projectManager.curFilesList as FilesItemType[]);
+      return files || [];
+    },
+    get enumNames() {
+      const fileNames = [];
+      const findWasmCode = (arr: FilesItemType[]) => {
+        arr.forEach((i) => {
+          if (i.data?.dataType === 'assemblyscript') {
+            fileNames.push(i.label);
+          } else if (i.type === 'folder') {
+            findWasmCode(i.children);
+          }
+        });
+      };
+      findWasmCode(globalThis.store.w3s.projectManager.curFilesList as FilesItemType[]);
+      return fileNames || [];
+    }
+  },
+
   projects: {
     type: 'string',
     get enum() {

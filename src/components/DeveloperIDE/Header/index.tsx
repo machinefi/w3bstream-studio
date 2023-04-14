@@ -78,9 +78,9 @@ const Header = observer(() => {
             <Tab ml="60px" w="80px" h="30px" fontSize="xs" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Support
             </Tab>
-            <Tab ml="60px" w="60px" h="30px" fontSize="xs" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            {/* <Tab ml="60px" w="60px" h="30px" fontSize="xs" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Flow
-            </Tab>
+            </Tab> */}
           </TabList>
         </Tabs>
       </Flex>

@@ -47,15 +47,16 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
 
   useEffect(() => {
     eventBus.on('flow.run.result', store.onFlowRunResult);
-
     function handleKeyDown(event) {
       if (id == flow.curEditNodeId) {
         flow.editNode(id, toJS(store.realNodeInstance.getJSONFormValue()) as any);
       }
     }
+    document.addEventListener('click', handleKeyDown);
     document.addEventListener('keyup', handleKeyDown);
     return () => {
       document.removeEventListener('keyup', handleKeyDown);
+      document.removeEventListener('click', handleKeyDown);
       eventBus.off('flow.run.result', store.onFlowRunResult);
     };
   }, []);

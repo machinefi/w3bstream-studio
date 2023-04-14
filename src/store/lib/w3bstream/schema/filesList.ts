@@ -11,12 +11,14 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { dataURItoBlob } from '@rjsf/utils';
 import { StorageState } from '@/store/standard/StorageState';
-import { examples } from '@/constants/initWASMExamples';
+import { assemblyScriptExample } from '@/constants/initWASMExamples';
 
 type FileItemDataType<T = any> = {
+  dataType?: string; // simulation flow assemblyscript
   code?: string;
   language?: string;
   extraData?: T;
+  [key: string]: any;
 };
 
 export type FilesItemType = {
@@ -44,7 +46,7 @@ export class FilesListSchema {
       key: uuidv4(),
       type: 'folder',
       label: 'Browser Files',
-      children: [examples]
+      children: [assemblyScriptExample]
     },
     {
       key: uuidv4(),
@@ -198,19 +200,21 @@ export class FilesListSchema {
     return this.findFile(this.files, this.curActiveFileId) || null;
   }
 
-  curActiveFileIs(label: 'html' | 'ts' | 'wasm') {
+  curActiveFileIs(label: 'html' | 'ts' | 'wasm' | 'flow') {
     return this?.curActiveFile?.label.endsWith(`.${label}`);
   }
 
-  createFileFormFolder(file: FilesItemType, action: 'file' | 'folder', code = templatecode['log.ts']) {
+  createFileFormFolder(file: FilesItemType, action: 'file' | 'folder', template?: FilesItemType) {
     if (file.type == 'folder' && action == 'file') {
-      file.children.push({
-        type: 'file',
-        key: uuidv4(),
-        label: `NewFile.ts`,
-        isRename: true,
-        data: { code, language: 'typescript' }
-      });
+      file.children.push(
+        template ?? {
+          type: 'file',
+          key: uuidv4(),
+          label: `NewFile.ts`,
+          isRename: true,
+          data: { code: '', language: 'typescript' }
+        }
+      );
       file.isOpen = true;
     }
     if (file.type == 'folder' && action == 'folder') {
