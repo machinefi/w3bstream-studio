@@ -17,7 +17,6 @@ export const WasmNodeSchema = {
   required: ['label']
 } as const;
 
-
 const template = `
 export function start(rid: i32): i32 {
   Log("start from typescript");
@@ -107,7 +106,23 @@ export class WasmNode extends BaseNode {
                       docUri: {
                         title: 'SDK Document',
                         uri: 'https://github.com/machinefi/waas-flow-sdk-doc/blob/main/README.md'
-                      }
+                      },
+                      showCodeSelector: `={{(()=>{
+                          const files = [];
+                          const findWasmCode = (arr) => {
+                            arr?.forEach((i) => {
+                              if (i.data?.dataType === 'assemblyscript') {
+                                files.push({ label: i.label, value: i.data.code , id: i.key});
+                              } else if (i.type === 'folder') {
+                                findWasmCode(i.children);
+                              }
+                            });
+                          };
+                          findWasmCode(globalThis.store.w3s.projectManager.curFilesList ?? []);
+                          return files || [];
+                        })()}}=`
+                        .replace(/[\n]/g, '')
+                        .replace(/\s+/g, ' ')
                     }
                   },
                   fieldLabelLayout: {

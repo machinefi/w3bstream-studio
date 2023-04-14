@@ -7,7 +7,7 @@ import Editor from '@/components/IDE/Editor';
 const Labs = () => {
   return (
     <Flex w="100%" h="calc(100vh - 120px)">
-      <Box minW="300px" h="100%" p="20px 10px" bg="#fff" borderRadius="8px" overflowY="auto">
+      <Box minW="230px" h="100%" p="20px 10px" bg="#fff" borderRadius="8px" overflowY="auto">
         <FilesItem />
       </Box>
       <Box ml="10px" w="100%" h="100%" p="20px 10px" bg="#fff" borderRadius="8px">

@@ -4,7 +4,7 @@ import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Box, Flex, Image, ImageProps, Portal } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import { toast } from '@/lib/helper';
+import { helper, toast } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
 
 export const FileIcon = (file: FilesItemType) => {
@@ -25,6 +25,8 @@ export const FileIcon = (file: FilesItemType) => {
     return <Image {...s} src="/images/icons/typescript.svg"></Image>;
   } else if (file?.label.endsWith('.wasm')) {
     return <Image {...s} src="/images/icons/assembly.svg"></Image>;
+  } else if (file?.label.endsWith('.flow')) {
+    return <Image {...s} src="/images/icons/tree.svg"></Image>;
   }
 
   if (file?.type == 'file') {
@@ -71,8 +73,8 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
             }
           ]
         });
-        console.log(formData)
-        w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file',formData.template);
+        console.log(formData);
+        w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', helper.json.safeParse(formData.template) ?? null);
       }
     },
     {

@@ -54,7 +54,7 @@ const RuntimeConsole = observer(({ label, required, value, readonly, onChange, o
   // }, []);
 
   return (
-    <Box ref={terminalRef} id="terminal" fontFamily="monospace" w="100%" h="calc(100vh - 480px)" p="10px" bg="#1e1e1e" color="white" whiteSpace="pre-line" overflowY="auto" position="relative">
+    <Box ref={terminalRef} id="terminal" fontFamily="monospace" w="100%" h="400px" p="10px" bg="#1e1e1e" color="white" whiteSpace="pre-line" overflowY="auto" position="relative">
       {store.stdout?.map((i) => {
         return (
           <Flex userSelect={'text'}>
