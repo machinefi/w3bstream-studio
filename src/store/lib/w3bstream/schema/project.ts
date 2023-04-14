@@ -16,6 +16,8 @@ import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import FileWidget, { FileWidgetUIOptions } from '@/components/JSONFormWidgets/FileWidget';
 import { Project } from 'pages/api/init';
 import SelectTagWidget, { SelectTagWidgetUIOptions } from '@/components/JSONFormWidgets/SelectTagWidget';
+import { Button, Text } from '@mantine/core';
+import { modals } from '@mantine/modals';
 
 export const defaultSchema = {
   type: 'object',
@@ -444,7 +446,16 @@ export default class ProjectModule {
         data: initProjectData
       });
       if (res.data) {
-        await showNotification({ message: 'Create project succeeded' });
+        console.log('res.data', res.data)
+        await showNotification({ message: `Create project succeeded` });
+        modals.openContextModal({
+          modal: 'projectstration',
+          title: 'Go to the project',
+          centered: true,
+          innerProps: {
+            modalBody: 'create success, you can view new project',
+          },
+        })
         eventBus.emit('project.create');
       }
     }

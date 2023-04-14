@@ -9,7 +9,7 @@ const Support = () => {
 
   return (
     <Center w="100%" h="calc(100vh - 100px)">
-      <Grid templateRows="repeat(2, 1fr)" templateColumns="repeat(2, 1fr)" gap={6}>
+      <Grid templateRows="repeat(2, 1fr)" templateColumns="repeat(3, 1fr)" gap={6}>
         <GridItem w="412px" h="328px" bg="#fff">
           <Flex
             w="100%"
@@ -73,6 +73,23 @@ const Support = () => {
           >
             <Image src="/images/icons/about.svg" />
             <Box mt="32px">About</Box>
+          </Flex>
+        </GridItem>
+        <GridItem w="412px" h="328px" bg="#fff">
+          <Flex
+            w="100%"
+            h="100%"
+            flexDir="column"
+            justifyContent="center"
+            alignItems="center"
+            cursor="pointer"
+            _hover={{
+              boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+            }}
+            onClick={onOpen}
+          >
+            <Image src="/images/icons/about.svg" />
+            <Box mt="32px">Tutorials</Box>
           </Flex>
         </GridItem>
       </Grid>

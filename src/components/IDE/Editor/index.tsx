@@ -19,6 +19,7 @@ import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
 import { defaultButtonStyle } from '@/lib/theme';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
+import { modals } from '@mantine/modals';
 
 const Editor = observer(() => {
   const {
@@ -273,7 +274,7 @@ const Editor = observer(() => {
 
         {curFilesListSchema?.curActiveFileIs('wasm') && (
           <>
-            <Tooltip label={`Upload to studio`} placement="top">
+            <Tooltip label={`Upload to DevNet`} placement="top">
               <Text
                 ml="auto"
                 cursor="pointer"
@@ -292,24 +293,13 @@ const Editor = observer(() => {
             </Tooltip>
 
             <Box position={'relative'}>
-              <Tooltip label="Compile to wasm" placement="top">
-                <Popover placement="top-start" offset={[0, 19]} variant="ghost" trigger="hover">
-                  <PopoverTrigger>
+              <Box onClick={() => {
+                modals.open({
+                  title: 'Send Simulated Event',
+                  centered: true,
+                  size: "lg",
+                  children: (
                     <Box>
-                      <VscDebugStart
-                        color="white"
-                        style={{
-                          marginRight: '10px',
-                          cursor: 'pointer'
-                        }}
-                      />
-                    </Box>
-                  </PopoverTrigger>
-                  <PopoverContent right="0" border="none" w="600px">
-                    {/* <PopoverArrow />
-                  <PopoverCloseButton />
-                <PopoverHeader>Confirmation!</PopoverHeader> */}
-                    <PopoverBody>
                       <MonacoEditor
                         height={300}
                         language="json"
@@ -324,20 +314,29 @@ const Editor = observer(() => {
                         }}
                       ></MonacoEditor>
                       <Button
-                        size="sm"
-                        mt={4}
-                        variant="ghost"
                         {...defaultButtonStyle}
+                        size="lg"
+                        mt={'10px'}
+                        w="100%"
+                        py="0.5rem"
                         onClick={async () => {
                           store.onDebugWASM();
                         }}
                       >
                         Send Simulated Event
                       </Button>
-                    </PopoverBody>
-                  </PopoverContent>
-                </Popover>
-              </Tooltip>
+                    </Box>
+                  ),
+                });
+              }}>
+                <VscDebugStart
+                  color="white"
+                  style={{
+                    marginRight: '10px',
+                    cursor: 'pointer'
+                  }}
+                />
+              </Box>
             </Box>
           </>
         )}

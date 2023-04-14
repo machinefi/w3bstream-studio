@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { withTRPC } from '@trpc/next';
 import { observer } from 'mobx-react-lite';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
@@ -16,6 +16,9 @@ import superjson from 'superjson';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
+import { Button, Text } from '@mantine/core';
+import { ContextModalProps, ModalsProvider } from '@mantine/modals';
+import { ProjectType } from '@/server/routers/w3bstream';
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
 
@@ -39,29 +42,52 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [token]);
 
+  const GoToProjectModal = ({ context, id, innerProps }: ContextModalProps<{ modalBody: string, instance: ProjectType }>) => (
+    <>
+      <Text size="sm">{innerProps.modalBody}</Text>
+      <Button fullWidth mt="md" onClick={(e) => {
+        const len = w3s.project.allProjects.value?.length - 1
+        const instance = w3s.project.allProjects.value[len]
+        console.log('allProjects', instance)
+        e.stopPropagation();
+        if (instance) {
+          w3s.project.allProjects.onSelect(len)
+          w3s.showContent = 'METRICS';
+          w3s.metrics.allMetrics.call();
+        } else {
+          toast.error('No instance found, please create one first');
+        }
+      }}>
+        View
+      </Button>
+    </>
+  );
+
   return useMemo(() => {
     return (
-      <InspectorWrapper
-        // props see docs:
-        // https://github.com/zthxxx/react-dev-inspector#inspector-component-props
-        keys={['control', 'shift', 'z']}
-        disableLaunchEditor={true}
-        onClickElement={({ codeInfo }: InspectParams) => {
-          if (!codeInfo?.absolutePath) return;
-          const { absolutePath, lineNumber, columnNumber } = codeInfo;
-          // you can change the url protocol if you are using in Web IDE
-          window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`);
-        }}
-      >
-        <ChakraProvider theme={theme}>
-          <NotificationsProvider>
-            <Toaster />
-            <WagmiProvider>
-              <Component {...pageProps} />
-            </WagmiProvider>
-          </NotificationsProvider>
-        </ChakraProvider>
-      </InspectorWrapper>
+      <ModalsProvider modals={{projectstration: GoToProjectModal}}>
+        <InspectorWrapper
+          // props see docs:
+          // https://github.com/zthxxx/react-dev-inspector#inspector-component-props
+          keys={['control', 'shift', 'z']}
+          disableLaunchEditor={true}
+          onClickElement={({ codeInfo }: InspectParams) => {
+            if (!codeInfo?.absolutePath) return;
+            const { absolutePath, lineNumber, columnNumber } = codeInfo;
+            // you can change the url protocol if you are using in Web IDE
+            window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`);
+          }}
+        >
+          <ChakraProvider theme={theme}>
+            <NotificationsProvider>
+              <Toaster />
+              <WagmiProvider>
+                <Component {...pageProps} />
+              </WagmiProvider>
+            </NotificationsProvider>
+          </ChakraProvider>
+        </InspectorWrapper>
+      </ModalsProvider>
     );
   }, [Component, pageProps]);
 }

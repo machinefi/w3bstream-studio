@@ -1,5 +1,5 @@
 {
-  "name": "w3bstream-studio",
+  "name": "w3bstream-devnet",
   "version": "0.1.0",
   "license": "MIT",
   "description": "Starter pack using Nextjs, React, Typescript, tRPC, Mantine and Cypress",
@@ -29,6 +29,7 @@
     "@emotion/styled": "^11.10.4",
     "@mantine/core": "^4.1.4",
     "@mantine/hooks": "^4.1.4",
+    "@mantine/modals": "^6.0.7",
     "@mantine/notifications": "^4.1.4",
     "@mantine/spotlight": "^5.5.5",
     "@monaco-editor/react": "^4.4.6",
