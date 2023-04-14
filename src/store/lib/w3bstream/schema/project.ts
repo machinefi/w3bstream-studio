@@ -448,6 +448,7 @@ export default class ProjectModule {
       if (res.data) {
         console.log('res.data', res.data)
         await showNotification({ message: `Create project succeeded` });
+        eventBus.emit('project.create');
         modals.openContextModal({
           modal: 'projectstration',
           title: 'Go to the project',
@@ -456,7 +457,6 @@ export default class ProjectModule {
             modalBody: 'create success, you can view new project',
           },
         })
-        eventBus.emit('project.create');
       }
     }
   }

@@ -48,7 +48,7 @@ const Header = observer(() => {
           W3bstream DevNet
         </Text>
       </Flex>
-      <Flex ml="100px" alignItems="center">
+      <Flex ml="120px" alignItems="center">
         <Tabs
           variant="unstyled"
           index={getTabIndex(w3s.headerTabs)}
@@ -78,7 +78,7 @@ const Header = observer(() => {
             <Tab px="0" ml="60px"  h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Support
             </Tab>
-            <Tab ml="60px" w="60px" h="30px" fontSize="xs" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Flow
             </Tab>
           </TabList>

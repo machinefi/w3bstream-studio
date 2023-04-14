@@ -401,7 +401,7 @@ const Editor = observer(() => {
                       return (
                         <Flex>
                           <Flex color="#d892ff" mr={2} whiteSpace="nowrap">
-                            [wasmvm -{' '}
+                            [wasmvm -
                             {
                               <>
                                 <Box color="#ffd300" ml={1}>
@@ -410,7 +410,7 @@ const Editor = observer(() => {
                               </>
                             }
                             ]
-                          </Flex>{' '}
+                          </Flex>
                           {JSON.stringify(i)}
                         </Flex>
                       );

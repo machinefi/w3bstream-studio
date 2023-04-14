@@ -17,7 +17,7 @@ import { Inspector, InspectParams } from 'react-dev-inspector';
 import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
 import { Button, Text } from '@mantine/core';
-import { ContextModalProps, ModalsProvider } from '@mantine/modals';
+import { ContextModalProps, modals, ModalsProvider } from '@mantine/modals';
 import { ProjectType } from '@/server/routers/w3bstream';
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
@@ -52,16 +52,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Text size="sm">{innerProps.modalBody}</Text>
       <Button fullWidth mt="md" onClick={(e) => {
-        const len = w3s.project.allProjects.value?.length - 1
-        const instance = w3s.project.allProjects.value[len]
-        console.log('allProjects', instance)
-        e.stopPropagation();
-        if (instance) {
-          w3s.project.allProjects.onSelect(len)
+        try {
+          w3s.headerTabs === 'PROJECTS'
+          w3s.project.allProjects.onSelect(0)
           w3s.showContent = 'METRICS';
-          w3s.metrics.allMetrics.call();
-        } else {
-          toast.error('No instance found, please create one first');
+          // w3s.metrics.allMetrics.call();
+        } catch (error) {
+          toast.error(error.message)
         }
       }}>
         View

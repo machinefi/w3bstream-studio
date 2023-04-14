@@ -16,7 +16,10 @@ export const w3bstreamRouter = t.router({
       where: {
         f_account_id: {
           equals: accountID
-        }
+        },
+      },
+      orderBy: {
+        f_created_at: 'desc'
       },
       select: {
         f_project_id: true,

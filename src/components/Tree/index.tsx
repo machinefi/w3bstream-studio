@@ -130,7 +130,6 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
   return (
     <Flex flexDirection="column" cursor="pointer">
       {data?.map?.((item: FilesItemType) => {
-        console.log('item', item)
         return (
           <>
             <Flex
@@ -217,7 +216,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                                       try {
                                         store.wasmPayload = JSON.parse(e);
                                       } catch (error) {}
-                                      console.log(e);
+                                        console.log(e);
                                     }}
                                   ></MonacoEditor>
                                   <Button

@@ -121,7 +121,7 @@ dependencies:
   '@faker-js/faker': 8.0.0-alpha.1
   '@mantine/core': 5.10.5_fd3z4b6otvtztiddqjy5atxlge
   '@mantine/hooks': 5.10.5_react@18.2.0
-  '@mantine/modals': 6.0.7_n5fi23fjjzlwcbqhnnpdtjftw4
+  '@mantine/modals': 6.0.7_7l7cohgiq6l4ncfy2pvlz3brzy
   '@mantine/notifications': 5.10.5_7l7cohgiq6l4ncfy2pvlz3brzy
   '@mantine/spotlight': 5.10.5_7l7cohgiq6l4ncfy2pvlz3brzy
   '@monaco-editor/react': 4.4.6_biqbaboplfbrettd7655fr4n2y
@@ -2543,7 +2543,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@mantine/modals/6.0.7_n5fi23fjjzlwcbqhnnpdtjftw4:
+  /@mantine/modals/6.0.7_7l7cohgiq6l4ncfy2pvlz3brzy:
     resolution: {integrity: sha512-H83apNcglzARbKp296l5z6xEnBuAeQQk6frkGXVGB+bZhmjOdDsaropiq+CL/cqESm29vGFjjOnBl+yvYv9MzQ==}
     peerDependencies:
       '@mantine/core': 6.0.7
@@ -2551,8 +2551,8 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
-      '@mantine/core': 4.2.12_5xygnop5723tamgcmcnjbwu4iu
-      '@mantine/hooks': 4.2.12_react@18.2.0
+      '@mantine/core': 5.10.5_fd3z4b6otvtztiddqjy5atxlge
+      '@mantine/hooks': 5.10.5_react@18.2.0
       '@mantine/utils': 6.0.7_react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
