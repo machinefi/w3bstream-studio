@@ -1,3 +1,4 @@
+import { publicConfig } from '@/constants/config';
 import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
 
 const getJavascriptTemplate = (projectName: string, body: PublishEventRequestBody) => {
@@ -6,7 +7,7 @@ const getJavascriptTemplate = (projectName: string, body: PublishEventRequestBod
 const data = {
   "events": [
     ${events.map((item) => {
-      return `{ 
+      return `{
         ${Object.entries(item)
           .map(([key, value]) => {
             if (key === 'payload') {
@@ -26,7 +27,7 @@ const data = {
   ]
 }
 
-fetch('${window.location.origin}/api/w3bapp/event/${projectName}', { 
+fetch('${publicConfig.httpURL}', {
   method: 'POST',
   body: JSON.stringify(data)
 })

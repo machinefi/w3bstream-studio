@@ -1,9 +1,7 @@
-import { PublishEventRequestBody } from "@/store/lib/w3bstream/schema/publisher";
+import { publicConfig } from '@/constants/config';
+import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
 
-const getGolangTemplate = (
-  projectName: string,
-  body: PublishEventRequestBody
-) => `package main
+const getGolangTemplate = (projectName: string, body: PublishEventRequestBody) => `package main
 
 import (
   "fmt"
@@ -13,7 +11,7 @@ import (
 )
 
 func main() {
-  url := "${window.location.origin}/api/w3bapp/event/${projectName}"
+  url := ${publicConfig.httpURL}
 
   method := "POST"
 

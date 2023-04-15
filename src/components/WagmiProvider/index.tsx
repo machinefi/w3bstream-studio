@@ -119,8 +119,11 @@ const Wallet = observer(() => {
   }));
 
   useEffect(() => {
-    if (isLoading) {
-      return;
+    // if (isLoading) {
+    //   return;
+    // }
+    if (isConnected && w3s.config.isLogin) {
+      eventBus.emit('user.login');
     }
     if (!isConnected && w3s.config.isLogin) {
       store.logout();
@@ -151,7 +154,7 @@ const Wallet = observer(() => {
         }
       });
     }
-  }, [isConnected, error, connector, chain, address, isLoading]);
+  }, [isConnected, error, connector, chain, address]);
 
   useEffect(() => {
     //@ts-ignore

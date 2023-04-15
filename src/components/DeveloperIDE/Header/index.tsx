@@ -72,15 +72,15 @@ const Header = observer(() => {
             <Tab px="0" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Projects
             </Tab>
-            <Tab px="0" ml="60px"  h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Labs
             </Tab>
-            <Tab px="0" ml="60px"  h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Support
             </Tab>
-            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            {/* <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Flow
-            </Tab>
+            </Tab> */}
           </TabList>
         </Tabs>
       </Flex>

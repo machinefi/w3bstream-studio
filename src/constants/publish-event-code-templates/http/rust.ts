@@ -1,3 +1,4 @@
+import { publicConfig } from '@/constants/config';
 import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
 
 const getRequestBody = (body: PublishEventRequestBody) => {
@@ -20,7 +21,7 @@ async fn main() ->  Result<()> {
 let request_body = json!({
   ${getRequestBody(body)}
 });
-let request_url = "${window.location.origin}/api/w3bapp/event/${projectName}";
+let request_url = ${publicConfig.httpURL};
 let response = Client::new()
   .post(request_url)
   .json(&request_body)
