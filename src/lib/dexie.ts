@@ -25,7 +25,7 @@ class IndexDatabase extends Dexie {
 
   public constructor() {
     super('IndexDatabase');
-    this.version(6).stores({
+    this.version(7).stores({
       files: '++id,data',
       flows: '++id,data,name',
       kvs: 'key,string'

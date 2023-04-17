@@ -5,7 +5,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query, body, headers } = req;
   const { slug, ...params } = query;
   const path = Array.isArray(slug) ? slug.join('/') : slug;
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/${path}`;
+  const apiURL = path.includes("event") ?  process.env.NEXT_PUBLIC_EVENT_URL:process.env.NEXT_PUBLIC_API_URL
+  const url = `${apiURL}/srv-applet-mgr/v0/${path}`;
   try {
     const axiosResponse = await axios.request({
       url,
