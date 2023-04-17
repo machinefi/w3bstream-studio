@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
-import { Text, Flex, Image, chakra, Box } from '@chakra-ui/react';
-import { examples } from '@/constants/initWASMExamples';
+import { Text, Flex, Image, chakra, Box, Menu, MenuButton, Button, MenuList, MenuGroup, MenuItem, MenuDivider } from '@chakra-ui/react';
+import { assemblyScriptExample, flowExample, simulationExample } from '@/constants/initWASMExamples';
 import { helper } from '@/lib/helper';
-
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { v4 as uuidv4 } from 'uuid';
 type Options = {};
 
 export interface InitWasmTemplateWidgetProps extends WidgetProps {
@@ -15,60 +17,67 @@ export interface InitWasmTemplateWidgetUIOptions {
   'ui:options': Options;
 }
 
-function InitWasmTemplateWidget({ id, options, value, required, label, onChange }: InitWasmTemplateWidgetProps) {
+const InitWasmTemplate = observer(({ id, options, value, required, label, onChange }: InitWasmTemplateWidgetProps) => {
   const [templateName, setTemplateName] = useState('');
+  const store = useLocalObservable<{ curTemplate: typeof assemblyScriptExample }>(() => ({
+    curTemplate: null
+  }));
+
+  const templates = (v: typeof assemblyScriptExample, label: string) => {
+    return (
+      <>
+        <Flex alignItems="center" mt={2}>
+          <Text>{label}</Text>
+        </Flex>
+        <Flex
+          mt="10px"
+          id={id}
+          sx={{
+            width: '100%',
+            '& > div:not(:first-child)': {
+              marginLeft: '10px'
+            }
+          }}
+        >
+          {v?.children?.map((template) => (
+            <Flex
+              key={template.key}
+              flexDir="column"
+              justifyContent="center"
+              alignItems="center"
+              w={100 / v?.children?.length + '%'}
+              h="100px"
+              border="2px solid #EDEDED"
+              borderRadius="8px"
+              cursor="pointer"
+              style={{
+                borderColor: templateName === template.label ? '#946FFF' : '#EDEDED'
+              }}
+              onClick={() => {
+                onChange(JSON.stringify({ ...template, key: uuidv4() }));
+                setTemplateName(template.label);
+              }}
+            >
+              <Box mt="10px" fontWeight={700} fontSize="16px">
+                {helper.string.firstUpperCase(template.label.split('.')[0])}
+              </Box>
+            </Flex>
+          ))}
+        </Flex>
+      </>
+    );
+  };
   return (
     <>
-      <Flex alignItems="center">
-        <Text>{label}</Text>
-        {required && (
-          <chakra.span ml="0.25rem" color="#D34B46">
-            *
-          </chakra.span>
-        )}
-      </Flex>
-      <Flex
-        mt="10px"
-        id={id}
-        sx={{
-          width: '100%',
-          '& > div:not(:first-child)': {
-            marginLeft: '10px'
-          }
-        }}
-      >
-        {examples?.children?.map((template) => (
-          <Flex
-            key={template.key}
-            flexDir="column"
-            justifyContent="center"
-            alignItems="center"
-            w="200px"
-            h="200px"
-            border="2px solid #EDEDED"
-            borderRadius="8px"
-            cursor="pointer"
-            style={{
-              borderColor: templateName === template.label ? '#946FFF' : '#EDEDED'
-            }}
-            onClick={() => {
-              if (templateName === template.label) {
-                onChange('');
-                setTemplateName('');
-              } else {
-                onChange(template.data.code);
-                setTemplateName(template.label);
-              }
-            }}
-          >
-            <Box mt="10px" fontWeight={700} fontSize="16px">
-              {helper.string.firstUpperCase(template.label.replace('.ts', ''))}
-            </Box>
-          </Flex>
-        ))}
-      </Flex>
+      {templates(assemblyScriptExample, 'AssemblyScript')}
+      {templates(flowExample, 'Flow')}
+      {templates(simulationExample, 'Simulation')}
     </>
   );
-}
+});
+
+const InitWasmTemplateWidget = (props: InitWasmTemplateWidgetProps) => {
+  return <InitWasmTemplate {...props} />;
+};
 
 export default InitWasmTemplateWidget;
