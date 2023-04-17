@@ -47,7 +47,17 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
       return curFilesListSchema.findFile(curFilesListSchema.files, store.curCodeId.value);
     }
   }));
-  
+
+  useEffect(() => {
+    if (store.curCodeLabel.value) {
+      if (!store.curEditorFile) {
+        store.curCodeLabel.clear();
+        store.curCodeId.clear();
+        return;
+      }
+    }
+  }, [store.curCodeLabel.value]);
+
   const handleChange = useCallback(
     (value) => {
       onChange(value === '' ? (options.emptyValue ? options.emptyValue : '') : value);
@@ -115,7 +125,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
         height={editorHeight}
         theme="vs-dark"
         language={showLanguageSelector ? language : lang}
-        value={readOnly ? (value ? value : '') : store.curCodeId.value ? store.curEditorFile.data.code : value}
+        value={readOnly ? (value ? value : '') : store.curCodeId.value ? store.curEditorFile?.data?.code ?? value : value}
         onChange={handleChange}
       />
       {showSubmitButton && (

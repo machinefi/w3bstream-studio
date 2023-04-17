@@ -10,7 +10,7 @@ export class StorageState<T> extends JSONSchemaValue<T> {
     Object.assign(this, args);
     this.load();
   }
-  
+
   set(val) {
     const value = super.set(val);
     localStorage.setItem(this.key, JSON.stringify(value));
@@ -35,5 +35,6 @@ export class StorageState<T> extends JSONSchemaValue<T> {
 
   clear() {
     localStorage.removeItem(this.key);
+    this.value = null;
   }
 }
