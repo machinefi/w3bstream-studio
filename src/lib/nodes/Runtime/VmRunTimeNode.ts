@@ -45,7 +45,6 @@ export class VmRunTimeNode extends BaseNode {
   static async execute({ input, output, node, callStack, callStackCurIdx, variables }) {
     const preNode = callStack[callStackCurIdx - 1];
     try {
-      console.log(variables);
       const buffer = Buffer.from(variables.wasm);
       const wasi = new WASM(buffer);
       wasi.sendEvent(JSON.stringify(preNode.output));
@@ -61,7 +60,6 @@ export class VmRunTimeNode extends BaseNode {
           stderr
         }
       });
-      console.log('VmRunTimeNode', node);
     } catch (e) {
       eventBus.emit('flow.run.result', {
         flowId: node.id,

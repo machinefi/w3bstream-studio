@@ -14,6 +14,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import superjson from 'superjson';
 import { Inspector, InspectParams } from 'react-dev-inspector';
+import "./global.css"
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
 export let asc: typeof import('assemblyscript/dist/asc');

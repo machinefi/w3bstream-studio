@@ -155,7 +155,6 @@ export const helper = {
       }
 
       if (toLocalString) {
-        console.log(helper.number.numberWithCommas(Number(new BN(result).toFixed())));
         return helper.number.numberWithCommas(Number(new BN(result).toFixed()));
       }
 

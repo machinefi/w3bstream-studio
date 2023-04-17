@@ -38,6 +38,16 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
     }
   } = useStore();
 
+  const [language, setLanguage] = useState('json');
+  const { editorHeight = '200px', showLanguageSelector = false, showCodeSelector = [], showSubmitButton = false, onChangeLanguage, afterSubmit, readOnly = false, lang = 'json' } = options;
+  const store = useLocalObservable(() => ({
+    curCodeLabel: new StorageState<string>({ key: curFlowId + 'curCodeLabel' ?? 'EditorWidget' }),
+    curCodeId: new StorageState<string>({ key: curFlowId + 'curCodeId' ?? 'EditorWidget' }),
+    get curEditorFile() {
+      return curFilesListSchema.findFile(curFilesListSchema.files, store.curCodeId.value);
+    }
+  }));
+  
   const handleChange = useCallback(
     (value) => {
       onChange(value === '' ? (options.emptyValue ? options.emptyValue : '') : value);
@@ -49,18 +59,6 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
     },
     [onChange, options.emptyValue]
   );
-
-  const [language, setLanguage] = useState('json');
-
-  const { editorHeight = '200px', showLanguageSelector = false, showCodeSelector = [], showSubmitButton = false, onChangeLanguage, afterSubmit, readOnly = false, lang = 'json' } = options;
-  const store = useLocalObservable(() => ({
-    curCodeLabel: new StorageState<string>({ key: curFlowId + 'curCodeLabel' ?? 'EditorWidget' }),
-    curCodeId: new StorageState<string>({ key: curFlowId + 'curCodeId' ?? 'EditorWidget' }),
-    get curEditorFile() {
-      return curFilesListSchema.findFile(curFilesListSchema.files, store.curCodeId.value);
-    }
-  }));
-
   return (
     <Flex flexDir="column">
       <Flex justifyContent="space-between" alignItems="center" mb="10px">

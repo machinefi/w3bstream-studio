@@ -29,10 +29,8 @@ const RuntimeConsole = observer(({ label, required, value, readonly, onChange, o
       store.stderr.push(message);
     },
     onFlowRunResult(message: any) {
-      console.log('onFlowRunResult2', message.flowId == context);
       if (message.flowId == context) {
         store.stdout = message?.extra?.stdout;
-        console.log('onFlowRunResult2', store.stdout);
       }
     }
   }));

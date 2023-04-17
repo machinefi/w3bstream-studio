@@ -20,6 +20,8 @@ import { SmallCloseIcon } from '@chakra-ui/icons';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { asc } from 'pages/_app';
 import Flow from '@/components/DeveloperIDE/Flow';
+// @ts-ignore 
+import fakerjs from '@faker-js/faker';
 
 const Editor = observer(() => {
   const {
@@ -57,14 +59,12 @@ const Editor = observer(() => {
       if (!filesItem.label.endsWith('.ts')) return;
       try {
         const code = wasm_vm_sdk + filesItem.data.code;
-        console.log(code);
         const { error, binary, text, stats, stderr } = await asc.compileString(code, {
           optimizeLevel: 4,
           runtime: 'stub',
           lib: 'assemblyscript-json/assembly/index',
           debug: true
         });
-        console.log(binary, text);
         if (error) {
           console.log(error);
           return toast.error(error.message);
@@ -90,7 +90,6 @@ const Editor = observer(() => {
           currentFolder.children[curWasmIndex] = wasmFile;
         }
         curFilesListSchema.setActiveFiles(wasmFile);
-        console.log('current folder ->', helper.log(curFilesListSchema.findCurFolder(curFilesListSchema.files)));
         toast.success('Compile Success!');
       } catch (error) {
         console.log(error);
@@ -104,54 +103,15 @@ const Editor = observer(() => {
       const { stderr, stdout } = await wasi.start();
       store.stdout = store.stdout.concat(stdout ?? []);
       store.stderr = store.stderr.concat(stderr ?? []);
-      console.log(stderr, stdout);
       setTimeout(() => {
         terminalRef.current.scrollTop = terminalRef.current.scrollHeight * 10000;
       }, 1);
     },
-    onGetCompileScript(raw) {
-      console.log(raw);
-      return `
-      <head>
-        <script>
-          async function compile() {
-            return await WebAssembly.compile(new Uint8Array([${raw}]));
-          }
-          async function instantiate(module, imports = {}) {
-            const __module0 = imports.module;
-            const adaptedImports = {
-              env: Object.assign(Object.create(globalThis), imports.env || {}, {
-                "Math.random": (
-                  Math.random
-                ),
-              }),
-              module: __module0,
-            };
-            const { exports } = await WebAssembly.instantiate(module, adaptedImports);
-            return exports;
-          }
-          </script>
-      </head>
-      `;
-    },
-    onGenHTMLRawData(filesItem: FilesItemType) {
-      const curWasmIndex = _.findIndex(curFilesListSchema?.activeFiles, (i) => i?.label.endsWith('.wasm'));
-      console.log(curFilesListSchema?.activeFiles, curWasmIndex, curFilesListSchema?.activeFiles[curWasmIndex]);
-      if (curWasmIndex == -1) return toast.error('No wasm file find!');
-      const arr = [];
-      console.log(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw);
-      for (let key in toJS(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw)) {
-        arr.push(toJS(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw)[key]);
-      }
-      this.curPreviewRawData = window.btoa(this.getCompileScript(arr) + filesItem.data.code);
-      this.showPreviewMode = true;
-    }
   }));
 
   useEffect(() => {
     const handleSave = (event) => {
       if (event.ctrlKey && event.key === 's') {
-        console.log('ctrl+s pressed');
         if (curFilesListSchema?.curActiveFileIs('ts')) {
           store.onCompile(curFilesListSchema?.curActiveFile);
         }
@@ -252,12 +212,6 @@ const Editor = observer(() => {
             </>
           );
         })}
-
-        {/* {curFilesListSchema?.curActiveFileIs('html') && (
-          <Tooltip label="Preview in html" placement="top">
-            <Text ml="auto" cursor="pointer" mr={4} className="pi pi-play" color="white" onClick={() => store.onGenHTMLRawData(curFilesListSchema?.curActiveFile)}></Text>
-          </Tooltip>
-        )} */}
 
         {curFilesListSchema?.curActiveFileIs('ts') && (
           <>
@@ -434,8 +388,25 @@ const Editor = observer(() => {
                           'sdk/index.d.ts'
                         );
                         monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-                        // asc = await import('assemblyscript/dist/asc');
-                        console.log(asc);
+                        // editor.createDecorationsCollection([
+                        //   {
+                        //     range: new monaco.Range(4, 17, 4, 22),
+                        //     options: {
+                        //       isWholeLine: true,
+                        //       linesDecorationsClassName: 'myLineDecoration'
+                        //     }
+                        //   }
+                        // ]);
+                        // monaco.languages.registerHoverProvider('typescript', {
+                        //   provideHover: function (model, position) {
+                        //     const word = model.getWordAtPosition(position);
+                        //     return {
+                        //       contents: [{ value: 'Click to debug' }],
+                        //       range: new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn)
+                        //     };
+                        //     return null;
+                        //   }
+                        // });
                         if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
                       }}
                       onChange={(e) => {

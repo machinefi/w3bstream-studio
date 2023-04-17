@@ -68,7 +68,6 @@ export class WasmNode extends BaseNode {
         wasm: null
       });
     }
-    console.log('wasmnode run', binary);
     node.output = {
       wasm: binary
     };

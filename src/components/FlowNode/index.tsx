@@ -36,7 +36,6 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
     realNodeInstance: new FlowNode(flow.nodeAbstracts.find((node) => node.description.name == nodeInstance.description.name)),
     curFlowNodeResult: null,
     onFlowRunResult(result) {
-      console.log(result);
       if (result.flowId == id) {
         store.curFlowNodeResult = result;
       }
@@ -347,7 +346,6 @@ export type NodeMenu = NodeMenuItem[];
 
 export const generateNodeGroupMenu = (nodeInstances: INodeType[]): NodeMenu => {
   const nodeMenu: NodeMenu = [];
-  console.log('nodeInstances', nodeInstances);
   nodeInstances.forEach((node) => {
     const group = nodeMenu.find((item) => item.group === node.description.group);
     if (group) {
@@ -360,6 +358,5 @@ export const generateNodeGroupMenu = (nodeInstances: INodeType[]): NodeMenu => {
       });
     }
   });
-  console.log(nodeMenu);
   return nodeMenu;
 };

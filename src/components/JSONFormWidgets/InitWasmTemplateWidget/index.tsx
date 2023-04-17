@@ -5,7 +5,7 @@ import { assemblyScriptExample, flowExample, simulationExample } from '@/constan
 import { helper } from '@/lib/helper';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-
+import { v4 as uuidv4 } from 'uuid';
 type Options = {};
 
 export interface InitWasmTemplateWidgetProps extends WidgetProps {
@@ -22,119 +22,56 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
   const store = useLocalObservable<{ curTemplate: typeof assemblyScriptExample }>(() => ({
     curTemplate: null
   }));
+
+  const templates = (v: typeof assemblyScriptExample, label: string) => {
+    return (
+      <>
+        <Flex alignItems="center" mt={2}>
+          <Text>{label}</Text>
+        </Flex>
+        <Flex
+          mt="10px"
+          id={id}
+          sx={{
+            width: '100%',
+            '& > div:not(:first-child)': {
+              marginLeft: '10px'
+            }
+          }}
+        >
+          {v?.children?.map((template) => (
+            <Flex
+              key={template.key}
+              flexDir="column"
+              justifyContent="center"
+              alignItems="center"
+              w={100 / v?.children?.length + '%'}
+              h="100px"
+              border="2px solid #EDEDED"
+              borderRadius="8px"
+              cursor="pointer"
+              style={{
+                borderColor: templateName === template.label ? '#946FFF' : '#EDEDED'
+              }}
+              onClick={() => {
+                onChange(JSON.stringify({ ...template, key: uuidv4() }));
+                setTemplateName(template.label);
+              }}
+            >
+              <Box mt="10px" fontWeight={700} fontSize="16px">
+                {helper.string.firstUpperCase(template.label.split('.')[0])}
+              </Box>
+            </Flex>
+          ))}
+        </Flex>
+      </>
+    );
+  };
   return (
     <>
-      <Flex alignItems="center">
-        <Text>{label}</Text>
-        {required && (
-          <chakra.span ml="0.25rem" color="#D34B46">
-            *
-          </chakra.span>
-        )}
-      </Flex>
-      <Flex
-        mt="10px"
-        id={id}
-        sx={{
-          width: '100%',
-          '& > div:not(:first-child)': {
-            marginLeft: '10px'
-          }
-        }}
-      >
-        <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-            {store.curTemplate?.label || 'Select a template'}
-          </MenuButton>
-          <MenuList>
-            <MenuGroup title="Assemblyscript">
-              {assemblyScriptExample.children.map((item) => {
-                return (
-                  <MenuItem
-                    w="90%"
-                    ml={4}
-                    key={item.label}
-                    onClick={() => {
-                      onChange(JSON.stringify(item));
-                      store.curTemplate = item;
-                      setTemplateName(item.label);
-                    }}
-                  >
-                    {item.label}
-                  </MenuItem>
-                );
-              })}
-            </MenuGroup>
-            <MenuDivider />
-            <MenuGroup title="Flow">
-              {flowExample.children.map((item) => {
-                return (
-                  <MenuItem
-                    w="90%"
-                    ml={4}
-                    key={item.label}
-                    onClick={() => {
-                      onChange(JSON.stringify(item));
-                      store.curTemplate = item;
-                      setTemplateName(item.label);
-                    }}
-                  >
-                    {item.label}
-                  </MenuItem>
-                );
-              })}
-            </MenuGroup>
-            <MenuDivider />
-            <MenuGroup title="Simulation">
-              {simulationExample.children.map((item) => {
-                return (
-                  <MenuItem
-                    w="90%"
-                    ml={4}
-                    key={item.label}
-                    onClick={() => {
-                      onChange(JSON.stringify(item));
-                      store.curTemplate = item;
-                      setTemplateName(item.label);
-                    }}
-                  >
-                    {item.label}
-                  </MenuItem>
-                );
-              })}
-            </MenuGroup>
-          </MenuList>
-        </Menu>
-        {/* {store.examples?.children?.map((template) => (
-          <Flex
-            key={template.key}
-            flexDir="column"
-            justifyContent="center"
-            alignItems="center"
-            w="200px"
-            h="200px"
-            border="2px solid #EDEDED"
-            borderRadius="8px"
-            cursor="pointer"
-            style={{
-              borderColor: templateName === template.label ? '#946FFF' : '#EDEDED'
-            }}
-            onClick={() => {
-              if (templateName === template.label) {
-                onChange('');
-                setTemplateName('');
-              } else {
-                onChange(template.data.code);
-                setTemplateName(template.label);
-              }
-            }}
-          >
-            <Box mt="10px" fontWeight={700} fontSize="16px">
-              {helper.string.firstUpperCase(template.label.split('.')[0])}
-            </Box>
-          </Flex>
-        ))} */}
-      </Flex>
+      {templates(assemblyScriptExample, 'AssemblyScript')}
+      {templates(flowExample, 'Flow')}
+      {templates(simulationExample, 'Simulation')}
     </>
   );
 });

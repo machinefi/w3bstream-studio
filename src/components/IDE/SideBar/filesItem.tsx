@@ -27,7 +27,6 @@ export const FilesItem = observer(() => {
       label: 'View Key',
       icon: 'pi pi-search',
       command: (e) => {
-        console.log(store.selectedNodeKey);
       }
     },
     {

@@ -67,7 +67,6 @@ export class FlowState {
   };
 
   addNodes = (newNode: Node<FlowNodeData> | Node<FlowNodeData>[]) => {
-    console.log('addNodes');
     this.nodes = this.nodes.concat(newNode);
     this.onDataChange();
   };
@@ -235,7 +234,6 @@ export class FlowState {
   async executeFlow() {
     this.nodes = this.nodes.map((node) => ({ ...node, input: {}, output: {} }));
     const triggerNodes = this.nodes.filter((node) => node.type === 'SimulationNode');
-    console.log(triggerNodes, 'triggerNodes');
     await Promise.all(
       triggerNodes.map(async (node) => {
         if (node.data.triggerInterval >= 0) {
@@ -267,13 +265,11 @@ export class FlowState {
         // console.log(variableNode, 'variableNode');
         return variableNode;
       });
-    console.log(JSON.parse(JSON.stringify(variablesFlows)), 'variablesFlows');
     let vars = {};
     await Promise.all(
       variablesFlows.map(async (i, index) => {
         const NodeClass2 = nodeManager.getClass(i.type);
         if (NodeClass2?.node_type == 'WasmNode') {
-          console.log('variable wasm');
           await NodeClass2.execute({
             input: {},
             output: {},
@@ -282,7 +278,6 @@ export class FlowState {
             callStackCurIdx: index
           });
           //@ts-ignore
-          console.log(i?.output, 'output');
           //@ts-ignore
           Object.assign(vars, i?.output);
         }
@@ -307,9 +302,7 @@ export class FlowState {
     if (callStack.length <= 1) return { is_run_over: true };
     for await (const [index, node] of callStack.entries()) {
       const variables = await this.handleVariable(node.id);
-      console.log(variables, 'variablesEdge');
       const NodeClass = nodeManager.getClass(node.type);
-      console.log(node);
       if (NodeClass?.node_type == 'SimulationNode') {
         await NodeClass.execute({
           input: {},
