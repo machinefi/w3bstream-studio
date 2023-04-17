@@ -51,7 +51,7 @@ const AddBtn = observer(() => {
           if (projectName) {
             const res = await axios.request({
               method: 'post',
-              url: `/api/w3bapp/event/${projectName}`,
+              url: `${process.env.NEXT_PUBLIC_EVENT_URL}/srv-applet-mgr/v0/event/${projectName}`,
               data: w3s.publisher.parseBody(formData.body)
             });
             if (res.data) {

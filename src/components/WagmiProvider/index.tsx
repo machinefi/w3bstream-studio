@@ -154,7 +154,7 @@ const Wallet = observer(() => {
         }
       });
     }
-  }, [isConnected, error, connector, chain, address]);
+  }, [isConnected, error, connector, chain, address, w3s.config.isLogin]);
 
   useEffect(() => {
     //@ts-ignore

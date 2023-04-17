@@ -119,7 +119,7 @@ const EventLogs = observer(() => {
             try {
               const res = await axios.request({
                 method: 'post',
-                url: `/api/w3bapp/event/${projectName}`,
+                url: `${process.env.NEXT_PUBLIC_EVENT_URL}/srv-applet-mgr/v0/event/${projectName}`,
                 data: publisher.parseBody(formData.body)
               });
               const wasmResult = res.data?.[0].wasmResults?.[0];
