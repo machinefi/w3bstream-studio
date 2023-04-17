@@ -202,17 +202,15 @@ const Projects = observer(() => {
                     0
                   </Box>
                 </Flex> */}
-                {project.f_description && (
-                  <Flex mt="20px" flexWrap="wrap">
-                    {project.f_description.split(',').map((tag) => {
-                      return (
-                        <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#000" fontSize="xs" border="1px solid #EDEDED" borderRadius="6px">
-                          {tag}
-                        </Box>
-                      );
-                    })}
-                  </Flex>
-                )}
+                <Flex mt="20px" flexWrap="wrap">
+                  {project.f_description && project.f_description.split(',').map((tag) => {
+                    return (
+                      <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#000" fontSize="xs" border="1px solid #EDEDED" borderRadius="6px">
+                        {tag}
+                      </Box>
+                    );
+                  })}
+                </Flex>
 
                 <Flex mt="10px" justifyContent="flex-end">
                   {instance && (
@@ -221,7 +219,7 @@ const Projects = observer(() => {
                         <Icon
                           ml="20px"
                           as={AiOutlinePauseCircle}
-                          boxSize={5}
+                          boxSize={'1rem'}
                           color="#946FFF"
                           cursor="pointer"
                           _hover={{ color: '#7D44FF' }}
@@ -239,9 +237,9 @@ const Projects = observer(() => {
                         />
                       ) : (
                         <Icon
-                          ml="20px"
+                          ml="16px"
                           as={AiOutlinePlayCircle}
-                          boxSize={5}
+                          boxSize={'1rem'}
                           color="#946FFF"
                           cursor="pointer"
                           _hover={{ color: '#7D44FF' }}

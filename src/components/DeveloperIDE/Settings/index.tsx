@@ -6,6 +6,7 @@ import { ProjectEnvs } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { showNotification } from '@mantine/notifications';
 
 const Settings = () => {
   const {
@@ -14,6 +15,7 @@ const Settings = () => {
   } = useStore();
 
   const store = useLocalObservable(() => ({
+    operateAddress: '',
     get wasmName() {
       const applets = applet.allData.find((item) => item.project_name === project.curProject?.f_name);
       return applets?.f_wasm_name;
@@ -23,11 +25,25 @@ const Settings = () => {
         return project.curProject.f_description.split(',');
       }
       return [];
+    },
+    getOperateAddress: async() => {
+     try {
+      const res = await axios.request({
+        method: 'get',
+        url: `/api/w3bapp/account/operatoraddr`,
+      });
+      if(res.data) {
+        store.operateAddress = res.data
+      }
+     } catch (error) {
+      console.log(error)
+     }
     }
   }));
 
   useEffect(() => {
     project.setMode('edit');
+    store.getOperateAddress();
   }, []);
 
   return (
@@ -40,6 +56,12 @@ const Settings = () => {
           <Box>WASM file name:</Box>
           <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
             {store.wasmName}
+          </Box>
+        </Flex>
+        <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
+          <Box>Operator Address:</Box>
+          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+            {store.operateAddress}
           </Box>
         </Flex>
         <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">

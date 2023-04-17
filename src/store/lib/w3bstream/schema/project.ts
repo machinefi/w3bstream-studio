@@ -277,7 +277,7 @@ export default class ProjectModule {
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
-      this.form.reset();
+      this.createProjectByWasmForm.reset();
     },
     value: new JSONValue<CreateProjectByWasmSchemaType>({
       //@ts-ignore
@@ -461,7 +461,6 @@ export default class ProjectModule {
           console.log('res.data', res.data);
           await showNotification({ message: `Create project succeeded` });
           eventBus.emit('project.create');
-          //todo: crash here
           // modals.openContextModal({
           //   id: 'projectstration',
           //   modal: 'projectstration',

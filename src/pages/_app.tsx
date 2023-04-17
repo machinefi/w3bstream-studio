@@ -53,12 +53,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Text size="sm">{innerProps.modalBody}</Text>
       <Button fullWidth mt="md" onClick={(e) => {
         try {
-          modals.closeAll();
-          w3s.headerTabs === 'PROJECTS'
-          w3s.project.resetSelectedNames();
-          w3s.project.allProjects.onSelect(0)
-          w3s.showContent = 'METRICS';
-          w3s.metrics.allMetrics.call();
+          console.log('xxx')
+          // modals.closeAll();
+          // w3s.headerTabs === 'PROJECTS'
+          // w3s.project.resetSelectedNames();
+          // w3s.project.allProjects.onSelect(0)
+          // w3s.showContent = 'METRICS';
+          // w3s.metrics.allMetrics.call();
         } catch (error) {
           toast.error(error.message)
         }
@@ -70,7 +71,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return useMemo(() => {
     return (
-      <ModalsProvider modals={{projectstration: GoToProjectModal}}>
         <InspectorWrapper
           // props see docs:
           // https://github.com/zthxxx/react-dev-inspector#inspector-component-props
@@ -87,12 +87,13 @@ function MyApp({ Component, pageProps }: AppProps) {
             <NotificationsProvider>
               <Toaster />
               <WagmiProvider>
-                <Component {...pageProps} />
+                <ModalsProvider modals={{projectstration: GoToProjectModal}}>
+                  <Component {...pageProps} />
+                </ModalsProvider>
               </WagmiProvider>
             </NotificationsProvider>
           </ChakraProvider>
         </InspectorWrapper>
-      </ModalsProvider>
     );
   }, [Component, pageProps]);
 }
