@@ -29,6 +29,24 @@ const Support = () => {
           </a>
         </GridItem>
         <GridItem w="412px" h="328px" bg="#fff">
+          <a href="http://developers.iotex.io/academy" target="_blank" rel="noopener noreferrer">
+            <Flex
+              w="100%"
+              h="100%"
+              flexDir="column"
+              justifyContent="center"
+              alignItems="center"
+              cursor="pointer"
+              _hover={{
+                boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+              }}
+            >
+              <Image boxSize={'70px'} color="#000" src="/images/Turorials.svg" />
+              <Box mt="32px">Tutorials</Box>
+            </Flex>
+          </a>
+        </GridItem>
+        <GridItem w="412px" h="328px" bg="#fff">
           <Flex
             w="100%"
             h="100%"
@@ -79,24 +97,7 @@ const Support = () => {
             <Box mt="32px">About</Box>
           </Flex>
         </GridItem>
-        <GridItem w="412px" h="328px" bg="#fff">
-          <a href="http://developers.iotex.io/academy" target="_blank" rel="noopener noreferrer">
-            <Flex
-              w="100%"
-              h="100%"
-              flexDir="column"
-              justifyContent="center"
-              alignItems="center"
-              cursor="pointer"
-              _hover={{
-                boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
-              }}
-            >
-              <Image boxSize={'70px'} color="#000" src="/images/Turorials.svg" />
-              <Box mt="32px">Tutorials</Box>
-            </Flex>
-          </a>
-        </GridItem>
+
       </Grid>
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
