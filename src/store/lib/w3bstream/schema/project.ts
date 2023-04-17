@@ -439,6 +439,7 @@ export default class ProjectModule {
     //   "applets": [{ "wasmRaw": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-ts-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
     //   "datas": []
     // }
+    console.log(formData.file);
     if (formData.file && formData.projectName) {
       const initProjectData: { project: Project[] } = {
         project: [
@@ -450,24 +451,29 @@ export default class ProjectModule {
           }
         ]
       };
-      const res = await axios.request({
-        method: 'post',
-        url: `/api/init`,
-        data: initProjectData
-      });
-      if (res.data) {
-        console.log('res.data', res.data)
-        await showNotification({ message: `Create project succeeded` });
-        eventBus.emit('project.create');
-        modals.openContextModal({
-          id: 'projectstration',
-          modal: 'projectstration',
-          title: 'Go to the project',
-          centered: true,
-          innerProps: {
-            modalBody: 'create success, you can view new project',
-          },
-        })
+      try {
+        const res = await axios.request({
+          method: 'post',
+          url: `/api/init`,
+          data: initProjectData
+        });
+        if (res.data) {
+          console.log('res.data', res.data);
+          await showNotification({ message: `Create project succeeded` });
+          eventBus.emit('project.create');
+          //todo: crash here
+          // modals.openContextModal({
+          //   id: 'projectstration',
+          //   modal: 'projectstration',
+          //   title: 'Go to the project',
+          //   centered: true,
+          //   innerProps: {
+          //     modalBody: 'create success, you can view new project'
+          //   }
+          // });
+        }
+      } catch (error) {
+        console.log('error', error);
       }
     }
   }

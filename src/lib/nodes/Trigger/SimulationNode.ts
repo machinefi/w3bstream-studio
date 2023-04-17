@@ -59,13 +59,11 @@ export class SimulationNode extends BaseNode {
       //sdk https://github.com/nuysoft/Mock/wiki/Getting-Started mockjs
       const res = new Function('faker', node.data.code)(faker);
       node.output = res;
-      console.log('simulation', res);
       eventBus.emit('flow.run.result', {
         flowId: node.id,
         success: true
       });
     } catch (e) {
-      console.log(e.message, 'simulation');
       eventBus.emit('flow.run.result', {
         flowId: node.id,
         success: false,
@@ -98,7 +96,23 @@ export class SimulationNode extends BaseNode {
                     'ui:options': {
                       emptyValue: ``,
                       lang: 'javascript',
-                      editorHeight: '400px'
+                      editorHeight: '400px',
+                      showCodeSelector: `={{(()=>{
+                        const files = [];
+                        const findSimulationCode = (arr) => {
+                          arr?.forEach((i) => {
+                            if (i.data?.dataType === 'simulation') {
+                              files.push({ label: i.label, value: i.data.code , id: i.key});
+                            } else if (i.type === 'folder') {
+                              findSimulationCode(i.children);
+                            }
+                          });
+                        };
+                        findSimulationCode(globalThis.store.w3s.projectManager.curFilesList ?? []);
+                        return files || [];
+                      })()}}=`
+                        .replace(/[\n]/g, '')
+                        .replace(/\s+/g, ' ')
                     }
                   },
                   fieldLabelLayout: {

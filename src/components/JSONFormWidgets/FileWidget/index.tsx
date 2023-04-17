@@ -67,7 +67,7 @@ function FilesInfo({ filesInfo }: { filesInfo: { name: string; size: number; typ
 }
 
 function extractFileInfo(dataURLs: string[]) {
-  return dataURLs
+  const res = dataURLs
     .filter((dataURL) => typeof dataURL !== 'undefined')
     .map((dataURL) => {
       const { blob, name } = dataURItoBlob(dataURL);
@@ -77,6 +77,8 @@ function extractFileInfo(dataURLs: string[]) {
         type: blob.type
       };
     });
+  console.log(res);
+  return res;
 }
 
 type Options = {
@@ -101,7 +103,7 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
   useEffect(() => {
     if (value) {
-      Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value]);
+      Array.isArray(value) ? setFilesInfo(extractFileInfo(value)) : setFilesInfo(extractFileInfo([value]));
     } else {
       setFilesInfo([]);
     }

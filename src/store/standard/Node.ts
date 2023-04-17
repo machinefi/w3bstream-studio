@@ -4,6 +4,7 @@ import { UiSchema } from '@rjsf/utils';
 import { JSONSchemaFormState, JSONValue } from './JSONSchemaState';
 import { v4 as uuid } from 'uuid';
 import { _ } from '@/lib/lodash';
+import { result } from 'lodash';
 export class FlowNode {
   uuid: string;
   description: INodeTypeDescription;
@@ -22,6 +23,7 @@ export class FlowNode {
   init(args: Partial<INodeType>): INodeType {
     Object.assign(this, args);
     const argsString = this.templateSyntaxInterpreter(JSON.stringify(args));
+    // console.log(argsString);
     const argsJson: INodeType = JSON.parse(argsString);
     // console.log(argsJson);
     this.form = _.cloneDeep(argsJson.form);
@@ -101,15 +103,23 @@ export class FlowNode {
   }
 
   templateSyntaxInterpreter = (str: string): string => {
-    return str?.replace(/=\{\{(.+?)\}\}/g, (match, expression) => {
+    str = str?.replace(/"=\{\{(.+?)\}\}="/g, (match, expression) => {
       try {
-        console.log(new Function(`return ${expression}`)());
-        return new Function(`return ${this.mountScope(expression)}`)();
+        const result = new Function('uuid', `return ${expression}`)(uuid);
+        if (typeof result === 'string') {
+          // console.log(result);
+          return `"${result}"`;
+        } else {
+          // console.log(JSON.stringify(result));
+          return JSON.stringify(result);
+        }
       } catch (error) {
+        console.log(expression, 'error');
         console.log(error);
-        return `={{${this.mountScope(expression)}}}`;
+        return `={{${expression.replace(/[\r\n]/g, '')}}}=`;
       }
     });
+    return str;
   };
 
   mountScope = (expression: string): string => {

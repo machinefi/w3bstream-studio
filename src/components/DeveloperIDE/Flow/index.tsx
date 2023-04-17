@@ -67,8 +67,8 @@ const MenuItemCollapse = ({ nodeMenuItem, addNode }: { nodeMenuItem: NodeMenuIte
 };
 
 type LocalStoreType = {
-  selectFlow: (id: number) => void;
-  currentFlowInfo: any;
+  // selectFlow: (id: number) => void;
+  currentFlowInfo: { nodes: any[]; edges: any[] };
   nodeTypes: NodeTypes;
   nodeMenu: NodeMenuItem[];
   flowHasChanged: boolean;
@@ -81,7 +81,8 @@ const Flow = observer(() => {
   const {
     w3s: {
       flowModule,
-      flowModule: { flow }
+      flowModule: { flow },
+      projectManager: { curFilesListSchema }
     }
   } = useStore();
   // const { classes } = useStyles();
@@ -94,7 +95,7 @@ const Flow = observer(() => {
     flows: [],
     nodeTypes: {},
     nodeMenu: [],
-    currentFlowInfo: {},
+    currentFlowInfo: null,
     flowHasChanged: false,
     async init() {
       await flowModule.flow.initNodes.call();
@@ -102,36 +103,36 @@ const Flow = observer(() => {
       this.nodeMenu = generateNodeGroupMenu(flowModule.flow.nodeInstances);
     },
     async initFlow() {
-      this.flows = await IndexDb.findFlows();
-      if (this.flows.length > 0) {
-        this.selectFlow(this.flows[0].id);
-      }
-    },
-    async selectFlow(id: number) {
-      // this.init();
-      this.flows = await IndexDb.findFlows();
-      const curFlow = this.flows.find((f) => f.id === id);
-      console.log(curFlow);
-      if (curFlow) {
-        flow.curFlowId = id;
-        this.currentFlowInfo = curFlow;
-        flowModule.flow.importJSON(curFlow.data);
-      }
+      // this.flows = await IndexDb.findFlows();
+      // if (this.flows.length > 0) {
+      //   this.selectFlow(this.flows[0].id);
+      // }
+      this.currentFlowInfo = curFilesListSchema?.curActiveFile.data;
+      flowModule.flow.importJSON(this.currentFlowInfo);
+      flow.curFlowRunning = false;
     }
+    // async selectFlow(id: number) {
+    //   // this.init();
+    //   this.flows = await IndexDb.findFlows();
+    //   const curFlow = this.flows.find((f) => f.id === id);
+    //   console.log(curFlow);
+    //   if (curFlow) {
+    //     flow.curFlowId = id;
+    //     this.currentFlowInfo = curFlow;
+    //     flowModule.flow.importJSON(curFlow.data);
+    //   }
+    // }
   }));
 
   useEffect(() => {
-    // if (id) {
-    //   flowModule.findFlowById(Number(id)).then((flow) => {
-    //     store.currentFlowInfo = flow;
-    //   });
-    // }
+    store.initFlow();
+
+  }, [curFilesListSchema.curActiveFileId]);
+
+  useEffect(() => {
     flow.onDataChange = () => {
-      const flowData = flow.exportData();
-      if (!_.isEqual(flowData, store.currentFlowInfo?.data)) {
-        store.flowHasChanged = true;
-      }
-      flow.syncToIndexDb();
+      curFilesListSchema.curActiveFile.data = flow.exportData();
+      curFilesListSchema.syncToIndexDb();
     };
 
     flow.onConnectEnd = (event) => {
@@ -150,9 +151,10 @@ const Flow = observer(() => {
           }
         });
       }
-      flow.syncToIndexDb();
+      curFilesListSchema.curActiveFile.data = flow.exportData();
+      curFilesListSchema.syncToIndexDb();
     };
-    store.initFlow();
+
     store.init();
   }, []);
 
@@ -210,9 +212,9 @@ const Flow = observer(() => {
   );
 
   return (
-    <Flex w="100%" h="calc(100vh - 100px)">
+    <Flex w="100%" h="calc(100vh - 180px)">
       {/* left menu  */}
-      <Flex overflowY="auto" direction={'column'} w="250px" h="100%" p="20px 10px" bg="#fff" mr={8} style={{ borderRadius: '12px' }}>
+      {/* <Flex overflowY="auto" direction={'column'} w="250px" h="100%" p="20px 10px" bg="#fff" mr={8} style={{ borderRadius: '12px' }}>
         <Box>
           <Button
             leftIcon={<AiOutlinePlus />}
@@ -261,80 +263,74 @@ const Flow = observer(() => {
             </Flex>
           ))}
         </Flex>
-      </Flex>
+      </Flex> */}
 
       <Box pos="relative" w="100%" h="100%">
-        {flow.curFlowId ? (
-          <>
-            <ContextMenuTrigger id="flow-box" holdToDisplay={-1}>
-              <Box pos="absolute" top="0" left="0" w="100%" h="100%" ref={reactFlowWrapper}>
-                <ReactFlow
-                  fitView
-                  selectNodesOnDrag={false}
-                  minZoom={0.5}
-                  maxZoom={1.5}
-                  onInit={flow.onInit}
-                  nodes={flow.nodes.map((i) => ({ ...i, dragHandle: '.drag-handle' }))}
-                  edges={flow.edges}
-                  onNodesChange={flow.onNodesChange}
-                  onEdgesChange={flow.onEdgesChange}
-                  onConnect={flow.onConnect}
-                  nodeTypes={store.nodeTypes}
-                  onConnectStart={flow.onConnectStart}
-                  onConnectEnd={flow.onConnectEnd}
-                  onEdgeUpdateStart={flow.onEdgeUpdateStart}
-                  onEdgeUpdate={flow.onEdgeUpdate}
-                  onEdgeUpdateEnd={flow.onEdgeUpdateEnd}
-                >
-                  <Background />
-                  <Controls />
-                </ReactFlow>
-              </Box>
-            </ContextMenuTrigger>
-            <Flex pos="absolute" top="20px" right="20px">
-              {flow.copiedNodes.length > 0 && (
-                <Button
-                  mr="10px"
-                  style={{
-                    background: '#000',
-                    color: '#fff',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => {
-                    flow.pasteNodes();
-                  }}
-                >
-                  Paste Nodes
-                </Button>
-              )}
+        <>
+          <ContextMenuTrigger id="flow-box" holdToDisplay={-1}>
+            <Box pos="absolute" top="0" left="0" w="100%" h="100%" ref={reactFlowWrapper}>
+              <ReactFlow
+                fitView
+                selectNodesOnDrag={false}
+                minZoom={0.5}
+                maxZoom={1.5}
+                onInit={flow.onInit}
+                nodes={flow.nodes.map((i) => ({ ...i, dragHandle: '.drag-handle' }))}
+                edges={flow.edges}
+                onNodesChange={flow.onNodesChange}
+                onEdgesChange={flow.onEdgesChange}
+                onConnect={flow.onConnect}
+                nodeTypes={store.nodeTypes}
+                onConnectStart={flow.onConnectStart}
+                onConnectEnd={flow.onConnectEnd}
+                onEdgeUpdateStart={flow.onEdgeUpdateStart}
+                onEdgeUpdate={flow.onEdgeUpdate}
+                onEdgeUpdateEnd={flow.onEdgeUpdateEnd}
+              >
+                <Background />
+                <Controls />
+              </ReactFlow>
+            </Box>
+          </ContextMenuTrigger>
+          <Flex pos="absolute" top="20px" right="20px">
+            {flow.copiedNodes.length > 0 && (
               <Button
-                mr="0px"
+                mr="10px"
                 style={{
                   background: '#000',
                   color: '#fff',
                   cursor: 'pointer'
                 }}
-                // VscDebugPause
-                rightIcon={flow.curFlowRunning ? <VscDebugPause /> : <VscDebugStart />}
                 onClick={() => {
-                  if (flow.curFlowRunning) {
-                    flow.curFlowRunning = false;
-                    return;
-                  } else {
-                    flow.curFlowRunning = true;
-                    flow.executeFlow();
-                  }
+                  flow.pasteNodes();
                 }}
               >
-                {flow.curFlowRunning ? 'Pause' : 'Start'}
+                Paste Nodes
               </Button>
-            </Flex>
-          </>
-        ) : (
-          <Box textAlign={'center'} mt="20%">
-            No Flow
-          </Box>
-        )}
+            )}
+            <Button
+              mr="0px"
+              style={{
+                background: '#000',
+                color: '#fff',
+                cursor: 'pointer'
+              }}
+              // VscDebugPause
+              rightIcon={flow.curFlowRunning ? <VscDebugPause /> : <VscDebugStart />}
+              onClick={() => {
+                if (flow.curFlowRunning) {
+                  flow.curFlowRunning = false;
+                  return;
+                } else {
+                  flow.curFlowRunning = true;
+                  flow.executeFlow();
+                }
+              }}
+            >
+              {flow.curFlowRunning ? 'Pause' : 'Start'}
+            </Button>
+          </Flex>
+        </>
       </Box>
 
       <ContextMenu

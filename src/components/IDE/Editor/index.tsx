@@ -18,8 +18,9 @@ import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
 import { defaultButtonStyle } from '@/lib/theme';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import { modals } from '@mantine/modals';
 import { asc } from 'pages/_app';
+import Flow from '@/components/DeveloperIDE/Flow';
+import { modals } from '@mantine/modals';
 
 const Editor = observer(() => {
   const {
@@ -57,14 +58,12 @@ const Editor = observer(() => {
       if (!filesItem.label.endsWith('.ts')) return;
       try {
         const code = wasm_vm_sdk + filesItem.data.code;
-        console.log(code);
         const { error, binary, text, stats, stderr } = await asc.compileString(code, {
           optimizeLevel: 4,
           runtime: 'stub',
           lib: 'assemblyscript-json/assembly/index',
           debug: true
         });
-        console.log(binary, text);
         if (error) {
           console.log(error);
           return toast.error(error.message);
@@ -90,7 +89,6 @@ const Editor = observer(() => {
           currentFolder.children[curWasmIndex] = wasmFile;
         }
         curFilesListSchema.setActiveFiles(wasmFile);
-        console.log('current folder ->', helper.log(curFilesListSchema.findCurFolder(curFilesListSchema.files)));
         toast.success('Compile Success!');
       } catch (error) {
         console.log(error);
@@ -104,54 +102,15 @@ const Editor = observer(() => {
       const { stderr, stdout } = await wasi.start();
       store.stdout = store.stdout.concat(stdout ?? []);
       store.stderr = store.stderr.concat(stderr ?? []);
-      console.log(stderr, stdout);
       setTimeout(() => {
         terminalRef.current.scrollTop = terminalRef.current.scrollHeight * 10000;
       }, 1);
-    },
-    onGetCompileScript(raw) {
-      console.log(raw);
-      return `
-      <head>
-        <script>
-          async function compile() {
-            return await WebAssembly.compile(new Uint8Array([${raw}]));
-          }
-          async function instantiate(module, imports = {}) {
-            const __module0 = imports.module;
-            const adaptedImports = {
-              env: Object.assign(Object.create(globalThis), imports.env || {}, {
-                "Math.random": (
-                  Math.random
-                ),
-              }),
-              module: __module0,
-            };
-            const { exports } = await WebAssembly.instantiate(module, adaptedImports);
-            return exports;
-          }
-          </script>
-      </head>
-      `;
-    },
-    onGenHTMLRawData(filesItem: FilesItemType) {
-      const curWasmIndex = _.findIndex(curFilesListSchema?.activeFiles, (i) => i?.label.endsWith('.wasm'));
-      console.log(curFilesListSchema?.activeFiles, curWasmIndex, curFilesListSchema?.activeFiles[curWasmIndex]);
-      if (curWasmIndex == -1) return toast.error('No wasm file find!');
-      const arr = [];
-      console.log(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw);
-      for (let key in toJS(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw)) {
-        arr.push(toJS(curFilesListSchema?.activeFiles[curWasmIndex].data.extraData?.raw)[key]);
-      }
-      this.curPreviewRawData = window.btoa(this.getCompileScript(arr) + filesItem.data.code);
-      this.showPreviewMode = true;
     }
   }));
 
   useEffect(() => {
     const handleSave = (event) => {
       if (event.ctrlKey && event.key === 's') {
-        console.log('ctrl+s pressed');
         if (curFilesListSchema?.curActiveFileIs('ts')) {
           store.onCompile(curFilesListSchema?.curActiveFile);
         }
@@ -253,12 +212,6 @@ const Editor = observer(() => {
           );
         })}
 
-        {/* {curFilesListSchema?.curActiveFileIs('html') && (
-          <Tooltip label="Preview in html" placement="top">
-            <Text ml="auto" cursor="pointer" mr={4} className="pi pi-play" color="white" onClick={() => store.onGenHTMLRawData(curFilesListSchema?.curActiveFile)}></Text>
-          </Tooltip>
-        )} */}
-
         {curFilesListSchema?.curActiveFileIs('ts') && (
           <>
             <Tooltip label="Compile to wasm (ctrl+s)" placement="top">
@@ -279,7 +232,7 @@ const Editor = observer(() => {
                 onClick={async () => {
                   w3s.project.createProjectByWasmForm.value.set({
                     // projectName: w3s.project.curProject?.f_name,
-                    file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw),
+                    file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw)
                     // appletName: ''
                   });
                   w3s.project.createProjectByWasm();
@@ -288,42 +241,44 @@ const Editor = observer(() => {
             </Tooltip>
 
             <Box position={'relative'}>
-              <Box onClick={() => {
-                modals.open({
-                  title: 'Send Simulated Event',
-                  centered: true,
-                  size: "lg",
-                  children: (
-                    <Box>
-                      <MonacoEditor
-                        height={300}
-                        language="json"
-                        key="json-monaco"
-                        theme="vs-dark"
-                        value={JSON.stringify(store.wasmPayload, null, 2)}
-                        onChange={(e) => {
-                          try {
-                            store.wasmPayload = JSON.parse(e);
-                          } catch (error) {}
-                          console.log(e);
-                        }}
-                      ></MonacoEditor>
-                      <Button
-                        {...defaultButtonStyle}
-                        size="lg"
-                        mt={'10px'}
-                        w="100%"
-                        py="0.5rem"
-                        onClick={async () => {
-                          store.onDebugWASM();
-                        }}
-                      >
-                        Send Simulated Event
-                      </Button>
-                    </Box>
-                  ),
-                });
-              }}>
+              <Box
+                onClick={() => {
+                  modals.open({
+                    title: 'Send Simulated Event',
+                    centered: true,
+                    size: 'lg',
+                    children: (
+                      <Box>
+                        <MonacoEditor
+                          height={300}
+                          language="json"
+                          key="json-monaco"
+                          theme="vs-dark"
+                          value={JSON.stringify(store.wasmPayload, null, 2)}
+                          onChange={(e) => {
+                            try {
+                              store.wasmPayload = JSON.parse(e);
+                            } catch (error) {}
+                            console.log(e);
+                          }}
+                        ></MonacoEditor>
+                        <Button
+                          {...defaultButtonStyle}
+                          size="lg"
+                          mt={'10px'}
+                          w="100%"
+                          py="0.5rem"
+                          onClick={async () => {
+                            store.onDebugWASM();
+                          }}
+                        >
+                          Send Simulated Event
+                        </Button>
+                      </Box>
+                    )
+                  });
+                }}
+              >
                 <VscDebugStart
                   color="white"
                   style={{
@@ -346,115 +301,125 @@ const Editor = observer(() => {
             flexDirection: 'column'
           }}
         >
-          {store.showPreviewMode ? (
-            <iframe
-              style={{
-                background: '#1e1e1e'
-              }}
-              frameBorder="0"
-              height={400}
-              src={`data:text/html;base64,${store.curPreviewRawData}`}
-              sandbox="allow-scripts allow-pointer-lock"
-            ></iframe>
-          ) : (
-            <div
-              style={{
-                display: 'flex'
-              }}
-              onMouseEnter={() => {
-                curFilesListSchema.unlockFile();
-              }}
-              onMouseLeave={() => {
-                curFilesListSchema.lockedFile();
-              }}
-            >
-              {curFilesListSchema?.curActiveFile.label.endsWith('.wasm') ? (
-                <Flex flexDirection={'column'} w="full">
-                  <Center bg={'#1e1e1e'} width={'100%'} height={300} color="white">
-                    {/* This file is a binary file and cannot be opened in the editor! */}
-                    <MonacoEditor key="wasm-monaco" theme="vs-dark" value={curFilesListSchema?.curActiveFile?.data?.code}></MonacoEditor>
-                  </Center>
-                  <Flex borderTop={'2px solid #090909'} bg="#1e1e1e" color="white" pt={1}>
-                    <VscClearAll
-                      onClick={() => {
-                        store.stdout = [];
-                        store.stderr = [];
-                      }}
-                      cursor={'pointer'}
-                      style={{ marginLeft: 'auto', marginRight: '20px' }}
-                    />
-                  </Flex>
-                  <Box
-                    ref={terminalRef}
-                    id="terminal"
-                    fontFamily="monospace"
-                    w="100%"
-                    h="calc(100vh - 480px)"
-                    p="10px"
-                    bg="#1e1e1e"
-                    color="white"
-                    whiteSpace="pre-line"
-                    overflowY="auto"
-                    position="relative"
-                  >
-                    {store.stdout?.map((i) => {
-                      return (
-                        <Flex>
-                          <Flex color="#d892ff" mr={2} whiteSpace="nowrap">
-                            [wasmvm -
-                            {
-                              <>
-                                <Box color="#ffd300" ml={1}>
-                                  {dayjs(i?.['@ts']).format('hh:mm:ss')}
-                                </Box>
-                              </>
-                            }
-                            ]
-                          </Flex>
-                          {JSON.stringify(i)}
-                        </Flex>
-                      );
-                    })}
-                  </Box>
-                </Flex>
-              ) : (
-                <Flex flexDirection={'column'} w="full">
-                  <MonacoEditor
-                    // defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
-                    width={'100%'}
-                    height={400}
-                    key="monaco"
-                    theme="vs-dark"
-                    defaultLanguage="typescript"
-                    language="typescript"
-                    defaultValue="export function test(): void {}"
-                    value={curFilesListSchema?.curActiveFile?.data?.code}
-                    beforeMount={(monaco) => {}}
-                    onMount={async (editor, monaco) => {
-                      monaco.languages.typescript.typescriptDefaults.addExtraLib(
-                        `
-                        declare const Log: (message:string) => void;
-                        declare const SetDB: (key: string, value: number) => void;
-                        declare const GetDB: (key: string) => string;
-                        declare const SendTx: (chainId: number, to:string, value:string ,data:string) => string | null;
-                        declare const GetDataByRID: (rid: number) => string;
-                        `,
-                        'sdk/index.d.ts'
-                      );
-                      monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-                      // asc = await import('assemblyscript/dist/asc');
-                      console.log(asc);
-                      if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
+          <div
+            style={{
+              display: 'flex'
+            }}
+            onMouseEnter={() => {
+              curFilesListSchema.unlockFile();
+            }}
+            onMouseLeave={() => {
+              curFilesListSchema.lockedFile();
+            }}
+          >
+            {curFilesListSchema?.curActiveFileIs('wasm') ? (
+              <Flex flexDirection={'column'} w="full">
+                <Center bg={'#1e1e1e'} width={'100%'} height={300} color="white">
+                  {/* This file is a binary file and cannot be opened in the editor! */}
+                  <MonacoEditor key="wasm-monaco" theme="vs-dark" value={curFilesListSchema?.curActiveFile?.data?.code}></MonacoEditor>
+                </Center>
+                <Flex borderTop={'2px solid #090909'} bg="#1e1e1e" color="white" pt={1}>
+                  <VscClearAll
+                    onClick={() => {
+                      store.stdout = [];
+                      store.stderr = [];
                     }}
-                    onChange={(e) => {
-                      curFilesListSchema.setCurFileCode(e);
-                    }}
+                    cursor={'pointer'}
+                    style={{ marginLeft: 'auto', marginRight: '20px' }}
                   />
                 </Flex>
-              )}
-            </div>
-          )}
-          {/* <Box mt={4} w="100%" h="200px" p="10px" bg="#1D262D" color="#98AABA" whiteSpace="pre-line" overflowY="auto" dangerouslySetInnerHTML={{ __html: '123123' }} /> */}
+                <Box
+                  ref={terminalRef}
+                  id="terminal"
+                  fontFamily="monospace"
+                  w="100%"
+                  h="calc(100vh - 480px)"
+                  p="10px"
+                  bg="#1e1e1e"
+                  color="white"
+                  whiteSpace="pre-line"
+                  overflowY="auto"
+                  position="relative"
+                >
+                  {store.stdout?.map((i) => {
+                    return (
+                      <Flex>
+                        <Flex color="#d892ff" mr={2} whiteSpace="nowrap">
+                          [wasmvm -{' '}
+                          {
+                            <>
+                              <Box color="#ffd300" ml={1}>
+                                {dayjs(i?.['@ts']).format('hh:mm:ss')}
+                              </Box>
+                            </>
+                          }
+                          ]
+                        </Flex>{' '}
+                        {JSON.stringify(i)}
+                      </Flex>
+                    );
+                  })}
+                </Box>
+              </Flex>
+            ) : (
+              <>
+                {curFilesListSchema?.curActiveFileIs('flow') ? (
+                  <Flow></Flow>
+                ) : (
+                  <Flex flexDirection={'column'} w="full">
+                    <MonacoEditor
+                      // defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
+                      width={'100%'}
+                      height={400}
+                      key="monaco"
+                      theme="vs-dark"
+                      defaultLanguage="typescript"
+                      language="typescript"
+                      defaultValue="export function test(): void {}"
+                      value={curFilesListSchema?.curActiveFile?.data?.code}
+                      beforeMount={(monaco) => {}}
+                      onMount={async (editor, monaco) => {
+                        monaco.languages.typescript.typescriptDefaults.addExtraLib(
+                          `
+                            declare const Log: (message:string) => void;
+                            declare const SetDB: (key: string, value: number) => void;
+                            declare const GetDB: (key: string) => string;
+                            declare const SendTx: (chainId: number, to:string, value:string ,data:string) => string | null;
+                            declare const GetDataByRID: (rid: number) => string;
+                            `,
+                          'sdk/index.d.ts'
+                        );
+                        monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
+                        // editor.createDecorationsCollection([
+                        //   {
+                        //     range: new monaco.Range(4, 17, 4, 22),
+                        //     options: {
+                        //       isWholeLine: true,
+                        //       linesDecorationsClassName: 'myLineDecoration'
+                        //     }
+                        //   }
+                        // ]);
+                        // monaco.languages.registerHoverProvider('typescript', {
+                        //   provideHover: function (model, position) {
+                        //     const word = model.getWordAtPosition(position);
+                        //     return {
+                        //       contents: [{ value: 'Click to debug' }],
+                        //       range: new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn)
+                        //     };
+                        //     return null;
+                        //   }
+                        // });
+                        if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
+                      }}
+                      onChange={(e) => {
+                        curFilesListSchema.setCurFileCode(e);
+                      }}
+                    />
+                  </Flex>
+                )}
+              </>
+            )}
+          </div>
         </main>
       ) : (
         <>No File Selected!</>

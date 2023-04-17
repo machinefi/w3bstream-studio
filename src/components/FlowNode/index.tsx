@@ -36,7 +36,6 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
     realNodeInstance: new FlowNode(flow.nodeAbstracts.find((node) => node.description.name == nodeInstance.description.name)),
     curFlowNodeResult: null,
     onFlowRunResult(result) {
-      console.log(result);
       if (result.flowId == id) {
         store.curFlowNodeResult = result;
       }
@@ -47,15 +46,16 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
 
   useEffect(() => {
     eventBus.on('flow.run.result', store.onFlowRunResult);
-
     function handleKeyDown(event) {
       if (id == flow.curEditNodeId) {
         flow.editNode(id, toJS(store.realNodeInstance.getJSONFormValue()) as any);
       }
     }
+    document.addEventListener('click', handleKeyDown);
     document.addEventListener('keyup', handleKeyDown);
     return () => {
       document.removeEventListener('keyup', handleKeyDown);
+      document.removeEventListener('click', handleKeyDown);
       eventBus.off('flow.run.result', store.onFlowRunResult);
     };
   }, []);
@@ -346,7 +346,6 @@ export type NodeMenu = NodeMenuItem[];
 
 export const generateNodeGroupMenu = (nodeInstances: INodeType[]): NodeMenu => {
   const nodeMenu: NodeMenu = [];
-  console.log('nodeInstances', nodeInstances);
   nodeInstances.forEach((node) => {
     const group = nodeMenu.find((item) => item.group === node.description.group);
     if (group) {
@@ -359,6 +358,5 @@ export const generateNodeGroupMenu = (nodeInstances: INodeType[]): NodeMenu => {
       });
     }
   });
-  console.log(nodeMenu);
   return nodeMenu;
 };

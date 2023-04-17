@@ -47,7 +47,7 @@ export function Log(message: string): i32 {
   let strEncoded = String.UTF8.encode(message, false);
   let message_ptr = changetype<usize>(strEncoded);
   let message_size = strEncoded.byteLength;
-  ws_log(3, message_ptr, message_size); // logInfoLevel = 3
+  ws_log(4, message_ptr, message_size); // logInfoLevel = 3
   return 0;
 }
 
