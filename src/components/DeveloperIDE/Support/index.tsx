@@ -92,7 +92,7 @@ const Support = () => {
                 boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
               }}
             >
-              <Image boxSize={'70px'} color="#000" src="/images/tutorials.svg" />
+              <Image boxSize={'70px'} color="#000" src="/images/Turorials.svg" />
               <Box mt="32px">Tutorials</Box>
             </Flex>
           </a>
