@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Flex, chakra, Box, Text, Stack, FlexProps, Icon } from '@chakra-ui/react';
 import { dataURItoBlob, WidgetProps } from '@rjsf/utils';
 import { Accept, useDropzone } from 'react-dropzone';
@@ -98,13 +98,14 @@ export type FileWidgetUIOptions = {
 
 const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: FileWidgetProps) => {
   const { accept, maxFiles = 0, multiple = false, tips, flexProps = {} } = options;
-  const extractedFilesInfo = useMemo(() => {
-    if (!value) {
-      return [];
+  const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
+  useEffect(() => {
+    if (value) {
+      Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value]);
+    } else {
+      setFilesInfo([]);
     }
-    return Array.isArray(value) ? extractFileInfo(value) : extractFileInfo([value]);
   }, [value]);
-  const [filesInfo, setFilesInfo] = useState<FileInfoType[]>(extractedFilesInfo);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {

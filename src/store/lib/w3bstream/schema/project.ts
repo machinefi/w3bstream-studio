@@ -243,6 +243,16 @@ export default class ProjectModule {
         description: '',
         template: '',
         file: ''
+      },
+      onSet(e) {
+        const { template, file } = e;
+        if (template && template != this.value.template) {
+          e.file = '';
+        }
+        if (file && file != this.value.file) {
+          e.template = '';
+        }
+        return e;
       }
     })
   });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
 import { Text, Flex, Image, chakra, Box, FlexProps } from '@chakra-ui/react';
 import initTemplates from '@/constants/initTemplates.json';
@@ -19,6 +19,9 @@ export interface InitializationTemplateWidgetUIOptions {
 function InitializationTemplateWidget({ id, options, value, required, label, onChange }: InitializationTemplateWidgetProps) {
   const [templateName, setTemplateName] = useState('');
   const { flexProps = {} } = options;
+  useEffect(() => {
+    setTemplateName(value);
+  }, [value]);
   return (
     <>
       <Flex alignItems="center">
