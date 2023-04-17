@@ -24,14 +24,16 @@ export const FileIcon = (file: FilesItemType) => {
     w: 5,
     mr: 1
   };
-  if (file?.label.endsWith('.go')) {
+  if (file?.label?.endsWith('.go')) {
     return <Image {...s} src="/images/icons/go.svg"></Image>;
-  } else if (file?.label.endsWith('.html')) {
+  } else if (file?.label?.endsWith('.html')) {
     return <Image {...s} src="/images/icons/html.svg"></Image>;
-  } else if (file?.label.endsWith('.ts')) {
+  } else if (file?.label?.endsWith('.ts')) {
     return <Image {...s} src="/images/icons/typescript.svg"></Image>;
-  } else if (file?.label.endsWith('.wasm')) {
+  } else if (file?.label?.endsWith('.wasm')) {
     return <Image {...s} src="/images/icons/assembly.svg"></Image>;
+  } else if (file?.label?.endsWith('.flow')) {
+    return <Image {...s} src="/images/icons/tree.svg"></Image>;
   }
 
   if (file?.type == 'file') {
@@ -83,8 +85,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
             }
           ]
         });
-        console.log(formData);
-        w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', formData.template);
+        w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', helper.json.safeParse(formData.template) ?? null);
       }
     },
     {
@@ -177,7 +178,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                       {item.label}
                     </Box>
                   )}
-                  {item.label.includes('wasm') && curFilesListSchema?.curActiveFileIs('wasm') && (
+                  {item?.label?.includes('wasm') && curFilesListSchema?.curActiveFileIs('wasm') && (
                     <>
                       <Tooltip label={`Upload to DevNet`} placement="top">
                         <Text
