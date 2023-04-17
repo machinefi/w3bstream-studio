@@ -1,18 +1,12 @@
 import { useStore } from '@/store/index';
 import { FilesItemType, VSCodeRemoteFolderName } from '@/store/lib/w3bstream/schema/filesList';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { helper, toast } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
-import MonacoEditor from '@monaco-editor/react';
-import { Image, ImageProps, Box, Button, Center, Flex, PopoverContent, PopoverTrigger, Portal, Text, Tooltip } from '@chakra-ui/react';
-import { modals } from '@mantine/modals';
-import { defaultButtonStyle } from '@/lib/theme';
+import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip } from '@chakra-ui/react';
 import { VscDebugStart } from 'react-icons/vsc';
-import { WASM } from '@/server/wasmvm';
-import { useEffect, useRef } from 'react';
-import { eventBus } from '@/lib/event';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -64,7 +58,8 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
   const {
     w3s,
     w3s: {
-      projectManager: { curFilesListSchema }
+      projectManager: { curFilesListSchema },
+      lab
     }
   } = useStore();
 
@@ -107,25 +102,6 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
       onClick: (item) => w3s.projectManager.curFilesListSchema.deleteFile(item)
     }
   ];
-  const terminalRef = useRef(null);
-
-  const store = useLocalObservable(() => ({
-    wasmPayload: '',
-    stdout: [],
-    stderr: [],
-    async onDebugWASM() {
-      const buffer = Buffer.from(curFilesListSchema?.curActiveFile.data.extraData?.raw);
-      const wasi = new WASM(buffer);
-      wasi.sendEvent(JSON.stringify(store.wasmPayload));
-      const { stderr, stdout } = await wasi.start();
-      store.stdout = store.stdout.concat(stdout ?? []);
-      store.stderr = store.stderr.concat(stderr ?? []);
-      console.log(stderr, stdout);
-      setTimeout(() => {
-        terminalRef.current.scrollTop = terminalRef.current.scrollHeight * 10000;
-      }, 1);
-    }
-  }));
 
   return (
     <Flex flexDirection="column" cursor="pointer">
@@ -200,39 +176,27 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                       <Box position={'relative'}>
                         <Box
                           onClick={() => {
-                            modals.open({
+                            lab.simulationEventForm.value.set({
+                              wasmPayload: curFilesListSchema.curActiveFile.data?.extraData?.payload || '{}'
+                            });
+                            lab.simulationEventForm.afterSubmit = async ({ formData }) => {
+                              if (formData.wasmPayload) {
+                                try {
+                                  const wasmPayload = JSON.parse(formData.wasmPayload);
+                                  lab.onDebugWASM(wasmPayload);
+                                } catch (error) {}
+                              }
+                            };
+                            hooks.getFormData({
                               title: 'Send Simulated Event',
-                              centered: true,
-                              size: 'lg',
-                              children: (
-                                <Box>
-                                  <MonacoEditor
-                                    height={300}
-                                    language="json"
-                                    key="json-monaco"
-                                    theme="vs-dark"
-                                    value={JSON.stringify(store.wasmPayload, null, 2)}
-                                    onChange={(e) => {
-                                      try {
-                                        store.wasmPayload = JSON.parse(e);
-                                      } catch (error) {}
-                                        console.log(e);
-                                    }}
-                                  ></MonacoEditor>
-                                  <Button
-                                    {...defaultButtonStyle}
-                                    size="lg"
-                                    mt={'10px'}
-                                    w="100%"
-                                    py="0.5rem"
-                                    onClick={async () => {
-                                      store.onDebugWASM();
-                                    }}
-                                  >
-                                    Send Simulated Event
-                                  </Button>
-                                </Box>
-                              )
+                              size: 'xl',
+                              isAutomaticallyClose: false,
+                              isCentered: true,
+                              formList: [
+                                {
+                                  form: lab.simulationEventForm
+                                }
+                              ]
                             });
                           }}
                         >

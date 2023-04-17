@@ -1,4 +1,4 @@
-import { FormListType } from '@/store/base';
+import { FormModalState } from '@/store/base';
 import { rootStore } from '@/store/index';
 import { eventBus } from './event';
 
@@ -21,24 +21,20 @@ export const hooks = {
       }
     });
   },
-  async getFormData<T = any>(v: { title: string; size: string; formList: FormListType[]; children?: JSX.Element }) {
+  async getFormData<T = any>(v: Partial<FormModalState>) {
     return new Promise<T>((resolve, reject) => {
       rootStore.base.formModal.setData({
         ...v,
         isOpen: true
       });
       eventBus.once('base.formModal.afterSubmit', (formData: T) => {
-        rootStore.base.formModal.setData({
-          isOpen: false,
-          children: null
-        });
+        if (rootStore.base.formModal.isAutomaticallyClose) {
+          rootStore.base.formModal.close();
+        }
         resolve(formData);
       });
       eventBus.once('base.formModal.abort', () => {
-        rootStore.base.formModal.setData({
-          isOpen: false,
-          children: null
-        });
+        rootStore.base.formModal.close();
         reject('abort');
       });
     });

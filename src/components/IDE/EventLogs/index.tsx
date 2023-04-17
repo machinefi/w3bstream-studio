@@ -105,44 +105,48 @@ const EventLogs = observer(() => {
           color: '#946FFF'
         }}
         onClick={async () => {
-          const formData = await hooks.getFormData({
-            title: '',
+          publisher.developerPublishEventForm.afterSubmit = async ({ formData }) => {
+            const projectName = curProject?.f_name;
+            if (projectName) {
+              try {
+                const res = await axios.request({
+                  method: 'post',
+                  url: `/api/w3bapp/event/${projectName}`,
+                  data: publisher.parseBody(formData.body)
+                });
+                const wasmResult = res.data?.[0].wasmResults?.[0];
+                if (wasmResult) {
+                  if (wasmResult.errMsg) {
+                    showNotification({ color: 'red', message: wasmResult.errMsg });
+                  } else {
+                    store.setData({
+                      loading: true
+                    });
+                    fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+                      store.setData({
+                        logs: res.concat(logs),
+                        offset: store.offset + logs.length,
+                        loading: false
+                      });
+                    });
+                  }
+                } else {
+                  showNotification({ color: 'red', message: 'Failed' });
+                }
+              } catch (error) {}
+            }
+          };
+          hooks.getFormData({
+            title: 'Drag from here',
             size: 'xl',
+            isAutomaticallyClose: false,
+            isCentered: true,
             formList: [
               {
                 form: publisher.developerPublishEventForm
               }
             ]
           });
-          const projectName = curProject?.f_name;
-          if (projectName) {
-            try {
-              const res = await axios.request({
-                method: 'post',
-                url: `/api/w3bapp/event/${projectName}`,
-                data: publisher.parseBody(formData.body)
-              });
-              const wasmResult = res.data?.[0].wasmResults?.[0];
-              if (wasmResult) {
-                if (wasmResult.errMsg) {
-                  showNotification({ color: 'red', message: wasmResult.errMsg });
-                } else {
-                  store.setData({
-                    loading: true
-                  });
-                  fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
-                    store.setData({
-                      logs: res.concat(logs),
-                      offset: store.offset + logs.length,
-                      loading: false
-                    });
-                  });
-                }
-              } else {
-                showNotification({ color: 'red', message: 'Failed' });
-              }
-            } catch (error) {}
-          }
         }}
       />
       <Flex align="center" p="10px 20px" fontSize="sm" fontWeight={700} color="#fff">

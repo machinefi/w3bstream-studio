@@ -28,9 +28,13 @@ export type FormListType = {
 export class FormModalState {
   isOpen = false;
   title = '';
-  size?: string = '2xl';
+  size: string = '2xl';
   formList: FormListType[] = [];
-  children?: JSX.Element;
+  children: JSX.Element;
+  isAutomaticallyClose: boolean = true;
+  showModalOverlay: boolean = true;
+  isCentered: boolean = false;
+  closeOnOverlayClick: boolean = true;
 
   constructor(args?: Partial<FormModalState>) {
     Object.assign(this, args);
@@ -39,6 +43,18 @@ export class FormModalState {
 
   setData(v: Partial<FormModalState>) {
     Object.assign(this, v);
+  }
+
+  close() {
+    this.isOpen = false;
+    this.title = '';
+    this.size = '2xl';
+    this.formList = [];
+    this.children = null;
+    this.isAutomaticallyClose = true;
+    this.showModalOverlay = true;
+    this.isCentered = false;
+    this.closeOnOverlayClick = true;
   }
 }
 
