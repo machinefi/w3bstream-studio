@@ -22,10 +22,10 @@ const DeveloperIDE = observer(() => {
     <Box w="100vw" h="100vh" overflow="hidden" bg="#F8F8FA">
       <Header />
       <Box mt="80px" w="100%" px="30px">
-        {w3s.headerTabs === 'PROJECTS' && <>{w3s.project.curProject ? <CurrentProject /> : <Projects />}</>}
-        {w3s.headerTabs === 'LABS' && <Labs />}
-        {w3s.headerTabs === 'FLOW' && <Flow />}
-        {w3s.headerTabs === 'SUPPORT' && <Support></Support>}
+        {w3s.currentHeaderTab === 'PROJECTS' && <>{w3s.project.curProject ? <CurrentProject /> : <Projects />}</>}
+        {w3s.currentHeaderTab === 'LABS' && <Labs />}
+        {w3s.currentHeaderTab === 'FLOW' && <Flow />}
+        {w3s.currentHeaderTab === 'SUPPORT' && <Support />}
       </Box>
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />
       <JSONModal />

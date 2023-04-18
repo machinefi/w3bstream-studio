@@ -505,7 +505,7 @@ export default class AppletModule {
           },
           data
         });
-        if (res?.data) {
+        if (res) {
           showNotification({ message: 'update wasm succeeded' });
           eventBus.emit('applet.update');
         }

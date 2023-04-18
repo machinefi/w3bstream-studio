@@ -21,9 +21,6 @@ const Settings = () => {
     get curInstance() {
       return instances.table.dataSource.find((item) => item.project_name === project.curProject?.f_name);
     },
-    get wasmName() {
-      return this.curApplet?.f_wasm_name;
-    },
     get tags() {
       if (project.curProject?.f_description) {
         return project.curProject.f_description.split(',');
@@ -59,7 +56,7 @@ const Settings = () => {
         <Flex alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>WASM file name:</Box>
           <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-            {store.wasmName}
+            {store.curApplet?.f_wasm_name}
           </Box>
           <Button
             ml="10px"

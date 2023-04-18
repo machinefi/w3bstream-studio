@@ -74,7 +74,7 @@ export class W3bStream {
     | 'SETTINGS'
     | 'DB_TABLE' = 'CURRENT_APPLETS';
 
-  headerTabs: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'FLOW' = 'PROJECTS';
+  currentHeaderTab: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'FLOW' = 'PROJECTS';
 
   isReady = false;
 
