@@ -51,20 +51,20 @@ const Header = observer(() => {
       <Flex ml="120px" alignItems="center">
         <Tabs
           variant="unstyled"
-          index={getTabIndex(w3s.headerTabs)}
+          index={getTabIndex(w3s.currentHeaderTab)}
           onChange={(number) => {
             if (number === 0) {
-              w3s.headerTabs = 'PROJECTS';
+              w3s.currentHeaderTab = 'PROJECTS';
               w3s.project.resetSelectedNames();
             }
             if (number === 1) {
-              w3s.headerTabs = 'LABS';
+              w3s.currentHeaderTab = 'LABS';
             }
             if (number === 2) {
-              w3s.headerTabs = 'SUPPORT';
+              w3s.currentHeaderTab = 'SUPPORT';
             }
             if (number === 3) {
-              w3s.headerTabs = 'FLOW';
+              w3s.currentHeaderTab = 'FLOW';
             }
           }}
         >

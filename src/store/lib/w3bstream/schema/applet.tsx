@@ -45,8 +45,6 @@ export const developerSchema = {
   required: ['file']
 } as const;
 
-
-
 type SchemaType = FromSchema<typeof schema>;
 type DeveloperSchemaType = FromSchema<typeof developerSchema>;
 
@@ -473,6 +471,45 @@ export default class AppletModule {
         return appletID;
       }
       return null;
+    }
+  }
+
+  async updateWASM(appletID, instanceID) {
+    const formData = await hooks.getFormData({
+      title: 'Update WASM',
+      size: 'md',
+      formList: [
+        {
+          form: this.form
+        }
+      ]
+    });
+    if (formData.file) {
+      const data = new FormData();
+      const file = dataURItoBlob(formData.file);
+      data.append('file', file.blob);
+      data.append(
+        'info',
+        JSON.stringify({
+          wasmName: file.name,
+          appletName: formData.appletName,
+          strategies: [{ eventType: 'DEFAULT', handler: 'start' }]
+        })
+      );
+      try {
+        const res = await axios.request({
+          method: 'put',
+          url: `/api/file?api=applet/${appletID}/${instanceID} `,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          data
+        });
+        if (res) {
+          showNotification({ message: 'update wasm succeeded' });
+          eventBus.emit('applet.update');
+        }
+      } catch (error) {}
     }
   }
 }
