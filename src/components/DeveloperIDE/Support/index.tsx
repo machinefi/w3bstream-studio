@@ -47,20 +47,23 @@ const Support = () => {
           </a>
         </GridItem>
         <GridItem w="412px" h="328px" bg="#fff">
-          <Flex
-            w="100%"
-            h="100%"
-            flexDir="column"
-            justifyContent="center"
-            alignItems="center"
-            cursor="pointer"
-            _hover={{
-              boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
-            }}
-          >
-            <Image src="/images/icons/file-an-issue.svg" />
-            <Box mt="32px">File an Issue</Box>
-          </Flex>
+          <a href="https://github.com/machinefi/w3bstream/discussions" target="_blank" rel="noopener noreferrer">
+            <Flex
+              w="100%"
+              h="100%"
+              flexDir="column"
+              justifyContent="center"
+              alignItems="center"
+              cursor="pointer"
+              _hover={{
+                boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+              }}
+            >
+              <Image src="/images/icons/file-an-issue.svg" />
+              <Box mt="32px">File an Issue</Box>
+            </Flex>
+          </a>
+
         </GridItem>
         <GridItem w="412px" h="328px" bg="#fff">
           <a href="http://developers.iotex.io/grants" target="_blank" rel="noopener noreferrer">
