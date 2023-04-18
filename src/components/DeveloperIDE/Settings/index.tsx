@@ -67,6 +67,9 @@ const Settings = () => {
                 applet.form.uiSchema.projectName = {
                   'ui:widget': 'hidden'
                 };
+                applet.form.uiSchema.appletName = {
+                  'ui:widget': 'hidden'
+                };
                 applet.form.value.set({
                   projectName: project.curProject?.f_name,
                   appletName: store.curApplet.f_name
