@@ -50,7 +50,6 @@ export class ProjectManager {
       template: {
         'ui:widget': InitWasmTemplateWidget
       },
-      layout: [['name', 'description'], 'template']
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);

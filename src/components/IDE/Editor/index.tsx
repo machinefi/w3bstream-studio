@@ -2,31 +2,30 @@ import { useEffect, useRef } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { Box, Button, Center, Flex, Popover, PopoverBody, PopoverContent, PopoverTrigger, Portal, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Center, Flex, Portal, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
 import _ from 'lodash';
 import { VscDebugStart, VscClearAll } from 'react-icons/vsc';
 import { FileIcon } from '@/components/Tree';
-import { toJS } from 'mobx';
 import { eventBus } from '@/lib/event';
 import { StdIOType, WASM } from '@/server/wasmvm';
 import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
 import dayjs from 'dayjs';
 import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
-import { defaultButtonStyle } from '@/lib/theme';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { asc } from 'pages/_app';
 import Flow from '@/components/DeveloperIDE/Flow';
-import { modals } from '@mantine/modals';
+import { hooks } from '@/lib/hooks';
 
 const Editor = observer(() => {
   const {
     w3s,
     w3s: {
-      projectManager: { curFilesListSchema }
+      projectManager: { curFilesListSchema },
+      lab
     }
   } = useStore();
   const terminalRef = useRef(null);
@@ -44,14 +43,11 @@ const Editor = observer(() => {
     curPreviewRawData: null,
     showPreviewMode: false,
     lockFile: true,
-    stdout: [],
-    stderr: [],
-    wasmPayload: '',
     onStdout(message: StdIOType) {
-      store.stdout.push(message);
+      lab.stdout.push(message);
     },
     onStderr(message: StdIOType) {
-      store.stderr.push(message);
+      lab.stderr.push(message);
     },
     async onCompile(filesItem: FilesItemType) {
       if (filesItem.type != 'file') return;
@@ -94,17 +90,6 @@ const Editor = observer(() => {
         console.log(error);
         toast.error('Compile Error!');
       }
-    },
-    async onDebugWASM() {
-      const buffer = Buffer.from(curFilesListSchema?.curActiveFile.data.extraData?.raw);
-      const wasi = new WASM(buffer);
-      wasi.sendEvent(JSON.stringify(store.wasmPayload));
-      const { stderr, stdout } = await wasi.start();
-      store.stdout = store.stdout.concat(stdout ?? []);
-      store.stderr = store.stderr.concat(stderr ?? []);
-      setTimeout(() => {
-        terminalRef.current.scrollTop = terminalRef.current.scrollHeight * 10000;
-      }, 1);
     }
   }));
 
@@ -122,12 +107,6 @@ const Editor = observer(() => {
       window.removeEventListener('keydown', handleSave);
     };
   }, []);
-
-  useEffect(() => {
-    if (curFilesListSchema?.curActiveFile?.data?.extraData?.payload && store.wasmPayload == '') {
-      store.wasmPayload = curFilesListSchema.curActiveFile.data?.extraData?.payload;
-    }
-  }, [curFilesListSchema?.curActiveFile]);
 
   const CurActiveFileRightClickMenu = observer(({ activeFile }: { activeFile: FilesItemType }) => {
     return (
@@ -243,39 +222,30 @@ const Editor = observer(() => {
             <Box position={'relative'}>
               <Box
                 onClick={() => {
-                  modals.open({
+                  lab.simulationEventForm.value.set({
+                    wasmPayload: curFilesListSchema.curActiveFile.data?.extraData?.payload || '{}'
+                  });
+                  lab.simulationEventForm.afterSubmit = async ({ formData }) => {
+                    if (formData.wasmPayload) {
+                      try {
+                        const wasmPayload = JSON.parse(formData.wasmPayload);
+                        lab.onDebugWASM(wasmPayload);
+                        setTimeout(() => {
+                          terminalRef.current.scrollTop = terminalRef.current.scrollHeight * 10000;
+                        }, 1);
+                      } catch (error) {}
+                    }
+                  };
+                  hooks.getFormData({
                     title: 'Send Simulated Event',
-                    centered: true,
-                    size: 'lg',
-                    children: (
-                      <Box>
-                        <MonacoEditor
-                          height={300}
-                          language="json"
-                          key="json-monaco"
-                          theme="vs-dark"
-                          value={JSON.stringify(store.wasmPayload, null, 2)}
-                          onChange={(e) => {
-                            try {
-                              store.wasmPayload = JSON.parse(e);
-                            } catch (error) {}
-                            console.log(e);
-                          }}
-                        ></MonacoEditor>
-                        <Button
-                          {...defaultButtonStyle}
-                          size="lg"
-                          mt={'10px'}
-                          w="100%"
-                          py="0.5rem"
-                          onClick={async () => {
-                            store.onDebugWASM();
-                          }}
-                        >
-                          Send Simulated Event
-                        </Button>
-                      </Box>
-                    )
+                    size: 'xl',
+                    isAutomaticallyClose: false,
+                    isCentered: true,
+                    formList: [
+                      {
+                        form: lab.simulationEventForm
+                      }
+                    ]
                   });
                 }}
               >
@@ -321,8 +291,8 @@ const Editor = observer(() => {
                 <Flex borderTop={'2px solid #090909'} bg="#1e1e1e" color="white" pt={1}>
                   <VscClearAll
                     onClick={() => {
-                      store.stdout = [];
-                      store.stderr = [];
+                      lab.stdout = [];
+                      lab.stderr = [];
                     }}
                     cursor={'pointer'}
                     style={{ marginLeft: 'auto', marginRight: '20px' }}
@@ -341,7 +311,7 @@ const Editor = observer(() => {
                   overflowY="auto"
                   position="relative"
                 >
-                  {store.stdout?.map((i) => {
+                  {lab.stdout?.map((i) => {
                     return (
                       <Flex>
                         <Flex color="#d892ff" mr={2} whiteSpace="nowrap">

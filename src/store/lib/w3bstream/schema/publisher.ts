@@ -253,7 +253,7 @@ export default class PublisherModule {
       }
     },
     afterSubmit: async (e) => {
-      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      // eventBus.emit('base.formModal.afterSubmit', e.formData);
       // this.developerPublishEventForm.reset();
     },
     value: new JSONValue<DeveloperPublishEventSchemaType>({

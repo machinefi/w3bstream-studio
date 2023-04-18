@@ -19,6 +19,7 @@ import ChainHeightModule from './schema/chainHeight';
 import DBTableModule from './schema/dbTable';
 import MetricsModule from './schema/metrics';
 import FlowModule from './schema/flow';
+import LabModule from './schema/lab';
 
 configure({
   enforceActions: 'never'
@@ -56,6 +57,7 @@ export class W3bStream {
   chainHeight = new ChainHeightModule();
   dbTable = new DBTableModule();
   metrics = new MetricsModule();
+  lab = new LabModule();
 
   showContent:
     | 'CURRENT_APPLETS'
