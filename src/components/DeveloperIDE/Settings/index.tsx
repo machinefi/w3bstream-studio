@@ -6,19 +6,23 @@ import { ProjectEnvs } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
-import { showNotification } from '@mantine/notifications';
 
 const Settings = () => {
   const {
-    w3s: { project, applet },
+    w3s: { project, applet, instances },
     base: { confirm }
   } = useStore();
 
   const store = useLocalObservable(() => ({
     operateAddress: '',
+    get curApplet() {
+      return applet.allData.find((item) => item.project_name === project.curProject?.f_name);
+    },
+    get curInstance() {
+      return instances.table.dataSource.find((item) => item.project_name === project.curProject?.f_name);
+    },
     get wasmName() {
-      const applets = applet.allData.find((item) => item.project_name === project.curProject?.f_name);
-      return applets?.f_wasm_name;
+      return this.curApplet?.f_wasm_name;
     },
     get tags() {
       if (project.curProject?.f_description) {
@@ -26,18 +30,18 @@ const Settings = () => {
       }
       return [];
     },
-    getOperateAddress: async() => {
-     try {
-      const res = await axios.request({
-        method: 'get',
-        url: `/api/w3bapp/account/operatoraddr`,
-      });
-      if(res.data) {
-        store.operateAddress = res.data
+    getOperateAddress: async () => {
+      try {
+        const res = await axios.request({
+          method: 'get',
+          url: `/api/w3bapp/account/operatoraddr`
+        });
+        if (res.data) {
+          store.operateAddress = res.data;
+        }
+      } catch (error) {
+        console.log(error);
       }
-     } catch (error) {
-      console.log(error)
-     }
     }
   }));
 
@@ -57,6 +61,25 @@ const Settings = () => {
           <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
             {store.wasmName}
           </Box>
+          <Button
+            ml="10px"
+            size="sm"
+            {...defaultOutlineButtonStyle}
+            onClick={async () => {
+              if (store.curApplet && store.curInstance) {
+                applet.form.uiSchema.projectName = {
+                  'ui:widget': 'hidden'
+                };
+                applet.form.value.set({
+                  projectName: project.curProject?.f_name,
+                  appletName: store.curApplet.f_name
+                });
+                applet.updateWASM(store.curApplet.f_applet_id, store.curInstance.f_instance_id);
+              }
+            }}
+          >
+            Update WASM
+          </Button>
         </Flex>
         <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>Operator Address:</Box>

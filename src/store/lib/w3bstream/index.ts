@@ -108,6 +108,10 @@ export class W3bStream {
         await this.project.allProjects.call();
         this.projectManager.sync();
       })
+      .on('applet.update', async () => {
+        await this.project.allProjects.call();
+        this.projectManager.sync();
+      })
       .on('applet.delete', async () => {
         await this.project.allProjects.call();
         this.projectManager.sync();
