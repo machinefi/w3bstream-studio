@@ -10,12 +10,13 @@ function checkErr(err) {
   }
   const message = err.response.data.error?.message || err.response.data.message || err.response.data.desc || err.response.data.msg || err.response.data.code || '';
   if (err.response) {
-    showNotification({
-      message,
-      color: 'red'
-    });
     if (message.includes('UNAUTHORIZED')) {
       globalThis.store.w3s.config.logout();
+    } else {
+      showNotification({
+        message,
+        color: 'red'
+      });
     }
   } else {
     showNotification({

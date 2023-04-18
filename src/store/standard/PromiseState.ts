@@ -38,13 +38,14 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
       console.log(error);
       if (this.autoAlert) {
         const message = error.message || error.data?.message;
-        showNotification({
-          message,
-          title: 'Error',
-          color: 'red'
-        });
         if (message.includes('UNAUTHORIZED')) {
-          globalThis.store.w3s.config.logout()
+          globalThis.store.w3s.config.logout();
+        } else {
+          showNotification({
+            message,
+            title: 'Error',
+            color: 'red'
+          });
         }
       } else {
         throw error;
