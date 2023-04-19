@@ -39,6 +39,8 @@ interface MessageEvents {
   'chainTx.delete': () => void;
   'chainHeight.create': () => void;
   'chainHeight.delete': () => void;
+  'cronJob.create': (projectId: bigint) => void;
+  'cronJob.delete': (projectId: bigint) => void;
   'base.formModal.abort': () => void;
   'base.formModal.afterSubmit': (formData: any) => void;
   'wasmvm.stdout': (message: StdIOType) => void;

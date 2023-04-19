@@ -8,36 +8,34 @@ datasource db {
 }
 
 model t_account {
-  f_account_id    BigInt
-  f_username      String @db.VarChar(255)
-  f_identity_type Int    @default(0)
-  f_state         Int    @default(0)
-  f_password      String
-  f_vendor        String @default("")
-  f_meta          String @default("")
-  f_created_at    BigInt @default(0)
-  f_updated_at    BigInt @default(0)
-  f_deleted_at    BigInt @default(0)
+  f_account_id BigInt
+  f_role       Int    @default(2)
+  f_state      Int    @default(1)
+  f_avatar     String @default("") @db.VarChar(255)
+  f_meta       String @default("{}")
+  f_prvkey     String @default("") @db.VarChar(255)
+  f_created_at BigInt @default(0)
+  f_updated_at BigInt @default(0)
+  f_deleted_at BigInt @default(0)
 
   @@id([f_account_id, f_deleted_at])
-  @@unique([f_username, f_deleted_at], map: "t_account_ui_username")
+  @@unique([f_account_id, f_deleted_at], map: "t_account_ui_account_id")
 }
 
 model t_applet {
-  f_id         BigInt       @id @default(autoincrement())
-  f_project_id BigInt
-  f_applet_id  BigInt       @unique(map: "t_applet_ui_applet_id")
-  f_name       String       @unique(map: "t_applet_ui_name") @db.VarChar(255)
-  f_path       String       @db.VarChar(255)
-  f_md5        String       @db.VarChar(255)
-  f_wasm_name  String
-  f_created_at BigInt       @default(0)
-  f_updated_at BigInt       @default(0)
+  f_id          BigInt @id @default(autoincrement())
+  f_project_id  BigInt
+  f_applet_id   BigInt @unique(map: "t_applet_ui_applet_id")
+  f_resource_id BigInt
+  f_name        String @db.VarChar(255)
+  f_wasm_name   String @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
   project      t_project    @relation(fields: [f_project_id], references: [f_project_id])
   instances    t_instance[]
   strategies   t_strategy[]
 
-  @@unique([f_project_id, f_md5], map: "t_applet_ui_project_md5")
+  @@unique([f_project_id, f_name], map: "t_applet_ui_project_name")
 }
 
 model t_event_log {
@@ -55,32 +53,33 @@ model t_event_log {
 }
 
 model t_instance {
-  f_id          BigInt   @id @default(autoincrement())
+  f_id          BigInt @id @default(autoincrement())
   f_instance_id BigInt
   f_applet_id   BigInt
-  f_path        String   @db.VarChar(255)
   f_state       Int
-  f_created_at  BigInt   @default(0)
-  f_updated_at  BigInt   @default(0)
-  f_deleted_at  BigInt   @default(0)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
   applet        t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
 
   @@unique([f_instance_id, f_deleted_at], map: "t_instance_ui_instance_id")
-  @@index([f_applet_id], map: "t_instance_i_applet_id")
-  @@index([f_path], map: "t_instance_i_path")
+  @@unique([f_applet_id, f_deleted_at], map: "t_instance_ui_applet_id")
 }
 
 model t_project {
-  f_id          BigInt        @id @default(autoincrement())
+  f_id          BigInt @id @default(autoincrement())
   f_project_id  BigInt
   f_account_id  BigInt
-  f_name        String        @db.VarChar(255)
-  f_description String        @default("") @db.VarChar(255)
-  f_version     String        @default("") @db.VarChar(255)
-  f_proto       Int           @default(0)
-  f_created_at  BigInt        @default(0)
-  f_updated_at  BigInt        @default(0)
-  f_deleted_at  BigInt        @default(0)
+  f_name        String @db.VarChar(255)
+  f_version     String @default("") @db.VarChar(255)
+  f_proto       Int    @default(0)
+  f_description String @default("") @db.VarChar(255)
+  f_issuer      String @default("web3stream") @db.VarChar(255)
+  f_exp_in      BigInt @default(0)
+  f_sign_key    String @default("web3stream") @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
   applets       t_applet[]
   publishers    t_publisher[]
   configs       t_config[]
@@ -162,7 +161,21 @@ model t_wasm_log {
   f_instance_id  BigInt @default(0)
   f_level        String @default("") @db.VarChar(255)
   f_log_time     BigInt @default(0)
-  f_msg          String @default("") @db.VarChar(255)
+  f_msg          String @default("") @db.VarChar(1024)
   f_created_at   BigInt @default(0)
   f_updated_at   BigInt @default(0)
+}
+
+model t_cron_job {
+  f_id               BigInt @id @default(autoincrement())
+  f_cron_job_id      BigInt
+  f_project_id       BigInt
+  f_cron_expressions String @db.VarChar(255)
+  f_event_type       String @db.VarChar(255)
+  f_created_at       BigInt @default(0)
+  f_updated_at       BigInt @default(0)
+  f_deleted_at       BigInt @default(0)
+
+  @@unique([f_project_id, f_cron_expressions, f_event_type, f_deleted_at], map: "t_cron_job_ui_cron")
+  @@unique([f_cron_job_id, f_deleted_at], map: "t_cron_job_ui_cron_job_id")
 }

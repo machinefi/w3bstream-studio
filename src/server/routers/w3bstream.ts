@@ -16,7 +16,7 @@ export const w3bstreamRouter = t.router({
       where: {
         f_account_id: {
           equals: accountID
-        },
+        }
       },
       orderBy: {
         f_created_at: 'desc'
@@ -193,7 +193,30 @@ FROM pg_stat_database where DATname='w3bstream';
 `;
 
     return { usedSize, stats };
-  })
+  }),
+  cronJobs: t.procedure
+    .input(
+      z.object({
+        projectId: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const res = await ctx.prisma.t_cron_job.findMany({
+        where: {
+          f_project_id: {
+            equals: BigInt(input.projectId)
+          }
+        },
+        select: {
+          f_cron_job_id: true,
+          f_project_id: true,
+          f_cron_expressions: true,
+          f_event_type: true,
+          f_created_at: true
+        }
+      });
+      return res;
+    })
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
@@ -213,3 +236,4 @@ export type ContractLogType = inferProcedureOutput<W3bstreamRouter['contractLogs
 export type ChainTxType = inferProcedureOutput<W3bstreamRouter['chainTx']>[0];
 export type ChainHeightType = inferProcedureOutput<W3bstreamRouter['chainHeight']>[0];
 export type WasmLogType = inferProcedureOutput<W3bstreamRouter['wasmLogs']>[0];
+export type CronJobsType = inferProcedureOutput<W3bstreamRouter['cronJobs']>[0];

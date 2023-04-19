@@ -20,6 +20,7 @@ import DBTableModule from './schema/dbTable';
 import MetricsModule from './schema/metrics';
 import FlowModule from './schema/flow';
 import LabModule from './schema/lab';
+import CronJobModule from './schema/cronJob';
 
 configure({
   enforceActions: 'never'
@@ -58,6 +59,7 @@ export class W3bStream {
   dbTable = new DBTableModule();
   metrics = new MetricsModule();
   lab = new LabModule();
+  cronJob = new CronJobModule();
 
   showContent:
     | 'CURRENT_APPLETS'
@@ -170,6 +172,12 @@ export class W3bStream {
       })
       .on('chainHeight.delete', async () => {
         this.chainHeight.allChainHeight.call();
+      })
+      .on('cronJob.create', async (projectId: bigint) => {
+        this.cronJob.fetchCronJobs(projectId);
+      })
+      .on('cronJob.delete', async (projectId: bigint) => {
+        this.cronJob.fetchCronJobs(projectId);
       })
       .on('metrics.timerange', async (startTime: Date, endTime: Date, step: number) => {
         this.metrics.allMetrics.call(startTime, endTime, step);

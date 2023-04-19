@@ -7,6 +7,7 @@ import ChainHeight, { CreateChainHeightButton } from '@/components/IDE/Monitor/C
 import Strategies, { CreateStrategyButton } from '@/components/IDE/Strategies';
 import { publicConfig } from '@/constants/config';
 import { ShowRequestTemplatesButton } from '@/components/IDE/PublishEventRequestTemplates';
+import CronJobs, { CreateCronJobButton } from '../CronJob';
 
 const Triggers = () => {
   const {
@@ -63,15 +64,20 @@ const Triggers = () => {
       <Tabs mt="20px" isLazy index={tabIndex} onChange={(index) => setTabIndex(index)}>
         <Flex alignItems="center" justifyContent="space-between">
           <TabList>
-            <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Smart Contract Monitor</Tab>
+            <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Cron Job</Tab>
+            <Tab ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Smart Contract Monitor</Tab>
             <Tab ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Chain Height Monitor
             </Tab>
           </TabList>
-          {tabIndex === 0 && <CreateContractLogButton />}
-          {tabIndex === 1 && <CreateChainHeightButton />}
+          {tabIndex === 0 && <CreateCronJobButton />}
+          {tabIndex === 1 && <CreateContractLogButton />}
+          {tabIndex === 2 && <CreateChainHeightButton />}
         </Flex>
         <TabPanels>
+         <TabPanel px="0px">
+            <CronJobs />
+          </TabPanel>
           <TabPanel px="0px">
             <ContractLogs />
           </TabPanel>
