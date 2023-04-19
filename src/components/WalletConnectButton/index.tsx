@@ -53,7 +53,7 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
               alignItems="center"
               onClick={() => {
                 openAccountModal();
-                close();
+                // close();
               }}
             >
               <Box>
