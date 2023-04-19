@@ -137,7 +137,7 @@ const EventLogs = observer(() => {
             }
           };
           hooks.getFormData({
-            title: 'Drag from here',
+            title: 'Send test message',
             size: 'xl',
             isAutomaticallyClose: false,
             isCentered: true,

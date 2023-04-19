@@ -238,7 +238,7 @@ export default class PublisherModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit'
+        submitText: 'Send'
       },
       body: {
         'ui:widget': EditorWidget,
