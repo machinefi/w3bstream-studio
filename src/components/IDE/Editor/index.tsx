@@ -54,7 +54,7 @@ export const compileAndCreateProject = async () => {
             ml={2}
             onClick={async () => {
               reactHotToast.dismiss(t.id);
-              rootStore.w3s.headerTabs = 'PROJECTS';
+              rootStore.w3s.currentHeaderTab = 'PROJECTS';
               rootStore.w3s.project.resetSelectedNames();
               await rootStore?.w3s.project.allProjects.call();
               rootStore.w3s.project.allProjects.onSelect(0);
