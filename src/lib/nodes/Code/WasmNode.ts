@@ -8,6 +8,7 @@ import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
 import { FlowState } from '@/store/standard/FlowState';
 import { rootStore } from '@/store/index';
 import { eventBus } from '@/lib/event';
+import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 
 export const WasmNodeSchema = {
   type: 'object',
@@ -88,7 +89,8 @@ export class WasmNode extends BaseNode {
             key: 'JSONFormKey',
             component: 'JSONForm',
             props: {
-              formState: {
+              formState: new JSONSchemaFormState({
+                // @ts-ignore
                 schema: WasmNodeSchema,
                 uiSchema: {
                   'ui:submitButtonOptions': {
@@ -106,22 +108,20 @@ export class WasmNode extends BaseNode {
                         title: 'SDK Document',
                         uri: 'https://github.com/machinefi/waas-flow-sdk-doc/blob/main/README.md'
                       },
-                      showCodeSelector: `={{(()=>{
-                          const files = [];
-                          const findWasmCode = (arr) => {
-                            arr?.forEach((i) => {
-                              if (i.data?.dataType === 'assemblyscript') {
-                                files.push({ label: i.label, value: i.data.code , id: i.key});
-                              } else if (i.type === 'folder') {
-                                findWasmCode(i.children);
-                              }
-                            });
-                          };
-                          findWasmCode(globalThis.store.w3s.projectManager.curFilesList ?? []);
-                          return files || [];
-                        })()}}=`
-                        .replace(/[\n]/g, '')
-                        .replace(/\s+/g, ' ')
+                      showCodeSelector: (() => {
+                        const files = [];
+                        const findWasmCode = (arr) => {
+                          arr?.forEach((i) => {
+                            if (i.data?.dataType === 'assemblyscript') {
+                              files.push({ label: i.label, value: i.data.code, id: i.key });
+                            } else if (i.type === 'folder') {
+                              findWasmCode(i.children);
+                            }
+                          });
+                        };
+                        findWasmCode(globalThis.store?.w3s?.projectManager.curFilesList ?? []);
+                        return files || [];
+                      })()
                     }
                   },
                   fieldLabelLayout: {
@@ -129,10 +129,12 @@ export class WasmNode extends BaseNode {
                     labelWidth: '200px'
                   }
                 },
-                value: {
-                  code: ''
-                }
-              }
+                value: new JSONValue<any>({
+                  default: {
+                    code: template
+                  }
+                })
+              })
             }
           }
         ]
@@ -143,6 +145,5 @@ export class WasmNode extends BaseNode {
 
   constructor() {
     super();
-    this.form.formList[0].form[0].props.formState.value.code = template;
   }
 }

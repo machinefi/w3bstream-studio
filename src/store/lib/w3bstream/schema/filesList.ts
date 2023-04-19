@@ -228,6 +228,7 @@ export class FilesListSchema {
       });
       file.isOpen = true;
     }
+    eventBus.emit('file.change');
     this.syncToIndexDb();
   }
 
@@ -236,6 +237,7 @@ export class FilesListSchema {
     if (curFolder.children) {
       _.remove(curFolder.children, (i) => i.key == file.key);
     }
+    eventBus.emit('file.change');
     this.deleteActiveFiles(file);
   }
 
@@ -310,5 +312,6 @@ export class FilesListSchema {
     } else {
       await IndexDb.files.add({ id: String(this.project_id), data: toJS(this) });
     }
+
   }
 }

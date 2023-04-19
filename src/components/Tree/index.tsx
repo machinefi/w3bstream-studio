@@ -7,6 +7,11 @@ import { helper, toast } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
 import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip } from '@chakra-ui/react';
 import { VscDebugStart } from 'react-icons/vsc';
+import { asc } from 'pages/_app';
+import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
+import { compileAndCreateProject, compileAssemblyscript, debugAssemblyscript } from '../IDE/Editor';
+import { eventBus } from '@/lib/event';
+import Draggable from 'react-draggable';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -154,7 +159,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                       {item.label}
                     </Box>
                   )}
-                  {item?.label?.includes('wasm') && curFilesListSchema?.curActiveFileIs('wasm') && (
+                  {item?.data?.dataType == 'assemblyscript' && curFilesListSchema?.curActiveFileId == item?.key && (
                     <>
                       <Tooltip label={`Upload to DevNet`} placement="top">
                         <Text
@@ -164,12 +169,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                           className="pi pi-cloud-upload"
                           color="black"
                           onClick={async () => {
-                            w3s.project.createProjectByWasmForm.value.set({
-                              // projectName: w3s.project.curProject?.f_name,
-                              file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw)
-                              // appletName: ''
-                            });
-                            w3s.project.createProjectByWasm();
+                            compileAndCreateProject();
                           }}
                         ></Text>
                       </Tooltip>
@@ -177,28 +177,7 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
                       <Box position={'relative'}>
                         <Box
                           onClick={() => {
-                            lab.simulationEventForm.value.set({
-                              wasmPayload: curFilesListSchema.curActiveFile.data?.extraData?.payload || '{}'
-                            });
-                            lab.simulationEventForm.afterSubmit = async ({ formData }) => {
-                              if (formData.wasmPayload) {
-                                try {
-                                  const wasmPayload = JSON.parse(formData.wasmPayload);
-                                  lab.onDebugWASM(wasmPayload);
-                                } catch (error) {}
-                              }
-                            };
-                            hooks.getFormData({
-                              title: 'Send Simulated Event',
-                              size: 'xl',
-                              isAutomaticallyClose: false,
-                              isCentered: true,
-                              formList: [
-                                {
-                                  form: lab.simulationEventForm
-                                }
-                              ]
-                            });
+                            debugAssemblyscript();
                           }}
                         >
                           <VscDebugStart

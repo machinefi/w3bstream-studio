@@ -51,11 +51,8 @@ export const JSONRender = observer((props: Props) => {
   //   if(JSONForm){
   //     componentMaps['JSONForm'] = JSONForm;
   //   }
-
   // }, [JSONForm]);
   if (!json.props) json.props = {};
-
-  console.log('render');
   if (json.$children) {
     json.children = _.get(data, json.$children, '');
   }

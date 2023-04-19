@@ -271,7 +271,8 @@ export default class ProjectModule {
           accept: {
             'application/wasm': ['.wasm']
           },
-          tips: `Drag 'n' drop a file here, or click to select a file`
+          tips: `Drag 'n' drop a file here, or click to select a file`,
+          showDownload: true,
         }
       }
     },
@@ -459,7 +460,7 @@ export default class ProjectModule {
         });
         if (res.data) {
           console.log('res.data', res.data);
-          await showNotification({ message: `Create project succeeded` });
+          // await showNotification({ message: `Create project succeeded` });
           eventBus.emit('project.create');
           // modals.openContextModal({
           //   id: 'projectstration',
@@ -473,6 +474,7 @@ export default class ProjectModule {
         }
       } catch (error) {
         console.log('error', error);
+        throw new Error(error);
       }
     }
   }

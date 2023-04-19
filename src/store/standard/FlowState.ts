@@ -9,6 +9,10 @@ import { _ } from '@/lib/lodash';
 import { v4 as uuid } from 'uuid';
 import { IndexDb } from '@/lib/dexie';
 import { nodeManager } from '@/lib/nodes';
+import { SimulationNode } from '@/lib/nodes/Trigger/SimulationNode';
+import { BaseNode } from '@/lib/nodes/baseNode';
+import { WasmNode } from '@/lib/nodes/Code/WasmNode';
+import { VmRunTimeNode } from '@/lib/nodes/Runtime/VmRunTimeNode';
 
 export class FlowState {
   curFlowId: number = null;
@@ -17,7 +21,7 @@ export class FlowState {
   reactFlowInstance: null | ReactFlowInstance<FlowNodeData, any> = null;
   nodes: Node<FlowNodeData>[] = [];
   edges: Edge<any>[] = [];
-  nodeInstances: FlowNode[] = [];
+  nodeInstances: BaseNode[] = [];
   nodeAbstracts: INodeType[] = [];
   edgeUpdateSuccessful = false;
   connectingNodeId = '';
@@ -33,13 +37,7 @@ export class FlowState {
 
   initNodes = new PromiseState({
     function: async () => {
-      this.nodeInstances = [];
-      const res = await axios.get('/api/nodes');
-      res?.data?.forEach((i) => {
-        this.nodeInstances.push(new FlowNode(i as INodeType));
-      });
-      this.nodeAbstracts = res.data;
-      return res.data;
+      this.nodeInstances = [new SimulationNode(), new WasmNode(), new VmRunTimeNode()];
     }
   });
 
@@ -154,7 +152,7 @@ export class FlowState {
 
   importJSON = (json: { nodes: any[]; edges: any[] }) => {
     this.nodes = json.nodes;
-    this.edges = json.edges.map((edge) => {
+    this.edges = json.edges?.map((edge) => {
       return {
         ...edge,
         id: `reactflow__edge-${edge.source}-${edge.target}`,

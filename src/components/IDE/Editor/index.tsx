@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useStore } from '@/store/index';
-import { Box, Center, Flex, Portal, Text, Tooltip } from '@chakra-ui/react';
+import { rootStore, useStore } from '@/store/index';
+import { Box, Button, Center, Flex, Portal, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
+import reactHotToast from 'react-hot-toast';
 import _ from 'lodash';
 import { VscDebugStart, VscClearAll } from 'react-icons/vsc';
 import { FileIcon } from '@/components/Tree';
@@ -14,11 +15,106 @@ import { StdIOType, WASM } from '@/server/wasmvm';
 import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
 import dayjs from 'dayjs';
 import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
-import { SmallCloseIcon } from '@chakra-ui/icons';
+import { CheckCircleIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { asc } from 'pages/_app';
-import Flow from '@/components/DeveloperIDE/Flow';
+import Flow, { FlowErrorFallback } from '@/components/DeveloperIDE/Flow';
 import { hooks } from '@/lib/hooks';
+import { StorageState } from '@/store/standard/StorageState';
+import ErrorBoundary from '@/components/Common/ErrorBoundary';
+
+export const compileAssemblyscript = async (code: string) => {
+  const { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
+    optimizeLevel: 4,
+    runtime: 'stub',
+    lib: 'assemblyscript-json/assembly/index',
+    debug: true
+  });
+  return { error, binary, text, stats, stderr };
+};
+
+export const compileAndCreateProject = async () => {
+  const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
+  const { error, binary, text, stats, stderr } = await compileAssemblyscript(curActiveFile.data.code);
+  if (error) {
+    console.log(error);
+    return toast.error(error.message);
+  }
+  rootStore?.w3s.project.createProjectByWasmForm.value.set({
+    file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), binary)
+  });
+  try {
+    await rootStore?.w3s.project.createProjectByWasm();
+    reactHotToast(
+      (t) => (
+        <span>
+          Creact Project Success
+          <Button
+            size="sm"
+            ml={2}
+            onClick={async () => {
+              reactHotToast.dismiss(t.id);
+              rootStore.w3s.headerTabs = 'PROJECTS';
+              rootStore.w3s.project.resetSelectedNames();
+              await rootStore?.w3s.project.allProjects.call();
+              rootStore.w3s.project.allProjects.onSelect(0);
+              rootStore.w3s.showContent = 'METRICS';
+              rootStore.w3s.metrics.allMetrics.call();
+            }}
+          >
+            Go to
+          </Button>
+        </span>
+      ),
+      {
+        duration: 5000,
+        icon: <CheckCircleIcon color={'green'} />
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const debugAssemblyscript = async (afterSubmit?: () => void) => {
+  const lab = rootStore?.w3s.lab;
+  const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
+  const payloadCache = new StorageState<string>({
+    key: curActiveFile.key + '_payload'
+  });
+  if (payloadCache.value) {
+    lab.simulationEventForm.value.set({
+      wasmPayload: payloadCache.value
+    });
+  } else {
+    lab.simulationEventForm.value.set({
+      wasmPayload: '{}'
+    });
+  }
+  try {
+    // curFilesListSchema.curActiveFile.data?.extraData?.payload ||
+    lab.simulationEventForm.afterSubmit = async ({ formData }) => {
+      if (formData.wasmPayload) {
+        try {
+          const wasmPayload = JSON.parse(formData.wasmPayload);
+          lab.onDebugWASM(wasmPayload);
+          afterSubmit();
+        } catch (error) {}
+      }
+    };
+    hooks.getFormData({
+      title: 'Send Simulated Event',
+      size: 'xl',
+      isAutomaticallyClose: false,
+      isCentered: true,
+      formList: [
+        {
+          form: lab.simulationEventForm
+        }
+      ]
+    });
+  } catch (e) {}
+};
 
 const Editor = observer(() => {
   const {
@@ -53,13 +149,7 @@ const Editor = observer(() => {
       if (filesItem.type != 'file') return;
       if (!filesItem.label.endsWith('.ts')) return;
       try {
-        const code = wasm_vm_sdk + filesItem.data.code;
-        const { error, binary, text, stats, stderr } = await asc.compileString(code, {
-          optimizeLevel: 4,
-          runtime: 'stub',
-          lib: 'assemblyscript-json/assembly/index',
-          debug: true
-        });
+        const { error, binary, text, stats, stderr } = await compileAssemblyscript(filesItem.data.code);
         if (error) {
           console.log(error);
           return toast.error(error.message);
@@ -149,6 +239,43 @@ const Editor = observer(() => {
     );
   });
 
+  const ConsolePanel = observer(() => {
+    return (
+      <>
+        <Flex borderTop={'2px solid #090909'} bg="#1e1e1e" color="white" pt={1}>
+          <VscClearAll
+            onClick={() => {
+              lab.stdout = [];
+              lab.stderr = [];
+            }}
+            cursor={'pointer'}
+            style={{ marginLeft: 'auto', marginRight: '20px' }}
+          />
+        </Flex>
+        <Box ref={terminalRef} id="terminal" fontFamily="monospace" w="100%" h="calc(100vh - 580px)" p="10px" bg="#1e1e1e" color="white" whiteSpace="pre-line" overflowY="auto" position="relative">
+          {lab.stdout?.map((i) => {
+            return (
+              <Flex>
+                <Flex color="#d892ff" mr={2} whiteSpace="nowrap">
+                  [wasmvm -{' '}
+                  {
+                    <>
+                      <Box color="#ffd300" ml={1}>
+                        {dayjs(i?.['@ts']).format('hh:mm:ss')}
+                      </Box>
+                    </>
+                  }
+                  ]
+                </Flex>{' '}
+                {JSON.stringify(i)}
+              </Flex>
+            );
+          })}
+        </Box>
+      </>
+    );
+  });
+
   return (
     <Box>
       {/* Active Bar Headers  */}
@@ -191,15 +318,15 @@ const Editor = observer(() => {
           );
         })}
 
-        {curFilesListSchema?.curActiveFileIs('ts') && (
+        {/* {curFilesListSchema?.curActiveFileIs('ts') && (
           <>
             <Tooltip label="Compile to wasm (ctrl+s)" placement="top">
               <Text ml="auto" cursor="pointer" mr={4} className="pi pi-bolt" color="white" onClick={() => store.onCompile(curFilesListSchema?.curActiveFile)}></Text>
             </Tooltip>
           </>
-        )}
+        )} */}
 
-        {curFilesListSchema?.curActiveFileIs('wasm') && (
+        {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && (
           <>
             <Tooltip label={`Upload to DevNet`} placement="top">
               <Text
@@ -209,12 +336,7 @@ const Editor = observer(() => {
                 className="pi pi-cloud-upload"
                 color="white"
                 onClick={async () => {
-                  w3s.project.createProjectByWasmForm.value.set({
-                    // projectName: w3s.project.curProject?.f_name,
-                    file: helper.Uint8ArrayToWasmBase64FileData(curFilesListSchema?.curActiveFile.label, curFilesListSchema?.curActiveFile.data.extraData.raw)
-                    // appletName: ''
-                  });
-                  w3s.project.createProjectByWasm();
+                  compileAndCreateProject();
                 }}
               ></Text>
             </Tooltip>
@@ -222,30 +344,10 @@ const Editor = observer(() => {
             <Box position={'relative'}>
               <Box
                 onClick={() => {
-                  lab.simulationEventForm.value.set({
-                    wasmPayload: curFilesListSchema.curActiveFile.data?.extraData?.payload || '{}'
-                  });
-                  lab.simulationEventForm.afterSubmit = async ({ formData }) => {
-                    if (formData.wasmPayload) {
-                      try {
-                        const wasmPayload = JSON.parse(formData.wasmPayload);
-                        lab.onDebugWASM(wasmPayload);
-                        setTimeout(() => {
-                          terminalRef.current.scrollTop = terminalRef.current.scrollHeight * 10000;
-                        }, 1);
-                      } catch (error) {}
-                    }
-                  };
-                  hooks.getFormData({
-                    title: 'Send Simulated Event',
-                    size: 'xl',
-                    isAutomaticallyClose: false,
-                    isCentered: true,
-                    formList: [
-                      {
-                        form: lab.simulationEventForm
-                      }
-                    ]
+                  debugAssemblyscript(() => {
+                    setTimeout(() => {
+                      terminalRef.current.scrollTop = terminalRef.current.scrollHeight * 10000;
+                    }, 1);
                   });
                 }}
               >
@@ -288,104 +390,67 @@ const Editor = observer(() => {
                   {/* This file is a binary file and cannot be opened in the editor! */}
                   <MonacoEditor key="wasm-monaco" theme="vs-dark" value={curFilesListSchema?.curActiveFile?.data?.code}></MonacoEditor>
                 </Center>
-                <Flex borderTop={'2px solid #090909'} bg="#1e1e1e" color="white" pt={1}>
-                  <VscClearAll
-                    onClick={() => {
-                      lab.stdout = [];
-                      lab.stderr = [];
-                    }}
-                    cursor={'pointer'}
-                    style={{ marginLeft: 'auto', marginRight: '20px' }}
-                  />
-                </Flex>
-                <Box
-                  ref={terminalRef}
-                  id="terminal"
-                  fontFamily="monospace"
-                  w="100%"
-                  h="calc(100vh - 480px)"
-                  p="10px"
-                  bg="#1e1e1e"
-                  color="white"
-                  whiteSpace="pre-line"
-                  overflowY="auto"
-                  position="relative"
-                >
-                  {lab.stdout?.map((i) => {
-                    return (
-                      <Flex>
-                        <Flex color="#d892ff" mr={2} whiteSpace="nowrap">
-                          [wasmvm -{' '}
-                          {
-                            <>
-                              <Box color="#ffd300" ml={1}>
-                                {dayjs(i?.['@ts']).format('hh:mm:ss')}
-                              </Box>
-                            </>
-                          }
-                          ]
-                        </Flex>{' '}
-                        {JSON.stringify(i)}
-                      </Flex>
-                    );
-                  })}
-                </Box>
               </Flex>
             ) : (
               <>
                 {curFilesListSchema?.curActiveFileIs('flow') ? (
-                  <Flow></Flow>
+                  <ErrorBoundary fallback={<FlowErrorFallback />}>
+                    <Flow />
+                  </ErrorBoundary>
                 ) : (
-                  <Flex flexDirection={'column'} w="full">
-                    <MonacoEditor
-                      // defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
-                      width={'100%'}
-                      height={400}
-                      key="monaco"
-                      theme="vs-dark"
-                      defaultLanguage="typescript"
-                      language="typescript"
-                      defaultValue="export function test(): void {}"
-                      value={curFilesListSchema?.curActiveFile?.data?.code}
-                      beforeMount={(monaco) => {}}
-                      onMount={async (editor, monaco) => {
-                        monaco.languages.typescript.typescriptDefaults.addExtraLib(
-                          `
+                  <>
+                    <Flex flexDirection={'column'} w="full">
+                      <MonacoEditor
+                        // defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
+                        width={'100%'}
+                        height={400}
+                        key="monaco"
+                        theme="vs-dark"
+                        defaultLanguage="typescript"
+                        language="typescript"
+                        defaultValue="export function test(): void {}"
+                        value={curFilesListSchema?.curActiveFile?.data?.code}
+                        beforeMount={(monaco) => {}}
+                        onMount={async (editor, monaco) => {
+                          monaco.languages.typescript.typescriptDefaults.addExtraLib(
+                            `
                             declare const Log: (message:string) => void;
                             declare const SetDB: (key: string, value: number) => void;
                             declare const GetDB: (key: string) => string;
                             declare const SendTx: (chainId: number, to:string, value:string ,data:string) => string | null;
                             declare const GetDataByRID: (rid: number) => string;
                             `,
-                          'sdk/index.d.ts'
-                        );
-                        monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-                        // editor.createDecorationsCollection([
-                        //   {
-                        //     range: new monaco.Range(4, 17, 4, 22),
-                        //     options: {
-                        //       isWholeLine: true,
-                        //       linesDecorationsClassName: 'myLineDecoration'
-                        //     }
-                        //   }
-                        // ]);
-                        // monaco.languages.registerHoverProvider('typescript', {
-                        //   provideHover: function (model, position) {
-                        //     const word = model.getWordAtPosition(position);
-                        //     return {
-                        //       contents: [{ value: 'Click to debug' }],
-                        //       range: new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn)
-                        //     };
-                        //     return null;
-                        //   }
-                        // });
-                        if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
-                      }}
-                      onChange={(e) => {
-                        curFilesListSchema.setCurFileCode(e);
-                      }}
-                    />
-                  </Flex>
+                            'sdk/index.d.ts'
+                          );
+                          monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
+                          // editor.createDecorationsCollection([
+                          //   {
+                          //     range: new monaco.Range(4, 17, 4, 22),
+                          //     options: {
+                          //       isWholeLine: true,
+                          //       linesDecorationsClassName: 'myLineDecoration'
+                          //     }
+                          //   }
+                          // ]);
+                          // monaco.languages.registerHoverProvider('typescript', {
+                          //   provideHover: function (model, position) {
+                          //     const word = model.getWordAtPosition(position);
+                          //     return {
+                          //       contents: [{ value: 'Click to debug' }],
+                          //       range: new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn)
+                          //     };
+                          //     return null;
+                          //   }
+                          // });
+                          if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
+                        }}
+                        onChange={(e) => {
+                          curFilesListSchema.setCurFileCode(e);
+                        }}
+                      />
+                      <ConsolePanel />
+                    </Flex>
+                  </>
                 )}
               </>
             )}

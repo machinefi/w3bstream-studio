@@ -37,7 +37,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     asyncImportASC();
   }, []);
 
-
   useEffect(() => {
     if (!token && !['/openapi', '/admin-login'].includes(router.pathname)) {
       NextRouter.push('/login');
@@ -48,22 +47,26 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [token]);
 
-  const GoToProjectModal = ({ context, id, innerProps }: ContextModalProps<{ modalBody: string, instance: ProjectType }>) => (
+  const GoToProjectModal = ({ context, id, innerProps }: ContextModalProps<{ modalBody: string; instance: ProjectType }>) => (
     <>
       <Text size="sm">{innerProps.modalBody}</Text>
-      <Button fullWidth mt="md" onClick={(e) => {
-        try {
-          console.log('xxx')
-          // modals.closeAll();
-          // w3s.currentHeaderTab === 'PROJECTS'
-          // w3s.project.resetSelectedNames();
-          // w3s.project.allProjects.onSelect(0)
-          // w3s.showContent = 'METRICS';
-          // w3s.metrics.allMetrics.call();
-        } catch (error) {
-          toast.error(error.message)
-        }
-      }}>
+      <Button
+        fullWidth
+        mt="md"
+        onClick={(e) => {
+          try {
+            console.log('xxx');
+            // modals.closeAll();
+            // w3s.headerTabs === 'PROJECTS'
+            // w3s.project.resetSelectedNames();
+            // w3s.project.allProjects.onSelect(0)
+            // w3s.showContent = 'METRICS';
+            // w3s.metrics.allMetrics.call();
+          } catch (error) {
+            toast.error(error.message);
+          }
+        }}
+      >
         View
       </Button>
     </>
@@ -71,29 +74,29 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return useMemo(() => {
     return (
-        <InspectorWrapper
-          // props see docs:
-          // https://github.com/zthxxx/react-dev-inspector#inspector-component-props
-          keys={['control', 'shift', 'z']}
-          disableLaunchEditor={true}
-          onClickElement={({ codeInfo }: InspectParams) => {
-            if (!codeInfo?.absolutePath) return;
-            const { absolutePath, lineNumber, columnNumber } = codeInfo;
-            // you can change the url protocol if you are using in Web IDE
-            window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`);
-          }}
-        >
-          <ChakraProvider theme={theme}>
-            <NotificationsProvider>
-              <Toaster />
-              <WagmiProvider>
-                <ModalsProvider modals={{projectstration: GoToProjectModal}}>
-                  <Component {...pageProps} />
-                </ModalsProvider>
-              </WagmiProvider>
-            </NotificationsProvider>
-          </ChakraProvider>
-        </InspectorWrapper>
+      <InspectorWrapper
+        // props see docs:
+        // https://github.com/zthxxx/react-dev-inspector#inspector-component-props
+        keys={['control', 'shift', 'z']}
+        disableLaunchEditor={true}
+        onClickElement={({ codeInfo }: InspectParams) => {
+          if (!codeInfo?.absolutePath) return;
+          const { absolutePath, lineNumber, columnNumber } = codeInfo;
+          // you can change the url protocol if you are using in Web IDE
+          window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`);
+        }}
+      >
+        <ChakraProvider theme={theme}>
+          <NotificationsProvider>
+            <Toaster position="bottom-right" />
+            <WagmiProvider>
+              <ModalsProvider modals={{ projectstration: GoToProjectModal }}>
+                <Component {...pageProps} />
+              </ModalsProvider>
+            </WagmiProvider>
+          </NotificationsProvider>
+        </ChakraProvider>
+      </InspectorWrapper>
     );
   }, [Component, pageProps]);
 }

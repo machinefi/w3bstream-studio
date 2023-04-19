@@ -6,6 +6,8 @@ import { IFormType, INodeTypeDescription } from '../types';
 import { eventBus } from '@/lib/event';
 //@ts-ignore
 import { faker } from '@faker-js/faker';
+import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { rootStore } from '@/store/index';
 
 const template = `
 //https://github.com/faker-js/faker
@@ -83,7 +85,8 @@ export class SimulationNode extends BaseNode {
             key: 'JSONForm',
             component: 'JSONForm',
             props: {
-              formState: {
+              formState: new JSONSchemaFormState({
+                // @ts-ignore
                 schema: dataSimulationNodeSchema,
                 uiSchema: {
                   'ui:submitButtonOptions': {
@@ -91,28 +94,25 @@ export class SimulationNode extends BaseNode {
                     submitText: 'OK'
                   },
                   code: {
-                    // @ts-ignore
                     'ui:widget': 'EditorWidget',
                     'ui:options': {
                       emptyValue: ``,
                       lang: 'javascript',
                       editorHeight: '400px',
-                      showCodeSelector: `={{(()=>{
+                      showCodeSelector: (() => {
                         const files = [];
                         const findSimulationCode = (arr) => {
                           arr?.forEach((i) => {
                             if (i.data?.dataType === 'simulation') {
-                              files.push({ label: i.label, value: i.data.code , id: i.key});
+                              files.push({ label: i.label, value: i.data.code, id: i.key });
                             } else if (i.type === 'folder') {
                               findSimulationCode(i.children);
                             }
                           });
                         };
-                        findSimulationCode(globalThis.store.w3s.projectManager.curFilesList ?? []);
+                        findSimulationCode(globalThis.store?.w3s.projectManager.curFilesList ?? []);
                         return files || [];
-                      })()}}=`
-                        .replace(/[\n]/g, '')
-                        .replace(/\s+/g, ' ')
+                      })()
                     }
                   },
                   fieldLabelLayout: {
@@ -120,11 +120,13 @@ export class SimulationNode extends BaseNode {
                     labelWidth: '200px'
                   }
                 },
-                value: {
-                  code: '',
-                  triggerInterval: '2'
-                }
-              }
+                value: new JSONValue<any>({
+                  default: {
+                    code: template,
+                    triggerInterval: '2'
+                  }
+                })
+              })
             }
           }
         ]
@@ -135,6 +137,5 @@ export class SimulationNode extends BaseNode {
 
   constructor() {
     super();
-    this.form.formList[0].form[0].props.formState.value.code = template;
   }
 }

@@ -1,6 +1,7 @@
 import fetch, { FormData, File } from 'node-fetch';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Blob from 'cross-blob';
+import { _ } from '@/lib/lodash';
 
 export interface Project {
   name: string;
@@ -55,6 +56,9 @@ const createProject = async (
       body: JSON.stringify(project),
       headers: { Authorization: token }
     });
+    if (response.status !== 200 && response.status !== 201) {
+      throw new Error('create project failed:' + response.statusText);
+    }
     const data: any = await response.json();
     if (data.project) {
       return {
@@ -110,13 +114,17 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
       },
       body: formData
     });
+    if (res.status !== 200 && res.status !== 201) {
+      throw new Error('create applet failed:' + res.statusText);
+    }
     const data: any = await res.json();
+    // console.log('createApplet->', data);
     if (data.appletID) {
       return data.appletID;
     }
     throw data;
   } catch (e) {
-    console.log(e.message)
+    console.log('createApplet', e);
     throw new Error('create applet failed');
   }
 };
@@ -150,7 +158,7 @@ const startInstance = async (instanceID: string, token: string): Promise<any> =>
     });
   } catch (error) {
     console.log(error);
-    throw new Error('start instance failed:'+error.msg);
+    throw new Error('start instance failed:' + error.msg);
   }
 };
 
@@ -200,14 +208,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
+      console.log(project);
       for (const p of project) {
+        console.log('p', p);
         const { projectID, projectName } = await createProject(p, token);
+        console.log('projectID', projectID);
         // if (p.envs?.length > 0) {
         //   await saveEnvs(projectName, p.envs, token);
         // }
         for (const a of p.applets) {
           const appletID = await createApplet({ ...a, projectName }, token);
+          console.log('appletID', appletID);
           const instanceID = await deployApplet(appletID, token);
+          console.log('instanceID', instanceID);
           await startInstance(instanceID, token);
         }
         for (const d of p.datas) {

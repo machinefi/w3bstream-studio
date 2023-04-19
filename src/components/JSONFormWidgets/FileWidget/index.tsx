@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Flex, chakra, Box, Text, Stack, FlexProps, Icon } from '@chakra-ui/react';
+import { Flex, chakra, Box, Text, Stack, FlexProps, Icon, Button } from '@chakra-ui/react';
 import { dataURItoBlob, WidgetProps } from '@rjsf/utils';
 import { Accept, useDropzone } from 'react-dropzone';
 import { FiUploadCloud } from 'react-icons/fi';
+import { DownloadIcon } from '@chakra-ui/icons';
 
 function addNameToDataURL(dataURL: string, name: string) {
   if (dataURL === null) {
@@ -87,6 +88,7 @@ type Options = {
   multiple?: boolean; // Allow drag 'n' drop (or selection from the file dialog) of multiple files
   tips?: string;
   flexProps?: FlexProps;
+  showDownload?: boolean;
 };
 
 export interface FileWidgetProps extends WidgetProps {
@@ -99,7 +101,7 @@ export type FileWidgetUIOptions = {
 };
 
 const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: FileWidgetProps) => {
-  const { accept, maxFiles = 0, multiple = false, tips, flexProps = {} } = options;
+  const { accept, maxFiles = 0, multiple = false, tips, flexProps = {}, showDownload = false } = options;
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
   useEffect(() => {
     if (value) {
@@ -168,6 +170,33 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
         )}
       </Flex>
       <FilesInfo filesInfo={filesInfo} />
+      {showDownload && (
+        <Button
+          mt={2}
+          size="md"
+          rightIcon={<DownloadIcon />}
+          onClick={() => {
+            if (value) {
+              const link = document.createElement('a');
+              if (Array.isArray(value)) {
+                value.forEach((dataURL) => {
+                  const { blob, name } = dataURItoBlob(dataURL);
+                  link.href = window.URL.createObjectURL(blob);
+                  link.download = name;
+                  link.click();
+                });
+              } else {
+                const { blob, name } = dataURItoBlob(value);
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.click();
+              }
+            }
+          }}
+        >
+          Download File
+        </Button>
+      )}
     </Flex>
   );
 };

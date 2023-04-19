@@ -5,6 +5,7 @@ import { BaseNode, BaseNodeForm } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
 import { WASM } from '@/server/wasmvm';
 import { eventBus } from '@/lib/event';
+import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 
 export const vmRunTimeNodeSchema = {
   type: 'object',
@@ -82,7 +83,8 @@ export class VmRunTimeNode extends BaseNode {
             key: 'JSONForm',
             component: 'JSONForm',
             props: {
-              formState: {
+              formState: new JSONSchemaFormState({
+                // @ts-ignore 
                 schema: vmRunTimeNodeSchema,
                 uiSchema: {
                   'ui:submitButtonOptions': {
@@ -92,7 +94,7 @@ export class VmRunTimeNode extends BaseNode {
                   console: {
                     'ui:widget': 'RuntimeConsoleWidget',
                     'ui:options': {
-                      id: '={{uuid()}}'
+                      // id: '={{uuid()}}'
                     }
                   },
                   fieldLabelLayout: {
@@ -100,12 +102,12 @@ export class VmRunTimeNode extends BaseNode {
                     labelWidth: '200px'
                   }
                 },
-                value: {
-                  // id: '={{uuid()}}',
-                  // code: 'template'
-                  handler: 'start'
-                }
-              }
+                value: new JSONValue<any>({
+                  default: {
+                    handler: 'start'
+                  }
+                })
+              })
             }
           }
         ]

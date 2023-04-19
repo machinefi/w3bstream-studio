@@ -179,7 +179,6 @@ export class WASM {
             const key_view = new Uint8Array(_this.memory.buffer, key_ptr, key_size);
             const key = new TextDecoder().decode(key_view);
             const value = window?.localStorage.getItem(key);
-            console.log(rAddrPtr, rSizePtr, 'vvv');
             if (value) {
               _this.copyToWasm(value, rAddrPtr, rSizePtr);
               _this.writeStdout({ message: `call ws_get_db ${key}: ${value}` });

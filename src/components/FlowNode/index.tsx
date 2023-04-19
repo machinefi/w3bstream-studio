@@ -10,7 +10,6 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { INodeGroup, INodeIconType, INodeType } from '@/lib/nodes/types';
 import { hooks } from '@/lib/hooks';
-import { FlowNode } from '@/store/standard/Node';
 import { Radar2 } from 'tabler-icons-react';
 import { JSONRender, jsonRenderGlobalStore } from '../JSONRender';
 import { toJS } from 'mobx';
@@ -19,13 +18,14 @@ import { JSONForm } from '../JSONForm';
 import { eventBus } from '@/lib/event';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
 import { Box, Flex, Tab, TabList, TabPanels, Tabs, Tooltip, Image, TabPanel } from '@chakra-ui/react';
+import { BaseNode } from '@/lib/nodes/baseNode';
 
 export type FlowNodeData = {
   [x: string]: any;
   label: string;
 };
 
-export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string; nodeInstance: FlowNode; data: FlowNodeData }) => {
+export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string; nodeInstance: BaseNode; data: FlowNodeData }) => {
   const {
     w3s: {
       flowModule: { flow }
@@ -33,7 +33,7 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
   } = useStore();
 
   const store = useLocalObservable(() => ({
-    realNodeInstance: new FlowNode(flow.nodeAbstracts.find((node) => node.description.name == nodeInstance.description.name)),
+    realNodeInstance: new BaseNode(nodeInstance),
     curFlowNodeResult: null,
     onFlowRunResult(result) {
       if (result.flowId == id) {
@@ -189,7 +189,7 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
 export const NodeContext = React.createContext('NodeContext');
 //node style , write in backand
 export const NodeLayout = memo(
-  ({ id, data, nodeInstance, children }: { id: string; data: FlowNodeData; nodeInstance: FlowNode; children: any }) => {
+  ({ id, data, nodeInstance, children }: { id: string; data: FlowNodeData; nodeInstance: BaseNode; children: any }) => {
     const handleStyle = {
       width: '16px',
       height: '16px',
@@ -324,7 +324,7 @@ export const NodeIcon = ({ icon, size }: NodeIconProps) => {
   }
 };
 
-export const generateReactFlowNode = (nodeInstances: FlowNode[]): NodeTypes => {
+export const generateReactFlowNode = (nodeInstances: BaseNode[]): NodeTypes => {
   const nodeTypes: NodeTypes = {};
   nodeInstances.forEach((node) => {
     const Node = (props: { id: string; data: FlowNodeData }) => (

@@ -8,18 +8,12 @@ import { generateNodeGroupMenu, generateReactFlowNode, NodeIcon, NodeMenuItem } 
 import 'reactflow/dist/style.css';
 import { INodeType } from '@/lib/nodes/types';
 import { helper } from '@/lib/helper';
-import { FlowNode } from '@/store/standard/Node';
-import { hooks } from '@/lib/hooks';
-// import LogView from '@/components/LogView';
 import { _ } from '@/lib/lodash';
-// import { IconArrowLeft } from '@tabler/icons';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { defaultButtonStyle } from '@/lib/theme';
 import { Flows, IndexDb } from '@/lib/dexie';
 import { Box, Button, Collapse, Flex, Text } from '@chakra-ui/react';
-import { getSelectedStyles } from '../ToolBar';
-import { DeleteIcon } from '@chakra-ui/icons';
 import { VscDebugStart, VscDebugPause } from 'react-icons/vsc';
+import { eventBus } from '@/lib/event';
+import { BaseNode } from '@/lib/nodes/baseNode';
 
 const MenuItemCollapse = ({ nodeMenuItem, addNode }: { nodeMenuItem: NodeMenuItem; addNode: (event: any, nodeInstance: INodeType) => void }) => {
   // const { classes } = useStyles();
@@ -103,30 +97,14 @@ const Flow = observer(() => {
       this.nodeMenu = generateNodeGroupMenu(flowModule.flow.nodeInstances);
     },
     async initFlow() {
-      // this.flows = await IndexDb.findFlows();
-      // if (this.flows.length > 0) {
-      //   this.selectFlow(this.flows[0].id);
-      // }
-      this.currentFlowInfo = curFilesListSchema?.curActiveFile.data;
+      this.currentFlowInfo = curFilesListSchema?.curActiveFile?.data;
       flowModule.flow.importJSON(this.currentFlowInfo);
       flow.curFlowRunning = false;
     }
-    // async selectFlow(id: number) {
-    //   // this.init();
-    //   this.flows = await IndexDb.findFlows();
-    //   const curFlow = this.flows.find((f) => f.id === id);
-    //   console.log(curFlow);
-    //   if (curFlow) {
-    //     flow.curFlowId = id;
-    //     this.currentFlowInfo = curFlow;
-    //     flowModule.flow.importJSON(curFlow.data);
-    //   }
-    // }
   }));
 
   useEffect(() => {
     store.initFlow();
-
   }, [curFilesListSchema.curActiveFileId]);
 
   useEffect(() => {
@@ -156,10 +134,21 @@ const Flow = observer(() => {
     };
 
     store.init();
+
+    eventBus.on('file.change', () => {
+      store.init();
+      store.initFlow();
+    });
+    return () => {
+      eventBus.removeListener('file.change', () => {
+        store.init();
+        store.initFlow();
+      });
+    };
   }, []);
 
   const addNode = useCallback(
-    (event, nodeInstance: FlowNode) => {
+    (event, nodeInstance: BaseNode) => {
       event.preventDefault();
       if (!flow.reactFlowInstance) {
         return;
@@ -213,58 +202,6 @@ const Flow = observer(() => {
 
   return (
     <Flex w="100%" h="calc(100vh - 180px)">
-      {/* left menu  */}
-      {/* <Flex overflowY="auto" direction={'column'} w="250px" h="100%" p="20px 10px" bg="#fff" mr={8} style={{ borderRadius: '12px' }}>
-        <Box>
-          <Button
-            leftIcon={<AiOutlinePlus />}
-            h="32px"
-            {...defaultButtonStyle}
-            onClick={async () => {
-              const { name } = await hooks.getFormData({
-                title: 'New Flow',
-                size: 'md',
-                formList: [
-                  {
-                    form: flowModule.createFlowForm
-                  }
-                ]
-              });
-              await IndexDb.insertFlow(name, { nodes: [], edges: [] });
-              store.initFlow();
-            }}
-          >
-            Create New Flow
-          </Button>
-        </Box>
-
-        <Flex direction={'column'} mt={4}>
-          {store.flows.map((flowItem) => (
-            <Flex
-              key={flowItem.id}
-              p="18px"
-              bg="#f7f7f7"
-              mt={2}
-              borderRadius="8px"
-              {...getSelectedStyles(Number(flowItem.id) === Number(flow.curFlowId))}
-              onClick={() => {
-                store.selectFlow(Number(flowItem.id));
-              }}
-            >
-              <Text>{flowItem.name}</Text>
-              <DeleteIcon
-                ml="auto"
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  IndexDb.deleteFlow(flowItem.id);
-                  store.flows = await IndexDb.findFlows();
-                }}
-              ></DeleteIcon>
-            </Flex>
-          ))}
-        </Flex>
-      </Flex> */}
-
       <Box pos="relative" w="100%" h="100%">
         <>
           <ContextMenuTrigger id="flow-box" holdToDisplay={-1}>
@@ -275,7 +212,7 @@ const Flow = observer(() => {
                 minZoom={0.5}
                 maxZoom={1.5}
                 onInit={flow.onInit}
-                nodes={flow.nodes.map((i) => ({ ...i, dragHandle: '.drag-handle' }))}
+                nodes={flow.nodes?.map((i) => ({ ...i, dragHandle: '.drag-handle' }))}
                 edges={flow.edges}
                 onNodesChange={flow.onNodesChange}
                 onEdgesChange={flow.onEdgesChange}
@@ -358,5 +295,25 @@ const Flow = observer(() => {
     </Flex>
   );
 });
+
+export const FlowErrorFallback = () => {
+  return (
+    <Flex direction={'column'} alignItems="center" bg={'#1e1e1e'} width={'100%'} height={300} color="white">
+      <Box mt={4} opacity="0.7">
+        Someting went wrong
+      </Box>
+      <Button
+        mt={4}
+        color="red"
+        onClick={(e) => {
+          e.preventDefault();
+          window.location.reload();
+        }}
+      >
+        Click to refresh
+      </Button>
+    </Flex>
+  );
+};
 
 export default Flow;
