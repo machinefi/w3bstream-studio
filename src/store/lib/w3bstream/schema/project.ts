@@ -149,12 +149,9 @@ export default class ProjectModule {
     },
     customValidate: (formData, errors) => {
       if (formData.name) {
-        if (formData.name.length > 128) {
-          errors.name.addError('field cannot be longer than 128 characters');
-        }
-        const re = /^[a-z][a-z0-9_]*$/;
+        const re = /^[a-z0-9_]{6,32}$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('field starts with a lowercase letter and include only lowercase letters, numbers, underscores and no spaces');
+          errors.name.addError('field includes only lowercase letters, numbers, underscores, no spaces, minimum of 6 characters, maximum of 32 characters');
         }
       }
       return errors;
@@ -227,12 +224,9 @@ export default class ProjectModule {
     },
     customValidate: (formData, errors) => {
       if (formData.name) {
-        if (formData.name.length > 128) {
-          errors.name.addError('field cannot be longer than 128 characters');
-        }
-        const re = /^[a-z][a-z0-9_]*$/;
+        const re = /^[a-z0-9_]{6,32}$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('field starts with a lowercase letter and include only lowercase letters, numbers, underscores and no spaces');
+          errors.name.addError('field includes only lowercase letters, numbers, underscores, no spaces, minimum of 6 characters, maximum of 32 characters');
         }
       }
       return errors;
@@ -272,7 +266,7 @@ export default class ProjectModule {
             'application/wasm': ['.wasm']
           },
           tips: `Drag 'n' drop a file here, or click to select a file`,
-          showDownload: true,
+          showDownload: true
         }
       }
     },
