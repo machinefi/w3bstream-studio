@@ -151,7 +151,7 @@ export default class ProjectModule {
       if (formData.name) {
         const re = /^[a-z0-9_]{6,32}$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('field includes only lowercase letters, numbers, underscores, no spaces, minimum of 6 characters, maximum of 32 characters');
+          errors.name.addError('The name field should consist of only lowercase letters, numbers, and underscores, with no spaces; it must be at least 6 characters long and no more than 32.');
         }
       }
       return errors;
