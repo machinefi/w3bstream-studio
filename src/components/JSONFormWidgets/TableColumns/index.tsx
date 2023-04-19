@@ -26,7 +26,7 @@ import { useStore } from '@/store/index';
 import { WidgetColumn } from '@/store/lib/w3bstream/schema/dbTable';
 
 // const ColumnTypes = ['int4', 'int8', 'float4', 'float8', 'numeric', 'json', 'jsonb', 'text', 'varchar', 'uuid', 'time', 'timetz', 'timestamp', 'timestamptz', 'date', 'bool', 'bytea'];
-const ColumnTypes = ['int4', 'int8', 'json', 'jsonb', 'text', 'varchar', 'time', 'timestamp', 'timestamptz', 'date', 'bool'];
+const ColumnTypes = ['int4', 'int8', 'float4', 'float8', 'numeric', 'json', 'jsonb', 'text', 'varchar', 'time', 'timestamp', 'timestamptz', 'date', 'bool', 'bytea'];
 
 const getMenuValue = (type: string) => {
   if (type === 'text' || type === 'varchar') {

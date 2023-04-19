@@ -82,7 +82,10 @@ function ActionButton({ props, text }: ActionButtonType) {
 }
 
 function renderFieldValue(v: any) {
-  return typeof v == 'string' ? v : JSON.stringify(v);
+  if (typeof v == 'string' || typeof v == 'number' || typeof v == 'boolean') {
+    return v;
+  }
+  return JSON.stringify(v);
 }
 
 function Body<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
