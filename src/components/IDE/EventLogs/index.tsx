@@ -1,7 +1,7 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useStore } from '@/store/index';
-import { Box, Flex, Icon, Spinner, Text } from '@chakra-ui/react';
+import { Box, Flex, Icon, Spinner, chakra, Tooltip } from '@chakra-ui/react';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
@@ -11,7 +11,6 @@ import { trpc } from '@/lib/trpc';
 import { VscDebugStart } from 'react-icons/vsc';
 import { hooks } from '@/lib/hooks';
 import { AiOutlineClear } from 'react-icons/ai';
-import { TrueExpression } from 'types:assemblyscript/src/index-js';
 
 type LocalStoreType = {
   loading: boolean;
@@ -48,7 +47,7 @@ const EventLogs = observer(() => {
     loading: true,
     initialized: false,
     logs: [],
-    limit: 20,
+    limit: 50,
     offset: 0,
     haveMore: true,
     setData(data: Partial<LocalStoreType>) {
@@ -152,28 +151,23 @@ const EventLogs = observer(() => {
       <Flex align="center" p="10px 20px" fontSize="sm" fontWeight={700} color="#fff">
         Logs: {loading && <Spinner ml="10px" size="sm" color="#fff" />}
       </Flex>
-      <Box height="calc(100vh - 180px)">
+      <Box height="calc(100vh - 180px)" px="20px">
         <AutoSizer>
           {({ width, height }) => (
             <List
               width={width}
               height={height}
               rowCount={logs.length}
-              rowHeight={50}
+              rowHeight={20}
               rowRenderer={({ index, key, style }) => {
                 const item = logs[index];
                 return (
-                  <Flex px="20px" mb="10px" align="center" key={key} style={style} color="#fff">
-                    <Text minW="160px" size="sm">
-                      {dayjs(Number(item.f_created_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}
-                    </Text>
-                    <Text minW="120px" ml="10px" size="sm" textAlign="center">
-                      {item.f_level}
-                    </Text>
-                    <Text ml="10px" size="sm">
+                  <chakra.p key={key} style={style} color="#fff" whiteSpace="nowrap" overflow="hidden">
+                    {dayjs(Number(item.f_created_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}&nbsp;&nbsp;{item.f_level}&nbsp;&nbsp;
+                    <Tooltip label={item.f_msg} hasArrow aria-label="A tooltip">
                       {item.f_msg}
-                    </Text>
-                  </Flex>
+                    </Tooltip>
+                  </chakra.p>
                 );
               }}
               onScroll={async ({ clientHeight, scrollHeight, scrollTop }) => {
