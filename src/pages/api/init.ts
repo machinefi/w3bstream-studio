@@ -66,8 +66,8 @@ const createProject = async (
         projectName: data.project.name
       };
     }
+    throw data;
   } catch (e) {
-    console.log(e);
     throw new Error('create project failed:' + e.msg);
   }
 };
@@ -124,7 +124,6 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
     }
     throw data;
   } catch (e) {
-    console.log('createApplet', e);
     throw new Error('create applet failed');
   }
 };
@@ -143,7 +142,6 @@ const deployApplet = async (appletID: string, token: string): Promise<string> =>
     }
     throw data;
   } catch (error) {
-    console.log(error);
     throw new Error('deploy applet failed:' + error.msg);
   }
 };
@@ -157,7 +155,6 @@ const startInstance = async (instanceID: string, token: string): Promise<any> =>
       }
     });
   } catch (error) {
-    console.log(error);
     throw new Error('start instance failed:' + error.msg);
   }
 };
