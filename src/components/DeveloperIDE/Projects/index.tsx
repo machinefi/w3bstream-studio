@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Badge } from '@chakra-ui/react';
+import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Badge, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
@@ -203,13 +203,14 @@ const Projects = observer(() => {
                   </Box>
                 </Flex> */}
                 <Flex mt="20px" flexWrap="wrap">
-                  {project.f_description && project.f_description.split(',').map((tag) => {
-                    return (
-                      <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#000" fontSize="xs" border="1px solid #EDEDED" borderRadius="6px">
-                        {tag}
-                      </Box>
-                    );
-                  })}
+                  {project.f_description &&
+                    project.f_description.split(',').map((tag) => {
+                      return (
+                        <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#000" fontSize="xs" border="1px solid #EDEDED" borderRadius="6px">
+                          {tag}
+                        </Box>
+                      );
+                    })}
                 </Flex>
 
                 <Flex mt="10px" justifyContent="flex-end">
@@ -269,22 +270,26 @@ const Projects = observer(() => {
 
   return (
     <Center w="100%" h="calc(100vh - 100px)">
-      <Flex flexDir="column" alignItems="center">
-        <Image w="80px" src="/images/empty_box.svg" alt="" />
-        <Text mt="16px" fontSize="14px" color="#7A7A7A">
-          You haven't created any project.
-        </Text>
-        <Button
-          mt="30px"
-          h="32px"
-          {...defaultButtonStyle}
-          onClick={() => {
-            w3s.project.createProjectForDeleveloper();
-          }}
-        >
-          Create a project now
-        </Button>
-      </Flex>
+      {allProjects.loading.value ? (
+        <Spinner color="#946FFF" />
+      ) : (
+        <Flex flexDir="column" alignItems="center">
+          <Image w="80px" src="/images/empty_box.svg" alt="" />
+          <Text mt="16px" fontSize="14px" color="#7A7A7A">
+            You haven't created any project.
+          </Text>
+          <Button
+            mt="30px"
+            h="32px"
+            {...defaultButtonStyle}
+            onClick={() => {
+              w3s.project.createProjectForDeleveloper();
+            }}
+          >
+            Create a project now
+          </Button>
+        </Flex>
+      )}
     </Center>
   );
 });
