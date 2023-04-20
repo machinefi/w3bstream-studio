@@ -57,4 +57,4 @@ docker-compose -p w3bstream -f ./docker-compose.yaml up -d
 
 Your node should be up and running. 
 
-Please note: the docker images are hosted at [GitHub Docker Registry](https://github.com/machinefi/w3bstream/pkgs/container/w3bstream)
+Please note: the docker images are hosted at [GitHub Docker Registry](https://github.com/machinefi/w3bstream-studio/pkgs/container/w3bstream-studio)
