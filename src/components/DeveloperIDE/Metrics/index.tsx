@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Flex, Box, Icon } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -9,6 +9,10 @@ import { TbApi } from 'react-icons/tb';
 
 const Metrics = () => {
   const { w3s } = useStore();
+
+  useEffect(() => {
+    w3s.metrics.allMetrics.call();
+  }, [])
 
   return (
     <Flex w="100%" h="calc(100vh - 150px)">
