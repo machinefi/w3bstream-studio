@@ -26,7 +26,72 @@ import { useStore } from '@/store/index';
 import { WidgetColumn } from '@/store/lib/w3bstream/schema/dbTable';
 
 // const ColumnTypes = ['int4', 'int8', 'float4', 'float8', 'numeric', 'json', 'jsonb', 'text', 'varchar', 'uuid', 'time', 'timetz', 'timestamp', 'timestamptz', 'date', 'bool', 'bytea'];
-const ColumnTypes = ['int4', 'int8', 'float4', 'float8', 'numeric', 'json', 'jsonb', 'text', 'varchar', 'time', 'timestamp', 'timestamptz', 'date', 'bool', 'bytea'];
+const ColumnTypes = [
+  {
+    type: 'int4',
+    name: 'Int32'
+  },
+  {
+    type: 'int8',
+    name: 'Int64'
+  },
+  {
+    type: 'float4',
+    name: 'Float32'
+  },
+  {
+    type: 'float8',
+    name: 'Float64'
+  },
+  {
+    type: 'numeric',
+    name: 'Decimal'
+  },
+  {
+    type: 'json',
+    name: 'JSON'
+  },
+  {
+    type: 'jsonb',
+    name: 'JSONB'
+  },
+  {
+    type: 'text',
+    name: 'String'
+  },
+  {
+    type: 'varchar',
+    name: 'VarChar'
+  },
+  {
+    type: 'uuid',
+    name: 'UUID'
+  },
+  {
+    type: 'time',
+    name: 'Time'
+  },
+  {
+    type: 'timestamp',
+    name: 'Timestamp'
+  },
+  {
+    type: 'timestamptz',
+    name: 'Timestamp with Timezone'
+  },
+  {
+    type: 'date',
+    name: 'Date'
+  },
+  {
+    type: 'bool',
+    name: 'Bool'
+  },
+  {
+    type: 'bytea',
+    name: 'Bytes'
+  }
+];
 
 const getMenuValue = (type: string) => {
   if (type === 'text' || type === 'varchar') {
@@ -303,9 +368,9 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
           }
         }}
       >
-        {ColumnTypes.map((type) => (
+        {ColumnTypes.map(({ type, name }) => (
           <option key={type} value={type}>
-            {type}
+            {name}
           </option>
         ))}
       </Select>
