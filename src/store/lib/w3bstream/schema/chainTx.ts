@@ -70,7 +70,7 @@ export default class ChainTxModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/api/w3bapp/monitor/chain_tx/${item.f_project_name}/${item.f_chaintx_id}`
+                          url: `/api/w3bapp/monitor/x/${item.f_project_name}/chain_tx/${item.f_chaintx_id}`
                         });
                         eventBus.emit('chainTx.delete');
                         toast.success('Deleted successfully');

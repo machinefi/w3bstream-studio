@@ -70,7 +70,7 @@ export default class ChainHeightModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/api/w3bapp/monitor/chain_height/${item.f_project_name}/${item.f_chain_height_id}`
+                          url: `/api/w3bapp/monitor/x/${item.f_project_name}/chain_height/${item.f_chain_height_id}`
                         });
                         eventBus.emit('chainHeight.delete');
                         toast.success('Deleted successfully');

@@ -378,7 +378,7 @@ export default class PublisherModule {
                     try {
                       await axios.request({
                         method: 'put',
-                        url: `/api/w3bapp/publisher/${projectName}/${item.f_publisher_id}`,
+                        url: `/api/w3bapp/publisher/x/${projectName}/${item.f_publisher_id}`,
                         data: {
                           key,
                           name: key
@@ -404,7 +404,7 @@ export default class PublisherModule {
                     async onOk() {
                       await axios.request({
                         method: 'delete',
-                        url: `/api/w3bapp/publisher/${item.project_name}?publisherID=${item.f_publisher_id}`
+                        url: `/api/w3bapp/publisher/x/${item.project_name}?publisherID=${item.f_publisher_id}`
                       });
                       await showNotification({ message: 'Deleted successfully' });
                       eventBus.emit('strategy.delete');

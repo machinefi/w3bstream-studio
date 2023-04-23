@@ -60,7 +60,7 @@ const Projects = observer(() => {
                     for (const name of selectedNames) {
                       await axios.request({
                         method: 'delete',
-                        url: `/api/w3bapp/project/${name}`
+                        url: `/api/w3bapp/project/x/${name}`
                       });
                     }
                     w3s.project.resetSelectedNames();

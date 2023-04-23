@@ -103,7 +103,7 @@ const SideBar = observer((props: SideBarProps) => {
                           async onOk() {
                             await axios.request({
                               method: 'delete',
-                              url: `/api/w3bapp/project/${p.f_name}`
+                              url: `/api/w3bapp/project/x/${p.f_name}`
                             });
                             eventBus.emit('project.delete');
                             toast.success('Deleted successfully');

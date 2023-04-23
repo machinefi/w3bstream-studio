@@ -16,8 +16,6 @@ import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import FileWidget, { FileWidgetUIOptions } from '@/components/JSONFormWidgets/FileWidget';
 import { Project } from 'pages/api/init';
 import SelectTagWidget, { SelectTagWidgetUIOptions } from '@/components/JSONFormWidgets/SelectTagWidget';
-import { Button, Text } from '@mantine/core';
-import { modals } from '@mantine/modals';
 
 export const defaultSchema = {
   type: 'object',
@@ -92,8 +90,9 @@ export default class ProjectModule {
         const instances = [];
         let strategies = [];
         let publishers = [];
+        const regex = /(?:[^_]*_){2}(.*)/;
         res.forEach((p: ProjectType) => {
-          // p.project_files = new FilesListSchema();
+          p.f_name = p.f_name.match(regex)[1];
           p.applets.forEach((a: AppletType) => {
             a.project_name = p.f_name;
             a.instances.forEach((i) => {
@@ -119,7 +118,6 @@ export default class ProjectModule {
             publishers.push(pub);
           });
         });
-        // console.log(toJS(res));
         this.onLoadCompleted({
           applets,
           publishers,
@@ -356,7 +354,7 @@ export default class ProjectModule {
       const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.f_name : this.form.value.get().name;
       if (projectName) {
         try {
-          await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
+          await axios.post(`/api/w3bapp/project_config/x/${projectName}/PROJECT_ENV`, { env: values });
           showNotification({ message: 'Save environment variables successfully' });
         } catch (error) {
           throw error;
@@ -551,7 +549,7 @@ export default class ProjectModule {
           );
           const res = await axios.request({
             method: 'post',
-            url: `/api/file?api=applet/${projectName}`,
+            url: `/api/file?api=applet/x/${projectName}`,
             headers: {
               'Content-Type': 'multipart/form-data'
             },

@@ -73,7 +73,7 @@ export default class ContractLogModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/api/w3bapp/monitor/contract_log/${item.f_project_name}/${item.f_contractlog_id}`
+                          url: `/api/w3bapp/monitor/x/${item.f_project_name}/contract_log/${item.f_contractlog_id}`
                         });
                         eventBus.emit('contractlog.delete');
                         toast.success('Deleted successfully');

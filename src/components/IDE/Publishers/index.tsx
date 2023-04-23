@@ -57,7 +57,7 @@ const Publishers = observer(() => {
               try {
                 await axios.request({
                   method: 'post',
-                  url: `/api/w3bapp/publisher/${projectName}`,
+                  url: `/api/w3bapp/publisher/x/${projectName}`,
                   data: {
                     key,
                     name: key

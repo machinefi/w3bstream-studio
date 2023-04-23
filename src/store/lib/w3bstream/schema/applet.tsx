@@ -324,7 +324,7 @@ export default class AppletModule {
                         try {
                           await axios.request({
                             method: 'put',
-                            url: `/api/w3bapp/strategy/${applet.project_name}/${item.f_strategy_id}`,
+                            url: `/api/w3bapp/strategy/x/${applet.project_name}/${item.f_strategy_id}`,
                             data: {
                               appletID,
                               eventType,
@@ -355,7 +355,7 @@ export default class AppletModule {
                           }
                           await axios.request({
                             method: 'delete',
-                            url: `/api/w3bapp/strategy/${p.f_name}?strategyID=${item.f_strategy_id}`
+                            url: `/api/w3bapp/strategy/x/${p.f_name}?strategyID=${item.f_strategy_id}`
                           });
                           await showNotification({ message: 'Deleted successfully' });
                           eventBus.emit('strategy.delete');
@@ -405,7 +405,7 @@ export default class AppletModule {
       );
       const res = await axios.request({
         method: 'post',
-        url: `/api/file?api=applet/${formData.projectName}`,
+        url: `/api/file?api=applet/x/${formData.projectName}`,
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -460,7 +460,7 @@ export default class AppletModule {
       );
       const res = await axios.request({
         method: 'post',
-        url: `/api/file?api=applet/${projectName}`,
+        url: `/api/file?api=applet/x/${projectName}`,
         headers: {
           'Content-Type': 'multipart/form-data'
         },

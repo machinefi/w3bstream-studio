@@ -73,7 +73,7 @@ const createProject = async (
 };
 
 // const saveEnvs = async (projectName: string, envs: string[][], token: string): Promise<void> => {
-//   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project_config/${projectName}/PROJECT_ENV`, {
+//   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project_config/x/${projectName}/PROJECT_ENV`, {
 //     method: 'post',
 //     body: JSON.stringify({
 //       env: envs
@@ -107,7 +107,7 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
         wasmName
       })
     );
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${projectName}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/x/${projectName}`, {
       method: 'post',
       headers: {
         Authorization: token
