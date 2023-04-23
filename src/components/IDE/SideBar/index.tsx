@@ -73,7 +73,7 @@ const SideBar = observer((props: SideBarProps) => {
                 }}
               >
                 <Box maxW="200px" lineHeight="28px" fontSize="14px" fontWeight={700}>
-                  {p.f_name}
+                  {p.name}
                 </Box>
                 <Flex alignItems="center">
                   <Tooltip hasArrow label="Edit Project" placement="bottom">
@@ -84,7 +84,7 @@ const SideBar = observer((props: SideBarProps) => {
                         e.stopPropagation();
                         allProjects.onSelect(index);
                         w3s.project.form.value.set({
-                          name: curProject?.f_name
+                          name: curProject?.name
                         });
                         w3s.project.editProject();
                       }}

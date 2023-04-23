@@ -5,16 +5,16 @@ export const definitions = {
       return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_project_id}`) || [];
     },
     get enumNames() {
-      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.name}`) || [];
     }
   },
   projectName: {
     type: 'string',
     get enum() {
-      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.name}`) || [];
     },
     get enumNames() {
-      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.f_name}`) || [];
+      return globalThis.store.w3s.project.allProjects.value?.map((i) => `${i.name}`) || [];
     }
   },
   publishers: {

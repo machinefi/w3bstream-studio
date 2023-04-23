@@ -229,6 +229,7 @@ export type StrategyType = AppletType['strategies'][0];
 export type InstanceType = AppletType['instances'][0] & { project_name: string; applet_name: string };
 export type PublisherType = ProjectOriginalType['publishers'][0] & { project_id: string; project_name: string };
 export type ProjectType = ProjectOriginalType & {
+  name: string;
   applets: AppletType[];
   publishers: PublisherType[];
 };

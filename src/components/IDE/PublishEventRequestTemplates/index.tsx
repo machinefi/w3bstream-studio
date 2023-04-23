@@ -123,7 +123,7 @@ const PublishEventRequestTemplates = observer(() => {
   }));
 
   const languages = ['javascript', 'go', 'rust'];
-  const projectName = (accountRole === 'ADMIN' ? publisher.publishEventForm.formData.projectName : curProject?.f_name) || ':projectName';
+  const projectName = (accountRole === 'ADMIN' ? publisher.publishEventForm.formData.projectName : curProject?.name) || ':projectName';
 
   return (
     <Drawer

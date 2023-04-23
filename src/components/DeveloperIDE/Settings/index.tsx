@@ -16,10 +16,10 @@ const Settings = () => {
   const store = useLocalObservable(() => ({
     operateAddress: '',
     get curApplet() {
-      return applet.allData.find((item) => item.project_name === project.curProject?.f_name);
+      return applet.allData.find((item) => item.project_name === project.curProject?.name);
     },
     get curInstance() {
-      return instances.table.dataSource.find((item) => item.project_name === project.curProject?.f_name);
+      return instances.table.dataSource.find((item) => item.project_name === project.curProject?.name);
     },
     get tags() {
       if (project.curProject?.f_description) {
@@ -71,7 +71,7 @@ const Settings = () => {
                   'ui:widget': 'hidden'
                 };
                 applet.form.value.set({
-                  projectName: project.curProject?.f_name,
+                  projectName: project.curProject?.name,
                   appletName: store.curApplet.f_name
                 });
                 applet.updateWASM(store.curApplet.f_applet_id, store.curInstance.f_instance_id);

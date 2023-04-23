@@ -57,7 +57,7 @@ const Triggers = () => {
           Topic:
         </Box>
         <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-          {curProject?.f_name}
+          {curProject?.name}
         </Box>
       </Flex>
 

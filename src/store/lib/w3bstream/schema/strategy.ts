@@ -100,7 +100,7 @@ export default class StrategyModule {
                     try {
                       await axios.request({
                         method: 'put',
-                        url: `/api/w3bapp/strategy/x/${applet.project_name}/${item.f_strategy_id}`,
+                        url: `/api/w3bapp/strategy/${item.f_strategy_id}`,
                         data: {
                           appletID,
                           eventType,
@@ -131,7 +131,7 @@ export default class StrategyModule {
                       }
                       await axios.request({
                         method: 'delete',
-                        url: `/api/w3bapp/strategy/x/${p.f_name}?strategyID=${item.f_strategy_id}`
+                        url: `/api/w3bapp/strategy/x/${p.name}?strategyID=${item.f_strategy_id}&appletID=${item.f_applet_id}&eventType=${item.f_event_type}&handler=${item.f_handler}`
                       });
                       showNotification({ message: 'Deleted successfully' });
                       eventBus.emit('strategy.delete');
@@ -171,7 +171,7 @@ export default class StrategyModule {
           method: 'post',
           url: `/api/w3bapp/strategy/x/${applet.project_name}`,
           data: {
-            strategies: [
+            data: [
               {
                 appletID,
                 eventType,

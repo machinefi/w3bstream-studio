@@ -50,8 +50,8 @@ export default class ContractLogModule {
   });
 
   get curProjectContractLogs() {
-    const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
-    return this.allContractLogs.value.filter((c) => c.f_project_name === curProjectName);
+    const curProject = globalThis.store.w3s.project.curProject;
+    return this.allContractLogs.value.filter((c) => c.f_project_name === curProject?.f_name);
   }
 
   table = new JSONSchemaTableState<ContractLogType>({
@@ -70,10 +70,12 @@ export default class ContractLogModule {
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
+                      const regex = /(?:[^_]*_){2}(.*)/;
+                      const projectName = item.f_project_name.match(regex)[1];
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/api/w3bapp/monitor/x/${item.f_project_name}/contract_log/${item.f_contractlog_id}`
+                          url: `/api/w3bapp/monitor/x/${projectName}/contract_log/${item.f_contractlog_id}`
                         });
                         eventBus.emit('contractlog.delete');
                         toast.success('Deleted successfully');

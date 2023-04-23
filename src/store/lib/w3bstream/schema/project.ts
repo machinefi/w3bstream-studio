@@ -92,13 +92,13 @@ export default class ProjectModule {
         let publishers = [];
         const regex = /(?:[^_]*_){2}(.*)/;
         res.forEach((p: ProjectType) => {
-          p.f_name = p.f_name.match(regex)[1];
+          p.name = p.f_name.match(regex)[1];
           p.applets.forEach((a: AppletType) => {
-            a.project_name = p.f_name;
+            a.project_name = p.name;
             a.instances.forEach((i) => {
               instances.push({
                 project_id: p.f_project_id,
-                project_name: p.f_name,
+                project_name: p.name,
                 applet_id: a.f_applet_id,
                 applet_name: a.f_name,
                 ...i
@@ -106,7 +106,7 @@ export default class ProjectModule {
             });
             applets.push({
               ...a,
-              project_name: p.f_name
+              project_name: p.name
             });
             strategies = strategies.concat(a.strategies);
           });
@@ -114,7 +114,7 @@ export default class ProjectModule {
             // @ts-ignore
             pub.project_id = p.f_project_id;
             // @ts-ignore
-            pub.project_name = p.f_name;
+            pub.project_name = p.name;
             publishers.push(pub);
           });
         });
@@ -351,7 +351,7 @@ export default class ProjectModule {
   async onSaveEnv() {
     const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
     if (values.length) {
-      const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.f_name : this.form.value.get().name;
+      const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.name : this.form.value.get().name;
       if (projectName) {
         try {
           await axios.post(`/api/w3bapp/project_config/x/${projectName}/PROJECT_ENV`, { env: values });

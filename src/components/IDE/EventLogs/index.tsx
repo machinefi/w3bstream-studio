@@ -56,7 +56,7 @@ const EventLogs = observer(() => {
   }));
 
   useEffect(() => {
-    const projectName = curProject?.f_name;
+    const projectName = curProject?.name;
     if (projectName && !store.initialized) {
       fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
         store.setData({
@@ -105,7 +105,7 @@ const EventLogs = observer(() => {
         }}
         onClick={async () => {
           publisher.developerPublishEventForm.afterSubmit = async ({ formData }) => {
-            const projectName = curProject?.f_name;
+            const projectName = curProject?.name;
             if (projectName) {
               try {
                 const res = await axios.request({
@@ -175,7 +175,7 @@ const EventLogs = observer(() => {
                   if (store.loading || !store.haveMore) {
                     return;
                   }
-                  const projectName = curProject?.f_name;
+                  const projectName = curProject?.name;
                   if (projectName) {
                     store.setData({
                       loading: true

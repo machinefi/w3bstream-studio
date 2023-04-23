@@ -355,7 +355,7 @@ export default class AppletModule {
                           }
                           await axios.request({
                             method: 'delete',
-                            url: `/api/w3bapp/strategy/x/${p.f_name}?strategyID=${item.f_strategy_id}`
+                            url: `/api/w3bapp/strategy/x/${p.name}?strategyID=${item.f_strategy_id}&appletID=${item.f_applet_id}&eventType=${item.f_event_type}&handler=${item.f_handler}`
                           });
                           await showNotification({ message: 'Deleted successfully' });
                           eventBus.emit('strategy.delete');

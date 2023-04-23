@@ -47,8 +47,8 @@ export default class ChainTxModule {
   });
 
   get curProjectChainTx() {
-    const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
-    return this.allChainTx.value.filter((c) => c.f_project_name === curProjectName);
+    const curProject = globalThis.store.w3s.project.curProject;
+    return this.allChainTx.value.filter((c) => c.f_project_name === curProject?.f_name);
   }
 
   table = new JSONSchemaTableState<ChainTxType>({
@@ -67,10 +67,12 @@ export default class ChainTxModule {
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
+                      const regex = /(?:[^_]*_){2}(.*)/;
+                      const projectName = item.f_project_name.match(regex)[1];
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/api/w3bapp/monitor/x/${item.f_project_name}/chain_tx/${item.f_chaintx_id}`
+                          url: `/api/w3bapp/monitor/x/${projectName}/chain_tx/${item.f_chaintx_id}`
                         });
                         eventBus.emit('chainTx.delete');
                         toast.success('Deleted successfully');
