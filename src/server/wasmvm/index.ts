@@ -1,5 +1,6 @@
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
+import { rootStore } from '@/store/index';
 import BigNumber from 'bignumber.js';
 import { SqlDB } from './sqldb';
 export type StdIOType = {
@@ -22,7 +23,6 @@ export enum ResultStatusCode {
   // TODO following result status
   Failed = -1 // reserved for wasm invoke failed
 }
-export const sqlDB = new SqlDB();
 
 export class WASM {
   wasmModuleBytes: Buffer;
@@ -109,9 +109,9 @@ export class WASM {
             });
             return;
           }
-          const sqlStatement = sqlDB.toSQL(sqlJSON);
+          const sqlStatement = rootStore.god.sqlDB.toSQL(sqlJSON);
           try {
-            sqlDB.exec(sqlStatement);
+            rootStore.god.sqlDB.exec(sqlStatement);
             _this.writeStdout({
               message: `run sql ${sqlStatement}`
             });
@@ -133,11 +133,11 @@ export class WASM {
             });
             return;
           }
-          const sqlStatement = sqlDB.toSQL(sqlJSON);
+          const sqlStatement = rootStore.god.sqlDB.toSQL(sqlJSON);
           try {
-            const res = sqlDB.exec(sqlStatement);
-            console.log(sqlDB.parseResult(res))
-            const resStr = JSON.stringify(sqlDB.parseResult(res));
+            const res = rootStore.god.sqlDB.exec(sqlStatement);
+            console.log(rootStore.god.sqlDB.parseResult(res));
+            const resStr = JSON.stringify(rootStore.god.sqlDB.parseResult(res));
             _this.copyToWasm(resStr, vmAddr, vmSizePtr);
           } catch (e) {
             console.log(e);

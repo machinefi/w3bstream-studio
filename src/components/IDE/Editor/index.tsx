@@ -12,7 +12,7 @@ import { VscDebugStart, VscClearAll } from 'react-icons/vsc';
 import { BsDatabaseFillAdd } from 'react-icons/bs';
 import { FileIcon } from '@/components/Tree';
 import { eventBus } from '@/lib/event';
-import { sqlDB, StdIOType, WASM } from '@/server/wasmvm';
+import { StdIOType, WASM } from '@/server/wasmvm';
 import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
 import dayjs from 'dayjs';
 import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
@@ -136,13 +136,13 @@ export const onCreateDB = async () => {
   const sqlJSON: TableJSONSchema[] | TableJSONSchema = JSON.parse(curActiveFile?.data?.code);
   const _sqlJSON = Array.isArray(sqlJSON) ? sqlJSON : [sqlJSON];
   _sqlJSON.forEach((i) => {
-    const res: CREATDB_TYPE = sqlDB.createTableByJSONSchema(i);
+    const res: CREATDB_TYPE = rootStore.god.sqlDB.createTableByJSONSchema(i);
     if (res == CREATDB_TYPE.EXIST) {
       rootStore?.base.confirm.show({
         title: 'Warning',
         description: `The table '${i.name}' already exists. Do you want to overwrite it?`,
         async onOk() {
-          sqlDB.createTableByJSONSchema(i, true);
+          rootStore.god.sqlDB.createTableByJSONSchema(i, true);
           toast.success(`Create Table '${i.name}' Success`);
           eventBus.emit('sql.change');
         }

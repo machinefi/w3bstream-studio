@@ -1,4 +1,5 @@
 import { defaultNetworks } from '@/constants/chain';
+import { SqlDB } from '@/server/wasmvm/sqldb';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { metaMaskWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets';
 import { makeAutoObservable } from 'mobx';
@@ -16,7 +17,20 @@ export class GodStore {
   wagmiClient: any = null;
   wagmiChains: Chain[] = [];
   isWrongNetwork = new BooleanState();
+  sqlDBInstance;
 
+  get sqlDB() {
+    if (!this.sqlDBInstance) {
+      this.initSQLDB();
+    }
+    return this.sqlDBInstance;
+  }
+
+  initSQLDB() {
+    if (!this.sqlDBInstance) {
+      this.sqlDBInstance = new SqlDB();
+    }
+  }
   constructor() {
     makeAutoObservable(this);
     this.eth = new EthNetworkState({

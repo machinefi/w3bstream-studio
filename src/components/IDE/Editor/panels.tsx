@@ -1,7 +1,6 @@
 import JSONTable from '@/components/JSONTable';
 import dayjs from '@/lib/dayjs';
 import { eventBus } from '@/lib/event';
-import { sqlDB } from '@/server/wasmvm';
 import { TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { useStore } from '@/store/index';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
@@ -14,6 +13,7 @@ import { VscClearAll, VscDebugStart } from 'react-icons/vsc';
 
 export const DBpanel = observer(() => {
   const {
+    god: { sqlDB },
     w3s,
     w3s: {
       projectManager: { curFilesListSchema },
@@ -81,7 +81,7 @@ export const DBpanel = observer(() => {
       {store.tables.length > 0 && (
         <>
           <Flex align="center">
-            <Input placeholder='write sql here' w="96%" value={store.sql} onChange={(e) => (store.sql = e.target.value)}></Input>
+            <Input placeholder="write sql here" w="96%" value={store.sql} onChange={(e) => (store.sql = e.target.value)}></Input>
             <VscDebugStart
               style={{ marginLeft: 'auto', marginRight: '10px' }}
               fontSize={'19px'}

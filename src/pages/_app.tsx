@@ -26,7 +26,7 @@ const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : Re
 export let asc: typeof import('assemblyscript/dist/asc');
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { lang, w3s } = useStore();
+  const { lang, w3s, god } = useStore();
   const { token } = w3s.config.form.formData;
   const router = useRouter();
 
@@ -37,6 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       asc = await import('assemblyscript/dist/asc');
     };
     asyncImportASC();
+    god.initSQLDB();
   }, []);
 
   useEffect(() => {

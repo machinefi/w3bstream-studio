@@ -1,5 +1,6 @@
 import { IndexDb } from '@/lib/dexie';
 import { helper, toast } from '@/lib/helper';
+import { hooks } from '@/lib/hooks';
 import initSqlJs from 'sql.js';
 //https://sql.js.org/#/
 //https://sqliteonline.com/
@@ -47,23 +48,10 @@ export interface TableJSONSchema {
 export class SqlDB {
   db: any;
   constructor() {
-    initSqlJs({
-      locateFile: (file) => `/wasms/${file}`
-    }).then((SQL) => {
-      console.log('sql.js loaded', SQL);
-      // const persistedData = localStorage.getItem('s');
-      IndexDb.kvs
-        .filter((i) => i.key == 'sqlite')
-        .toArray()
-        .then((res) => {
-          if (res.length > 0) {
-            console.log(res);
-            this.db = new SQL.Database(helper.base64ToUint8Array(res[0].value));
-          } else {
-            this.db = new SQL.Database();
-          }
-        });
-    });
+    try {
+      if (this.db) return;
+      hooks.waitSQLJSReady().then((db) => (this.db = db));
+    } catch (error) {}
   }
 
   test() {
