@@ -151,8 +151,8 @@ export class FlowState {
   };
 
   importJSON = (json: { nodes: any[]; edges: any[] }) => {
-    this.nodes = json.nodes;
-    this.edges = json.edges?.map((edge) => {
+    this.nodes = json?.nodes;
+    this.edges = json?.edges?.map((edge) => {
       return {
         ...edge,
         id: `reactflow__edge-${edge.source}-${edge.target}`,

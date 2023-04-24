@@ -200,7 +200,10 @@ export class FilesListSchema {
     return this.findFile(this.files, this.curActiveFileId) || null;
   }
 
-  curActiveFileIs(label: 'html' | 'ts' | 'wasm' | 'flow') {
+  curActiveFileIs(label: string | string[]) {
+    if(Array.isArray(label)){
+      return label.some(i=>this.curActiveFile?.label.endsWith(`.${i}`))
+    }
     return this?.curActiveFile?.label.endsWith(`.${label}`);
   }
 
@@ -312,6 +315,5 @@ export class FilesListSchema {
     } else {
       await IndexDb.files.add({ id: String(this.project_id), data: toJS(this) });
     }
-
   }
 }

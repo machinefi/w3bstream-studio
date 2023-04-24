@@ -1,6 +1,7 @@
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
 import BigNumber from 'bignumber.js';
+import { SqlDB } from './sqldb';
 export type StdIOType = {
   '@lv': 'info' | 'error';
   '@ts': number;
@@ -21,6 +22,7 @@ export enum ResultStatusCode {
   // TODO following result status
   Failed = -1 // reserved for wasm invoke failed
 }
+export const sqlDB = new SqlDB();
 
 export class WASM {
   wasmModuleBytes: Buffer;
@@ -96,6 +98,54 @@ export class WASM {
     const _this = this;
     this.vmImports = {
       env: {
+        ws_set_sql_db(ptr, size) {
+          const sql_view = new Uint8Array(_this.memory.buffer, ptr, size);
+          const sql = new TextDecoder().decode(sql_view); //{statement: string, params: any[]}
+          //INSERT INTO \"t_log\" (f_id,f_log) VALUES (?,?);
+          const sqlJSON = helper.json.safeParse(sql);
+          if (!sqlJSON) {
+            _this.writeStderr({
+              message: `sql parse error: ${sql}`
+            });
+            return;
+          }
+          const sqlStatement = sqlDB.toSQL(sqlJSON);
+          try {
+            sqlDB.exec(sqlStatement);
+            _this.writeStdout({
+              message: `run sql ${sqlStatement}`
+            });
+            eventBus.emit('sql.change');
+          } catch (e) {
+            console.log(e);
+            _this.writeStderr({
+              message: `sql run error: ${e.message}`
+            });
+          }
+        },
+        ws_get_sql_db(ptr, size, vmAddr, vmSizePtr) {
+          const sql_view = new Uint8Array(_this.memory.buffer, ptr, size);
+          const sql = new TextDecoder().decode(sql_view);
+          const sqlJSON = helper.json.safeParse(sql);
+          if (!sqlJSON) {
+            _this.writeStderr({
+              message: `sql parse error: ${sql}`
+            });
+            return;
+          }
+          const sqlStatement = sqlDB.toSQL(sqlJSON);
+          try {
+            const res = sqlDB.exec(sqlStatement);
+            console.log(sqlDB.parseResult(res))
+            const resStr = JSON.stringify(sqlDB.parseResult(res));
+            _this.copyToWasm(resStr, vmAddr, vmSizePtr);
+          } catch (e) {
+            console.log(e);
+            _this.writeStderr({
+              message: `sql run error: ${e.message}`
+            });
+          }
+        },
         ws_call_contract(chainID: number, offset: number, size: number, vmAddrPtr: number, vmSizePtr: number): number {
           console.log(`ws_call_contract: chainID=${chainID}, offset=${offset}, size=${size}`);
           const inputView = new Uint8Array(_this.memory.buffer, offset, size);
@@ -223,7 +273,7 @@ export class WASM {
     } catch (error) {
       console.log(error);
       this.writeStderr(error.message);
-      throw new Error(error);
+      // throw new Error(error);
     }
     return {
       stdout: this.stdout,

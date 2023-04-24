@@ -19,6 +19,8 @@ import '@/lib/superjson';
 import { Button, Text } from '@mantine/core';
 import { ContextModalProps, modals, ModalsProvider } from '@mantine/modals';
 import { ProjectType } from '@/server/routers/w3bstream';
+import { SqlDB } from '@/server/wasmvm/sqldb';
+import initSqlJs from 'sql.js';
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
 export let asc: typeof import('assemblyscript/dist/asc');

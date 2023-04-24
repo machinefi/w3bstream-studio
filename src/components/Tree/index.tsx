@@ -33,6 +33,8 @@ export const FileIcon = (file: FilesItemType) => {
     return <Image {...s} src="/images/icons/assembly.svg"></Image>;
   } else if (file?.label?.endsWith('.flow')) {
     return <Image {...s} src="/images/icons/tree.svg"></Image>;
+  }else if (file?.label?.endsWith('.json')) {
+    return <Image {...s} src="/images/icons/json.svg"></Image>;
   }
 
   if (file?.type == 'file') {

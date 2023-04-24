@@ -68,6 +68,6 @@ export default class LabModule {
     this.payloadCache.save(JSON.stringify(wasmPayload));
     const { stderr, stdout } = await wasi.start();
     this.stdout = this.stdout.concat(stdout ?? []);
-    this.stderr = this.stderr.concat(stderr ?? []);
+    this.stdout = this.stdout.concat(stderr ?? []);
   }
 }

@@ -181,5 +181,12 @@ export function start(rid: i32): i32 {
      }
      return rid;
    }
+  `,
+  'sql.ts':`
+  export function start(rid: i32): i32 {
+    const value = ExecSQL(\`INSERT INTO "t_log" (number,text,boolean) VALUES (?,?,?);\`, [new SQL.Int32(1), new SQL.String("test"),new SQL.Bool(false)]);
+    const res = QuerySQL(\`SELECT * FROM "t_log";\`);
+    return rid;
+  }
   `
 };

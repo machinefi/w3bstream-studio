@@ -1,11 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
-import { Text, Flex, Image, chakra, Box, Menu, MenuButton, Button, MenuList, MenuGroup, MenuItem, MenuDivider } from '@chakra-ui/react';
-import { assemblyScriptExample, flowExample, simulationExample } from '@/constants/initWASMExamples';
+import {
+  Text,
+  Flex,
+  Image,
+  chakra,
+  Box,
+  Menu,
+  MenuButton,
+  Button,
+  MenuList,
+  MenuGroup,
+  MenuItem,
+  MenuDivider,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon
+} from '@chakra-ui/react';
+import { assemblyScriptExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
 import { helper } from '@/lib/helper';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
+import { FileIcon } from '@/components/Tree';
 type Options = {};
 
 export interface InitWasmTemplateWidgetProps extends WidgetProps {
@@ -41,26 +60,26 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
         >
           {v?.children?.map((template) => (
             <Flex
+              ml={2}
               key={template.key}
-              flexDir="column"
-              justifyContent="center"
-              alignItems="center"
-              w={100 / v?.children?.length + '%'}
-              h="100px"
-              border="2px solid #EDEDED"
-              borderRadius="8px"
-              cursor="pointer"
               style={{
                 borderColor: templateName === template.label ? '#946FFF' : '#EDEDED'
               }}
-              onClick={() => {
+              borderWidth="1px"
+              px={2}
+              pb={2}
+              borderRadius="8px"
+              cursor="pointer"
+              onClick={(e) => {
+                e.stopPropagation();
                 onChange(JSON.stringify({ ...template, key: uuidv4() }));
                 setTemplateName(template.label);
               }}
             >
-              <Box mt="10px" fontWeight={700} fontSize="16px">
-                {helper.string.firstUpperCase(template.label.split('.')[0])}
-              </Box>
+              <Flex mt="10px" fontWeight={700} fontSize="16px">
+                {FileIcon(template)}
+                {template.label}
+              </Flex>
             </Flex>
           ))}
         </Flex>
@@ -72,6 +91,7 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
       {templates(assemblyScriptExample, 'AssemblyScript')}
       {templates(flowExample, 'Flow')}
       {templates(simulationExample, 'Simulation')}
+      {templates(SqlExample, 'Database')}
     </>
   );
 });

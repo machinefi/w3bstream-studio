@@ -1,6 +1,56 @@
 //tsc --declaration --lib esnext index.ts
 // <reference types="assemblyscript/std/assembly" />
 export const assemblyscriptJSONDTS = `
+delcare namespace SQL {
+  export abstract class SQLTypes {
+    Int32!: i32;
+    Int64!: i64;
+    Float32!: f32;
+    Float64!: f64;
+    String!: string;
+    Time!: string;
+    Bool!: bool;
+    Bytes!: string;
+    abstract pushSQLType(encoder: JSONEncoder): i32;
+  }
+  
+  export class Int32 {
+    Int32: i32;
+    constructor(value: i32);
+  }
+
+  export class Int64 {
+    Int64: i64;
+    constructor(value: i64);
+  }
+
+  export class Float32 {
+    Float32: f32;
+    constructor(value: f32);
+  }
+
+  export class Float64 {
+    Float64: f64;
+    constructor(value: f64);
+  }
+
+  export class String {
+    String: string;
+    constructor(value: string);
+  }
+
+  export class Time {
+    Time: string;
+    constructor(value: string);
+  }
+
+  export class Bool {
+    Bool: bool;
+    constructor(value: bool);
+  }
+}
+
+
 declare namespace ENCODE {
   class JSONEncoder {
     private _isFirstKey;
