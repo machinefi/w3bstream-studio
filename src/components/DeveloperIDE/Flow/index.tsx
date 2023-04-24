@@ -9,7 +9,6 @@ import 'reactflow/dist/style.css';
 import { INodeType } from '@/lib/nodes/types';
 import { helper } from '@/lib/helper';
 import { _ } from '@/lib/lodash';
-import { Flows, IndexDb } from '@/lib/dexie';
 import { Box, Button, Collapse, Flex, Text } from '@chakra-ui/react';
 import { VscDebugStart, VscDebugPause } from 'react-icons/vsc';
 import { eventBus } from '@/lib/event';
@@ -67,7 +66,6 @@ type LocalStoreType = {
   nodeMenu: NodeMenuItem[];
   flowHasChanged: boolean;
   init: () => void;
-  flows: Flows[];
   initFlow: () => void;
 };
 
@@ -86,7 +84,6 @@ const Flow = observer(() => {
   // const { id } = router.query;
 
   const store = useLocalObservable<LocalStoreType>(() => ({
-    flows: [],
     nodeTypes: {},
     nodeMenu: [],
     currentFlowInfo: null,
