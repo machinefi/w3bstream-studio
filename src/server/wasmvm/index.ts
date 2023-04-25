@@ -97,7 +97,57 @@ export class WASM {
     this.wasmModuleBytes = wasmModuleBytes;
     const _this = this;
     this.vmImports = {
+      wasi_snapshot_preview1: {
+        fd_write() {
+          return 0;
+        },
+        clock_time_get() {
+          return 0;
+        },
+        args_sizes_get() {
+          return 0;
+        },
+        args_get() {
+          return 0;
+        },
+        environ_get() {
+          return 0;
+        },
+        environ_sizes_get() {
+          return 0;
+        },
+        fd_close() {
+          return 0;
+        },
+        fd_fdstat_get() {
+          return 0;
+        },
+        fd_prestat_get() {
+          return 0;
+        },
+        fd_prestat_dir_name() {
+          return 0;
+        },
+        fd_read() {
+          return 0;
+        },
+        fd_seek() {
+          return 0;
+        },
+        path_open() {
+          return 0;
+        },
+        proc_exit() {
+          return 0;
+        }
+      },
       env: {
+        ws_get_env(ptr, size) {
+          return null;
+        },
+        ws_send_mqtt_msg() {
+          return null;
+        },
         ws_set_sql_db(ptr, size) {
           const sql_view = new Uint8Array(_this.memory.buffer, ptr, size);
           const sql = new TextDecoder().decode(sql_view); //{statement: string, params: any[]}
@@ -273,7 +323,7 @@ export class WASM {
     } catch (error) {
       console.log(error);
       this.writeStderr({ message: error.message });
-      // throw new Error(error);
+      throw new Error(error);
     }
     return {
       stdout: this.stdout,
