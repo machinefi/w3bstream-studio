@@ -1,15 +1,15 @@
-import getGolangTemplate from "./go";
-import getJavascriptTemplate from "./js";
-import getRustTemplate from "./rust";
+import getGolangTemplate from './go';
+import getJavascriptTemplate from './js';
+import getRustTemplate from './rust';
 
-export const getMQTTRequestTemplate = (language: string, projectName: string, message: string) => {
+export const getMQTTRequestTemplate = ({ language, url, projectName, message }: { language: string; url: string; projectName: string; message: string }) => {
   switch (language) {
     case 'javascript':
-      return getJavascriptTemplate(projectName, message);
+      return getJavascriptTemplate(url, projectName, message);
     case 'go':
-      return getGolangTemplate(projectName, message);
+      return getGolangTemplate(url, projectName, message);
     case 'rust':
-      return getRustTemplate(projectName, message);
+      return getRustTemplate(url, projectName, message);
     default:
       return '';
   }

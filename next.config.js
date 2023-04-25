@@ -5,10 +5,6 @@
  **/
 const nextConfig = {
   output: 'standalone',
-  publicRuntimeConfig: {
-    NEXT_PUBLIC_GATEWAY_HTTP_URL: process.env["NEXT_PUBLIC_GATEWAY_HTTP_URL"],
-    NEXT_PUBLIC_GATEWAY_MQTT_URL: process.env["NEXT_PUBLIC_GATEWAY_MQTT_URL"]
-  },
   webpack: (config, { isServer }) => {
     config.experiments = {
       topLevelAwait: true,
