@@ -69,7 +69,7 @@ export const CreateChainHeightButton = observer(() => {
             data: formData
           });
           if (res.data) {
-            await showNotification({ message: 'Blockchain height monitor sucessfully created.' });
+            showNotification({ message: 'Blockchain height monitor sucessfully created.' });
             eventBus.emit('chainHeight.create');
           }
         }

@@ -107,7 +107,7 @@ export default class StrategyModule {
                           handler
                         }
                       });
-                      await showNotification({ message: 'update strategy succeeded' });
+                      showNotification({ message: 'update strategy succeeded' });
                       eventBus.emit('strategy.update');
                     } catch (error) {}
                   }
@@ -180,7 +180,7 @@ export default class StrategyModule {
             ]
           }
         });
-        await showNotification({ message: 'create strategy succeeded' });
+        showNotification({ message: 'create strategy succeeded' });
         eventBus.emit('strategy.create');
       } catch (error) {}
     }
