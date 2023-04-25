@@ -158,7 +158,7 @@ const Header = observer(() => {
                 }
               });
             }
-            await showNotification({ message: 'requset succeeded' });
+            showNotification({ message: 'requset succeeded' });
             eventBus.emit('postman.request');
           }}
         />

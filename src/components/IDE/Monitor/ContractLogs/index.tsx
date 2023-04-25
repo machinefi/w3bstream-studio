@@ -69,7 +69,7 @@ export const CreateContractLogButton = observer(() => {
             data: formData
           });
           if (res.data) {
-            await showNotification({ message: 'Smart Contract event monitor successfully created.' });
+            showNotification({ message: 'Smart Contract event monitor successfully created.' });
             eventBus.emit('contractlog.create');
           }
         }

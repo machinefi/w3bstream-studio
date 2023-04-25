@@ -298,16 +298,16 @@ export default class DBTableModule {
     //     sql: this.sql
     //   });
     //   if (errorMsg) {
-    //     await showNotification({ message: errorMsg });
+    //     showNotification({ message: errorMsg });
     //     return {
     //       errorMsg
     //     };
     //   } else {
-    //     await showNotification({ message: 'This SQL was executed successfully' });
+    //     showNotification({ message: 'This SQL was executed successfully' });
     //     return data;
     //   }
     // } catch (error) {
-    //   await showNotification({ message: error.message });
+    //   showNotification({ message: error.message });
     //   return {
     //     errorMsg: error.message
     //   };
@@ -334,7 +334,11 @@ export default class DBTableModule {
 
       return tableId;
     } catch (error) {
-      await showNotification({ message: error.message });
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+      }
       return tableId;
     }
   }
@@ -353,30 +357,52 @@ export default class DBTableModule {
       });
       this.allTables.call();
     } catch (error) {
-      console.log('error', error);
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+      }
     }
   }
 
   async addColumn(tableId: number, column: Partial<WidgetColumn>) {
-    const { errorMsg } = await trpc.pg.createColumn.mutate({
-      tableId,
-      ...column
-    });
-    if (errorMsg) {
-      await showNotification({ message: `Failed to create column "${column.name}". Reason: ${errorMsg}` });
+    try {
+      const { errorMsg } = await trpc.pg.createColumn.mutate({
+        tableId,
+        ...column
+      });
+      if (errorMsg) {
+        showNotification({ message: `Failed to create column "${column.name}". Reason: ${errorMsg}` });
+      }
+      return errorMsg;
+    } catch (error) {
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+        return error.message;
+      }
     }
-    return errorMsg;
   }
 
   async updateColumn(columnId: string, column: Partial<WidgetColumn>) {
-    const { errorMsg } = await trpc.pg.updateColumn.mutate({
-      columnId,
-      ...column
-    });
-    if (errorMsg) {
-      await showNotification({ message: `Failed to update column "${column.name}". Reason: ${errorMsg}` });
+    try {
+      const { errorMsg } = await trpc.pg.updateColumn.mutate({
+        columnId,
+        ...column
+      });
+      if (errorMsg) {
+        showNotification({ message: `Failed to update column "${column.name}". Reason: ${errorMsg}` });
+      }
+      return errorMsg;
+    } catch (error) {
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+        return error.message;
+      }
     }
-    return errorMsg;
   }
 
   async deleteColumn({ columnId, cascade }: { columnId: string; cascade?: boolean }) {
@@ -386,13 +412,17 @@ export default class DBTableModule {
         cascade
       });
       if (errorMsg) {
-        await showNotification({ message: errorMsg });
+        showNotification({ message: errorMsg });
       } else {
         const cols = await this.getCurrentTableCols();
         this.setCurrentColumns(cols);
       }
     } catch (error) {
-      console.log('error', error);
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+      }
     }
   }
 
@@ -418,19 +448,27 @@ export default class DBTableModule {
   async createTableData(keys: string[], values: any[]) {
     const { tableSchema, tableName } = this.currentTable;
     if (!keys.length) {
-      await showNotification({ message: 'No data provided' });
+      showNotification({ message: 'No data provided' });
       return 'No data provided';
     }
-    const { errorMsg } = await trpc.pg.createTableData.mutate({
-      tableSchema,
-      tableName,
-      keys,
-      values
-    });
-    if (errorMsg) {
-      await showNotification({ message: errorMsg });
+    try {
+      const { errorMsg } = await trpc.pg.createTableData.mutate({
+        tableSchema,
+        tableName,
+        keys,
+        values
+      });
+      if (errorMsg) {
+        showNotification({ message: errorMsg });
+      }
+      return errorMsg;
+    } catch (error) {
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+      }
     }
-    return errorMsg;
   }
 
   async getCurrentTableCols() {
@@ -440,6 +478,11 @@ export default class DBTableModule {
       });
       return cols;
     } catch (error) {
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+      }
       return [];
     }
   }
@@ -449,12 +492,17 @@ export default class DBTableModule {
     try {
       const { data, errorMsg } = await trpc.pg.dataCount.query({ tableSchema, tableName });
       if (errorMsg) {
-        await showNotification({ message: errorMsg });
+        showNotification({ message: errorMsg });
         return 0;
       } else {
         return data[0].count;
       }
     } catch (error) {
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+      }
       return 0;
     }
   }
@@ -469,32 +517,45 @@ export default class DBTableModule {
         pageSize: this.table.pagination.limit
       });
       if (errorMsg) {
-        await showNotification({ message: errorMsg });
+        showNotification({ message: errorMsg });
         return [];
       } else {
         return data;
       }
     } catch (error) {
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+      }
       return [];
     }
   }
 
   async deleteTableData(name, value) {
     if (!name || !value) {
-      await showNotification({ message: 'No data provided' });
+      showNotification({ message: 'No data provided' });
       return 'No data provided';
     }
     const { tableSchema, tableName } = this.currentTable;
-    const { errorMsg } = await trpc.pg.deleteTableData.mutate({
-      tableSchema,
-      tableName,
-      name,
-      value
-    });
-    if (errorMsg) {
-      await showNotification({ message: errorMsg });
+    try {
+      const { errorMsg } = await trpc.pg.deleteTableData.mutate({
+        tableSchema,
+        tableName,
+        name,
+        value
+      });
+      if (errorMsg) {
+        showNotification({ message: errorMsg });
+      }
+      return errorMsg;
+    } catch (error) {
+      if (error.message.includes('UNAUTHORIZED')) {
+        globalThis.store.w3s.config.logout();
+      } else {
+        showNotification({ message: error.message });
+      }
     }
-    return errorMsg;
   }
 
   async init() {
