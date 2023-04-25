@@ -17,9 +17,9 @@ export class GodStore {
   wagmiClient: any = null;
   wagmiChains: Chain[] = [];
   isWrongNetwork = new BooleanState();
-  sqlDBInstance;
+  sqlDBInstance: SqlDB;
 
-  get sqlDB() {
+  get sqlDB(): SqlDB {
     if (!this.sqlDBInstance) {
       this.initSQLDB();
     }

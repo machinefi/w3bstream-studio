@@ -9,49 +9,14 @@ import { FlowState } from '@/store/standard/FlowState';
 import { rootStore } from '@/store/index';
 import { eventBus } from '@/lib/event';
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
-import { helper } from '@/lib/helper';
 
-export const WasmNodeSchema = {
+export const AssemblyScriptNodeSchema = {
   type: 'object',
   properties: {
-    wasmRaw: { $ref: '#/definitions/wasms', title: 'Wasms' }
+    code: { type: 'string', title: 'Code' }
   },
-  required: ['wasmRaw']
+  required: ['label']
 } as const;
-//@ts-ignore
-WasmNodeSchema.definitions = {
-  wasms: {
-    type: 'string',
-    get enum() {
-      const files = [];
-      const findAssemblyScriptCode = (arr) => {
-        arr?.forEach((i) => {
-          if (i.data?.dataType === 'wasm') {
-            files.push(helper.Uint8ArrayToBase64(i.data?.extraData?.raw));
-          } else if (i.type === 'folder') {
-            findAssemblyScriptCode(i.children);
-          }
-        });
-      };
-      findAssemblyScriptCode(globalThis.store?.w3s?.projectManager.curFilesList ?? []);
-      return files || [];
-    },
-    get enumNames() {
-      const files = [];
-      const findAssemblyScriptCode = (arr) => {
-        arr?.forEach((i) => {
-          if (i.data?.dataType === 'wasm') {
-            files.push(i.label);
-          } else if (i.type === 'folder') {
-            findAssemblyScriptCode(i.children);
-          }
-        });
-      };
-      findAssemblyScriptCode(globalThis.store?.w3s?.projectManager.curFilesList ?? []);
-      return files || [];
-    }
-  }
-};
 
 const template = `
 export function start(rid: i32): i32 {
@@ -62,13 +27,13 @@ export function start(rid: i32): i32 {
 }
 `;
 
-export type WasmNodeSchemaType = FromSchema<typeof WasmNodeSchema>;
+export type AssemblyScriptNodeSchemaType = FromSchema<typeof AssemblyScriptNodeSchema>;
 
-export class WasmNode extends BaseNode {
+export class AssemblyScriptNode extends BaseNode {
   uuid = uuid();
   description: INodeTypeDescription = {
-    displayName: 'WASM Code',
-    name: 'WasmNode',
+    displayName: 'AssemblyScript',
+    name: 'AssemblyScriptNode',
     // nodeType: 'code',
     group: 'code',
     groupIcon: 'AiOutlineCode',
@@ -84,11 +49,28 @@ export class WasmNode extends BaseNode {
     wasm: Uint8Array | null;
   };
 
-  static node_type = 'WasmNode';
+  static node_type = 'AssemblyScriptNode';
   static async execute({ input, output, node, callStack, callStackCurIdx, flow, webhookCtx }) {
+    const code = wasm_vm_sdk + node?.data?.code;
+    const { error, binary, text, stats, stderr } = await asc.compileString(code, {
+      optimizeLevel: 4,
+      runtime: 'stub',
+      lib: 'assemblyscript-json/assembly/index',
+      debug: true
+    });
+    if (error) {
+      console.log(error);
+      eventBus.emit('flow.run.result', {
+        flowId: node.id,
+        success: false,
+        errMsg: error.message
+      });
+      return (node.output = {
+        wasm: null
+      });
+    }
     node.output = {
-      // @ts-ignore
-      wasm: helper.base64ToUint8Array(node?.data?.wasmRaw)
+      wasm: binary
     };
     eventBus.emit('flow.run.result', {
       flowId: node.id,
@@ -101,7 +83,7 @@ export class WasmNode extends BaseNode {
     size: '60%',
     formList: [
       {
-        label: 'WASM',
+        label: 'Code',
         form: [
           {
             key: 'JSONFormKey',
@@ -109,10 +91,7 @@ export class WasmNode extends BaseNode {
             props: {
               formState: new JSONSchemaFormState({
                 // @ts-ignore
-                schema: WasmNodeSchema,
-                // afterSubmit: (e) => {
-                //   console.log(e, 'xxxx');
-                // },
+                schema: AssemblyScriptNodeSchema,
                 uiSchema: {
                   'ui:submitButtonOptions': {
                     norender: true,
@@ -128,7 +107,21 @@ export class WasmNode extends BaseNode {
                       docUri: {
                         title: 'SDK Document',
                         uri: 'https://github.com/machinefi/waas-flow-sdk-doc/blob/main/README.md'
-                      }
+                      },
+                      showCodeSelector: (() => {
+                        const files = [];
+                        const findAssemblyScriptCode = (arr) => {
+                          arr?.forEach((i) => {
+                            if (i.data?.dataType === 'assemblyscript') {
+                              files.push({ label: i.label, value: i.data.code, id: i.key });
+                            } else if (i.type === 'folder') {
+                              findAssemblyScriptCode(i.children);
+                            }
+                          });
+                        };
+                        findAssemblyScriptCode(globalThis.store?.w3s?.projectManager.curFilesList ?? []);
+                        return files || [];
+                      })()
                     }
                   },
                   fieldLabelLayout: {
@@ -138,7 +131,7 @@ export class WasmNode extends BaseNode {
                 },
                 value: new JSONValue<any>({
                   default: {
-                    wasmRaw: ''
+                    code: template
                   }
                 })
               })
@@ -146,7 +139,7 @@ export class WasmNode extends BaseNode {
           }
         ]
       },
-      BaseNodeForm({ label: 'WASM' })
+      BaseNodeForm({ label: 'AssemblyScript' })
     ]
   };
 

@@ -7,6 +7,17 @@ import { makeObservable, observable } from 'mobx';
 import { compileAssemblyscript } from '@/components/IDE/Editor';
 import toast from 'react-hot-toast';
 import { StorageState } from '@/store/standard/StorageState';
+import FileWidget from '@/components/JSONFormWidgets/FileWidget';
+import { eventBus } from '@/lib/event';
+
+export const uploadWasmTemplateFormSchema = {
+  type: 'object',
+  properties: {
+    file: { type: 'string', title: 'Upload File' }
+  },
+  required: ['file']
+} as const;
+type UploadWasmTemplateFormSchemaType = FromSchema<typeof uploadWasmTemplateFormSchema>;
 
 export const simulationEventSchema = {
   type: 'object',
@@ -46,6 +57,39 @@ export default class LabModule {
   stderr: StdIOType[] = [];
   payloadCache: StorageState<string>;
 
+  uploadWasmForm = new JSONSchemaFormState<UploadWasmTemplateFormSchemaType>({
+    //@ts-ignore
+    schema: uploadWasmTemplateFormSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      file: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          accept: {
+            'application/wasm': ['.wasm']
+          },
+          tips: `Code Upload`,
+          flexProps: {
+            h: '200px',
+            borderRadius: '8px'
+          }
+        }
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.uploadWasmForm.reset();
+    },
+    value: new JSONValue<UploadWasmTemplateFormSchemaType>({
+      default: {
+        file: ''
+      }
+    })
+  });
+
   constructor() {
     makeObservable(this, {
       stdout: observable,
@@ -53,13 +97,19 @@ export default class LabModule {
     });
   }
 
-  async onDebugWASM(wasmPayload) {
+  async onDebugWASM(wasmPayload: Uint8Array, needCompile = true) {
     const { curFilesListSchema } = globalThis.store.w3s.projectManager;
-    const { error, binary, text, stats } = await compileAssemblyscript(curFilesListSchema.curActiveFile.data?.code);
-    if (error) {
-      return toast.error(error.message);
+    let buffer;
+    if (needCompile) {
+      const { error, binary, text, stats } = await compileAssemblyscript(curFilesListSchema.curActiveFile.data?.code);
+      if (error) {
+        return toast.error(error.message);
+      }
+      buffer = Buffer.from(binary);
+    } else {
+      buffer = Buffer.from(curFilesListSchema.curActiveFile.data?.extraData?.raw);
     }
-    const buffer = Buffer.from(binary);
+
     const wasi = new WASM(buffer);
     wasi.sendEvent(JSON.stringify(wasmPayload));
     this.payloadCache = new StorageState<string>({

@@ -262,17 +262,17 @@ export class WASM {
   }
 
   async start(start_func = 'start'): Promise<{ stdout: StdIOType[]; stderr: StdIOType[] }> {
-    this.wasmModule = await WebAssembly.compile(this.wasmModuleBytes);
-    this.instance = await WebAssembly.instantiate(this.wasmModule, this.vmImports);
-    console.log(this.instance);
-    this.memory = this.instance.exports.memory as WebAssembly.Memory;
     try {
+      this.wasmModule = await WebAssembly.compile(this.wasmModuleBytes);
+      this.instance = await WebAssembly.instantiate(this.wasmModule, this.vmImports);
+      console.log(this.instance);
+      this.memory = this.instance.exports.memory as WebAssembly.Memory;
       //@ts-ignore
       const res = eval(`this.instance.exports?.${start_func}(this.rid)`);
       // this.writeStdout({ message: `rid:${res}` });
     } catch (error) {
       console.log(error);
-      this.writeStderr(error.message);
+      this.writeStderr({ message: error.message });
       // throw new Error(error);
     }
     return {
