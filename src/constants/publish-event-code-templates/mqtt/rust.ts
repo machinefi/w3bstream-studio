@@ -1,6 +1,4 @@
-import { publicConfig } from '../../config';
-
-const getRustTemplate = (projectName: string, message: string) => `use std::{
+const getRustTemplate = (url: string, projectName: string, message: string) => `use std::{
   env,
   process,
   thread,
@@ -9,7 +7,7 @@ const getRustTemplate = (projectName: string, message: string) => `use std::{
 
 extern crate paho_mqtt as mqtt;
 
-const DFLT_BROKER:&str = "${publicConfig.mqttURL}";
+const DFLT_BROKER:&str = "${url}";
 const DFLT_CLIENT:&str = "rust_subscribe";
 const DFLT_TOPICS:&[&str] = &["${projectName}"];
 // The qos list that match topics above.

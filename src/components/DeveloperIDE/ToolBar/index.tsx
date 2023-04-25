@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, BoxProps, Box, Icon } from '@chakra-ui/react';
+import { Flex, BoxProps, Box, Icon, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { BiBarChartSquare } from 'react-icons/bi';
@@ -15,6 +15,7 @@ const ToolBar = (props: ToolBar) => {
 
   return (
     <Flex minW="200px" h="100%" direction="column" align="center" p="16px" bg="#fff" {...props}>
+      <Text mb="20px" fontSize={'24px'} fontWeight={700}>{w3s.project.curProject.f_name}</Text>
       <Flex
         mb="30px"
         alignItems="center"

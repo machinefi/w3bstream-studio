@@ -3,14 +3,14 @@ import getGolangTemplate from './go';
 import getJavascriptTemplate from './js';
 import getRustTemplate from './rust';
 
-export const getHTTPRequestTemplate = (language: string, projectName: string, body: PublishEventRequestBody) => {
+export const getHTTPRequestTemplate = ({ language, url, projectName, body }: { language: string; url: string; projectName: string; body: PublishEventRequestBody }) => {
   switch (language) {
     case 'javascript':
-      return getJavascriptTemplate(projectName, body);
+      return getJavascriptTemplate(url, projectName, body);
     case 'go':
-      return getGolangTemplate(projectName, body);
+      return getGolangTemplate(url, projectName, body);
     case 'rust':
-      return getRustTemplate(projectName, body);
+      return getRustTemplate(url, projectName, body);
     default:
       return '';
   }
