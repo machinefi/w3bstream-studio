@@ -8,6 +8,7 @@ import '@/lib/superjson';
 import { z } from 'zod';
 import { webhookRouter } from './webhook';
 import { pgRouter } from './pg';
+import { envRouter } from './env';
 
 /**
  * Create your application's root router
@@ -18,7 +19,8 @@ import { pgRouter } from './pg';
 export const appRouter = t.router({
   api: w3bstreamRouter,
   webhook: webhookRouter,
-  pg: pgRouter
+  pg: pgRouter,
+  env: envRouter
 });
 /**
  * Add data transformers

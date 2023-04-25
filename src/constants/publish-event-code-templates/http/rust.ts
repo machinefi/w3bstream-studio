@@ -1,4 +1,3 @@
-import { publicConfig } from '@/constants/config';
 import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
 
 const getRequestBody = (body: PublishEventRequestBody) => {
@@ -9,7 +8,7 @@ const getRequestBody = (body: PublishEventRequestBody) => {
     .join(',');
 };
 
-const getRustTemplate = (projectName: string, body: PublishEventRequestBody) => `extern crate reqwest;
+const getRustTemplate = (url: string, projectName: string, body: PublishEventRequestBody) => `extern crate reqwest;
 extern crate serde;
 extern crate serde_json;
 
@@ -21,7 +20,7 @@ async fn main() ->  Result<()> {
 let request_body = json!({
   ${getRequestBody(body)}
 });
-let request_url = ${publicConfig.httpURL};
+let request_url = ${url};
 let response = Client::new()
   .post(request_url)
   .json(&request_body)

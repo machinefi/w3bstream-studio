@@ -2,9 +2,14 @@ import React from 'react';
 import { Flex, Box, Grid, GridItem, Image, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { Center } from '@chakra-ui/layout';
-import { publicConfig } from '@/constants/config';
+import { useStore } from '@/store/index';
 
 const Support = () => {
+  const {
+    w3s: {
+      env: { envs }
+    }
+  } = useStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -63,7 +68,6 @@ const Support = () => {
               <Box mt="32px">File an Issue</Box>
             </Flex>
           </a>
-
         </GridItem>
         <GridItem w="412px" h="328px" bg="#fff">
           <a href="http://developers.iotex.io/grants" target="_blank" rel="noopener noreferrer">
@@ -100,7 +104,6 @@ const Support = () => {
             <Box mt="32px">About</Box>
           </Flex>
         </GridItem>
-
       </Grid>
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
@@ -110,7 +113,11 @@ const Support = () => {
           <ModalBody pb="30px">
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>
               <Box>Version:</Box>
-              <Box ml="10px">{publicConfig.version}</Box>
+              <Box ml="10px">{envs.value?.studioVersion}</Box>
+            </Flex>
+            <Flex alignItems="center" fontSize="16px" fontWeight={700}>
+              <Box>W3bstream Version:</Box>
+              <Box ml="10px">{envs.value?.w3bstreamVersion}</Box>
             </Flex>
           </ModalBody>
         </ModalContent>

@@ -1,7 +1,6 @@
-import { publicConfig } from '@/constants/config';
 import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
 
-const getJavascriptTemplate = (projectName: string, body: PublishEventRequestBody) => {
+const getJavascriptTemplate = (url: string, projectName: string, body: PublishEventRequestBody) => {
   const { events } = body;
   return `
 const data = {
@@ -27,7 +26,7 @@ const data = {
   ]
 }
 
-fetch('${publicConfig.httpURL}', {
+fetch('${url}', {
   method: 'POST',
   body: JSON.stringify(data)
 })
