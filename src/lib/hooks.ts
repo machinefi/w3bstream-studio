@@ -22,7 +22,7 @@ export const hooks = {
         initSqlJs({
           locateFile: (file) => `/wasms/${file}`
         }).then((SQL) => {
-          console.log('sql.js loaded', SQL);
+          // console.log('sql.js loaded', SQL);
           // const persistedData = localStorage.getItem('s');
           IndexDb.kvs
             .filter((i) => i.key == 'sqlite')

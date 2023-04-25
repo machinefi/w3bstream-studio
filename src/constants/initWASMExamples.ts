@@ -147,6 +147,13 @@ export const SqlExample: FilesItemType = {
                   }
                 }
               ],
+              keys: [
+                {
+                  name: 'ui_username',
+                  isUnique: true,
+                  columnNames: ['number']
+                }
+              ],
               withSoftDeletion: true,
               withPrimaryKey: true
             }

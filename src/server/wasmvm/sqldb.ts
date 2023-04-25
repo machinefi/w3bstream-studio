@@ -119,12 +119,12 @@ export class SqlDB {
 
     // Add primary key
     if (withPrimaryKey) {
-      let pkColumns = keys[0].columnNames.join(', ');
+      let pkColumns = keys?.[0].columnNames.join(', ');
       sql += `, PRIMARY KEY (${pkColumns})`;
     }
 
     // Add unique keys
-    keys.forEach((key, index) => {
+    keys?.forEach((key, index) => {
       if (index > 0) {
         let name = key.name;
         let columnNames = key.columnNames.join(', ');
@@ -161,6 +161,7 @@ export class SqlDB {
       return res;
     } catch (e) {
       console.log(e);
+      toast.error(e.message);
       throw new Error(e.message);
     }
   }

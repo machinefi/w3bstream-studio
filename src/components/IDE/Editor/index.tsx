@@ -48,16 +48,23 @@ export const compileAssemblyscript = async (code: string) => {
   return { error: error ? { message: _error } : null, binary, text, stats, stderr };
 };
 
-export const compileAndCreateProject = async () => {
+export const compileAndCreateProject = async (needCompile: boolean = true) => {
   const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
-  const { error, binary, text, stats, stderr } = await compileAssemblyscript(curActiveFile.data.code);
-  if (error) {
-    console.log(error);
-    return toast.error(error.message);
+  if (needCompile) {
+    const { error, binary, text, stats, stderr } = await compileAssemblyscript(curActiveFile.data.code);
+    if (error) {
+      console.log(error);
+      return toast.error(error.message);
+    }
+    rootStore?.w3s.project.createProjectByWasmForm.value.set({
+      file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), binary)
+    });
+  } else {
+    rootStore?.w3s.project.createProjectByWasmForm.value.set({
+      file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), curActiveFile.data.extraData.raw)
+    });
   }
-  rootStore?.w3s.project.createProjectByWasmForm.value.set({
-    file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), binary)
-  });
+
   try {
     await rootStore?.w3s.project.createProjectByWasm();
     reactHotToast(
@@ -91,7 +98,7 @@ export const compileAndCreateProject = async () => {
   }
 };
 
-export const debugAssemblyscript = async (afterSubmit?: () => void) => {
+export const debugAssemblyscript = async (needCompile = true) => {
   const lab = rootStore?.w3s.lab;
   const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
   const payloadCache = new StorageState<string>({
@@ -112,8 +119,7 @@ export const debugAssemblyscript = async (afterSubmit?: () => void) => {
       if (formData.wasmPayload) {
         try {
           const wasmPayload = JSON.parse(formData.wasmPayload);
-          lab.onDebugWASM(wasmPayload);
-          afterSubmit();
+          lab.onDebugWASM(wasmPayload, needCompile);
         } catch (error) {}
       }
     };
@@ -132,26 +138,30 @@ export const debugAssemblyscript = async (afterSubmit?: () => void) => {
 };
 
 export const onCreateDB = async () => {
-  const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
-  const sqlJSON: TableJSONSchema[] | TableJSONSchema = JSON.parse(curActiveFile?.data?.code);
-  const _sqlJSON = Array.isArray(sqlJSON) ? sqlJSON : [sqlJSON];
-  _sqlJSON.forEach((i) => {
-    const res: CREATDB_TYPE = rootStore.god.sqlDB.createTableByJSONSchema(i);
-    if (res == CREATDB_TYPE.EXIST) {
-      rootStore?.base.confirm.show({
-        title: 'Warning',
-        description: `The table '${i.name}' already exists. Do you want to overwrite it?`,
-        async onOk() {
-          rootStore.god.sqlDB.createTableByJSONSchema(i, true);
-          toast.success(`Create Table '${i.name}' Success`);
-          eventBus.emit('sql.change');
-        }
-      });
-    } else if (res == CREATDB_TYPE.SUCCESS) {
-      toast.success(`Create Table '${i.name}' Success`);
-    }
-    eventBus.emit('sql.change');
-  });
+  try {
+    const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
+    const sqlJSON: TableJSONSchema[] | TableJSONSchema = JSON.parse(curActiveFile?.data?.code);
+    const _sqlJSON = Array.isArray(sqlJSON) ? sqlJSON : [sqlJSON];
+    _sqlJSON.forEach((i) => {
+      const res: CREATDB_TYPE = rootStore.god.sqlDB.createTableByJSONSchema(i);
+      if (res == CREATDB_TYPE.EXIST) {
+        rootStore?.base.confirm.show({
+          title: 'Warning',
+          description: `The table '${i.name}' already exists. Do you want to overwrite it?`,
+          async onOk() {
+            rootStore.god.sqlDB.createTableByJSONSchema(i, true);
+            toast.success(`Create Table '${i.name}' Success`);
+            eventBus.emit('sql.change');
+          }
+        });
+      } else if (res == CREATDB_TYPE.SUCCESS) {
+        toast.success(`Create Table '${i.name}' Success`);
+      }
+      eventBus.emit('sql.change');
+    });
+  } catch (e) {
+    toast.error(e.message);
+  }
 };
 
 const Editor = observer(() => {
@@ -363,6 +373,39 @@ const Editor = observer(() => {
             </Box>
           </>
         )}
+
+        {curFilesListSchema?.curActiveFile?.data?.dataType == 'wasm' && (
+          <>
+            <Tooltip label={`Upload to DevNet`} placement="top">
+              <Text
+                ml="auto"
+                cursor="pointer"
+                mr={4}
+                className="pi pi-cloud-upload"
+                color="white"
+                onClick={async () => {
+                  compileAndCreateProject(false);
+                }}
+              ></Text>
+            </Tooltip>
+
+            <Box position={'relative'}>
+              <Box
+                onClick={() => {
+                  debugAssemblyscript(false);
+                }}
+              >
+                <VscDebugStart
+                  color="white"
+                  style={{
+                    marginRight: '10px',
+                    cursor: 'pointer'
+                  }}
+                />
+              </Box>
+            </Box>
+          </>
+        )}
       </Flex>
     );
   });
@@ -394,9 +437,9 @@ const Editor = observer(() => {
             {curFilesListSchema?.curActiveFileIs('wasm') ? (
               <Flex flexDirection={'column'} w="full">
                 <Center bg={'#1e1e1e'} width={'100%'} height={300} color="white">
-                  {/* This file is a binary file and cannot be opened in the editor! */}
-                  <MonacoEditor key="wasm-monaco" theme="vs-dark" value={curFilesListSchema?.curActiveFile?.data?.code}></MonacoEditor>
+                  This file is a binary file and cannot be opened in the editor!
                 </Center>
+                <ConsolePanel />
               </Flex>
             ) : (
               <>
@@ -406,7 +449,7 @@ const Editor = observer(() => {
                   </ErrorBoundary>
                 )}
 
-                {curFilesListSchema?.curActiveFileIs(['ts', 'json']) && (
+                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm']) && (
                   <>
                     <Flex flexDirection={'column'} w="full">
                       <MonacoEditor

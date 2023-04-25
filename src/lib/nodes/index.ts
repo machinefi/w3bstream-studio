@@ -2,6 +2,7 @@ import { INodeType } from './types';
 import { SimulationNode } from './Trigger/SimulationNode';
 import { WasmNode } from './Code/WasmNode';
 import { VmRunTimeNode } from './Runtime/VmRunTimeNode';
+import { AssemblyScriptNode } from './Code/AssemblyScriptNode';
 
 export class NodeManager {
   nodes: INodeType[] = [];
@@ -18,14 +19,11 @@ export class NodeManager {
 
   registerNode() {
     this.nodeClassMap = {
-      // WebhookNode,
       SimulationNode,
       WasmNode,
-      VmRunTimeNode
-      // CarNode,
-      // RadarNode,
+      VmRunTimeNode,
+      AssemblyScriptNode
     };
-
     //@ts-ignore
     this.nodes = Object.values(this.nodeClassMap).map((i) => new i());
     this.nodesJSON = this.nodes.map((node) => node.toJSON());
