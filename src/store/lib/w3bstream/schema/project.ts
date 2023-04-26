@@ -375,6 +375,7 @@ export default class ProjectModule {
     const formData = await hooks.getFormData({
       title: 'Create Project',
       size: '2xl',
+      closeOnOverlayClick: false,
       formList: [
         {
           label: 'Default',
@@ -497,6 +498,7 @@ export default class ProjectModule {
       formData = await hooks.getFormData({
         title: 'Create a New Project',
         size: '2xl',
+        closeOnOverlayClick: false,
         formList: [
           {
             form: this.developerInitializationTemplateForm
