@@ -47,7 +47,7 @@ export class W3bStream {
       this.strategy.set({
         allData: strategies
       });
-    }
+    },
   });
   applet = new AppletModule();
   instances = new InstancesModule();
