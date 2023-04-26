@@ -28,6 +28,7 @@ import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { CREATDB_TYPE, TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { toJS } from 'mobx';
 import { ConsolePanel, DBpanel } from './panels';
+import { defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const compileAssemblyscript = async (code: string) => {
   let { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
@@ -119,7 +120,7 @@ export const debugAssemblyscript = async (needCompile = true) => {
       if (formData.wasmPayload) {
         try {
           const wasmPayload = JSON.parse(formData.wasmPayload);
-          lab.onDebugWASM(wasmPayload, needCompile);
+          lab.onDebugWASM(wasmPayload, needCompile, formData.handleFunc);
         } catch (error) {}
       }
     };
@@ -244,7 +245,7 @@ const Editor = observer(() => {
     return (
       <>
         <Portal>
-          <ContextMenu id={`ActiveFileContent${activeFile.key}`} onShow={() => {}} onHide={() => {}}>
+          <ContextMenu id={`ActiveFileContent${activeFile?.key}`} onShow={() => {}} onHide={() => {}}>
             <Box p={2} bg="#fff" boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px">
               <MenuItem
                 onClick={() => {
@@ -284,10 +285,10 @@ const Editor = observer(() => {
   const EditorTopBarIcons = observer(() => {
     return (
       <Flex w="full" bg="#2f3030" alignItems={'center'} position={'relative'}>
-        {curFilesListSchema?.activeFiles.map((i, index) => {
+        {curFilesListSchema?.activeFiles?.map((i, index) => {
           return (
             <>
-              <ContextMenuTrigger id={`ActiveFileContent${i.key}`} holdToDisplay={-1}>
+              <ContextMenuTrigger id={`ActiveFileContent${i?.key}`} holdToDisplay={-1}>
                 {i?.label && (
                   <Box
                     onClick={() => {
@@ -436,7 +437,7 @@ const Editor = observer(() => {
           >
             {curFilesListSchema?.curActiveFileIs('wasm') ? (
               <Flex flexDirection={'column'} w="full">
-                <Center bg={'#1e1e1e'} width={'100%'} height={300} color="white">
+                <Center fontFamily={'sans-serif'} bg={'#1e1e1e'} width={'100%'} height={300} color="white">
                   This file is a binary file and cannot be opened in the editor!
                 </Center>
                 <ConsolePanel />
@@ -449,7 +450,7 @@ const Editor = observer(() => {
                   </ErrorBoundary>
                 )}
 
-                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm']) && (
+                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env']) && (
                   <>
                     <Flex flexDirection={'column'} w="full">
                       <MonacoEditor
@@ -459,7 +460,7 @@ const Editor = observer(() => {
                         key="monaco"
                         theme="vs-dark"
                         defaultLanguage="typescript"
-                        language="typescript"
+                        language={curFilesListSchema?.curActiveFile.data?.language}
                         defaultValue="export function test(): void {}"
                         value={curFilesListSchema?.curActiveFile?.data?.code}
                         beforeMount={(monaco) => {}}
@@ -473,6 +474,7 @@ const Editor = observer(() => {
                             declare const GetDataByRID: (rid: number) => string;
                             declare const ExecSQL: (query: string,args?:any[]) => i32;
                             declare const QuerySQL: (query: string,args?:any[]) => string;
+                            declare const GetEnv: (key:string) => string;
                             `,
                             'sdk/index.d.ts'
                           );
@@ -493,7 +495,28 @@ const Editor = observer(() => {
           </div>
         </main>
       ) : (
-        <>No File Selected!</>
+        <Flex justify={'center'} align="center" direction="column" w="full">
+          <Flex justify={'center'} mt={12}>No File Selected!</Flex>
+          <Button
+            mt={4}
+            w="50%"
+            {...defaultOutlineButtonStyle}
+            onClick={async () => {
+              const formData = await hooks.getFormData({
+                title: 'Create a File',
+                size: '2xl',
+                formList: [
+                  {
+                    form: w3s.projectManager.initWasmTemplateForm
+                  }
+                ]
+              });
+              w3s.projectManager.curFilesListSchema.createFileFormFolder(w3s.projectManager.curFilesList[0], 'file', helper.json.safeParse(formData.template) ?? null);
+            }}
+          >
+            New File
+          </Button>
+        </Flex>
       )}
     </Box>
   );

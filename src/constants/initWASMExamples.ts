@@ -36,7 +36,7 @@ import { templatecode } from './templatecode';
 export const assemblyScriptExample: FilesItemType = {
   type: 'folder',
   key: uuidv4(),
-  label: `Examples`,
+  label: `.examples`,
   children: [
     {
       type: 'file',
@@ -82,6 +82,12 @@ export const assemblyScriptExample: FilesItemType = {
       key: uuidv4(),
       label: `sql.ts`,
       data: { dataType: 'assemblyscript', code: templatecode['sql.ts'], language: 'typescript' }
+    },
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `env.ts`,
+      data: { dataType: 'assemblyscript', code: templatecode['env.ts'], language: 'typescript' }
     }
   ]
 };
@@ -97,8 +103,48 @@ export const flowExample: FilesItemType = {
       label: `basic.flow`,
       data: {
         dataType: 'flow',
-        nodes: [],
-        edges: []
+        nodes: [
+          {
+            id: '1682491671393',
+            type: 'SimulationNode',
+            position: { x: 107, y: 358 },
+            data: {
+              label: 'Simulation',
+              code: '\n//https://github.com/faker-js/faker\nfunction createRandomUser() {\n  return {\n    userId: faker.datatype.uuid(),\n    username: faker.internet.userName(),\n    email: faker.internet.email(),\n    avatar: faker.image.avatar(),\n    password: faker.internet.password(),\n    birthdate: faker.date.birthdate(),\n    registeredAt: faker.date.past(),\n  };\n}\n\nreturn faker.helpers.multiple(createRandomUser, {\n  count: 5,\n});\n\n',
+              triggerInterval: '2'
+            }
+          },
+          { id: '1682491679529', type: 'VmRunTimeNode', position: { x: 1148, y: 346 }, data: { label: 'VM runtime', handler: 'start' } },
+          {
+            id: '1682491683609',
+            type: 'AssemblyScriptNode',
+            position: { x: 622, y: 425 },
+            data: {
+              label: 'AssemblyScript',
+              code: '\nexport function start(rid: i32): i32 {\n  Log("start from typescript");\n  const message = GetDataByRID(rid);\n  Log("wasm received message:" + message);\n  return 0;\n}\n'
+            }
+          }
+        ],
+        edges: [
+          {
+            source: '1682491683609',
+            sourceHandle: 'variable-source',
+            target: '1682491679529',
+            targetHandle: 'variable-target-wasm',
+            animated: true,
+            markerEnd: { type: 'arrowclosed' },
+            id: 'reactflow__edge-1682491683609variable-source-1682491679529variable-target-wasm'
+          },
+          {
+            source: '1682491671393',
+            sourceHandle: 'flow-source',
+            target: '1682491679529',
+            targetHandle: 'flow-target',
+            animated: true,
+            markerEnd: { type: 'arrowclosed' },
+            id: 'reactflow__edge-1682491671393flow-source-1682491679529flow-target'
+          }
+        ]
       }
     }
   ]
@@ -160,7 +206,8 @@ export const SqlExample: FilesItemType = {
           ],
           null,
           2
-        )
+        ),
+        language: 'json'
       }
     }
   ]
@@ -174,27 +221,47 @@ export const simulationExample: FilesItemType = {
     {
       type: 'file',
       key: uuidv4(),
-      label: `simulation.ts`,
+      label: `iot-simulate.ts`,
       data: {
         dataType: 'simulation',
+        language: 'typescript',
         code: `
 //https://github.com/faker-js/faker
 function createRandomUser() {
   return {
-    userId: faker.datatype.uuid(),
-    username: faker.internet.userName(),
-    email: faker.internet.email(),
-    avatar: faker.image.avatar(),
-    password: faker.internet.password(),
-    birthdate: faker.date.birthdate(),
-    registeredAt: faker.date.past(),
+    snr: faker.number.int(),
+    latitude: faker.location.latitude(),
+    longitude: faker.location.longitude(),
+    gasResistance: faker.number.int(),
+    temperature: faker.number.int({max:100,min:10}),
+    light: faker.number.int(),
+    random: faker.datatype.uuid()
   };
 }
 
 return faker.helpers.multiple(createRandomUser, {
-  count: 5,
+  count: 1,
 });
+      
 `
+      }
+    }
+  ]
+};
+
+export const envExample: FilesItemType = {
+  type: 'folder',
+  key: uuidv4(),
+  label: `ENV`,
+  children: [
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `.env`,
+      data: {
+        dataType: 'env',
+        code: `MY_ENV=this is my env`,
+        language: 'env'
       }
     }
   ]

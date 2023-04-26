@@ -142,8 +142,18 @@ export class WASM {
         }
       },
       env: {
-        ws_get_env(ptr, size) {
-          return null;
+        ws_get_env(kaddr, ksize, vaddr, vsize) {
+          const k_view = new Uint8Array(_this.memory.buffer, kaddr, ksize);
+          const k = new TextDecoder().decode(k_view); //{statement: string, params: any[]}
+          const v = rootStore.w3s.projectManager.curFilesListSchema.findENV(k);
+          if (!v) {
+            _this.writeStderr({
+              message: `env key not found: ${k}`
+            });
+            return ResultStatusCode.EnvKeyNotFound;
+          }
+          _this.copyToWasm(v, vaddr, vsize);
+          return ResultStatusCode.OK;
         },
         ws_send_mqtt_msg() {
           return null;
@@ -311,7 +321,7 @@ export class WASM {
     };
   }
 
-  async start(start_func = 'start'): Promise<{ stdout: StdIOType[]; stderr: StdIOType[] }> {
+  async start(start_func = 'start', throw_error = true): Promise<{ stdout: StdIOType[]; stderr: StdIOType[] }> {
     try {
       this.wasmModule = await WebAssembly.compile(this.wasmModuleBytes);
       this.instance = await WebAssembly.instantiate(this.wasmModule, this.vmImports);
@@ -323,7 +333,9 @@ export class WASM {
     } catch (error) {
       console.log(error);
       this.writeStderr({ message: error.message });
-      throw new Error(error);
+      if (throw_error) {
+        throw new Error(error);
+      }
     }
     return {
       stdout: this.stdout,

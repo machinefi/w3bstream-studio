@@ -188,5 +188,15 @@ export function start(rid: i32): i32 {
     const res = QuerySQL(\`SELECT * FROM "t_log";\`);
     return rid;
   }
+  `,
+  'env.ts':`
+  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+  export function start(rid: i32): i32 {
+    Log(rid.toString());
+    const message = GetDataByRID(rid);
+    const env = GetEnv("MY_ENV");
+    Log(env);
+    return 0;
+  }
   `
 };
