@@ -70,7 +70,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
     [onChange, options.emptyValue]
   );
   return (
-    <Flex flexDir="column" key={new Date().getTime()}>
+    <Flex flexDir="column">
       <Flex justifyContent="space-between" alignItems="center" mb="10px">
         <Flex alignItems="center">
           <Text>{label}</Text>
