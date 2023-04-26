@@ -48,6 +48,7 @@ interface MessageEvents {
   'metrics.timerange': (startTime: Date, endTime: Date, step: number) => void;
   'flow.run.result': ({ flowId, success, errMsg, extra }: { flowId: string; success: boolean; errMsg?: string; extra?: { [key: string]: any } }) => void;
   'file.change': () => void;
+  'sql.change': () => void;
   signer: (signer: any) => void;
   provider: (signer: any) => void;
 }

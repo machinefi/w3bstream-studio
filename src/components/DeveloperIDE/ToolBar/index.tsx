@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, BoxProps, Box, Icon } from '@chakra-ui/react';
+import { Flex, BoxProps, Box, Icon, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { BiBarChartSquare } from 'react-icons/bi';

@@ -92,7 +92,8 @@ const PublishEventRequestTemplates = observer(() => {
           formData: { accountRole }
         }
       },
-      project: { curProject }
+      project: { curProject },
+      env: { envs }
     }
   } = useStore();
 
@@ -155,10 +156,15 @@ const PublishEventRequestTemplates = observer(() => {
                     ))}
                   </TabList>
                   <TabPanels p="0px">
-                    {languages.map((item) => {
-                      const codeStr = getHTTPRequestTemplate(item, projectName, store.body);
+                    {languages.map((language) => {
+                      const codeStr = getHTTPRequestTemplate({
+                        language,
+                        projectName,
+                        url: envs.value?.httpURL,
+                        body: store.body
+                      });
                       return (
-                        <TabPanel key={item}>
+                        <TabPanel key={language}>
                           <Box pos="relative" width="100%" height="calc(100vh - 180px)">
                             <Button
                               zIndex={99}
@@ -174,7 +180,7 @@ const PublishEventRequestTemplates = observer(() => {
                             >
                               Copy
                             </Button>
-                            <MonacoEditor width="100%" height="calc(100vh - 180px)" theme="vs-dark" language={item} value={codeStr} />
+                            <MonacoEditor width="100%" height="calc(100vh - 180px)" theme="vs-dark" language={language} value={codeStr} />
                           </Box>
                         </TabPanel>
                       );
@@ -192,10 +198,15 @@ const PublishEventRequestTemplates = observer(() => {
                     ))}
                   </TabList>
                   <TabPanels p="0px">
-                    {languages.map((item) => {
-                      const codeStr = getMQTTRequestTemplate(item, projectName, JSON.stringify(JSON.stringify(store.body), null, 2));
+                    {languages.map((language) => {
+                      const codeStr = getMQTTRequestTemplate({
+                        language,
+                        projectName,
+                        url: envs.value?.mqttURL,
+                        message: JSON.stringify(JSON.stringify(store.body), null, 2)
+                      });
                       return (
-                        <TabPanel key={item}>
+                        <TabPanel key={language}>
                           <Box pos="relative" width="100%" height="calc(100vh - 180px)">
                             <Button
                               zIndex={99}
@@ -211,7 +222,7 @@ const PublishEventRequestTemplates = observer(() => {
                             >
                               Copy
                             </Button>
-                            <MonacoEditor width="100%" height="calc(100vh - 180px)" theme="vs-dark" language={item} value={codeStr} />
+                            <MonacoEditor width="100%" height="calc(100vh - 180px)" theme="vs-dark" language={language} value={codeStr} />
                           </Box>
                         </TabPanel>
                       );

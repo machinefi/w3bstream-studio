@@ -384,7 +384,7 @@ export default class PublisherModule {
                           name: key
                         }
                       });
-                      await showNotification({ message: 'update publisher succeeded' });
+                      showNotification({ message: 'update publisher succeeded' });
                       eventBus.emit('publisher.update');
                     } catch (error) {}
                   }
@@ -409,7 +409,7 @@ export default class PublisherModule {
                           publisherIDs: item.f_publisher_id
                         }
                       });
-                      await showNotification({ message: 'Deleted successfully' });
+                      showNotification({ message: 'Deleted successfully' });
                       eventBus.emit('strategy.delete');
                     }
                   });

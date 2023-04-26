@@ -55,7 +55,7 @@ const AddBtn = observer(() => {
               data: w3s.publisher.parseBody(formData.body)
             });
             if (res.data) {
-              await showNotification({ message: 'publish event succeeded' });
+              showNotification({ message: 'publish event succeeded' });
               eventBus.emit('applet.publish-event');
             }
           }

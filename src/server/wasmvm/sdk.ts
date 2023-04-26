@@ -13,10 +13,12 @@
 // }
 
 import { assemblyscriptJSON } from "./assemblyscript-json";
+import { sqlSDK } from "./sql-sdk";
 
 // declare function abort(message: usize ,fileName: usize ,lineNumber: u32,columnNumber: u32): void
 export const wasm_vm_sdk = `
 ${assemblyscriptJSON}
+${sqlSDK}
 @external("env", "ws_log")
   declare function ws_log(logLevel: u8, ptr: usize, size: usize): i32
 
@@ -34,6 +36,12 @@ ${assemblyscriptJSON}
 
 @external("env", "ws_get_data")
   declare function ws_get_data(rid: i32, data_ptr: usize, size_ptr: usize): i32
+
+@external("env", "ws_set_sql_db")
+  declare function ws_set_sql_db(ptr: usize, size: i32): i32
+
+@external("env", "ws_get_sql_db")
+  declare function ws_get_sql_db(ptr: usize, size: i32, rAddr: u32, rSize: u32): i32
 
 export function alloc(size: usize): usize {
     return heap.alloc(size);
@@ -163,5 +171,66 @@ export function CallContract(chainId:i32,to:string,data:string):string {
   heap.free(vmSizePtr);
 
   return vm;
+}
+
+export function QuerySQL(query:string,args:SQLTypes[] = []):string {
+  let encoder = new ENCODE.JSONEncoder();
+  encoder.pushObject(null)
+  encoder.setString("statement", query);
+  encoder.pushArray("params");
+  if(args.length!=0){
+    for (let i = 0; i < args.length; i++) {
+      const param: SQLTypes = args[i];
+      encoder.pushObject(null)
+      param.pushSQLType(encoder);
+      encoder.popObject()
+    }
+  }
+  encoder.popArray();
+  encoder.popObject();
+  let serializedQuery = encoder.serialize();
+  let string = encoder.toString()
+  Log(string)
+
+  let key_ptr = changetype<usize>(serializedQuery.buffer) ;
+  let rAddr:usize = heap.alloc(sizeof<u32>());
+  let rSize:usize = heap.alloc(sizeof<u32>());
+
+  let code = ws_get_sql_db(key_ptr, serializedQuery.length, rAddr as u32, rSize as u32);
+  Log("code:"+code.toString())
+  if (code != 0) {
+    assert(false, "QuerySQL failed");
+  }
+  let rAddrValue = load<u32>(rAddr);
+  let rAddrSize = load<u32>(rSize);
+  let data = String.UTF8.decodeUnsafe(rAddrValue, rAddrSize, true);
+  heap.free(rAddr);
+  heap.free(rSize);
+  return data;
+}
+
+export function ExecSQL(query: string, args: SQLTypes[]): i32 {
+  let encoder = new ENCODE.JSONEncoder();
+  encoder.pushObject(null)
+  encoder.setString("statement", query);
+  encoder.pushArray("params");
+  for (let i = 0; i < args.length; i++) {
+    const param: SQLTypes = args[i];
+    encoder.pushObject(null)
+    param.pushSQLType(encoder);
+    encoder.popObject()
+  }
+  encoder.popArray();
+  encoder.popObject();
+  let serializedQuery = encoder.serialize();
+  let string = encoder.toString()
+  Log(string)
+  let key_ptr = changetype<usize>(serializedQuery.buffer);
+  const ret = ws_set_sql_db(key_ptr, serializedQuery.length);
+  if (ret !== 0) {
+    assert(false, "fail to execute the sql query");
+  }
+
+  return 0;
 }
 `;

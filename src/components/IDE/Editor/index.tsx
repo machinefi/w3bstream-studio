@@ -9,6 +9,7 @@ import { helper, toast } from '@/lib/helper';
 import reactHotToast from 'react-hot-toast';
 import _ from 'lodash';
 import { VscDebugStart, VscClearAll } from 'react-icons/vsc';
+import { BsDatabaseFillAdd } from 'react-icons/bs';
 import { FileIcon } from '@/components/Tree';
 import { eventBus } from '@/lib/event';
 import { StdIOType, WASM } from '@/server/wasmvm';
@@ -22,27 +23,48 @@ import Flow, { FlowErrorFallback } from '@/components/DeveloperIDE/Flow';
 import { hooks } from '@/lib/hooks';
 import { StorageState } from '@/store/standard/StorageState';
 import ErrorBoundary from '@/components/Common/ErrorBoundary';
+import JSONTable from '@/components/JSONTable';
+import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { CREATDB_TYPE, TableJSONSchema } from '@/server/wasmvm/sqldb';
+import { toJS } from 'mobx';
+import { ConsolePanel, DBpanel } from './panels';
 
 export const compileAssemblyscript = async (code: string) => {
-  const { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
+  let { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
     optimizeLevel: 4,
     runtime: 'stub',
     lib: 'assemblyscript-json/assembly/index',
     debug: true
   });
-  return { error, binary, text, stats, stderr };
+  let _error = error + '';
+  // @ts-ignore
+  stderr?.map((i: Uint8Array) => {
+    const errorText = new TextDecoder().decode(i);
+    if (errorText.includes('ERROR')) {
+      // console.log(errorText);
+      _error += '\n\n' + errorText;
+    }
+  });
+  return { error: error ? { message: _error } : null, binary, text, stats, stderr };
 };
 
-export const compileAndCreateProject = async () => {
+export const compileAndCreateProject = async (needCompile: boolean = true) => {
   const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
-  const { error, binary, text, stats, stderr } = await compileAssemblyscript(curActiveFile.data.code);
-  if (error) {
-    console.log(error);
-    return toast.error(error.message);
+  if (needCompile) {
+    const { error, binary, text, stats, stderr } = await compileAssemblyscript(curActiveFile.data.code);
+    if (error) {
+      console.log(error);
+      return toast.error(error.message);
+    }
+    rootStore?.w3s.project.createProjectByWasmForm.value.set({
+      file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), binary)
+    });
+  } else {
+    rootStore?.w3s.project.createProjectByWasmForm.value.set({
+      file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), curActiveFile.data.extraData.raw)
+    });
   }
-  rootStore?.w3s.project.createProjectByWasmForm.value.set({
-    file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), binary)
-  });
+
   try {
     await rootStore?.w3s.project.createProjectByWasm();
     reactHotToast(
@@ -76,7 +98,7 @@ export const compileAndCreateProject = async () => {
   }
 };
 
-export const debugAssemblyscript = async (afterSubmit?: () => void) => {
+export const debugAssemblyscript = async (needCompile = true) => {
   const lab = rootStore?.w3s.lab;
   const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
   const payloadCache = new StorageState<string>({
@@ -97,8 +119,7 @@ export const debugAssemblyscript = async (afterSubmit?: () => void) => {
       if (formData.wasmPayload) {
         try {
           const wasmPayload = JSON.parse(formData.wasmPayload);
-          lab.onDebugWASM(wasmPayload);
-          afterSubmit();
+          lab.onDebugWASM(wasmPayload, needCompile);
         } catch (error) {}
       }
     };
@@ -116,6 +137,33 @@ export const debugAssemblyscript = async (afterSubmit?: () => void) => {
   } catch (e) {}
 };
 
+export const onCreateDB = async () => {
+  try {
+    const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
+    const sqlJSON: TableJSONSchema[] | TableJSONSchema = JSON.parse(curActiveFile?.data?.code);
+    const _sqlJSON = Array.isArray(sqlJSON) ? sqlJSON : [sqlJSON];
+    _sqlJSON.forEach((i) => {
+      const res: CREATDB_TYPE = rootStore.god.sqlDB.createTableByJSONSchema(i);
+      if (res == CREATDB_TYPE.EXIST) {
+        rootStore?.base.confirm.show({
+          title: 'Warning',
+          description: `The table '${i.name}' already exists. Do you want to overwrite it?`,
+          async onOk() {
+            rootStore.god.sqlDB.createTableByJSONSchema(i, true);
+            toast.success(`Create Table '${i.name}' Success`);
+            eventBus.emit('sql.change');
+          }
+        });
+      } else if (res == CREATDB_TYPE.SUCCESS) {
+        toast.success(`Create Table '${i.name}' Success`);
+      }
+      eventBus.emit('sql.change');
+    });
+  } catch (e) {
+    toast.error(e.message);
+  }
+};
+
 const Editor = observer(() => {
   const {
     w3s,
@@ -125,13 +173,22 @@ const Editor = observer(() => {
     }
   } = useStore();
   const terminalRef = useRef(null);
-
   useEffect(() => {
+    const handleSave = (event) => {
+      if (event.ctrlKey && event.key === 's') {
+        if (curFilesListSchema?.curActiveFileIs('ts')) {
+          store.onCompile(curFilesListSchema?.curActiveFile);
+        }
+        event.preventDefault();
+      }
+    };
+    window.addEventListener('keydown', handleSave);
     eventBus.on('wasmvm.stdout', store.onStdout);
     eventBus.on('wasmvm.stderr', store.onStderr);
     return () => {
       eventBus.off('wasmvm.stdout', store.onStdout);
       eventBus.off('wasmvm.stderr', store.onStderr);
+      window.removeEventListener('keydown', handleSave);
     };
   }, []);
 
@@ -183,21 +240,6 @@ const Editor = observer(() => {
     }
   }));
 
-  useEffect(() => {
-    const handleSave = (event) => {
-      if (event.ctrlKey && event.key === 's') {
-        if (curFilesListSchema?.curActiveFileIs('ts')) {
-          store.onCompile(curFilesListSchema?.curActiveFile);
-        }
-        event.preventDefault();
-      }
-    };
-    window.addEventListener('keydown', handleSave);
-    return () => {
-      window.removeEventListener('keydown', handleSave);
-    };
-  }, []);
-
   const CurActiveFileRightClickMenu = observer(({ activeFile }: { activeFile: FilesItemType }) => {
     return (
       <>
@@ -239,46 +281,8 @@ const Editor = observer(() => {
     );
   });
 
-  const ConsolePanel = observer(() => {
+  const EditorTopBarIcons = observer(() => {
     return (
-      <>
-        <Flex borderTop={'2px solid #090909'} bg="#1e1e1e" color="white" pt={1}>
-          <VscClearAll
-            onClick={() => {
-              lab.stdout = [];
-              lab.stderr = [];
-            }}
-            cursor={'pointer'}
-            style={{ marginLeft: 'auto', marginRight: '20px' }}
-          />
-        </Flex>
-        <Box ref={terminalRef} id="terminal" fontFamily="monospace" w="100%" h="calc(100vh - 580px)" p="10px" bg="#1e1e1e" color="white" whiteSpace="pre-line" overflowY="auto" position="relative">
-          {lab.stdout?.map((i) => {
-            return (
-              <Flex>
-                <Flex color="#d892ff" mr={2} whiteSpace="nowrap">
-                  [wasmvm -{' '}
-                  {
-                    <>
-                      <Box color="#ffd300" ml={1}>
-                        {dayjs(i?.['@ts']).format('hh:mm:ss')}
-                      </Box>
-                    </>
-                  }
-                  ]
-                </Flex>{' '}
-                {JSON.stringify(i)}
-              </Flex>
-            );
-          })}
-        </Box>
-      </>
-    );
-  });
-
-  return (
-    <Box>
-      {/* Active Bar Headers  */}
       <Flex w="full" bg="#2f3030" alignItems={'center'} position={'relative'}>
         {curFilesListSchema?.activeFiles.map((i, index) => {
           return (
@@ -318,14 +322,6 @@ const Editor = observer(() => {
           );
         })}
 
-        {/* {curFilesListSchema?.curActiveFileIs('ts') && (
-          <>
-            <Tooltip label="Compile to wasm (ctrl+s)" placement="top">
-              <Text ml="auto" cursor="pointer" mr={4} className="pi pi-bolt" color="white" onClick={() => store.onCompile(curFilesListSchema?.curActiveFile)}></Text>
-            </Tooltip>
-          </>
-        )} */}
-
         {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && (
           <>
             <Tooltip label={`Upload to DevNet`} placement="top">
@@ -344,11 +340,59 @@ const Editor = observer(() => {
             <Box position={'relative'}>
               <Box
                 onClick={() => {
-                  debugAssemblyscript(() => {
-                    setTimeout(() => {
-                      terminalRef.current.scrollTop = terminalRef.current.scrollHeight * 10000;
-                    }, 1);
-                  });
+                  debugAssemblyscript();
+                }}
+              >
+                <VscDebugStart
+                  color="white"
+                  style={{
+                    marginRight: '10px',
+                    cursor: 'pointer'
+                  }}
+                />
+              </Box>
+            </Box>
+          </>
+        )}
+
+        {curFilesListSchema?.curActiveFile?.data?.dataType == 'sql' && (
+          <>
+            <Box
+              ml="auto"
+              onClick={() => {
+                onCreateDB();
+              }}
+            >
+              <BsDatabaseFillAdd
+                color="white"
+                style={{
+                  marginRight: '10px',
+                  cursor: 'pointer'
+                }}
+              />
+            </Box>
+          </>
+        )}
+
+        {curFilesListSchema?.curActiveFile?.data?.dataType == 'wasm' && (
+          <>
+            <Tooltip label={`Upload to DevNet`} placement="top">
+              <Text
+                ml="auto"
+                cursor="pointer"
+                mr={4}
+                className="pi pi-cloud-upload"
+                color="white"
+                onClick={async () => {
+                  compileAndCreateProject(false);
+                }}
+              ></Text>
+            </Tooltip>
+
+            <Box position={'relative'}>
+              <Box
+                onClick={() => {
+                  debugAssemblyscript(false);
                 }}
               >
                 <VscDebugStart
@@ -363,7 +407,13 @@ const Editor = observer(() => {
           </>
         )}
       </Flex>
+    );
+  });
 
+  return (
+    <Box>
+      {/* Active Bar Headers  */}
+      <EditorTopBarIcons />
       {/* Editor Body  */}
       {curFilesListSchema?.curActiveFile ? (
         <main
@@ -387,23 +437,25 @@ const Editor = observer(() => {
             {curFilesListSchema?.curActiveFileIs('wasm') ? (
               <Flex flexDirection={'column'} w="full">
                 <Center bg={'#1e1e1e'} width={'100%'} height={300} color="white">
-                  {/* This file is a binary file and cannot be opened in the editor! */}
-                  <MonacoEditor key="wasm-monaco" theme="vs-dark" value={curFilesListSchema?.curActiveFile?.data?.code}></MonacoEditor>
+                  This file is a binary file and cannot be opened in the editor!
                 </Center>
+                <ConsolePanel />
               </Flex>
             ) : (
               <>
-                {curFilesListSchema?.curActiveFileIs('flow') ? (
+                {curFilesListSchema?.curActiveFileIs('flow') && (
                   <ErrorBoundary fallback={<FlowErrorFallback />}>
                     <Flow />
                   </ErrorBoundary>
-                ) : (
+                )}
+
+                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm']) && (
                   <>
                     <Flex flexDirection={'column'} w="full">
                       <MonacoEditor
                         // defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
                         width={'100%'}
-                        height={400}
+                        height={350}
                         key="monaco"
                         theme="vs-dark"
                         defaultLanguage="typescript"
@@ -419,36 +471,20 @@ const Editor = observer(() => {
                             declare const GetDB: (key: string) => string;
                             declare const SendTx: (chainId: number, to:string, value:string ,data:string) => string | null;
                             declare const GetDataByRID: (rid: number) => string;
+                            declare const ExecSQL: (query: string,args?:any[]) => i32;
+                            declare const QuerySQL: (query: string,args?:any[]) => string;
                             `,
                             'sdk/index.d.ts'
                           );
                           monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-                          // editor.createDecorationsCollection([
-                          //   {
-                          //     range: new monaco.Range(4, 17, 4, 22),
-                          //     options: {
-                          //       isWholeLine: true,
-                          //       linesDecorationsClassName: 'myLineDecoration'
-                          //     }
-                          //   }
-                          // ]);
-                          // monaco.languages.registerHoverProvider('typescript', {
-                          //   provideHover: function (model, position) {
-                          //     const word = model.getWordAtPosition(position);
-                          //     return {
-                          //       contents: [{ value: 'Click to debug' }],
-                          //       range: new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn)
-                          //     };
-                          //     return null;
-                          //   }
-                          // });
                           if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
                         }}
                         onChange={(e) => {
                           curFilesListSchema.setCurFileCode(e);
                         }}
                       />
-                      <ConsolePanel />
+                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && <ConsolePanel />}
+                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'sql' && <DBpanel />}
                     </Flex>
                   </>
                 )}

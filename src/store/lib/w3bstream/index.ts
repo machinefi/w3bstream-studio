@@ -21,6 +21,7 @@ import MetricsModule from './schema/metrics';
 import FlowModule from './schema/flow';
 import LabModule from './schema/lab';
 import CronJobModule from './schema/cronJob';
+import ENVModule from './schema/envs';
 
 configure({
   enforceActions: 'never'
@@ -46,7 +47,7 @@ export class W3bStream {
       this.strategy.set({
         allData: strategies
       });
-    }
+    },
   });
   applet = new AppletModule();
   instances = new InstancesModule();
@@ -60,6 +61,7 @@ export class W3bStream {
   metrics = new MetricsModule();
   lab = new LabModule();
   cronJob = new CronJobModule();
+  env = new ENVModule();
 
   showContent:
     | 'CURRENT_APPLETS'
@@ -192,6 +194,7 @@ export class W3bStream {
       this.chainTx.allChainTx.call();
       this.chainHeight.allChainHeight.call();
       this.metrics.allDBState.call();
+      this.env.envs.call();
     });
   }
 }

@@ -5,13 +5,13 @@ import { useStore } from '@/store/index';
 import ContractLogs, { CreateContractLogButton } from '@/components/IDE/Monitor/ContractLogs';
 import ChainHeight, { CreateChainHeightButton } from '@/components/IDE/Monitor/ChainHeight';
 import Strategies, { CreateStrategyButton } from '@/components/IDE/Strategies';
-import { publicConfig } from '@/constants/config';
 import { ShowRequestTemplatesButton } from '@/components/IDE/PublishEventRequestTemplates';
 import CronJobs, { CreateCronJobButton } from '../CronJob';
 
 const Triggers = () => {
   const {
     w3s: {
+      env: { envs },
       project: { curProject }
     }
   } = useStore();
@@ -38,7 +38,7 @@ const Triggers = () => {
           Route:
         </Box>
         <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-          {publicConfig.httpURL}
+          {envs.value?.httpURL}
         </Box>
       </Flex>
       <Box mt="20px" fontSize="14px" color="#7A7A7A">
@@ -49,7 +49,7 @@ const Triggers = () => {
           URL:
         </Box>
         <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-          {publicConfig.mqttURL}
+          {envs.value?.mqttURL}
         </Box>
       </Flex>
       <Flex mt="10px" alignItems="center">
@@ -65,7 +65,9 @@ const Triggers = () => {
         <Flex alignItems="center" justifyContent="space-between">
           <TabList>
             <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Cron Job</Tab>
-            <Tab ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Smart Contract Monitor</Tab>
+            <Tab ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+              Smart Contract Monitor
+            </Tab>
             <Tab ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Chain Height Monitor
             </Tab>
@@ -75,7 +77,7 @@ const Triggers = () => {
           {tabIndex === 2 && <CreateChainHeightButton />}
         </Flex>
         <TabPanels>
-         <TabPanel px="0px">
+          <TabPanel px="0px">
             <CronJobs />
           </TabPanel>
           <TabPanel px="0px">

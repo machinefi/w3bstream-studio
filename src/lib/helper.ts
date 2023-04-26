@@ -235,6 +235,10 @@ export const helper = {
     const buff = Buffer.from(base64, 'base64');
     return buff.toString('utf8');
   },
+  Uint8ArrayToBase64(raw: Uint8Array): String {
+    //@ts-ignore
+    return `${Buffer.from(raw, 'binary').toString('base64')}`;
+  },
   Uint8ArrayToWasmBase64FileData(name: string, raw: Uint8Array | string): string {
     //@ts-ignore
     return `data:application/wasm;name=${name};base64,${Buffer.from(raw, 'binary').toString('base64')}`;

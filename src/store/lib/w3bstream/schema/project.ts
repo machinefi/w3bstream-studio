@@ -373,6 +373,7 @@ export default class ProjectModule {
     const formData = await hooks.getFormData({
       title: 'Create Project',
       size: '2xl',
+      closeOnOverlayClick: false,
       formList: [
         {
           label: 'Default',
@@ -393,7 +394,7 @@ export default class ProjectModule {
         });
         if (res.data?.project) {
           eventBus.emit('project.create');
-          await showNotification({ message: 'create project succeeded' });
+          showNotification({ message: 'create project succeeded' });
           await this.onSaveEnv();
         }
       } catch (error) {}
@@ -409,7 +410,7 @@ export default class ProjectModule {
         data
       });
       if (res.data) {
-        await showNotification({ message: 'Create project succeeded' });
+        showNotification({ message: 'Create project succeeded' });
         eventBus.emit('project.create');
       }
     }
@@ -452,7 +453,7 @@ export default class ProjectModule {
         });
         if (res.data) {
           console.log('res.data', res.data);
-          // await showNotification({ message: `Create project succeeded` });
+          // showNotification({ message: `Create project succeeded` });
           eventBus.emit('project.create');
           // modals.openContextModal({
           //   id: 'projectstration',
@@ -495,6 +496,7 @@ export default class ProjectModule {
       formData = await hooks.getFormData({
         title: 'Create a New Project',
         size: '2xl',
+        closeOnOverlayClick: false,
         formList: [
           {
             form: this.developerInitializationTemplateForm

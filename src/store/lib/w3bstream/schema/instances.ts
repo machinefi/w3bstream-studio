@@ -92,7 +92,7 @@ export default class InstancesModule {
                           method: 'put',
                           url: `/api/w3bapp/deploy/${item.f_instance_id}/REMOVE`
                         });
-                        await showNotification({ message: 'Deleted successfully' });
+                        showNotification({ message: 'Deleted successfully' });
                         eventBus.emit('instance.delete');
                       } catch (error) {}
                     }

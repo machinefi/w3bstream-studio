@@ -57,7 +57,7 @@ const ChainTx = observer(() => {
                 data: formData
               });
               if (res.data) {
-                await showNotification({ message: 'Blockchain transaction monitor successfully created' });
+                showNotification({ message: 'Blockchain transaction monitor successfully created' });
                 eventBus.emit('chainTx.create');
               }
             }

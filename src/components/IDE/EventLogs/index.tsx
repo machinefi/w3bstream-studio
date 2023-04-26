@@ -89,7 +89,7 @@ const EventLogs = observer(() => {
             logs: [],
             offset: 0,
             haveMore: true,
-            limit: 3
+            limit: 1
           });
         }}
       />
@@ -123,8 +123,8 @@ const EventLogs = observer(() => {
                     });
                     fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
                       store.setData({
-                        logs: res.concat(logs),
-                        offset: store.offset + logs.length,
+                        logs: res,
+                        offset: 0,
                         loading: false
                       });
                     });

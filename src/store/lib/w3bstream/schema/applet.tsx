@@ -146,7 +146,7 @@ export default class AppletModule {
                         method: 'delete',
                         url: `/api/w3bapp/applet/${item.f_applet_id}`
                       });
-                      await showNotification({ message: 'Deleted successfully' });
+                      showNotification({ message: 'Deleted successfully' });
                       eventBus.emit('applet.delete');
                     } catch (error) {}
                   }
@@ -265,7 +265,7 @@ export default class AppletModule {
                               method: 'put',
                               url: `/api/w3bapp/deploy/${item.f_instance_id}/REMOVE`
                             });
-                            await showNotification({ message: 'Deleted successfully' });
+                            showNotification({ message: 'Deleted successfully' });
                             eventBus.emit('instance.delete');
                           } catch (error) {}
                         }
@@ -331,7 +331,7 @@ export default class AppletModule {
                               handler
                             }
                           });
-                          await showNotification({ message: 'update strategy succeeded' });
+                          showNotification({ message: 'update strategy succeeded' });
                           eventBus.emit('strategy.update');
                         } catch (error) {}
                       }
@@ -360,7 +360,7 @@ export default class AppletModule {
                               strategyID: item.f_strategy_id
                             }
                           });
-                          await showNotification({ message: 'Deleted successfully' });
+                          showNotification({ message: 'Deleted successfully' });
                           eventBus.emit('strategy.delete');
                         }
                       });

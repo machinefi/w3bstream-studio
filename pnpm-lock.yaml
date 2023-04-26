@@ -46,6 +46,7 @@ specifiers:
   async-mqtt: ^2.6.3
   axios: ^0.21.1
   bignumber.js: ^9.0.1
+  cache-manager: ^5.2.1
   class-transformer: ^0.5.1
   concurrently: ^6.5.1
   copy-to-clipboard: ^3.3.1
@@ -92,7 +93,7 @@ specifiers:
   react-dropzone: ^14.2.3
   react-hot-toast: ^1.0.2
   react-i18next: ^11.16.9
-  react-icons: ^4.4.0
+  react-icons: ^4.8.0
   react-query: ^3.34.19
   react-virtualized: ^9.22.3
   reactflow: ^11.7.0
@@ -100,6 +101,7 @@ specifiers:
   reflect-metadata: ^0.1.13
   siwe: ^1.1.6
   sleep-promise: ^9.1.0
+  sql.js: ^1.8.0
   superjson: ^1.8.1
   swagger-ui-react: ^4.15.5
   tabler-icons-react: ^1.56.0
@@ -145,6 +147,7 @@ dependencies:
   async-mqtt: 2.6.3
   axios: 0.21.4
   bignumber.js: 9.0.2
+  cache-manager: 5.2.1
   class-transformer: 0.5.1
   copy-to-clipboard: 3.3.1
   cross-blob: 3.0.2
@@ -189,7 +192,7 @@ dependencies:
   react-dropzone: 14.2.3_react@18.2.0
   react-hot-toast: 1.0.2_biqbaboplfbrettd7655fr4n2y
   react-i18next: 11.17.3_vth7g6zw6lco7clwxal23of2km
-  react-icons: 4.4.0_react@18.2.0
+  react-icons: 4.8.0_react@18.2.0
   react-query: 3.39.1_biqbaboplfbrettd7655fr4n2y
   react-virtualized: 9.22.3_biqbaboplfbrettd7655fr4n2y
   reactflow: 11.7.0_biqbaboplfbrettd7655fr4n2y
@@ -197,6 +200,7 @@ dependencies:
   reflect-metadata: 0.1.13
   siwe: 1.1.6_ethers@5.7.0
   sleep-promise: 9.1.0
+  sql.js: 1.8.0
   superjson: 1.9.1
   swagger-ui-react: 4.15.5_biqbaboplfbrettd7655fr4n2y
   tabler-icons-react: 1.56.0_react@18.2.0
@@ -5070,6 +5074,13 @@ packages:
       - bluebird
     dev: false
 
+  /cache-manager/5.2.1:
+    resolution: {integrity: sha512-qYHx0DlM0mepUqXkpDg83K1dYEXOinq9+sYdHxs1c5LQjR1MPgm34im+JVtsy9+uoeE2T1JLzJSAB+nV4IH5dQ==}
+    dependencies:
+      lodash.clonedeep: 4.5.0
+      lru-cache: 9.1.1
+    dev: false
+
   /call-bind/1.0.2:
     resolution: {integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==}
     dependencies:
@@ -7258,6 +7269,11 @@ packages:
       yallist: 4.0.0
     dev: false
 
+  /lru-cache/9.1.1:
+    resolution: {integrity: sha512-65/Jky17UwSb0BuB9V+MyDpsOtXKmYwzhyl+cOa9XUiI4uV2Ouy/2voFP3+al0BjZbJgMBD8FojMpAf+Z+qn4A==}
+    engines: {node: 14 || >=16.14}
+    dev: false
+
   /make-dir/3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
@@ -8675,8 +8691,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /react-icons/4.4.0_react@18.2.0:
-    resolution: {integrity: sha512-fSbvHeVYo/B5/L4VhB7sBA1i2tS8MkT0Hb9t2H1AVPkwGfVHLJCqyr2Py9dKMxsyM63Eng1GkdZfbWj+Fmv8Rg==}
+  /react-icons/4.8.0_react@18.2.0:
+    resolution: {integrity: sha512-N6+kOLcihDiAnj5Czu637waJqSnwlMNROzVZMhfX68V/9bu9qHaMIJC4UdozWoOk57gahFCNHwVvWzm0MTzRjg==}
     peerDependencies:
       react: '*'
     dependencies:
@@ -9460,6 +9476,10 @@ packages:
     dependencies:
       argparse: 2.0.1
       nearley: 2.20.1
+    dev: false
+
+  /sql.js/1.8.0:
+    resolution: {integrity: sha512-3HD8pSkZL+5YvYUI8nlvNILs61ALqq34xgmF+BHpqxe68yZIJ1H+sIVIODvni25+CcxHUxDyrTJUL0lE/m7afw==}
     dev: false
 
   /ssri/8.0.1:

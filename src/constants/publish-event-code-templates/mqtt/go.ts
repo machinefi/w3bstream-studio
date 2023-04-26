@@ -1,6 +1,4 @@
-import { publicConfig } from '../../config';
-
-const getGolangTemplate = (projectName: string, message: string) => `package main
+const getGolangTemplate = (url: string, projectName: string, message: string) => `package main
 import (
   "fmt"
   "time"
@@ -22,7 +20,7 @@ var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err
 
 func main() {
   opts := mqtt.NewClientOptions()
-  opts.AddBroker(fmt.Sprintf("${publicConfig.mqttURL}"))
+  opts.AddBroker(fmt.Sprintf("${url}"))
   opts.SetClientID("go_mqtt_client")
   opts.SetUsername("admin")
   opts.SetPassword("instar")

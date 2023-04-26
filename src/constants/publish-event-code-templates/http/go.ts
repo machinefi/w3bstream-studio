@@ -1,7 +1,6 @@
-import { publicConfig } from '@/constants/config';
 import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
 
-const getGolangTemplate = (projectName: string, body: PublishEventRequestBody) => `package main
+const getGolangTemplate = (url: string, projectName: string, body: PublishEventRequestBody) => `package main
 
 import (
   "fmt"
@@ -11,7 +10,7 @@ import (
 )
 
 func main() {
-  url := ${publicConfig.httpURL}
+  url := ${url}
 
   method := "POST"
 

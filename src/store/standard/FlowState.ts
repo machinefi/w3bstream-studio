@@ -13,6 +13,7 @@ import { SimulationNode } from '@/lib/nodes/Trigger/SimulationNode';
 import { BaseNode } from '@/lib/nodes/baseNode';
 import { WasmNode } from '@/lib/nodes/Code/WasmNode';
 import { VmRunTimeNode } from '@/lib/nodes/Runtime/VmRunTimeNode';
+import { AssemblyScriptNode } from '@/lib/nodes/Code/AssemblyScriptNode';
 
 export class FlowState {
   curFlowId: number = null;
@@ -37,7 +38,7 @@ export class FlowState {
 
   initNodes = new PromiseState({
     function: async () => {
-      this.nodeInstances = [new SimulationNode(), new WasmNode(), new VmRunTimeNode()];
+      this.nodeInstances = [new SimulationNode(), new WasmNode(), new VmRunTimeNode(), new AssemblyScriptNode()];
     }
   });
 
@@ -151,8 +152,8 @@ export class FlowState {
   };
 
   importJSON = (json: { nodes: any[]; edges: any[] }) => {
-    this.nodes = json.nodes;
-    this.edges = json.edges?.map((edge) => {
+    this.nodes = json?.nodes;
+    this.edges = json?.edges?.map((edge) => {
       return {
         ...edge,
         id: `reactflow__edge-${edge.source}-${edge.target}`,
@@ -267,7 +268,7 @@ export class FlowState {
     await Promise.all(
       variablesFlows.map(async (i, index) => {
         const NodeClass2 = nodeManager.getClass(i.type);
-        if (NodeClass2?.node_type == 'WasmNode') {
+        if (NodeClass2?.node_type == 'WasmNode' || NodeClass2?.node_type == 'AssemblyScriptNode') {
           await NodeClass2.execute({
             input: {},
             output: {},
@@ -311,17 +312,6 @@ export class FlowState {
         });
         continue;
       }
-      if (NodeClass?.node_type == 'WasmNode') {
-        await NodeClass.execute({
-          input: {},
-          output: {},
-          node,
-          callStack,
-          callStackCurIdx: index
-        });
-        continue;
-      }
-
       if (NodeClass?.node_type == 'VmRunTimeNode') {
         await NodeClass.execute({
           input: {},

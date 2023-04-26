@@ -1,6 +1,8 @@
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
+import { rootStore } from '@/store/index';
 import BigNumber from 'bignumber.js';
+import { SqlDB } from './sqldb';
 export type StdIOType = {
   '@lv': 'info' | 'error';
   '@ts': number;
@@ -95,7 +97,105 @@ export class WASM {
     this.wasmModuleBytes = wasmModuleBytes;
     const _this = this;
     this.vmImports = {
+      wasi_snapshot_preview1: {
+        fd_write() {
+          return 0;
+        },
+        clock_time_get() {
+          return 0;
+        },
+        args_sizes_get() {
+          return 0;
+        },
+        args_get() {
+          return 0;
+        },
+        environ_get() {
+          return 0;
+        },
+        environ_sizes_get() {
+          return 0;
+        },
+        fd_close() {
+          return 0;
+        },
+        fd_fdstat_get() {
+          return 0;
+        },
+        fd_prestat_get() {
+          return 0;
+        },
+        fd_prestat_dir_name() {
+          return 0;
+        },
+        fd_read() {
+          return 0;
+        },
+        fd_seek() {
+          return 0;
+        },
+        path_open() {
+          return 0;
+        },
+        proc_exit() {
+          return 0;
+        }
+      },
       env: {
+        ws_get_env(ptr, size) {
+          return null;
+        },
+        ws_send_mqtt_msg() {
+          return null;
+        },
+        ws_set_sql_db(ptr, size) {
+          const sql_view = new Uint8Array(_this.memory.buffer, ptr, size);
+          const sql = new TextDecoder().decode(sql_view); //{statement: string, params: any[]}
+          //INSERT INTO \"t_log\" (f_id,f_log) VALUES (?,?);
+          const sqlJSON = helper.json.safeParse(sql);
+          if (!sqlJSON) {
+            _this.writeStderr({
+              message: `sql parse error: ${sql}`
+            });
+            return;
+          }
+          const sqlStatement = rootStore.god.sqlDB.toSQL(sqlJSON);
+          try {
+            rootStore.god.sqlDB.exec(sqlStatement);
+            _this.writeStdout({
+              message: `run sql ${sqlStatement}`
+            });
+            eventBus.emit('sql.change');
+          } catch (e) {
+            console.log(e);
+            _this.writeStderr({
+              message: `sql run error: ${e.message}`
+            });
+          }
+        },
+        ws_get_sql_db(ptr, size, vmAddr, vmSizePtr) {
+          const sql_view = new Uint8Array(_this.memory.buffer, ptr, size);
+          const sql = new TextDecoder().decode(sql_view);
+          const sqlJSON = helper.json.safeParse(sql);
+          if (!sqlJSON) {
+            _this.writeStderr({
+              message: `sql parse error: ${sql}`
+            });
+            return;
+          }
+          const sqlStatement = rootStore.god.sqlDB.toSQL(sqlJSON);
+          try {
+            const res = rootStore.god.sqlDB.exec(sqlStatement);
+            console.log(rootStore.god.sqlDB.parseResult(res));
+            const resStr = JSON.stringify(rootStore.god.sqlDB.parseResult(res));
+            _this.copyToWasm(resStr, vmAddr, vmSizePtr);
+          } catch (e) {
+            console.log(e);
+            _this.writeStderr({
+              message: `sql run error: ${e.message}`
+            });
+          }
+        },
         ws_call_contract(chainID: number, offset: number, size: number, vmAddrPtr: number, vmSizePtr: number): number {
           console.log(`ws_call_contract: chainID=${chainID}, offset=${offset}, size=${size}`);
           const inputView = new Uint8Array(_this.memory.buffer, offset, size);
@@ -212,17 +312,17 @@ export class WASM {
   }
 
   async start(start_func = 'start'): Promise<{ stdout: StdIOType[]; stderr: StdIOType[] }> {
-    this.wasmModule = await WebAssembly.compile(this.wasmModuleBytes);
-    this.instance = await WebAssembly.instantiate(this.wasmModule, this.vmImports);
-    console.log(this.instance);
-    this.memory = this.instance.exports.memory as WebAssembly.Memory;
     try {
+      this.wasmModule = await WebAssembly.compile(this.wasmModuleBytes);
+      this.instance = await WebAssembly.instantiate(this.wasmModule, this.vmImports);
+      console.log(this.instance);
+      this.memory = this.instance.exports.memory as WebAssembly.Memory;
       //@ts-ignore
       const res = eval(`this.instance.exports?.${start_func}(this.rid)`);
       // this.writeStdout({ message: `rid:${res}` });
     } catch (error) {
       console.log(error);
-      this.writeStderr(error.message);
+      this.writeStderr({ message: error.message });
       throw new Error(error);
     }
     return {

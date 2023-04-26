@@ -63,7 +63,7 @@ const Publishers = observer(() => {
                     name: key
                   }
                 });
-                await showNotification({ message: 'create publisher succeeded' });
+                showNotification({ message: 'create publisher succeeded' });
                 eventBus.emit('publisher.create');
               } catch (error) {}
             }

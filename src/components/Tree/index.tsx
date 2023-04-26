@@ -12,6 +12,7 @@ import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
 import { compileAndCreateProject, compileAssemblyscript, debugAssemblyscript } from '../IDE/Editor';
 import { eventBus } from '@/lib/event';
 import Draggable from 'react-draggable';
+import { v4 as uuidv4 } from 'uuid';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -33,6 +34,8 @@ export const FileIcon = (file: FilesItemType) => {
     return <Image {...s} src="/images/icons/assembly.svg"></Image>;
   } else if (file?.label?.endsWith('.flow')) {
     return <Image {...s} src="/images/icons/tree.svg"></Image>;
+  } else if (file?.label?.endsWith('.json')) {
+    return <Image {...s} src="/images/icons/json.svg"></Image>;
   }
 
   if (file?.type == 'file') {
@@ -86,6 +89,33 @@ export const Tree = observer(({ data, onSelect }: IProps) => {
           ]
         });
         w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', helper.json.safeParse(formData.template) ?? null);
+      }
+    },
+    {
+      name: 'Upload File',
+      onClick: async (item) => {
+        const formData = await hooks.getFormData({
+          title: 'Upload a File',
+          size: '2xl',
+          formList: [
+            {
+              form: w3s.lab.uploadWasmForm
+            }
+          ]
+        });
+        const fileInfo = formData.file.match(/name=(.*);base64,(.*)$/);
+        const fileName = fileInfo?.[1];
+        const fileData = fileInfo?.[2];
+        console.log(helper.base64ToUint8Array(fileData));
+        if (fileName.endsWith('.wasm')) {
+          w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', {
+            type: 'file',
+            key: uuidv4(),
+            label: fileName,
+            isRename: true,
+            data: { extraData: { raw: helper.base64ToUint8Array(fileData) }, dataType: 'wasm' }
+          });
+        }
       }
     },
     {

@@ -1,6 +1,37 @@
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { templatecode } from './templatecode';
+// case "INT":
+//   return DATATYPE__INT, nil
+// case "INT8":
+//   return DATATYPE__INT8, nil
+// case "INT16":
+//   return DATATYPE__INT16, nil
+// case "INT32":
+//   return DATATYPE__INT32, nil
+// case "INT64":
+//   return DATATYPE__INT64, nil
+// case "UINT":
+//   return DATATYPE__UINT, nil
+// case "UINT8":
+//   return DATATYPE__UINT8, nil
+// case "UINT16":
+//   return DATATYPE__UINT16, nil
+// case "UINT32":
+//   return DATATYPE__UINT32, nil
+// case "UINT64":
+//   return DATATYPE__UINT64, nil
+// case "FLOAT32":
+//   return DATATYPE__FLOAT32, nil
+// case "FLOAT64":
+//   return DATATYPE__FLOAT64, nil
+// case "TEXT":
+//   return DATATYPE__TEXT, nil
+// case "BOOL":
+//   return DATATYPE__BOOL, nil
+// case "TIMESTAMP":
+//   return DATATYPE__TIMESTAMP, nil
+// }
 
 export const assemblyScriptExample: FilesItemType = {
   type: 'folder',
@@ -45,6 +76,12 @@ export const assemblyScriptExample: FilesItemType = {
       key: uuidv4(),
       label: `setDB.ts`,
       data: { dataType: 'assemblyscript', code: templatecode['setDB.ts'], language: 'typescript' }
+    },
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `sql.ts`,
+      data: { dataType: 'assemblyscript', code: templatecode['sql.ts'], language: 'typescript' }
     }
   ]
 };
@@ -62,6 +99,68 @@ export const flowExample: FilesItemType = {
         dataType: 'flow',
         nodes: [],
         edges: []
+      }
+    }
+  ]
+};
+
+export const SqlExample: FilesItemType = {
+  type: 'folder',
+  key: uuidv4(),
+  label: `Examples`,
+  children: [
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `sql.json`,
+      data: {
+        dataType: 'sql',
+        code: JSON.stringify(
+          [
+            {
+              name: 't_log',
+              desc: 'test table',
+              cols: [
+                {
+                  name: 'number',
+                  constrains: {
+                    datatype: 'UIN8',
+                    length: 255,
+                    desc: 'number'
+                  }
+                },
+                {
+                  name: 'text',
+                  constrains: {
+                    datatype: 'TEXT',
+                    length: 255,
+                    default: '0',
+                    desc: 'text'
+                  }
+                },
+                {
+                  name: 'boolean',
+                  constrains: {
+                    datatype: 'BOOL',
+                    length: 0,
+                    desc: ''
+                  }
+                }
+              ],
+              keys: [
+                {
+                  name: 'ui_username',
+                  isUnique: true,
+                  columnNames: ['number']
+                }
+              ],
+              withSoftDeletion: true,
+              withPrimaryKey: true
+            }
+          ],
+          null,
+          2
+        )
       }
     }
   ]

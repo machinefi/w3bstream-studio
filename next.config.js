@@ -5,7 +5,6 @@
  **/
 const nextConfig = {
   output: 'standalone',
-  publicRuntimeConfig: {},
   webpack: (config, { isServer }) => {
     config.experiments = {
       topLevelAwait: true,
