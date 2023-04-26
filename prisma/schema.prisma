@@ -28,7 +28,6 @@ model t_applet {
   f_applet_id   BigInt @unique(map: "t_applet_ui_applet_id")
   f_resource_id BigInt
   f_name        String @db.VarChar(255)
-  f_wasm_name   String @db.VarChar(255)
   f_created_at  BigInt @default(0)
   f_updated_at  BigInt @default(0)
   project      t_project    @relation(fields: [f_project_id], references: [f_project_id])
