@@ -22,6 +22,7 @@ type UploadWasmTemplateFormSchemaType = FromSchema<typeof uploadWasmTemplateForm
 export const simulationEventSchema = {
   type: 'object',
   properties: {
+    handleFunc: { type: 'string', title: 'Handle Function' },
     wasmPayload: { type: 'string', title: '' }
   },
   required: []
@@ -48,7 +49,8 @@ export default class LabModule {
     },
     value: new JSONValue<SimulationEventSchemaType>({
       default: {
-        wasmPayload: JSON.stringify({}, null, 2)
+        wasmPayload: JSON.stringify({}, null, 2),
+        handleFunc: 'start'
       }
     })
   });
@@ -97,7 +99,7 @@ export default class LabModule {
     });
   }
 
-  async onDebugWASM(wasmPayload: Uint8Array, needCompile = true) {
+  async onDebugWASM(wasmPayload: Uint8Array, needCompile = true, start_func = 'start') {
     const { curFilesListSchema } = globalThis.store.w3s.projectManager;
     let buffer;
     if (needCompile) {
@@ -116,7 +118,7 @@ export default class LabModule {
       key: curFilesListSchema.curActiveFile.key + '_payload'
     });
     this.payloadCache.save(JSON.stringify(wasmPayload));
-    const { stderr, stdout } = await wasi.start();
+    const { stderr, stdout } = await wasi.start(start_func, false);
     this.stdout = this.stdout.concat(stdout ?? []);
     this.stdout = this.stdout.concat(stderr ?? []);
   }

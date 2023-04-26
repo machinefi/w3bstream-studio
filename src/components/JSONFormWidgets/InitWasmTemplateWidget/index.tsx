@@ -3,23 +3,8 @@ import { WidgetProps } from '@rjsf/utils';
 import {
   Text,
   Flex,
-  Image,
-  chakra,
-  Box,
-  Menu,
-  MenuButton,
-  Button,
-  MenuList,
-  MenuGroup,
-  MenuItem,
-  MenuDivider,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon
 } from '@chakra-ui/react';
-import { assemblyScriptExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
+import { assemblyScriptExample, envExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
 import { helper } from '@/lib/helper';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ChevronDownIcon } from '@chakra-ui/icons';
@@ -92,6 +77,7 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
       {templates(flowExample, 'Flow')}
       {templates(simulationExample, 'Simulation')}
       {templates(SqlExample, 'Database')}
+      {templates(envExample, 'ENV')}
     </>
   );
 });
