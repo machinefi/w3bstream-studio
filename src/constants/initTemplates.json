@@ -7,37 +7,14 @@
         {
           "name": "hello_world",
           "description": "",
-          "applets": [{ "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/log.wasm", "appletName": "applet_01" }],
+          "applets": [
+            {
+              "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/log.wasm",
+              "appletName": "applet_01"
+            }
+          ],
           "datas": [],
-          "envs": [["key1", "value1"]],
-          "schema": {
-            "name": "log",
-            "tables": [
-              {
-                "name": "t_log",
-                "desc": "log table",
-                "cols": [
-                  {
-                    "name": "f_log",
-                    "constrains": {
-                      "datatype": "TEXT",
-                      "length": 255,
-                      "desc": ""
-                    }
-                  }
-                ],
-                "keys": [
-                  {
-                    "name": "ui_log",
-                    "isUnique": false,
-                    "columnNames": ["f_log"]
-                  }
-                ],
-                "withSoftDeletion": true,
-                "withPrimaryKey": true
-              }
-            ]
-          }
+          "envs": [["key1", "value1"]]
         }
       ]
     }
