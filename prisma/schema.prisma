@@ -53,16 +53,12 @@ model t_event_log {
 
 model t_instance {
   f_id          BigInt @id @default(autoincrement())
-  f_instance_id BigInt
-  f_applet_id   BigInt
+  f_instance_id BigInt @unique(map: "t_instance_ui_instance_id")
+  f_applet_id   BigInt @unique(map: "t_instance_ui_applet_id")
   f_state       Int
   f_created_at  BigInt @default(0)
   f_updated_at  BigInt @default(0)
-  f_deleted_at  BigInt @default(0)
   applet        t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
-
-  @@unique([f_instance_id, f_deleted_at], map: "t_instance_ui_instance_id")
-  @@unique([f_applet_id, f_deleted_at], map: "t_instance_ui_applet_id")
 }
 
 model t_project {
@@ -73,9 +69,6 @@ model t_project {
   f_version     String @default("") @db.VarChar(255)
   f_proto       Int    @default(0)
   f_description String @default("") @db.VarChar(255)
-  f_issuer      String @default("web3stream") @db.VarChar(255)
-  f_exp_in      BigInt @default(0)
-  f_sign_key    String @default("web3stream") @db.VarChar(255)
   f_created_at  BigInt @default(0)
   f_updated_at  BigInt @default(0)
   f_deleted_at  BigInt @default(0)
@@ -93,12 +86,13 @@ model t_publisher {
   f_project_id   BigInt
   f_publisher_id BigInt @unique(map: "t_publisher_ui_publisher_id")
   f_name         String @db.VarChar(255)
-  f_key          String @unique(map: "t_publisher_ui_publisher_key") @db.VarChar(255)
+  f_key          String @db.VarChar(255)
   f_token        String @default("") @db.VarChar(255)
   f_created_at   BigInt @default(0)
   f_updated_at   BigInt @default(0)
 
   project t_project @relation(fields: [f_project_id], references: [f_project_id])
+  @@unique([f_project_id, f_key], map: "t_publisher_ui_project_id_publisher_key")
 }
 
 model t_sql_meta_enum {
@@ -113,15 +107,15 @@ model t_sql_meta_enum {
 }
 
 model t_strategy {
-  f_id          BigInt   @id @default(autoincrement())
+  f_id          BigInt @id @default(autoincrement())
   f_strategy_id BigInt
   f_project_id  BigInt
   f_applet_id   BigInt
-  f_event_type  String   @db.VarChar(255)
-  f_handler     String   @db.VarChar(255)
-  f_created_at  BigInt   @default(0)
-  f_updated_at  BigInt   @default(0)
-  f_deleted_at  BigInt   @default(0)
+  f_event_type  String @db.VarChar(255)
+  f_handler     String @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
   applet        t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
 
   @@unique([f_project_id, f_applet_id, f_event_type, f_handler, f_deleted_at], map: "t_strategy_ui_prj_app_event")
@@ -129,14 +123,14 @@ model t_strategy {
 }
 
 model t_config {
-  f_id          BigInt     @id @default(autoincrement())
-  f_config_id   BigInt     @unique(map: "t_config_ui_config_id")
-  f_rel_id      BigInt
-  f_type        Int
-  f_value       Bytes      @default("")
-  f_created_at  BigInt     @default(0)
-  f_updated_at  BigInt     @default(0)
-  f_project_id  BigInt?
+  f_id         BigInt @id @default(autoincrement())
+  f_config_id  BigInt @unique(map: "t_config_ui_config_id")
+  f_rel_id     BigInt
+  f_type       Int
+  f_value      Bytes  @default("")
+  f_created_at BigInt @default(0)
+  f_updated_at BigInt @default(0)
+
 
   project t_project @relation(fields: [f_rel_id], references: [f_project_id])
 
@@ -177,4 +171,18 @@ model t_cron_job {
 
   @@unique([f_project_id, f_cron_expressions, f_event_type, f_deleted_at], map: "t_cron_job_ui_cron")
   @@unique([f_cron_job_id, f_deleted_at], map: "t_cron_job_ui_cron_job_id")
+}
+
+model t_resource_ownership {
+  f_id          BigInt @id @default(autoincrement())
+  f_resource_id BigInt
+  f_account_id  BigInt
+  f_uploaded_at BigInt
+  f_expire_at   BigInt @default(0)
+  f_filename    String @default("") @db.VarChar(255)
+  f_comment     String @default("") @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+
+  @@unique([f_resource_id, f_account_id], map: "t_resource_ownership_ui_resource_account")
 }

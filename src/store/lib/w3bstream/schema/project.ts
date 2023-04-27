@@ -520,10 +520,6 @@ export default class ProjectModule {
           data
         });
         if (res.data) {
-          const { projectIds } = res.data;
-          for (const projectID of projectIds) {
-            this.createDB(projectID);
-          }
           showNotification({ message: 'Create project succeeded' });
         }
       } catch (error) {}
@@ -540,7 +536,7 @@ export default class ProjectModule {
           description: formData.description
         }
       });
-      if (res.data?.project) {
+      if (res.data?.projectID) {
         if (formData.file) {
           const data = new FormData();
           const file = dataURItoBlob(formData.file);
@@ -550,7 +546,8 @@ export default class ProjectModule {
             JSON.stringify({
               projectName,
               appletName: 'applet_01',
-              wasmName: file.name
+              wasmName: file.name,
+              start: true
             })
           );
           const res = await axios.request({
@@ -561,34 +558,14 @@ export default class ProjectModule {
             },
             data
           });
-          const appletID = res.data?.appletID;
-          if (appletID) {
-            const instanceID = await globalThis.store.w3s.applet.deployApplet({ appletID, triggerEvent: false });
-            if (instanceID) {
-              globalThis.store.w3s.instances.handleInstance({ instanceID, event: 'START' });
-              eventBus.emit('project.create');
-              showNotification({ message: 'create project succeeded' });
-            }
+          if (res.data) {
+            eventBus.emit('project.create');
+            showNotification({ message: 'create project succeeded' });
           }
         } else {
           eventBus.emit('project.create');
           showNotification({ message: 'create project succeeded' });
         }
-
-        this.createDB(res.data.project.projectID);
-      }
-    } catch (error) {
-      showNotification({ color: 'red', message: error.message });
-    }
-  }
-
-  async createDB(projectID: string) {
-    try {
-      const { errorMsg } = await trpc.pg.createDB.mutate({
-        projectID
-      });
-      if (errorMsg) {
-        showNotification({ color: 'red', message: errorMsg });
       }
     } catch (error) {
       showNotification({ color: 'red', message: error.message });

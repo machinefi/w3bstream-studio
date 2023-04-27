@@ -15,6 +15,7 @@ const Settings = () => {
 
   const store = useLocalObservable(() => ({
     operateAddress: '',
+    wasmName: '',
     get curApplet() {
       return applet.allData.find((item) => item.project_name === project.curProject?.name);
     },
@@ -47,6 +48,14 @@ const Settings = () => {
     store.getOperateAddress();
   }, []);
 
+  useEffect(() => {
+    if (store.curApplet) {
+      applet.getFileName(store.curApplet.f_resource_id).then((fileName) => {
+        store.wasmName = fileName;
+      });
+    }
+  }, [store.curApplet]);
+
   return (
     <Box w="100%" h="calc(100vh - 140px)">
       <Box mt="20px" fontSize="18px" fontWeight={700}>
@@ -55,15 +64,15 @@ const Settings = () => {
       <Box mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
         <Flex alignItems={'center'} mb="20px">
           <Box fontWeight={700} fontSize="16px" color="#0F0F0F">
-            Project Name:{' '}
+            Project Name:
           </Box>
           <Text ml="10px" fontSize={'18px'} fontWeight={700}>
-            {project.curProject.f_name}
+            {project.curProject?.name}
           </Text>
         </Flex>
         <Flex alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>WASM file name:</Box>
-          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px"></Box>
+          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">{store.wasmName}</Box>
           <Button
             ml="10px"
             size="sm"

@@ -4,6 +4,7 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import { trpc } from '@/lib/trpc';
 import { AppletType } from '@/server/routers/w3bstream';
 import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
@@ -399,7 +400,8 @@ export default class AppletModule {
         JSON.stringify({
           wasmName: file.name,
           projectName: formData.projectName,
-          appletName: formData.appletName
+          appletName: formData.appletName,
+          start: false
         })
       );
       const res = await axios.request({
@@ -509,6 +511,17 @@ export default class AppletModule {
           eventBus.emit('applet.update');
         }
       } catch (error) {}
+    }
+  }
+
+  async getFileName(resourceId) {
+    try {
+      const res = await trpc.api.wasmName.query({
+        resourceId
+      });
+      return res?.f_filename;
+    } catch (error) {
+      return '';
     }
   }
 }

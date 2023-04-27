@@ -39,6 +39,7 @@ export const w3bstreamRouter = t.router({
             f_name: true,
             f_applet_id: true,
             f_project_id: true,
+            f_resource_id: true,
             strategies: {
               select: {
                 f_strategy_id: true,
@@ -221,6 +222,25 @@ FROM pg_stat_database where DATname='w3bstream';
           f_cron_expressions: true,
           f_event_type: true,
           f_created_at: true
+        }
+      });
+      return res;
+    }),
+  wasmName: t.procedure
+    .input(
+      z.object({
+        resourceId: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const res = await ctx.prisma.t_resource_ownership.findFirst({
+        where: {
+          f_resource_id: {
+            equals: BigInt(input.resourceId)
+          }
+        },
+        select: {
+          f_filename: true
         }
       });
       return res;

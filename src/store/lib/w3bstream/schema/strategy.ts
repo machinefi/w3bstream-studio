@@ -174,13 +174,9 @@ export default class StrategyModule {
           method: 'post',
           url: `/api/w3bapp/strategy/x/${applet.project_name}`,
           data: {
-            data: [
-              {
-                appletID,
-                eventType,
-                handler
-              }
-            ]
+            appletID,
+            eventType,
+            handler
           }
         });
         showNotification({ message: 'create strategy succeeded' });
