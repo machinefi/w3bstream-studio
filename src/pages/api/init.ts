@@ -10,10 +10,6 @@ export interface Project {
   datas?: {
     monitor: Monitor;
   }[];
-  envs?: string[][];
-  schema?: {
-    [x: string]: any;
-  };
 }
 
 interface Applet {

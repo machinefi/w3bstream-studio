@@ -13,8 +13,7 @@
               "appletName": "applet_01"
             }
           ],
-          "datas": [],
-          "envs": [["key1", "value1"]]
+          "datas": []
         }
       ]
     }
