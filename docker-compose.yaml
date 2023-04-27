@@ -43,9 +43,13 @@ services:
     ports:
       - '3000:3000'
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}
-      DATABASE_URL_APPLET_MANAGEMENT: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?schema=applet_management
-      DATABASE_URL_MONITOR: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?schema=monitor
+      DB_HOST: postgres:5432
+      DB_NAME: ${POSTGRES_DB:-w3bstream}
+      DB_USER: ${POSTGRES_USER:-w3badmin}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-PaSsW0Rd}
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}
+      DATABASE_URL_APPLET_MANAGEMENT: ${DATABASE_URL}?schema=applet_management
+      DATABASE_URL_MONITOR: ${DATABASE_URL}?schema=monitor
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://w3bapp:8888}
       NEXT_PUBLIC_EVENT_URL: ${NEXT_PUBLIC_EVENT_URL:-http://w3bapp:8889}
       NEXT_PUBLIC_MQTT_URL: ${NEXT_PUBLIC_MQTT_URL:-mqtt://mqtt_server:1883}
