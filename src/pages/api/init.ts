@@ -68,7 +68,7 @@ const createProject = async (
     }
     throw data;
   } catch (e) {
-    throw new Error('create project failed:' + e.msg);
+    throw new Error('create project failed:' + e.message);
   }
 };
 
@@ -142,7 +142,7 @@ const deployApplet = async (appletID: string, token: string): Promise<string> =>
     }
     throw data;
   } catch (error) {
-    throw new Error('deploy applet failed:' + error.msg);
+    throw new Error('deploy applet failed:' + error.message);
   }
 };
 
@@ -155,7 +155,7 @@ const startInstance = async (instanceID: string, token: string): Promise<any> =>
       }
     });
   } catch (error) {
-    throw new Error('start instance failed:' + error.msg);
+    throw new Error('start instance failed:' + error.message);
   }
 };
 
@@ -205,11 +205,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-      console.log(project);
+      const projectIds = [];
       for (const p of project) {
-        console.log('p', p);
         const { projectID, projectName } = await createProject(p, token);
-        console.log('projectID', projectID);
+        projectIds.push(projectID);
         // if (p.envs?.length > 0) {
         //   await saveEnvs(projectName, p.envs, token);
         // }
@@ -226,7 +225,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           }
         }
       }
-      res.status(200).json({ message: 'OK' });
+      res.status(200).json({ message: 'OK', projectIds });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

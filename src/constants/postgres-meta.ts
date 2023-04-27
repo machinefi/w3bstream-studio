@@ -5,6 +5,29 @@ export const PG_CONNECTION = `${process.env.DATABASE_URL}?sslmode=${PG_META_DB_S
 export const DEFAULT_POOL_CONFIG = { max: 1, connectionTimeoutMillis: PG_CONN_TIMEOUT_SECS * 1000 };
 export const PG_META_REQ_HEADER = 'request-id';
 
+export const url2obj = (url: string) => {
+  const pattern = /^(?:([^:\/?#\s]+):\/{2})?(?:([^@\/?#\s]+)@)?([^\/?#\s]+)?(?:\/([^?#\s]*))?(?:[?]([^#\s]+))?\S*$/;
+  const matches = url.match(pattern);
+  const params = {};
+  if (matches[5] != undefined) {
+    matches[5].split('&').map(function (x) {
+      const a = x.split('=');
+      params[a[0]] = a[1];
+    });
+  }
+  return {
+    protocol: matches[1],
+    user: matches[2] != undefined ? matches[2].split(':')[0] : undefined,
+    password: matches[2] != undefined ? matches[2].split(':')[1] : undefined,
+    host: matches[3],
+    hostname: matches[3] != undefined ? matches[3].split(/:(?=\d+$)/)[0] : undefined,
+    port: matches[3] != undefined ? matches[3].split(/:(?=\d+$)/)[1] : undefined,
+    segments: matches[4] != undefined ? matches[4].split('/') : undefined,
+    params: params
+  };
+};
+
 export const getConnectionString = (projectID: string) => {
-  return `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/w3b_${projectID}?sslmode=${PG_META_DB_SSL_MODE}`;
+  const obj = url2obj(process.env.DATABASE_URL);
+  return `postgresql://${obj.user}:${obj.password}@${obj.host}/w3b_${projectID}?sslmode=${PG_META_DB_SSL_MODE}`;
 };
