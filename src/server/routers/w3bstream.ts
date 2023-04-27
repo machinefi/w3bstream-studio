@@ -137,6 +137,15 @@ export const w3bstreamRouter = t.router({
       }
     });
   }),
+  blockChain: t.procedure.query(({ ctx, input }) => {
+    return ctx.monitor.t_blockchain.findMany({
+      select: {
+        f_id: true,
+        f_chain_id: true,
+        f_chain_address: true
+      }
+    });
+  }),
   wasmLogs: t.procedure
     .input(
       z.object({

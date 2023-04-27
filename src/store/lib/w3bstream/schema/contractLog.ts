@@ -13,13 +13,16 @@ export const schema = {
   definitions: {
     projects: {
       type: 'string'
+    },
+    blockChains: {
+      type: 'string'
     }
   },
   type: 'object',
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type' },
-    chainID: { type: 'number', title: 'Chain ID' },
+    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', default: "4690" },
     contractAddress: { type: 'string', title: 'Contract Address' },
     blockStart: { type: 'number', title: 'Block Start' },
     blockEnd: { type: 'number', title: 'Block End' },
@@ -32,7 +35,8 @@ type SchemaType = FromSchema<typeof schema>;
 
 //@ts-ignore
 schema.definitions = {
-  projects: definitions.projectName
+  projects: definitions.projectName,
+  blockChains: definitions.blockChains
 };
 
 export default class ContractLogModule {
@@ -133,6 +137,9 @@ export default class ContractLogModule {
       'ui:submitButtonOptions': {
         norender: false,
         submitText: 'Submit'
+      },
+      chainID: {
+        'ui:widget': 'select'
       }
     },
     afterSubmit: async (e) => {
@@ -143,7 +150,7 @@ export default class ContractLogModule {
       default: {
         projectName: '',
         eventType: 'DEFAULT',
-        chainID: 4690,
+        chainID: "4690",
         contractAddress: '',
         blockStart: 16737070,
         blockEnd: 16740080,

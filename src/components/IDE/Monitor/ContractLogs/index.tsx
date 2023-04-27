@@ -63,10 +63,11 @@ export const CreateContractLogButton = observer(() => {
           ]
         });
         if (formData.projectName) {
+
           const res = await axios.request({
             method: 'post',
             url: `/api/w3bapp/monitor/contract_log/${formData.projectName}`,
-            data: formData
+            data: {...formData, chainID: Number(formData.chainID)}
           });
           if (res.data) {
             showNotification({ message: 'Smart Contract event monitor successfully created.' });
