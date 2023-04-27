@@ -401,7 +401,7 @@ export default class AppletModule {
           wasmName: file.name,
           projectName: formData.projectName,
           appletName: formData.appletName,
-          start: false
+          start: true
         })
       );
       const res = await axios.request({
@@ -456,7 +456,8 @@ export default class AppletModule {
         JSON.stringify({
           projectName,
           appletName,
-          wasmName: file.name
+          wasmName: file.name,
+          start: true
         })
       );
       const res = await axios.request({
@@ -494,7 +495,8 @@ export default class AppletModule {
         JSON.stringify({
           wasmName: file.name,
           appletName: formData.appletName,
-          strategies: [{ eventType: 'DEFAULT', handler: 'start' }]
+          strategies: [{ eventType: 'DEFAULT', handler: 'start' }],
+          start: true
         })
       );
       try {
