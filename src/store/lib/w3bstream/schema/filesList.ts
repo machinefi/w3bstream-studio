@@ -46,7 +46,7 @@ export class FilesListSchema {
       key: uuidv4(),
       type: 'folder',
       label: 'Browser Files',
-      children: [assemblyScriptExample]
+      children: [] //assemblyScriptExample
     },
     {
       key: uuidv4(),
@@ -55,6 +55,7 @@ export class FilesListSchema {
       children: []
     }
   ];
+  currentCopyFile: FilesItemType | null = null;
 
   constructor(args: Partial<FilesListSchema>) {
     Object.assign(this, args);
@@ -180,6 +181,15 @@ export class FilesListSchema {
     }
   }
 
+  findFilesByLabel(objects: FilesItemType[], label: string): FilesItemType[] {
+    const files: FilesItemType[] = [];
+    for (let o of objects || []) {
+      if (o.label == label) files.push(o);
+      if (o.children) files.push(...this.findFilesByLabel(o.children, label));
+    }
+    return files;
+  }
+
   findCurFolder(objects: FilesItemType[]): FilesItemType {
     for (let o of objects || []) {
       if (o.children?.find((i) => i.key == this.curActiveFileId)) return o;
@@ -201,13 +211,21 @@ export class FilesListSchema {
   }
 
   curActiveFileIs(label: string | string[]) {
-    if(Array.isArray(label)){
-      return label.some(i=>this.curActiveFile?.label.endsWith(`.${i}`))
+    if (Array.isArray(label)) {
+      return label.some((i) => this.curActiveFile?.label.endsWith(`.${i}`));
     }
     return this?.curActiveFile?.label.endsWith(`.${label}`);
   }
 
-  createFileFormFolder(file: FilesItemType, action: 'file' | 'folder', template?: FilesItemType) {
+  regenFileKey(file: FilesItemType) {
+    file.key = uuidv4();
+    file.children?.forEach((i) => this.regenFileKey(i));
+  }
+
+  createFileFormFolder(file: FilesItemType, action: 'file' | 'folder', _template?: FilesItemType) {
+    const template = _.cloneDeep(_template);
+    template && this.regenFileKey(template);
+    console.log(template);
     if (file.type == 'folder' && action == 'file') {
       file.children.push(
         template ?? {
@@ -221,14 +239,16 @@ export class FilesListSchema {
       file.isOpen = true;
     }
     if (file.type == 'folder' && action == 'folder') {
-      file.children.push({
-        type: 'folder',
-        key: uuidv4(),
-        label: `New Folder`,
-        isRename: true,
-        isOpen: false,
-        children: []
-      });
+      file.children.push(
+        template ?? {
+          type: 'folder',
+          key: uuidv4(),
+          label: `New Folder`,
+          isRename: true,
+          isOpen: false,
+          children: []
+        }
+      );
       file.isOpen = true;
     }
     eventBus.emit('file.change');
@@ -236,10 +256,18 @@ export class FilesListSchema {
   }
 
   deleteFile(file: FilesItemType) {
-    const curFolder = this.findCurFolder(this.files);
-    if (curFolder.children) {
-      _.remove(curFolder.children, (i) => i.key == file.key);
-    }
+    this.deleteFileDeep(this.files, file);
+  }
+
+  deleteFileDeep(sourceFile: FilesItemType[], file: FilesItemType) {
+    sourceFile?.forEach((i) => {
+      const index = _.findIndex(i?.children, (j) => j.key == file.key);
+      if (index != -1) {
+        _.remove(i?.children, (i) => i.key == file.key);
+      } else {
+        this.deleteFileDeep(i?.children, file);
+      }
+    });
     eventBus.emit('file.change');
     this.deleteActiveFiles(file);
   }
@@ -254,7 +282,6 @@ export class FilesListSchema {
 
   deleteActiveFiles(activeFile: FilesItemType) {
     const index = _.findIndex(this.activeFileIds, (i) => i == activeFile.key);
-    console.log(this.activeFileIds, activeFile, index);
     if (index != -1) {
       // _.remove(this.activeFileIds, (i) => i == activeFile.key);
       this.activeFileIds.splice(index, 1);
@@ -306,6 +333,24 @@ export class FilesListSchema {
     this.curActiveFileId = activeFile.key;
     this.lockFile = true;
     this.setActiveFiles(activeFile);
+  }
+
+  findENV(key: string) {
+    const envFiles = this.findFilesByLabel(this.files, '.env');
+    console.log(envFiles);
+    let env = {};
+    if (envFiles) {
+      envFiles.forEach((file) => {
+        const _env = file.data.code.split('\n').reduce((acc, cur) => {
+          const [key, value] = cur.split('=');
+          acc[key] = value;
+          return acc;
+        }, {});
+        env = { ...env, ..._env };
+      });
+    }
+    console.log(env);
+    return env?.[key] ?? null;
   }
 
   async syncToIndexDb() {

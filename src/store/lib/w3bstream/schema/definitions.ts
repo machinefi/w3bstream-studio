@@ -38,5 +38,14 @@ export const definitions = {
       const allApplets = globalThis.store.w3s.applet.allData;
       return allApplets.map((i) => `${i.f_name}`);
     }
-  }
+  },
+  blockChains: {
+    type: 'string',
+    get enum() {
+      return globalThis.store.w3s.blockChain.allBlockChain.value?.map((i) => `${i.f_chain_id}`) || [];
+    },
+    get enumNames() {
+      return globalThis.store.w3s.blockChain.allBlockChain.value?.map((i) => `${i.f_chain_id}`) || [];
+    }
+  },
 };

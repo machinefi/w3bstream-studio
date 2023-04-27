@@ -12,13 +12,16 @@
 //   return rid;
 // }
 
-import { assemblyscriptJSON } from "./assemblyscript-json";
-import { sqlSDK } from "./sql-sdk";
+import { assemblyscriptJSON } from './assemblyscript-json';
+import { sqlSDK } from './sql-sdk';
 
 // declare function abort(message: usize ,fileName: usize ,lineNumber: u32,columnNumber: u32): void
 export const wasm_vm_sdk = `
 ${assemblyscriptJSON}
 ${sqlSDK}
+@external("env", "ws_get_env")
+declare function ws_get_env(kaddr: usize, ksize: i32, vaddr: usize, vsize: i32): i32
+
 @external("env", "ws_log")
   declare function ws_log(logLevel: u8, ptr: usize, size: usize): i32
 
@@ -49,6 +52,32 @@ export function alloc(size: usize): usize {
 
 export function freeResource(rid: i32): void {
     heap.free(rid);
+}
+
+export function GetEnv(key: string): string {
+  let kstrEncoded = String.UTF8.encode(key, false);
+  let kaddr = changetype<usize>(kstrEncoded);
+  let ksize = kstrEncoded.byteLength;
+
+  let vaddr: usize = heap.alloc(sizeof<u32>());
+  let vsize: usize = heap.alloc(sizeof<u32>());
+
+  let code = ws_get_env(kaddr, ksize, vaddr, vsize);
+
+  if (code != 0) {
+    assert(false, \`get env failed: key: \${key} addr: \${vaddr}\`);
+    return "";
+  }
+
+  let m = load<u32>(vaddr);
+  let mSize = load<u32>(vsize);
+  if (!m) {
+    assert(false, \`get env failed: key: \${key} addr: \${vaddr}\`);
+    return "";
+  }
+  heap.free(vaddr);
+  heap.free(vsize);
+  return String.UTF8.decodeUnsafe(m, mSize, true);
 }
 
 export function Log(message: string): i32 {

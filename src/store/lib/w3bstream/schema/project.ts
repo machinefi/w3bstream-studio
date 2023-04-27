@@ -507,10 +507,12 @@ export default class ProjectModule {
       this.developerInitializationTemplateForm.reset();
       return;
     }
+    const projectName = formData.name;
+    let projectID = '';
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
-      data.project[0].name = formData.name;
+      data.project[0].name = projectName;
       data.project[0].description = formData.description;
       try {
         const res = await axios.request({
@@ -519,6 +521,7 @@ export default class ProjectModule {
           data
         });
         if (res.data) {
+          projectID = res.data.project?.projectID;
           showNotification({ message: 'Create project succeeded' });
         }
       } catch (error) {}
@@ -526,7 +529,6 @@ export default class ProjectModule {
       return;
     }
 
-    const projectName = formData.name;
     try {
       const res = await axios.request({
         method: 'post',
@@ -537,6 +539,7 @@ export default class ProjectModule {
         }
       });
       if (res.data?.project) {
+        projectID = res.data.project.projectID;
         if (formData.file) {
           const data = new FormData();
           const file = dataURItoBlob(formData.file);
@@ -573,6 +576,19 @@ export default class ProjectModule {
       }
     } catch (error) {
       showNotification({ color: 'red', message: error.message });
+    }
+
+    if (projectID) {
+      try {
+        const { errorMsg } = await trpc.pg.createDB.mutate({
+          projectID
+        });
+        if (errorMsg) {
+          showNotification({ color: 'red', message: errorMsg });
+        }
+      } catch (error) {
+        showNotification({ color: 'red', message: error.message });
+      }
     }
   }
 

@@ -22,6 +22,7 @@ import FlowModule from './schema/flow';
 import LabModule from './schema/lab';
 import CronJobModule from './schema/cronJob';
 import ENVModule from './schema/envs';
+import BlockChainModule from './schema/blockChain';
 
 configure({
   enforceActions: 'never'
@@ -62,6 +63,7 @@ export class W3bStream {
   lab = new LabModule();
   cronJob = new CronJobModule();
   env = new ENVModule();
+  blockChain = new BlockChainModule();
 
   showContent:
     | 'CURRENT_APPLETS'
@@ -195,6 +197,7 @@ export class W3bStream {
       this.chainHeight.allChainHeight.call();
       this.metrics.allDBState.call();
       this.env.envs.call();
+      this.blockChain.allBlockChain.call();
     });
   }
 }

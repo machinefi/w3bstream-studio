@@ -63,6 +63,7 @@ export const CreateContractLogButton = observer(() => {
           ]
         });
         if (formData.projectName) {
+          formData.chainID = Number(formData.chainID);
           const res = await axios.request({
             method: 'post',
             url: `/api/w3bapp/monitor/x/${formData.projectName}/contract_log`,

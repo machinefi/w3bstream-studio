@@ -1,7 +1,7 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useStore } from '@/store/index';
-import { Box, Flex, Icon, Spinner, chakra, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Icon, Spinner, chakra, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/react';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
@@ -19,6 +19,8 @@ type LocalStoreType = {
   offset: number;
   limit: number;
   haveMore: boolean;
+  showModal: boolean;
+  modalContent: string;
   setData: (data: Partial<LocalStoreType>) => void;
 };
 
@@ -50,6 +52,8 @@ const EventLogs = observer(() => {
     limit: 50,
     offset: 0,
     haveMore: true,
+    showModal: false,
+    modalContent: '',
     setData(data: Partial<LocalStoreType>) {
       Object.assign(store, data);
     }
@@ -162,11 +166,23 @@ const EventLogs = observer(() => {
               rowRenderer={({ index, key, style }) => {
                 const item = logs[index];
                 return (
-                  <chakra.p key={key} style={style} color="#fff" whiteSpace="nowrap" overflow="hidden">
-                    {dayjs(Number(item.f_created_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}&nbsp;&nbsp;{item.f_level}&nbsp;&nbsp;
-                    <Tooltip label={item.f_msg} hasArrow aria-label="A tooltip">
-                      {item.f_msg}
-                    </Tooltip>
+                  <chakra.p
+                    key={key}
+                    style={style}
+                    color="#fff"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    cursor="pointer"
+                    onClick={() => {
+                      const n = item.f_msg.split('message:');
+                      const modalContent = n[1] || n[0];
+                      store.setData({
+                        showModal: true,
+                        modalContent
+                      });
+                    }}
+                  >
+                    {dayjs(Number(item.f_created_at) * 1000).format('YYYY-MM-DD HH:mm:ss')}&nbsp;&nbsp;{item.f_level}&nbsp;&nbsp; {item.f_msg}
                   </chakra.p>
                 );
               }}
@@ -199,6 +215,23 @@ const EventLogs = observer(() => {
           )}
         </AutoSizer>
       </Box>
+      <Modal
+        isOpen={store.showModal}
+        onClose={() => {
+          store.setData({
+            showModal: false
+          });
+        }}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontSize="sm">Received Message:</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb="20px" fontWeight={700}>
+            {store.modalContent}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 });
