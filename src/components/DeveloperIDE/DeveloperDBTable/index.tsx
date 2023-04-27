@@ -16,7 +16,7 @@ const DeveloperDBTable = () => {
       <Box ml="20px" flex={1} borderRadius="8px">
         <DBTable />
       </Box>
-      {/* {w3s.showContent === 'DB_TABLE' && (
+      {w3s.showContent === 'DB_TABLE' && (
         <Box pos="absolute" right="0px" top="0px">
           <Tooltip label="Query SQL" placement="bottom">
             <Box
@@ -30,7 +30,7 @@ const DeveloperDBTable = () => {
             </Box>
           </Tooltip>
         </Box>
-      )} */}
+      )}
     </Flex>
   );
 };

@@ -9,7 +9,6 @@ import { eventBus } from '@/lib/event';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
 import { showNotification } from '@mantine/notifications';
-import { DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import EditorWidget from '@/components/JSONFormWidgets/EditorWidget';
 
@@ -71,27 +70,29 @@ export default class DBTableModule {
   allTables = new PromiseState<() => Promise<any>, { schemaName: string; tables: TableType[] }[]>({
     defaultValue: [],
     function: async () => {
-      const accountRole = globalThis.store.w3s.config.form.formData.accountRole;
-      const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       try {
-        const schemaName = accountRole === 'DEVELOPER' ? `wasm_project__${curProjectName}` : '';
-        const schemas = await trpc.pg.schemas.query({
-          accountRole,
-          schemaName
+        const { schemas, errorMsg } = await trpc.pg.schemas.query({
+          projectID: curProjectId
         });
-        if (schemas?.length) {
-          const includedSchemas = schemas.map((s) => s.name);
-          const tables = await trpc.pg.tables.query({
-            includedSchemas
-          });
-          const data = includedSchemas.map((schemaName) => {
-            const tablesInSchema = tables.filter((t) => t.tableSchema === schemaName);
-            return {
-              schemaName,
-              tables: tablesInSchema
-            };
-          });
-          return data;
+        if (errorMsg) {
+          showNotification({ message: errorMsg });
+        } else {
+          if (schemas?.length) {
+            const includedSchemas = schemas.map((s) => s.name);
+            const tables = await trpc.pg.tables.query({
+              projectID: curProjectId,
+              includedSchemas
+            });
+            const data = includedSchemas.map((schemaName) => {
+              const tablesInSchema = tables.filter((t) => t.tableSchema === schemaName);
+              return {
+                schemaName,
+                tables: tablesInSchema
+              };
+            });
+            return data;
+          }
         }
       } catch (error) {
         console.log('error', error.message);
@@ -169,8 +170,7 @@ export default class DBTableModule {
   currentTable = {
     tableId: 0,
     tableSchema: '',
-    tableName: '',
-    disabled: true
+    tableName: ''
   };
 
   currentColumns: ColumnType[] = [];
@@ -283,41 +283,35 @@ export default class DBTableModule {
       };
     }
 
-    if (globalThis.store.w3s.config.form.formData.accountRole !== 'ADMIN') {
-      for (const schema of DISABLED_SCHEMA_LIST) {
-        if (this.sql.includes(schema)) {
-          return {
-            errorMsg: `You don't have permission to access this table`
-          };
-        }
+    try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
+      const { data, errorMsg } = await trpc.pg.query.mutate({
+        projectID: curProjectId,
+        sql: this.sql
+      });
+      if (errorMsg) {
+        showNotification({ message: errorMsg });
+        return {
+          errorMsg
+        };
+      } else {
+        showNotification({ message: 'This SQL was executed successfully' });
+        return data;
       }
+    } catch (error) {
+      showNotification({ message: error.message });
+      return {
+        errorMsg: error.message
+      };
     }
-
-    // try {
-    //   const { data, errorMsg } = await trpc.pg.query.mutate({
-    //     sql: this.sql
-    //   });
-    //   if (errorMsg) {
-    //     showNotification({ message: errorMsg });
-    //     return {
-    //       errorMsg
-    //     };
-    //   } else {
-    //     showNotification({ message: 'This SQL was executed successfully' });
-    //     return data;
-    //   }
-    // } catch (error) {
-    //   showNotification({ message: error.message });
-    //   return {
-    //     errorMsg: error.message
-    //   };
-    // }
   }
 
   async createTable({ tableSchema = 'public', formData }: { tableSchema?: string; formData: CreateTableSchemaType }) {
     let tableId = null;
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       const tableRes = await trpc.pg.createTable.mutate({
+        projectID: curProjectId,
         schema: tableSchema,
         name: formData.name,
         comment: formData.comment
@@ -345,15 +339,16 @@ export default class DBTableModule {
 
   async deleteTable({ tableId, cascade }: { tableId: number; cascade?: boolean }) {
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       await trpc.pg.deleteTable.mutate({
+        projectID: curProjectId,
         tableId,
         cascade
       });
       this.setCurrentTable({
         tableId: 0,
         tableSchema: '',
-        tableName: '',
-        disabled: true
+        tableName: ''
       });
       this.allTables.call();
     } catch (error) {
@@ -367,7 +362,9 @@ export default class DBTableModule {
 
   async addColumn(tableId: number, column: Partial<WidgetColumn>) {
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       const { errorMsg } = await trpc.pg.createColumn.mutate({
+        projectID: curProjectId,
         tableId,
         ...column
       });
@@ -387,7 +384,9 @@ export default class DBTableModule {
 
   async updateColumn(columnId: string, column: Partial<WidgetColumn>) {
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       const { errorMsg } = await trpc.pg.updateColumn.mutate({
+        projectID: curProjectId,
         columnId,
         ...column
       });
@@ -407,7 +406,9 @@ export default class DBTableModule {
 
   async deleteColumn({ columnId, cascade }: { columnId: string; cascade?: boolean }) {
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       const { errorMsg } = await trpc.pg.deleteColumn.mutate({
+        projectID: curProjectId,
         columnId,
         cascade
       });
@@ -452,7 +453,9 @@ export default class DBTableModule {
       return 'No data provided';
     }
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       const { errorMsg } = await trpc.pg.createTableData.mutate({
+        projectID: curProjectId,
         tableSchema,
         tableName,
         keys,
@@ -473,7 +476,9 @@ export default class DBTableModule {
 
   async getCurrentTableCols() {
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       const cols = await trpc.pg.columns.query({
+        projectID: curProjectId,
         tableId: this.currentTable.tableId
       });
       return cols;
@@ -490,7 +495,12 @@ export default class DBTableModule {
   async getCurrentTableDataCount() {
     const { tableSchema, tableName } = this.currentTable;
     try {
-      const { data, errorMsg } = await trpc.pg.dataCount.query({ tableSchema, tableName });
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
+      const { data, errorMsg } = await trpc.pg.dataCount.query({
+        projectID: curProjectId,
+        tableSchema,
+        tableName
+      });
       if (errorMsg) {
         showNotification({ message: errorMsg });
         return 0;
@@ -510,7 +520,9 @@ export default class DBTableModule {
   async getCurrentTableData() {
     const { tableSchema, tableName } = this.currentTable;
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       const { data, errorMsg } = await trpc.pg.tableData.query({
+        projectID: curProjectId,
         tableSchema,
         tableName,
         page: this.table.pagination.page,
@@ -539,7 +551,9 @@ export default class DBTableModule {
     }
     const { tableSchema, tableName } = this.currentTable;
     try {
+      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
       const { errorMsg } = await trpc.pg.deleteTableData.mutate({
+        projectID: curProjectId,
         tableSchema,
         tableName,
         name,
@@ -569,38 +583,36 @@ export default class DBTableModule {
       });
 
       const idName = cols[0]?.name;
-      if (!DISABLED_TABLE_LIST.includes(this.currentTable.tableName) && idName) {
-        columns.push({
-          key: 'action',
-          label: 'Action',
-          actions: (item) => {
-            return [
-              {
-                props: {
-                  size: 'xs',
-                  ...defaultOutlineButtonStyle,
-                  onClick: async () => {
-                    globalThis.store.base.confirm.show({
-                      title: 'Warning',
-                      description: 'Are you sure you want to delete it?',
-                      onOk: async () => {
-                        try {
-                          await this.deleteTableData(idName, item[idName]);
-                          const data = await this.getCurrentTableData();
-                          this.table.set({
-                            dataSource: data
-                          });
-                        } catch (error) {}
-                      }
-                    });
-                  }
-                },
-                text: 'Delete'
-              }
-            ];
-          }
-        });
-      }
+      columns.push({
+        key: 'action',
+        label: 'Action',
+        actions: (item) => {
+          return [
+            {
+              props: {
+                size: 'xs',
+                ...defaultOutlineButtonStyle,
+                onClick: async () => {
+                  globalThis.store.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    onOk: async () => {
+                      try {
+                        await this.deleteTableData(idName, item[idName]);
+                        const data = await this.getCurrentTableData();
+                        this.table.set({
+                          dataSource: data
+                        });
+                      } catch (error) {}
+                    }
+                  });
+                }
+              },
+              text: 'Delete'
+            }
+          ];
+        }
+      });
 
       this.table.set({
         columns
@@ -611,9 +623,7 @@ export default class DBTableModule {
         total: Number(count)
       });
 
-      if (!this.currentTable.disabled) {
-        this.setCurrentColumns(cols);
-      }
+      this.setCurrentColumns(cols);
     }
   }
 

@@ -2,45 +2,44 @@ import { authProcedure, t } from '../trpc';
 import { z } from 'zod';
 import { inferProcedureOutput, TRPCError } from '@trpc/server';
 import { PostgresMeta } from '@/postgres-meta/index';
-import { DEFAULT_POOL_CONFIG, DISABLED_SCHEMA_LIST, DISABLED_TABLE_LIST, PG_CONNECTION } from '@/constants/postgres-meta';
+import { DEFAULT_POOL_CONFIG, getConnectionString, PG_CONNECTION } from '@/constants/postgres-meta';
 import format from 'pg-format';
 
 export const pgRouter = t.router({
+  createDB: authProcedure
+    .input(
+      z.object({
+        projectID: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const dbName = `w3b_${input.projectID}`;
+      const { data, error } = await pgMeta.query(format('CREATE DATABASE %I', dbName));
+      await pgMeta.end();
+      return { data, errorMsg: error?.message };
+    }),
   schemas: authProcedure
     .input(
       z.object({
-        accountRole: z.string().optional().default('DEVELOPER'),
-        schemaName: z.string().optional().default('')
+        projectID: z.string()
       })
     )
     .query(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.schemas.list();
       await pgMeta.end();
-      if (error) {
-        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
-      }
-
-      if (input.accountRole === 'DEVELOPER') {
-        if (input.schemaName) {
-          return data.filter((item) => item.name === input.schemaName);
-        }
-
-        return data.filter((item) => {
-          return !DISABLED_SCHEMA_LIST.includes(item.name);
-        });
-      }
-
-      return data;
+      return { schemas: data, errorMsg: error?.message };
     }),
   tables: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         includedSchemas: z.array(z.string())
       })
     )
     .query(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.tables.list({
         includedSchemas: input.includedSchemas,
         includeColumns: false
@@ -55,21 +54,21 @@ export const pgRouter = t.router({
           return {
             tableId: item.id,
             tableSchema: item.schema,
-            tableName: item.name,
-            disabled: DISABLED_TABLE_LIST.includes(item.name)
+            tableName: item.name
           };
         });
     }),
   createTable: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         schema: z.string(),
         name: z.string(),
         comment: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.tables.create({
         schema: input.schema,
         name: input.name,
@@ -84,6 +83,7 @@ export const pgRouter = t.router({
   updateTable: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         id: z.number(),
         name: z.string().optional(),
         rls_enabled: z.boolean().optional(),
@@ -110,7 +110,7 @@ export const pgRouter = t.router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.tables.update(input.id, {
         name: input.name,
         rls_enabled: input.rls_enabled,
@@ -131,13 +131,14 @@ export const pgRouter = t.router({
   deleteTable: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         tableId: z.number(),
         cascade: z.boolean().optional()
       })
     )
     .mutation(async ({ ctx, input }) => {
       const cascade = input.cascade || false;
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.tables.remove(input.tableId, { cascade });
       await pgMeta.end();
       if (error) {
@@ -148,11 +149,12 @@ export const pgRouter = t.router({
   columns: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         tableId: z.number()
       })
     )
     .query(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.columns.list({
         includeSystemSchemas: false,
         tableId: Number(input.tableId)
@@ -166,6 +168,7 @@ export const pgRouter = t.router({
   createColumn: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         tableId: z.number(),
         name: z.string(),
         type: z.string(),
@@ -179,7 +182,7 @@ export const pgRouter = t.router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.columns.create({
         table_id: input.tableId,
         name: input.name,
@@ -199,6 +202,7 @@ export const pgRouter = t.router({
   updateColumn: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         columnId: z.string(),
         name: z.string().optional(),
         type: z.string().optional(),
@@ -211,7 +215,7 @@ export const pgRouter = t.router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.columns.update(input.columnId, {
         name: input.name,
         type: input.type,
@@ -229,38 +233,41 @@ export const pgRouter = t.router({
   deleteColumn: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         columnId: z.string(),
         cascade: z.boolean().optional()
       })
     )
     .mutation(async ({ ctx, input }) => {
       const cascade = input.cascade || false;
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.columns.remove(input.columnId, { cascade });
       await pgMeta.end();
       return { data, errorMsg: error?.message };
     }),
-  // query: authProcedure
-  //   .input(
-  //     z.object({
-  //       sql: z.string()
-  //     })
-  //   )
-  //   .mutation(async ({ ctx, input }) => {
-  //     const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
-  //     const { data, error } = await pgMeta.query(input.sql);
-  //     await pgMeta.end();
-  //     return { data, errorMsg: error?.message };
-  //   }),
+  query: authProcedure
+    .input(
+      z.object({
+        projectID: z.string(),
+        sql: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
+      const { data, error } = await pgMeta.query(input.sql);
+      await pgMeta.end();
+      return { data, errorMsg: error?.message };
+    }),
   dataCount: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         tableSchema: z.string(),
         tableName: z.string()
       })
     )
     .query(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const sql = `SELECT COUNT(*) FROM ${format.string(`${input.tableSchema}.${input.tableName}`)}`;
       const { data, error } = await pgMeta.query(sql);
       await pgMeta.end();
@@ -269,6 +276,7 @@ export const pgRouter = t.router({
   tableData: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         tableSchema: z.string(),
         tableName: z.string(),
         page: z.number().optional().default(1),
@@ -276,7 +284,7 @@ export const pgRouter = t.router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const offset = (input.page - 1) * input.pageSize;
       const sql = `SELECT * FROM ${format.string(`${input.tableSchema}.${input.tableName}`)} LIMIT ${input.pageSize} OFFSET ${offset}`;
       const { data, error } = await pgMeta.query(sql);
@@ -286,6 +294,7 @@ export const pgRouter = t.router({
   createTableData: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         tableSchema: z.string(),
         tableName: z.string(),
         keys: z.array(z.string()),
@@ -293,7 +302,7 @@ export const pgRouter = t.router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const sql = format(`INSERT INTO %I.%I (%I) VALUES (%L)`, input.tableSchema, input.tableName, input.keys, input.values);
       const { error } = await pgMeta.query(sql);
       await pgMeta.end();
@@ -302,6 +311,7 @@ export const pgRouter = t.router({
   deleteTableData: authProcedure
     .input(
       z.object({
+        projectID: z.string(),
         tableSchema: z.string(),
         tableName: z.string(),
         name: z.string(),
@@ -309,7 +319,7 @@ export const pgRouter = t.router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const sql = format(`DELETE FROM %I.%I WHERE %I = %L`, input.tableSchema, input.tableName, input.name, input.value);
       const { error } = await pgMeta.query(sql);
       await pgMeta.end();

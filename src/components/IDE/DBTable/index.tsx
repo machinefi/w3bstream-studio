@@ -11,7 +11,6 @@ import { hooks } from '@/lib/hooks';
 import { formatColumn, creatColumnDataForm } from '@/store/lib/w3bstream/schema/dbTable';
 import MonacoEditor from '@monaco-editor/react';
 import { _ } from '@/lib/lodash';
-import { DISABLED_TABLE_LIST } from '@/constants/postgres-meta';
 import CSVReader from 'react-csv-reader';
 import toast from 'react-hot-toast';
 
@@ -185,56 +184,9 @@ const ViewData = observer(() => {
     return null;
   }
 
-  if (DISABLED_TABLE_LIST.includes(dbTable.currentTable.tableName)) {
-    return <JSONTable jsonstate={dbTable} />;
-  }
-
   return (
     <>
-      <Flex alignItems="center" justifyContent="space-between">
-        <Flex alignItems="center">
-          <Button
-            h="32px"
-            leftIcon={<AddIcon />}
-            {...defaultButtonStyle}
-            onClick={async (e) => {
-              const form = creatColumnDataForm(dbTable.currentColumns);
-              const formData = await hooks.getFormData({
-                title: `Insert data to '${dbTable.currentTable.tableName}'`,
-                size: 'md',
-                formList: [
-                  {
-                    form
-                  }
-                ]
-              });
-              try {
-                const keys = Object.keys(formData);
-                const values = Object.values(formData);
-                const errorMsg = await dbTable.createTableData(keys, values);
-                if (!errorMsg) {
-                  const data = await dbTable.getCurrentTableData();
-                  dbTable.table.set({
-                    dataSource: data
-                  });
-                }
-              } catch (error) {}
-            }}
-          >
-            Insert
-          </Button>
-          <Button
-            ml="20px"
-            h="32px"
-            leftIcon={<MdRefresh />}
-            {...defaultOutlineButtonStyle}
-            onClick={async (e) => {
-              dbTable.init();
-            }}
-          >
-            Refresh
-          </Button>
-        </Flex>
+      <Flex alignItems="center">
         <label>
           <CSVReader
             label=""
@@ -276,11 +228,53 @@ const ViewData = observer(() => {
             inputName="csv-input"
             inputStyle={{ display: 'none' }}
           />
-          <Flex alignItems="center" p="6px 20px" borderRadius="4px" cursor="pointer" {...defaultButtonStyle}>
+          <Flex alignItems="center" px="20px" h="32px" borderRadius="4px" cursor="pointer" {...defaultButtonStyle}>
             <FiUpload />
             <Box ml="10px">Upload CSV</Box>
           </Flex>
         </label>
+        <Button
+          ml="20px"
+          h="32px"
+          leftIcon={<AddIcon />}
+          {...defaultButtonStyle}
+          onClick={async (e) => {
+            const form = creatColumnDataForm(dbTable.currentColumns);
+            const formData = await hooks.getFormData({
+              title: `Insert data to '${dbTable.currentTable.tableName}'`,
+              size: 'md',
+              formList: [
+                {
+                  form
+                }
+              ]
+            });
+            try {
+              const keys = Object.keys(formData);
+              const values = Object.values(formData);
+              const errorMsg = await dbTable.createTableData(keys, values);
+              if (!errorMsg) {
+                const data = await dbTable.getCurrentTableData();
+                dbTable.table.set({
+                  dataSource: data
+                });
+              }
+            } catch (error) {}
+          }}
+        >
+          Insert
+        </Button>
+        <Button
+          ml="20px"
+          h="32px"
+          leftIcon={<MdRefresh />}
+          {...defaultOutlineButtonStyle}
+          onClick={async (e) => {
+            dbTable.init();
+          }}
+        >
+          Refresh
+        </Button>
       </Flex>
       <JSONTable jsonstate={dbTable} />
     </>
@@ -350,8 +344,7 @@ const DBTable = observer(() => {
       dbTable.setCurrentTable({
         tableId: 0,
         tableSchema: '',
-        tableName: '',
-        disabled: true
+        tableName: ''
       });
     };
   }, []);
