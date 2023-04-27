@@ -510,7 +510,6 @@ export default class ProjectModule {
       return;
     }
     const projectName = formData.name;
-    let projectID = '';
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
@@ -523,7 +522,10 @@ export default class ProjectModule {
           data
         });
         if (res.data) {
-          projectID = res.data.project?.projectID;
+          const { projectIds } = res.data;
+          for (const projectID of projectIds) {
+            this.createDB(projectID);
+          }
           showNotification({ message: 'Create project succeeded' });
         }
       } catch (error) {}
@@ -541,7 +543,6 @@ export default class ProjectModule {
         }
       });
       if (res.data?.project) {
-        projectID = res.data.project.projectID;
         if (formData.file) {
           const data = new FormData();
           const file = dataURItoBlob(formData.file);
@@ -575,22 +576,24 @@ export default class ProjectModule {
           eventBus.emit('project.create');
           showNotification({ message: 'create project succeeded' });
         }
+
+        this.createDB(res.data.project.projectID);
       }
     } catch (error) {
       showNotification({ color: 'red', message: error.message });
     }
+  }
 
-    if (projectID) {
-      try {
-        const { errorMsg } = await trpc.pg.createDB.mutate({
-          projectID
-        });
-        if (errorMsg) {
-          showNotification({ color: 'red', message: errorMsg });
-        }
-      } catch (error) {
-        showNotification({ color: 'red', message: error.message });
+  async createDB(projectID: string) {
+    try {
+      const { errorMsg } = await trpc.pg.createDB.mutate({
+        projectID
+      });
+      if (errorMsg) {
+        showNotification({ color: 'red', message: errorMsg });
       }
+    } catch (error) {
+      showNotification({ color: 'red', message: error.message });
     }
   }
 
