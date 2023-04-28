@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { withTRPC } from '@trpc/next';
 import { observer } from 'mobx-react-lite';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
@@ -16,11 +16,6 @@ import superjson from 'superjson';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
-import { Button, Text } from '@mantine/core';
-import { ContextModalProps, modals, ModalsProvider } from '@mantine/modals';
-import { ProjectType } from '@/server/routers/w3bstream';
-import { SqlDB } from '@/server/wasmvm/sqldb';
-import initSqlJs from 'sql.js';
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
 export let asc: typeof import('assemblyscript/dist/asc');
@@ -50,31 +45,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [token]);
 
-  const GoToProjectModal = ({ context, id, innerProps }: ContextModalProps<{ modalBody: string; instance: ProjectType }>) => (
-    <>
-      <Text size="sm">{innerProps.modalBody}</Text>
-      <Button
-        fullWidth
-        mt="md"
-        onClick={(e) => {
-          try {
-            console.log('xxx');
-            // modals.closeAll();
-            // w3s.headerTabs === 'PROJECTS'
-            // w3s.project.resetSelectedNames();
-            // w3s.project.allProjects.onSelect(0)
-            // w3s.showContent = 'METRICS';
-            // w3s.metrics.allMetrics.call();
-          } catch (error) {
-            toast.error(error.message);
-          }
-        }}
-      >
-        View
-      </Button>
-    </>
-  );
-
   return useMemo(() => {
     return (
       <InspectorWrapper
@@ -93,9 +63,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <NotificationsProvider>
             <Toaster position="bottom-right" />
             <WagmiProvider>
-              <ModalsProvider modals={{ projectstration: GoToProjectModal }}>
-                <Component {...pageProps} />
-              </ModalsProvider>
+              <Component {...pageProps} />
             </WagmiProvider>
           </NotificationsProvider>
         </ChakraProvider>

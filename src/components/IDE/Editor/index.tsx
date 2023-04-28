@@ -82,7 +82,6 @@ export const compileAndCreateProject = async (needCompile: boolean = true) => {
               await rootStore?.w3s.project.allProjects.call();
               rootStore.w3s.project.allProjects.onSelect(0);
               rootStore.w3s.showContent = 'METRICS';
-              rootStore.w3s.metrics.allMetrics.call();
             }}
           >
             Go to

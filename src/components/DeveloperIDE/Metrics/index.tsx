@@ -8,25 +8,26 @@ import { HiOutlineDatabase } from 'react-icons/hi';
 import { TbApi } from 'react-icons/tb';
 
 const Metrics = () => {
-  const { w3s } = useStore();
+  const {
+    w3s: { metrics }
+  } = useStore();
 
   useEffect(() => {
-    w3s.metrics.allMetrics.call();
-  }, [])
+    metrics.allMetrics.call();
+  }, []);
 
   return (
-    <Flex w="100%" h="calc(100vh - 150px)">
-      <Flex minW="100px" direction="column" align="center" bg="#fff" borderRadius="8px" overflowY="auto">
+    <Box w="100%" h="calc(100vh - 150px)">
+      <Flex mb="10px" align="center" bg="#fff" borderRadius="8px" overflowY="auto">
         <Flex
-          w="100%"
-          p="18px"
+          p="10px 20px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
           borderRadius="8px"
-          {...getSelectedStyles(w3s.metrics.showContent === 'API')}
+          {...getSelectedStyles(metrics.showContent === 'API')}
           onClick={(e) => {
-            w3s.metrics.showContent = 'API';
+            metrics.showContent = 'API';
           }}
         >
           <Icon as={TbApi} boxSize={6} />
@@ -35,16 +36,16 @@ const Metrics = () => {
           </Box>
         </Flex>
         <Flex
-          mt="16px"
-          w="100%"
-          p="18px"
+          ml="10px"
+          p="10px 20px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
           borderRadius="8px"
-          {...getSelectedStyles(w3s.metrics.showContent === 'DATABASE')}
+          {...getSelectedStyles(metrics.showContent === 'DATABASE')}
           onClick={(e) => {
-            w3s.metrics.showContent = 'DATABASE';
+            metrics.dbState.call();
+            metrics.showContent = 'DATABASE';
           }}
         >
           <Icon as={HiOutlineDatabase} boxSize={6} />
@@ -53,10 +54,8 @@ const Metrics = () => {
           </Box>
         </Flex>
       </Flex>
-      <Box ml="20px" flex={1} borderRadius="8px">
-        <JSONMetricsView data={w3s.metrics.metricsData} showContent={w3s.metrics.showContent}/>
-      </Box>
-    </Flex>
+      <JSONMetricsView data={metrics.metricsData} />
+    </Box>
   );
 };
 

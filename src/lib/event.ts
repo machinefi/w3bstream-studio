@@ -45,7 +45,6 @@ interface MessageEvents {
   'base.formModal.afterSubmit': (formData: any) => void;
   'wasmvm.stdout': (message: StdIOType) => void;
   'wasmvm.stderr': (message: StdIOType) => void;
-  'metrics.timerange': (startTime: Date, endTime: Date, step: number) => void;
   'flow.run.result': ({ flowId, success, errMsg, extra }: { flowId: string; success: boolean; errMsg?: string; extra?: { [key: string]: any } }) => void;
   'file.change': () => void;
   'sql.change': () => void;

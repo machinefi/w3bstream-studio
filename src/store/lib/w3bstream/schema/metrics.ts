@@ -25,29 +25,56 @@ export default class MetricsModule {
   allMetrics = new PromiseState<any, Metrics[]>({
     defaultValue: [],
     function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
-      const { data } = await axios.request({
-        method: 'GET',
-        url: `/api/metrics/query_range`,
-        params: {
-          query: `{project="${rootStore.w3s.project.curProject.name}"}`,
-          start: startTime.toISOString(),
-          end: endTime.toISOString(),
-          step: `${step}s`
-        }
-      });
-      console.log(data.data.result);
-      return data.data.result;
+      try {
+        const { data } = await axios.request({
+          method: 'GET',
+          url: `/api/metrics/query_range`,
+          params: {
+            query: `{project="${rootStore.w3s.project.curProject.name}"}`,
+            start: startTime.toISOString(),
+            end: endTime.toISOString(),
+            step: `${step}s`
+          }
+        });
+        return data.data.result;
+      } catch (error) {
+        return [];
+      }
     }
   });
 
-  allDBState = new PromiseState<() => Promise<any>, any>({
-    defaultValue: [],
+  dbState = new PromiseState<() => Promise<any>, any>({
     function: async () => {
-      const res = await trpc.api.dbState.query();
-      console.log(res);
-      return res;
+      try {
+        const res = await trpc.pg.dbState.query();
+        if (!res.errorMsg) {
+          return {
+            usedSize: res.usedSize,
+            stats: res.stats
+          };
+        }
+        return {
+          usedSize: 0,
+          stats: []
+        };
+      } catch (error) {
+        return {
+          usedSize: 0,
+          stats: []
+        };
+      }
     }
   });
+
+  timeRangePick: JSONMetricsView = {
+    type: 'TimeRangePick',
+    data: {
+      props: {},
+      onChange: (startTime: Date, endTime: Date, step: number) => {
+        this.allMetrics.call(startTime, endTime, step);
+      }
+    }
+  };
 
   get publisherMetrics(): JSONMetricsView {
     let values = [];
@@ -95,7 +122,7 @@ export default class MetricsModule {
   }
 
   get dataBaseMetrics(): JSONMetricsView {
-    const _dbMetrics = this.allDBState.value;
+    const _dbMetrics = this.dbState.value;
     return {
       type: 'ProgressCard',
       data: {
@@ -107,123 +134,10 @@ export default class MetricsModule {
             total: 512,
             unit: 'MB'
           }
-          // {
-          //   title: 'Database agress',
-          //   currentValue: _dbMetrics?.agress,
-          //   total: 2,
-          //   unit: 'GB'
-          // }
         ]
       }
     };
   }
-
-  // databaseMetrics: JSONMetricsView[] = [
-  //   {
-  //     type: 'ProgressCard',
-  //     data: {
-  //       title: 'Database usage',
-  //       data: [
-  //         {
-  //           title: 'Database size',
-  //           currentValue: 74.14,
-  //           total: 512,
-  //           unit: 'MB'
-  //         },
-  //         {
-  //           title: 'Database agress',
-  //           currentValue: 0,
-  //           total: 2,
-  //           unit: 'GB'
-  //         }
-  //       ]
-  //     }
-  //   }
-  // ];
-
-  // apiMetrics: JSONMetricsView[] = [
-  //   {
-  //     type: 'LineChartCard',
-  //     data: {
-  //       title: 'Total Requests',
-  //       tips: '2',
-  //       data: [
-  //         {
-  //           name: 'Mar 14, 2023, 07:00am',
-  //           value: 0
-  //         },
-  //         {
-  //           name: '',
-  //           value: 0
-  //         },
-  //         {
-  //           name: '',
-  //           value: 1
-  //         },
-  //         {
-  //           name: '',
-  //           value: 1
-  //         },
-  //         {
-  //           name: '',
-  //           value: 0
-  //         },
-  //         {
-  //           name: '',
-  //           value: 0
-  //         },
-  //         {
-  //           name: 'Mar 14, 2023, 07:00am',
-  //           value: 0
-  //         }
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     type: 'BarChartCard',
-  //     data: {
-  //       title: 'Response Errors',
-  //       data: []
-  //     }
-  //   },
-  //   {
-  //     type: 'BarChartCard',
-  //     data: {
-  //       title: 'Response Speed',
-  //       tips: '1059ms',
-  //       data: [
-  //         {
-  //           name: 'Mar 14, 2023, 07:00am',
-  //           value: 0
-  //         },
-  //         {
-  //           name: '',
-  //           value: 0
-  //         },
-  //         {
-  //           name: '',
-  //           value: 100
-  //         },
-  //         {
-  //           name: '',
-  //           value: 1059
-  //         },
-  //         {
-  //           name: '',
-  //           value: 0
-  //         },
-  //         {
-  //           name: '',
-  //           value: 0
-  //         },
-  //         {
-  //           name: 'Mar 14, 2023, 07:00am',
-  //           value: 0
-  //         }
-  //       ]
-  //     }
-  //   }
-  // ];
 
   showContent: 'DATABASE' | 'API' = 'API';
 
@@ -233,9 +147,7 @@ export default class MetricsModule {
     }
 
     if (this.showContent === 'API') {
-      // return this.apiMetrics;
-      console.log([this.publisherMetrics]);
-      return [this.publisherMetrics, this.eventMetrics, this.blockchainMetrics];
+      return [this.timeRangePick, this.publisherMetrics, this.eventMetrics, this.blockchainMetrics];
     }
 
     return [];
