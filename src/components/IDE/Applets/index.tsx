@@ -47,12 +47,28 @@ const AddBtn = observer(() => {
               }
             ]
           });
-          const { projectName  } = formData;
+          const { projectName } = formData;
           if (projectName) {
+            const pub = w3s.publisher.allData.find((item) => item.f_publisher_id.toString() === formData.publisher);
+            if (!pub) {
+              showNotification({ message: 'publisher not found' });
+              return;
+            }
+            const timestamp = Date.now();
+            const eventType = 'ANY';
+            const eventID = pub?.f_key || `${timestamp}`;
+            const authorization = pub?.f_token;
+            const data = new Blob([formData.body], { type: 'text/plain' });
             const res = await axios.request({
               method: 'post',
               url: `/api/w3bapp/event/${projectName}`,
-              data: formData.body
+              params: {
+                authorization,
+                eventID,
+                eventType,
+                timestamp
+              },
+              data
             });
             if (res.data) {
               showNotification({ message: 'publish event succeeded' });

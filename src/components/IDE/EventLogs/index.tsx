@@ -11,6 +11,7 @@ import { trpc } from '@/lib/trpc';
 import { VscDebugStart } from 'react-icons/vsc';
 import { hooks } from '@/lib/hooks';
 import { AiOutlineClear } from 'react-icons/ai';
+import { eventBus } from '@/lib/event';
 
 type LocalStoreType = {
   loading: boolean;
@@ -39,6 +40,7 @@ const fetchWasmLogs = async ({ projectName, limit = 20, offset = 0 }: { projectN
 
 const EventLogs = observer(() => {
   const {
+    w3s,
     w3s: {
       publisher,
       project: { curProject }
@@ -112,9 +114,19 @@ const EventLogs = observer(() => {
             const projectName = curProject?.name;
             if (projectName) {
               const pub = publisher.allData.find((item) => item.project_id === curProject?.f_project_id);
+              if (!pub) {
+                showNotification({ color: 'red', message: 'Please create a publisher first' });
+                eventBus.emit('base.formModal.abort');
+                setTimeout(() => {
+                  w3s.showContent = 'CURRENT_PUBLISHERS';
+                }, 2000);
+                return;
+              }
               const timestamp = Date.now();
               const eventType = 'ANY';
-              const eventID = pub?.f_key || `${timestamp}`;
+              const eventID = pub.f_key || `${timestamp}`;
+              const authorization = pub.f_token;
+              const data = new Blob([formData.body], { type: 'text/plain' });
               try {
                 const res = await axios.request({
                   method: 'post',
@@ -123,11 +135,12 @@ const EventLogs = observer(() => {
                     'Content-Type': 'application/octet-stream'
                   },
                   params: {
+                    authorization,
                     eventID,
                     eventType,
                     timestamp
                   },
-                  data: formData.body
+                  data
                 });
                 console.log('[Send test message]:', res);
                 const result = res.data?.[0].results?.[0];

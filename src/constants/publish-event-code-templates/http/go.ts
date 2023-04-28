@@ -21,7 +21,7 @@ func main() {
   method := "POST"
 
   payload := strings.NewReader(
-    ${body}
+   "${body}"
   )
 
   client := &http.Client {}
