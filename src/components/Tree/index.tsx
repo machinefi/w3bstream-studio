@@ -15,6 +15,7 @@ import Draggable from 'react-draggable';
 import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
 import { BiPaste, BiRename } from 'react-icons/bi';
+import { toJS } from 'mobx';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -170,7 +171,8 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
         icon: <VscCloudDownload />,
         onClick: (item) => {
           //download json file
-          const dataStr = JSON.stringify(item.data);
+          console.log(toJS(item));
+          const dataStr = JSON.stringify(toJS(item));
           const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
           const exportFileDefaultName = item.label + '.json';
           const linkElement = document.createElement('a');

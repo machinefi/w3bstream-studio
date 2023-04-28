@@ -1,7 +1,7 @@
 import { JSONSchemaRenderData } from '@/components/JSONRender';
 import { IconType } from 'react-icons/lib';
 
-type INodeGroup = 'trigger' | 'code' | 'condition' | 'runtime';
+type INodeGroup = 'trigger' | 'code' | 'condition' | 'runtime' |'common';
 type INodeNodeType = 'code' | 'webhook' | 'cron' | 'form' | 'simulation' | 'runtime';
 type INodeIconType = string | IconType | React.ReactNode;
 type IFormType = {

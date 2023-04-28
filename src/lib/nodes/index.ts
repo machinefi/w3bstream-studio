@@ -3,6 +3,7 @@ import { SimulationNode } from './Trigger/SimulationNode';
 import { WasmNode } from './Code/WasmNode';
 import { VmRunTimeNode } from './Runtime/VmRunTimeNode';
 import { AssemblyScriptNode } from './Code/AssemblyScriptNode';
+import { DatabaseNode } from './Common/DatabaseNode';
 
 export class NodeManager {
   nodes: INodeType[] = [];
@@ -22,7 +23,8 @@ export class NodeManager {
       SimulationNode,
       WasmNode,
       VmRunTimeNode,
-      AssemblyScriptNode
+      AssemblyScriptNode,
+      DatabaseNode
     };
     //@ts-ignore
     this.nodes = Object.values(this.nodeClassMap).map((i) => new i());
