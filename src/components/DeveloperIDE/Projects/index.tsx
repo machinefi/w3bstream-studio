@@ -87,7 +87,7 @@ const Projects = observer(() => {
                     try {
                       await axios.request({
                         method: 'put',
-                        url: `/api/w3bapp/deploy/${instance.f_instance_id}/STOP`
+                        url: `/api/w3bapp/deploy/${instance.f_instance_id}/HUNGUP`
                       });
                     } catch (error) {
                       err = error.message;
@@ -228,7 +228,7 @@ const Projects = observer(() => {
                             try {
                               await axios.request({
                                 method: 'put',
-                                url: `/api/w3bapp/deploy/${instance.f_instance_id}/STOP`
+                                url: `/api/w3bapp/deploy/${instance.f_instance_id}/HUNGUP`
                               });
                               eventBus.emit('instance.handle');
                               toast.success('Successfully suspended');

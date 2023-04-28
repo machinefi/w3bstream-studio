@@ -351,7 +351,7 @@ export default class ProjectModule {
   async onSaveEnv() {
     const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
     if (values.length) {
-      const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.f_name : this.form.value.get().name;
+      const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.name : this.form.value.get().name;
       if (projectName) {
         try {
           await axios.post(`/api/w3bapp/project_config/x/${projectName}/PROJECT_ENV`, { env: values });

@@ -47,7 +47,7 @@ export const CreateChainHeightButton = observer(() => {
       onClick={async (e) => {
         if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
           w3s.chainHeight.form.value.set({
-            projectName: w3s.project.curProject?.f_name
+            projectName: w3s.project.curProject?.name
           });
           w3s.chainHeight.form.uiSchema.projectName = {
             'ui:widget': 'hidden'

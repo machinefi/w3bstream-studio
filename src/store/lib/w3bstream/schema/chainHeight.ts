@@ -67,8 +67,8 @@ export default class ChainHeightModule {
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
-                      // const regex = /(?:[^_]*_){2}(.*)/;
-                      const projectName = item.f_project_name
+                      const regex = /(?:[^_]*_){2}(.*)/;
+                      const projectName = item.f_project_name.match(regex)[1]
                       try {
                         await axios.request({
                           method: 'delete',
