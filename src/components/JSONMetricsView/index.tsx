@@ -1,50 +1,17 @@
-import { eventBus } from '@/lib/event';
-import { Select, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import { BarChartCard } from './BarChartCard';
 import { LineChartCard } from './LineChartCard';
 import { ProgressCard } from './ProgressCard';
+import { TimeRangePick } from './TimeRangePick';
 
 export interface JSONMetricsView {
-  type: 'ProgressCard' | 'BarChartCard' | 'LineChartCard';
-  data: ProgressCard | BarChartCard | LineChartCard;
+  type: 'ProgressCard' | 'BarChartCard' | 'LineChartCard' | 'TimeRangePick';
+  data: ProgressCard | BarChartCard | LineChartCard | TimeRangePick;
 }
 
-const TimeRangePick = () => {
-  return (
-    <Select
-      placeholder="Time Range"
-      size="sm"
-      w="100"
-      ml="auto"
-      onChange={(e) => {
-        const v = e.target.value;
-        switch (v) {
-          case '1':
-            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 24 * 60 * 60 * 1000), new Date(), 3600);
-            break;
-          case '2':
-            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), new Date(), 3600 * 6);
-            break;
-          case '3':
-            eventBus.emit('metrics.timerange', new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), new Date(), 3600 * 24);
-            break;
-          default:
-            break;
-        }
-      }}
-    >
-      <option value="1">One Day</option>
-      <option value="2">One Week</option>
-      <option value="3">One Month</option>
-    </Select>
-  );
-};
-
-export const JSONMetricsView = ({ data, showContent }: { data: JSONMetricsView[]; showContent?: 'DATABASE' | 'API' }) => {
+export const JSONMetricsView = ({ data }: { data: JSONMetricsView[] }) => {
   return (
     <Stack h="calc(100vh - 100px)" spacing={6} p="10px" overflowY="scroll">
-      {showContent == 'API' && <TimeRangePick />}
-
       {data.map((item) => {
         switch (item.type) {
           case 'ProgressCard':
@@ -53,6 +20,8 @@ export const JSONMetricsView = ({ data, showContent }: { data: JSONMetricsView[]
             return <BarChartCard {...(item.data as BarChartCard)} />;
           case 'LineChartCard':
             return <LineChartCard {...(item.data as LineChartCard)} />;
+          case 'TimeRangePick':
+            return <TimeRangePick {...(item.data as TimeRangePick)} />;
           default:
             return null;
         }

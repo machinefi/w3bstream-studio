@@ -11,6 +11,7 @@ import { trpc } from '@/lib/trpc';
 import { VscDebugStart } from 'react-icons/vsc';
 import { hooks } from '@/lib/hooks';
 import { AiOutlineClear } from 'react-icons/ai';
+import { eventBus } from '@/lib/event';
 
 type LocalStoreType = {
   loading: boolean;
@@ -39,6 +40,7 @@ const fetchWasmLogs = async ({ projectName, limit = 20, offset = 0 }: { projectN
 
 const EventLogs = observer(() => {
   const {
+    w3s,
     w3s: {
       publisher,
       project: { curProject }
@@ -111,32 +113,48 @@ const EventLogs = observer(() => {
           publisher.developerPublishEventForm.afterSubmit = async ({ formData }) => {
             const projectName = curProject?.f_name;
             if (projectName) {
+              const pub = publisher.allData.find((item) => item.project_id === curProject?.f_project_id);
+              if (!pub) {
+                showNotification({ color: 'red', message: 'Please create a publisher first' });
+                eventBus.emit('base.formModal.abort');
+                setTimeout(() => {
+                  w3s.showContent = 'CURRENT_PUBLISHERS';
+                }, 2000);
+                return;
+              }
+              const timestamp = Date.now();
+              // const eventType = 'ANY';
+              // const eventID = pub.f_key || `${timestamp}`;
+              const authorization = pub.f_token;
+              // const data = new Blob([formData.body], { type: 'text/plain' });
+              const data = formData.body
+
               try {
                 const res = await axios.request({
                   method: 'post',
                   url: `/api/w3bapp/event/${projectName}`,
-                  data: publisher.parseBody(formData.body)
+                  headers: {
+                    Authorization: authorization,
+                    'Content-Type': 'application/octet-stream',
+                  },
+                  data
                 });
-                const wasmResult = res.data?.[0].wasmResults?.[0];
-                if (wasmResult) {
-                  if (wasmResult.errMsg) {
-                    showNotification({ color: 'red', message: wasmResult.errMsg });
-                  } else {
-                    store.setData({
-                      loading: true
-                    });
-                    fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
-                      store.setData({
-                        logs: res,
-                        offset: 0,
-                        loading: false
-                      });
-                    });
-                  }
-                } else {
-                  showNotification({ color: 'red', message: 'Failed' });
-                }
-              } catch (error) {}
+                console.log('[Send test message]:', res);
+                showNotification({ color: 'green', message: 'Send event successed' });
+                store.setData({
+                  loading: true
+                });
+                fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+                  store.setData({
+                    logs: res,
+                    offset: 0,
+                    loading: false
+                  });
+                });
+
+              } catch (error) {
+                showNotification({ color: 'red', message: "send event failed"});
+              }
             }
           };
           hooks.getFormData({
@@ -191,7 +209,7 @@ const EventLogs = observer(() => {
                   if (store.loading || !store.haveMore) {
                     return;
                   }
-                  const projectName = curProject?.f_name;
+                  const projectName = curProject?.name;
                   if (projectName) {
                     store.setData({
                       loading: true

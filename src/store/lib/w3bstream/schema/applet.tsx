@@ -4,6 +4,7 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import { trpc } from '@/lib/trpc';
 import { AppletType } from '@/server/routers/w3bstream';
 import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { showNotification } from '@mantine/notifications';
@@ -123,10 +124,6 @@ export default class AppletModule {
       {
         key: 'project_name',
         label: 'Project Name'
-      },
-      {
-        key: 'f_wasm_name',
-        label: 'Wasm Name'
       },
       {
         key: 'actions',
@@ -324,7 +321,7 @@ export default class AppletModule {
                         try {
                           await axios.request({
                             method: 'put',
-                            url: `/api/w3bapp/strategy/${applet.project_name}/${item.f_strategy_id}`,
+                            url: `/api/w3bapp/strategy/x/${applet.project_name}/${item.f_strategy_id}`,
                             data: {
                               appletID,
                               eventType,
@@ -355,7 +352,10 @@ export default class AppletModule {
                           }
                           await axios.request({
                             method: 'delete',
-                            url: `/api/w3bapp/strategy/${p.f_name}?strategyID=${item.f_strategy_id}`
+                            url: `/api/w3bapp/strategy/x/${p.name}`,
+                            params: {
+                              strategyID: item.f_strategy_id
+                            }
                           });
                           showNotification({ message: 'Deleted successfully' });
                           eventBus.emit('strategy.delete');
@@ -400,12 +400,13 @@ export default class AppletModule {
         JSON.stringify({
           wasmName: file.name,
           projectName: formData.projectName,
-          appletName: formData.appletName
+          appletName: formData.appletName,
+          start: true
         })
       );
       const res = await axios.request({
         method: 'post',
-        url: `/api/file?api=applet/${formData.projectName}`,
+        url: `/api/file?api=applet/x/${formData.projectName}`,
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -455,12 +456,13 @@ export default class AppletModule {
         JSON.stringify({
           projectName,
           appletName,
-          wasmName: file.name
+          wasmName: file.name,
+          start: true
         })
       );
       const res = await axios.request({
         method: 'post',
-        url: `/api/file?api=applet/${projectName}`,
+        url: `/api/file?api=applet/x/${projectName}`,
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -491,9 +493,10 @@ export default class AppletModule {
       data.append(
         'info',
         JSON.stringify({
-          wasmName: file.name,
-          appletName: formData.appletName,
-          strategies: [{ eventType: 'DEFAULT', handler: 'start' }]
+          // wasmName: file.name,
+          // appletName: formData.appletName,
+          // strategies: [{ eventType: 'DEFAULT', handler: 'start' }],
+          start: true
         })
       );
       try {
@@ -510,6 +513,17 @@ export default class AppletModule {
           eventBus.emit('applet.update');
         }
       } catch (error) {}
+    }
+  }
+
+  async getFileName(resourceId) {
+    try {
+      const res = await trpc.api.wasmName.query({
+        resourceId
+      });
+      return res?.f_filename;
+    } catch (error) {
+      return '';
     }
   }
 }

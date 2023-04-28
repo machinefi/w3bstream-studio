@@ -16,8 +16,6 @@ import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import FileWidget, { FileWidgetUIOptions } from '@/components/JSONFormWidgets/FileWidget';
 import { Project } from 'pages/api/init';
 import SelectTagWidget, { SelectTagWidgetUIOptions } from '@/components/JSONFormWidgets/SelectTagWidget';
-import { Button, Text } from '@mantine/core';
-import { modals } from '@mantine/modals';
 
 export const defaultSchema = {
   type: 'object',
@@ -92,14 +90,15 @@ export default class ProjectModule {
         const instances = [];
         let strategies = [];
         let publishers = [];
+        const regex = /(?:[^_]*_){2}(.*)/;
         res.forEach((p: ProjectType) => {
-          // p.project_files = new FilesListSchema();
+          p.name = p.f_name.match(regex)[1];
           p.applets.forEach((a: AppletType) => {
-            a.project_name = p.f_name;
+            a.project_name = p.name;
             a.instances.forEach((i) => {
               instances.push({
                 project_id: p.f_project_id,
-                project_name: p.f_name,
+                project_name: p.name,
                 applet_id: a.f_applet_id,
                 applet_name: a.f_name,
                 ...i
@@ -107,7 +106,7 @@ export default class ProjectModule {
             });
             applets.push({
               ...a,
-              project_name: p.f_name
+              project_name: p.name
             });
             strategies = strategies.concat(a.strategies);
           });
@@ -115,11 +114,10 @@ export default class ProjectModule {
             // @ts-ignore
             pub.project_id = p.f_project_id;
             // @ts-ignore
-            pub.project_name = p.f_name;
+            pub.project_name = p.name;
             publishers.push(pub);
           });
         });
-        // console.log(toJS(res));
         this.onLoadCompleted({
           applets,
           publishers,
@@ -356,7 +354,7 @@ export default class ProjectModule {
       const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.f_name : this.form.value.get().name;
       if (projectName) {
         try {
-          await axios.post(`/api/w3bapp/project_config/${projectName}/PROJECT_ENV`, { env: values });
+          await axios.post(`/api/w3bapp/project_config/x/${projectName}/PROJECT_ENV`, { env: values });
           showNotification({ message: 'Save environment variables successfully' });
         } catch (error) {
           throw error;
@@ -522,10 +520,6 @@ export default class ProjectModule {
           data
         });
         if (res.data) {
-          const { projectIds } = res.data;
-          for (const projectID of projectIds) {
-            this.createDB(projectID);
-          }
           showNotification({ message: 'Create project succeeded' });
         }
       } catch (error) {}
@@ -542,7 +536,7 @@ export default class ProjectModule {
           description: formData.description
         }
       });
-      if (res.data?.project) {
+      if (res.data?.projectID) {
         if (formData.file) {
           const data = new FormData();
           const file = dataURItoBlob(formData.file);
@@ -552,45 +546,26 @@ export default class ProjectModule {
             JSON.stringify({
               projectName,
               appletName: 'applet_01',
-              wasmName: file.name
+              wasmName: file.name,
+              start: true
             })
           );
           const res = await axios.request({
             method: 'post',
-            url: `/api/file?api=applet/${projectName}`,
+            url: `/api/file?api=applet/x/${projectName}`,
             headers: {
               'Content-Type': 'multipart/form-data'
             },
             data
           });
-          const appletID = res.data?.appletID;
-          if (appletID) {
-            const instanceID = await globalThis.store.w3s.applet.deployApplet({ appletID, triggerEvent: false });
-            if (instanceID) {
-              globalThis.store.w3s.instances.handleInstance({ instanceID, event: 'START' });
-              eventBus.emit('project.create');
-              showNotification({ message: 'create project succeeded' });
-            }
+          if (res.data) {
+            eventBus.emit('project.create');
+            showNotification({ message: 'create project succeeded' });
           }
         } else {
           eventBus.emit('project.create');
           showNotification({ message: 'create project succeeded' });
         }
-
-        this.createDB(res.data.project.projectID);
-      }
-    } catch (error) {
-      showNotification({ color: 'red', message: error.message });
-    }
-  }
-
-  async createDB(projectID: string) {
-    try {
-      const { errorMsg } = await trpc.pg.createDB.mutate({
-        projectID
-      });
-      if (errorMsg) {
-        showNotification({ color: 'red', message: errorMsg });
       }
     } catch (error) {
       showNotification({ color: 'red', message: error.message });

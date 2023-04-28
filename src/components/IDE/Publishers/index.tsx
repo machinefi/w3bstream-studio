@@ -36,7 +36,7 @@ const Publishers = observer(() => {
           onClick={async (e) => {
             if (w3s.showContent === 'CURRENT_PUBLISHERS') {
               w3s.publisher.createPublisherForm.value.set({
-                projectName: w3s.project.curProject?.f_name
+                projectName: w3s.project.curProject?.name
               });
               w3s.publisher.createPublisherForm.uiSchema.projectName = {
                 // 'ui:disabled': true,
@@ -57,7 +57,7 @@ const Publishers = observer(() => {
               try {
                 await axios.request({
                   method: 'post',
-                  url: `/api/w3bapp/publisher/${projectName}`,
+                  url: `/api/w3bapp/publisher/x/${projectName}`,
                   data: {
                     key,
                     name: key

@@ -3,7 +3,6 @@ import { rootStore } from '@/store/index';
 import { eventBus } from './event';
 import initSqlJs from 'sql.js';
 import { IndexDb } from './dexie';
-import { resolve } from 'path';
 import { helper } from './helper';
 
 export const hooks = {

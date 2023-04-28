@@ -26,7 +26,7 @@ function checkErr(err) {
   }
 }
 axios.interceptors.request.use((req) => {
-  if (rootStore.w3s.config.form.formData.token) {
+  if (rootStore.w3s.config.form.formData.token && !req.headers['Authorization']) {
     req.headers['Authorization'] = `${rootStore.w3s.config.form.formData.token}`;
   }
   return req;

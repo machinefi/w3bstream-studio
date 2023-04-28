@@ -29,7 +29,7 @@ export const ProgressCard = ({ title, data }: ProgressCard) => {
                       {item.unit}
                     </Box>
                   </Flex>
-                  <Progress mt="5px" value={item.currentValue} min={0} max={item.total} colorScheme="green" size="sm" {...progressPros} />
+                  <Progress mt="5px" value={item.currentValue} min={0} max={item.total} colorScheme="purple" size="sm" {...progressPros} />
                 </Box>
               </Box>
             );

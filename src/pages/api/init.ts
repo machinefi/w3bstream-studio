@@ -10,10 +10,6 @@ export interface Project {
   datas?: {
     monitor: Monitor;
   }[];
-  envs?: string[][];
-  schema?: {
-    [x: string]: any;
-  };
 }
 
 interface Applet {
@@ -60,10 +56,10 @@ const createProject = async (
       throw new Error('create project failed:' + response.statusText);
     }
     const data: any = await response.json();
-    if (data.project) {
+    if (data.projectID) {
       return {
-        projectID: data.project.projectID,
-        projectName: data.project.name
+        projectID: data.projectID,
+        projectName: data.name
       };
     }
     throw data;
@@ -71,16 +67,6 @@ const createProject = async (
     throw new Error('create project failed:' + e.message);
   }
 };
-
-// const saveEnvs = async (projectName: string, envs: string[][], token: string): Promise<void> => {
-//   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/project_config/${projectName}/PROJECT_ENV`, {
-//     method: 'post',
-//     body: JSON.stringify({
-//       env: envs
-//     }),
-//     headers: { Authorization: token }
-//   });
-// };
 
 const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Applet & { projectName: string }, token: string): Promise<string> => {
   try {
@@ -104,10 +90,11 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
       JSON.stringify({
         projectName,
         appletName,
-        wasmName
+        wasmName,
+        start: true
       })
     );
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${projectName}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/x/${projectName}`, {
       method: 'post',
       headers: {
         Authorization: token
@@ -125,37 +112,6 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
     throw data;
   } catch (e) {
     throw new Error('create applet failed');
-  }
-};
-
-const deployApplet = async (appletID: string, token: string): Promise<string> => {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/applet/${appletID}`, {
-      method: 'post',
-      headers: {
-        Authorization: token
-      }
-    });
-    const data: any = await res.json();
-    if (data.instanceID) {
-      return data.instanceID;
-    }
-    throw data;
-  } catch (error) {
-    throw new Error('deploy applet failed:' + error.message);
-  }
-};
-
-const startInstance = async (instanceID: string, token: string): Promise<any> => {
-  try {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/deploy/${instanceID}/START`, {
-      method: 'put',
-      headers: {
-        Authorization: token
-      }
-    });
-  } catch (error) {
-    throw new Error('start instance failed:' + error.message);
   }
 };
 
@@ -205,19 +161,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-      const projectIds = [];
       for (const p of project) {
         const { projectID, projectName } = await createProject(p, token);
-        projectIds.push(projectID);
-        // if (p.envs?.length > 0) {
-        //   await saveEnvs(projectName, p.envs, token);
-        // }
         for (const a of p.applets) {
-          const appletID = await createApplet({ ...a, projectName }, token);
-          console.log('appletID', appletID);
-          const instanceID = await deployApplet(appletID, token);
-          console.log('instanceID', instanceID);
-          await startInstance(instanceID, token);
+          await createApplet({ ...a, projectName }, token);
         }
         for (const d of p.datas) {
           if (d.monitor) {
@@ -225,7 +172,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           }
         }
       }
-      res.status(200).json({ message: 'OK', projectIds });
+      res.status(200).json({ message: 'OK' });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

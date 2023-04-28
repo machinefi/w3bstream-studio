@@ -8,23 +8,10 @@ import { PublisherType } from '@/server/routers/w3bstream';
 import { PublisherTokenRender } from '@/components/JSONTable/FieldRender';
 import { UiSchema } from '@rjsf/utils';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
-import { ShowRequestTemplatesButtonWidget, UseDefaultTemplateButtonWidget } from '@/components/IDE/PublishEventRequestTemplates';
+import { ShowRequestTemplatesButtonWidget } from '@/components/IDE/PublishEventRequestTemplates';
 import { makeObservable, observable } from 'mobx';
-import { helper } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
-
-export interface PublishEventRequestBody {
-  events: {
-    header: {
-      event_type: string;
-      pub_id: string;
-      token: string;
-      pub_time: number;
-    };
-    payload: string;
-  }[];
-}
 
 export const createPublisherSchema = {
   definitions: {
@@ -62,8 +49,7 @@ export const publishEventSchema = {
 export const developerPublishEventSchema = {
   type: 'object',
   properties: {
-    body: { type: 'string', title: '' },
-    defaultTemplate: { type: 'string', title: '' }
+    body: { type: 'string', title: '' }
   },
   required: []
 } as const;
@@ -117,46 +103,8 @@ export default class PublisherModule {
         'ui:widget': EditorWidget,
         'ui:options': {
           editorHeight: '400px',
-          emptyValue: JSON.stringify([
-            {
-              header: {
-                event_type: 'ANY',
-                pub_id: '',
-                token: '',
-                pub_time: Date.now()
-              },
-              payload: {
-                example: 'This is is an example payload'
-              }
-            }
-          ]),
+          lang: 'text',
           showLanguageSelector: true,
-          onChangeLanguage: (language) => {
-            const header = {
-              event_type: 'ANY',
-              pub_id: '',
-              token: '',
-              pub_time: Date.now()
-            };
-            const payload =
-              language === 'text'
-                ? 'This is is an example payload'
-                : {
-                    example: 'This is is an example payload'
-                  };
-            this.publishEventForm.value.set({
-              body: JSON.stringify(
-                [
-                  {
-                    header,
-                    payload
-                  }
-                ],
-                null,
-                2
-              )
-            });
-          }
         }
       },
       showRequestTemplates: {
@@ -169,65 +117,7 @@ export default class PublisherModule {
     value: new JSONValue<PublishEventSchemaType>({
       default: {
         projectName: '',
-        body: JSON.stringify(
-          [
-            {
-              header: {
-                event_type: 'ANY',
-                pub_id: '',
-                token: '',
-                pub_time: Date.now()
-              },
-              payload: {
-                example: 'This is is an example payload'
-              }
-            }
-          ],
-          null,
-          2
-        )
-      },
-      onSet(e: any) {
-        const { publisher } = e;
-        if (publisher && publisher != this.value.publisher) {
-          const allPublishers = globalThis.store.w3s.publisher.allData;
-          const pub = allPublishers.find((item) => String(item.f_publisher_id) === publisher);
-          if (pub) {
-            const header = {
-              event_type: 'ANY',
-              pub_id: pub.f_key,
-              token: pub.f_token,
-              pub_time: Date.now()
-            };
-            try {
-              const body = JSON.parse(e.body);
-              if (Array.isArray(body)) {
-                e.body = JSON.stringify(
-                  body.map((item) => {
-                    return {
-                      header,
-                      payload: item.payload
-                    };
-                  }),
-                  null,
-                  2
-                );
-              }
-
-              if (body.payload) {
-                e.body = JSON.stringify(
-                  {
-                    header: header,
-                    payload: body.payload
-                  },
-                  null,
-                  2
-                );
-              }
-            } catch (error) {}
-          }
-        }
-        return e;
+        body: ''
       }
     })
   });
@@ -244,13 +134,10 @@ export default class PublisherModule {
         'ui:widget': EditorWidget,
         'ui:options': {
           editorHeight: '400px',
-          // emptyValue: `[]`,
+          lang: 'text',
           showLanguageSelector: false
         }
       },
-      defaultTemplate: {
-        'ui:widget': UseDefaultTemplateButtonWidget
-      }
     },
     afterSubmit: async (e) => {
       // eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -258,79 +145,10 @@ export default class PublisherModule {
     },
     value: new JSONValue<DeveloperPublishEventSchemaType>({
       default: {
-        body: JSON.stringify(
-          [
-            {
-              header: {
-                event_type: 'ANY',
-                pub_id: '',
-                token: '',
-                pub_time: Date.now()
-              },
-              payload: {
-                example: 'This is is an example payload'
-              }
-            }
-          ],
-          null,
-          2
-        )
+        body: ''
       }
     })
   });
-
-  parseBody(bodyStr: string): PublishEventRequestBody {
-    try {
-      const body = JSON.parse(bodyStr);
-      if (Array.isArray(body)) {
-        return {
-          events: body.map((item) => ({
-            header: item.header,
-            payload: typeof item.payload == 'string' ? helper.stringToBase64(item.payload) : helper.stringToBase64(JSON.stringify(item.payload))
-          }))
-        };
-      }
-
-      if (body.payload) {
-        return {
-          events: [
-            {
-              header: body.header,
-              payload: typeof body.payload == 'string' ? helper.stringToBase64(body.payload) : helper.stringToBase64(JSON.stringify(body.payload))
-            }
-          ]
-        };
-      }
-
-      return {
-        events: [
-          {
-            header: {
-              event_type: 'ANY',
-              pub_id: '',
-              token: '',
-              pub_time: Date.now()
-            },
-            payload: typeof body == 'string' ? helper.stringToBase64(body) : helper.stringToBase64(JSON.stringify(body))
-          }
-        ]
-      };
-    } catch (error) {
-      return {
-        events: [
-          {
-            header: {
-              event_type: 'ANY',
-              pub_id: '',
-              token: '',
-              pub_time: Date.now()
-            },
-            payload: helper.stringToBase64('')
-          }
-        ]
-      };
-    }
-  }
 
   showPublishEventRequestTemplates = false;
 
@@ -378,7 +196,7 @@ export default class PublisherModule {
                     try {
                       await axios.request({
                         method: 'put',
-                        url: `/api/w3bapp/publisher/${projectName}/${item.f_publisher_id}`,
+                        url: `/api/w3bapp/publisher/x/${projectName}/${item.f_publisher_id}`,
                         data: {
                           key,
                           name: key
@@ -404,7 +222,10 @@ export default class PublisherModule {
                     async onOk() {
                       await axios.request({
                         method: 'delete',
-                        url: `/api/w3bapp/publisher/${item.project_name}?publisherID=${item.f_publisher_id}`
+                        url: `/api/w3bapp/publisher/x/${item.project_name}`,
+                        params: {
+                          publisherIDs: item.f_publisher_id
+                        }
                       });
                       showNotification({ message: 'Deleted successfully' });
                       eventBus.emit('strategy.delete');

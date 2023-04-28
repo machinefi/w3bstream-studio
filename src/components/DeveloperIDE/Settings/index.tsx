@@ -15,11 +15,12 @@ const Settings = () => {
 
   const store = useLocalObservable(() => ({
     operateAddress: '',
+    wasmName: '',
     get curApplet() {
-      return applet.allData.find((item) => item.project_name === project.curProject?.f_name);
+      return applet.allData.find((item) => item.project_name === project.curProject?.name);
     },
     get curInstance() {
-      return instances.table.dataSource.find((item) => item.project_name === project.curProject?.f_name);
+      return instances.table.dataSource.find((item) => item.project_name === project.curProject?.name);
     },
     get tags() {
       if (project.curProject?.f_description) {
@@ -47,6 +48,14 @@ const Settings = () => {
     store.getOperateAddress();
   }, []);
 
+  useEffect(() => {
+    if (store.curApplet) {
+      applet.getFileName(store.curApplet.f_resource_id).then((fileName) => {
+        store.wasmName = fileName;
+      });
+    }
+  }, [store.curApplet]);
+
   return (
     <Box w="100%" h="calc(100vh - 140px)">
       <Box mt="20px" fontSize="18px" fontWeight={700}>
@@ -54,14 +63,16 @@ const Settings = () => {
       </Box>
       <Box mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
         <Flex alignItems={'center'} mb="20px">
-          <Box fontWeight={700} fontSize="16px" color="#0F0F0F">Project Name: </Box>
-          <Text  ml="10px" fontSize={'18px'} fontWeight={700}>{project.curProject.f_name}</Text>
+          <Box fontWeight={700} fontSize="16px" color="#0F0F0F">
+            Project Name:
+          </Box>
+          <Text ml="10px" fontSize={'18px'} fontWeight={700}>
+            {project.curProject?.name}
+          </Text>
         </Flex>
         <Flex alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>WASM file name:</Box>
-          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-            {store.curApplet?.f_wasm_name}
-          </Box>
+          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">{store.wasmName}</Box>
           <Button
             ml="10px"
             size="sm"
@@ -75,7 +86,7 @@ const Settings = () => {
                   'ui:widget': 'hidden'
                 };
                 applet.form.value.set({
-                  projectName: project.curProject?.f_name,
+                  projectName: project.curProject?.name,
                   appletName: store.curApplet.f_name
                 });
                 applet.updateWASM(store.curApplet.f_applet_id, store.curInstance.f_instance_id);

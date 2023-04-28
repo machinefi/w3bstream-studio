@@ -65,7 +65,7 @@ export const CreateChainHeightButton = observer(() => {
         if (formData.projectName) {
           const res = await axios.request({
             method: 'post',
-            url: `/api/w3bapp/monitor/chain_height/${formData.projectName}`,
+            url: `/api/w3bapp/monitor/x/${formData.projectName}/chain_height`,
             data: formData
           });
           if (res.data) {

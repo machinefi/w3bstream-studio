@@ -53,7 +53,7 @@ const ChainTx = observer(() => {
             if (formData.projectName) {
               const res = await axios.request({
                 method: 'post',
-                url: `/api/w3bapp/monitor/chain_tx/${formData.projectName}`,
+                url: `/api/w3bapp/monitor/x/${formData.projectName}/chain_tx`,
                 data: formData
               });
               if (res.data) {

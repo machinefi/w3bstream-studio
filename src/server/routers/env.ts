@@ -25,5 +25,5 @@ export const envRouter = t.router({
   })
 });
 
-export type PgRouter = typeof envRouter;
-export type EnvsType = inferProcedureOutput<PgRouter['envs']>;
+export type EnvRouter = typeof envRouter;
+export type EnvsType = inferProcedureOutput<EnvRouter['envs']>;

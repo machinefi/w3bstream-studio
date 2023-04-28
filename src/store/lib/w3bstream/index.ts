@@ -48,7 +48,7 @@ export class W3bStream {
       this.strategy.set({
         allData: strategies
       });
-    },
+    }
   });
   applet = new AppletModule();
   instances = new InstancesModule();
@@ -182,9 +182,6 @@ export class W3bStream {
       })
       .on('cronJob.delete', async (projectId: bigint) => {
         this.cronJob.fetchCronJobs(projectId);
-      })
-      .on('metrics.timerange', async (startTime: Date, endTime: Date, step: number) => {
-        this.metrics.allMetrics.call(startTime, endTime, step);
       });
   }
 
@@ -195,7 +192,6 @@ export class W3bStream {
       this.contractLogs.allContractLogs.call();
       this.chainTx.allChainTx.call();
       this.chainHeight.allChainHeight.call();
-      this.metrics.allDBState.call();
       this.env.envs.call();
       this.blockChain.allBlockChain.call();
     });

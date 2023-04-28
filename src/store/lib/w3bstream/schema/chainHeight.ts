@@ -47,8 +47,8 @@ export default class ChainHeightModule {
   });
 
   get curProjectChainHeight() {
-    const curProjectName = globalThis.store.w3s.project.curProject?.f_name || '';
-    return this.allChainHeight.value.filter((c) => c.f_project_name === curProjectName);
+    const curProject = globalThis.store.w3s.project.curProject;
+    return this.allChainHeight.value.filter((c) => c.f_project_name === curProject?.f_name);
   }
 
   table = new JSONSchemaTableState<ChainHeightType>({
@@ -67,10 +67,12 @@ export default class ChainHeightModule {
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
+                      // const regex = /(?:[^_]*_){2}(.*)/;
+                      const projectName = item.f_project_name
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/api/w3bapp/monitor/chain_height/${item.f_project_name}/${item.f_chain_height_id}`
+                          url: `/api/w3bapp/monitor/x/${projectName}/chain_height/${item.f_chain_height_id}`
                         });
                         eventBus.emit('chainHeight.delete');
                         toast.success('Deleted successfully');

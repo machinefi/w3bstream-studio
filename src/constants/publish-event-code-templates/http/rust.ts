@@ -1,34 +1,25 @@
-import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
-
-const getRequestBody = (body: PublishEventRequestBody) => {
-  return Object.entries(body)
-    .map(([key, value]) => {
-      return `"${key}": ${JSON.stringify(value)}`;
-    })
-    .join(',');
-};
-
-const getRustTemplate = (url: string, projectName: string, body: PublishEventRequestBody) => `extern crate reqwest;
-extern crate serde;
-extern crate serde_json;
-
-use serde_json::json;
+const getRustTemplate = (
+  url: string,
+  params: {
+    eventID: string;
+    eventType: string;
+    timestamp: number;
+  },
+  body: string
+) => `extern crate reqwest;
+use reqwest::header;
 use reqwest::Client;
 
-#[tokio::main]
-async fn main() ->  Result<()> {
-let request_body = json!({
-  ${getRequestBody(body)}
-});
-let request_url = ${url};
-let response = Client::new()
-  .post(request_url)
-  .json(&request_body)
-  .send().await?;
-
-let result = response.json().await?;
-println!("result={:?}", result);
-
-Ok(())
-}`;
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+  let client = Client::new();
+  let url = "${url}";
+  let body = "${body}";
+  let response = client.post(url)
+    .header(header::CONTENT_TYPE, "application/octet-stream")
+    .body(body.to_string())
+    .send()?;
+  println!("{}", response.text()?);
+  Ok(())
+}
+`;
 export default getRustTemplate;

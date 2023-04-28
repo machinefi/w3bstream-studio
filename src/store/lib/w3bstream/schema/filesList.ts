@@ -119,7 +119,7 @@ export class FilesListSchema {
           //delete project
           await axios.request({
             method: 'delete',
-            url: `/api/w3bapp/project/${project.f_name}`
+            url: `/api/w3bapp/project/${project.name}`
           });
           await axios.request({
             method: 'get',

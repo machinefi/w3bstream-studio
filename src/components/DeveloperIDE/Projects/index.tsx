@@ -60,7 +60,7 @@ const Projects = observer(() => {
                     for (const name of selectedNames) {
                       await axios.request({
                         method: 'delete',
-                        url: `/api/w3bapp/project/${name}`
+                        url: `/api/w3bapp/project/x/${name}`
                       });
                     }
                     w3s.project.resetSelectedNames();
@@ -111,11 +111,11 @@ const Projects = observer(() => {
         </Flex>
         <Grid mt="20px" gridTemplateRows="repeat(6, 1fr)" templateColumns="repeat(2, 1fr)" gap={6} h="calc(100vh - 210px)" overflow="auto">
           {allProjects.value.map((project, index) => {
-            const instance = w3s.instances.table.dataSource.find((item) => item.project_name === project.f_name);
+            const instance = w3s.instances.table.dataSource.find((item) => item.project_name === project.name);
             const status = INSTANCE_STATUS[instance?.f_state || 0];
             return (
               <GridItem
-                key={project.f_name}
+                key={project.name}
                 w="100%"
                 p="24px"
                 bg="rgba(248, 248, 250, 0.5)"
@@ -130,7 +130,6 @@ const Projects = observer(() => {
                   if (instance) {
                     allProjects.onSelect(index);
                     w3s.showContent = 'METRICS';
-                    w3s.metrics.allMetrics.call();
                   } else {
                     toast.error('No instance found, please create one first');
                   }
@@ -139,7 +138,7 @@ const Projects = observer(() => {
                 <Flex alignItems="center" justifyContent="space-between">
                   <Flex alignItems="center" mr="5px">
                     <Box fontWeight={700} fontSize="16px">
-                      {project.f_name}
+                      {project.name}
                     </Box>
                     <Badge ml="10px" variant="outline" colorScheme={status.colorScheme} textTransform="none">
                       {status.text}
@@ -152,7 +151,7 @@ const Projects = observer(() => {
                         onClick={async (e) => {
                           e.stopPropagation();
                           const appletID = await w3s.applet.createAppletForDeveloper({
-                            projectName: project.f_name
+                            projectName: project.name
                           });
                           if (appletID) {
                             const instanceID = await w3s.applet.deployApplet({ appletID, triggerEvent: false });
@@ -188,7 +187,7 @@ const Projects = observer(() => {
                         }
                       }}
                       onChange={(e) => {
-                        w3s.project.selectProjectName(project.f_name, e.target.checked);
+                        w3s.project.selectProjectName(project.name, e.target.checked);
                       }}
                     />
                   </Flex>

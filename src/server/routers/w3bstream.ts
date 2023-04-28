@@ -39,7 +39,7 @@ export const w3bstreamRouter = t.router({
             f_name: true,
             f_applet_id: true,
             f_project_id: true,
-            f_wasm_name: true,
+            f_resource_id: true,
             strategies: {
               select: {
                 f_strategy_id: true,
@@ -181,28 +181,6 @@ export const w3bstreamRouter = t.router({
         }
       });
     }),
-  dbState: t.procedure.query(async ({ ctx }) => {
-    const result = await ctx.prisma.$queryRaw<{ size: bigint }[]>`SELECT pg_database_size(DATname) AS size FROM pg_database WHERE DATname != 'template1'`; //!=template1 tempalte0
-    console.log(result);
-    const sizes = result.map((r) => Number(r.size));
-    const usedSize = (sizes.reduce((acc, size) => acc + size, 0) / 1024 / 1024).toFixed(4); // mb
-
-    const stats = await ctx.prisma.$queryRaw`SELECT datname,
-    numbackends,
-    xact_commit,
-    xact_rollback,
-    blks_read,
-    blks_hit,
-    tup_returned,
-    tup_fetched,
-    tup_inserted,
-    tup_updated,
-    tup_deleted
-FROM pg_stat_database where DATname='w3bstream';
-`;
-
-    return { usedSize, stats };
-  }),
   cronJobs: t.procedure
     .input(
       z.object({
@@ -225,6 +203,25 @@ FROM pg_stat_database where DATname='w3bstream';
         }
       });
       return res;
+    }),
+  wasmName: t.procedure
+    .input(
+      z.object({
+        resourceId: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const res = await ctx.prisma.t_resource_ownership.findFirst({
+        where: {
+          f_resource_id: {
+            equals: BigInt(input.resourceId)
+          }
+        },
+        select: {
+          f_filename: true
+        }
+      });
+      return res;
     })
 });
 
@@ -238,6 +235,7 @@ export type StrategyType = AppletType['strategies'][0];
 export type InstanceType = AppletType['instances'][0] & { project_name: string; applet_name: string };
 export type PublisherType = ProjectOriginalType['publishers'][0] & { project_id: string; project_name: string };
 export type ProjectType = ProjectOriginalType & {
+  name: string;
   applets: AppletType[];
   publishers: PublisherType[];
 };
