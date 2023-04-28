@@ -118,8 +118,8 @@ export class SqlDB {
     });
 
     // Add primary key
-    if (withPrimaryKey) {
-      let pkColumns = keys?.[0].columnNames.join(', ');
+    if (withPrimaryKey && keys && keys?.length > 0) {
+      let pkColumns = keys?.[0]?.columnNames?.join(', ');
       sql += `, PRIMARY KEY (${pkColumns})`;
     }
 
@@ -127,7 +127,7 @@ export class SqlDB {
     keys?.forEach((key, index) => {
       if (index > 0) {
         let name = key.name;
-        let columnNames = key.columnNames.join(', ');
+        let columnNames = key?.columnNames?.join(', ');
         sql += `, UNIQUE KEY ${name} (${columnNames})`;
       }
     });

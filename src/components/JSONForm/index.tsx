@@ -9,6 +9,7 @@ import { defaultButtonStyle } from '@/lib/theme';
 import PrefixWidget from '../JSONFormWidgets/PerfixWidget';
 import EditorWidget from '../JSONFormWidgets/EditorWidget';
 import RuntimeConsoleWidget from '../JSONFormWidgets/RuntimeConsoleWidget';
+import FlowDatabaseWidget from '../JSONFormWidgets/FlowDatabaseWidget';
 
 const renderLayout = (layout: any[], fields: { [k: string]: React.ReactElement }, n = 1) => {
   n++;
@@ -153,7 +154,7 @@ export const JSONForm = observer(({ children, formState }: Props) => {
         ErrorListTemplate,
         ButtonTemplates: { SubmitButton }
       }}
-      widgets={{ EditorWidget, PrefixWidget, RuntimeConsoleWidget }}
+      widgets={{ EditorWidget, PrefixWidget, RuntimeConsoleWidget ,FlowDatabaseWidget}}
       formData={formState.formData}
       readonly={formState.readonly}
       uiSchema={formState.uiSchema}

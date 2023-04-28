@@ -69,12 +69,15 @@ export const DBpanel = observer(() => {
     }
   }));
   useEffect(() => {
-    store.initDBTable();
     eventBus.on('sql.change', store.initDBTable);
     return () => {
       eventBus.off('sql.change', store.initDBTable);
     };
   }, []);
+
+  useEffect(() => {
+    store.initDBTable();
+  }, [curFilesListSchema.curActiveFile]);
 
   return (
     <Box mt={2}>

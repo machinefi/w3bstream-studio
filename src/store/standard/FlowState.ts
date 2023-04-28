@@ -14,6 +14,7 @@ import { BaseNode } from '@/lib/nodes/baseNode';
 import { WasmNode } from '@/lib/nodes/Code/WasmNode';
 import { VmRunTimeNode } from '@/lib/nodes/Runtime/VmRunTimeNode';
 import { AssemblyScriptNode } from '@/lib/nodes/Code/AssemblyScriptNode';
+import { DatabaseNode } from '@/lib/nodes/Common/DatabaseNode';
 
 export class FlowState {
   curFlowId: number = null;
@@ -38,7 +39,7 @@ export class FlowState {
 
   initNodes = new PromiseState({
     function: async () => {
-      this.nodeInstances = [new SimulationNode(), new WasmNode(), new VmRunTimeNode(), new AssemblyScriptNode()];
+      this.nodeInstances = [new SimulationNode(), new WasmNode(), new VmRunTimeNode(), new AssemblyScriptNode(), new DatabaseNode()];
     }
   });
 
