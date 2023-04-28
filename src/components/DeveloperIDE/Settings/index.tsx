@@ -67,7 +67,7 @@ const Settings = () => {
             Project Name:
           </Box>
           <Text ml="10px" fontSize={'18px'} fontWeight={700}>
-            {project.curProject?.name}
+            {project.curProject?.f_name}
           </Text>
         </Flex>
         <Flex alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">

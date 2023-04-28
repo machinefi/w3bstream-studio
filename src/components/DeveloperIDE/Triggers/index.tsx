@@ -38,7 +38,7 @@ const Triggers = () => {
           Route:
         </Box>
         <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-          {envs.value?.httpURL}
+          {envs.value?.httpURL.replace(':projectName', curProject?.f_name)}
         </Box>
       </Flex>
       <Box mt="20px" fontSize="14px" color="#7A7A7A">

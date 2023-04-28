@@ -123,7 +123,7 @@ const EventLogs = observer(() => {
                 return;
               }
               const timestamp = Date.now();
-              // const eventType = 'ANY';
+              const eventType = formData.type || "DEFAULT"
               // const eventID = pub.f_key || `${timestamp}`;
               const authorization = pub.f_token;
               // const data = new Blob([formData.body], { type: 'text/plain' });
@@ -136,6 +136,10 @@ const EventLogs = observer(() => {
                   headers: {
                     Authorization: authorization,
                     'Content-Type': 'application/octet-stream',
+                  },
+                  params: {
+                    eventType,
+                    timestamp
                   },
                   data
                 });

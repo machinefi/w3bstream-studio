@@ -49,9 +49,10 @@ export const publishEventSchema = {
 export const developerPublishEventSchema = {
   type: 'object',
   properties: {
+    type:{type:'string',title:'Event Type'},
     body: { type: 'string', title: '' }
   },
-  required: []
+  required: ['type']
 } as const;
 
 type CreatePublisherSchemaType = FromSchema<typeof createPublisherSchema>;
@@ -145,7 +146,8 @@ export default class PublisherModule {
     },
     value: new JSONValue<DeveloperPublishEventSchemaType>({
       default: {
-        body: ''
+        body: '',
+        type:'DEFAULT'
       }
     })
   });
