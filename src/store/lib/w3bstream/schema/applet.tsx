@@ -493,9 +493,9 @@ export default class AppletModule {
       data.append(
         'info',
         JSON.stringify({
-          wasmName: file.name,
-          appletName: formData.appletName,
-          strategies: [{ eventType: 'DEFAULT', handler: 'start' }],
+          // wasmName: file.name,
+          // appletName: formData.appletName,
+          // strategies: [{ eventType: 'DEFAULT', handler: 'start' }],
           start: true
         })
       );

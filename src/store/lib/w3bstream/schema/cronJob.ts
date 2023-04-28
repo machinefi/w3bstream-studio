@@ -38,7 +38,7 @@ export default class CronJobModule {
                       try {
                         await axios.request({
                           method: 'delete',
-                          url: `/api/w3bapp/cronjob/${item.f_project_id}/${item.f_cron_job_id}`
+                          url: `/api/w3bapp/cronjob/data/${item.f_cron_job_id}`
                         });
                         eventBus.emit('cronJob.delete', item.f_project_id);
                         toast.success('Deleted successfully');

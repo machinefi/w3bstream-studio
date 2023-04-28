@@ -62,7 +62,7 @@ const EventLogs = observer(() => {
   }));
 
   useEffect(() => {
-    const projectName = curProject?.name;
+    const projectName = curProject?.f_name;
     if (projectName && !store.initialized) {
       fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
         store.setData({
@@ -111,7 +111,7 @@ const EventLogs = observer(() => {
         }}
         onClick={async () => {
           publisher.developerPublishEventForm.afterSubmit = async ({ formData }) => {
-            const projectName = curProject?.name;
+            const projectName = curProject?.f_name;
             if (projectName) {
               const pub = publisher.allData.find((item) => item.project_id === curProject?.f_project_id);
               if (!pub) {
@@ -123,46 +123,38 @@ const EventLogs = observer(() => {
                 return;
               }
               const timestamp = Date.now();
-              const eventType = 'ANY';
-              const eventID = pub.f_key || `${timestamp}`;
+              // const eventType = 'ANY';
+              // const eventID = pub.f_key || `${timestamp}`;
               const authorization = pub.f_token;
-              const data = new Blob([formData.body], { type: 'text/plain' });
+              // const data = new Blob([formData.body], { type: 'text/plain' });
+              const data = formData.body
+
               try {
                 const res = await axios.request({
                   method: 'post',
                   url: `/api/w3bapp/event/${projectName}`,
                   headers: {
-                    'Content-Type': 'application/octet-stream'
-                  },
-                  params: {
-                    authorization,
-                    eventID,
-                    eventType,
-                    timestamp
+                    Authorization: authorization,
+                    'Content-Type': 'application/octet-stream',
                   },
                   data
                 });
                 console.log('[Send test message]:', res);
-                const result = res.data?.[0].results?.[0];
-                if (result) {
-                  if (result.error) {
-                    showNotification({ color: 'red', message: result?.error });
-                  } else {
-                    store.setData({
-                      loading: true
-                    });
-                    fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
-                      store.setData({
-                        logs: res,
-                        offset: 0,
-                        loading: false
-                      });
-                    });
-                  }
-                } else {
-                  showNotification({ color: 'red', message: 'Failed' });
-                }
-              } catch (error) {}
+                showNotification({ color: 'green', message: 'Send event successed' });
+                store.setData({
+                  loading: true
+                });
+                fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+                  store.setData({
+                    logs: res,
+                    offset: 0,
+                    loading: false
+                  });
+                });
+
+              } catch (error) {
+                showNotification({ color: 'red', message: "send event failed"});
+              }
             }
           };
           hooks.getFormData({
