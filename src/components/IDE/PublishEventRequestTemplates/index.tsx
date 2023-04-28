@@ -5,7 +5,6 @@ import MonacoEditor from '@monaco-editor/react';
 import copy from 'copy-to-clipboard';
 import toast from 'react-hot-toast';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
-import { helper } from '@/lib/helper';
 import { CopyIcon } from '@chakra-ui/icons';
 import { getHTTPRequestTemplate, getMQTTRequestTemplate } from '@/constants/publish-event-code-templates';
 
@@ -44,45 +43,6 @@ export const ShowRequestTemplatesButtonWidget = () => {
   return <ShowRequestTemplatesButton props={{ mt: '10px', w: '100%', h: '32px' }} />;
 };
 
-const UseDefaultTemplateButton = observer(({ props = {} }: { props?: ButtonProps }) => {
-  const {
-    w3s: { publisher }
-  } = useStore();
-  return (
-    <Button
-      {...defaultOutlineButtonStyle}
-      {...props}
-      onClick={() => {
-        publisher.developerPublishEventForm.value.set({
-          body: JSON.stringify(
-            [
-              {
-                header: {
-                  event_type: 'ANY',
-                  pub_id: '',
-                  token: '',
-                  pub_time: Date.now()
-                },
-                payload: {
-                  example: 'This is is an example payload'
-                }
-              }
-            ],
-            null,
-            2
-          )
-        });
-      }}
-    >
-      Use the default template
-    </Button>
-  );
-});
-
-export const UseDefaultTemplateButtonWidget = () => {
-  return <UseDefaultTemplateButton />;
-};
-
 const PublishEventRequestTemplates = observer(() => {
   const {
     w3s: {
@@ -98,28 +58,27 @@ const PublishEventRequestTemplates = observer(() => {
   } = useStore();
 
   const store = useLocalObservable(() => ({
-    get body() {
+    get params() {
       if (accountRole === 'ADMIN') {
-        const { body } = publisher.publishEventForm.formData;
-        return publisher.parseBody(body);
+        const pub = publisher.allData.find((item) => publisher.publishEventForm.formData.publisher === item.f_publisher_id.toString());
+        const timestamp = Date.now();
+        const eventType = 'ANY';
+        const eventID = pub?.f_key || `${timestamp}`;
+        return {
+          eventID,
+          eventType,
+          timestamp
+        };
+      } else {
+        const timestamp = Date.now();
+        const eventType = 'ANY';
+        const eventID = `${timestamp}`;
+        return {
+          eventID,
+          eventType,
+          timestamp
+        };
       }
-      return {
-        events: [
-          {
-            header: {
-              event_type: 'ANY',
-              pub_id: '',
-              token: '',
-              pub_time: Date.now()
-            },
-            payload: helper.stringToBase64(
-              JSON.stringify({
-                example: 'This is is an example payload'
-              })
-            )
-          }
-        ]
-      };
     }
   }));
 
@@ -159,9 +118,9 @@ const PublishEventRequestTemplates = observer(() => {
                     {languages.map((language) => {
                       const codeStr = getHTTPRequestTemplate({
                         language,
-                        projectName,
+                        params: store.params,
                         url: envs.value?.httpURL,
-                        body: store.body
+                        body: publisher.publishEventForm.formData.body
                       });
                       return (
                         <TabPanel key={language}>
@@ -203,7 +162,7 @@ const PublishEventRequestTemplates = observer(() => {
                         language,
                         projectName,
                         url: envs.value?.mqttURL,
-                        message: JSON.stringify(JSON.stringify(store.body), null, 2)
+                        message: publisher.publishEventForm.formData.body
                       });
                       return (
                         <TabPanel key={language}>

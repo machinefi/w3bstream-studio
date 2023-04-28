@@ -52,7 +52,7 @@ const AddBtn = observer(() => {
             const res = await axios.request({
               method: 'post',
               url: `/api/w3bapp/event/${projectName}`,
-              data: w3s.publisher.parseBody(formData.body)
+              data: formData.body
             });
             if (res.data) {
               showNotification({ message: 'publish event succeeded' });

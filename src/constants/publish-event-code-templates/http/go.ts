@@ -1,6 +1,12 @@
-import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
-
-const getGolangTemplate = (url: string, projectName: string, body: PublishEventRequestBody) => `package main
+const getGolangTemplate = (
+  url: string,
+  params: {
+    eventID: string;
+    eventType: string;
+    timestamp: number;
+  },
+  body: string
+) => `package main
 
 import (
   "fmt"
@@ -15,13 +21,13 @@ func main() {
   method := "POST"
 
   payload := strings.NewReader(
-    ${Object.entries(body).length > 0 ? `${JSON.stringify(body, null, 2)}` : '{}'}
+    ${body}
   )
 
   client := &http.Client {}
 
   req, err := http.NewRequest(method, url, payload)
-
+  req.Header.Add("Content-Type", "application/octet-stream");
   if err != nil {
     fmt.Println(err)
     return

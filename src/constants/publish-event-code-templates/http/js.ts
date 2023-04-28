@@ -1,34 +1,20 @@
-import { PublishEventRequestBody } from '@/store/lib/w3bstream/schema/publisher';
-
-const getJavascriptTemplate = (url: string, projectName: string, body: PublishEventRequestBody) => {
-  const { events } = body;
+const getJavascriptTemplate = (
+  url: string,
+  params: {
+    eventID: string;
+    eventType: string;
+    timestamp: number;
+  },
+  body: string
+) => {
   return `
-const data = {
-  "events": [
-    ${events.map((item) => {
-      return `{
-        ${Object.entries(item)
-          .map(([key, value]) => {
-            if (key === 'payload') {
-              return `"${key}": btoa(JSON.stringify(${JSON.stringify(
-                {
-                  example: 'This is is an example payload'
-                },
-                null,
-                2
-              )}))`;
-            }
-            return `"${key}": ${JSON.stringify(value)}`;
-          })
-          .join(',')}
-      }`;
-    })}
-  ]
-}
-
 fetch('${url}', {
   method: 'POST',
-  body: JSON.stringify(data)
+  headers: {
+    'Content-Type': 'application/octet-stream'
+  },
+  params: ${JSON.stringify(params)},
+  body: ${body}
 })
 .then(response => response.json())
 .then(console.log)

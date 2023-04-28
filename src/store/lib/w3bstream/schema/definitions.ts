@@ -25,7 +25,7 @@ export const definitions = {
     },
     get enumNames() {
       const allPublishers = globalThis.store.w3s.publisher.allData;
-      return allPublishers.length ? allPublishers.map((i) => `${i.f_name}`) : [''];
+      return allPublishers.length ? allPublishers.map((i) => `${i.f_key}`) : [''];
     }
   },
   applets: {

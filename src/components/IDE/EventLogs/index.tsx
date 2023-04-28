@@ -111,16 +111,29 @@ const EventLogs = observer(() => {
           publisher.developerPublishEventForm.afterSubmit = async ({ formData }) => {
             const projectName = curProject?.name;
             if (projectName) {
+              const pub = publisher.allData.find((item) => item.project_id === curProject?.f_project_id);
+              const timestamp = Date.now();
+              const eventType = 'ANY';
+              const eventID = pub?.f_key || `${timestamp}`;
               try {
                 const res = await axios.request({
                   method: 'post',
                   url: `/api/w3bapp/event/${projectName}`,
-                  data: publisher.parseBody(formData.body)
+                  headers: {
+                    'Content-Type': 'application/octet-stream'
+                  },
+                  params: {
+                    eventID,
+                    eventType,
+                    timestamp
+                  },
+                  data: formData.body
                 });
-                const wasmResult = res.data?.[0].wasmResults?.[0];
-                if (wasmResult) {
-                  if (wasmResult.errMsg) {
-                    showNotification({ color: 'red', message: wasmResult.errMsg });
+                console.log('[Send test message]:', res);
+                const result = res.data?.[0].results?.[0];
+                if (result) {
+                  if (result.error) {
+                    showNotification({ color: 'red', message: result?.error });
                   } else {
                     store.setData({
                       loading: true
