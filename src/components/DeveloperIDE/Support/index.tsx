@@ -16,15 +16,16 @@ const Support = () => {
   return (
     <Center w="100%" h="calc(100vh - 100px)">
       <Grid templateRows="repeat(2, 1fr)" templateColumns="repeat(3, 1fr)" gap={6}>
-        <GridItem w="412px" h="328px" bg="#fff">
+        <GridItem>
           <a href="http://docs.w3bstream.com" target="_blank" rel="noopener noreferrer">
             <Flex
-              w="100%"
-              h="100%"
+              w="300px"
+              h="300px"
               flexDir="column"
               justifyContent="center"
               alignItems="center"
               cursor="pointer"
+              bg="#fff"
               _hover={{
                 boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
               }}
@@ -34,15 +35,16 @@ const Support = () => {
             </Flex>
           </a>
         </GridItem>
-        <GridItem w="412px" h="328px" bg="#fff">
+        <GridItem>
           <a href="http://developers.iotex.io/academy" target="_blank" rel="noopener noreferrer">
             <Flex
-              w="100%"
-              h="100%"
+              w="300px"
+              h="300px"
               flexDir="column"
               justifyContent="center"
               alignItems="center"
               cursor="pointer"
+              bg="#fff"
               _hover={{
                 boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
               }}
@@ -52,15 +54,16 @@ const Support = () => {
             </Flex>
           </a>
         </GridItem>
-        <GridItem w="412px" h="328px" bg="#fff">
+        <GridItem>
           <a href="https://github.com/machinefi/w3bstream/discussions" target="_blank" rel="noopener noreferrer">
             <Flex
-              w="100%"
-              h="100%"
+              w="300px"
+              h="300px"
               flexDir="column"
               justifyContent="center"
               alignItems="center"
               cursor="pointer"
+              bg="#fff"
               _hover={{
                 boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
               }}
@@ -70,15 +73,16 @@ const Support = () => {
             </Flex>
           </a>
         </GridItem>
-        <GridItem w="412px" h="328px" bg="#fff">
+        <GridItem>
           <a href="http://developers.iotex.io/grants" target="_blank" rel="noopener noreferrer">
             <Flex
-              w="100%"
-              h="100%"
+              w="300px"
+              h="300px"
               flexDir="column"
               justifyContent="center"
               alignItems="center"
               cursor="pointer"
+              bg="#fff"
               _hover={{
                 boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
               }}
@@ -88,14 +92,15 @@ const Support = () => {
             </Flex>
           </a>
         </GridItem>
-        <GridItem w="412px" h="328px" bg="#fff">
+        <GridItem>
           <Flex
-            w="100%"
-            h="100%"
+            w="300px"
+            h="300px"
             flexDir="column"
             justifyContent="center"
             alignItems="center"
             cursor="pointer"
+            bg="#fff"
             _hover={{
               boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
             }}
