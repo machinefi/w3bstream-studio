@@ -106,7 +106,7 @@ const Support = () => {
           </Flex>
         </GridItem>
       </Grid>
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
+      <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>W3bstream DevNet</ModalHeader>
@@ -117,7 +117,7 @@ const Support = () => {
               <Box ml="10px">{publicConfig.version}</Box>
             </Flex>
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>
-              <Box>W3bstream Version:</Box>
+              <Box whiteSpace="nowrap">W3bstream Version:</Box>
               <Box ml="10px">{envs.value?.w3bstreamVersion}</Box>
             </Flex>
           </ModalBody>
