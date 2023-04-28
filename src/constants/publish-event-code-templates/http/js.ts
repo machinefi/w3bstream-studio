@@ -14,7 +14,7 @@ fetch('${url}', {
     'Content-Type': 'application/octet-stream'
   },
   params: ${JSON.stringify(params)},
-  body: ${body}
+  body: "${body}"
 })
 .then(response => response.json())
 .then(console.log)
