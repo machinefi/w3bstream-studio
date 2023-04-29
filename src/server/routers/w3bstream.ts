@@ -162,7 +162,7 @@ export const w3bstreamRouter = t.router({
         }
       };
       if (input.createdAt) {
-        where['f_created_at'] = {
+        where['f_log_time'] = {
           gte: input.createdAt
         };
       }
@@ -171,12 +171,13 @@ export const w3bstreamRouter = t.router({
         take: input.limit,
         skip: input.offset,
         orderBy: {
-          f_created_at: 'desc'
+          f_log_time: 'desc'
         },
         select: {
           f_id: true,
           f_level: true,
           f_msg: true,
+          f_log_time: true,
           f_created_at: true
         }
       });
