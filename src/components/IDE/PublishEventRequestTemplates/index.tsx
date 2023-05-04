@@ -1,12 +1,13 @@
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { Box, Button, ButtonProps, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Box, Button, ButtonProps, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import MonacoEditor from '@monaco-editor/react';
 import copy from 'copy-to-clipboard';
 import toast from 'react-hot-toast';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { CopyIcon } from '@chakra-ui/icons';
 import { getHTTPRequestTemplate, getMQTTRequestTemplate } from '@/constants/publish-event-code-templates';
+import { eventBus } from '@/lib/event';
 
 export const ShowRequestTemplatesButton = observer(({ props = {} }: { props?: ButtonProps }) => {
   const {
@@ -31,6 +32,7 @@ export const ShowRequestTemplatesButton = observer(({ props = {} }: { props?: Bu
             return;
           }
         }
+        eventBus.emit('base.formModal.abort');
         publisher.showPublishEventRequestTemplates = true;
       }}
     >
@@ -38,10 +40,6 @@ export const ShowRequestTemplatesButton = observer(({ props = {} }: { props?: Bu
     </Button>
   );
 });
-
-export const ShowRequestTemplatesButtonWidget = () => {
-  return <ShowRequestTemplatesButton props={{ mt: '10px', w: '100%', h: '32px' }} />;
-};
 
 const PublishEventRequestTemplates = observer(() => {
   const {
@@ -56,34 +54,28 @@ const PublishEventRequestTemplates = observer(() => {
       env: { envs }
     }
   } = useStore();
-
-  const store = useLocalObservable(() => ({
-    get params() {
-      if (accountRole === 'ADMIN') {
-        const pub = publisher.allData.find((item) => publisher.publishEventForm.formData.publisher === item.f_publisher_id.toString());
-        const timestamp = Date.now();
-        const eventType = 'ANY';
-        const eventID = pub?.f_key || `${timestamp}`;
-        return {
-          eventID,
-          eventType,
-          timestamp
-        };
-      } else {
-        const timestamp = Date.now();
-        const eventType = 'ANY';
-        const eventID = `${timestamp}`;
-        return {
-          eventID,
-          eventType,
-          timestamp
-        };
-      }
-    }
-  }));
-
   const languages = ['javascript', 'go', 'rust'];
-  const projectName = (accountRole === 'ADMIN' ? publisher.publishEventForm.formData.projectName : curProject?.name) || ':projectName';
+  const formData = accountRole === 'ADMIN' ? publisher.publishEventForm.formData : publisher.developerPublishEventForm.formData;
+  const projectName = (accountRole === 'ADMIN' ? formData.projectName : curProject?.f_name) || ':projectName';
+  const getHttpProps = () => {
+    const eventType = (formData.type || 'DEFAULT') as string;
+    const pub =
+      accountRole === 'ADMIN'
+        ? publisher.allData.find((item) => formData.publisher === item.f_publisher_id.toString())
+        : publisher.allData.find((item) => item.project_id === curProject?.f_project_id);
+    return {
+      url: envs.value?.httpURL.replace(':projectName', projectName),
+      body: formData.body,
+      params: {
+        eventType,
+        timestamp: Date.now()
+      },
+      headers: {
+        Authorization: pub?.f_token,
+        'Content-Type': 'application/octet-stream'
+      }
+    };
+  };
 
   return (
     <Drawer
@@ -94,7 +86,6 @@ const PublishEventRequestTemplates = observer(() => {
         publisher.showPublishEventRequestTemplates = false;
       }}
     >
-      <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
         <DrawerHeader>API Code Sample</DrawerHeader>
@@ -117,10 +108,8 @@ const PublishEventRequestTemplates = observer(() => {
                   <TabPanels p="0px">
                     {languages.map((language) => {
                       const codeStr = getHTTPRequestTemplate({
-                        language,
-                        params: store.params,
-                        url: envs.value?.httpURL,
-                        body: publisher.publishEventForm.formData.body
+                        ...getHttpProps(),
+                        language
                       });
                       return (
                         <TabPanel key={language}>
@@ -162,7 +151,7 @@ const PublishEventRequestTemplates = observer(() => {
                         language,
                         projectName,
                         url: envs.value?.mqttURL,
-                        message: publisher.publishEventForm.formData.body
+                        message: formData.body
                       });
                       return (
                         <TabPanel key={language}>

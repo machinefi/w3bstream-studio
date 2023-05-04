@@ -4,14 +4,15 @@ import getRustTemplate from './rust';
 
 export const getHTTPRequestTemplate = ({
   language,
+  headers,
   url,
   params,
   body
 }: {
   language: string;
   url: string;
+  headers: { [key: string]: string };
   params: {
-    eventID: string;
     eventType: string;
     timestamp: number;
   };
@@ -19,11 +20,11 @@ export const getHTTPRequestTemplate = ({
 }) => {
   switch (language) {
     case 'javascript':
-      return getJavascriptTemplate(url, params, body);
+      return getJavascriptTemplate(url, headers, params, body);
     case 'go':
-      return getGolangTemplate(url, params, body);
+      return getGolangTemplate(url, headers, params, body);
     case 'rust':
-      return getRustTemplate(url, params, body);
+      return getRustTemplate(url, headers, params, body);
     default:
       return '';
   }

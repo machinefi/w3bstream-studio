@@ -12,6 +12,7 @@ import { VscDebugStart } from 'react-icons/vsc';
 import { hooks } from '@/lib/hooks';
 import { AiOutlineClear } from 'react-icons/ai';
 import { eventBus } from '@/lib/event';
+import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
 
 type LocalStoreType = {
   loading: boolean;
@@ -122,26 +123,20 @@ const EventLogs = observer(() => {
                 }, 2000);
                 return;
               }
-              const timestamp = Date.now();
-              const eventType = formData.type || "DEFAULT"
-              // const eventID = pub.f_key || `${timestamp}`;
-              const authorization = pub.f_token;
-              // const data = new Blob([formData.body], { type: 'text/plain' });
-              const data = formData.body
 
               try {
                 const res = await axios.request({
                   method: 'post',
                   url: `/api/w3bapp/event/${projectName}`,
                   headers: {
-                    Authorization: authorization,
-                    'Content-Type': 'application/octet-stream',
+                    Authorization: pub.f_token,
+                    'Content-Type': 'application/octet-stream'
                   },
                   params: {
-                    eventType,
-                    timestamp
+                    eventType: formData.type || 'DEFAULT',
+                    timestamp: Date.now()
                   },
-                  data
+                  data: formData.body
                 });
                 console.log('[Send test message]:', res);
                 showNotification({ color: 'green', message: 'Send event successed' });
@@ -155,9 +150,8 @@ const EventLogs = observer(() => {
                     loading: false
                   });
                 });
-
               } catch (error) {
-                showNotification({ color: 'red', message: "send event failed"});
+                showNotification({ color: 'red', message: 'send event failed' });
               }
             }
           };
@@ -170,7 +164,15 @@ const EventLogs = observer(() => {
               {
                 form: publisher.developerPublishEventForm
               }
-            ]
+            ],
+            children: (
+              <ShowRequestTemplatesButton
+                props={{
+                  mt: '10px',
+                  w: '100%'
+                }}
+              />
+            )
           });
         }}
       />
