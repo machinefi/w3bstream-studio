@@ -139,7 +139,7 @@ export const debugSimulation = () => {
   const lab = globalThis.store.w3s.lab;
   const code = globalThis.store.w3s.projectManager.curFilesListSchema.curActiveFile.data.code;
   const res = new Function('faker', code)(faker);
-  const stdio: StdIOType = { '@lv': 'info', msg: res, '@ts': Date.now() };
+  const stdio: StdIOType = { '@lv': 'info', msg: res, '@ts': Date.now(), prefix: '' };
   lab.stdout.push(stdio);
 };
 

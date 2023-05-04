@@ -182,17 +182,10 @@ export const ConsolePanel = observer(() => {
         {lab.stdout?.map((i) => {
           return (
             <Flex color={i?.['@lv'] == 'error' ? 'red' : ''}>
-              <Flex color="#d892ff" mr={2} whiteSpace="nowrap">
-                [wasmvm -{' '}
-                {
-                  <>
-                    <Box color="#ffd300" ml={1}>
-                      {dayjs(i?.['@ts']).format('hh:mm:ss')}
-                    </Box>
-                  </>
-                }
-                ]
-              </Flex>{' '}
+              <Flex mr={2} whiteSpace="nowrap">
+                [<Box color="#d892ff">{i.prefix}</Box>
+                <Box color="#ffd300">{dayjs(i?.['@ts']).format('hh:mm:ss')}</Box>]
+              </Flex>
               {JSON.stringify(i)}
             </Flex>
           );
