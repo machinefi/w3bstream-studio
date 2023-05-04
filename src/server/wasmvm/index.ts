@@ -229,7 +229,7 @@ export class WASM {
             return ResultStatusCode.ResourceNotFound;
           }
         },
-        async ws_call_contract(chainId: number, tx_ptr: number, tx_size: number, vmAddrPtr: number, vmSizePtr: number): number {
+        ws_call_contract(chainId: number, tx_ptr: number, tx_size: number, vmAddrPtr: number, vmSizePtr: number): number {
           const inputView = new Uint8Array(_this.memory.buffer, tx_ptr, tx_size);
           const vmSizeView = new DataView(_this.memory.buffer, vmSizePtr, 4);
           const vmAddrView = new Uint8Array(_this.memory.buffer, vmAddrPtr, 4);
@@ -238,7 +238,7 @@ export class WASM {
           let callRes;
           if (to && data) {
             try {
-              const res = helper.c.callContractSync({ chainId, to, data:  data });
+              const res = helper.c.callContractSync({ chainId, to, data: data });
               callRes = res;
               console.log('callRes');
             } catch (e) {
