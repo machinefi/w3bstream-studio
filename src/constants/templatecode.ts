@@ -161,10 +161,10 @@ export function start(rid: i32): i32 {
 export function start(rid: i32): i32 {
   Log("Log:start from typescript123");
   SendTx(
-      4690,
-      "0x4BF7916893DfA78834B2F8B535654682d36e1163",
-      "0",
-      \`6a627842000000000000000000000000${'0x9117f5EF4156709092f79740a97b1638cA399A00'.replace('0x', '')}\`
+    4690, //chain id
+    "0x4BF7916893DfA78834B2F8B535654682d36e1163",//contract address
+    "0",//tx value 
+    \`6a6278420000000000000000000000009117f5EF4156709092f79740a97b1638cA399A00\` //bytecode
     );
   // const message = GetDataByRID(rid);
   return rid;

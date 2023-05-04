@@ -6,6 +6,9 @@ import { rootStore } from '@/store/index';
 import BigNumber from 'bignumber.js';
 import { _ } from './lodash';
 import { showNotification } from '@mantine/notifications';
+import { ethers } from 'ethers';
+import { metamaskUtils } from './metaskUtils';
+import { Deferrable } from 'ethers/lib/utils.js';
 
 const valMap = {
   undefined: '',
@@ -44,6 +47,35 @@ export const toast = {
 };
 
 export const helper = {
+  setChain(god, chainId) {
+    if (god.chainId === chainId) return;
+    return new Promise((resolve, reject) => {
+      const chain = god.currentNetwork.chain.map[chainId];
+      console.log(chain);
+      metamaskUtils
+        .setupNetwork({
+          chainId: chain.chainId,
+          blockExplorerUrls: [chain.explorerURL],
+          chainName: chain.name,
+          nativeCurrency: {
+            decimals: chain.Coin.decimals || 18,
+            name: chain.Coin.symbol,
+            symbol: chain.Coin.symbol
+          },
+          rpcUrls: [chain.rpcUrl]
+        })
+        .then((res) => {
+          god.setChain(chainId);
+          setTimeout(() => {
+            resolve(res);
+          }, 1000);
+        })
+        .catch((err) => {
+          toast.error(err.message);
+          reject(err);
+        });
+    });
+  },
   promise: {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -179,6 +211,72 @@ export const helper = {
         }
       } catch (error) {
         throw new Error(error.message);
+      }
+    }
+  },
+  c: {
+    async sendTx({
+      chainId,
+      address,
+      data,
+      gasPrice = 0,
+      value = 0,
+      autoRefresh = true,
+      autoAlert = false,
+      showTransactionSubmitDialog = true,
+      onSubmit,
+      onSuccess,
+      onError
+    }: {
+      chainId: number | string;
+      address: string;
+      data: string;
+      value?: string | number;
+      gasPrice?: string | number;
+      autoRefresh?: boolean;
+      autoAlert?: boolean;
+      showTransactionSubmitDialog?: boolean;
+      onSubmit?: ({ res }: { res: ethers.providers.TransactionResponse }) => void;
+      onSuccess?: ({ res }: { res: ethers.providers.TransactionReceipt }) => void;
+      onError?: (e: Error) => void;
+    }): Promise<ethers.providers.TransactionReceipt> {
+      console.log('showTransactionSubmitDialog', showTransactionSubmitDialog);
+      chainId = Number(chainId);
+
+      try {
+        if (!chainId || !address || !data) throw new Error('chainId, address, data is required');
+
+        if (rootStore.god.currentChain.chainId !== chainId) {
+          await helper.setChain(rootStore.god, chainId);
+        }
+        let sendTransactionParam: ethers.utils.Deferrable<ethers.providers.TransactionRequest> = _.omitBy(
+          {
+            to: address,
+            data,
+            value: value ? ethers.BigNumber.from(value) : null,
+            gasPrice: gasPrice ? ethers.BigNumber.from(gasPrice) : null
+          },
+          _.isNil
+        );
+        const res = await rootStore.god.eth.signer.sendTransaction(sendTransactionParam);
+        const receipt = await res.wait();
+        if (receipt.status) {
+          toast.success(`Success`);
+          // @ts-ignore 
+          onSuccess && onSuccess({ res });
+        }
+        return receipt;
+      } catch (error) {
+        console.log(error);
+        if (autoAlert) {
+          showNotification({
+            title: 'Error',
+            message: error.data?.message || error.message,
+            color: 'red'
+          });
+        }
+        onError && onError(error);
+        throw error;
       }
     }
   },

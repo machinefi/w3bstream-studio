@@ -235,31 +235,20 @@ export class WASM {
             const vmSizeView = new DataView(_this.memory.buffer, vmSizePtr, 4);
             const vmAddrView = new Uint8Array(_this.memory.buffer, vmAddrPtr, 4);
             const input = new TextDecoder().decode(inputView);
-            console.log(helper.json.safeParse(input));
-            // @ts-ignore
-            const provider = window.ethereum;
-            const [account] = await provider.request({ method: 'eth_requestAccounts' });
-            await provider.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x' + new BigNumber(chainID).toString(16) }]
-            });
-
-            const tx = await provider.request({
-              // @ts-ignore
-              method: 'eth_sendTransaction',
-              params: [
-                {
-                  ...helper.json.safeParse(input),
-                  from: account,
-                  gas: '0x76c0', // 30400
-                  gasPrice: '0x9184e72a000' // 10000000000000
-                }
-              ]
-            });
-            console.log(tx);
-            _this.writeStdout({
-              message: `call ws_send_tx ${tx}`,
-              isAsync: true
+            const jsonInput = helper.json.safeParse(input);
+            console.log(jsonInput);
+            helper.c.sendTx({
+              chainId: chainID,
+              address: jsonInput.to,
+              data: '0x'+jsonInput.data,
+              value: jsonInput.value,
+              onSuccess: (tx) => {
+                console.log(tx);
+                _this.writeStdout({
+                  message: `call ws_send_tx `,
+                  isAsync: true
+                });
+              }
             });
             // vmAddrView.set(txEncoded);
             // vmSizeView.setInt32(0, txEncoded.length, true);
