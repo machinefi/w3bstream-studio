@@ -11,6 +11,7 @@ import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidget
 import { makeObservable, observable } from 'mobx';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import { JSONHistoryState } from '@/store/standard/JSONHistoryState';
 
 export const createPublisherSchema = {
   definitions: {
@@ -39,7 +40,7 @@ export const publishEventSchema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     publisher: { $ref: '#/definitions/publishers', title: 'Publisher' },
-    body: { type: 'string', title: 'Body' },
+    body: { type: 'string', title: 'Body' }
   },
   required: ['projectName', 'body']
 } as const;
@@ -47,7 +48,7 @@ export const publishEventSchema = {
 export const developerPublishEventSchema = {
   type: 'object',
   properties: {
-    type:{type:'string',title:'Event Type'},
+    type: { type: 'string', title: 'Event Type' },
     body: { type: 'string', title: '' }
   },
   required: ['type']
@@ -103,7 +104,7 @@ export default class PublisherModule {
         'ui:options': {
           editorHeight: '400px',
           lang: 'text',
-          showLanguageSelector: true,
+          showLanguageSelector: true
         }
       }
     },
@@ -133,7 +134,7 @@ export default class PublisherModule {
           lang: 'text',
           showLanguageSelector: false
         }
-      },
+      }
     },
     afterSubmit: async (e) => {
       // eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -142,7 +143,7 @@ export default class PublisherModule {
     value: new JSONValue<DeveloperPublishEventSchemaType>({
       default: {
         body: '',
-        type:'DEFAULT'
+        type: 'DEFAULT'
       }
     })
   });
@@ -241,6 +242,13 @@ export default class PublisherModule {
   });
 
   allData: PublisherType[] = [];
+
+  records = new JSONHistoryState<{
+    type: string;
+    body: string;
+  }>({
+    key: 'publish-event-records'
+  });
 
   constructor() {
     makeObservable(this, {

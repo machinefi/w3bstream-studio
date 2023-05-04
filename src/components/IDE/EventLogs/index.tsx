@@ -1,7 +1,7 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useStore } from '@/store/index';
-import { Box, Flex, Icon, Spinner, chakra, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/react';
+import { Box, Flex, Icon, Spinner, chakra, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Select } from '@chakra-ui/react';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
@@ -123,7 +123,10 @@ const EventLogs = observer(() => {
                 }, 2000);
                 return;
               }
-
+              publisher.records.push({
+                type: formData.type,
+                body: formData.body
+              });
               try {
                 const res = await axios.request({
                   method: 'post',
@@ -166,12 +169,29 @@ const EventLogs = observer(() => {
               }
             ],
             children: (
-              <ShowRequestTemplatesButton
-                props={{
-                  mt: '10px',
-                  w: '100%'
-                }}
-              />
+              <>
+                <ShowRequestTemplatesButton
+                  props={{
+                    mt: '10px',
+                    w: '100%'
+                  }}
+                />
+                <Select
+                  mt="10px"
+                  placeholder="Select a history"
+                  onChange={(e) => {
+                    const index = Number(e.target.value);
+                    publisher.records.currentIndex = index;
+                    publisher.developerPublishEventForm.value.set({
+                      ...publisher.records.current
+                    });
+                  }}
+                >
+                  {publisher.records.list.map((item, index) => (
+                    <option value={index}>{item.body}</option>
+                  ))}
+                </Select>
+              </>
             )
           });
         }}
