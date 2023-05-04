@@ -8,13 +8,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
 import reactHotToast from 'react-hot-toast';
 import _ from 'lodash';
-import { VscDebugStart, VscClearAll } from 'react-icons/vsc';
+import { VscDebugStart } from 'react-icons/vsc';
 import { BsDatabaseFillAdd } from 'react-icons/bs';
 import { FileIcon } from '@/components/Tree';
 import { eventBus } from '@/lib/event';
-import { StdIOType, WASM } from '@/server/wasmvm';
+import { StdIOType } from '@/server/wasmvm';
 import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
-import dayjs from 'dayjs';
 import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
 import { CheckCircleIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
@@ -23,12 +22,11 @@ import Flow, { FlowErrorFallback } from '@/components/DeveloperIDE/Flow';
 import { hooks } from '@/lib/hooks';
 import { StorageState } from '@/store/standard/StorageState';
 import ErrorBoundary from '@/components/Common/ErrorBoundary';
-import JSONTable from '@/components/JSONTable';
-import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { CREATDB_TYPE, TableJSONSchema } from '@/server/wasmvm/sqldb';
-import { toJS } from 'mobx';
 import { ConsolePanel, DBpanel } from './panels';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
+//@ts-ignore
+import { faker } from '@faker-js/faker';
 
 export const compileAssemblyscript = async (code: string) => {
   let { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
@@ -135,6 +133,14 @@ export const debugAssemblyscript = async (needCompile = true) => {
       ]
     });
   } catch (e) {}
+};
+
+export const debugSimulation = () => {
+  const lab = globalThis.store.w3s.lab;
+  const code = globalThis.store.w3s.projectManager.curFilesListSchema.curActiveFile.data.code;
+  const res = new Function('faker', code)(faker);
+  const stdio: StdIOType = { '@lv': 'info', msg: res, '@ts': Date.now() };
+  lab.stdout.push(stdio);
 };
 
 export const onCreateDB = async () => {
@@ -406,6 +412,20 @@ const Editor = observer(() => {
             </Box>
           </>
         )}
+
+        {curFilesListSchema?.curActiveFile?.data?.dataType == 'simulation' && (
+          <Box ml="auto">
+            <Box onClick={debugSimulation}>
+              <VscDebugStart
+                color="white"
+                style={{
+                  marginRight: '10px',
+                  cursor: 'pointer'
+                }}
+              />
+            </Box>
+          </Box>
+        )}
       </Flex>
     );
   });
@@ -474,6 +494,7 @@ const Editor = observer(() => {
                             declare const ExecSQL: (query: string,args?:any[]) => i32;
                             declare const QuerySQL: (query: string,args?:any[]) => string;
                             declare const GetEnv: (key:string) => string;
+                            declare const faker: any;
                             `,
                             'sdk/index.d.ts'
                           );
@@ -486,6 +507,7 @@ const Editor = observer(() => {
                       />
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && <ConsolePanel />}
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'sql' && <DBpanel />}
+                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'simulation' && <ConsolePanel />}
                     </Flex>
                   </>
                 )}
@@ -495,7 +517,9 @@ const Editor = observer(() => {
         </main>
       ) : (
         <Flex justify={'center'} align="center" direction="column" w="full">
-          <Flex justify={'center'} mt={12}>No File Selected!</Flex>
+          <Flex justify={'center'} mt={12}>
+            No File Selected!
+          </Flex>
           <Button
             mt={4}
             w="50%"
