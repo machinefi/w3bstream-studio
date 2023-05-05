@@ -138,30 +138,9 @@ export const debugAssemblyscript = async (needCompile = true) => {
 };
 
 export const onCreateDB = async () => {
-  try {
-    const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
-    const sqlJSON: TableJSONSchema[] | TableJSONSchema = JSON.parse(curActiveFile?.data?.code);
-    const _sqlJSON = Array.isArray(sqlJSON) ? sqlJSON : [sqlJSON];
-    _sqlJSON.forEach((i) => {
-      const res: CREATDB_TYPE = rootStore.god.sqlDB.createTableByJSONSchema(i);
-      if (res == CREATDB_TYPE.EXIST) {
-        rootStore?.base.confirm.show({
-          title: 'Warning',
-          description: `The table '${i.name}' already exists. Do you want to overwrite it?`,
-          async onOk() {
-            rootStore.god.sqlDB.createTableByJSONSchema(i, true);
-            toast.success(`Create Table '${i.name}' Success`);
-            eventBus.emit('sql.change');
-          }
-        });
-      } else if (res == CREATDB_TYPE.SUCCESS) {
-        toast.success(`Create Table '${i.name}' Success`);
-      }
-      eventBus.emit('sql.change');
-    });
-  } catch (e) {
-    toast.error(e.message);
-  }
+  const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
+  const tableJSONSchema: TableJSONSchema = JSON.parse(curActiveFile?.data?.code);
+  await rootStore.god.sqlDB.createTableByJSONSchema(tableJSONSchema);
 };
 
 const Editor = observer(() => {
@@ -495,7 +474,9 @@ const Editor = observer(() => {
         </main>
       ) : (
         <Flex justify={'center'} align="center" direction="column" w="full">
-          <Flex justify={'center'} mt={12}>No File Selected!</Flex>
+          <Flex justify={'center'} mt={12}>
+            No File Selected!
+          </Flex>
           <Button
             mt={4}
             w="50%"

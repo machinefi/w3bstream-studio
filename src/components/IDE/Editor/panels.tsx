@@ -1,7 +1,7 @@
 import JSONTable from '@/components/JSONTable';
 import dayjs from '@/lib/dayjs';
 import { eventBus } from '@/lib/event';
-import { TableJSONSchema } from '@/server/wasmvm/sqldb';
+import { Schema, TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { useStore } from '@/store/index';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { Box, Flex, Input, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
@@ -26,15 +26,15 @@ export const DBpanel = observer(() => {
     initDBTable: () => {
       store.tables = [];
       try {
-        const sqlJSON: TableJSONSchema[] | TableJSONSchema = JSON.parse(curFilesListSchema.curActiveFile?.data?.code);
-        const _sqlJSON = Array.isArray(sqlJSON) ? sqlJSON : [sqlJSON];
+        const tableJSONSchema: TableJSONSchema = JSON.parse(curFilesListSchema.curActiveFile?.data?.code);
+        const _firstSchema: Schema = tableJSONSchema.schemas[0];
         const tables: { tableName: string; columnName: string[]; table: JSONSchemaTableState }[] = [];
-        _sqlJSON.forEach((i) => {
+        _firstSchema.tables.forEach((i) => {
           const { tableName, columnName } = sqlDB.getTableInfoByJSONSchema(i);
-          console.log(tableName, columnName);
+          // console.log(tableName, columnName);
           // sqlDB.test();
           const res = sqlDB.db.exec(`SELECT * FROM ${tableName}`);
-          console.log(res);
+          // console.log(res);
           const dataSource: { [key: string]: any }[] = [];
           if (res.length > 0) {
             res[0].values.forEach((i) => {
@@ -61,7 +61,7 @@ export const DBpanel = observer(() => {
             })
           });
           store.tables = tables;
-          console.log(toJS(tables));
+          // console.log(toJS(tables));
         });
       } catch (e) {
         console.log(e);
