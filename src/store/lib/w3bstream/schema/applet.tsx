@@ -476,7 +476,7 @@ export default class AppletModule {
     }
   }
 
-  async updateWASM(appletID, instanceID) {
+  async updateWASM(appletID, appletName) {
     const formData = await hooks.getFormData({
       title: 'Update WASM',
       size: 'md',
@@ -493,16 +493,15 @@ export default class AppletModule {
       data.append(
         'info',
         JSON.stringify({
-          // wasmName: file.name,
-          // appletName: formData.appletName,
-          // strategies: [{ eventType: 'DEFAULT', handler: 'start' }],
+          appletName,
+          wasmName: file.name,
           start: true
         })
       );
       try {
         const res = await axios.request({
           method: 'put',
-          url: `/api/file?api=applet/${appletID}/${instanceID} `,
+          url: `/api/file?api=applet/${appletID}`,
           headers: {
             'Content-Type': 'multipart/form-data'
           },
@@ -510,7 +509,6 @@ export default class AppletModule {
         });
         if (res) {
           showNotification({ message: 'update wasm succeeded' });
-          eventBus.emit('applet.update');
         }
       } catch (error) {}
     }
