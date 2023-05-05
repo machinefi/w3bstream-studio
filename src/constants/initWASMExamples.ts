@@ -164,48 +164,80 @@ export const SqlExample: FilesItemType = {
       data: {
         dataType: 'sql',
         code: JSON.stringify(
-          [
-            {
-              name: 't_log',
-              desc: 'test table',
-              cols: [
-                {
-                  name: 'number',
-                  constrains: {
-                    datatype: 'UIN8',
-                    length: 255,
-                    desc: 'number'
+          {
+            schemas: [
+              {
+                schema: 'public',
+                tables: [
+                  {
+                    name: 't_demo',
+                    desc: 'demo table',
+                    cols: [
+                      {
+                        name: 'f_id',
+                        constrains: {
+                          datatype: 'INT64',
+                          autoincrement: true,
+                          desc: 'primary id'
+                        }
+                      },
+                      {
+                        name: 'f_name',
+                        constrains: {
+                          datatype: 'TEXT',
+                          length: 255,
+                          desc: 'name'
+                        }
+                      },
+                      {
+                        name: 'f_amount',
+                        constrains: {
+                          datatype: 'FLOAT64',
+                          desc: 'amount'
+                        }
+                      },
+                      {
+                        name: 'f_income',
+                        constrains: {
+                          datatype: 'DECIMAL',
+                          length: 512,
+                          decimal: 512,
+                          default: '0',
+                          desc: 'income'
+                        }
+                      },
+                      {
+                        name: 'f_comment',
+                        constrains: {
+                          datatype: 'TEXT',
+                          default: "''",
+                          null: true,
+                          desc: 'comment'
+                        }
+                      }
+                    ],
+                    keys: [
+                      {
+                        name: 'primary',
+                        isUnique: false,
+                        columnNames: ['f_id']
+                      },
+                      {
+                        name: 't_demo_ui_name',
+                        isUnique: true,
+                        columnNames: ['f_name']
+                      },
+                      {
+                        name: 'i_amount',
+                        isUnique: false,
+                        columnNames: ['f_amount']
+                      }
+                    ]
                   }
-                },
-                {
-                  name: 'text',
-                  constrains: {
-                    datatype: 'TEXT',
-                    length: 255,
-                    default: '0',
-                    desc: 'text'
-                  }
-                },
-                {
-                  name: 'boolean',
-                  constrains: {
-                    datatype: 'BOOL',
-                    length: 0,
-                    desc: ''
-                  }
-                }
-              ],
-              keys: [
-                {
-                  name: 'ui_username',
-                  isUnique: true,
-                  columnNames: ['number']
-                }
-              ],
-              withSoftDeletion: true,
-              withPrimaryKey: true
-            }
-          ],
+                ]
+              }
+            ]
+          },
           null,
           2
         ),
