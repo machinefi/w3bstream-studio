@@ -1,6 +1,9 @@
 import { IndexDb } from '@/lib/dexie';
+import { eventBus } from '@/lib/event';
 import { helper, toast } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
+import { rootStore } from '@/store/index';
+import { resolve } from 'path';
 import initSqlJs from 'sql.js';
 //https://sql.js.org/#/
 //https://sqliteonline.com/
@@ -15,21 +18,6 @@ interface sqlTypes {
   time?: number;
   bytes?: string;
 }
-interface Column {
-  name: string;
-  constrains: {
-    datatype: string;
-    length: number;
-    desc: string;
-    default?: string;
-  };
-}
-interface Key {
-  name: string;
-  isUnique: boolean;
-  columnNames: string[];
-}
-
 export enum CREATDB_TYPE {
   SUCCESS,
   EXIST,
@@ -37,12 +25,34 @@ export enum CREATDB_TYPE {
 }
 
 export interface TableJSONSchema {
+  schemas: Schema[];
+}
+export interface Schema {
+  schema: string; //public
+  tables: Table[];
+}
+export interface Table {
   name: string;
   desc: string;
   cols: Column[];
   keys: Key[];
-  withSoftDeletion: boolean;
-  withPrimaryKey: boolean;
+}
+export interface Column {
+  name: string;
+  constrains: {
+    datatype: string;
+    length?: number;
+    decimal?: number;
+    default?: string;
+    null?: boolean;
+    autoincrement?: boolean;
+    desc?: string;
+  };
+}
+export interface Key {
+  name: string;
+  isUnique: boolean;
+  columnNames: string[];
 }
 
 export class SqlDB {
@@ -74,84 +84,185 @@ export class SqlDB {
     }
   }
 
-  getTableInfoByJSONSchema(tableJson: TableJSONSchema): { tableName: string; columnName: string[] } | null {
-    let tableName = tableJson.name;
-    let columns = tableJson.cols;
-    let columnName: string[] = [];
-    columns.forEach((col, index) => {
-      columnName.push(col.name);
+  getTableInfoByJSONSchema(table: Table): { tableName: string; columnName: string[] } | null {
+    const tableName = table.name;
+    const columns = table.cols;
+    const columnNames: string[] = [];
+    columns.forEach((col) => {
+      columnNames.push(col.name);
     });
-    if (!this.findDBExist(tableJson.name)) {
-      columnName = [];
-    }
-    return { tableName, columnName };
+    return { tableName, columnName: columnNames };
   }
 
-  createTableByJSONSchema(tableJson: TableJSONSchema, forceCreate: boolean = false): CREATDB_TYPE {
-    let tableName = tableJson.name;
-    let columns = tableJson.cols;
-    let keys = tableJson.keys;
-    let withSoftDeletion = tableJson.withSoftDeletion;
-    let withPrimaryKey = tableJson.withPrimaryKey;
-    let columnName: string[] = [];
+  // createTableByJSONSchema(tableJson: TableJSONSchema, forceCreate: boolean = false): CREATDB_TYPE {
+  //   let tableName = tableJson.name;
+  //   let columns = tableJson.cols;
+  //   let keys = tableJson.keys;
+  //   let withSoftDeletion = tableJson.withSoftDeletion;
+  //   let withPrimaryKey = tableJson.withPrimaryKey;
+  //   let columnName: string[] = [];
 
-    let sql = `CREATE TABLE ${tableName} (`;
-    columns.forEach((col, index) => {
-      columnName.push(col.name);
-      let colName = col.name;
-      let dataType = col.constrains.datatype.toUpperCase();
-      let length = col.constrains.length;
-      let colString = `${colName} ${dataType}${length ? `(${length})` : ''}`;
-      // Add default value if provided
-      if (col.constrains.default !== undefined) {
-        let defaultValue = col.constrains.default;
-        if (dataType === 'TEXT') {
-          defaultValue = `'${defaultValue}'`;
+  //   let sql = `CREATE TABLE ${tableName} (`;
+  //   columns.forEach((col, index) => {
+  //     columnName.push(col.name);
+  //     let colName = col.name;
+  //     let dataType = col.constrains.datatype.toUpperCase();
+  //     let length = col.constrains.length;
+  //     let colString = `${colName} ${dataType}${length ? `(${length})` : ''}`;
+  //     // Add default value if provided
+  //     if (col.constrains.default !== undefined) {
+  //       let defaultValue = col.constrains.default;
+  //       if (dataType === 'TEXT') {
+  //         defaultValue = `'${defaultValue}'`;
+  //       }
+  //       colString += ` DEFAULT ${defaultValue}`;
+  //     }
+
+  //     if (index < columns.length - 1) {
+  //       colString += ', ';
+  //     }
+  //     sql += colString;
+  //   });
+
+  //   // Add primary key
+  //   if (withPrimaryKey && keys && keys?.length > 0) {
+  //     let pkColumns = keys?.[0]?.columnNames?.join(', ');
+  //     sql += `, PRIMARY KEY (${pkColumns})`;
+  //   }
+
+  //   // Add unique keys
+  //   keys?.forEach((key, index) => {
+  //     if (index > 0) {
+  //       let name = key.name;
+  //       let columnNames = key?.columnNames?.join(', ');
+  //       sql += `, UNIQUE KEY ${name} (${columnNames})`;
+  //     }
+  //   });
+
+  //   sql += ');';
+  //   if (this.findDBExist(tableJson.name) && !forceCreate) {
+  //     return CREATDB_TYPE.EXIST;
+  //   }
+
+  //   if (forceCreate) {
+  //     try {
+  //       this.exec(`DROP TABLE ${tableJson.name}`);
+  //     } catch (error) {
+  //       return CREATDB_TYPE.ERROR;
+  //     }
+  //   }
+
+  //   try {
+  //     console.log('cret table sql', sql);
+  //     this.exec(sql);
+  //     return CREATDB_TYPE.SUCCESS;
+  //   } catch (e) {
+  //     return CREATDB_TYPE.ERROR;
+  //   }
+  // }
+  async createTableByJSONSchema(tableJson: TableJSONSchema) {
+    const schemas = tableJson.schemas;
+    let sqlResult = CREATDB_TYPE.ERROR;
+
+    for (const schema of schemas) {
+      const tables = schema.tables;
+      for (const table of tables) {
+        const tableName = table.name;
+        const columns = table.cols;
+        const keys = table.keys;
+        const colNames: string[] = [];
+        let sql = `CREATE TABLE IF NOT EXISTS ${tableName} (`;
+
+        columns.forEach((col, index) => {
+          colNames.push(col.name);
+          const colName = col.name;
+          const dataType = col.constrains.datatype.toUpperCase();
+          let colString = `${colName} ${dataType}`;
+          if (dataType === 'TEXT' && col.constrains.length) {
+            colString += `(${col.constrains.length})`;
+          } else if (dataType === 'NUMERIC' && col.constrains.length && col.constrains.decimal) {
+            colString += `(${col.constrains.length},${col.constrains.decimal})`;
+          }
+
+          // Add default value if provided
+          if (col.constrains.default !== undefined) {
+            let defaultValue = col.constrains.default;
+            if (dataType === 'TEXT') {
+              defaultValue = `'${defaultValue}'`;
+            }
+            colString += ` DEFAULT ${defaultValue}`;
+          }
+
+          // Add autoincrement if provided
+          if (col.constrains.autoincrement) {
+            //f_id INT64 INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+            colString += ' INTEGER PRIMARY KEY AUTOINCREMENT';
+            colString = colString.replace(/(\b|(?<=\s))INT(?:8|16|32|64)?\b/g, '');
+          }
+
+          // Add nullability
+          if (col.constrains.null === true) {
+            colString += ' NULL';
+          } else {
+            colString += ' NOT NULL';
+          }
+
+          if (index < columns.length - 1) {
+            colString += ', ';
+          }
+          sql += colString;
+        });
+
+        // Add unique keys
+        keys?.forEach((key) => {
+          if (key.isUnique) {
+            const columnNames = key.columnNames.join(', ');
+            sql += `, UNIQUE (${columnNames})`;
+          }
+        });
+
+        sql += ');';
+
+        if (this.findDBExist(tableName)) {
+          sqlResult = CREATDB_TYPE.EXIST;
+          await this.conflicateDialog(tableName, sql);
+          continue;
         }
-        colString += ` DEFAULT ${defaultValue}`;
-      }
 
-      if (index < columns.length - 1) {
-        colString += ', ';
+        try {
+          console.log('create table sql', sql);
+          this.exec(sql);
+          sqlResult = CREATDB_TYPE.SUCCESS;
+          toast.success(`Create Table '${tableName}' Success`);
+          eventBus.emit('sql.change');
+        } catch (e) {
+          sqlResult = CREATDB_TYPE.ERROR;
+          toast.error(e.message);
+          eventBus.emit('sql.change');
+          continue;
+        }
       }
-      sql += colString;
+    }
+
+    return '';
+  }
+  conflicateDialog(tableName, sql): Promise<boolean> {
+    return new Promise((res, rej) => {
+      rootStore?.base.confirm.show({
+        title: 'Warning',
+        description: `The table '${tableName}' already exists. Do you want to overwrite it?`,
+        onOk: async () => {
+          this.exec(`DROP TABLE IF EXISTS ${tableName}`);
+          this.exec(sql);
+          toast.success(`Create Table '${tableName}' Success`);
+          eventBus.emit('sql.change');
+          res(true);
+        },
+        onCancel: () => {
+          res(false);
+        }
+      });
     });
-
-    // Add primary key
-    if (withPrimaryKey && keys && keys?.length > 0) {
-      let pkColumns = keys?.[0]?.columnNames?.join(', ');
-      sql += `, PRIMARY KEY (${pkColumns})`;
-    }
-
-    // Add unique keys
-    keys?.forEach((key, index) => {
-      if (index > 0) {
-        let name = key.name;
-        let columnNames = key?.columnNames?.join(', ');
-        sql += `, UNIQUE KEY ${name} (${columnNames})`;
-      }
-    });
-
-    sql += ');';
-    if (this.findDBExist(tableJson.name) && !forceCreate) {
-      return CREATDB_TYPE.EXIST;
-    }
-
-    if (forceCreate) {
-      try {
-        this.exec(`DROP TABLE ${tableJson.name}`);
-      } catch (error) {
-        return CREATDB_TYPE.ERROR;
-      }
-    }
-
-    try {
-      console.log('cret table sql', sql);
-      this.exec(sql);
-      return CREATDB_TYPE.SUCCESS;
-    } catch (e) {
-      return CREATDB_TYPE.ERROR;
-    }
   }
 
   exec(sql: string) {
