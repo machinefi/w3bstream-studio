@@ -7,7 +7,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
 import { FileIcon } from '@/components/Tree';
-import { TableJSONSchema } from '@/server/wasmvm/sqldb';
+import { Schema, TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { useStore } from '@/store/index';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { toJS } from 'mobx';
@@ -41,15 +41,15 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
     initDBTable: (code: string) => {
       store.tables = [];
       try {
-        const sqlJSON: TableJSONSchema[] | TableJSONSchema = JSON.parse(code);
-        const _sqlJSON = Array.isArray(sqlJSON) ? sqlJSON : [sqlJSON];
+        const tableJSONSchema: TableJSONSchema = JSON.parse(curFilesListSchema.curActiveFile?.data?.code);
+        const _firstSchema: Schema = tableJSONSchema.schemas[0];
         const tables: { tableName: string; columnName: string[]; table: JSONSchemaTableState }[] = [];
-        _sqlJSON?.forEach((i) => {
+        _firstSchema.tables.forEach((i) => {
           const { tableName, columnName } = sqlDB.getTableInfoByJSONSchema(i);
-          console.log(tableName, columnName);
+          // console.log(tableName, columnName);
           // sqlDB.test();
           const res = sqlDB.db.exec(`SELECT * FROM ${tableName}`);
-          console.log(res);
+          // console.log(res);
           const dataSource: { [key: string]: any }[] = [];
           if (res.length > 0) {
             res[0].values.forEach((i) => {
@@ -76,7 +76,7 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
             })
           });
           store.tables = tables;
-          console.log(toJS(tables));
+          // console.log(toJS(tables));
         });
       } catch (e) {
         console.log(e);
@@ -100,7 +100,7 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
 
   useEffect(() => {
     store.curDBJSONCode = store.DBJSONs[0]?.value;
-    store.initDBTable(store.curDBJSONCode)
+    store.initDBTable(store.curDBJSONCode);
     eventBus.on('sql.change', () => store.initDBTable(store.curDBJSONCode));
     return () => {
       eventBus.off('sql.change', () => store.initDBTable(store.curDBJSONCode));
