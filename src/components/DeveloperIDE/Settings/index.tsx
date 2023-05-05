@@ -72,7 +72,9 @@ const Settings = () => {
         </Flex>
         <Flex alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>WASM file name:</Box>
-          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">{store.wasmName}</Box>
+          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+            {store.wasmName}
+          </Box>
           <Button
             ml="10px"
             size="sm"
@@ -89,7 +91,11 @@ const Settings = () => {
                   projectName: project.curProject?.name,
                   appletName: store.curApplet.f_name
                 });
-                applet.updateWASM(store.curApplet.f_applet_id, store.curInstance.f_instance_id);
+                await applet.updateWASM(store.curApplet.f_applet_id, store.curApplet.f_name);
+                const fileName = await applet.getFileName(store.curApplet.f_resource_id);
+                if (fileName) {
+                  store.wasmName = fileName;
+                }
               }
             }}
           >
