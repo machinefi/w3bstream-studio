@@ -154,10 +154,7 @@ const Projects = observer(() => {
                             projectName: project.name
                           });
                           if (appletID) {
-                            const instanceID = await w3s.applet.deployApplet({ appletID, triggerEvent: false });
-                            if (instanceID) {
-                              w3s.instances.handleInstance({ instanceID, event: 'START' });
-                            }
+                            eventBus.emit('applet.create');
                           }
                         }}
                       >
