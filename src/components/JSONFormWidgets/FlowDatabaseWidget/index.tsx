@@ -41,7 +41,7 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
     initDBTable: (code: string) => {
       store.tables = [];
       try {
-        const tableJSONSchema: TableJSONSchema = JSON.parse(curFilesListSchema.curActiveFile?.data?.code);
+        const tableJSONSchema: TableJSONSchema = JSON.parse(code);
         const _firstSchema: Schema = tableJSONSchema.schemas[0];
         const tables: { tableName: string; columnName: string[]; table: JSONSchemaTableState }[] = [];
         _firstSchema.tables.forEach((i) => {
