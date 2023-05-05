@@ -1,7 +1,7 @@
 const getGolangTemplate = (
   url: string,
+  headers: { [key: string]: string },
   params: {
-    eventID: string;
     eventType: string;
     timestamp: number;
   },
@@ -16,17 +16,18 @@ import (
 )
 
 func main() {
-  url := ${url}
+  url := "${url}"
 
   method := "POST"
 
   payload := strings.NewReader(
-   "${body}"
+    ${JSON.stringify(body)}
   )
 
   client := &http.Client {}
 
   req, err := http.NewRequest(method, url, payload)
+  req.Header.Add("Authorization", "${headers.Authorization}");
   req.Header.Add("Content-Type", "application/octet-stream");
   if err != nil {
     fmt.Println(err)

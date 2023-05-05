@@ -9,6 +9,7 @@ import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
+import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
 
 const AddBtn = observer(() => {
   const { w3s } = useStore();
@@ -45,7 +46,15 @@ const AddBtn = observer(() => {
               {
                 form: w3s.publisher.publishEventForm
               }
-            ]
+            ],
+            children: (
+              <ShowRequestTemplatesButton
+                props={{
+                  mt: '10px',
+                  w: '100%'
+                }}
+              />
+            )
           });
           const { projectName } = formData;
           if (projectName) {
@@ -54,21 +63,18 @@ const AddBtn = observer(() => {
               showNotification({ message: 'publisher not found' });
               return;
             }
-            const timestamp = Date.now();
-            const eventType = 'ANY';
-            const eventID = pub?.f_key || `${timestamp}`;
-            const authorization = pub?.f_token;
-            const data = new Blob([formData.body], { type: 'text/plain' });
             const res = await axios.request({
               method: 'post',
               url: `/api/w3bapp/event/${projectName}`,
-              params: {
-                authorization,
-                eventID,
-                eventType,
-                timestamp
+              headers: {
+                Authorization: pub.f_token,
+                'Content-Type': 'application/octet-stream'
               },
-              data
+              params: {
+                eventType: 'DEFAULT',
+                timestamp: Date.now()
+              },
+              data: formData.body
             });
             if (res.data) {
               showNotification({ message: 'publish event succeeded' });

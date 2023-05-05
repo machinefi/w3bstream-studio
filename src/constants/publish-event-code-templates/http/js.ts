@@ -1,7 +1,7 @@
 const getJavascriptTemplate = (
   url: string,
+  headers: { [key: string]: string },
   params: {
-    eventID: string;
     eventType: string;
     timestamp: number;
   },
@@ -10,11 +10,9 @@ const getJavascriptTemplate = (
   return `
 fetch('${url}', {
   method: 'POST',
-  headers: {
-    'Content-Type': 'application/octet-stream'
-  },
+  headers: ${JSON.stringify(headers)},
   params: ${JSON.stringify(params)},
-  body: "${body}"
+  body: ${JSON.stringify(body)}
 })
 .then(response => response.json())
 .then(console.log)

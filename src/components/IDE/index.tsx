@@ -48,9 +48,7 @@ const IDE = observer(() => {
             {w3s.showContent === 'CHAIN_TX' && <ChainTx />}
             {w3s.showContent === 'CHAIN_HEIGHT' && <ChainHeight />}
             {w3s.showContent === 'DB_TABLE' && <DBTable />}
-            {
-              //@ts-ignore
-              w3s.showContent === 'METRICS' && <JSONMetricsView data={w3s.metrics.metricsData} showContent={w3s.metrics.showContent} />}
+            {w3s.showContent === 'METRICS' && <JSONMetricsView data={w3s.metrics.metricsData} />}
           </Box>
         ) : (
           <LayoutCenter w="100%" h="calc(100vh - 100px)">
