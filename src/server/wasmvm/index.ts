@@ -7,6 +7,7 @@ export type StdIOType = {
   '@lv': 'info' | 'error';
   '@ts': number;
   msg: string;
+  prefix?: string;
 };
 
 export enum ResultStatusCode {
@@ -39,12 +40,12 @@ export class WASM {
   }
 
   writeStdout({ message, isAsync = false }: { message: string; isAsync?: boolean }) {
-    const stdio: StdIOType = { '@lv': 'info', msg: message, '@ts': new Date().getTime() };
+    const stdio: StdIOType = { '@lv': 'info', msg: message, '@ts': new Date().getTime(), prefix: 'wasmvm - ' };
     !isAsync ? this.stdout.push(stdio) : eventBus.emit('wasmvm.stdout', stdio);
   }
 
   writeStderr({ message, isAsync = false }: { message: string; isAsync?: boolean }) {
-    const stdio: StdIOType = { '@lv': 'error', msg: message, '@ts': new Date().getTime() };
+    const stdio: StdIOType = { '@lv': 'error', msg: message, '@ts': new Date().getTime(), prefix: 'wasmvm - ' };
     !isAsync ? this.stderr.push(stdio) : eventBus.emit('wasmvm.stderr', stdio);
   }
 

@@ -7,11 +7,7 @@ import { helper, toast } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
 import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider } from '@chakra-ui/react';
 import { VscCloudDownload, VscDebugStart, VscFile, VscFiles, VscFileSymlinkFile, VscFileZip, VscFolder, VscTrash } from 'react-icons/vsc';
-import { asc } from 'pages/_app';
-import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
-import { compileAndCreateProject, compileAssemblyscript, debugAssemblyscript } from '../IDE/Editor';
-import { eventBus } from '@/lib/event';
-import Draggable from 'react-draggable';
+import { compileAndCreateProject, debugAssemblyscript, debugSimulation } from '../IDE/Editor';
 import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
 import { BiPaste, BiRename } from 'react-icons/bi';
@@ -317,6 +313,20 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                         </Box>
                       </Box>
                     </>
+                  )}
+
+                  {item?.data?.dataType == 'simulation' && curFilesListSchema?.curActiveFileId == item?.key && (
+                    <Box ml="auto">
+                      <Box onClick={debugSimulation}>
+                        <VscDebugStart
+                          color="black"
+                          style={{
+                            marginRight: '10px',
+                            cursor: 'pointer'
+                          }}
+                        />
+                      </Box>
+                    </Box>
                   )}
                 </Flex>
                 {item.children && item.isOpen && <Tree isHidden={isHidden ? true : item.label.startsWith('.')} data={item.children} onSelect={onSelect} />}

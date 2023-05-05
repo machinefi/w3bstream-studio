@@ -17,63 +17,36 @@ export const labExamples: FilesItemType[] = [
     isOpen: true,
     children: [
       {
-        type: 'folder',
-        key: 'f79811d3-9690-4d97-b4dc-ed5d44cd4743',
-        label: 'Assemblyscript',
-        isRename: false,
-        isOpen: true,
-        children: [
-          {
-            type: 'file',
-            key: '36b173d3-2258-4db5-a4f4-1284c0f5ba4b',
-            label: 'index.ts',
-            data: {
-              dataType: 'assemblyscript',
-              code: '\n  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk\n  export function start(rid: i32): i32 {\n    const message = GetDataByRID(rid);\n    const deviceName = GetEnv(\'DEVICE_NAME\');\n    Log("wasm received message:" + message);\n    Log("deviceName:" + deviceName)\n    let JSONMessage: JSON.Obj = JSON.parse(message) as JSON.Obj;\n    let snr: JSON.Integer | null = JSONMessage.getInteger("snr");\n    let latitude: JSON.Float | null = JSONMessage.getFloat("latitude");\n    let longitude: JSON.Float | null = JSONMessage.getFloat("longitude");\n    let temperature: JSON.Integer | null = JSONMessage.getInteger("temperature");\n    if(snr && latitude && longitude && temperature){\n      let _snr:i64 = snr.valueOf();\n      let _latitude:f64 = latitude.valueOf();\n      let _longitude:f64 = longitude.valueOf();\n      let _temperature:i64 = temperature.valueOf();\n      Log(_snr.toString());\n      Log(_latitude.toString());\n      Log(_longitude.toString());\n      Log(_temperature.toString());\n\n      ExecSQL("INSERT INTO t_iot (snr,lat,long,temperature) VALUES (?,?,?,?);",[new SQL.Int64(_snr),new SQL.Float64(_latitude),new SQL.Float64(_longitude),new SQL.Int64(_temperature)])\n    }\n  \n    // if()\n    return 0;\n  }\n  ',
-              language: 'typescript'
-            },
-            isRename: false
-          }
-        ]
+        type: 'file',
+        key: '36b173d3-2258-4db5-a4f4-1284c0f5ba4b',
+        label: 'index.ts',
+        data: {
+          dataType: 'assemblyscript',
+          code: '\n  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk\n  export function start(rid: i32): i32 {\n    const message = GetDataByRID(rid);\n    const deviceName = GetEnv(\'DEVICE_NAME\');\n    Log("wasm received message:" + message);\n    Log("deviceName:" + deviceName)\n    let JSONMessage: JSON.Obj = JSON.parse(message) as JSON.Obj;\n    let snr: JSON.Integer | null = JSONMessage.getInteger("snr");\n    let latitude: JSON.Float | null = JSONMessage.getFloat("latitude");\n    let longitude: JSON.Float | null = JSONMessage.getFloat("longitude");\n    let temperature: JSON.Integer | null = JSONMessage.getInteger("temperature");\n    if(snr && latitude && longitude && temperature){\n      let _snr:i64 = snr.valueOf();\n      let _latitude:f64 = latitude.valueOf();\n      let _longitude:f64 = longitude.valueOf();\n      let _temperature:i64 = temperature.valueOf();\n      Log(_snr.toString());\n      Log(_latitude.toString());\n      Log(_longitude.toString());\n      Log(_temperature.toString());\n\n      ExecSQL("INSERT INTO t_iot (snr,lat,long,temperature) VALUES (?,?,?,?);",[new SQL.Int64(_snr),new SQL.Float64(_latitude),new SQL.Float64(_longitude),new SQL.Int64(_temperature)])\n    }\n  \n    // if()\n    return 0;\n  }\n  ',
+          language: 'typescript'
+        },
+        isRename: false
       },
       {
-        type: 'folder',
-        key: '44b4e4e9-9b7c-480f-b9cd-57c9659d0bc0',
-        label: 'Simulate',
-        isRename: false,
-        isOpen: true,
-        children: [
-          {
-            type: 'file',
-            key: '2f021274-2b0c-4fb6-b12a-4089875b0cb4',
-            label: 'iot-simulate.ts',
-            data: {
-              dataType: 'simulation',
-              language: 'typescript',
-              code: '\n//https://github.com/faker-js/faker\nfunction createRandomUser() {\n  return {\n    snr: faker.number.int({max:1000000}),\n    latitude: faker.location.latitude(),\n    longitude: faker.location.longitude(),\n    gasResistance: faker.number.int(),\n    temperature: faker.number.int({max:100,min:10}),\n    light: faker.number.int(),\n    random: faker.datatype.uuid()\n  };\n}\n\nreturn createRandomUser()\n'
-            }
-          }
-        ]
+        type: 'file',
+        key: '2f021274-2b0c-4fb6-b12a-4089875b0cb4',
+        label: 'iot-simulate.ts',
+        data: {
+          dataType: 'simulation',
+          language: 'typescript',
+          code: '\n//https://github.com/faker-js/faker\nfunction createRandomUser() {\n  return {\n    snr: faker.number.int({max:1000000}),\n    latitude: faker.location.latitude(),\n    longitude: faker.location.longitude(),\n    gasResistance: faker.number.int(),\n    temperature: faker.number.int({max:100,min:10}),\n    light: faker.number.int(),\n    random: faker.datatype.uuid()\n  };\n}\n\nreturn createRandomUser()\n'
+        }
       },
       {
-        type: 'folder',
-        key: '6fbfa5be-3ee1-46f1-9105-3e6739fed1a3',
-        label: 'Database',
-        isRename: false,
-        isOpen: true,
-        children: [
-          {
-            type: 'file',
-            key: 'db6f5833-2b86-4ffb-ab23-d7b0d953bdb0',
-            label: 't_iot.json',
-            data: {
-              dataType: 'sql',
-              code: '[\n  {\n    "name": "t_iot",\n    "desc": "iot table",\n    "cols": [\n      {\n        "name": "snr",\n        "constrains": {\n          "datatype": "UIN16",\n          "length": 255,\n          "desc": "number"\n        }\n      },\n      {\n        "name": "lat",\n        "constrains": {\n          "datatype": "FLOAT8",\n          "length": 255,\n          "default": "0",\n          "desc": "text"\n        }\n      },\n      {\n        "name": "long",\n        "constrains": {\n          "datatype": "FLOAT8",\n          "length": 255,\n          "desc": ""\n        }\n      },\n      {\n        "name": "temperature",\n        "constrains": {\n          "datatype": "UINT8",\n          "length": 255,\n          "desc": ""\n        }\n      }\n    ],\n    "withSoftDeletion": true,\n    "withPrimaryKey": false\n  }\n]',
-              language: 'json'
-            },
-            isRename: false
-          }
-        ]
+        type: 'file',
+        key: 'db6f5833-2b86-4ffb-ab23-d7b0d953bdb0',
+        label: 't_iot.json',
+        data: {
+          dataType: 'sql',
+          code: '[\n  {\n    "name": "t_iot",\n    "desc": "iot table",\n    "cols": [\n      {\n        "name": "snr",\n        "constrains": {\n          "datatype": "UIN16",\n          "length": 255,\n          "desc": "number"\n        }\n      },\n      {\n        "name": "lat",\n        "constrains": {\n          "datatype": "FLOAT8",\n          "length": 255,\n          "default": "0",\n          "desc": "text"\n        }\n      },\n      {\n        "name": "long",\n        "constrains": {\n          "datatype": "FLOAT8",\n          "length": 255,\n          "desc": ""\n        }\n      },\n      {\n        "name": "temperature",\n        "constrains": {\n          "datatype": "UINT8",\n          "length": 255,\n          "desc": ""\n        }\n      }\n    ],\n    "withSoftDeletion": true,\n    "withPrimaryKey": false\n  }\n]',
+          language: 'json'
+        },
+        isRename: false
       },
       { type: 'file', key: '3f22e866-6b5b-433b-b3d6-42bf9fc41319', label: '.env', data: { dataType: 'env', code: 'DEVICE_NAME=ESP32', language: 'env' } },
       {
