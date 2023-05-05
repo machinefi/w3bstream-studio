@@ -7,7 +7,10 @@ import { useStore } from '@/store/index';
 import { SqlDB } from '@/server/wasmvm/sqldb';
 
 const Labs = () => {
-
+  const { w3s } = useStore();
+  useEffect(() => {
+    w3s.projectManager.init();
+  }, []);
   return (
     <Flex w="100%" h="calc(100vh - 120px)">
       <Box minW="300px" h="100%" p="20px 10px" bg="#fff" borderRadius="8px" overflowY="auto">

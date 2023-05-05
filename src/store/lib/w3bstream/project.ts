@@ -49,7 +49,7 @@ export class ProjectManager {
       },
       template: {
         'ui:widget': InitWasmTemplateWidget
-      },
+      }
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -74,6 +74,10 @@ export class ProjectManager {
     return this.files.current;
   }
 
+  init() {
+    this.files.setCurrentId('GLOBAL');
+    this.sync();
+  }
   constructor() {
     makeAutoObservable(this);
   }
@@ -121,7 +125,8 @@ export class ProjectManager {
     });
   }
   sync() {
-    _.each(rootStore?.w3s.project.allProjects.value, async (v: ProjectType, k) => {
+    _.each([undefined], async (v: ProjectType, k) => {
+      console.log('ssssync');
       const project_id = 'GLOBAL';
       const IndexDbFile = await IndexDb.findFilesById(project_id);
       if (IndexDbFile[0]) {
