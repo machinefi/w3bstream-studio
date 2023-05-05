@@ -141,12 +141,12 @@ const Settings = () => {
                 title: 'Warning',
                 description: 'Are you sure you want to delete it?',
                 async onOk() {
-                  const projectName = project.curProject?.f_name;
+                  const projectName = project.curProject?.name;
                   if (projectName) {
                     try {
                       await axios.request({
                         method: 'delete',
-                        url: `/api/w3bapp/project/${projectName}`
+                        url: `/api/w3bapp/project/x/${projectName}`
                       });
                       eventBus.emit('project.delete');
                       project.allProjects.onSelect(-1);
