@@ -78,7 +78,6 @@ function extractFileInfo(dataURLs: string[]) {
         type: blob.type
       };
     });
-  console.log(res);
   return res;
 }
 
@@ -120,7 +119,6 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
       processFiles(acceptedFiles).then((filesInfoEvent) => {
         setFilesInfo(filesInfoEvent);
         const newValue = filesInfoEvent.map((fileInfo) => {
-          console.log(fileInfo)
           return fileInfo.dataURL;
         });
         if (multiple) {
