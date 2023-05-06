@@ -43,7 +43,52 @@ export const labExamples: FilesItemType[] = [
         label: 't_iot.json',
         data: {
           dataType: 'sql',
-          code: '[\n  {\n    "name": "t_iot",\n    "desc": "iot table",\n    "cols": [\n      {\n        "name": "snr",\n        "constrains": {\n          "datatype": "UIN16",\n          "length": 255,\n          "desc": "number"\n        }\n      },\n      {\n        "name": "lat",\n        "constrains": {\n          "datatype": "FLOAT8",\n          "length": 255,\n          "default": "0",\n          "desc": "text"\n        }\n      },\n      {\n        "name": "long",\n        "constrains": {\n          "datatype": "FLOAT8",\n          "length": 255,\n          "desc": ""\n        }\n      },\n      {\n        "name": "temperature",\n        "constrains": {\n          "datatype": "UINT8",\n          "length": 255,\n          "desc": ""\n        }\n      }\n    ],\n    "withSoftDeletion": true,\n    "withPrimaryKey": false\n  }\n]',
+          code: `{
+            "schemas": [
+              {
+                "schema": "public",
+                "tables": [
+                  {
+                    "name": "t_iot",
+                    "desc": "iot table",
+                    "cols": [
+                      {
+                        "name": "snr",
+                        "constrains": {
+                          "datatype": "UINT",
+                          "autoincrement": false,
+                          "desc": "primary id"
+                        }
+                      },
+                      {
+                        "name": "lat",
+                        "constrains": {
+                          "datatype": "FLOAT32",
+                          "length": 255
+                        }
+                      },
+                      {
+                        "name": "long",
+                        "constrains": {
+                          "datatype": "FLOAT32",
+                          "desc": "amount"
+                        }
+                      },
+                      {
+                        "name": "temperature",
+                        "constrains": {
+                          "datatype": "UINT",
+                          "length": 512,
+                          "decimal": 512
+                        }
+                      }
+                    ],
+                    "keys": []
+                  }
+                ]
+              }
+            ]
+          }`,
           language: 'json'
         },
         isRename: false
