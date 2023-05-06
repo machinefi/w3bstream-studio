@@ -3,10 +3,16 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Blob from 'cross-blob';
 import { _ } from '@/lib/lodash';
 
-export interface Project {
+export interface InitProject {
   name: string;
   description: string;
   applets: Applet[];
+  database?: {
+    schemas: any[];
+  };
+  envs?: {
+    env: [string, string][];
+  };
   datas?: {
     monitor: Monitor;
   }[];
@@ -40,7 +46,7 @@ interface Monitor {
 }
 
 const createProject = async (
-  project: Project,
+  project: InitProject,
   token: string
 ): Promise<{
   projectID: string;
@@ -53,7 +59,7 @@ const createProject = async (
       headers: { Authorization: token }
     });
     if (response.status !== 200 && response.status !== 201) {
-      throw new Error('create project failed:' + response.statusText);
+      throw new Error(response.statusText);
     }
     const data: any = await response.json();
     if (data.projectID) {
@@ -154,7 +160,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
   if (method === 'POST') {
     const token = req.headers.authorization.replace('Bearer ', '');
-    const project = req.body.project as Project[];
+    const project = req.body.project as InitProject[];
     if (!project) {
       res.status(400).json({ message: 'Bad Request' });
       return;
@@ -162,7 +168,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       for (const p of project) {
-        const { projectID, projectName } = await createProject(p, token);
+        const { projectName } = await createProject(p, token);
         for (const a of p.applets) {
           await createApplet({ ...a, projectName }, token);
         }
