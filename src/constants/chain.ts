@@ -53,6 +53,16 @@ export const defaultNetworks: NetworkObject[] = [
     type: 'mainnet'
   },
   {
+    name: 'IoTeX Testnet',
+    chainId: 4690,
+    rpcUrl: `https://babel-api.testnet.iotex.io`,
+    logoUrl: 'https://coingecko-proxy.iopay.me/coins/images/3334/large/iotex-logo.png?1547037941',
+    explorerUrl: 'https://testnet.iotexscan.io',
+    explorerName: 'IotexScan',
+    nativeCoin: 'IOTX',
+    type: 'testnet'
+  },
+  {
     name: 'Avalanche',
     chainId: 43114,
     rpcUrl: 'https://rpc.ankr.com/avalanche',

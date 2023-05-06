@@ -56,7 +56,7 @@ export class AssemblyScriptNode extends BaseNode {
       optimizeLevel: 4,
       runtime: 'stub',
       lib: 'assemblyscript-json/assembly/index',
-      debug: true
+      debug: true,
     });
     if (error) {
       console.log(error);

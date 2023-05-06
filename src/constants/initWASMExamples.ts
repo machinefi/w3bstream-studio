@@ -1,6 +1,8 @@
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { templatecode } from './templatecode';
+import ERC20 from './abis/ERC20.json';
+import ERC721 from './abis/ERC721.json';
 // case "INT":
 //   return DATATYPE__INT, nil
 // case "INT8":
@@ -262,6 +264,48 @@ export const envExample: FilesItemType = {
         dataType: 'env',
         code: `MY_ENV=this is my env`,
         language: 'env'
+      }
+    }
+  ]
+};
+
+export const abiExample: FilesItemType = {
+  type: 'folder',
+  key: uuidv4(),
+  label: `ENV`,
+  children: [
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `ERC20.abi.json`,
+      data: {
+        dataType: 'abi',
+        code: JSON.stringify(
+          {
+            address: '',
+            abi: ERC20
+          },
+          null,
+          2
+        ),
+        language: 'json'
+      }
+    },
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `ERC721.abi.json`,
+      data: {
+        dataType: 'abi',
+        code: JSON.stringify(
+          {
+            address: '',
+            abi: ERC721
+          },
+          null,
+          2
+        ),
+        language: 'json'
       }
     }
   ]

@@ -4,7 +4,7 @@ import {
   Text,
   Flex,
 } from '@chakra-ui/react';
-import { assemblyScriptExample, envExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
+import { abiExample, assemblyScriptExample, envExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
 import { helper } from '@/lib/helper';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ChevronDownIcon } from '@chakra-ui/icons';
@@ -34,8 +34,9 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
           <Text>{label}</Text>
         </Flex>
         <Flex
-          mt="10px"
+          mt="5px"
           id={id}
+          flexWrap="wrap"
           sx={{
             width: '100%',
             '& > div:not(:first-child)': {
@@ -46,6 +47,7 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
           {v?.children?.map((template) => (
             <Flex
               ml={2}
+              mt={1}
               key={template.key}
               style={{
                 borderColor: templateName === template.label ? '#946FFF' : '#EDEDED'
@@ -78,6 +80,7 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
       {templates(simulationExample, 'Simulation')}
       {templates(SqlExample, 'Database')}
       {templates(envExample, 'ENV')}
+      {templates(abiExample, 'ABI')}
     </>
   );
 });

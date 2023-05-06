@@ -29,7 +29,7 @@ export const DBpanel = observer(() => {
         const sqlJSON: TableJSONSchema[] | TableJSONSchema = JSON.parse(curFilesListSchema.curActiveFile?.data?.code);
         const _sqlJSON = Array.isArray(sqlJSON) ? sqlJSON : [sqlJSON];
         const tables: { tableName: string; columnName: string[]; table: JSONSchemaTableState }[] = [];
-        _sqlJSON.forEach((i) => {
+        _sqlJSON?.forEach((i) => {
           const { tableName, columnName } = sqlDB.getTableInfoByJSONSchema(i);
           console.log(tableName, columnName);
           // sqlDB.test();
