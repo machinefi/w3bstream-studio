@@ -14,8 +14,10 @@ import { trpc } from '@/lib/trpc';
 import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import FileWidget, { FileWidgetUIOptions } from '@/components/JSONFormWidgets/FileWidget';
-import { Project } from 'pages/api/init';
+import { InitProject } from 'pages/api/init';
 import SelectTagWidget, { SelectTagWidgetUIOptions } from '@/components/JSONFormWidgets/SelectTagWidget';
+import { SelectSqlFileAndEnvFileWidget, SelectSqlFileAndEnvFileWidgetUIOptions } from '@/components/JSONFormWidgets/SelectSqlFileAndEnvFileWidget';
+import { helper } from '@/lib/helper';
 
 export const defaultSchema = {
   type: 'object',
@@ -57,7 +59,11 @@ export const createProjectByWasmSchema = {
       type: 'string',
       title: 'Upload Single File'
     },
-    projectName: { type: 'string', title: 'Project Name' }
+    projectName: { type: 'string', title: 'Project Name' },
+    sqlFileAndEnvFile: {
+      type: 'string',
+      title: ' '
+    }
   },
   required: ['file', 'projectName']
 } as const;
@@ -249,7 +255,7 @@ export default class ProjectModule {
     })
   });
 
-  createProjectByWasmForm = new JSONSchemaFormState<CreateProjectByWasmSchemaType, UiSchema & { file: FileWidgetUIOptions }>({
+  createProjectByWasmForm = new JSONSchemaFormState<CreateProjectByWasmSchemaType, UiSchema & { file: FileWidgetUIOptions; sqlFileAndEnvFile: SelectSqlFileAndEnvFileWidgetUIOptions }>({
     //@ts-ignore
     schema: createProjectByWasmSchema,
     uiSchema: {
@@ -265,6 +271,12 @@ export default class ProjectModule {
           },
           tips: `Drag 'n' drop a file here, or click to select a file`,
           showDownload: true
+        }
+      },
+      sqlFileAndEnvFile: {
+        'ui:widget': SelectSqlFileAndEnvFileWidget,
+        'ui:options': {
+          separator: '<--->'
         }
       }
     },
@@ -433,37 +445,32 @@ export default class ProjectModule {
     //   "applets": [{ "wasmRaw": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-ts-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
     //   "datas": []
     // }
-    console.log(formData.file);
     if (formData.file && formData.projectName) {
-      const initProjectData: { project: Project[] } = {
-        project: [
-          {
-            name: formData.projectName,
-            description: '',
-            applets: [{ wasmRaw: formData.file, appletName: 'applet_01' }],
-            datas: []
-          }
-        ]
+      const projectData: InitProject = {
+        name: formData.projectName,
+        description: '',
+        applets: [{ wasmRaw: formData.file, appletName: 'applet_01' }],
+        datas: []
       };
+      if (formData.sqlFileAndEnvFile) {
+        const [sqlCode, envCode] = formData.sqlFileAndEnvFile.split('<--->');
+        if (sqlCode) {
+          projectData.database = helper.json.safeParse(sqlCode);
+        }
+        if (envCode) {
+          projectData.envs = helper.json.safeParse(envCode);
+        }
+      }
       try {
         const res = await axios.request({
           method: 'post',
           url: `/api/init`,
-          data: initProjectData
+          data: {
+            project: [projectData]
+          }
         });
         if (res.data) {
-          console.log('res.data', res.data);
-          // showNotification({ message: `Create project succeeded` });
           eventBus.emit('project.create');
-          // modals.openContextModal({
-          //   id: 'projectstration',
-          //   modal: 'projectstration',
-          //   title: 'Go to the project',
-          //   centered: true,
-          //   innerProps: {
-          //     modalBody: 'create success, you can view new project'
-          //   }
-          // });
         }
       } catch (error) {
         console.log('error', error);

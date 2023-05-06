@@ -186,7 +186,11 @@ export const ConsolePanel = observer(() => {
                 [<Box color="#d892ff">{i.prefix}</Box>
                 <Box color="#ffd300">{dayjs(i?.['@ts']).format('hh:mm:ss')}</Box>]
               </Flex>
-              {JSON.stringify(i)}
+              {JSON.stringify({
+                '@lv': i?.['@lv'],
+                '@ts': i?.['@ts'],
+                msg: i?.msg
+              })}
             </Flex>
           );
         })}
