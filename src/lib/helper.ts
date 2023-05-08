@@ -9,6 +9,7 @@ import { showNotification } from '@mantine/notifications';
 import { ethers } from 'ethers';
 import { metamaskUtils } from './metaskUtils';
 import { Deferrable } from 'ethers/lib/utils.js';
+import request from 'sync-request';
 
 const valMap = {
   undefined: '',
@@ -262,7 +263,7 @@ export const helper = {
         const receipt = await res.wait();
         if (receipt.status) {
           toast.success(`Success`);
-          // @ts-ignore 
+          // @ts-ignore
           onSuccess && onSuccess({ res });
         }
         return receipt;
@@ -277,6 +278,37 @@ export const helper = {
         }
         onError && onError(error);
         throw error;
+      }
+    },
+    callContractSync({ chainId, to, data }): string {
+      if (rootStore.god.currentChain.chainId !== chainId) {
+        helper.setChain(rootStore.god, chainId);
+      }
+      const contractAddress = to;
+      const response = request('POST', rootStore.god.currentNetwork.currentChain.rpcUrl, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_call',
+          params: [
+            {
+              to: contractAddress,
+              data: data
+            },
+            'latest'
+          ]
+        })
+      });
+
+      if (response.statusCode === 200) {
+        const result = JSON.parse(response.getBody('utf8')).result;
+        console.log(result);
+        return result;
+      } else {
+        console.error(response.statusCode);
       }
     }
   },

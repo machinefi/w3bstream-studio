@@ -76,17 +76,28 @@ export class WASM {
   // }
 
   /** The runtime heap memory is copied to WebAssembly's linear memory space */
-  copyToWasm(hostData: string, vmAddrPtr: number, vmSizePtr: number) {
+  copyToWasm(hostData: string | Uint8Array, vmAddrPtr: number, vmSizePtr: number) {
     try {
-      const encoded = new TextEncoder().encode(hostData);
-      // @ts-ignore
-      const ptr = this.instance.exports?.alloc(encoded.length);
-      const hostDataView = new Uint8Array(this.memory.buffer, ptr, encoded.length);
-      hostDataView.set(encoded);
-      const vmAddrView = new DataView(this.memory.buffer, vmAddrPtr, 4);
-      const vmSizeView = new DataView(this.memory.buffer, vmSizePtr, 4);
-      vmAddrView.setInt32(0, ptr, true);
-      vmSizeView.setInt32(0, encoded.byteLength, true);
+      if (typeof hostData === 'string') {
+        const encoded = new TextEncoder().encode(hostData);
+        // @ts-ignore
+        const ptr = this.instance.exports?.alloc(encoded.length);
+        const hostDataView = new Uint8Array(this.memory.buffer, ptr, encoded.length);
+        hostDataView.set(encoded);
+        const vmAddrView = new DataView(this.memory.buffer, vmAddrPtr, 4);
+        const vmSizeView = new DataView(this.memory.buffer, vmSizePtr, 4);
+        vmAddrView.setInt32(0, ptr, true);
+        vmSizeView.setInt32(0, encoded.byteLength, true);
+      } else {
+        // @ts-ignore
+        const ptr = this.instance.exports?.alloc(hostData.length);
+        const hostDataView = new Uint8Array(this.memory.buffer, ptr, hostData.length);
+        hostDataView.set(hostData);
+        const vmAddrView = new DataView(this.memory.buffer, vmAddrPtr, 4);
+        const vmSizeView = new DataView(this.memory.buffer, vmSizePtr, 4);
+        vmAddrView.setInt32(0, ptr, true);
+        vmSizeView.setInt32(0, hostData.byteLength, true);
+      }
     } catch (error) {
       throw new Error(`copyToWasmErr: ${error.message}`);
     }
@@ -207,18 +218,6 @@ export class WASM {
             });
           }
         },
-        ws_call_contract(chainID: number, offset: number, size: number, vmAddrPtr: number, vmSizePtr: number): number {
-          console.log(`ws_call_contract: chainID=${chainID}, offset=${offset}, size=${size}`);
-          const inputView = new Uint8Array(_this.memory.buffer, offset, size);
-          const vmSizeView = new DataView(_this.memory.buffer, vmSizePtr, 4);
-
-          const vmReturnValue = new Uint8Array([1, 2, 3, 4, 5]);
-          const vmAddrView = new Uint8Array(_this.memory.buffer, vmAddrPtr, vmReturnValue.length);
-          vmAddrView.set(vmReturnValue);
-
-          vmSizeView.setInt32(0, vmReturnValue.length, true);
-          return 0;
-        },
         ws_get_data(rid: number, data_ptr: number, data_size: number): number {
           const data = _this.ctxData;
           console.log(data, 'ctxData', data_ptr, data_size);
@@ -229,6 +228,31 @@ export class WASM {
             console.log(error);
             return ResultStatusCode.ResourceNotFound;
           }
+        },
+        ws_call_contract(chainId: number, tx_ptr: number, tx_size: number, vmAddrPtr: number, vmSizePtr: number): number {
+          const inputView = new Uint8Array(_this.memory.buffer, tx_ptr, tx_size);
+          const vmSizeView = new DataView(_this.memory.buffer, vmSizePtr, 4);
+          const vmAddrView = new Uint8Array(_this.memory.buffer, vmAddrPtr, 4);
+          const input = new TextDecoder().decode(inputView);
+          const { to, data } = helper.json.safeParse(input);
+          let callRes;
+          if (to && data) {
+            try {
+              const res = helper.c.callContractSync({ chainId, to, data: data });
+              callRes = res;
+              console.log('callRes');
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          console.log(callRes);
+          const bytes = new Uint8Array(callRes.length / 2);
+          for (let i = 0; i < bytes.length; i++) {
+            const byteString = callRes.substr(i * 2, 2);
+            bytes[i] = parseInt(byteString, 16);
+          }
+          _this.copyToWasm(bytes, vmAddrPtr, vmSizePtr);
+          return ResultStatusCode.OK;
         },
         async ws_send_tx(chainID: number, offset: number, size: number, vmAddrPtr: number, vmSizePtr: number) {
           try {
@@ -241,7 +265,7 @@ export class WASM {
             helper.c.sendTx({
               chainId: chainID,
               address: jsonInput.to,
-              data: '0x'+jsonInput.data,
+              data: '0x' + jsonInput.data,
               value: jsonInput.value,
               onSuccess: (tx) => {
                 console.log(tx);

@@ -45,40 +45,38 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
         const _firstSchema: Schema = tableJSONSchema.schemas[0];
         const tables: { tableName: string; columnName: string[]; table: JSONSchemaTableState }[] = [];
         _firstSchema.tables.forEach((i) => {
-          _firstSchema.tables.forEach((i) => {
-            const { tableName, columnName } = sqlDB.getTableInfoByJSONSchema(i);
-            // console.log(tableName, columnName);
-            // sqlDB.test();
-            const res = sqlDB.db.exec(`SELECT * FROM ${tableName}`);
-            // console.log(res);
-            const dataSource: { [key: string]: any }[] = [];
-            if (res.length > 0) {
-              res[0].values.forEach((i) => {
-                const obj: { [key: string]: any } = {};
-                i.forEach((j, index) => {
-                  obj[columnName[index]] = j;
-                });
-                dataSource.push(obj);
+          const { tableName, columnName } = sqlDB.getTableInfoByJSONSchema(i);
+          // console.log(tableName, columnName);
+          // sqlDB.test();
+          const res = sqlDB.db.exec(`SELECT * FROM ${tableName}`);
+          // console.log(res);
+          const dataSource: { [key: string]: any }[] = [];
+          if (res.length > 0) {
+            res[0].values.forEach((i) => {
+              const obj: { [key: string]: any } = {};
+              i.forEach((j, index) => {
+                obj[columnName[index]] = j;
               });
-            }
-
-            tables.push({
-              tableName,
-              columnName,
-              table: new JSONSchemaTableState<any>({
-                dataSource,
-                columns: columnName.map((i) => {
-                  return {
-                    key: i,
-                    label: i
-                  };
-                })
-                // containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
-              })
+              dataSource.push(obj);
             });
-            store.tables = tables;
-            // console.log(toJS(tables));
+          }
+
+          tables.push({
+            tableName,
+            columnName,
+            table: new JSONSchemaTableState<any>({
+              dataSource,
+              columns: columnName.map((i) => {
+                return {
+                  key: i,
+                  label: i
+                };
+              })
+              // containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
+            })
           });
+          store.tables = tables;
+          // console.log(toJS(tables));
         });
       } catch (e) {
         console.log(e);

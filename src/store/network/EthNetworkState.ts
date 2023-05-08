@@ -1,10 +1,11 @@
 import { makeAutoObservable } from 'mobx';
-import { Signer, utils } from 'ethers';
+import { ethers, Contract, Signer, ContractFactory, utils } from 'ethers';
 import { MappingState } from '../standard/MappingState';
 import { ChainState } from './ChainState';
 import { NetworkState } from './NetworkState';
 import { GodStore } from '../god';
 import BigNumber from 'bignumber.js';
+import { CallParams } from '../lib/ContractState';
 
 export class EthNetworkState implements NetworkState {
   god: GodStore;
@@ -40,5 +41,13 @@ export class EthNetworkState implements NetworkState {
 
   isAddress(address: string): boolean {
     return utils.isAddress(address);
+  }
+
+  async execContract({ address, abi, method, params = [], options = {} }: CallParams): Promise<Partial<any>> {
+    if (!this.account) {
+      throw new Error('wallet not connected.');
+    }
+    const contract = new Contract(address, abi, this.signer);
+    return contract[method](...params, options);
   }
 }

@@ -23,17 +23,19 @@ import { hooks } from '@/lib/hooks';
 import { StorageState } from '@/store/standard/StorageState';
 import ErrorBoundary from '@/components/Common/ErrorBoundary';
 import { CREATDB_TYPE, TableJSONSchema } from '@/server/wasmvm/sqldb';
-import { ConsolePanel, DBpanel } from './panels';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 //@ts-ignore
 import { faker } from '@faker-js/faker';
+import { ConsolePanel } from './EditorBottomPanels/ConsolePanel';
+import { DBpanel } from './EditorBottomPanels/DBpanel';
+import { ABIPanel } from './EditorBottomPanels/ABIPanel';
 
 export const compileAssemblyscript = async (code: string) => {
   let { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
     optimizeLevel: 4,
     runtime: 'stub',
     lib: 'assemblyscript-json/assembly/index',
-    debug: true
+    debug: true,
   });
   let _error = error + '';
   // @ts-ignore
@@ -409,6 +411,49 @@ const Editor = observer(() => {
     );
   });
 
+  const MoEditor = (props) => {
+    return (
+      <MonacoEditor
+        width={'100%'}
+        height={350}
+        key="monaco"
+        theme="vs-dark"
+        defaultLanguage="typescript"
+        language={curFilesListSchema?.curActiveFile.data?.language}
+        defaultValue="export function test(): void {}"
+        value={curFilesListSchema?.curActiveFile?.data?.code}
+        beforeMount={(monaco) => {}}
+        onMount={async (editor, monaco) => {
+          monaco.languages.typescript.typescriptDefaults.addExtraLib(
+            `
+        declare const Log: (message:string) => void;
+        declare const SetDB: (key: string, value: number) => void;
+        declare const GetDB: (key: string) => string;
+        declare const SendTx: (chainId: number, to:string, value:string ,data:string) => string | null;
+        declare const GetDataByRID: (rid: number) => string;
+        declare const ExecSQL: (query: string,args?:any[]) => i32;
+        declare const QuerySQL: (query: string,args?:any[]) => string;
+        declare const GetEnv: (key:string) => string;
+        declare const faker: any;
+        declare const CallContract:(chainId: number, to:string, data:string) => string;
+        declare const hexToUtf8(hex: string): string;
+        declare const hexToInt(hex: string): i32;
+        declare const hexToBool(hex: string): bool;
+        declare const hexToAddress(hex: string): string;
+        `,
+            'sdk/index.d.ts'
+          );
+          monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
+          if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
+        }}
+        onChange={(e) => {
+          curFilesListSchema.setCurFileCode(e);
+        }}
+        {...props}
+      />
+    );
+  };
+
   return (
     <Box>
       {/* Active Bar Headers  */}
@@ -448,47 +493,23 @@ const Editor = observer(() => {
                   </ErrorBoundary>
                 )}
 
-                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env']) && (
+                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env']) && curFilesListSchema?.curActiveFile?.data?.dataType != 'abi' && (
                   <>
                     <Flex flexDirection={'column'} w="full">
-                      <MonacoEditor
-                        // defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
-                        width={'100%'}
-                        height={350}
-                        key="monaco"
-                        theme="vs-dark"
-                        defaultLanguage="typescript"
-                        language={curFilesListSchema?.curActiveFile.data?.language}
-                        defaultValue="export function test(): void {}"
-                        value={curFilesListSchema?.curActiveFile?.data?.code}
-                        beforeMount={(monaco) => {}}
-                        onMount={async (editor, monaco) => {
-                          monaco.languages.typescript.typescriptDefaults.addExtraLib(
-                            `
-                            declare const Log: (message:string) => void;
-                            declare const SetDB: (key: string, value: number) => void;
-                            declare const GetDB: (key: string) => string;
-                            declare const SendTx: (chainId: number, to:string, value:string ,data:string) => string | null;
-                            declare const GetDataByRID: (rid: number) => string;
-                            declare const ExecSQL: (query: string,args?:any[]) => i32;
-                            declare const QuerySQL: (query: string,args?:any[]) => string;
-                            declare const GetEnv: (key:string) => string;
-                            declare const faker: any;
-                            `,
-                            'sdk/index.d.ts'
-                          );
-                          monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-                          if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
-                        }}
-                        onChange={(e) => {
-                          curFilesListSchema.setCurFileCode(e);
-                        }}
-                      />
+                      <MoEditor />
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && <ConsolePanel />}
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'sql' && <DBpanel />}
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'simulation' && <ConsolePanel />}
+                      {/* {curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' && <ABIPanel />} */}
                     </Flex>
                   </>
+                )}
+
+                {curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' && (
+                  <Flex flexDirection={'row'} width="calc(100vw - 380px)" ml="auto" h="calc(100vh - 190px)">
+                    <MoEditor height="auto" w="50%" />
+                    <ABIPanel />
+                  </Flex>
                 )}
               </>
             )}

@@ -14,7 +14,7 @@ import { StorageState } from '@/store/standard/StorageState';
 import { assemblyScriptExample } from '@/constants/initWASMExamples';
 
 type FileItemDataType<T = any> = {
-  dataType?: string; // simulation flow assemblyscript
+  dataType?: string; // simulation flow assemblyscript abi env
   code?: string;
   language?: string;
   extraData?: T;

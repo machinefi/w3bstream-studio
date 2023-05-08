@@ -160,13 +160,16 @@ export function start(rid: i32): i32 {
 //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
 export function start(rid: i32): i32 {
   Log("Log:start from typescript123");
+  const ERC20Addr = "0xa00744882684c3e4747faefd68d283ea44099d03";
   SendTx(
-    4690, //chain id
-    "0x4BF7916893DfA78834B2F8B535654682d36e1163",//contract address
+    4689, //chain id
+    ERC20Addr,//contract address
     "0",//tx value 
-    \`6a6278420000000000000000000000009117f5EF4156709092f79740a97b1638cA399A00\` //bytecode
+    "0x095ea7b30000000000000000000000009117f5ef4156709092f79740a97b1638ca399a000000000000000000000000000000000000000000000000000000000000000001" //bytecode
     );
-  // const message = GetDataByRID(rid);
+  const symbolHex = CallContract(4689, ERC20Addr, "0x06fdde03");
+  Log("symbolHex:" + symbolHex);
+  Log("symbol:" + hexToUtf8(symbolHex));
   return rid;
 }
 `,
@@ -182,14 +185,14 @@ export function start(rid: i32): i32 {
      return rid;
    }
   `,
-  'sql.ts':`
+  'sql.ts': `
   export function start(rid: i32): i32 {
     const value = ExecSQL(\`INSERT INTO "t_log" (number,text,boolean) VALUES (?,?,?);\`, [new SQL.Int32(1), new SQL.String("test"),new SQL.Bool(false)]);
     const res = QuerySQL(\`SELECT * FROM "t_log";\`);
     return rid;
   }
   `,
-  'env.ts':`
+  'env.ts': `
   //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
   export function start(rid: i32): i32 {
     Log(rid.toString());
