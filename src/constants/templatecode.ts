@@ -160,13 +160,13 @@ export function start(rid: i32): i32 {
 //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
 export function start(rid: i32): i32 {
   Log("Log:start from typescript123");
+  const ERC20Addr = "0xa00744882684c3e4747faefd68d283ea44099d03";
   SendTx(
     4689, //chain id
     ERC20Addr,//contract address
     "0",//tx value 
     "0x095ea7b30000000000000000000000009117f5ef4156709092f79740a97b1638ca399a000000000000000000000000000000000000000000000000000000000000000001" //bytecode
     );
-  const ERC20Addr = "0xb8744ae4032be5e5ef9fab94ee9c3bf38d5d2ae0";
   const symbolHex = CallContract(4689, ERC20Addr, "0x06fdde03");
   Log("symbolHex:" + symbolHex);
   Log("symbol:" + hexToUtf8(symbolHex));
