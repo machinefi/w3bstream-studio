@@ -16,6 +16,7 @@ interface MessageEvents {
   'user.update-pwd': () => void;
   'project.list': (data: any[]) => void;
   'project.create': () => void;
+  'project.update': () => void;
   'project.delete': () => void;
   'applet.list': (data: any[]) => void;
   'applet.create': () => void;

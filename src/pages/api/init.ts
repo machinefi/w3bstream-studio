@@ -14,7 +14,14 @@ export interface InitProject {
     env: [string, string][];
   };
   datas?: {
-    monitor: Monitor;
+    publisher?: {
+      key: string;
+    };
+    cronJob?: {
+      eventType: string;
+      cronExpressions: string;
+    };
+    monitor?: Monitor;
   }[];
 }
 
@@ -25,7 +32,7 @@ interface Applet {
 }
 
 interface Monitor {
-  contractLog: {
+  contractLog?: {
     eventType: string;
     chainID: number;
     contractAddress: string;
@@ -33,12 +40,12 @@ interface Monitor {
     blockEnd: number;
     topic0: string;
   };
-  chainTx: {
+  chainTx?: {
     eventType: string;
     chainID: number;
     txAddress: string;
   };
-  chainHeight: {
+  chainHeight?: {
     eventType: string;
     chainID: number;
     height: number;
@@ -123,34 +130,26 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
 
 const createMonitor = async (projectName: string, monitor: Monitor, token: string): Promise<void> => {
   if (monitor.contractLog) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/contract_log/${projectName}`, {
+    monitor.contractLog.chainID = Number(monitor.contractLog.chainID);
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
       method: 'post',
-      body: JSON.stringify({
-        projectName,
-        ...monitor.contractLog
-      }),
+      body: JSON.stringify(monitor.contractLog),
       headers: { Authorization: token }
     });
   }
 
   if (monitor.chainTx) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/chain_tx/${projectName}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_tx`, {
       method: 'post',
-      body: JSON.stringify({
-        projectName,
-        ...monitor.chainTx
-      }),
+      body: JSON.stringify(monitor.chainTx),
       headers: { Authorization: token }
     });
   }
 
   if (monitor.chainHeight) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/chain_height/${projectName}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_height`, {
       method: 'post',
-      body: JSON.stringify({
-        projectName,
-        ...monitor.chainHeight
-      }),
+      body: JSON.stringify(monitor.chainHeight),
       headers: { Authorization: token }
     });
   }

@@ -73,12 +73,6 @@ type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplate
 type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;
 type CreateProjectByWasmSchemaType = FromSchema<typeof createProjectByWasmSchema>;
 
-interface Env {
-  id: string;
-  key: string;
-  value: string;
-}
-
 interface OnLoadCompletedProps {
   applets: AppletType[];
   publishers: PublisherType[];
@@ -86,19 +80,26 @@ interface OnLoadCompletedProps {
   strategies: StrategyType[];
 }
 
+enum ProjectConfigType {
+  PROJECT_DATABASE = 1,
+  CONFIG_TYPE__INSTANCE_CACHE = 2,
+  PROJECT_ENV = 3
+}
+
 export default class ProjectModule {
   allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
     function: async () => {
-      const res = await trpc.api.projects.query();
-      if (res) {
+      const projects = await trpc.api.projects.query();
+      if (projects) {
         const applets = [];
         const instances = [];
         let strategies = [];
         let publishers = [];
         const regex = /(?:[^_]*_){2}(.*)/;
-        res.forEach((p: ProjectType) => {
-          p.name = p.f_name.match(regex)[1];
+        projects.forEach((p: ProjectType) => {
+          const matchArray = p.f_name.match(regex);
+          p.name = matchArray ? matchArray[1] : p.f_name;
           p.applets.forEach((a: AppletType) => {
             a.project_name = p.name;
             a.instances.forEach((i) => {
@@ -123,6 +124,20 @@ export default class ProjectModule {
             pub.project_name = p.name;
             publishers.push(pub);
           });
+          p.configs.forEach((config) => {
+            // buffer to string cause by prisma client parse error
+            config.f_value && (config.f_value = JSON.parse(config.f_value.toString()));
+            switch (config.f_type) {
+              case ProjectConfigType.PROJECT_DATABASE:
+                // @ts-ignore
+                p.database = config.f_value;
+                break;
+              case ProjectConfigType.PROJECT_ENV:
+                // @ts-ignore
+                p.envs = config.f_value;
+                break;
+            }
+          });
         });
         this.onLoadCompleted({
           applets,
@@ -131,7 +146,7 @@ export default class ProjectModule {
           strategies
         });
       }
-      return res;
+      return projects;
     }
   });
 
@@ -293,92 +308,28 @@ export default class ProjectModule {
   });
 
   formMode: 'add' | 'edit' = 'add';
+  selectedNames = [];
 
-  envs: Env[] = [];
+  get curProject() {
+    return this.allProjects.current;
+  }
 
-  onAddEnv() {
-    this.envs.push({
-      id: uuidv4(),
-      key: '',
-      value: ''
+  constructor({
+    onLoadCompleted
+  }: Partial<{
+    onLoadCompleted: (data: OnLoadCompletedProps) => void;
+  }> = {}) {
+    makeObservable(this, {
+      formMode: observable,
+      selectedNames: observable
     });
-  }
 
-  onDeleteEnv(id: string) {
-    this.envs = this.envs.filter((i) => i.id !== id);
-  }
-
-  onChangeEnv(id: string, key: string, value: string) {
-    for (let i = 0; i < this.envs.length; i++) {
-      const item = this.envs[i];
-      if (item.id === id) {
-        item.key = key;
-        item.value = value;
-        break;
-      }
+    if (onLoadCompleted) {
+      this.onLoadCompleted = onLoadCompleted;
     }
   }
 
-  async setMode(mode: 'add' | 'edit') {
-    if (mode === 'add') {
-      this.form.reset();
-      this.form.uiSchema['ui:submitButtonOptions'].norender = false;
-      this.form.uiSchema.name = {
-        'ui:disabled': false
-      };
-    } else {
-      this.form.uiSchema['ui:submitButtonOptions'].norender = true;
-      this.form.uiSchema.name = {
-        'ui:disabled': true
-      };
-    }
-    this.formMode = mode;
-    this.setEnvs();
-  }
-
-  async setEnvs() {
-    if (this.formMode === 'edit') {
-      const envs = this.curProject?.config?.env || [];
-      this.envs =
-        envs.length > 0
-          ? envs
-          : [
-              {
-                id: uuidv4(),
-                key: '',
-                value: ''
-              }
-            ];
-    } else {
-      this.envs = [
-        {
-          id: uuidv4(),
-          key: '',
-          value: ''
-        }
-      ];
-    }
-  }
-
-  async onSaveEnv() {
-    const values = this.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
-    if (values.length) {
-      const projectName = globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER' ? this.curProject?.name : this.form.value.get().name;
-      if (projectName) {
-        try {
-          await axios.post(`/api/w3bapp/project_config/x/${projectName}/PROJECT_ENV`, { env: values });
-          showNotification({ message: 'Save environment variables successfully' });
-        } catch (error) {
-          throw error;
-        }
-      } else {
-        showNotification({
-          color: 'red',
-          message: 'Project name is empty'
-        });
-      }
-    }
-  }
+  onLoadCompleted(data: OnLoadCompletedProps) {}
 
   async createProject() {
     this.setMode('add');
@@ -407,7 +358,6 @@ export default class ProjectModule {
         if (res.data?.project) {
           eventBus.emit('project.create');
           showNotification({ message: 'create project succeeded' });
-          await this.onSaveEnv();
         }
       } catch (error) {}
     }
@@ -477,19 +427,6 @@ export default class ProjectModule {
         throw new Error(error);
       }
     }
-  }
-
-  async editProject() {
-    this.setMode('edit');
-    await hooks.getFormData({
-      title: 'Project Details',
-      size: '2xl',
-      formList: [
-        {
-          form: this.form
-        }
-      ]
-    });
   }
 
   async createProjectForDeleveloper() {
@@ -579,11 +516,21 @@ export default class ProjectModule {
     }
   }
 
-  get curProject() {
-    return this.allProjects.current;
+  async setMode(mode: 'add' | 'edit') {
+    this.formMode = mode;
+    if (mode === 'add') {
+      this.form.reset();
+      this.form.uiSchema['ui:submitButtonOptions'].norender = false;
+      this.form.uiSchema.name = {
+        'ui:disabled': false
+      };
+    } else {
+      this.form.uiSchema['ui:submitButtonOptions'].norender = true;
+      this.form.uiSchema.name = {
+        'ui:disabled': true
+      };
+    }
   }
-
-  selectedNames = [];
 
   selectProjectName(projectName: string, checked: boolean) {
     const index = this.selectedNames.findIndex((i) => i === projectName);
@@ -599,21 +546,38 @@ export default class ProjectModule {
     this.selectedNames = [];
   }
 
-  constructor({
-    onLoadCompleted
-  }: Partial<{
-    onLoadCompleted: (data: OnLoadCompletedProps) => void;
-  }> = {}) {
-    makeObservable(this, {
-      envs: observable,
-      formMode: observable,
-      selectedNames: observable
-    });
-
-    if (onLoadCompleted) {
-      this.onLoadCompleted = onLoadCompleted;
+  async export() {
+    if (globalThis.store.w3s.cronJob.list.value.length === 0) {
+      await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);
     }
+    helper.download.downloadJSON(`w3bstream`, {
+      name: this.curProject?.name,
+      description: this.curProject?.f_description,
+      database: this.curProject?.database,
+      envs: this.curProject?.envs,
+      wasmName: globalThis.store.w3s.applet.wasmName.value,
+      publisher: this.curProject?.publishers.map((i) => ({
+        key: i.f_key
+      })),
+      cronJob: globalThis.store.w3s.cronJob.list.value.map((i) => ({
+        eventType: i.f_event_type,
+        cronExpressions: i.f_cron_expressions
+      })),
+      monitor: {
+        contractLog: globalThis.store.w3s.contractLogs.curProjectContractLogs.map((i) => ({
+          eventType: i.f_event_type,
+          chainID: i.f_chain_id,
+          contractAddress: i.f_contract_address,
+          blockStart: i.f_block_start,
+          blockEnd: i.f_block_end,
+          topic0: i.f_topic0
+        })),
+        chainHeight: globalThis.store.w3s.chainHeight.curProjectChainHeight.map((i) => ({
+          eventType: i.f_event_type,
+          chainID: i.f_chain_id,
+          height: i.f_height
+        }))
+      }
+    });
   }
-
-  onLoadCompleted(data: OnLoadCompletedProps) {}
 }

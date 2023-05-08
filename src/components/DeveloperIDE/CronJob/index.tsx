@@ -19,7 +19,7 @@ const CronJobs = observer(() => {
 
   useEffect(() => {
     if (curProject) {
-      cronJob.fetchCronJobs(curProject.f_project_id);
+      cronJob.list.call(curProject.f_project_id);
     }
   }, [curProject]);
 

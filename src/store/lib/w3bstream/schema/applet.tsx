@@ -7,6 +7,7 @@ import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { trpc } from '@/lib/trpc';
 import { AppletType } from '@/server/routers/w3bstream';
 import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { PromiseState } from '@/store/standard/PromiseState';
 import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
@@ -381,6 +382,20 @@ export default class AppletModule {
     Object.assign(this, v);
   }
 
+  wasmName = new PromiseState<(resourceId) => Promise<any>, string>({
+    defaultValue: '',
+    function: async (resourceId) => {
+      try {
+        const res = await trpc.api.wasmName.query({
+          resourceId
+        });
+        return res?.f_filename;
+      } catch (error) {
+        return '';
+      }
+    }
+  });
+
   async createApplet() {
     const formData = await hooks.getFormData({
       title: 'Create Applet',
@@ -511,17 +526,6 @@ export default class AppletModule {
           showNotification({ message: 'update wasm succeeded' });
         }
       } catch (error) {}
-    }
-  }
-
-  async getFileName(resourceId) {
-    try {
-      const res = await trpc.api.wasmName.query({
-        resourceId
-      });
-      return res?.f_filename;
-    } catch (error) {
-      return '';
     }
   }
 }

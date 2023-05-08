@@ -6,6 +6,7 @@ import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import toast from 'react-hot-toast';
+import { PromiseState } from '@/store/standard/PromiseState';
 
 export const schema = {
   type: 'object',
@@ -92,14 +93,22 @@ export default class CronJobModule {
     })
   });
 
-  async fetchCronJobs(projectId) {
-    const res = await trpc.api.cronJobs.query({
-      projectId
-    });
-    if (res) {
-      this.table.set({
-        dataSource: res
-      });
+  list = new PromiseState<(projectId) => Promise<any>, CronJobsType[]>({
+    defaultValue: [],
+    function: async (projectId) => {
+      try {
+        const res = await trpc.api.cronJobs.query({
+          projectId
+        });
+        if (res) {
+          this.table.set({
+            dataSource: res
+          });
+          return res;
+        }
+      } catch (error) {
+        return '';
+      }
     }
-  }
+  });
 }

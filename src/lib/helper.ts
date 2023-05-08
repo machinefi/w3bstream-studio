@@ -8,7 +8,7 @@ import { _ } from './lodash';
 import { showNotification } from '@mantine/notifications';
 import { ethers } from 'ethers';
 import { metamaskUtils } from './metaskUtils';
-import { Deferrable } from 'ethers/lib/utils.js';
+import JSONFormat from 'json-format';
 import request from 'sync-request';
 
 const valMap = {
@@ -309,6 +309,24 @@ export const helper = {
         return result;
       } else {
         console.error(response.statusCode);
+      }
+    }
+  },
+  download: {
+    downloadByBlob(name: string, blob: Blob) {
+      const a = document.createElement('a');
+      const href = window.URL.createObjectURL(blob);
+      a.href = href;
+      a.download = name;
+      a.click();
+    },
+    downloadJSON(name: string, jsonObj: object) {
+      try {
+        const jsonStr: string = JSONFormat(jsonObj);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        this.downloadByBlob(name + '.json', blob);
+      } catch (error) {
+        console.error(error);
       }
     }
   },

@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Stack, Text } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { ProjectEnvs } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { FaFileExport } from 'react-icons/fa';
+import { PromiseState } from '@/store/standard/PromiseState';
 
 const Settings = () => {
   const {
@@ -14,8 +16,6 @@ const Settings = () => {
   } = useStore();
 
   const store = useLocalObservable(() => ({
-    operateAddress: '',
-    wasmName: '',
     get curApplet() {
       return applet.allData.find((item) => item.project_name === project.curProject?.name);
     },
@@ -28,39 +28,50 @@ const Settings = () => {
       }
       return [];
     },
-    getOperateAddress: async () => {
-      try {
-        const res = await axios.request({
-          method: 'get',
-          url: `/api/w3bapp/account/operatoraddr`
-        });
-        if (res.data) {
-          store.operateAddress = res.data;
+    operateAddress: new PromiseState<() => Promise<any>, string>({
+      defaultValue: '',
+      function: async () => {
+        try {
+          const res = await axios.request({
+            method: 'get',
+            url: `/api/w3bapp/account/operatoraddr`
+          });
+          return res?.data;
+        } catch (error) {
+          return '';
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
+    })
   }));
 
   useEffect(() => {
     project.setMode('edit');
-    store.getOperateAddress();
+    store.operateAddress.call();
   }, []);
 
   useEffect(() => {
     if (store.curApplet) {
-      applet.getFileName(store.curApplet.f_resource_id).then((fileName) => {
-        store.wasmName = fileName;
-      });
+      applet.wasmName.call(store.curApplet.f_resource_id);
     }
   }, [store.curApplet]);
 
   return (
     <Box w="100%" h="calc(100vh - 140px)">
-      <Box mt="20px" fontSize="18px" fontWeight={700}>
-        General
-      </Box>
+      <Flex mt="20px" justifyContent="space-between">
+        <Box fontSize="18px" fontWeight={700}>
+          General
+        </Box>
+        <Button
+          leftIcon={<Icon as={FaFileExport} />}
+          size="sm"
+          {...defaultOutlineButtonStyle}
+          onClick={() => {
+            project.export();
+          }}
+        >
+          Export this project
+        </Button>
+      </Flex>
       <Box mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
         <Flex alignItems={'center'} mb="20px">
           <Box fontWeight={700} fontSize="16px" color="#0F0F0F">
@@ -73,7 +84,7 @@ const Settings = () => {
         <Flex alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>WASM file name:</Box>
           <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-            {store.wasmName}
+            {applet.wasmName.value}
           </Box>
           <Button
             ml="10px"
@@ -92,10 +103,7 @@ const Settings = () => {
                   appletName: store.curApplet.f_name
                 });
                 await applet.updateWASM(store.curApplet.f_applet_id, store.curApplet.f_name);
-                const fileName = await applet.getFileName(store.curApplet.f_resource_id);
-                if (fileName) {
-                  store.wasmName = fileName;
-                }
+                applet.wasmName.call(store.curApplet.f_resource_id);
               }
             }}
           >
@@ -105,7 +113,7 @@ const Settings = () => {
         <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>Operator Address:</Box>
           <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-            {store.operateAddress}
+            {store.operateAddress.value}
           </Box>
         </Flex>
         <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
@@ -135,6 +143,7 @@ const Settings = () => {
           </Stack>
           <Button
             ml="20px"
+            size="sm"
             {...defaultOutlineButtonStyle}
             onClick={async (e) => {
               confirm.show({

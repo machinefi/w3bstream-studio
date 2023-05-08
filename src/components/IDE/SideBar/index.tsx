@@ -86,7 +86,16 @@ const SideBar = observer((props: SideBarProps) => {
                         w3s.project.form.value.set({
                           name: curProject?.name
                         });
-                        w3s.project.editProject();
+                        w3s.project.setMode('edit');
+                        await hooks.getFormData({
+                          title: 'Project Details',
+                          size: '2xl',
+                          formList: [
+                            {
+                              form: w3s.project.form
+                            }
+                          ]
+                        });
                       }}
                     />
                   </Tooltip>

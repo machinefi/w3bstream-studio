@@ -68,6 +68,7 @@
     "graphql-ws": "^5.11.2",
     "i18next": "^21.8.4",
     "icons^1.0.9": "link:@chakra-ui/icons^1.0.9",
+    "json-format": "^1.0.1",
     "json-schema": "^0.4.0",
     "json-schema-to-ts": "^2.5.5",
     "jsonwebtoken": "^9.0.0",

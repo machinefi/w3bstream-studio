@@ -59,7 +59,8 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
                 }}
                 value={inputV}
                 onChange={(e) => {
-                  setInputV(e.target.value);
+                  const v = e.target.value;
+                  v && setInputV(v);
                 }}
               />
               <Button
@@ -67,8 +68,10 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
                 h="30px"
                 {...defaultButtonStyle}
                 onClick={() => {
-                  setTags([...tags, inputV]);
-                  setSddingTagState('DEFAULT');
+                  if (inputV) {
+                    setTags([...tags, inputV]);
+                    setSddingTagState('DEFAULT');
+                  }
                 }}
               >
                 Submit
