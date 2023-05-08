@@ -14,9 +14,6 @@ export interface InitProject {
     env: [string, string][];
   };
   datas?: {
-    publisher?: {
-      key: string;
-    };
     cronJob?: {
       eventType: string;
       cronExpressions: string;
@@ -97,7 +94,6 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
       wasmName = 'wasm_01';
       formData.set('file', new Blob([buffer], { type: 'application/wasm' }));
     }
-
     formData.set(
       'info',
       JSON.stringify({
@@ -118,7 +114,6 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
       throw new Error('create applet failed:' + res.statusText);
     }
     const data: any = await res.json();
-    // console.log('createApplet->', data);
     if (data.appletID) {
       return data.appletID;
     }
@@ -129,30 +124,46 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
 };
 
 const createMonitor = async (projectName: string, monitor: Monitor, token: string): Promise<void> => {
-  if (monitor.contractLog) {
-    monitor.contractLog.chainID = Number(monitor.contractLog.chainID);
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
-      method: 'post',
-      body: JSON.stringify(monitor.contractLog),
-      headers: { Authorization: token }
-    });
-  }
+  try {
+    if (monitor.contractLog) {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
+        method: 'post',
+        body: JSON.stringify(monitor.contractLog),
+        headers: { Authorization: token }
+      });
+    }
+    if (monitor.chainTx) {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_tx`, {
+        method: 'post',
+        body: JSON.stringify(monitor.chainTx),
+        headers: { Authorization: token }
+      });
+    }
+    if (monitor.chainHeight) {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_height`, {
+        method: 'post',
+        body: JSON.stringify(monitor.chainHeight),
+        headers: { Authorization: token }
+      });
+    }
+  } catch (error) {}
+};
 
-  if (monitor.chainTx) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_tx`, {
+const createCronJob = async (
+  projectId: string,
+  data: {
+    eventType: string;
+    cronExpressions: string;
+  },
+  token: string
+) => {
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/cronjob/${projectId}`, {
       method: 'post',
-      body: JSON.stringify(monitor.chainTx),
+      body: JSON.stringify(data),
       headers: { Authorization: token }
     });
-  }
-
-  if (monitor.chainHeight) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_height`, {
-      method: 'post',
-      body: JSON.stringify(monitor.chainHeight),
-      headers: { Authorization: token }
-    });
-  }
+  } catch (error) {}
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -167,13 +178,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       for (const p of project) {
-        const { projectName } = await createProject(p, token);
+        const { projectID, projectName } = await createProject(p, token);
         for (const a of p.applets) {
           await createApplet({ ...a, projectName }, token);
         }
         for (const d of p.datas) {
           if (d.monitor) {
             await createMonitor(projectName, d.monitor, token);
+          }
+          if (d.cronJob) {
+            await createCronJob(projectID, d.cronJob, token);
           }
         }
       }

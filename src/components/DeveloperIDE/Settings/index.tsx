@@ -66,7 +66,7 @@ const Settings = () => {
           size="sm"
           {...defaultOutlineButtonStyle}
           onClick={() => {
-            project.export();
+            project.exportProject();
           }}
         >
           Export this project

@@ -68,10 +68,20 @@ export const createProjectByWasmSchema = {
   required: ['file', 'projectName']
 } as const;
 
+export const importProjectSchema = {
+  type: 'object',
+  properties: {
+    json: { type: 'string', title: 'Project File' },
+    wasm: { type: 'string', title: 'WASM File' }
+  },
+  required: []
+} as const;
+
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
 type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;
 type CreateProjectByWasmSchemaType = FromSchema<typeof createProjectByWasmSchema>;
+type ImportProjectSchemaType = FromSchema<typeof importProjectSchema>;
 
 interface OnLoadCompletedProps {
   applets: AppletType[];
@@ -303,6 +313,63 @@ export default class ProjectModule {
       //@ts-ignore
       default: {
         projectName: ''
+      }
+    })
+  });
+
+  importProjectForm = new JSONSchemaFormState<ImportProjectSchemaType, UiSchema & { json: FileWidgetUIOptions; wasm: FileWidgetUIOptions }>({
+    //@ts-ignore
+    schema: importProjectSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      json: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          resultType: 'JSON',
+          accept: {
+            'application/json': ['.json']
+          },
+          tips: `Upload a JSON file`,
+          flexProps: {
+            h: '200px',
+            borderRadius: '8px'
+          }
+        }
+      },
+      wasm: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          accept: {
+            'application/wasm': ['.wasm']
+          },
+          tips: `Upload a WASM file`,
+          flexProps: {
+            h: '100px',
+            borderRadius: '8px'
+          }
+        }
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.importProjectForm.reset();
+    },
+    customValidate: (formData, errors) => {
+      if (!formData.json) {
+        errors.json.addError('JSON file is required');
+      }
+      if (!formData.wasm) {
+        errors.wasm.addError('WASM file is required');
+      }
+      return errors;
+    },
+    value: new JSONValue<ImportProjectSchemaType>({
+      default: {
+        json: '',
+        wasm: ''
       }
     })
   });
@@ -546,7 +613,7 @@ export default class ProjectModule {
     this.selectedNames = [];
   }
 
-  async export() {
+  async exportProject() {
     if (globalThis.store.w3s.cronJob.list.value.length === 0) {
       await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);
     }
@@ -555,29 +622,119 @@ export default class ProjectModule {
       description: this.curProject?.f_description,
       database: this.curProject?.database,
       envs: this.curProject?.envs,
-      wasmName: globalThis.store.w3s.applet.wasmName.value,
-      publisher: this.curProject?.publishers.map((i) => ({
-        key: i.f_key
-      })),
       cronJob: globalThis.store.w3s.cronJob.list.value.map((i) => ({
         eventType: i.f_event_type,
         cronExpressions: i.f_cron_expressions
       })),
-      monitor: {
-        contractLog: globalThis.store.w3s.contractLogs.curProjectContractLogs.map((i) => ({
-          eventType: i.f_event_type,
-          chainID: i.f_chain_id,
-          contractAddress: i.f_contract_address,
-          blockStart: i.f_block_start,
-          blockEnd: i.f_block_end,
-          topic0: i.f_topic0
-        })),
-        chainHeight: globalThis.store.w3s.chainHeight.curProjectChainHeight.map((i) => ({
-          eventType: i.f_event_type,
-          chainID: i.f_chain_id,
-          height: i.f_height
-        }))
-      }
+      contractLog: globalThis.store.w3s.contractLogs.curProjectContractLogs.map((i) => ({
+        eventType: i.f_event_type,
+        chainID: Number(i.f_chain_id),
+        contractAddress: i.f_contract_address,
+        blockStart: Number(i.f_block_start),
+        blockEnd: Number(i.f_block_end),
+        topic0: i.f_topic0
+      })),
+      chainHeight: globalThis.store.w3s.chainHeight.curProjectChainHeight.map((i) => ({
+        eventType: i.f_event_type,
+        chainID: Number(i.f_chain_id),
+        height: Number(i.f_height)
+      }))
     });
+  }
+
+  async importProject() {
+    let formData;
+    try {
+      formData = await hooks.getFormData({
+        title: 'Import Project',
+        size: '2xl',
+        closeOnOverlayClick: false,
+        formList: [
+          {
+            form: this.importProjectForm
+          }
+        ]
+      });
+    } catch (error) {
+      this.importProjectForm.reset();
+      return;
+    }
+    if (formData.json && formData.wasm) {
+      const json = helper.json.safeParse(formData.json);
+      try {
+        const projectName = json.name;
+        const body: any = {
+          name: projectName,
+          description: json.description
+        };
+        if (json.database?.schemas) {
+          body.database = json.database;
+        }
+        if (json.envs?.env) {
+          body.envs = json.envs;
+        }
+        const res = await axios.request({
+          method: 'post',
+          url: '/api/w3bapp/project',
+          data: body
+        });
+        const projectID = res.data?.projectID;
+        if (projectID) {
+          const data = new FormData();
+          const file = dataURItoBlob(formData.wasm);
+          data.append('file', file.blob);
+          data.append(
+            'info',
+            JSON.stringify({
+              projectName,
+              appletName: 'applet_01',
+              wasmName: file.name,
+              start: true
+            })
+          );
+          const res = await axios.request({
+            method: 'post',
+            url: `/api/file?api=applet/x/${projectName}`,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            data
+          });
+          if (res.data) {
+            if (json.cronJob && Array.isArray(json.cronJob)) {
+              for (const item of json.cronJob) {
+                await axios.request({
+                  method: 'post',
+                  url: `/api/w3bapp/cronjob/${projectID}`,
+                  data: item
+                });
+              }
+            }
+            if (json.contractLog && Array.isArray(json.contractLog)) {
+              for (const item of json.contractLog) {
+                await axios.request({
+                  method: 'post',
+                  url: `/api/w3bapp/monitor/x/${projectName}/contract_log`,
+                  data: item
+                });
+              }
+            }
+            if (json.chainHeight && Array.isArray(json.chainHeight)) {
+              for (const item of json.chainHeight) {
+                await axios.request({
+                  method: 'post',
+                  url: `/api/w3bapp/monitor/x/${projectName}/chain_height`,
+                  data: item
+                });
+              }
+            }
+            eventBus.emit('project.create');
+            eventBus.emit('contractlog.create');
+            eventBus.emit('chainHeight.create');
+            showNotification({ message: 'import project succeeded' });
+          }
+        }
+      } catch (error) {}
+    }
   }
 }
