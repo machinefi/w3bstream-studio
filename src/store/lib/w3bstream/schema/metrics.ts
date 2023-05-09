@@ -46,21 +46,20 @@ export default class MetricsModule {
   dbState = new PromiseState<() => Promise<any>, any>({
     function: async () => {
       try {
-        const res = await trpc.pg.dbState.query();
+        const res = await trpc.pg.dbState.query({
+          projectID: rootStore.w3s.project.curProject?.f_project_id
+        });
         if (!res.errorMsg) {
           return {
-            usedSize: res.usedSize,
-            stats: res.stats
+            usedSize: res.usedSize
           };
         }
         return {
-          usedSize: 0,
-          stats: []
+          usedSize: 0
         };
       } catch (error) {
         return {
-          usedSize: 0,
-          stats: []
+          usedSize: 0
         };
       }
     }

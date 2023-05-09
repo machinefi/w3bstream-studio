@@ -27,7 +27,9 @@ export const url2obj = (url: string) => {
   };
 };
 
+export const getDatabaseName = (projectID: string) => `w3b_${projectID}`;
+
 export const getConnectionString = (projectID: string) => {
   const obj = url2obj(process.env.DATABASE_URL);
-  return `postgresql://${obj.user}:${obj.password}@${obj.host}/w3b_${projectID}?sslmode=${PG_META_DB_SSL_MODE}`;
+  return `postgresql://${obj.user}:${obj.password}@${obj.host}/${getDatabaseName(projectID)}?sslmode=${PG_META_DB_SSL_MODE}`;
 };
