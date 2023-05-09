@@ -1,13 +1,6 @@
 import { authProcedure, t } from '../trpc';
 import { z } from 'zod';
 import { inferProcedureOutput } from '@trpc/server';
-import { v4 as uuidv4 } from 'uuid';
-
-enum ProjectConfigType {
-  CONFIG_TYPE__PROJECT_SCHEMA = 1,
-  CONFIG_TYPE__INSTANCE_CACHE = 2,
-  CONFIG_TYPE__PROJECT_ENV = 3
-}
 
 export const w3bstreamRouter = t.router({
   projects: authProcedure.query(async ({ ctx }) => {
@@ -64,31 +57,6 @@ export const w3bstreamRouter = t.router({
           }
         }
       }
-    });
-    res.forEach((i: ProjectOriginalType) => {
-      i.config = {};
-      i.configs.forEach((c: ConfigsType) => {
-        //buffer to string cause by prisma client parse error
-        c.f_value && (c.f_value = JSON.parse(c.f_value.toString()));
-        switch (c.f_type) {
-          case ProjectConfigType.CONFIG_TYPE__PROJECT_SCHEMA:
-            i.config.schema = c.f_value;
-            break;
-          case ProjectConfigType.CONFIG_TYPE__PROJECT_ENV:
-            const values = c.f_value.env as unknown as Array<Array<string>>;
-            i.config.env = [];
-            if (values) {
-              values.forEach((v) => {
-                i.config.env.push({
-                  id: uuidv4(),
-                  key: v[0],
-                  value: v[1]
-                });
-              });
-            }
-            break;
-        }
-      });
     });
     return res;
   }),
@@ -227,10 +195,7 @@ export const w3bstreamRouter = t.router({
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
-export type ProjectOriginalType = inferProcedureOutput<W3bstreamRouter['projects']>[0] & { config: ConfigType };
-export type ConfigType = { env?: EnvType[]; schema?: string };
-export type EnvType = { id: string; key: string; value: string };
-export type ConfigsType = ProjectOriginalType['configs'][0] & { f_value: string & { env: string[][] } };
+export type ProjectOriginalType = inferProcedureOutput<W3bstreamRouter['projects']>[0];
 export type AppletType = ProjectOriginalType['applets'][0] & { project_name: string };
 export type StrategyType = AppletType['strategies'][0];
 export type InstanceType = AppletType['instances'][0] & { project_name: string; applet_name: string };

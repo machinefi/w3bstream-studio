@@ -106,6 +106,10 @@ export class W3bStream {
         await this.project.allProjects.call();
         this.projectManager.sync();
       })
+      .on('project.update', async () => {
+        await this.project.allProjects.call();
+        this.projectManager.sync();
+      })
       .on('project.delete', async () => {
         await this.project.allProjects.call();
         this.contractLogs.allContractLogs.call();
@@ -178,10 +182,10 @@ export class W3bStream {
         this.chainHeight.allChainHeight.call();
       })
       .on('cronJob.create', async (projectId: bigint) => {
-        this.cronJob.fetchCronJobs(projectId);
+        this.cronJob.list.call(projectId);
       })
       .on('cronJob.delete', async (projectId: bigint) => {
-        this.cronJob.fetchCronJobs(projectId);
+        this.cronJob.list.call(projectId);
       });
   }
 

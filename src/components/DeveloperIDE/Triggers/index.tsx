@@ -61,7 +61,7 @@ const Triggers = () => {
         </Box>
       </Flex>
 
-      <Tabs mt="20px" isLazy index={tabIndex} onChange={(index) => setTabIndex(index)}>
+      <Tabs mt="20px" index={tabIndex} onChange={(index) => setTabIndex(index)}>
         <Flex alignItems="center" justifyContent="space-between">
           <TabList>
             <Tab _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Cron Job</Tab>

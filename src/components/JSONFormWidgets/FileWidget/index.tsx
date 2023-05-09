@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Flex, chakra, Box, Text, Stack, FlexProps, Icon, Button } from '@chakra-ui/react';
+import { Flex, chakra, Box, Text, Stack, FlexProps, Icon, Button, Spinner, Image } from '@chakra-ui/react';
 import { dataURItoBlob, WidgetProps } from '@rjsf/utils';
 import { Accept, useDropzone } from 'react-dropzone';
 import { FiUploadCloud } from 'react-icons/fi';
 import { DownloadIcon } from '@chakra-ui/icons';
+import { useS3Upload } from 'next-s3-upload';
+import MonacoEditor from '@monaco-editor/react';
 
 function addNameToDataURL(dataURL: string, name: string) {
   if (dataURL === null) {
@@ -13,40 +15,47 @@ function addNameToDataURL(dataURL: string, name: string) {
 }
 
 type FileInfoType = {
-  dataURL?: string | null;
+  dataURL?: string;
+  result?: string;
   name: string;
   size: number;
   type: string;
 };
 
-function processFile(file: File): Promise<FileInfoType> {
+function processFile(file: File, resultType: 'dataURL' | 'JSON'): Promise<FileInfoType> {
   const { name, size, type } = file;
   return new Promise((resolve, reject) => {
     const reader = new window.FileReader();
     reader.onerror = reject;
     reader.onload = (event) => {
-      if (typeof event.target?.result === 'string') {
+      const result = event.target?.result;
+      if (typeof result === 'string') {
         resolve({
-          dataURL: addNameToDataURL(event.target.result, name),
           name,
           size,
-          type
+          type,
+          result: resultType === 'JSON' ? result : null,
+          dataURL: resultType === 'dataURL' ? addNameToDataURL(result, name) : null
         });
       } else {
         resolve({
-          dataURL: null,
           name,
           size,
           type
         });
       }
     };
-    reader.readAsDataURL(file);
+    if (resultType === 'dataURL') {
+      reader.readAsDataURL(file);
+    }
+    if (resultType === 'JSON') {
+      reader.readAsText(file, 'UTF-8');
+    }
   });
 }
 
-function processFiles(files: File[]) {
-  return Promise.all(Array.from(files).map(processFile));
+function processFiles(files: File[], resultType: 'dataURL' | 'JSON'): Promise<FileInfoType[]> {
+  return Promise.all(Array.from(files).map((file: File) => processFile(file, resultType)));
 }
 
 function FilesInfo({ filesInfo }: { filesInfo: { name: string; size: number; type: string }[] }) {
@@ -88,6 +97,8 @@ type Options = {
   tips?: string;
   flexProps?: FlexProps;
   showDownload?: boolean;
+  mode?: 'general' | 'image';
+  resultType?: 'dataURL' | 'JSON';
 };
 
 export interface FileWidgetProps extends WidgetProps {
@@ -100,13 +111,18 @@ export type FileWidgetUIOptions = {
 };
 
 const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: FileWidgetProps) => {
-  const { accept, maxFiles = 0, multiple = false, tips, flexProps = {}, showDownload = false } = options;
+  const { mode = 'general', resultType = 'dataURL', accept, maxFiles = 0, multiple = false, tips = '', flexProps = {}, showDownload = false } = options;
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
+  const { uploadToS3 } = useS3Upload();
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (value) {
-      Array.isArray(value) ? setFilesInfo(extractFileInfo(value)) : setFilesInfo(extractFileInfo([value]));
-    } else {
+    if (mode === 'image' || !value) {
       setFilesInfo([]);
+      return;
+    }
+
+    if (resultType === 'dataURL') {
+      Array.isArray(value) ? setFilesInfo(extractFileInfo(value)) : setFilesInfo(extractFileInfo([value]));
     }
   }, [value]);
 
@@ -116,17 +132,33 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
         return;
       }
 
-      processFiles(acceptedFiles).then((filesInfoEvent) => {
-        setFilesInfo(filesInfoEvent);
-        const newValue = filesInfoEvent.map((fileInfo) => {
-          return fileInfo.dataURL;
+      if (mode === 'image') {
+        const file = acceptedFiles[0];
+        setLoading(true);
+        uploadToS3(file)
+          .then(({ url }) => {
+            onChange(url);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      } else {
+        processFiles(acceptedFiles, resultType).then((filesInfoEvent) => {
+          const newValue = filesInfoEvent.map((fileInfo) => {
+            if (resultType === 'dataURL') {
+              setFilesInfo(filesInfoEvent);
+              return fileInfo.dataURL;
+            } else {
+              return fileInfo.result;
+            }
+          });
+          if (multiple) {
+            onChange(newValue);
+          } else {
+            onChange(newValue[0]);
+          }
         });
-        if (multiple) {
-          onChange(newValue);
-        } else {
-          onChange(newValue[0]);
-        }
-      });
+      }
     },
     [multiple, onChange]
   );
@@ -157,18 +189,49 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
         alignItems="center"
         border="2px dashed #eee"
         mb="20px"
+        cursor="pointer"
         {...getRootProps({ className: 'dropzone' })}
         {...flexProps}
       >
         <input id={id} name={id} disabled={readonly || disabled} autoFocus={autofocus} {...getInputProps()} />
-        <Icon mb="5px" boxSize={6} as={FiUploadCloud} color="#aaa" />
-        {tips && (
-          <Text fontSize="14px" color="#aaa">
-            {tips}
-          </Text>
+        {loading ? (
+          <Spinner />
+        ) : mode === 'general' ? (
+          <>
+            {value ? (
+              <MonacoEditor
+                height="100%"
+                theme="vs-light"
+                language={resultType === 'JSON' ? 'json' : 'text'}
+                value={value}
+                options={{
+                  readOnly: true
+                }}
+              />
+            ) : (
+              <>
+                <Icon mb="5px" boxSize={6} as={FiUploadCloud} color="#aaa" />
+                <Text fontSize="14px" color="#aaa">
+                  {tips}
+                </Text>
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            {tips && !value && (
+              <>
+                <Icon mb="5px" boxSize={6} as={FiUploadCloud} color="#aaa" />
+                <Text fontSize="14px" color="#aaa">
+                  {tips}
+                </Text>
+              </>
+            )}
+            {mode === 'image' && value && <Image w="100%" h="100%" src={value} alt="" />}
+          </>
         )}
       </Flex>
-      <FilesInfo filesInfo={filesInfo} />
+      {resultType === 'dataURL' && <FilesInfo filesInfo={filesInfo} />}
       {showDownload && (
         <Button
           mt={2}

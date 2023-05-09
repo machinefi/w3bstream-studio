@@ -10,6 +10,7 @@ import { eventBus } from '@/lib/event';
 import toast from 'react-hot-toast';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import { MdRefresh } from 'react-icons/md';
+import { FaFileImport } from 'react-icons/fa';
 
 const Projects = observer(() => {
   const {
@@ -22,20 +23,33 @@ const Projects = observer(() => {
     return (
       <Box w="100%" h="calc(100vh - 100px)" p="40px 30px" bg="#fff" borderRadius="8px">
         <Flex justifyContent="space-between" alignItems="center">
-          <Button
-            leftIcon={<AiOutlinePlus />}
-            h="32px"
-            {...defaultButtonStyle}
-            onClick={() => {
-              w3s.project.createProjectForDeleveloper();
-            }}
-          >
-            Create New Project
-          </Button>
+          <Flex>
+            <Button
+              size="sm"
+              leftIcon={<AiOutlinePlus />}
+              {...defaultButtonStyle}
+              onClick={() => {
+                w3s.project.createProjectForDeleveloper();
+              }}
+            >
+              Create New Project
+            </Button>
+            <Button
+              ml="20px"
+              size="sm"
+              leftIcon={<Icon as={FaFileImport} />}
+              {...defaultOutlineButtonStyle}
+              onClick={() => {
+                w3s.project.importProject();
+              }}
+            >
+              Import a project
+            </Button>
+          </Flex>
           <Flex alignItems="center">
             <Button
               leftIcon={<MdRefresh />}
-              h="32px"
+              size="sm"
               {...defaultOutlineButtonStyle}
               onClick={async () => {
                 await allProjects.call();
@@ -48,7 +62,7 @@ const Projects = observer(() => {
             <Button
               ml="20px"
               leftIcon={<AiOutlineDelete />}
-              h="32px"
+              size="sm"
               {...defaultOutlineButtonStyle}
               isDisabled={!selectedNames.length}
               onClick={(e) => {
@@ -75,7 +89,7 @@ const Projects = observer(() => {
             <Button
               leftIcon={<AiOutlinePauseCircle />}
               ml="20px"
-              h="32px"
+              size="sm"
               {...defaultOutlineButtonStyle}
               isDisabled={!selectedNames.length}
               onClick={async (e) => {

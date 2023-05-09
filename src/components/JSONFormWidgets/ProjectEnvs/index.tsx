@@ -1,21 +1,122 @@
+import { useEffect } from 'react';
 import { Box, Flex, Stack, Input, Button } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import { v4 as uuidv4 } from 'uuid';
+import { axios } from '@/lib/axios';
+import { showNotification } from '@mantine/notifications';
+import { WidgetProps } from '@rjsf/utils';
+import { eventBus } from '@/lib/event';
+
+interface Env {
+  id: string;
+  key: string;
+  value: string;
+}
+
+type Options = {};
+
+export interface ProjectEnvsWidgetProps extends WidgetProps {
+  options: Options;
+}
+
+export type ProjectEnvsWidgetUIOptions = {
+  'ui:widget': (props: ProjectEnvsWidgetProps) => JSX.Element;
+  'ui:options': Options;
+};
 
 export const ProjectEnvs = observer(() => {
   const {
     w3s: {
       project,
-      project: { envs, formMode }
+      project: { curProject, formMode },
+      config: {
+        form: {
+          formData: { accountRole }
+        }
+      }
     }
   } = useStore();
+  const envs = curProject?.envs?.env;
+  const store = useLocalObservable(() => ({
+    envs: [],
+    setData(
+      v: Partial<{
+        envs: Env[];
+      }>
+    ) {
+      Object.assign(store, v);
+    },
+    onAddEnv() {
+      store.envs.push({
+        id: uuidv4(),
+        key: '',
+        value: ''
+      });
+    },
+    onDeleteEnv(id: string) {
+      store.envs = store.envs.filter((i) => i.id !== id);
+    },
+    onChangeEnv(id: string, key: string, value: string) {
+      for (let i = 0; i < store.envs.length; i++) {
+        const item = store.envs[i];
+        if (item.id === id) {
+          item.key = key;
+          item.value = value;
+          break;
+        }
+      }
+    },
+    async onSaveEnv() {
+      const values = store.envs.filter((item) => !!item.key).map((item) => [item.key, item.value]);
+      if (values.length) {
+        const projectName = accountRole === 'DEVELOPER' ? curProject?.name : project.form.value.get().name;
+        if (projectName) {
+          try {
+            await axios.post(`/api/w3bapp/project_config/x/${projectName}/PROJECT_ENV`, { env: values });
+            showNotification({ message: 'Save environment variables successfully' });
+            eventBus.emit('project.update');
+          } catch (error) {
+            throw error;
+          }
+        } else {
+          showNotification({
+            color: 'red',
+            message: 'Project name is empty'
+          });
+        }
+      }
+    }
+  }));
+
+  useEffect(() => {
+    if (formMode === 'edit') {
+      if (envs) {
+        store.setData({
+          envs: envs.map((item) => {
+            return {
+              id: uuidv4(),
+              key: item[0],
+              value: item[1]
+            };
+          })
+        });
+      } else {
+        store.onAddEnv();
+      }
+    } else {
+      store.onAddEnv();
+    }
+  }, [envs, formMode]);
 
   return (
     <Stack>
-      <Box>Project Environment Variables</Box>
-      {envs.map((item) => (
+      <Box fontSize="16px" fontWeight={700}>
+        Project Environment Variables:
+      </Box>
+      {store.envs.map((item) => (
         <Flex w="100%" key={item.id}>
           <Input
             w="300px"
@@ -23,7 +124,7 @@ export const ProjectEnvs = observer(() => {
             size="md"
             value={item.key}
             onChange={(e) => {
-              project.onChangeEnv(item.id, e.target.value, item.value);
+              store.onChangeEnv(item.id, e.target.value, item.value);
             }}
           />
           <Input
@@ -33,28 +134,28 @@ export const ProjectEnvs = observer(() => {
             size="md"
             value={item.value}
             onChange={(e) => {
-              project.onChangeEnv(item.id, item.key, e.target.value);
+              store.onChangeEnv(item.id, item.key, e.target.value);
             }}
           />
           <Button
             ml="10px"
             variant="outline"
             onClick={() => {
-              project.onDeleteEnv(item.id);
+              store.onDeleteEnv(item.id);
             }}
           >
             <DeleteIcon />
           </Button>
         </Flex>
       ))}
-
       <Flex justifyContent="flex-end">
         <Button
+          size="sm"
           variant="outline"
           fontWeight={400}
           {...defaultOutlineButtonStyle}
           onClick={() => {
-            project.onAddEnv();
+            store.onAddEnv();
           }}
         >
           Add Environment Variable
@@ -62,10 +163,11 @@ export const ProjectEnvs = observer(() => {
         {formMode === 'edit' && (
           <Button
             ml="10px"
+            size="sm"
             fontWeight={400}
             {...defaultButtonStyle}
             onClick={() => {
-              project.onSaveEnv();
+              store.onSaveEnv();
             }}
           >
             Save Changes
@@ -76,6 +178,6 @@ export const ProjectEnvs = observer(() => {
   );
 });
 
-export const ProjectEnvsWidget = () => {
-  return <ProjectEnvs />;
+export const ProjectEnvsWidget = (props: ProjectEnvsWidgetProps) => {
+  return <ProjectEnvs {...props} />;
 };
