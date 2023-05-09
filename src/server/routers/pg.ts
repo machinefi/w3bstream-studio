@@ -2,28 +2,35 @@ import { authProcedure, t } from '../trpc';
 import { z } from 'zod';
 import { inferProcedureOutput, TRPCError } from '@trpc/server';
 import { PostgresMeta } from '@/postgres-meta/index';
-import { DEFAULT_POOL_CONFIG, getConnectionString, PG_CONNECTION } from '@/constants/postgres-meta';
+import { DEFAULT_POOL_CONFIG, getConnectionString, getDatabaseName, PG_CONNECTION } from '@/constants/postgres-meta';
 import format from 'pg-format';
 
 export const pgRouter = t.router({
-  dbState: t.procedure.query(async ({ ctx }) => {
-    const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
-    const sizeResult = await pgMeta.query(`SELECT pg_database_size(DATname) AS size FROM pg_database`);
-    await pgMeta.end();
-    if (sizeResult.error) {
-      return { errorMsg: sizeResult.error.message };
-    }
-    const sizes = sizeResult.data.map((r) => Number(r.size));
-    const usedSize = (sizes.reduce((acc, size) => acc + size, 0) / 1024 / 1024).toFixed(4); // mb
-    const statsResult = await pgMeta.query(
-      `SELECT datname,numbackends,xact_commit,xact_rollback,blks_read,blks_hit,tup_returned,tup_fetched,tup_inserted,tup_updated,tup_deleted FROM pg_stat_database;`
-    );
-    await pgMeta.end();
-    if (statsResult.error) {
-      return { errorMsg: statsResult.error.message };
-    }
-    return { usedSize: Number(usedSize), stats: statsResult.data, errorMsg: '' };
-  }),
+  dbState: t.procedure
+    .input(
+      z.object({
+        projectID: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: PG_CONNECTION });
+      const dbName = getDatabaseName(input.projectID);
+      const sizeResult = await pgMeta.query(`SELECT PG_DATABASE_SIZE('${dbName}')`);
+      await pgMeta.end();
+      if (sizeResult.error) {
+        return { errorMsg: sizeResult.error.message };
+      }
+      const size = sizeResult.data[0]?.pg_database_size || 0;
+      const usedSize = (size / 1024 / 1024).toFixed(2); // mb
+      // const statsResult = await pgMeta.query(
+      //   `SELECT datname,numbackends,xact_commit,xact_rollback,blks_read,blks_hit,tup_returned,tup_fetched,tup_inserted,tup_updated,tup_deleted FROM pg_stat_database;`
+      // );
+      // await pgMeta.end();
+      // if (statsResult.error) {
+      //   return { errorMsg: statsResult.error.message };
+      // }
+      return { usedSize: Number(usedSize), errorMsg: '' };
+    }),
   schemas: authProcedure
     .input(
       z.object({
