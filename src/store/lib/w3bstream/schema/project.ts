@@ -9,7 +9,7 @@ import { ProjectEnvsWidget } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
 import { hooks } from '@/lib/hooks';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { AppletType, ProjectType, PublisherType, InstanceType, StrategyType } from '@/server/routers/w3bstream';
+import { AppletType, ProjectType, PublisherType, InstanceType, StrategyType, ContractLogType, CronJobsType, ChainHeightType } from '@/server/routers/w3bstream';
 import { trpc } from '@/lib/trpc';
 import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
@@ -18,6 +18,8 @@ import { InitProject } from 'pages/api/init';
 import SelectTagWidget, { SelectTagWidgetUIOptions } from '@/components/JSONFormWidgets/SelectTagWidget';
 import { SelectSqlFileAndEnvFileWidget, SelectSqlFileAndEnvFileWidgetUIOptions } from '@/components/JSONFormWidgets/SelectSqlFileAndEnvFileWidget';
 import { helper } from '@/lib/helper';
+import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
+import * as jsonpatch from 'fast-json-patch';
 
 export const defaultSchema = {
   type: 'object',
@@ -77,11 +79,20 @@ export const importProjectSchema = {
   required: []
 } as const;
 
+export const editProjectFileSchema = {
+  type: 'object',
+  properties: {
+    code: { type: 'string', title: ' ' }
+  },
+  required: []
+} as const;
+
 type DefaultSchemaType = FromSchema<typeof defaultSchema>;
 type InitializationTemplateSchemaType = FromSchema<typeof initializationTemplateSchema>;
 type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInitializationTemplateSchema>;
 type CreateProjectByWasmSchemaType = FromSchema<typeof createProjectByWasmSchema>;
 type ImportProjectSchemaType = FromSchema<typeof importProjectSchema>;
+type EditProjectFileSchemaType = FromSchema<typeof editProjectFileSchema>;
 
 interface OnLoadCompletedProps {
   applets: AppletType[];
@@ -374,6 +385,40 @@ export default class ProjectModule {
     })
   });
 
+  editProjectFileForm = new JSONSchemaFormState<EditProjectFileSchemaType, UiSchema & { code: EditorWidgetUIOptions }>({
+    //@ts-ignore
+    schema: editProjectFileSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Save'
+      },
+      code: {
+        'ui:widget': EditorWidget,
+        'ui:options': {
+          editorHeight: '400px',
+          emptyValue: JSON.stringify(
+            {
+              name: ''
+            },
+            null,
+            2
+          )
+        }
+      }
+    },
+    customValidate: (formData, errors) => {
+      if (!formData.code) {
+        errors.code.addError('is required');
+      }
+      return errors;
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.editProjectFileForm.reset();
+    }
+  });
+
   formMode: 'add' | 'edit' = 'add';
   selectedNames = [];
 
@@ -613,11 +658,11 @@ export default class ProjectModule {
     this.selectedNames = [];
   }
 
-  async exportProject() {
+  async getProjectInfo() {
     if (globalThis.store.w3s.cronJob.list.value.length === 0) {
       await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);
     }
-    helper.download.downloadJSON(`w3bstream`, {
+    return {
       name: this.curProject?.name,
       description: this.curProject?.f_description,
       database: this.curProject?.database,
@@ -639,7 +684,12 @@ export default class ProjectModule {
         chainID: Number(i.f_chain_id),
         height: Number(i.f_height)
       }))
-    });
+    };
+  }
+
+  async exportProject() {
+    const data = await this.getProjectInfo();
+    helper.download.downloadJSON(`w3bstream`, data);
   }
 
   async importProject() {
@@ -701,32 +751,34 @@ export default class ProjectModule {
             data
           });
           if (res.data) {
-            if (json.cronJob && Array.isArray(json.cronJob)) {
-              for (const item of json.cronJob) {
-                await axios.request({
-                  method: 'post',
-                  url: `/api/w3bapp/cronjob/${projectID}`,
-                  data: item
-                });
+            const createData = async ({ getPostUrl, list }: { getPostUrl: () => string; list: any }) => {
+              for (const item of list) {
+                try {
+                  await axios.request({
+                    method: 'post',
+                    url: getPostUrl(),
+                    data: item
+                  });
+                } catch (error) {}
               }
+            };
+            if (json.cronJob && Array.isArray(json.cronJob)) {
+              await createData({
+                list: json.cronJob,
+                getPostUrl: () => `/api/w3bapp/cronjob/${projectID}`
+              });
             }
             if (json.contractLog && Array.isArray(json.contractLog)) {
-              for (const item of json.contractLog) {
-                await axios.request({
-                  method: 'post',
-                  url: `/api/w3bapp/monitor/x/${projectName}/contract_log`,
-                  data: item
-                });
-              }
+              await createData({
+                list: json.contractLog,
+                getPostUrl: () => `/api/w3bapp/monitor/x/${projectName}/contract_log`
+              });
             }
             if (json.chainHeight && Array.isArray(json.chainHeight)) {
-              for (const item of json.chainHeight) {
-                await axios.request({
-                  method: 'post',
-                  url: `/api/w3bapp/monitor/x/${projectName}/chain_height`,
-                  data: item
-                });
-              }
+              await createData({
+                list: json.chainHeight,
+                getPostUrl: () => `/api/w3bapp/monitor/x/${projectName}/chain_height`
+              });
             }
             eventBus.emit('project.create');
             eventBus.emit('contractlog.create');
@@ -735,6 +787,187 @@ export default class ProjectModule {
           }
         }
       } catch (error) {}
+    }
+  }
+
+  async editProjectFile() {
+    const documentA = await this.getProjectInfo();
+    this.editProjectFileForm.value.set({
+      code: JSON.stringify(documentA, null, 2)
+    });
+    const formData = await hooks.getFormData({
+      title: 'Edit Project',
+      size: '2xl',
+      closeOnOverlayClick: false,
+      formList: [
+        {
+          form: this.editProjectFileForm
+        }
+      ]
+    });
+    if (formData.code) {
+      const handleTriggers = async <T>({
+        list,
+        getPostUrl,
+        getDeleteUrl,
+        operation,
+        formFieldMap
+      }: {
+        list: T[];
+        getPostUrl: () => string;
+        getDeleteUrl: (item: T) => string;
+        operation: jsonpatch.Operation;
+        formFieldMap: {
+          [formField: string]: {
+            k: string;
+            type: string;
+          };
+        };
+      }) => {
+        if (operation.op === 'add') {
+          try {
+            await axios.request({
+              method: 'post',
+              url: getPostUrl(),
+              data: operation.value
+            });
+          } catch (error) {}
+        }
+        if (operation.op === 'remove') {
+          try {
+            const index = operation.path.split('/')[2];
+            if (index) {
+              const item = list[Number(index)];
+              if (item) {
+                await axios.request({
+                  method: 'delete',
+                  url: getDeleteUrl(item)
+                });
+              }
+            } else {
+              for (const item of list) {
+                await axios.request({
+                  method: 'delete',
+                  url: getDeleteUrl(item)
+                });
+              }
+            }
+          } catch (error) {}
+        }
+        if (operation.op === 'replace') {
+          try {
+            const [, , index, field] = operation.path.split('/');
+            if (index && field) {
+              const item = list[Number(index)];
+              const data = Object.fromEntries(
+                Object.entries(formFieldMap).map(([formField, tableField]) => {
+                  const fieldValue = tableField.type === 'number' ? Number(item[tableField.k]) : item[tableField.k];
+                  return [formField, fieldValue];
+                })
+              );
+              data[field] = operation.value;
+              await axios.request({
+                method: 'post',
+                url: getPostUrl(),
+                data
+              });
+              await axios.request({
+                method: 'delete',
+                url: getDeleteUrl(item)
+              });
+            }
+          } catch (error) {}
+        }
+      };
+      const documentB = helper.json.safeParse(formData.code);
+      const diff = jsonpatch.compare(documentA, documentB);
+      for (const item of diff) {
+        if (item.path.includes('envs')) {
+          try {
+            const values = documentB.envs?.env || [];
+            if (values.length > 0) {
+              await axios.post(`/api/w3bapp/project_config/x/${documentA.name}/PROJECT_ENV`, { env: values });
+            }
+          } catch (error) {}
+        }
+        if (item.path.includes('cronJob')) {
+          await handleTriggers<CronJobsType>({
+            list: globalThis.store.w3s.cronJob.list.value,
+            getPostUrl: () => `/api/w3bapp/cronjob/${this.curProject?.f_project_id}`,
+            getDeleteUrl: (v) => `/api/w3bapp/cronjob/data/${v.f_cron_job_id}`,
+            operation: item,
+            formFieldMap: {
+              eventType: {
+                k: 'f_event_type',
+                type: 'string'
+              },
+              cronExpressions: {
+                k: 'f_cron_expressions',
+                type: 'string'
+              }
+            }
+          });
+        }
+        if (item.path.includes('contractLog')) {
+          await handleTriggers<ContractLogType>({
+            list: globalThis.store.w3s.contractLogs.curProjectContractLogs,
+            getPostUrl: () => `/api/w3bapp/monitor/x/${this.curProject?.name}/contract_log`,
+            getDeleteUrl: (v) => `/api/w3bapp/monitor/x/${this.curProject?.name}/contract_log/${v.f_contractlog_id}`,
+            operation: item,
+            formFieldMap: {
+              eventType: {
+                k: 'f_event_type',
+                type: 'string'
+              },
+              chainID: {
+                k: 'f_chain_id',
+                type: 'number'
+              },
+              contractAddress: {
+                k: 'f_contract_address',
+                type: 'string'
+              },
+              blockStart: {
+                k: 'f_block_start',
+                type: 'number'
+              },
+              blockEnd: {
+                k: 'f_block_end',
+                type: 'number'
+              },
+              topic0: {
+                k: 'f_topic0',
+                type: 'number'
+              }
+            }
+          });
+        }
+        if (item.path.includes('chainHeight')) {
+          await handleTriggers<ChainHeightType>({
+            list: globalThis.store.w3s.chainHeight.curProjectChainHeight,
+            getPostUrl: () => `/api/w3bapp/monitor/x/${this.curProject?.name}/chain_height`,
+            getDeleteUrl: (v) => `/api/w3bapp/monitor/x/${this.curProject?.name}/chain_height/${v.f_chain_height_id}`,
+            operation: item,
+            formFieldMap: {
+              eventType: {
+                k: 'f_event_type',
+                type: 'string'
+              },
+              chainID: {
+                k: 'f_chain_id',
+                type: 'number'
+              },
+              height: {
+                k: 'f_height',
+                type: 'number'
+              }
+            }
+          });
+        }
+      }
+      eventBus.emit('project.create');
+      eventBus.emit('contractlog.create');
+      eventBus.emit('chainHeight.create');
     }
   }
 }

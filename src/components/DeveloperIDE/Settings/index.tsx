@@ -8,6 +8,7 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { FaFileExport } from 'react-icons/fa';
 import { PromiseState } from '@/store/standard/PromiseState';
+import { MdEditDocument } from 'react-icons/md';
 
 const Settings = () => {
   const {
@@ -61,16 +62,29 @@ const Settings = () => {
         <Box fontSize="18px" fontWeight={700}>
           General
         </Box>
-        <Button
-          leftIcon={<Icon as={FaFileExport} />}
-          size="sm"
-          {...defaultOutlineButtonStyle}
-          onClick={() => {
-            project.exportProject();
-          }}
-        >
-          Export this project
-        </Button>
+        <Flex alignItems="center">
+          <Button
+            leftIcon={<Icon as={MdEditDocument} />}
+            size="sm"
+            {...defaultOutlineButtonStyle}
+            onClick={async () => {
+              project.editProjectFile();
+            }}
+          >
+            w3bstream.json
+          </Button>
+          <Button
+            ml="20px"
+            leftIcon={<Icon as={FaFileExport} />}
+            size="sm"
+            {...defaultOutlineButtonStyle}
+            onClick={() => {
+              project.exportProject();
+            }}
+          >
+            Export this project
+          </Button>
+        </Flex>
       </Flex>
       <Box mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
         <Flex alignItems={'center'} mb="20px">
@@ -160,7 +174,7 @@ const Settings = () => {
                       eventBus.emit('project.delete');
                       project.allProjects.onSelect(-1);
                       project.resetSelectedNames();
-                    } catch (error) {}
+                    } catch (error) { }
                   }
                 }
               });
