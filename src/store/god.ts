@@ -83,14 +83,14 @@ export class GodStore {
 
   setWagmiClient() {
     const chains = [
+      {
+        ...iotex,
+        iconUrl: 'https://coingecko-proxy.iopay.me/coins/images/3334/large/iotex-logo.png?1547037941'
+      },
       mainnet,
       polygon,
       bsc,
       avalanche,
-      {
-        ...iotex,
-        iconUrl: 'https://coingecko-proxy.iopay.me/coins/images/3334/large/iotex-logo.png?1547037941'
-      }
     ];
     const connectors = connectorsForWallets([
       {
