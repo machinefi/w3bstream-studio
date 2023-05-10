@@ -12,7 +12,7 @@ export const schema = {
   type: 'object',
   properties: {
     eventType: { type: 'string', title: 'Event Type' },
-    cronExpressions: { type: 'string', title: 'Cron Expressions' }
+    cronExpressions: { type: 'string', title: 'Cron Expressions', description: 'The quick and simple editor for cron schedule expressions: https://crontab.guru/' }
   },
   required: ['eventType', 'cronExpressions']
 } as const;

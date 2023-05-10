@@ -81,12 +81,12 @@ const ObjectFieldTemplate = ({ title, idSchema: { $id }, properties, uiSchema: {
             {layout
               ? renderLayout(layout, fields)
               : properties.map((element) => {
-                  return (
-                    <Box key={element.content.key} mb="10px">
-                      {element.content}
-                    </Box>
-                  );
-                })}
+                return (
+                  <Box key={element.content.key} mb="10px">
+                    {element.content}
+                  </Box>
+                );
+              })}
           </Collapse>
         </>
       )}
@@ -95,19 +95,11 @@ const ObjectFieldTemplate = ({ title, idSchema: { $id }, properties, uiSchema: {
 };
 
 const FieldTemplate = (props: FieldTemplateProps) => {
-  const handleVariableStyle = {
-    width: '16px',
-    height: '16px',
-    borderRadius: '50px',
-    backgroundColor: 'white',
-    border: '4px solid #784be8',
-    zIndex: 99
-  };
-
   const { id, classNames, label, help, required, description, errors, children } = props;
   return (
     <Flex direction="column" className={classNames} position={'relative'}>
       {children}
+      {description}
       {help}
     </Flex>
   );
@@ -154,7 +146,7 @@ export const JSONForm = observer(({ children, formState }: Props) => {
         ErrorListTemplate,
         ButtonTemplates: { SubmitButton }
       }}
-      widgets={{ EditorWidget, PrefixWidget, RuntimeConsoleWidget ,FlowDatabaseWidget}}
+      widgets={{ EditorWidget, PrefixWidget, RuntimeConsoleWidget, FlowDatabaseWidget }}
       formData={formState.formData}
       readonly={formState.readonly}
       uiSchema={formState.uiSchema}
