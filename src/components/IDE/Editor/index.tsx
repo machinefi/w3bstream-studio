@@ -444,7 +444,7 @@ const Editor = observer(() => {
     );
   });
 
-  const MoEditor = (props = {}) => {
+  const MoEditor = (props) => {
     const monaco = useMonaco();
     if (monaco) {
       monaco.languages.register({ id: 'env' });
