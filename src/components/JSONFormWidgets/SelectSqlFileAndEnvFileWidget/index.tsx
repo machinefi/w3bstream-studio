@@ -103,7 +103,7 @@ export const SelectSqlFileAndEnvFile = observer(({ options, onChange }: SelectSq
           return <option value={item.data?.code}>{item.label}</option>;
         })}
       </Select>
-      <Box>SQL Schema File</Box>
+      <Box>ENV File</Box>
       <Select
         placeholder="Select an ENV file"
         onChange={(e) => {
