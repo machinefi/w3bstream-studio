@@ -11,6 +11,8 @@ import mergeWith from 'lodash/mergeWith';
 import cloneDeep from 'lodash/cloneDeep';
 import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
+import uniqWith from 'lodash/uniqWith';
+
 export const _ = {
   throttle,
   debounce,
@@ -24,5 +26,6 @@ export const _ = {
   mergeWith,
   cloneDeep,
   groupBy,
-  isEqual
+  isEqual,
+  uniqWith
 };

@@ -119,7 +119,7 @@ const ErrorListTemplate = ({ errors }: ErrorListProps) => {
       <Text fontWeight={700}>Errors</Text>
       <Stack mt="10px">
         {errors.map((error) => (
-          <Text color="red">{error.stack}</Text>
+          <Text color="red">{error.message}</Text>
         ))}
       </Stack>
     </Box>
