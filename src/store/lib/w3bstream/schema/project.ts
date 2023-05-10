@@ -691,6 +691,10 @@ export default class ProjectModule {
         eventType: i.f_event_type,
         chainID: Number(i.f_chain_id),
         height: Number(i.f_height)
+      })),
+      eventRounting: globalThis.store.w3s.strategy.curStrategies.map((i) => ({
+        eventType: i.f_event_type,
+        handler: i.f_handler
       }))
     };
   }
@@ -759,6 +763,7 @@ export default class ProjectModule {
             data
           });
           if (res.data) {
+            const appletID = res.data?.appletID;
             const createData = async ({ getPostUrl, list }: { getPostUrl: () => string; list: any }) => {
               for (const item of list) {
                 try {
@@ -786,6 +791,15 @@ export default class ProjectModule {
               await createData({
                 list: json.chainHeight,
                 getPostUrl: () => `/api/w3bapp/monitor/x/${projectName}/chain_height`
+              });
+            }
+            if (json.eventRounting && Array.isArray(json.eventRounting)) {
+              await createData({
+                list: json.eventRounting.map((i) => ({
+                  ...i,
+                  appletID
+                })),
+                getPostUrl: () => `/api/w3bapp/strategy/x/${projectName}`
               });
             }
             eventBus.emit('project.create');
@@ -818,12 +832,18 @@ export default class ProjectModule {
         list,
         getPostUrl,
         getDeleteUrl,
+        getUpdateUrl,
+        getParams,
         operation,
         formFieldMap
       }: {
         list: T[];
         getPostUrl: () => string;
         getDeleteUrl: (item: T) => string;
+        getUpdateUrl?: (item: T) => string;
+        getParams?: (item: T) => {
+          [key: string]: any;
+        };
         operation: jsonpatch.Operation;
         formFieldMap: {
           [formField: string]: {
@@ -849,14 +869,16 @@ export default class ProjectModule {
               if (item) {
                 await axios.request({
                   method: 'delete',
-                  url: getDeleteUrl(item)
+                  url: getDeleteUrl(item),
+                  params: getParams ? getParams(item) : undefined
                 });
               }
             } else {
               for (const item of list) {
                 await axios.request({
                   method: 'delete',
-                  url: getDeleteUrl(item)
+                  url: getDeleteUrl(item),
+                  params: getParams ? getParams(item) : undefined
                 });
               }
             }
@@ -874,15 +896,23 @@ export default class ProjectModule {
                 })
               );
               data[field] = operation.value;
-              await axios.request({
-                method: 'post',
-                url: getPostUrl(),
-                data
-              });
-              await axios.request({
-                method: 'delete',
-                url: getDeleteUrl(item)
-              });
+              if (getUpdateUrl) {
+                await axios.request({
+                  method: 'put',
+                  url: getUpdateUrl(item),
+                  data
+                });
+              } else {
+                await axios.request({
+                  method: 'post',
+                  url: getPostUrl(),
+                  data
+                });
+                await axios.request({
+                  method: 'delete',
+                  url: getDeleteUrl(item)
+                });
+              }
             }
           } catch (error) {}
         }
@@ -968,6 +998,37 @@ export default class ProjectModule {
               height: {
                 k: 'f_height',
                 type: 'number'
+              }
+            }
+          });
+        }
+        if (item.path.includes('eventRounting')) {
+          if (item.op === 'add') {
+            const applet = this.curProject?.applets?.[0];
+            item.value = {
+              ...item.value,
+              appletID: applet?.f_applet_id
+            };
+          }
+          await handleTriggers<StrategyType>({
+            list: globalThis.store.w3s.strategy.curStrategies,
+            getPostUrl: () => `/api/w3bapp/strategy/x/${this.curProject?.name}`,
+            getDeleteUrl: (v) => `/api/w3bapp/strategy/x/${this.curProject?.name}`,
+            getUpdateUrl: (v) => `/api/w3bapp/strategy/${v.f_strategy_id}`,
+            getParams: (v) => ({ strategyID: v.f_strategy_id }),
+            operation: item,
+            formFieldMap: {
+              appletID: {
+                k: 'f_applet_id',
+                type: 'string'
+              },
+              eventType: {
+                k: 'f_event_type',
+                type: 'string'
+              },
+              handler: {
+                k: 'f_handler',
+                type: 'string'
               }
             }
           });

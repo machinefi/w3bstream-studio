@@ -11,9 +11,8 @@ const Strategies = observer(() => {
 
   useEffect(() => {
     if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-      const strategies = w3s.strategy.allData.filter((i) => i.f_project_id === w3s.project.curProject?.f_project_id);
       w3s.strategy.table.set({
-        dataSource: strategies
+        dataSource: w3s.strategy.curStrategies
       });
     } else {
       w3s.strategy.table.set({
@@ -43,8 +42,7 @@ export const CreateStrategyButton = observer(() => {
       {...defaultButtonStyle}
       onClick={async (e) => {
         if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-          const applets = w3s.project.curProject?.applets || [];
-          const applet = applets[0];
+          const applet = w3s.project.curProject?.applets?.[0];
           if (applet) {
             w3s.strategy.form.value.set({
               appletID: applet.f_applet_id.toString()
