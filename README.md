@@ -1,4 +1,4 @@
-# W3bstream DevNet
+# W3bstream Devnet
 
 - Managing your W3bstream node
 - Code and deploy Wasm Applets

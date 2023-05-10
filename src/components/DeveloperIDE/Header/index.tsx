@@ -45,7 +45,7 @@ const Header = observer(() => {
       <Flex alignItems="center">
         <Image w="30px" src="/favicon.svg" alt="logo" />
         <Text ml="10px" fontWeight={700}>
-          W3bstream DevNet
+          W3bstream Devnet
         </Text>
       </Flex>
       <Flex ml="120px" alignItems="center">
