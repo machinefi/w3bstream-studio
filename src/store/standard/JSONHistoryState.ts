@@ -1,5 +1,6 @@
 import { helper } from '@/lib/helper';
 import { makeAutoObservable } from 'mobx';
+import { _ } from '@/lib/lodash';
 
 export class JSONHistoryState<T = any> {
   key: string;
@@ -17,7 +18,7 @@ export class JSONHistoryState<T = any> {
   }
 
   push(value: T) {
-    this.list.push(value);
+    this.list = _.uniqWith(this.list.concat(value), _.isEqual);
     if (this.list.length > this.size) {
       this.list.shift();
     }
