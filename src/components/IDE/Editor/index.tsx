@@ -342,7 +342,7 @@ const Editor = observer(() => {
 
         {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && (
           <>
-            <Tooltip label={`Upload to DevNet`} placement="top">
+            <Tooltip label={`Upload to Devnet`} placement="top">
               <Text
                 ml="auto"
                 cursor="pointer"
@@ -394,7 +394,7 @@ const Editor = observer(() => {
 
         {curFilesListSchema?.curActiveFile?.data?.dataType == 'wasm' && (
           <>
-            <Tooltip label={`Upload to DevNet`} placement="top">
+            <Tooltip label={`Upload to Devnet`} placement="top">
               <Text
                 ml="auto"
                 cursor="pointer"
