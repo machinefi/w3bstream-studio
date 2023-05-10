@@ -284,7 +284,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                   )}
                   {item?.data?.dataType == 'assemblyscript' && curFilesListSchema?.curActiveFileId == item?.key && (
                     <>
-                      <Tooltip label={`Upload to DevNet`} placement="top">
+                      <Tooltip label={`Upload to Devnet`} placement="top">
                         <Text
                           ml="auto"
                           cursor="pointer"
