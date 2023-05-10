@@ -9,6 +9,12 @@ import toast from 'react-hot-toast';
 import { StorageState } from '@/store/standard/StorageState';
 import FileWidget from '@/components/JSONFormWidgets/FileWidget';
 import { eventBus } from '@/lib/event';
+import { definitions } from './definitions';
+import { helper } from '@/lib/helper';
+import { rootStore } from '@/store/index';
+import IndexerHistoryWidget from '@/components/JSONFormWidgets/IndexerHistoryWidget';
+import { JSONHistoryState } from '@/store/standard/JSONHistoryState';
+import labSimulateHistoryWidget from '@/components/JSONFormWidgets/labSimulateHistoryWidget';
 
 export const uploadWasmTemplateFormSchema = {
   type: 'object',
@@ -23,12 +29,41 @@ export const simulationEventSchema = {
   type: 'object',
   properties: {
     handleFunc: { type: 'string', title: 'Handle Function' },
-    wasmPayload: { type: 'string', title: '' }
+    wasmPayload: { type: 'string', title: '' },
+    history: { type: 'string', title: 'History' }
   },
-  required: []
+  required: ['handleFunc']
+} as const;
+
+export const simulationIndexerSchema = {
+  type: 'object',
+  definitions: {
+    contracts: {
+      type: 'string'
+    },
+    contractsEvents: {
+      type: 'string'
+    }
+  },
+  properties: {
+    handleFunc: { type: 'string', title: 'Handle Function' },
+    chainId: { type: 'number', title: 'Chain ID', default: 4689 },
+    contract: { $ref: '#/definitions/contracts', title: 'Contract' },
+    contractEventName: { $ref: '#/definitions/contractsEvents', title: 'Contract Event' },
+    contractAddress: { type: 'string', title: 'Contract Address' },
+    startBlock: { type: 'number', title: 'Start Block', default: 16737070 },
+    indexHistory: { type: 'string', title: 'Handle Function' }
+  },
+  required: ['handleFunc', 'chainId', 'contractEventName', 'contractAddress', 'startBlock']
 } as const;
 
 type SimulationEventSchemaType = FromSchema<typeof simulationEventSchema>;
+//@ts-ignore
+simulationIndexerSchema.definitions = {
+  contracts: definitions.labContracts,
+  contractsEvents: definitions.labContractEvents
+};
+type SimulationIndexerSchema = FromSchema<typeof simulationIndexerSchema>;
 
 export default class LabModule {
   simulationEventForm = new JSONSchemaFormState<SimulationEventSchemaType, UiSchema & { wasmPayload: EditorWidgetUIOptions }>({
@@ -42,10 +77,14 @@ export default class LabModule {
       wasmPayload: {
         'ui:widget': EditorWidget,
         'ui:options': {
-          editorHeight: '400px',
+          editorHeight: '200px',
           showLanguageSelector: false
         }
-      }
+      },
+      history: {
+        'ui:widget': labSimulateHistoryWidget
+      },
+      layout: ['handleFunc', 'wasmPayload', 'history']
     },
     value: new JSONValue<SimulationEventSchemaType>({
       default: {
@@ -55,9 +94,50 @@ export default class LabModule {
     })
   });
 
+  simulationIndexerForm = new JSONSchemaFormState<SimulationIndexerSchema, UiSchema>({
+    //@ts-ignore
+    schema: simulationIndexerSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      indexHistory: {
+        'ui:widget': IndexerHistoryWidget
+      },
+      layout: ['handleFunc', ['chainId', 'startBlock'], ['contract', 'contractEventName'], 'contractAddress', 'indexHistory']
+    },
+    onChange: async (e) => {
+      const { contract } = e.formData;
+      const { abi, address } = helper.string.validAbi(contract);
+      if (address) {
+        e.formData.contractAddress = address;
+      }
+      this.simulationIndexerForm.value.set(e.formData);
+      // console.log(contract);
+    },
+    value: new JSONValue<SimulationIndexerSchema>({
+      default: {
+        contractAddress: '',
+        contract: '',
+        contractEventName: '',
+        handleFunc: 'start',
+        chainId: 4689,
+        startBlock: 16737070
+      }
+    })
+  });
+
   stdout: StdIOType[] = [];
   stderr: StdIOType[] = [];
   payloadCache: StorageState<string>;
+  simulationEventHistory = new JSONHistoryState<{
+    handleFunc: string;
+    wasmPayload: string;
+  }>({
+    size: 10,
+    key: 'lab.simulationEventHistory'
+  });
 
   uploadWasmForm = new JSONSchemaFormState<UploadWasmTemplateFormSchemaType>({
     //@ts-ignore
@@ -99,7 +179,7 @@ export default class LabModule {
     });
   }
 
-  async onDebugWASM(wasmPayload: Uint8Array, needCompile = true, start_func = 'start') {
+  async onDebugWASM(wasmPayload: any, needCompile = true, start_func = 'start') {
     const { curFilesListSchema } = globalThis.store.w3s.projectManager;
     let buffer;
     if (needCompile) {

@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import MonacoEditor from '@monaco-editor/react';
+import MonacoEditor, { useMonaco } from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { rootStore, useStore } from '@/store/index';
-import { Box, Button, Center, Flex, Portal, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Portal, Select, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
@@ -27,15 +27,17 @@ import { defaultOutlineButtonStyle } from '@/lib/theme';
 //@ts-ignore
 import { faker } from '@faker-js/faker';
 import { ConsolePanel } from './EditorBottomPanels/ConsolePanel';
-import { DBpanel } from './EditorBottomPanels/DBpanel';
 import { ABIPanel } from './EditorBottomPanels/ABIPanel';
+import { DBpanel } from './EditorBottomPanels/DBpanel';
+import { Indexer } from '@/lib/indexer';
+import HorizontalScroll from 'react-scroll-horizontal';
 
 export const compileAssemblyscript = async (code: string) => {
   let { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
     optimizeLevel: 4,
     runtime: 'stub',
     lib: 'assemblyscript-json/assembly/index',
-    debug: true,
+    debug: true
   });
   let _error = error + '';
   // @ts-ignore
@@ -119,8 +121,28 @@ export const debugAssemblyscript = async (needCompile = true) => {
       if (formData.wasmPayload) {
         try {
           const wasmPayload = JSON.parse(formData.wasmPayload);
-          lab.onDebugWASM(wasmPayload, needCompile, formData.handleFunc);
+          await lab.onDebugWASM(wasmPayload, needCompile, formData.handleFunc);
+          lab.simulationEventHistory.push({ wasmPayload, handleFunc: formData.handleFunc });
         } catch (error) {}
+      }
+    };
+    lab.simulationIndexerForm.afterSubmit = async ({ formData }) => {
+      const { contractAddress, chainId, startBlock, contract, contractEventName, handleFunc } = formData;
+      let abi: any;
+      if (contractAddress && chainId && startBlock && contract && contractEventName) {
+        const { abi } = helper.string.validAbi(contract);
+        const indexer = new Indexer({
+          formData: {
+            contractAddress,
+            chainId,
+            startBlock,
+            abi,
+            contractEventName
+          }
+        });
+        const payload = await indexer.start();
+        await lab.onDebugWASM(payload, needCompile, handleFunc);
+        Indexer.indexderHistory.push({ contractAddress, chainId, startBlock, contract, contractEventName, handleFunc });
       }
     };
     hooks.getFormData({
@@ -130,7 +152,12 @@ export const debugAssemblyscript = async (needCompile = true) => {
       isCentered: true,
       formList: [
         {
+          label: 'Simulate',
           form: lab.simulationEventForm
+        },
+        {
+          label: 'Indexer',
+          form: lab.simulationIndexerForm
         }
       ]
     });
@@ -270,44 +297,50 @@ const Editor = observer(() => {
 
   const EditorTopBarIcons = observer(() => {
     return (
-      <Flex w="full" bg="#2f3030" alignItems={'center'} position={'relative'}>
-        {curFilesListSchema?.activeFiles?.map((i, index) => {
-          return (
-            <>
-              <ContextMenuTrigger id={`ActiveFileContent${i?.key}`} holdToDisplay={-1}>
-                {i?.label && (
-                  <Box
-                    onClick={() => {
-                      store.showPreviewMode = false;
-                      curFilesListSchema.setCurActiveFile(i);
-                    }}
-                    display="flex"
-                    py={2}
-                    px={2}
-                    background={i?.key == curFilesListSchema?.curActiveFile?.key ? '#1e1e1e' : 'none'}
-                    fontSize="sm"
-                    color={i?.key == curFilesListSchema?.curActiveFile?.key ? '#a9dc76' : 'white'}
-                    cursor="pointer"
-                    alignItems={'center'}
-                  >
-                    {FileIcon(i)}
-                    <Text mr="4">{i?.label}</Text>
-                    <SmallCloseIcon
-                      _hover={{ bg: '#3f3f3f' }}
-                      color="white"
-                      ml="auto"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        curFilesListSchema.deleteActiveFiles(i);
-                      }}
-                    />
-                  </Box>
-                )}
-              </ContextMenuTrigger>
-              <CurActiveFileRightClickMenu activeFile={i} />
-            </>
-          );
-        })}
+      <Flex w="full" bg="#2f3030" alignItems={'center'} position={'relative'} h="35px">
+        <HorizontalScroll style={{ marginRight: '15px' }}>
+          <Flex>
+            {curFilesListSchema?.activeFiles?.map((i, index) => {
+              return (
+                <>
+                  <ContextMenuTrigger id={`ActiveFileContent${i?.key}`} holdToDisplay={-1}>
+                    {i?.label && (
+                      <Box
+                        w="max-content"
+                        whiteSpace={'nowrap'}
+                        onClick={() => {
+                          store.showPreviewMode = false;
+                          curFilesListSchema.setCurActiveFile(i);
+                        }}
+                        display="flex"
+                        py={2}
+                        px={2}
+                        background={i?.key == curFilesListSchema?.curActiveFile?.key ? '#1e1e1e' : 'none'}
+                        fontSize="sm"
+                        color={i?.key == curFilesListSchema?.curActiveFile?.key ? '#a9dc76' : 'white'}
+                        cursor="pointer"
+                        alignItems={'center'}
+                      >
+                        {FileIcon(i)}
+                        <Text mr="4">{i?.label}</Text>
+                        <SmallCloseIcon
+                          _hover={{ bg: '#3f3f3f' }}
+                          color="white"
+                          ml="auto"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            curFilesListSchema.deleteActiveFiles(i);
+                          }}
+                        />
+                      </Box>
+                    )}
+                  </ContextMenuTrigger>
+                  <CurActiveFileRightClickMenu activeFile={i} />
+                </>
+              );
+            })}
+          </Flex>
+        </HorizontalScroll>
 
         {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && (
           <>
@@ -411,21 +444,35 @@ const Editor = observer(() => {
     );
   });
 
-  const MoEditor = (props) => {
+  const MoEditor = (props = {}) => {
+    const monaco = useMonaco();
+    if (monaco) {
+      monaco.languages.register({ id: 'env' });
+      monaco.languages.setMonarchTokensProvider('myEnv', {
+        tokenizer: {
+          root: [
+            [/^[^=]+/, 'identifier'],
+            [/=/, 'delimiter'],
+            [/[^=]+$/, 'string']
+          ]
+        }
+      });
+    }
     return (
-      <MonacoEditor
-        width={'100%'}
-        height={350}
-        key="monaco"
-        theme="vs-dark"
-        defaultLanguage="typescript"
-        language={curFilesListSchema?.curActiveFile.data?.language}
-        defaultValue="export function test(): void {}"
-        value={curFilesListSchema?.curActiveFile?.data?.code}
-        beforeMount={(monaco) => {}}
-        onMount={async (editor, monaco) => {
-          monaco.languages.typescript.typescriptDefaults.addExtraLib(
-            `
+      <>
+        <MonacoEditor
+          width={'100%'}
+          height={350}
+          key={curFilesListSchema?.curActiveFile.data?.language}
+          theme="vs-dark"
+          defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
+          language={curFilesListSchema?.curActiveFile.data?.language}
+          defaultValue="export function test(): void {}"
+          value={curFilesListSchema?.curActiveFile?.data?.code}
+          beforeMount={(monaco) => {}}
+          onMount={async (editor, monaco) => {
+            monaco.languages.typescript.typescriptDefaults.addExtraLib(
+              `
         declare const Log: (message:string) => void;
         declare const SetDB: (key: string, value: number) => void;
         declare const GetDB: (key: string) => string;
@@ -441,16 +488,17 @@ const Editor = observer(() => {
         declare const hexToBool(hex: string): bool;
         declare const hexToAddress(hex: string): string;
         `,
-            'sdk/index.d.ts'
-          );
-          monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-          if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
-        }}
-        onChange={(e) => {
-          curFilesListSchema.setCurFileCode(e);
-        }}
-        {...props}
-      />
+              'sdk/index.d.ts'
+            );
+            monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
+            if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
+          }}
+          onChange={(e) => {
+            curFilesListSchema.setCurFileCode(e);
+          }}
+          {...props}
+        />
+      </>
     );
   };
 
@@ -507,6 +555,7 @@ const Editor = observer(() => {
 
                 {curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' && (
                   <Flex flexDirection={'row'} width="calc(100vw - 380px)" ml="auto" h="calc(100vh - 190px)">
+                    {/* ts-ignore  */}
                     <MoEditor height="auto" w="50%" />
                     <ABIPanel />
                   </Flex>

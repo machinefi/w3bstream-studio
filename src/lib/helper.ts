@@ -144,6 +144,23 @@ export const helper = {
         backChars = Math.floor(charsToShow / 2);
 
       return fullStr.substr(0, frontChars) + separator + fullStr.substr(fullStr.length - backChars);
+    },
+    validAbi(abi: string): { abi: any[]; address: string } {
+      try {
+        JSON.parse(abi);
+        const _abi = helper.json.safeParse(abi);
+        if (!_abi) {
+          return { abi: [], address: '' };
+        }
+        if (Array.isArray(_abi)) {
+          return { abi: _abi, address: '' };
+        } else if (_abi.abi && _abi.address) {
+          return { abi: _abi.abi, address: _abi.address };
+        }
+        return { abi: [], address: '' };
+      } catch (error) {
+        return { abi: [], address: '' };
+      }
     }
   },
   number: {

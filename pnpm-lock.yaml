@@ -3,310 +3,221 @@ lockfileVersion: '6.0'
 overrides:
   graphql: ^16.3.0
 
+specifiers:
+  '@chakra-ui/icons': ^2.0.11
+  '@chakra-ui/layout': ^2.0.1
+  '@chakra-ui/react': ^2.3.6
+  '@emotion/react': ^11.10.4
+  '@emotion/styled': ^11.10.4
+  '@faker-js/faker': 8.0.0-alpha.1
+  '@mantine/core': ^5.9.5
+  '@mantine/hooks': ^5.9.5
+  '@mantine/modals': ^6.0.7
+  '@mantine/notifications': ^5.9.5
+  '@mantine/spotlight': ^5.9.5
+  '@monaco-editor/react': ^4.4.6
+  '@next/bundle-analyzer': ^12.3.1
+  '@prisma/client': ^4.4.0
+  '@rainbow-me/rainbowkit': ^0.12.7
+  '@rjsf/chakra-ui': 5.0.0-beta.9
+  '@rjsf/core': 5.0.0-beta.13
+  '@rjsf/utils': 5.0.0-beta.13
+  '@rjsf/validator-ajv6': 5.0.0-beta.13
+  '@sinclair/typebox': ^0.25.24
+  '@tabler/icons': ^1.118.0
+  '@tanstack/react-query': ^4.10.3
+  '@tanstack/react-table': ^8.2.6
+  '@trpc/client': 10.0.0-proxy-beta.15
+  '@trpc/next': 10.0.0-proxy-beta.15
+  '@trpc/react': 10.0.0-proxy-beta.15
+  '@trpc/server': 10.0.0-proxy-beta.15
+  '@types/json-schema': ^7.0.11
+  '@types/localforage': ^0.0.34
+  '@types/lodash': ^4.14.185
+  '@types/node': ^14.14.31
+  '@types/prop-types': ^15.7.5
+  '@types/react': ^17.0.0
+  '@types/react-dom': ^17.0.0
+  '@types/react-router-dom': ^5.1.7
+  '@types/reflect-metadata': ^0.1.0
+  '@types/swagger-ui-react': ^4.11.0
+  '@types/uuid': ^8.3.4
+  assemblyscript: ^0.21.4
+  async-mqtt: ^2.6.3
+  asyncify-wasm: ^1.2.1
+  axios: ^0.21.1
+  bignumber.js: ^9.0.1
+  cache-manager: ^5.2.1
+  class-transformer: ^0.5.1
+  concurrently: ^6.5.1
+  copy-to-clipboard: ^3.3.1
+  cross-blob: ^3.0.2
+  dayjs: ^1.11.1
+  dexie: ^3.2.2
+  dexie-react-hooks: ^1.1.1
+  ethers: 5.7.0
+  events: ^3.3.0
+  framer-motion: ^7.5.3
+  graphql: ^16.3.0
+  graphql-ws: ^5.11.2
+  i18next: ^21.8.4
+  icons^1.0.9: link:@chakra-ui/icons^1.0.9
+  json-schema: ^0.4.0
+  json-schema-to-ts: ^2.5.5
+  jsonwebtoken: ^9.0.0
+  lodash: ^4.17.21
+  mobx: ^6.2.0
+  mobx-react-lite: ^3.2.0
+  net: ^1.0.2
+  next: ^13.0.0
+  nextjs-cors: ^2.1.2
+  node-docker-api: ^1.1.22
+  node-fetch: ^3.3.0
+  numeral: ^2.0.6
+  pg: ^8.9.0
+  pg-format: ^1.0.4
+  pgsql-parser: ^13.4.1
+  postgres-array: ^3.0.2
+  prettier: ^2.8.4
+  prettier-plugin-sql: ^0.13.0
+  primeicons: ^6.0.1
+  prisma: ^4.4.0
+  promise-retry: ^2.0.1
+  prop-types: ^15.8.1
+  rc-pagination: ^3.1.17
+  react: 18.2.0
+  react-contextmenu: ^2.14.0
+  react-csv-reader: ^4.0.0
+  react-dev-inspector: ^1.8.4
+  react-dom: 18.2.0
+  react-draggable: ^4.4.5
+  react-dropzone: ^14.2.3
+  react-hot-toast: ^1.0.2
+  react-i18next: ^11.16.9
+  react-icons: ^4.8.0
+  react-query: ^3.34.19
+  react-scroll-horizontal: ^1.6.6
+  react-virtualized: ^9.22.3
+  reactflow: ^11.7.0
+  recharts: ^2.5.0
+  reflect-metadata: ^0.1.13
+  siwe: ^1.1.6
+  sleep-promise: ^9.1.0
+  sql.js: ^1.8.0
+  superjson: ^1.8.1
+  swagger-ui-react: ^4.15.5
+  sync-request: ^6.1.0
+  tabler-icons-react: ^1.56.0
+  tls: ^0.0.1
+  trpc-openapi: ^1.1.2
+  type-fest: ^1.2.0
+  typed-emitter: ^1.3.1
+  typescript: ^4.5.4
+  uuid: ^8.3.2
+  wagmi: ^0.12.10
+  ws: ^8.9.0
+  zod: ^3.17.3
+
 dependencies:
-  '@chakra-ui/icons':
-    specifier: ^2.0.11
-    version: 2.0.11(@chakra-ui/system@2.5.7)(react@18.2.0)
-  '@chakra-ui/layout':
-    specifier: ^2.0.1
-    version: 2.1.8(@chakra-ui/system@2.5.7)(react@18.2.0)
-  '@chakra-ui/react':
-    specifier: ^2.6.1
-    version: 2.6.1(@emotion/react@11.10.4)(@emotion/styled@11.10.4)(@types/react@17.0.47)(framer-motion@7.5.3)(react-dom@18.2.0)(react@18.2.0)
-  '@emotion/react':
-    specifier: ^11.10.4
-    version: 11.10.4(@babel/core@7.21.3)(@types/react@17.0.47)(react@18.2.0)
-  '@emotion/styled':
-    specifier: ^11.10.4
-    version: 11.10.4(@babel/core@7.21.3)(@emotion/react@11.10.4)(@types/react@17.0.47)(react@18.2.0)
-  '@faker-js/faker':
-    specifier: 8.0.0-alpha.1
-    version: 8.0.0-alpha.1
-  '@mantine/core':
-    specifier: ^5.9.5
-    version: 5.10.5(@emotion/react@11.10.4)(@mantine/hooks@5.10.5)(@types/react@17.0.47)(react-dom@18.2.0)(react@18.2.0)
-  '@mantine/hooks':
-    specifier: ^5.9.5
-    version: 5.10.5(react@18.2.0)
-  '@mantine/modals':
-    specifier: ^6.0.7
-    version: 6.0.7(@mantine/core@5.10.5)(@mantine/hooks@5.10.5)(react-dom@18.2.0)(react@18.2.0)
-  '@mantine/notifications':
-    specifier: ^5.9.5
-    version: 5.10.5(@mantine/core@5.10.5)(@mantine/hooks@5.10.5)(react-dom@18.2.0)(react@18.2.0)
-  '@mantine/spotlight':
-    specifier: ^5.9.5
-    version: 5.10.5(@mantine/core@5.10.5)(@mantine/hooks@5.10.5)(react-dom@18.2.0)(react@18.2.0)
-  '@monaco-editor/react':
-    specifier: ^4.4.6
-    version: 4.4.6(monaco-editor@0.38.0)(react-dom@18.2.0)(react@18.2.0)
-  '@next/bundle-analyzer':
-    specifier: ^12.3.1
-    version: 12.3.1
-  '@prisma/client':
-    specifier: ^4.4.0
-    version: 4.4.0(prisma@4.4.0)
-  '@rainbow-me/rainbowkit':
-    specifier: ^0.12.1
-    version: 0.12.7(@types/react@17.0.47)(ethers@5.7.0)(react-dom@18.2.0)(react@18.2.0)(wagmi@0.12.13)
-  '@rjsf/chakra-ui':
-    specifier: 5.0.0-beta.9
-    version: 5.0.0-beta.9(@babel/core@7.21.3)(@chakra-ui/icons@2.0.11)(@chakra-ui/react@2.6.1)(@emotion/react@11.10.4)(@emotion/styled@11.10.4)(@rjsf/core@5.0.0-beta.13)(@rjsf/utils@5.0.0-beta.13)(@types/react@17.0.47)(framer-motion@7.5.3)(react-dom@18.2.0)(react@18.2.0)
-  '@rjsf/core':
-    specifier: 5.0.0-beta.13
-    version: 5.0.0-beta.13(@rjsf/utils@5.0.0-beta.13)(react@18.2.0)
-  '@rjsf/utils':
-    specifier: 5.0.0-beta.13
-    version: 5.0.0-beta.13(react@18.2.0)
-  '@rjsf/validator-ajv6':
-    specifier: 5.0.0-beta.13
-    version: 5.0.0-beta.13(@rjsf/utils@5.0.0-beta.13)
-  '@sinclair/typebox':
-    specifier: ^0.25.24
-    version: 0.25.24
-  '@tabler/icons':
-    specifier: ^1.118.0
-    version: 1.119.0(react-dom@18.2.0)(react@18.2.0)
-  '@tanstack/react-query':
-    specifier: ^4.10.3
-    version: 4.10.3(react-dom@18.2.0)(react@18.2.0)
-  '@tanstack/react-table':
-    specifier: ^8.2.6
-    version: 8.2.6(react-dom@18.2.0)(react@18.2.0)
-  '@trpc/client':
-    specifier: 10.0.0-proxy-beta.15
-    version: 10.0.0-proxy-beta.15(@trpc/server@10.0.0-proxy-beta.15)
-  '@trpc/next':
-    specifier: 10.0.0-proxy-beta.15
-    version: 10.0.0-proxy-beta.15(@tanstack/react-query@4.10.3)(@trpc/client@10.0.0-proxy-beta.15)(@trpc/react@10.0.0-proxy-beta.15)(@trpc/server@10.0.0-proxy-beta.15)(next@13.0.0)(react-dom@18.2.0)(react@18.2.0)
-  '@trpc/react':
-    specifier: 10.0.0-proxy-beta.15
-    version: 10.0.0-proxy-beta.15(@tanstack/react-query@4.10.3)(@trpc/client@10.0.0-proxy-beta.15)(@trpc/server@10.0.0-proxy-beta.15)(react-dom@18.2.0)(react@18.2.0)
-  '@trpc/server':
-    specifier: 10.0.0-proxy-beta.15
-    version: 10.0.0-proxy-beta.15
-  assemblyscript:
-    specifier: ^0.21.4
-    version: 0.21.4
-  async-mqtt:
-    specifier: ^2.6.3
-    version: 2.6.3
-  asyncify-wasm:
-    specifier: ^1.2.1
-    version: 1.2.1
-  axios:
-    specifier: ^0.21.1
-    version: 0.21.4
-  bignumber.js:
-    specifier: ^9.0.1
-    version: 9.0.2
-  cache-manager:
-    specifier: ^5.2.1
-    version: 5.2.1
-  class-transformer:
-    specifier: ^0.5.1
-    version: 0.5.1
-  copy-to-clipboard:
-    specifier: ^3.3.1
-    version: 3.3.1
-  cross-blob:
-    specifier: ^3.0.2
-    version: 3.0.2
-  dayjs:
-    specifier: ^1.11.1
-    version: 1.11.3
-  dexie:
-    specifier: ^3.2.2
-    version: 3.2.2
-  dexie-react-hooks:
-    specifier: ^1.1.1
-    version: 1.1.1(@types/react@17.0.47)(dexie@3.2.2)(react@18.2.0)
-  ethers:
-    specifier: 5.7.0
-    version: 5.7.0
-  events:
-    specifier: ^3.3.0
-    version: 3.3.0
-  fast-json-patch:
-    specifier: ^3.1.1
-    version: 3.1.1
-  framer-motion:
-    specifier: ^7.5.3
-    version: 7.5.3(react-dom@18.2.0)(react@18.2.0)
-  graphql:
-    specifier: ^16.3.0
-    version: 16.6.0
-  graphql-ws:
-    specifier: ^5.11.2
-    version: 5.11.2(graphql@16.6.0)
-  i18next:
-    specifier: ^21.8.4
-    version: 21.8.11
-  icons^1.0.9:
-    specifier: link:@chakra-ui/icons^1.0.9
-    version: link:@chakra-ui/icons^1.0.9
-  json-format:
-    specifier: ^1.0.1
-    version: 1.0.1
-  json-schema:
-    specifier: ^0.4.0
-    version: 0.4.0
-  json-schema-to-ts:
-    specifier: ^2.5.5
-    version: 2.5.5
-  jsonwebtoken:
-    specifier: ^9.0.0
-    version: 9.0.0
-  lodash:
-    specifier: ^4.17.21
-    version: 4.17.21
-  mobx:
-    specifier: ^6.2.0
-    version: 6.6.1
-  mobx-react-lite:
-    specifier: ^3.2.0
-    version: 3.4.0(mobx@6.6.1)(react-dom@18.2.0)(react@18.2.0)
-  net:
-    specifier: ^1.0.2
-    version: 1.0.2
-  next:
-    specifier: ^13.0.0
-    version: 13.0.0(@babel/core@7.21.3)(react-dom@18.2.0)(react@18.2.0)
-  next-s3-upload:
-    specifier: ^0.3.0
-    version: 0.3.0(@aws-sdk/abort-controller@3.310.0)(next@13.0.0)(react@18.2.0)
-  nextjs-cors:
-    specifier: ^2.1.2
-    version: 2.1.2(next@13.0.0)
-  node-docker-api:
-    specifier: ^1.1.22
-    version: 1.1.22
-  node-fetch:
-    specifier: ^3.3.0
-    version: 3.3.0
-  numeral:
-    specifier: ^2.0.6
-    version: 2.0.6
-  pg:
-    specifier: ^8.9.0
-    version: 8.9.0
-  pg-format:
-    specifier: ^1.0.4
-    version: 1.0.4
-  pgsql-parser:
-    specifier: ^13.4.1
-    version: 13.4.1
-  postgres-array:
-    specifier: ^3.0.2
-    version: 3.0.2
-  prettier:
-    specifier: ^2.8.4
-    version: 2.8.4
-  prettier-plugin-sql:
-    specifier: ^0.13.0
-    version: 0.13.0(prettier@2.8.4)
-  primeicons:
-    specifier: ^6.0.1
-    version: 6.0.1
-  promise-retry:
-    specifier: ^2.0.1
-    version: 2.0.1
-  prop-types:
-    specifier: ^15.8.1
-    version: 15.8.1
-  rc-pagination:
-    specifier: ^3.1.17
-    version: 3.1.17(react-dom@18.2.0)(react@18.2.0)
-  react:
-    specifier: 18.2.0
-    version: 18.2.0
-  react-contextmenu:
-    specifier: ^2.14.0
-    version: 2.14.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-  react-csv-reader:
-    specifier: ^4.0.0
-    version: 4.0.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-  react-dev-inspector:
-    specifier: ^1.8.4
-    version: 1.8.4(react@18.2.0)(typescript@4.7.4)(webpack@5.82.0)
-  react-dom:
-    specifier: 18.2.0
-    version: 18.2.0(react@18.2.0)
-  react-draggable:
-    specifier: ^4.4.5
-    version: 4.4.5(react-dom@18.2.0)(react@18.2.0)
-  react-dropzone:
-    specifier: ^14.2.3
-    version: 14.2.3(react@18.2.0)
-  react-hot-toast:
-    specifier: ^1.0.2
-    version: 1.0.2(csstype@3.1.0)(react-dom@18.2.0)(react@18.2.0)
-  react-i18next:
-    specifier: ^11.16.9
-    version: 11.17.3(i18next@21.8.11)(react-dom@18.2.0)(react@18.2.0)
-  react-icons:
-    specifier: ^4.8.0
-    version: 4.8.0(react@18.2.0)
-  react-query:
-    specifier: ^3.34.19
-    version: 3.39.1(react-dom@18.2.0)(react@18.2.0)
-  react-virtualized:
-    specifier: ^9.22.3
-    version: 9.22.3(react-dom@18.2.0)(react@18.2.0)
-  reactflow:
-    specifier: ^11.7.0
-    version: 11.7.0(react-dom@18.2.0)(react@18.2.0)
-  recharts:
-    specifier: ^2.5.0
-    version: 2.5.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-  reflect-metadata:
-    specifier: ^0.1.13
-    version: 0.1.13
-  siwe:
-    specifier: ^2.1.3
-    version: 2.1.4(ethers@5.7.0)
-  sleep-promise:
-    specifier: ^9.1.0
-    version: 9.1.0
-  sql.js:
-    specifier: ^1.8.0
-    version: 1.8.0
-  superjson:
-    specifier: ^1.8.1
-    version: 1.9.1
-  swagger-ui-react:
-    specifier: ^4.15.5
-    version: 4.15.5(react-dom@18.2.0)(react@18.2.0)
-  sync-request:
-    specifier: ^6.1.0
-    version: 6.1.0
-  tabler-icons-react:
-    specifier: ^1.56.0
-    version: 1.56.0(react@18.2.0)
-  tls:
-    specifier: ^0.0.1
-    version: 0.0.1
-  trpc-openapi:
-    specifier: ^1.1.2
-    version: 1.1.2(@trpc/server@10.0.0-proxy-beta.15)(zod@3.17.3)
-  type-fest:
-    specifier: ^1.2.0
-    version: 1.4.0
-  typed-emitter:
-    specifier: ^1.3.1
-    version: 1.4.0
-  uuid:
-    specifier: ^8.3.2
-    version: 8.3.2
-  wagmi:
-    specifier: ^0.12.1
-    version: 0.12.13(ethers@5.7.0)(react-dom@18.2.0)(react@18.2.0)(typescript@4.7.4)(zod@3.17.3)
-  ws:
-    specifier: ^8.9.0
-    version: 8.9.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
-  zod:
-    specifier: ^3.17.3
-    version: 3.17.3
+  '@chakra-ui/icons': 2.0.11_react@18.2.0
+  '@chakra-ui/layout': 2.1.8_react@18.2.0
+  '@chakra-ui/react': 2.5.1_ae7dtvbdlj3vg56os4fyaxmgqy
+  '@emotion/react': 11.10.4_issp6eja53bx2taimj6tb2noxy
+  '@emotion/styled': 11.10.4_7rgntgopdziobpgp5j2w655ama
+  '@faker-js/faker': 8.0.0-alpha.1
+  '@mantine/core': 5.10.5_fd3z4b6otvtztiddqjy5atxlge
+  '@mantine/hooks': 5.10.5_react@18.2.0
+  '@mantine/modals': 6.0.7_7l7cohgiq6l4ncfy2pvlz3brzy
+  '@mantine/notifications': 5.10.5_7l7cohgiq6l4ncfy2pvlz3brzy
+  '@mantine/spotlight': 5.10.5_7l7cohgiq6l4ncfy2pvlz3brzy
+  '@monaco-editor/react': 4.4.6_biqbaboplfbrettd7655fr4n2y
+  '@next/bundle-analyzer': 12.3.1
+  '@prisma/client': 4.4.0_prisma@4.4.0
+  '@rainbow-me/rainbowkit': 0.12.7_zqapixxu45kyxcms4e3yxymofm
+  '@rjsf/chakra-ui': 5.0.0-beta.9_x5eudjujocnwxbrq6zigutaxam
+  '@rjsf/core': 5.0.0-beta.13_j5gb72ex5nnkkxhdamiyx63hiy
+  '@rjsf/utils': 5.0.0-beta.13_react@18.2.0
+  '@rjsf/validator-ajv6': 5.0.0-beta.13_@rjsf+utils@5.0.0-beta.13
+  '@sinclair/typebox': 0.25.24
+  '@tabler/icons': 1.119.0_biqbaboplfbrettd7655fr4n2y
+  '@tanstack/react-query': 4.10.3_biqbaboplfbrettd7655fr4n2y
+  '@tanstack/react-table': 8.2.6_biqbaboplfbrettd7655fr4n2y
+  '@trpc/client': 10.0.0-proxy-beta.15_rqa5bz7tlpjbmvdealcfbmvude
+  '@trpc/next': 10.0.0-proxy-beta.15_ocepoexrr7ji5u7f66krg2lzvy
+  '@trpc/react': 10.0.0-proxy-beta.15_oqq3zeu53pwwxzkjqaoxtnh3le
+  '@trpc/server': 10.0.0-proxy-beta.15
+  assemblyscript: 0.21.4
+  async-mqtt: 2.6.3
+  asyncify-wasm: 1.2.1
+  axios: 0.21.4
+  bignumber.js: 9.0.2
+  cache-manager: 5.2.1
+  class-transformer: 0.5.1
+  copy-to-clipboard: 3.3.1
+  cross-blob: 3.0.2
+  dayjs: 1.11.3
+  dexie: 3.2.2
+  dexie-react-hooks: 1.1.1_v3ms5jebdbsj6le67ymfczyos4
+  ethers: 5.7.0
+  events: 3.3.0
+  framer-motion: 7.5.3_biqbaboplfbrettd7655fr4n2y
+  graphql: 16.6.0
+  graphql-ws: 5.11.2_graphql@16.6.0
+  i18next: 21.8.11
+  icons^1.0.9: link:@chakra-ui/icons^1.0.9
+  json-schema: 0.4.0
+  json-schema-to-ts: 2.5.5
+  jsonwebtoken: 9.0.0
+  lodash: 4.17.21
+  mobx: 6.6.1
+  mobx-react-lite: 3.4.0_m26jawr67gnusmh4egzqtnhxru
+  net: 1.0.2
+  next: 13.0.0_biqbaboplfbrettd7655fr4n2y
+  nextjs-cors: 2.1.2_next@13.0.0
+  node-docker-api: 1.1.22
+  node-fetch: 3.3.0
+  numeral: 2.0.6
+  pg: 8.9.0
+  pg-format: 1.0.4
+  pgsql-parser: 13.4.1
+  postgres-array: 3.0.2
+  prettier: 2.8.4
+  prettier-plugin-sql: 0.13.0_prettier@2.8.4
+  primeicons: 6.0.1
+  promise-retry: 2.0.1
+  prop-types: 15.8.1
+  rc-pagination: 3.1.17_biqbaboplfbrettd7655fr4n2y
+  react: 18.2.0
+  react-contextmenu: 2.14.0_v2m5e27vhdewzwhryxwfaorcca
+  react-csv-reader: 4.0.0_v2m5e27vhdewzwhryxwfaorcca
+  react-dev-inspector: 1.8.4_qtbnez4q7bzoc4eqybg3efzzxe
+  react-dom: 18.2.0_react@18.2.0
+  react-draggable: 4.4.5_biqbaboplfbrettd7655fr4n2y
+  react-dropzone: 14.2.3_react@18.2.0
+  react-hot-toast: 1.0.2_biqbaboplfbrettd7655fr4n2y
+  react-i18next: 11.17.3_vth7g6zw6lco7clwxal23of2km
+  react-icons: 4.8.0_react@18.2.0
+  react-query: 3.39.1_biqbaboplfbrettd7655fr4n2y
+  react-scroll-horizontal: 1.6.6_v2m5e27vhdewzwhryxwfaorcca
+  react-virtualized: 9.22.3_biqbaboplfbrettd7655fr4n2y
+  reactflow: 11.7.0_biqbaboplfbrettd7655fr4n2y
+  recharts: 2.5.0_v2m5e27vhdewzwhryxwfaorcca
+  reflect-metadata: 0.1.13
+  siwe: 1.1.6_ethers@5.7.0
+  sleep-promise: 9.1.0
+  sql.js: 1.8.0
+  superjson: 1.9.1
+  swagger-ui-react: 4.15.5_biqbaboplfbrettd7655fr4n2y
+  sync-request: 6.1.0
+  tabler-icons-react: 1.56.0_react@18.2.0
+  tls: 0.0.1
+  trpc-openapi: 1.1.2_eqxo4n5o5uvv46zcoocyhahd4m
+  type-fest: 1.4.0
+  typed-emitter: 1.4.0
+  uuid: 8.3.2
+  wagmi: 0.12.10_ik7vfj2olj76unaz3ccx7bdday
+  ws: 8.9.0
+  zod: 3.17.3
 
 devDependencies:
   '@types/json-schema':
@@ -9189,7 +9100,19 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /pg-connection-string@2.5.0:
+  /pathval/1.1.1:
+    resolution: {integrity: sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==}
+    dev: false
+
+  /performance-now/0.2.0:
+    resolution: {integrity: sha512-YHk5ez1hmMR5LOkb9iJkLKqoBlL7WD5M8ljC75ZfzXriuBIVNuecaXuU7e+hOwyqf24Wxhh7Vxgt7Hnw9288Tg==}
+    dev: false
+
+  /performance-now/2.1.0:
+    resolution: {integrity: sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==}
+    dev: false
+
+  /pg-connection-string/2.5.0:
     resolution: {integrity: sha512-r5o/V/ORTA6TmUnyWZR9nCj1klXCO2CEKNRlVuJptZe85QuhFayC7WeMic7ndayT5IRIR0S0xFxFi2ousartlQ==}
     dev: false
 
@@ -9578,7 +9501,13 @@ packages:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
     dev: false
 
-  /railroad-diagrams@1.0.0:
+  /raf/3.4.1:
+    resolution: {integrity: sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==}
+    dependencies:
+      performance-now: 2.1.0
+    dev: false
+
+  /railroad-diagrams/1.0.0:
     resolution: {integrity: sha512-cz93DjNeLY0idrCNOH6PviZGRN9GJhsdm9hpn1YCS879fj4W+x5IFJhhkRZcwVgMmFF7R82UA/7Oh+R8lLZg6A==}
     dev: false
 
@@ -9906,7 +9835,18 @@ packages:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
     dev: false
 
-  /react-query@3.39.1(react-dom@18.2.0)(react@18.2.0):
+  /react-motion/0.5.2_react@18.2.0:
+    resolution: {integrity: sha512-9q3YAvHoUiWlP3cK0v+w1N5Z23HXMj4IF4YuvjvWegWqNPfLXsOBE/V7UvQGpXxHFKRQQcNcVQE31g9SB/6qgQ==}
+    peerDependencies:
+      react: ^0.14.9 || ^15.3.0 || ^16.0.0
+    dependencies:
+      performance-now: 0.2.0
+      prop-types: 15.8.1
+      raf: 3.4.1
+      react: 18.2.0
+    dev: false
+
+  /react-query/3.39.1_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-qYKT1bavdDiQZbngWZyPotlBVzcBjDYEJg5RQLBa++5Ix5jjfbEYJmHSZRZD+USVHUSvl/ey9Hu+QfF1QAK80A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -10012,7 +9952,20 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /react-select@5.7.0(@babel/core@7.21.3)(@types/react@17.0.47)(react-dom@18.2.0)(react@18.2.0):
+  /react-scroll-horizontal/1.6.6_v2m5e27vhdewzwhryxwfaorcca:
+    resolution: {integrity: sha512-aR5xE+5EOTQhhrljztHT5qqKEiYU+mKTePaQZJQqikREN0brNfpZst7QP2iEeQo8aip+r7ljTxQZOmfT3OwdSg==}
+    peerDependencies:
+      prop-types: ^15.5.4
+      react: ^15.0.0 || ^16.0.0
+      react-dom: ^15.0.0 || ^16.0.0
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-motion: 0.5.2_react@18.2.0
+    dev: false
+
+  /react-select/5.7.0_h3umwasw2xj55xde6qtxq6tis4:
     resolution: {integrity: sha512-lJGiMxCa3cqnUr2Jjtg9YHsaytiZqeNOKeibv6WF5zbK/fPegZ1hg3y/9P1RZVLhqBTs0PfqQLKuAACednYGhQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
