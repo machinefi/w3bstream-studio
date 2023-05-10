@@ -191,7 +191,7 @@ export default class ProjectModule {
       if (formData.name) {
         const re = /^[a-z0-9_]{6,32}$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('field should consist of only lowercase letters, numbers, and underscores, with no spaces; it must be at least 6 characters long and no more than 32.');
+          errors.name.addError('name field should consist of only lowercase letters, numbers, and underscores, with no spaces; it must be at least 6 characters long and no more than 32.');
         }
       }
       return errors;
@@ -266,7 +266,7 @@ export default class ProjectModule {
       if (formData.name) {
         const re = /^[a-z0-9_]{6,32}$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('field should consist of only lowercase letters, numbers, and underscores, with no spaces; it must be at least 6 characters long and no more than 32.');
+          errors.name.addError('name field should consist of only lowercase letters, numbers, and underscores, with no spaces; it must be at least 6 characters long and no more than 32.');
         }
       }
       return errors;
@@ -408,7 +408,15 @@ export default class ProjectModule {
       }
     },
     customValidate: (formData, errors) => {
-      if (!formData.code) {
+      if (formData.code) {
+        const json = helper.json.safeParse(formData.code);
+        if (json.name !== globalThis.store.w3s.project.curProject?.name) {
+          errors.code.addError('name is not allowed to be modified');
+        }
+        if (JSON.stringify(json.database) !== JSON.stringify(globalThis.store.w3s.project.curProject?.database)) {
+          errors.code.addError('database is not allowed to be modified');
+        }
+      } else {
         errors.code.addError('is required');
       }
       return errors;
@@ -965,9 +973,11 @@ export default class ProjectModule {
           });
         }
       }
-      eventBus.emit('project.create');
-      eventBus.emit('contractlog.create');
-      eventBus.emit('chainHeight.create');
+      if (diff.length > 0) {
+        eventBus.emit('project.create');
+        eventBus.emit('contractlog.create');
+        eventBus.emit('chainHeight.create');
+      }
     }
   }
 }
