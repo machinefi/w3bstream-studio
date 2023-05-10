@@ -28,6 +28,7 @@ export type FormListType = {
 export class FormModalState {
   isOpen = false;
   title = '';
+  currentTabIdx = 0;
   size: string = '2xl';
   formList: FormListType[] = [];
   children: JSX.Element;

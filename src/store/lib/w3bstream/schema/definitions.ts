@@ -1,3 +1,8 @@
+import { helper } from '@/lib/helper';
+import { Indexer } from '@/lib/indexer';
+import { rootStore } from '@/store/index';
+import { ContractInstance } from '../../ContractInstance';
+
 export const definitions = {
   projects: {
     type: 'string',
@@ -48,4 +53,63 @@ export const definitions = {
       return globalThis.store.w3s.blockChain.allBlockChain.value?.map((i) => `${i.f_chain_id}`) || [];
     }
   },
+  labContracts: {
+    type: 'string',
+    get enum() {
+      const files = [];
+      const findAssemblyScriptCode = (arr) => {
+        arr?.forEach((i) => {
+          if (i.data?.dataType === 'abi') {
+            files.push(i.data.code);
+          } else if (i.type === 'folder') {
+            findAssemblyScriptCode(i.children);
+          }
+        });
+      };
+      findAssemblyScriptCode(globalThis.store?.w3s?.projectManager.curFilesList ?? []);
+      return files || [];
+    },
+    get enumNames() {
+      const files = [];
+      const findAssemblyScriptCode = (arr) => {
+        arr?.forEach((i) => {
+          if (i.data?.dataType === 'abi') {
+            files.push(i.label);
+          } else if (i.type === 'folder') {
+            findAssemblyScriptCode(i.children);
+          }
+        });
+      };
+      findAssemblyScriptCode(globalThis.store?.w3s?.projectManager.curFilesList ?? []);
+      return files || [];
+    }
+  },
+  labContractEvents: {
+    type: 'string',
+    get enum() {
+      let files = [];
+      const { abi, address } = helper.string.validAbi(rootStore.w3s.lab.simulationIndexerForm.value.value.contract);
+      if (!abi) return [];
+      const contractInstance = new ContractInstance({ abi });
+      files = contractInstance.events.map((i) => i.name);
+      return files || [];
+    },
+    get enumNames() {
+      let files = [];
+      const { abi, address } = helper.string.validAbi(rootStore.w3s.lab.simulationIndexerForm.value.value.contract);
+      if (!abi) return [];
+      const contractInstance = new ContractInstance({ abi });
+      files = contractInstance.events.map((i) => i.name);
+      return files || [];
+    }
+  },
+  labContractIndexerHistory: {
+    type: 'string',
+    get enum() {
+      return Indexer.indexderHistory.list.map((i) => JSON.stringify(i)) || [];
+    },
+    get enumNames() {
+      return Indexer.indexderHistory.list.map((i) => `${i.chainId}-${i.contractAddress}-${i.contractEventName}-${i.startBlock}`) || [];
+    }
+  }
 };

@@ -16,7 +16,7 @@ interface ExecHistory {
 export class ContractInstance {
   id = uuidv4();
   address: string = '';
-  name: string;
+  name: string = '';
   functionsCache: {
     [key: string]: {
       callResult: string;
@@ -26,6 +26,7 @@ export class ContractInstance {
   functions: FunctionState[] = [];
   readFunctions: FunctionState[] = [];
   writeFunction: FunctionState[] = [];
+  events: FunctionState[] = [];
 
   execHistory: ExecHistory[] = [];
   tabIndex = 0;
@@ -100,7 +101,7 @@ export class ContractInstance {
       this.functions = functions;
       this.readFunctions = this.functions.filter((i) => ['view', 'pure'].includes(i.stateMutability)).sort((a, b) => a.name.length - b.name.length);
       this.writeFunction = this.functions.filter((i) => ['payable', 'nonpayable'].includes(i.stateMutability)).sort((a, b) => a.name.length - b.name.length);
-
+      this.events = abi.filter((i) => i.type === 'event').sort((a, b) => a.name.length - b.name.length);
       const viewFunctions = this.functions.filter((i) => ['view', 'pure'].includes(i.stateMutability) && i.inputs.length == 0 && !i.callResult);
       // this.workspace.workspaceManager.IDE.currentNetwork.multicall(
       //   viewFunctions.map((i) => ({
