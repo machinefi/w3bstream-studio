@@ -156,6 +156,8 @@ export const helper = {
           return { abi: _abi, address: '' };
         } else if (_abi.abi && _abi.address) {
           return { abi: _abi.abi, address: _abi.address };
+        } else if (_abi.abi && !_abi.addresses) {
+          return { abi: _abi.abi, address: '' };
         }
         return { abi: [], address: '' };
       } catch (error) {
