@@ -59,15 +59,13 @@ export const ConsolePanel = observer(() => {
         {lab.stdout?.map((i) => {
           return (
             <Flex color={i?.['@lv'] == 'error' ? 'red' : ''}>
-              <Flex mr={2} whiteSpace="nowrap">
-                [<Box color="#d892ff">{i.prefix}</Box>
+              <Flex maxW="200px" mr={2} whiteSpace="nowrap">
+                [<Box color="#d892ff">{i.prefix} </Box>
                 <Box color="#ffd300">{dayjs(i?.['@ts']).format('hh:mm:ss')}</Box>]
               </Flex>
-              {JSON.stringify({
-                '@lv': i?.['@lv'],
-                '@ts': i?.['@ts'],
-                msg: i?.msg
-              })}
+              <Flex w="90%" overflowWrap={'anywhere'}>
+                {JSON.stringify(i)}
+              </Flex>
             </Flex>
           );
         })}

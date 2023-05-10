@@ -42,7 +42,12 @@ const JSONModal = observer(() => {
               <ModalBody>
                 {formList.length > 1 ? (
                   <>
-                    <Tabs>
+                    <Tabs
+                      onChange={(e) => {
+                        formModal.currentTabIdx = e;
+                        console.log(formModal.currentTabIdx);
+                      }}
+                    >
                       <TabList>
                         {formList.map((item) => (
                           <Tab key={item.label}>{item.label}</Tab>

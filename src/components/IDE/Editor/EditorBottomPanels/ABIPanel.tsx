@@ -125,6 +125,7 @@ export const FunctionList = observer(({ contract }: { contract: ContractInstance
       <TabList>
         <Tab>Read</Tab>
         <Tab>Write</Tab>
+        <Tab>Event</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
@@ -142,32 +143,11 @@ export const FunctionList = observer(({ contract }: { contract: ContractInstance
           </Accordion>
         </TabPanel>
         <TabPanel>
-          <Box overflow="auto">
-            {contract?.execHistory.map((i) => (
-              <Box key={i.hash} fontSize="xs" wordBreak="break-all">
-                <VStack spacing="1" align="stretch" p={2} borderRadius="5" mt="2" border="1px">
-                  <Text fontSize="md" fontWeight="500">
-                    {i.method}
-                  </Text>
-                  <Box>
-                    {i.params?.map((v, i) => (
-                      <Text>
-                        {i}: {v}
-                      </Text>
-                    ))}
-                  </Box>
-                  <Link color="twitter.500" href={`${god.currentChain.explorerURL}/tx/${i.hash}`} target="__blank">
-                    {i.hash}
-                  </Link>
-                </VStack>
-              </Box>
+          <Accordion allowMultiple>
+            {contract?.events.map((functionItem) => (
+              <EventItem functionItem={functionItem} contract={contract} key={functionItem.name} />
             ))}
-            {contract?.execHistory.length > 0 && (
-              <Button mt={8} size="xs" onClick={(e) => contract.clearExecHistory()}>
-                Clear History
-              </Button>
-            )}
-          </Box>
+          </Accordion>
         </TabPanel>
       </TabPanels>
     </Tabs>
@@ -322,6 +302,105 @@ export const FunctiomItem = observer(({ functionItem, contract }: { functionItem
             <AlertDescription fontSize="sm">{functionItem.callError}</AlertDescription>
           </Alert>
         )}
+      </AccordionPanel>
+      {functionItem.callResult && <CallResult text={functionItem.callResult} />}
+    </AccordionItem>
+  );
+});
+
+export const EventItem = observer(({ functionItem, contract }: { functionItem: FunctionState; contract: ContractInstance }) => {
+  const { god } = useStore();
+  const _contract = contract;
+  const store = useLocalObservable(() => ({
+    loading: new BooleanState(),
+    async onCall(func: FunctionState, address) {
+      console.log(contract);
+      if (!address) {
+        return toast.warning('Please set address');
+      }
+      func.setCallError('');
+      const options = {} as any;
+      if (func.amount?.value) {
+        options.value = func.amount.value;
+      }
+      if (func.gasLimit) {
+        options.gasLimit = func.gasLimit;
+      }
+
+      store.loading.setValue(true);
+      const params = func.inputs.map((i) => {
+        i = helper.json.safeParse(i.value);
+        if (typeof i == 'number') {
+          return new BigNumber(i).toFixed();
+        }
+        return i;
+      });
+      console.log(params);
+
+      const [err, res] = await helper.promise.runAsync(
+        god.currentNetwork.execContract({
+          address,
+          abi: contract.abi,
+          method: func.name,
+          params,
+          options
+        })
+      );
+
+      if (!err) {
+        if (res.hash) {
+          func.setCallResult(res.hash);
+          // @ts-ignore
+          // store.curContractInstance.addExecHistory({ method: functionItem.name, params, options, address: store.curContractInstance.address, hash: res.hash });
+          res.wait();
+        } else {
+          func.setCallResult(res.toString());
+        }
+      }
+      store.loading.setValue(false);
+      if (err) {
+        console.log(err);
+        functionItem.setCallError(err.message);
+      }
+    },
+    async copyTopic(func: FunctionState) {
+      try {
+        let transferEventSignature// = 'Transfer(address,address,uint256)';
+        transferEventSignature = `${func.name}(${func.inputs.map((i) => i.type).join(',')})`
+        const topic = ethers.utils.id(transferEventSignature);
+        await navigator.clipboard.writeText(topic);
+        toast.success('Copy Success');
+      } catch (e) {
+        toast.error(e.message);
+      }
+    }
+  }));
+  return (
+    <AccordionItem key={functionItem.name}>
+      <AccordionButton color={functionItem.background} py={1.5} px={0}>
+        <Box flex="1" textAlign="left" fontSize="sm" fontWeight={500}>
+          {functionItem.name}（{functionItem.inputs?.length || 0}）
+        </Box>
+        <AccordionIcon />
+      </AccordionButton>
+      <AccordionPanel py={2} px={2}>
+        {functionItem.inputs?.length ? (
+          <Box>
+            {functionItem.inputs.map((input) => (
+              <FormControl key={input.name}>
+                <FormLabel fontSize="xs" mb={0.5}>
+                  {input.name}
+                </FormLabel>
+                <Input size="xs" mb={1.5} fontSize="sm" value={input.value} onChange={(e) => input.setValue(e.target.value)} placeholder={input.type} />
+              </FormControl>
+            ))}
+          </Box>
+        ) : null}
+        <Flex mt="8px" alignItems="center">
+          <Button ml={2} onClick={(e) => store.copyTopic(functionItem)} size="sm">
+            Copy Topic0
+          </Button>
+        </Flex>
       </AccordionPanel>
       {functionItem.callResult && <CallResult text={functionItem.callResult} />}
     </AccordionItem>

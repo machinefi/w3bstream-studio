@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Flex, chakra, Box, Text, Stack, FlexProps, Icon, Button, Spinner, Image } from '@chakra-ui/react';
 import { dataURItoBlob, WidgetProps } from '@rjsf/utils';
 import { Accept, useDropzone } from 'react-dropzone';
@@ -6,6 +6,7 @@ import { FiUploadCloud } from 'react-icons/fi';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { useS3Upload } from 'next-s3-upload';
 import MonacoEditor from '@monaco-editor/react';
+import { _ } from '@/lib/lodash';
 
 function addNameToDataURL(dataURL: string, name: string) {
   if (dataURL === null) {
@@ -115,17 +116,6 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
   const { uploadToS3 } = useS3Upload();
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    if (mode === 'image' || !value) {
-      setFilesInfo([]);
-      return;
-    }
-
-    if (resultType === 'dataURL') {
-      Array.isArray(value) ? setFilesInfo(extractFileInfo(value)) : setFilesInfo(extractFileInfo([value]));
-    }
-  }, [value]);
-
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (!acceptedFiles.length) {
@@ -162,13 +152,29 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
     },
     [multiple, onChange]
   );
-
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles,
     multiple,
-    accept: accept ? accept : undefined
+    accept: accept ? accept : undefined,
+    disabled: resultType === 'JSON' && value
   });
+  const changeCodeRef = useRef(
+    _.debounce((codeStr: string) => {
+      onChange(codeStr);
+    }, 800)
+  );
+
+  useEffect(() => {
+    if (mode === 'image' || !value) {
+      setFilesInfo([]);
+      return;
+    }
+
+    if (resultType === 'dataURL') {
+      Array.isArray(value) ? setFilesInfo(extractFileInfo(value)) : setFilesInfo(extractFileInfo([value]));
+    }
+  }, [value]);
 
   return (
     <Flex flexDir="column">
@@ -193,19 +199,19 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
         {...getRootProps({ className: 'dropzone' })}
         {...flexProps}
       >
-        <input id={id} name={id} disabled={readonly || disabled} autoFocus={autofocus} {...getInputProps()} />
+        <input id={id} name={id} autoFocus={autofocus} {...getInputProps()} />
         {loading ? (
           <Spinner />
         ) : mode === 'general' ? (
           <>
-            {value ? (
+            {value && resultType === 'JSON' ? (
               <MonacoEditor
                 height="100%"
                 theme="vs-light"
                 language={resultType === 'JSON' ? 'json' : 'text'}
                 value={value}
-                options={{
-                  readOnly: true
+                onChange={(v) => {
+                  changeCodeRef.current && changeCodeRef.current(v);
                 }}
               />
             ) : (
