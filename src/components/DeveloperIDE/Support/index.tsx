@@ -2,7 +2,6 @@ import React from 'react';
 import { Flex, Box, Grid, GridItem, Image, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { Center } from '@chakra-ui/layout';
-import { publicConfig } from '@/constants/config';
 import { useStore } from '@/store/index';
 
 const Support = () => {
@@ -119,7 +118,7 @@ const Support = () => {
           <ModalBody pb="30px">
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>
               <Box>Version:</Box>
-              <Box ml="10px">{publicConfig.version}</Box>
+              <Box ml="10px">{envs.value?.studioVersion}</Box>
             </Flex>
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>
               <Box whiteSpace="nowrap">W3bstream Version:</Box>

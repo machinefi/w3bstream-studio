@@ -16,6 +16,7 @@ export const envRouter = t.router({
         } catch (error) {}
         return {
           w3bstreamVersion,
+          studioVersion: process.env.npm_package_version,
           httpURL: process.env.NEXT_PUBLIC_GATEWAY_HTTP_URL || 'https://dev.w3bstream.com/api/w3bapp/event/:projectName',
           mqttURL: process.env.NEXT_PUBLIC_GATEWAY_MQTT_URL || 'mqtt://dev.w3bstream.com:1883'
         };
