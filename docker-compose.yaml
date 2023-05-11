@@ -27,6 +27,7 @@ services:
       SRV_APPLET_MGR__ServerEvent_Spec: ./swagger.json
       SRV_APPLET_MGR__MqttBroker_Server: mqtt://mqtt_server:1883
       SRV_APPLET_MGR__Server_Port: '8888'
+      SRV_APPLET_MGR__LocalFS_Root: /w3bstream/asserts
     volumes:
       - w3bstream_assets:/w3bstream/asserts
 
