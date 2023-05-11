@@ -30,7 +30,7 @@ const EditTable = observer(() => {
   return (
     <Box>
       <Flex alignItems="center">
-        <Button h="32px" leftIcon={<MdRefresh />} {...defaultOutlineButtonStyle} onClick={async (e) => {}}>
+        <Button h="32px" leftIcon={<MdRefresh />} {...defaultOutlineButtonStyle} onClick={async (e) => { }}>
           Refresh
         </Button>
       </Flex>
@@ -86,7 +86,8 @@ const EditTable = observer(() => {
                       defaultValue: column.default_value,
                       isUnique: column.is_unique,
                       isNullable: column.is_nullable,
-                      isIdentity: column.is_identity
+                      isIdentity: column.is_identity,
+                      isPrimaryKey: column.is_identity
                     });
                     const formData = await hooks.getFormData({
                       title: `Update column '${column.name}'  from  '${column.table}'`,
@@ -259,7 +260,7 @@ const ViewData = observer(() => {
                   dataSource: data
                 });
               }
-            } catch (error) {}
+            } catch (error) { }
           }}
         >
           Insert
