@@ -301,10 +301,10 @@ const Projects = observer(() => {
             <Button
               ml="20px"
               size="sm"
-              leftIcon={<Icon as={FaFileImport} />}
+              leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
-                w3s.project.importProject();
+                w3s.project.importProject.call();
               }}
             >
               Import a project
