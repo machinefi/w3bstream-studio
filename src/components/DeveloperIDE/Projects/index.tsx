@@ -288,16 +288,28 @@ const Projects = observer(() => {
           <Text mt="16px" fontSize="14px" color="#7A7A7A">
             You haven't created any project.
           </Text>
-          <Button
-            mt="30px"
-            h="32px"
-            {...defaultButtonStyle}
-            onClick={() => {
-              w3s.project.createProjectForDeleveloper();
-            }}
-          >
-            Create a project now
-          </Button>
+          <Flex mt="30px">
+            <Button
+              h="32px"
+              {...defaultButtonStyle}
+              onClick={() => {
+                w3s.project.createProjectForDeleveloper();
+              }}
+            >
+              Create a project now
+            </Button>
+            <Button
+              ml="20px"
+              size="sm"
+              leftIcon={<Icon as={FaFileImport} />}
+              {...defaultOutlineButtonStyle}
+              onClick={() => {
+                w3s.project.importProject();
+              }}
+            >
+              Import a project
+            </Button>
+          </Flex>
         </Flex>
       )}
     </Center>
