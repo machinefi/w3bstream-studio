@@ -4,6 +4,11 @@ import { useStore } from '@/store/index';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { useEffect } from 'react';
 import { WidgetProps } from '@rjsf/utils';
+import { Indexer } from '@/lib/indexer';
+import { Monitor } from 'pages/api/init';
+import { ContractInstance } from '@/store/lib/ContractInstance';
+import { helper } from '@/lib/helper';
+import { ethers } from 'ethers';
 
 const getSqlListAndEnvList = (fileList: FilesItemType[], sqlList: FilesItemType[] = [], envList: FilesItemType[] = []) => {
   fileList.forEach((item) => {
@@ -41,6 +46,28 @@ const convertEnvFile = (envFileStr: string) => {
   return JSON.stringify(projectEnv);
 };
 
+const convertMonitorLog = (monitorLog: typeof Indexer.indexderHistory.current) => {
+  let monitor: Partial<Monitor['contractLog']> = {};
+  if (monitorLog) {
+    monitor.blockStart = monitorLog.startBlock;
+    monitor.blockEnd = monitorLog.startBlock + 100;
+    monitor.contractAddress = monitorLog.contractAddress;
+    monitor.eventType = 'DEFAULT';
+    monitor.chainID = monitorLog.chainId;
+    const { abi, address } = helper.string.validAbi(monitorLog.contract);
+    const contractInstance = new ContractInstance({
+      abi,
+      name: '',
+      address: monitorLog.contractAddress
+    });
+    let transferEventSignature; // = 'Transfer(address,address,uint256)';
+    const func = contractInstance.abi.find((item) => item.name === monitorLog.contractEventName);
+    transferEventSignature = `${func.name}(${func.inputs.map((i) => i.type).join(',')})`;
+    monitor.topic0 = ethers.utils.id(transferEventSignature);
+  }
+  return JSON.stringify(monitor);
+};
+
 type Options = {
   separator?: string;
 };
@@ -63,7 +90,7 @@ export const SelectSqlFileAndEnvFile = observer(({ options, onChange }: SelectSq
   const store = useLocalObservable(() => ({
     sqlList: [],
     envList: [],
-    value: ['', ''],
+    value: ['', '', ''],
     setData(
       v: Partial<{
         sqlList: FilesItemType[];
@@ -86,6 +113,7 @@ export const SelectSqlFileAndEnvFile = observer(({ options, onChange }: SelectSq
 
   useEffect(() => {
     onChange(store.value.join(separator));
+    console.log(store.value, store.value.join(separator));
   }, [store.value]);
 
   return (
@@ -95,7 +123,7 @@ export const SelectSqlFileAndEnvFile = observer(({ options, onChange }: SelectSq
         placeholder="Select a SQL schema file"
         onChange={(e) => {
           store.setData({
-            value: [e.target.value, store.value[1]]
+            value: [e.target.value, store.value[1], store.value[2]]
           });
         }}
       >
@@ -109,12 +137,32 @@ export const SelectSqlFileAndEnvFile = observer(({ options, onChange }: SelectSq
         onChange={(e) => {
           const envCode = convertEnvFile(e.target.value);
           store.setData({
-            value: [store.value[0], envCode]
+            value: [store.value[0], envCode, store.value[2]]
           });
         }}
       >
         {store.envList.map((item) => {
           return <option value={item.data?.code}>{item.label}</option>;
+        })}
+      </Select>
+      <Box>Smart Contract Monitor</Box>
+      <Select
+        placeholder="Select an Indexer"
+        onChange={(e) => {
+          const index = Number(e.target.value);
+          Indexer.indexderHistory.currentIndex = index;
+          const monitorLog = convertMonitorLog(Indexer.indexderHistory.current);
+          store.setData({
+            value: [store.value[0], store.value[1], monitorLog]
+          });
+        }}
+      >
+        {Indexer.indexderHistory.list.map((item, index) => {
+          return (
+            <option value={index}>
+              {item.chainId}-{item.contractAddress}-{item.contractEventName}
+            </option>
+          );
         })}
       </Select>
     </Stack>
