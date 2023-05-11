@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Badge, Spinner } from '@chakra-ui/react';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
@@ -37,10 +37,10 @@ const Projects = observer(() => {
             <Button
               ml="20px"
               size="sm"
-              leftIcon={<Icon as={FaFileImport} />}
+              leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
-                w3s.project.importProject();
+                w3s.project.importProject.call();
               }}
             >
               Import a project
@@ -243,7 +243,7 @@ const Projects = observer(() => {
                               });
                               eventBus.emit('instance.handle');
                               toast.success('Successfully suspended');
-                            } catch (error) {}
+                            } catch (error) { }
                           }}
                         />
                       ) : (
@@ -263,7 +263,7 @@ const Projects = observer(() => {
                               });
                               eventBus.emit('instance.handle');
                               toast.success('Successfully started');
-                            } catch (error) {}
+                            } catch (error) { }
                           }}
                         />
                       )}
@@ -301,10 +301,10 @@ const Projects = observer(() => {
             <Button
               ml="20px"
               size="sm"
-              leftIcon={<Icon as={FaFileImport} />}
+              leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
-                w3s.project.importProject();
+                w3s.project.importProject.call();
               }}
             >
               Import a project
