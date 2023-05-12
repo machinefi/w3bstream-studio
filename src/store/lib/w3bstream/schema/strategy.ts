@@ -95,8 +95,6 @@ export default class StrategyModule {
                   });
                   const { appletID, eventType, handler } = formData;
                   if (appletID && eventType && handler) {
-                    const allApplets = globalThis.store.w3s.applet.allData;
-                    const applet = allApplets.find((item) => String(item.f_applet_id) === appletID);
                     try {
                       await axios.request({
                         method: 'put',
@@ -152,6 +150,23 @@ export default class StrategyModule {
     containerProps: { mt: '10px' }
   });
 
+  allData: StrategyType[] = [];
+
+  get curStrategies() {
+    const curProject = globalThis.store.w3s.project.curProject;
+    return this.allData.filter((i) => i.f_project_id === curProject?.f_project_id);
+  }
+
+  constructor() {
+    makeObservable(this, {
+      allData: observable
+    });
+  }
+
+  set(v: Partial<StrategyModule>) {
+    Object.assign(this, v);
+  }
+
   async createStrategy() {
     const formData = await hooks.getFormData({
       title: 'Create Strategy',
@@ -183,17 +198,5 @@ export default class StrategyModule {
         eventBus.emit('strategy.create');
       } catch (error) {}
     }
-  }
-
-  allData: StrategyType[] = [];
-
-  constructor() {
-    makeObservable(this, {
-      allData: observable
-    });
-  }
-
-  set(v: Partial<StrategyModule>) {
-    Object.assign(this, v);
   }
 }

@@ -47,14 +47,16 @@ export const pgRouter = t.router({
     .input(
       z.object({
         projectID: z.string(),
-        includedSchemas: z.array(z.string())
+        includedSchemas: z.array(z.string()),
+        includeColumns: z.boolean()
       })
     )
     .query(async ({ ctx, input }) => {
+      const { includedSchemas, includeColumns } = input;
       const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
       const { data, error } = await pgMeta.tables.list({
-        includedSchemas: input.includedSchemas,
-        includeColumns: false
+        includedSchemas,
+        includeColumns
       });
       await pgMeta.end();
       if (error) {
@@ -66,7 +68,11 @@ export const pgRouter = t.router({
           return {
             tableId: item.id,
             tableSchema: item.schema,
-            tableName: item.name
+            tableName: item.name,
+            columns: includeColumns ? item.columns : [],
+            primary_keys: includeColumns ? item.primary_keys : [],
+            relationships: includeColumns ? item.relationships : [],
+            comment: item.comment || ''
           };
         });
     }),

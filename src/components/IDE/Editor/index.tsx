@@ -30,8 +30,7 @@ import { ConsolePanel } from './EditorBottomPanels/ConsolePanel';
 import { ABIPanel } from './EditorBottomPanels/ABIPanel';
 import { DBpanel } from './EditorBottomPanels/DBpanel';
 import { Indexer } from '@/lib/indexer';
-import HorizontalScroll from 'react-scroll-horizontal';
-
+import { HorizontalScrollBox } from '@/components/Common/HorizontalScrollBox';
 export const compileAssemblyscript = async (code: string) => {
   let { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
     optimizeLevel: 4,
@@ -297,50 +296,49 @@ const Editor = observer(() => {
 
   const EditorTopBarIcons = observer(() => {
     return (
-      <Flex w="full" bg="#2f3030" alignItems={'center'} position={'relative'} h="35px">
-        <HorizontalScroll style={{ marginRight: '15px' }}>
-          <Flex>
-            {curFilesListSchema?.activeFiles?.map((i, index) => {
-              return (
-                <>
-                  <ContextMenuTrigger id={`ActiveFileContent${i?.key}`} holdToDisplay={-1}>
-                    {i?.label && (
-                      <Box
-                        w="max-content"
-                        whiteSpace={'nowrap'}
-                        onClick={() => {
-                          store.showPreviewMode = false;
-                          curFilesListSchema.setCurActiveFile(i);
+      <Flex w="full" bg="#2f3030" alignItems={'center'} position={'relative'} >
+        {/* style={{ marginRight: '15px' }} */}
+        <HorizontalScrollBox w="calc(100vw - 450px)">
+          {curFilesListSchema?.activeFiles?.map((i, index) => {
+            return (
+              <>
+                <ContextMenuTrigger id={`ActiveFileContent${i?.key}`} holdToDisplay={-1}>
+                  {i?.label && (
+                    <Box
+                      w="max-content"
+                      whiteSpace={'nowrap'}
+                      onClick={() => {
+                        store.showPreviewMode = false;
+                        curFilesListSchema.setCurActiveFile(i);
+                      }}
+                      display="flex"
+                      py={2}
+                      px={2}
+                      background={i?.key == curFilesListSchema?.curActiveFile?.key ? '#1e1e1e' : 'none'}
+                      fontSize="sm"
+                      color={i?.key == curFilesListSchema?.curActiveFile?.key ? '#a9dc76' : 'white'}
+                      cursor="pointer"
+                      alignItems={'center'}
+                    >
+                      {FileIcon(i)}
+                      <Text mr="4">{i?.label}</Text>
+                      <SmallCloseIcon
+                        _hover={{ bg: '#3f3f3f' }}
+                        color="white"
+                        ml="auto"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          curFilesListSchema.deleteActiveFiles(i);
                         }}
-                        display="flex"
-                        py={2}
-                        px={2}
-                        background={i?.key == curFilesListSchema?.curActiveFile?.key ? '#1e1e1e' : 'none'}
-                        fontSize="sm"
-                        color={i?.key == curFilesListSchema?.curActiveFile?.key ? '#a9dc76' : 'white'}
-                        cursor="pointer"
-                        alignItems={'center'}
-                      >
-                        {FileIcon(i)}
-                        <Text mr="4">{i?.label}</Text>
-                        <SmallCloseIcon
-                          _hover={{ bg: '#3f3f3f' }}
-                          color="white"
-                          ml="auto"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            curFilesListSchema.deleteActiveFiles(i);
-                          }}
-                        />
-                      </Box>
-                    )}
-                  </ContextMenuTrigger>
-                  <CurActiveFileRightClickMenu activeFile={i} />
-                </>
-              );
-            })}
-          </Flex>
-        </HorizontalScroll>
+                      />
+                    </Box>
+                  )}
+                </ContextMenuTrigger>
+                <CurActiveFileRightClickMenu activeFile={i} />
+              </>
+            );
+          })}
+        </HorizontalScrollBox>
 
         {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && (
           <>
