@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
-import { Box, Flex, Input, Tabs, TabList, TabPanels, Tab, TabPanel, Select } from '@chakra-ui/react';
-import { assemblyScriptExample, envExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
-import { helper } from '@/lib/helper';
+import { Box, Tabs, TabList, TabPanels, Tab, TabPanel, Select } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import { v4 as uuidv4 } from 'uuid';
-import { FileIcon } from '@/components/Tree';
-import { Schema, TableJSONSchema } from '@/server/wasmvm/sqldb';
+import { TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { useStore } from '@/store/index';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
-import { toJS } from 'mobx';
 import JSONTable from '@/components/JSONTable';
 import { eventBus } from '@/lib/event';
+
 type Options = {};
 
 export interface FlowDatabaseTemplateWidgetProps extends WidgetProps {
@@ -25,14 +20,8 @@ export interface FlowDatabaseTemplateWidgetUIOptions {
 }
 
 const FlowDatabaseTemplate = observer(({ id, options, value, required, label, onChange }: FlowDatabaseTemplateWidgetProps) => {
-  const [templateName, setTemplateName] = useState('');
   const {
     god: { sqlDB },
-    w3s,
-    w3s: {
-      projectManager: { curFilesListSchema },
-      lab
-    }
   } = useStore();
   const store = useLocalObservable(() => ({
     tables: [],
@@ -42,20 +31,18 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
       store.tables = [];
       try {
         const tableJSONSchema: TableJSONSchema = JSON.parse(code);
-        const _firstSchema: Schema = tableJSONSchema.schemas[0];
-        const tables: { tableName: string; columnName: string[]; table: JSONSchemaTableState }[] = [];
-        _firstSchema.tables.forEach((i) => {
-          const { tableName, columnName } = sqlDB.getTableInfoByJSONSchema(i);
-          // console.log(tableName, columnName);
-          // sqlDB.test();
+        const _firstSchema = tableJSONSchema.schemas[0];
+        const tables: { tableName: string; table: JSONSchemaTableState }[] = [];
+        _firstSchema.tables.forEach((t) => {
+          const { tableName, columns } = t;
+          const columnNames = columns.map((c) => c.name);
           const res = sqlDB.db.exec(`SELECT * FROM ${tableName}`);
-          // console.log(res);
           const dataSource: { [key: string]: any }[] = [];
           if (res.length > 0) {
             res[0].values.forEach((i) => {
               const obj: { [key: string]: any } = {};
               i.forEach((j, index) => {
-                obj[columnName[index]] = j;
+                obj[columnNames[index]] = j;
               });
               dataSource.push(obj);
             });
@@ -63,10 +50,9 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
 
           tables.push({
             tableName,
-            columnName,
             table: new JSONSchemaTableState<any>({
               dataSource,
-              columns: columnName.map((i) => {
+              columns: columnNames.map((i) => {
                 return {
                   key: i,
                   label: i
@@ -76,7 +62,6 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
             })
           });
           store.tables = tables;
-          // console.log(toJS(tables));
         });
       } catch (e) {
         console.log(e);
@@ -126,7 +111,7 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
       <Tabs mt={4}>
         <TabList>
           {store?.tables?.map((i) => {
-            return <Tab>{i.tableName}</Tab>;
+            return <Tab key={i.tableName}>{i.tableName}</Tab>;
           })}
         </TabList>
 
@@ -134,7 +119,7 @@ const FlowDatabaseTemplate = observer(({ id, options, value, required, label, on
           <TabPanels>
             {store?.tables?.map((i) => {
               return (
-                <TabPanel p={0}>
+                <TabPanel p={0} key={i.tableName}>
                   <JSONTable
                     jsonstate={{
                       table: i.table

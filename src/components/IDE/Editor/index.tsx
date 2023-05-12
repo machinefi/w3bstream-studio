@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import MonacoEditor, { useMonaco } from '@monaco-editor/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { rootStore, useStore } from '@/store/index';
-import { Box, Button, Center, Flex, Portal, Select, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Portal, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
 import { helper, toast } from '@/lib/helper';
@@ -22,7 +22,7 @@ import Flow, { FlowErrorFallback } from '@/components/DeveloperIDE/Flow';
 import { hooks } from '@/lib/hooks';
 import { StorageState } from '@/store/standard/StorageState';
 import ErrorBoundary from '@/components/Common/ErrorBoundary';
-import { CREATDB_TYPE, TableJSONSchema } from '@/server/wasmvm/sqldb';
+import { TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 //@ts-ignore
 import { faker } from '@faker-js/faker';
@@ -122,7 +122,7 @@ export const debugAssemblyscript = async (needCompile = true) => {
           const wasmPayload = JSON.parse(formData.wasmPayload);
           await lab.onDebugWASM(wasmPayload, needCompile, formData.handleFunc);
           lab.simulationEventHistory.push({ wasmPayload, handleFunc: formData.handleFunc });
-        } catch (error) {}
+        } catch (error) { }
       }
     };
     lab.simulationIndexerForm.afterSubmit = async ({ formData }) => {
@@ -160,7 +160,7 @@ export const debugAssemblyscript = async (needCompile = true) => {
         }
       ]
     });
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const debugSimulation = () => {
@@ -257,7 +257,7 @@ const Editor = observer(() => {
     return (
       <>
         <Portal>
-          <ContextMenu id={`ActiveFileContent${activeFile?.key}`} onShow={() => {}} onHide={() => {}}>
+          <ContextMenu id={`ActiveFileContent${activeFile?.key}`} onShow={() => { }} onHide={() => { }}>
             <Box p={2} bg="#fff" boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px">
               <MenuItem
                 onClick={() => {
@@ -467,7 +467,7 @@ const Editor = observer(() => {
           language={curFilesListSchema?.curActiveFile.data?.language}
           defaultValue="export function test(): void {}"
           value={curFilesListSchema?.curActiveFile?.data?.code}
-          beforeMount={(monaco) => {}}
+          beforeMount={(monaco) => { }}
           onMount={async (editor, monaco) => {
             monaco.languages.typescript.typescriptDefaults.addExtraLib(
               `

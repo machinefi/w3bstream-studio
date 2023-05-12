@@ -7,9 +7,6 @@ export interface InitProject {
   name: string;
   description: string;
   applets: Applet[];
-  database?: {
-    schemas: any[];
-  };
   envs?: {
     env: [string, string][];
   };
@@ -177,8 +174,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
+      const createdProjectIds = [];
       for (const p of project) {
         const { projectID, projectName } = await createProject(p, token);
+        createdProjectIds.push(projectID);
         for (const a of p.applets) {
           await createApplet({ ...a, projectName }, token);
         }
@@ -191,7 +190,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           }
         }
       }
-      res.status(200).json({ message: 'OK' });
+      res.status(200).json({ message: 'OK', createdProjectIds });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
