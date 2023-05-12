@@ -1,19 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
-import { Box, Flex, Input, Tabs, TabList, TabPanels, Tab, TabPanel, Select } from '@chakra-ui/react';
-import { assemblyScriptExample, envExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
-import { helper } from '@/lib/helper';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import { v4 as uuidv4 } from 'uuid';
-import { FileIcon } from '@/components/Tree';
-import { Schema, TableJSONSchema } from '@/server/wasmvm/sqldb';
+import { Select } from '@chakra-ui/react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
-import { toJS } from 'mobx';
-import JSONTable from '@/components/JSONTable';
-import { eventBus } from '@/lib/event';
-import { Indexer } from '@/lib/indexer';
+
 type Options = {};
 
 export interface labSimulateHistoryWidgetWidgetProps extends WidgetProps {
@@ -26,12 +16,8 @@ export interface labSimulateHistoryWidgetWidgetUIOptions {
 }
 
 const LabSimulateHistory = observer(({ id, options, value, required, label, onChange }: labSimulateHistoryWidgetWidgetProps) => {
-  const [templateName, setTemplateName] = useState('');
   const {
-    god: { sqlDB },
-    w3s,
     w3s: {
-      projectManager: { curFilesListSchema },
       lab
     }
   } = useStore();

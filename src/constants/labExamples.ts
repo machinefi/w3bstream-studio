@@ -46,44 +46,54 @@ export const labExamples: FilesItemType[] = [
           code: `{
             "schemas": [
               {
-                "schema": "public",
+                "schemaName": "public",
                 "tables": [
                   {
-                    "name": "t_iot",
-                    "desc": "iot table",
-                    "cols": [
+                    "tableName": "t_iot",
+                    "tableSchema": "public",
+                    "comment": "iot table",
+                    "columns": [
                       {
                         "name": "snr",
-                        "constrains": {
-                          "datatype": "UINT",
-                          "autoincrement": false,
-                          "desc": "primary id"
-                        }
+                        "type": "int8",
+                        "isIdentity": true,
+                        "isNullable": false,
+                        "isUnique": false,
+                        "isPrimaryKey": true,
+                        "comment": "primary id"
                       },
                       {
                         "name": "lat",
-                        "constrains": {
-                          "datatype": "FLOAT32",
-                          "length": 255
-                        }
+                        "type": "float4",
+                        "defaultValue": null,
+                        "isIdentity": false,
+                        "isNullable": true,
+                        "isUnique": false,
+                        "isPrimaryKey": false,
+                        "comment": null
                       },
                       {
                         "name": "long",
-                        "constrains": {
-                          "datatype": "FLOAT32",
-                          "desc": "amount"
-                        }
+                        "type": "float4",
+                        "defaultValue": null,
+                        "isIdentity": false,
+                        "isNullable": true,
+                        "isUnique": false,
+                        "isPrimaryKey": false,
+                        "comment": null
                       },
                       {
                         "name": "temperature",
-                        "constrains": {
-                          "datatype": "UINT",
-                          "length": 512,
-                          "decimal": 512
-                        }
+                        "type": "int8",
+                        "defaultValue": null,
+                        "isIdentity": false,
+                        "isNullable": false,
+                        "isUnique": false,
+                        "isPrimaryKey": false,
+                        "comment": null
                       }
                     ],
-                    "keys": []
+                    "relationships": []
                   }
                 ]
               }

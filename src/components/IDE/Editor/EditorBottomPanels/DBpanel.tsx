@@ -1,11 +1,10 @@
 import JSONTable from '@/components/JSONTable';
 import dayjs from '@/lib/dayjs';
 import { eventBus } from '@/lib/event';
-import { Schema, TableJSONSchema } from '@/server/wasmvm/sqldb';
+import { TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { useStore } from '@/store/index';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { Box, Flex, Input, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import { toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
@@ -27,20 +26,18 @@ export const DBpanel = observer(() => {
       store.tables = [];
       try {
         const tableJSONSchema: TableJSONSchema = JSON.parse(curFilesListSchema.curActiveFile?.data?.code);
-        const _firstSchema: Schema = tableJSONSchema.schemas[0];
-        const tables: { tableName: string; columnName: string[]; table: JSONSchemaTableState }[] = [];
-        _firstSchema.tables.forEach((i) => {
-          const { tableName, columnName } = sqlDB.getTableInfoByJSONSchema(i);
-          // console.log(tableName, columnName);
-          // sqlDB.test();
+        const _firstSchema = tableJSONSchema.schemas[0];
+        const tables: { tableName: string; table: JSONSchemaTableState }[] = [];
+        _firstSchema.tables.forEach((t) => {
+          const { tableName, columns } = t;
+          const columnNames = columns.map((c) => c.name);
           const res = sqlDB.db.exec(`SELECT * FROM ${tableName}`);
-          // console.log(res);
           const dataSource: { [key: string]: any }[] = [];
           if (res.length > 0) {
             res[0].values.forEach((i) => {
               const obj: { [key: string]: any } = {};
               i.forEach((j, index) => {
-                obj[columnName[index]] = j;
+                obj[columnNames[index]] = j;
               });
               dataSource.push(obj);
             });
@@ -48,10 +45,9 @@ export const DBpanel = observer(() => {
 
           tables.push({
             tableName,
-            columnName,
             table: new JSONSchemaTableState<any>({
               dataSource,
-              columns: columnName.map((i) => {
+              columns: columnNames.map((i) => {
                 return {
                   key: i,
                   label: i
@@ -102,7 +98,7 @@ export const DBpanel = observer(() => {
           <Tabs>
             <TabList>
               {store?.tables?.map((i) => {
-                return <Tab>{i.tableName}</Tab>;
+                return <Tab key={i.tableName}>{i.tableName}</Tab>;
               })}
             </TabList>
 
@@ -110,7 +106,7 @@ export const DBpanel = observer(() => {
               <TabPanels>
                 {store?.tables?.map((i) => {
                   return (
-                    <TabPanel p={0}>
+                    <TabPanel p={0} key={i.tableName}>
                       <JSONTable
                         jsonstate={{
                           table: i.table
@@ -130,9 +126,7 @@ export const DBpanel = observer(() => {
 
 export const ConsolePanel = observer(() => {
   const {
-    w3s,
     w3s: {
-      projectManager: { curFilesListSchema },
       lab
     }
   } = useStore();

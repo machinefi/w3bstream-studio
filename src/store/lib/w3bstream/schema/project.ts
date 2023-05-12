@@ -486,12 +486,24 @@ export default class ProjectModule {
       const data = JSON.parse(JSON.stringify(templateData));
       const templateProjectName = templateData.project[0].name;
       data.project[0].name = `${templateProjectName}_${uuidv4().slice(0, 4)}`;
+      data.project[0].database = undefined;
       const res = await axios.request({
         method: 'post',
         url: `/api/init`,
         data
       });
-      if (res.data) {
+      if (res.data?.message === 'OK') {
+        const { createdProjectIds } = res.data;
+        for (let index = 0; index < createdProjectIds.length; index++) {
+          const projectID = createdProjectIds[index];
+          const database = templateData.project[index].database;
+          if (database?.schemas) {
+            await globalThis.store.w3s.dbTable.importTables({
+              projectID,
+              schemas: database.schemas
+            });
+          }
+        }
         showNotification({ message: 'Create project succeeded' });
         eventBus.emit('project.create');
       }
@@ -522,10 +534,11 @@ export default class ProjectModule {
         applets: [{ wasmRaw: formData.file, appletName: 'applet_01' }],
         datas: []
       };
+      let sqlSchema;
       if (formData.sqlFileAndEnvFile) {
         const [sqlCode, envCode] = formData.sqlFileAndEnvFile.split('<--->');
         if (sqlCode) {
-          projectData.database = helper.json.safeParse(sqlCode);
+          sqlSchema = helper.json.safeParse(sqlCode);
         }
         if (envCode) {
           projectData.envs = helper.json.safeParse(envCode);
@@ -539,7 +552,14 @@ export default class ProjectModule {
             project: [projectData]
           }
         });
-        if (res.data) {
+        if (res.data?.message === 'OK') {
+          if (sqlSchema) {
+            const projectID = res.data.createdProjectIds[0];
+            await globalThis.store.w3s.dbTable.importTables({
+              projectID,
+              schemas: sqlSchema.schemas
+            });
+          }
           eventBus.emit('project.create');
         }
       } catch (error) {
@@ -577,13 +597,25 @@ export default class ProjectModule {
       const data = JSON.parse(JSON.stringify(templateData));
       data.project[0].name = projectName;
       data.project[0].description = formData.description;
+      data.project[0].database = undefined;
       try {
         const res = await axios.request({
           method: 'post',
           url: `/api/init`,
           data
         });
-        if (res.data) {
+        if (res.data?.message === 'OK') {
+          const { createdProjectIds } = res.data;
+          for (let index = 0; index < createdProjectIds.length; index++) {
+            const projectID = createdProjectIds[index];
+            const database = templateData.project[index].database;
+            if (database?.schemas) {
+              await globalThis.store.w3s.dbTable.importTables({
+                projectID,
+                schemas: database.schemas
+              });
+            }
+          }
           showNotification({ message: 'Create project succeeded' });
         }
       } catch (error) {}
