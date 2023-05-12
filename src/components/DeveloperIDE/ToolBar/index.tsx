@@ -16,18 +16,14 @@ const ToolBar = (props: ToolBar) => {
   return (
     <Flex minW="200px" h="100%" direction="column" align="center" p="16px" bg="#fff" {...props}>
       <Flex
-        mb="30px"
+        mb="20px"
+        mt="8px"
         alignItems="center"
         color="#7A7A7A"
         fontSize="14px"
         cursor="pointer"
-        onClick={() => {
-          w3s.project.allProjects.onSelect(-1);
-          w3s.project.resetSelectedNames();
-        }}
       >
-        <ChevronLeftIcon />
-        <Box ml="10px">Return to Projects</Box>
+        {w3s.project.curProject?.name}
       </Flex>
       <Flex
         w="100%"

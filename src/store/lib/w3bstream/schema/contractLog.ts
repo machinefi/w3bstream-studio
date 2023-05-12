@@ -8,6 +8,7 @@ import { trpc } from '@/lib/trpc';
 import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
+import { ethers } from 'ethers';
 
 export const schema = {
   definitions: {
@@ -26,7 +27,8 @@ export const schema = {
     contractAddress: { type: 'string', title: 'Contract Address' },
     blockStart: { type: 'number', title: 'Block Start' },
     blockEnd: { type: 'number', title: 'Block End' },
-    topic0: { type: 'string', title: 'topic0' }
+    event: {type: 'string', title: 'Event'},
+    topic0: { type: 'string', title: 'Topic0' }
   },
   required: ['projectName', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
 } as const;
@@ -142,6 +144,12 @@ export default class ContractLogModule {
       },
       chainID: {
         'ui:widget': 'select'
+      },
+      event: {
+        'ui:widget': 'textarea'
+      },
+      topic0: {
+        'ui:widget': 'textarea'
       }
     },
     afterSubmit: async (e) => {
@@ -156,7 +164,18 @@ export default class ContractLogModule {
         contractAddress: '',
         blockStart: 16737070,
         blockEnd: 16740080,
+        event: '',
         topic0: ''
+      },
+      onSet(e) {
+        const {event} = e;
+        console.log('event', event);
+        if(event && event !== this.value?.event) {
+          console.log('e', ethers.utils.keccak256(ethers.utils.toUtf8Bytes(event)))
+          e.topic0 = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(event))
+        }
+
+        return e
       }
     })
   });
