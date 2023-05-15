@@ -11,6 +11,9 @@ const Support = () => {
     }
   } = useStore();
   const store = useLocalObservable(() => ({
+    get studioVersionLink() {
+      return `https://github.com/machinefi/w3bstream-studio/releases/tag/v${envs.value?.studioVersion}`
+    },
     get w3bstreamVersionGithubLink() {
       const w3bstreamVersion = envs.value?.w3bstreamVersion;
       if (!w3bstreamVersion) {
@@ -146,8 +149,10 @@ const Support = () => {
           <ModalCloseButton />
           <ModalBody pb="30px">
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>
-              <Box>Version:</Box>
-              <Box ml="10px">{envs.value?.studioVersion}</Box>
+              <Box>Studio Version:</Box>
+              <Link ml="10px" href={store.studioVersionLink} color="#946FFF" isExternal >
+                {envs.value?.studioVersion}
+              </Link>
             </Flex>
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>
               <Box whiteSpace="nowrap">W3bstream Version:</Box>

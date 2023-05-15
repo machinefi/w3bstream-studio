@@ -1,18 +1,18 @@
 #build studio
-FROM node:16 AS build-nodejs
+FROM node:18-slim AS build-nodejs
 
 WORKDIR /w3bstream-studio
 
 RUN npm i pnpm -g
 COPY package.json pnpm-lock.yaml ./
 COPY prisma ./prisma
-RUN pnpm i --no-frozen-lockfile
+RUN pnpm i
 COPY . .
 RUN pnpm build:standalone
 
 
 #run
-FROM node:16
+FROM node:18-slim
 
 EXPOSE 3000
 

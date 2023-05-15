@@ -2,13 +2,14 @@ import { t } from '../trpc';
 import axios from 'axios';
 import { memoryCache } from '@/lib/cache-manager';
 import { inferProcedureOutput } from '@trpc/server';
+import pkg from "../../../package.json"
 
 export const envRouter = t.router({
   envs: t.procedure.query(async () => {
     return memoryCache.wrap(
       'envs',
       async () => {
-        let w3bstreamVersion = '';
+        let w3bstreamVersion = pkg.version;
         try {
           const url = `${process.env.NEXT_PUBLIC_API_URL}/version`;
           const res = await axios.get(url);

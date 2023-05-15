@@ -19,7 +19,8 @@
     "test:ci": "cypress run --headless",
     "postinstall": "npm run gen",
     "gen": "prisma generate; prisma generate --schema ./prisma/monitor.prisma",
-    "db:pull": "npx prisma db pull"
+    "db:pull": "npx prisma db pull",
+    "dev:docker": "dp -f docker-compose-dev.yaml build; dp -f docker-compose-dev.yaml  up -d"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.11",
