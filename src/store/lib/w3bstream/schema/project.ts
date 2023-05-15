@@ -151,7 +151,7 @@ export default class ProjectModule {
             switch (config.f_type) {
               case ProjectConfigType.PROJECT_DATABASE:
                 // @ts-ignore
-                p.database = config.f_value;
+                // p.database = config.f_value;
                 break;
               case ProjectConfigType.PROJECT_ENV:
                 // @ts-ignore

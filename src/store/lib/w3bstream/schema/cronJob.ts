@@ -107,7 +107,7 @@ export default class CronJobModule {
           return res;
         }
       } catch (error) {
-        return '';
+        return [];
       }
     }
   });
