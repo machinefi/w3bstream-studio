@@ -21,3 +21,4 @@ WORKDIR /w3bstream-studio
 COPY --from=build-nodejs /w3bstream-studio/public ./public
 COPY --from=build-nodejs /w3bstream-studio/.next/standalone ./
 COPY --from=build-nodejs /w3bstream-studio/.next/static .next/static
+COPY package.json  ./
