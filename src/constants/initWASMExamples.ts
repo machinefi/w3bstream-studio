@@ -167,72 +167,64 @@ export const SqlExample: FilesItemType = {
           {
             schemas: [
               {
-                schema: 'public',
+                schemaName: 'public',
                 tables: [
                   {
-                    name: 't_demo',
-                    desc: 'demo table',
-                    cols: [
+                    tableName: 't_demo',
+                    tableSchema: 'public',
+                    comment: 'demo table',
+                    columns: [
                       {
                         name: 'f_id',
-                        constrains: {
-                          datatype: 'INT64',
-                          autoincrement: true,
-                          desc: 'primary id'
-                        }
+                        type: 'int8',
+                        isIdentity: true,
+                        isNullable: false,
+                        isUnique: false,
+                        isPrimaryKey: true,
+                        comment: 'primary id'
                       },
                       {
                         name: 'f_name',
-                        constrains: {
-                          datatype: 'TEXT',
-                          length: 255,
-                          desc: 'name'
-                        }
+                        type: 'text',
+                        defaultValue: '',
+                        isIdentity: false,
+                        isNullable: true,
+                        isUnique: false,
+                        isPrimaryKey: false,
+                        comment: 'name'
                       },
                       {
                         name: 'f_amount',
-                        constrains: {
-                          datatype: 'FLOAT64',
-                          desc: 'amount'
-                        }
+                        type: 'float8',
+                        defaultValue: null,
+                        isIdentity: false,
+                        isNullable: true,
+                        isUnique: false,
+                        isPrimaryKey: false,
+                        comment: 'amount'
                       },
                       {
                         name: 'f_income',
-                        constrains: {
-                          datatype: 'DECIMAL',
-                          length: 512,
-                          decimal: 512,
-                          default: '0',
-                          desc: 'income'
-                        }
+                        type: 'numeric',
+                        defaultValue: 0,
+                        isIdentity: false,
+                        isNullable: true,
+                        isUnique: false,
+                        isPrimaryKey: false,
+                        comment: 'income'
                       },
                       {
                         name: 'f_comment',
-                        constrains: {
-                          datatype: 'TEXT',
-                          default: "''",
-                          null: true,
-                          desc: 'comment'
-                        }
+                        type: 'text',
+                        defaultValue: '',
+                        isIdentity: false,
+                        isNullable: true,
+                        isUnique: false,
+                        isPrimaryKey: false,
+                        comment: 'comment'
                       }
                     ],
-                    keys: [
-                      {
-                        name: 'primary',
-                        isUnique: false,
-                        columnNames: ['f_id']
-                      },
-                      {
-                        name: 't_demo_ui_name',
-                        isUnique: true,
-                        columnNames: ['f_name']
-                      },
-                      {
-                        name: 'i_amount',
-                        isUnique: false,
-                        columnNames: ['f_amount']
-                      }
-                    ]
+                    relationships: []
                   }
                 ]
               }
