@@ -344,7 +344,7 @@ export default class ProjectModule {
           },
           tips: `Upload a JSON file`,
           flexProps: {
-            h: '200px',
+            h: '400px',
             borderRadius: '8px'
           }
         }
