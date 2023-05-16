@@ -521,16 +521,19 @@ export default class ProjectModule {
         name: formData.projectName,
         description: '',
         applets: [{ wasmRaw: formData.file, appletName: 'applet_01' }],
-        datas: []
+        datas: [{ monitor: { contractLog: null } }]
       };
       let sqlSchema;
       if (formData.sqlFileAndEnvFile) {
-        const [sqlCode, envCode] = formData.sqlFileAndEnvFile.split('<--->');
+        const [sqlCode, envCode, contractLogMonitor] = formData.sqlFileAndEnvFile.split('<--->');
         if (sqlCode) {
           sqlSchema = helper.json.safeParse(sqlCode);
         }
         if (envCode) {
           projectData.envs = helper.json.safeParse(envCode);
+        }
+        if (contractLogMonitor) {
+          projectData.datas[0].monitor.contractLog = helper.json.safeParse(contractLogMonitor);
         }
       }
       try {
@@ -550,6 +553,7 @@ export default class ProjectModule {
             });
           }
           eventBus.emit('project.create');
+          eventBus.emit('contractlog.create');
         }
       } catch (error) {
         console.log('error', error);

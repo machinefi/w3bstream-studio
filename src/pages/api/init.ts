@@ -24,16 +24,16 @@ interface Applet {
   wasmRaw?: string;
   appletName: string;
 }
-
-interface Monitor {
-  contractLog?: {
-    eventType: string;
-    chainID: number;
-    contractAddress: string;
-    blockStart: number;
-    blockEnd: number;
-    topic0: string;
-  };
+export interface ContractLog {
+  eventType: string;
+  chainID: number;
+  contractAddress: string;
+  blockStart: number;
+  blockEnd: number;
+  topic0: string;
+}
+export interface Monitor {
+  contractLog?: ContractLog | ContractLog[];
   chainTx?: {
     eventType: string;
     chainID: number;
@@ -64,6 +64,7 @@ const createProject = async (
     }
     const data: any = await response.json();
     if (data.projectID) {
+      console.log('create project success');
       return {
         projectID: data.projectID,
         projectName: data.name
@@ -123,27 +124,53 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
 const createMonitor = async (projectName: string, monitor: Monitor, token: string): Promise<void> => {
   try {
     if (monitor.contractLog) {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
-        method: 'post',
-        body: JSON.stringify(monitor.contractLog),
-        headers: { Authorization: token }
-      });
+      if (Array.isArray(monitor.contractLog)) {
+        const res = await Promise.all(
+          monitor.contractLog.map((i) => {
+            return fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
+              method: 'post',
+              body: JSON.stringify(i),
+              headers: { Authorization: token }
+            });
+          })
+        );
+        if (res.some((i) => i.status != 200 && i.status !== 201)) {
+          throw new Error('create monitor failed:' + res[0].statusText);
+        }
+      } else {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
+          method: 'post',
+          body: JSON.stringify(monitor.contractLog),
+          headers: { Authorization: token }
+        });
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('create monitor failed:' + res.statusText);
+        }
+      }
     }
     if (monitor.chainTx) {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_tx`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_tx`, {
         method: 'post',
         body: JSON.stringify(monitor.chainTx),
         headers: { Authorization: token }
       });
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('create monitor failed:' + res.statusText);
+      }
     }
     if (monitor.chainHeight) {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_height`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/chain_height`, {
         method: 'post',
         body: JSON.stringify(monitor.chainHeight),
         headers: { Authorization: token }
       });
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('create monitor failed:' + res.statusText);
+      }
     }
-  } catch (error) {}
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const createCronJob = async (
@@ -193,6 +220,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(200).json({ message: 'OK', createdProjectIds });
     } catch (error) {
       res.status(500).json({ message: error.message });
+      //todo: if create project failed, rollback all (delete project)
     }
   } else {
     res.status(405).json({ message: 'Method Not Allowed' });

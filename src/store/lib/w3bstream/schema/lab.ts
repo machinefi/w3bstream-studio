@@ -4,17 +4,16 @@ import { UiSchema } from '@rjsf/utils';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
 import { StdIOType, WASM } from '@/server/wasmvm';
 import { makeObservable, observable } from 'mobx';
-import { compileAssemblyscript } from '@/components/IDE/Editor';
 import toast from 'react-hot-toast';
 import { StorageState } from '@/store/standard/StorageState';
 import FileWidget from '@/components/JSONFormWidgets/FileWidget';
 import { eventBus } from '@/lib/event';
 import { definitions } from './definitions';
 import { helper } from '@/lib/helper';
-import { rootStore } from '@/store/index';
 import IndexerHistoryWidget from '@/components/JSONFormWidgets/IndexerHistoryWidget';
 import { JSONHistoryState } from '@/store/standard/JSONHistoryState';
 import labSimulateHistoryWidget from '@/components/JSONFormWidgets/labSimulateHistoryWidget';
+import { compileAssemblyscript } from '@/components/IDE/Editor/EditorFunctions';
 
 export const uploadWasmTemplateFormSchema = {
   type: 'object',

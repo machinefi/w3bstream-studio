@@ -7,11 +7,11 @@ import { helper, toast } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
 import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider } from '@chakra-ui/react';
 import { VscCloudDownload, VscDebugStart, VscFile, VscFiles, VscFileSymlinkFile, VscFileZip, VscFolder, VscTrash } from 'react-icons/vsc';
-import { compileAndCreateProject, debugAssemblyscript, debugSimulation } from '../IDE/Editor';
 import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
 import { BiPaste, BiRename } from 'react-icons/bi';
 import { toJS } from 'mobx';
+import { compileAndCreateProject, debugAssemblyscript, debugSimulation } from '../IDE/Editor/EditorFunctions';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -88,6 +88,9 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
               }
             ]
           });
+          if (!formData.template) {
+            return toast.warning('Please select a template!');
+          }
           w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', helper.json.safeParse(formData.template) ?? null);
         }
       },
@@ -252,7 +255,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
               }}
             >
               <ContextMenuTrigger id={`ProjectItemContext${item.key}`} holdToDisplay={-1}>
-                <Flex color={item.label.startsWith('.') || isHidden ? '#979797' : ''} px={1} py={1} alignItems={'center'} _hover={{ bg: '#f6f6f6' }} bg={item.key == curFilekey ? '#f6f6f6' : ''}>
+                <Flex color={item.label?.startsWith('.') || isHidden ? '#979797' : ''} px={1} py={1} alignItems={'center'} _hover={{ bg: '#f6f6f6' }} bg={item.key == curFilekey ? '#f6f6f6' : ''}>
                   {item.children && <> {item?.isOpen ? <ChevronDownIcon mr={1} /> : <ChevronRightIcon mr={1} />}</>}
                   {FileIcon(item)}
                   {item.isRename ? (
