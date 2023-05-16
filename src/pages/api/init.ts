@@ -117,7 +117,7 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
     const data: any = await res.json();
     if (data.appletID) {
       return data.appletID;
-    } 
+    }
     throw data;
   } catch (e) {
     throw new Error('create applet failed');
@@ -127,15 +127,28 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
 const createMonitor = async (projectName: string, monitor: Monitor, token: string): Promise<void> => {
   try {
     if (monitor.contractLog) {
-      if(Array.isArray(monitor.contractLog)){
-      }
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
-        method: 'post',
-        body: JSON.stringify(monitor.contractLog),
-        headers: { Authorization: token }
-      });
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('create monitor failed:' + res.statusText);
+      if (Array.isArray(monitor.contractLog)) {
+        const res = await Promise.all(
+          monitor.contractLog.map((i) => {
+            return fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
+              method: 'post',
+              body: JSON.stringify(i),
+              headers: { Authorization: token }
+            });
+          })
+        );
+        if (res.some((i) => i.status != 200 && i.status !== 201)) {
+          throw new Error('create monitor failed:' + res[0].statusText);
+        }
+      } else {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/monitor/x/${projectName}/contract_log`, {
+          method: 'post',
+          body: JSON.stringify(monitor.contractLog),
+          headers: { Authorization: token }
+        });
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('create monitor failed:' + res.statusText);
+        }
       }
     }
     if (monitor.chainTx) {

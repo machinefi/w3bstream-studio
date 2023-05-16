@@ -9,6 +9,7 @@ import { Monitor } from 'pages/api/init';
 import { ContractInstance } from '@/store/lib/ContractInstance';
 import { helper } from '@/lib/helper';
 import { ethers } from 'ethers';
+import { MutiSelect } from '@/components/Common/MutiSelect';
 
 const getSqlListAndEnvList = (fileList: FilesItemType[], sqlList: FilesItemType[] = [], envList: FilesItemType[] = []) => {
   fileList.forEach((item) => {
@@ -65,7 +66,7 @@ const convertMonitorLog = (monitorLog: typeof Indexer.indexderHistory.current) =
     transferEventSignature = `${func.name}(${func.inputs.map((i) => i.type).join(',')})`;
     monitor.topic0 = ethers.utils.id(transferEventSignature);
   }
-  return JSON.stringify(monitor);
+  return monitor;
 };
 
 type Options = {
@@ -146,7 +147,27 @@ export const SelectSqlFileAndEnvFile = observer(({ options, onChange }: SelectSq
         })}
       </Select>
       <Box>Smart Contract Monitor</Box>
-      <Select
+      <MutiSelect
+        onChange={(e: { value: number; label: string }[]) => {
+          console.log(e);
+          const monitorLogList = [];
+          e.forEach((i) => {
+            Indexer.indexderHistory.currentIndex = Number(i.value);
+            const monitorLog = convertMonitorLog(Indexer.indexderHistory.current);
+            monitorLogList.push(monitorLog);
+          });
+          store.setData({
+            value: [store.value[0], store.value[1], JSON.stringify(monitorLogList)]
+          });
+        }}
+        isMulti
+        options={Indexer.indexderHistory.list.map((item, index) => {
+          return { value: index, label: `${item.chainId}-${item.contractAddress}-${item.contractEventName}` };
+        })}
+        className="basic-multi-select"
+        classNamePrefix="select"
+      />
+      {/* <Select
         placeholder="Select an Indexer"
         onChange={(e) => {
           const index = Number(e.target.value);
@@ -164,7 +185,7 @@ export const SelectSqlFileAndEnvFile = observer(({ options, onChange }: SelectSq
             </option>
           );
         })}
-      </Select>
+      </Select> */}
     </Stack>
   );
 });

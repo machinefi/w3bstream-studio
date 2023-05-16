@@ -101,6 +101,7 @@ specifiers:
   react-i18next: ^11.16.9
   react-icons: ^4.8.0
   react-query: ^3.34.19
+  react-select: ^5.7.3
   react-virtualized: ^9.22.3
   reactflow: ^11.7.0
   recharts: ^2.5.0
@@ -207,6 +208,7 @@ dependencies:
   react-i18next: 11.17.3_vth7g6zw6lco7clwxal23of2km
   react-icons: 4.8.0_react@18.2.0
   react-query: 3.39.1_biqbaboplfbrettd7655fr4n2y
+  react-select: 5.7.3_h3umwasw2xj55xde6qtxq6tis4
   react-virtualized: 9.22.3_biqbaboplfbrettd7655fr4n2y
   reactflow: 11.7.0_biqbaboplfbrettd7655fr4n2y
   recharts: 2.5.0_v2m5e27vhdewzwhryxwfaorcca
@@ -1488,7 +1490,7 @@ packages:
     resolution: {integrity: sha512-t9wi7/AW6XtKahAe20Yw0/mMljKq0B1r2fPdvaAdV/KPDZewFXdaaa6K7lxmZBZ8FBNpCiAT6iHPmd6QO9bKfQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      regenerator-runtime: 0.13.9
+      regenerator-runtime: 0.13.11
     dev: false
 
   /@babel/template/7.20.7:
@@ -4272,7 +4274,7 @@ packages:
       chakra-react-select: 3.3.9_ae7dtvbdlj3vg56os4fyaxmgqy
       framer-motion: 7.5.3_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
-      react-select: 5.7.0_h3umwasw2xj55xde6qtxq6tis4
+      react-select: 5.7.3_h3umwasw2xj55xde6qtxq6tis4
     transitivePeerDependencies:
       - '@babel/core'
       - '@emotion/react'
@@ -10057,6 +10059,28 @@ packages:
       - '@types/react'
     dev: false
 
+  /react-select/5.7.3_h3umwasw2xj55xde6qtxq6tis4:
+    resolution: {integrity: sha512-z8i3NCuFFWL3w27xq92rBkVI2onT0jzIIPe480HlBjXJ3b5o6Q+Clp4ydyeKrj9DZZ3lrjawwLC5NGl0FSvUDg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@babel/runtime': 7.18.6
+      '@emotion/cache': 11.10.3
+      '@emotion/react': 11.10.4_issp6eja53bx2taimj6tb2noxy
+      '@floating-ui/dom': 1.2.1
+      '@types/react-transition-group': 4.4.5
+      memoize-one: 6.0.0
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-transition-group: 4.4.2_biqbaboplfbrettd7655fr4n2y
+      use-isomorphic-layout-effect: 1.1.2_issp6eja53bx2taimj6tb2noxy
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@types/react'
+    dev: false
+
   /react-smooth/2.0.2_v2m5e27vhdewzwhryxwfaorcca:
     resolution: {integrity: sha512-pgqSp1q8rAGtF1bXQE0m3CHGLNfZZh5oA5o1tsPLXRHnKtkujMIJ8Ws5nO1mTySZf1c4vgwlEk+pHi3Ln6eYLw==}
     peerDependencies:
@@ -10303,10 +10327,6 @@ packages:
 
   /regenerator-runtime/0.13.11:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
-    dev: false
-
-  /regenerator-runtime/0.13.9:
-    resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
     dev: false
 
   /reinterval/1.1.0:
