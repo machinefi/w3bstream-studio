@@ -291,7 +291,7 @@ export default class AppletModule {
           },
           {
             key: 'f_handler',
-            label: 'handler'
+            label: 'Handler'
           },
           {
             key: 'actions',

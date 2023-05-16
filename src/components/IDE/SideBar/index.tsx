@@ -423,7 +423,15 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                 });
               }}
             >
-              <Text fontSize="16px" fontWeight={700}>
+              <Text fontSize="16px" fontWeight={700} onClick={(e) => {
+                e.stopPropagation();
+                dbTable.setCurrentTable({
+                  tableSchema,
+                  tableId: item.tableId,
+                  tableName: item.tableName
+                });
+                dbTable.setMode('VIEW_DATA');
+              }}>
                 {item.tableName}
               </Text>
               <Flex alignItems="center">

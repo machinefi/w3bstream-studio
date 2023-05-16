@@ -158,7 +158,7 @@ export default class PublisherModule {
       },
       {
         key: 'f_token',
-        label: 'token',
+        label: 'Token',
         render: PublisherTokenRender
       },
       {

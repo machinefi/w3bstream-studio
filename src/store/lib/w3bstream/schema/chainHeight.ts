@@ -88,14 +88,14 @@ export default class ChainHeightModule {
           ];
         }
       },
-      {
-        key: 'f_chain_height_id',
-        label: 'ChainTx ID'
-      },
-      {
-        key: 'f_finished',
-        label: 'Finished'
-      },
+      // {
+      //   key: 'f_chain_height_id',
+      //   label: 'ChainTx ID'
+      // },
+      // {
+      //   key: 'f_finished',
+      //   label: 'Finished'
+      // },
       {
         key: 'f_event_type',
         label: 'Event Type'

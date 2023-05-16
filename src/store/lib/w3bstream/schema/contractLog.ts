@@ -98,10 +98,10 @@ export default class ContractLogModule {
           ];
         }
       },
-      {
-        key: 'f_contractlog_id',
-        label: 'Contract Log ID'
-      },
+      // {
+      //   key: 'f_contractlog_id',
+      //   label: 'Contract Log ID'
+      // },
       {
         key: 'f_event_type',
         label: 'Event Type'

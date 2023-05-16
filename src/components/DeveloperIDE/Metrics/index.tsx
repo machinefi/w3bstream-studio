@@ -17,7 +17,7 @@ const Metrics = () => {
   }, []);
 
   return (
-    <Box w="100%" h="calc(100vh - 150px)">
+    <Box w="100%" paddingBottom={'100px'}>
       <Flex mb="10px" align="center" bg="#fff" borderRadius="8px" overflowY="auto">
         <Flex
           p="10px 20px"
