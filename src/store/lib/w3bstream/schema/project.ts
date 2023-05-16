@@ -486,12 +486,24 @@ export default class ProjectModule {
       const data = JSON.parse(JSON.stringify(templateData));
       const templateProjectName = templateData.project[0].name;
       data.project[0].name = `${templateProjectName}_${uuidv4().slice(0, 4)}`;
+      data.project[0].database = undefined;
       const res = await axios.request({
         method: 'post',
         url: `/api/init`,
         data
       });
-      if (res.data) {
+      if (res.data?.message === 'OK') {
+        const { createdProjectIds } = res.data;
+        for (let index = 0; index < createdProjectIds.length; index++) {
+          const projectID = createdProjectIds[index];
+          const database = templateData.project[index].database;
+          if (database?.schemas) {
+            await globalThis.store.w3s.dbTable.importTables({
+              projectID,
+              schemas: database.schemas
+            });
+          }
+        }
         showNotification({ message: 'Create project succeeded' });
         eventBus.emit('project.create');
       }
@@ -522,10 +534,11 @@ export default class ProjectModule {
         applets: [{ wasmRaw: formData.file, appletName: 'applet_01' }],
         datas: [{ monitor: { contractLog: null } }]
       };
+      let sqlSchema;
       if (formData.sqlFileAndEnvFile) {
         const [sqlCode, envCode, contractLogMonitor] = formData.sqlFileAndEnvFile.split('<--->');
         if (sqlCode) {
-          projectData.database = helper.json.safeParse(sqlCode);
+          sqlSchema = helper.json.safeParse(sqlCode);
         }
         if (envCode) {
           projectData.envs = helper.json.safeParse(envCode);
@@ -542,7 +555,14 @@ export default class ProjectModule {
             project: [projectData]
           }
         });
-        if (res.data) {
+        if (res.data?.message === 'OK') {
+          if (sqlSchema) {
+            const projectID = res.data.createdProjectIds[0];
+            await globalThis.store.w3s.dbTable.importTables({
+              projectID,
+              schemas: sqlSchema.schemas
+            });
+          }
           eventBus.emit('project.create');
           eventBus.emit('contractlog.create');
         }
@@ -581,13 +601,25 @@ export default class ProjectModule {
       const data = JSON.parse(JSON.stringify(templateData));
       data.project[0].name = projectName;
       data.project[0].description = formData.description;
+      data.project[0].database = undefined;
       try {
         const res = await axios.request({
           method: 'post',
           url: `/api/init`,
           data
         });
-        if (res.data) {
+        if (res.data?.message === 'OK') {
+          const { createdProjectIds } = res.data;
+          for (let index = 0; index < createdProjectIds.length; index++) {
+            const projectID = createdProjectIds[index];
+            const database = templateData.project[index].database;
+            if (database?.schemas) {
+              await globalThis.store.w3s.dbTable.importTables({
+                projectID,
+                schemas: database.schemas
+              });
+            }
+          }
           showNotification({ message: 'Create project succeeded' });
         }
       } catch (error) {}
@@ -674,10 +706,13 @@ export default class ProjectModule {
     if (globalThis.store.w3s.cronJob.list.value.length === 0) {
       await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);
     }
+    const schemas = await globalThis.store.w3s.dbTable.exportTables();
     return {
       name: this.curProject?.name,
       description: this.curProject?.f_description,
-      database: this.curProject?.database,
+      database: {
+        schemas
+      },
       envs: this.curProject?.envs,
       cronJob: globalThis.store.w3s.cronJob.list.value.map((i) => ({
         eventType: i.f_event_type,
@@ -708,113 +743,118 @@ export default class ProjectModule {
     helper.download.downloadJSON(`w3bstream`, data);
   }
 
-  async importProject() {
-    let formData;
-    try {
-      formData = await hooks.getFormData({
-        title: 'Import Project',
-        size: '2xl',
-        closeOnOverlayClick: false,
-        formList: [
-          {
-            form: this.importProjectForm
-          }
-        ]
-      });
-    } catch (error) {
-      this.importProjectForm.reset();
-      return;
-    }
-    if (formData.json && formData.wasm) {
-      const json = helper.json.safeParse(formData.json);
+  importProject = new PromiseState({
+    function: async () => {
+      let formData;
       try {
-        const projectName = json.name;
-        const body: any = {
-          name: projectName,
-          description: json.description
-        };
-        if (json.database?.schemas) {
-          body.database = json.database;
-        }
-        if (json.envs?.env) {
-          body.envs = json.envs;
-        }
-        const res = await axios.request({
-          method: 'post',
-          url: '/api/w3bapp/project',
-          data: body
+        formData = await hooks.getFormData({
+          title: 'Import Project',
+          size: '2xl',
+          closeOnOverlayClick: false,
+          formList: [
+            {
+              form: this.importProjectForm
+            }
+          ]
         });
-        const projectID = res.data?.projectID;
-        if (projectID) {
-          const data = new FormData();
-          const file = dataURItoBlob(formData.wasm);
-          data.append('file', file.blob);
-          data.append(
-            'info',
-            JSON.stringify({
-              projectName,
-              appletName: 'applet_01',
-              wasmName: file.name,
-              start: true
-            })
-          );
+      } catch (error) {
+        this.importProjectForm.reset();
+        return;
+      }
+      if (formData.json && formData.wasm) {
+        const json = helper.json.safeParse(formData.json);
+        try {
+          const projectName = json.name;
+          const body: any = {
+            name: projectName,
+            description: json.description
+          };
+          if (json.envs?.env) {
+            body.envs = json.envs;
+          }
           const res = await axios.request({
             method: 'post',
-            url: `/api/file?api=applet/x/${projectName}`,
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            },
-            data
+            url: '/api/w3bapp/project',
+            data: body
           });
-          if (res.data) {
-            const appletID = res.data?.appletID;
-            const createData = async ({ getPostUrl, list }: { getPostUrl: () => string; list: any }) => {
-              for (const item of list) {
-                try {
-                  await axios.request({
-                    method: 'post',
-                    url: getPostUrl(),
-                    data: item
-                  });
-                } catch (error) {}
+          const projectID = res.data?.projectID;
+          if (projectID) {
+            if (json.database?.schemas) {
+              await globalThis.store.w3s.dbTable.importTables({
+                projectID,
+                schemas: json.database.schemas
+              });
+            }
+            const data = new FormData();
+            const file = dataURItoBlob(formData.wasm);
+            data.append('file', file.blob);
+            data.append(
+              'info',
+              JSON.stringify({
+                projectName,
+                appletName: 'applet_01',
+                wasmName: file.name,
+                start: true
+              })
+            );
+            const res = await axios.request({
+              method: 'post',
+              url: `/api/file?api=applet/x/${projectName}`,
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+              data
+            });
+            if (res.data) {
+              const appletID = res.data?.appletID;
+              const createData = async ({ getPostUrl, list }: { getPostUrl: () => string; list: any }) => {
+                for (const item of list) {
+                  try {
+                    await axios.request({
+                      method: 'post',
+                      url: getPostUrl(),
+                      data: item
+                    });
+                  } catch (error) {}
+                }
+              };
+              if (json.cronJob && Array.isArray(json.cronJob)) {
+                await createData({
+                  list: json.cronJob,
+                  getPostUrl: () => `/api/w3bapp/cronjob/${projectID}`
+                });
               }
-            };
-            if (json.cronJob && Array.isArray(json.cronJob)) {
-              await createData({
-                list: json.cronJob,
-                getPostUrl: () => `/api/w3bapp/cronjob/${projectID}`
-              });
+              if (json.contractLog && Array.isArray(json.contractLog)) {
+                await createData({
+                  list: json.contractLog,
+                  getPostUrl: () => `/api/w3bapp/monitor/x/${projectName}/contract_log`
+                });
+              }
+              if (json.chainHeight && Array.isArray(json.chainHeight)) {
+                await createData({
+                  list: json.chainHeight,
+                  getPostUrl: () => `/api/w3bapp/monitor/x/${projectName}/chain_height`
+                });
+              }
+              if (json.eventRounting && Array.isArray(json.eventRounting)) {
+                await createData({
+                  list: json.eventRounting.map((i) => ({
+                    ...i,
+                    appletID
+                  })),
+                  getPostUrl: () => `/api/w3bapp/strategy/x/${projectName}`
+                });
+              }
+              eventBus.emit('project.create');
+              eventBus.emit('contractlog.create');
+              eventBus.emit('chainHeight.create');
+              showNotification({ message: 'import project succeeded' });
             }
-            if (json.contractLog && Array.isArray(json.contractLog)) {
-              await createData({
-                list: json.contractLog,
-                getPostUrl: () => `/api/w3bapp/monitor/x/${projectName}/contract_log`
-              });
-            }
-            if (json.chainHeight && Array.isArray(json.chainHeight)) {
-              await createData({
-                list: json.chainHeight,
-                getPostUrl: () => `/api/w3bapp/monitor/x/${projectName}/chain_height`
-              });
-            }
-            if (json.eventRounting && Array.isArray(json.eventRounting)) {
-              await createData({
-                list: json.eventRounting.map((i) => ({
-                  ...i,
-                  appletID
-                })),
-                getPostUrl: () => `/api/w3bapp/strategy/x/${projectName}`
-              });
-            }
-            eventBus.emit('project.create');
-            eventBus.emit('contractlog.create');
-            eventBus.emit('chainHeight.create');
-            showNotification({ message: 'import project succeeded' });
           }
-        }
-      } catch (error) {}
+        } catch (error) {}
+      }
     }
-  }
+  });
 
   async editProjectFile() {
     const documentA = await this.getProjectInfo();

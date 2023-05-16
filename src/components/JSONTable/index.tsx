@@ -82,7 +82,7 @@ function ActionButton({ props, text }: ActionButtonType) {
 }
 
 function renderFieldValue(v: any) {
-  if (typeof v == 'string' || typeof v == 'number' || typeof v == 'boolean') {
+  if (typeof v == 'string' || typeof v == 'number') {
     return v;
   }
   return JSON.stringify(v);
@@ -97,8 +97,8 @@ function Body<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
             {column.actions
               ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
               : column.render
-              ? column.render(item)
-              : renderFieldValue(item[column.key])}
+                ? column.render(item)
+                : renderFieldValue(item[column.key])}
           </Td>
         );
       })}
@@ -130,8 +130,8 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
               {column.actions
                 ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
                 : column.render
-                ? column.render(item)
-                : renderFieldValue(item[column.key])}
+                  ? column.render(item)
+                  : renderFieldValue(item[column.key])}
             </Td>
           );
         })}
@@ -165,8 +165,8 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
                               {exC.actions
                                 ? exC.actions(exItem).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
                                 : exC.render
-                                ? exC.render(exItem)
-                                : renderFieldValue(exItem[exC.key])}
+                                  ? exC.render(exItem)
+                                  : renderFieldValue(exItem[exC.key])}
                             </Td>
                           );
                         })}

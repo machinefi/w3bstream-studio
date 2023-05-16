@@ -156,12 +156,12 @@ const getExtraOptions = (item: WidgetColumn) => {
           label: 'Is Unique',
           desc: 'Enforce if values in the column should be unique across rows'
         },
-        {
-          value: item.isIdentity,
-          field: 'isIdentity',
-          label: 'Is Identity',
-          desc: 'Automatically assign a sequential unique number to the column'
-        },
+        // {
+        //   value: item.isIdentity,
+        //   field: 'isIdentity',
+        //   label: 'Is Identity',
+        //   desc: 'Automatically assign a sequential unique number to the column'
+        // },
         {
           value: !!item.isNullable,
           field: 'isNullable',
@@ -278,6 +278,7 @@ const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
             return (
               <Box key={item.label} mb="10px">
                 <Checkbox
+                  disabled={item.field === 'isIdentity'}
                   colorScheme="green"
                   fontWeight={700}
                   isChecked={item.value}
@@ -413,14 +414,17 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
             }
           }}
           onChange={(e) => {
+            const isPrimaryKey = e.target.checked;
             if (item) {
               dbTable.onChangeWidgetColumn({
                 ...item,
-                isPrimaryKey: e.target.checked
+                isPrimaryKey,
+                isIdentity: isPrimaryKey
               });
             } else {
               dbTable.setCurrentWidgetColumn({
-                isPrimaryKey: e.target.checked
+                isPrimaryKey,
+                isIdentity: isPrimaryKey
               });
             }
           }}

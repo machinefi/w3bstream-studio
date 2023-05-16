@@ -66,37 +66,42 @@ export interface WidgetColumn {
   comment?: string;
 }
 
+export type ExportTableType = {
+  schemaName: string;
+  tables: {
+    tableName: string;
+    tableSchema: string;
+    comment: string;
+    columns: {
+      name: string;
+      type: string;
+      defaultValue: string;
+      isIdentity: boolean;
+      isNullable: boolean;
+      isUnique: boolean;
+      isPrimaryKey: boolean;
+      comment: string;
+    }[];
+    relationships: {
+      id: number;
+      constraint_name: string;
+      source_schema: string;
+      source_table_name: string;
+      source_column_name: string;
+      target_table_schema: string;
+      target_table_name: string;
+      target_column_name: string;
+    }[];
+  }[];
+};
+
 export default class DBTableModule {
   allTables = new PromiseState<() => Promise<any>, { schemaName: string; tables: TableType[] }[]>({
     defaultValue: [],
     function: async () => {
-      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
-      try {
-        const { schemas, errorMsg } = await trpc.pg.schemas.query({
-          projectID: curProjectId
-        });
-        if (errorMsg) {
-          showNotification({ message: errorMsg });
-        } else {
-          if (schemas?.length) {
-            const includedSchemas = schemas.map((s) => s.name);
-            const tables = await trpc.pg.tables.query({
-              projectID: curProjectId,
-              includedSchemas
-            });
-            const data = includedSchemas.map((schemaName) => {
-              const tablesInSchema = tables.filter((t) => t.tableSchema === schemaName);
-              return {
-                schemaName,
-                tables: tablesInSchema
-              };
-            });
-            return data;
-          }
-        }
-      } catch (error) {
-        console.log('error', error.message);
-      }
+      return this.fetchTables({
+        includeColumns: false
+      });
     }
   });
 
@@ -240,7 +245,7 @@ export default class DBTableModule {
         name: 'id',
         type: 'int8',
         isPrimaryKey: true,
-        isUnique: true,
+        isUnique: false,
         isIdentity: true
       },
       {
@@ -256,8 +261,12 @@ export default class DBTableModule {
     ];
   }
 
-  setCurrentTable(v: TableType) {
-    this.currentTable = v;
+  setCurrentTable(v: { tableId: number; tableSchema: string; tableName: string }) {
+    this.currentTable = {
+      tableId: v.tableId,
+      tableSchema: v.tableSchema,
+      tableName: v.tableName
+    };
   }
 
   setCurrentColumns(v: ColumnType[]) {
@@ -303,6 +312,39 @@ export default class DBTableModule {
       return {
         errorMsg: error.message
       };
+    }
+  }
+
+  async fetchTables({ includeColumns }: { includeColumns: boolean }) {
+    const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
+    try {
+      const { schemas, errorMsg } = await trpc.pg.schemas.query({
+        projectID: curProjectId
+      });
+      if (errorMsg) {
+        showNotification({ message: errorMsg });
+      } else {
+        if (schemas?.length) {
+          const includedSchemas = schemas.map((s) => s.name);
+          const tables = await trpc.pg.tables.query({
+            includedSchemas,
+            includeColumns,
+            projectID: curProjectId
+          });
+          const data = includedSchemas.map((schemaName) => {
+            const tablesInSchema = tables.filter((t) => t.tableSchema === schemaName);
+            return {
+              schemaName,
+              tables: tablesInSchema
+            };
+          });
+          return data;
+        }
+      }
+      return [];
+    } catch (error) {
+      console.log('error', error.message);
+      return [];
     }
   }
 
@@ -633,6 +675,79 @@ export default class DBTableModule {
       dataSource: data
     });
   }
+
+  async exportTables() {
+    const res = await this.fetchTables({
+      includeColumns: true
+    });
+
+    const schemas = res.map(({ schemaName, tables }) => ({
+      schemaName,
+      tables: tables.map((t) => {
+        const primaryKeyNames = t.primary_keys.map((pk) => pk.name);
+        return {
+          tableName: t.tableName,
+          tableSchema: t.tableSchema,
+          comment: t.comment,
+          columns: t.columns.map((col) => ({
+            name: col.name,
+            type: col.format,
+            defaultValue: col.default_value,
+            isIdentity: col.is_identity,
+            isNullable: col.is_nullable,
+            isUnique: col.is_unique,
+            isPrimaryKey: primaryKeyNames.includes(col.name),
+            comment: col.comment
+          })),
+          relationships: t.relationships
+        };
+      })
+    }));
+
+    return schemas;
+  }
+
+  async importTables({ projectID, schemas }: { projectID: string; schemas: ExportTableType[] }) {
+    if (!schemas || !Array.isArray(schemas)) {
+      showNotification({ message: 'No data provided' });
+      return;
+    }
+    for (const schema of schemas) {
+      const tables = schema?.tables;
+      if (!tables || !Array.isArray(tables)) {
+        showNotification({ message: 'No data provided' });
+        return;
+      }
+      for (const t of tables) {
+        if (!t.tableName || !t.tableSchema) {
+          showNotification({ message: 'No data provided' });
+          return;
+        }
+        try {
+          const tableRes = await trpc.pg.createTable.mutate({
+            projectID,
+            schema: t.tableSchema,
+            name: t.tableName,
+            comment: t.comment
+          });
+          const tableId = tableRes.id;
+          if (tableId) {
+            for (const column of t.columns) {
+              try {
+                // @ts-ignore
+                const columnData = formatColumn(column);
+                await trpc.pg.createColumn.mutate({
+                  projectID,
+                  tableId,
+                  ...columnData
+                });
+              } catch (error) {}
+            }
+          }
+        } catch (error) {}
+      }
+    }
+  }
 }
 
 export const formatColumn = (column: WidgetColumn) => {
@@ -653,9 +768,15 @@ export const formatColumn = (column: WidgetColumn) => {
   } else {
     delete rest.isDefineASArray;
   }
+  if (rest.comment === null) {
+    delete rest.comment;
+  }
   if (column.type === 'text' || column.type === 'varchar') {
     // @ts-ignore
     rest.comment = '';
+  }
+  if (rest.isPrimaryKey) {
+    delete rest.defaultValue;
   }
   return rest;
 };

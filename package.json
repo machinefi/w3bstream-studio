@@ -1,6 +1,6 @@
 {
   "name": "w3bstream-devnet",
-  "version": "1.1.0-rc7",
+  "version": "1.1.0-rc8",
   "license": "MIT",
   "description": "Starter pack using Nextjs, React, Typescript, tRPC, Mantine and Cypress",
   "keywords": [
@@ -19,7 +19,8 @@
     "test:ci": "cypress run --headless",
     "postinstall": "npm run gen",
     "gen": "prisma generate; prisma generate --schema ./prisma/monitor.prisma",
-    "db:pull": "npx prisma db pull"
+    "db:pull": "npx prisma db pull",
+    "dev:docker": "dp -f docker-compose-dev.yaml build; dp -f docker-compose-dev.yaml  up -d"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.11",

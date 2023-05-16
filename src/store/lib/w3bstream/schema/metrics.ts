@@ -30,7 +30,7 @@ export default class MetricsModule {
           method: 'GET',
           url: `/api/metrics/query_range`,
           params: {
-            query: `{project="${rootStore.w3s.project.curProject.name}"}`,
+            query: `{project="${rootStore.w3s.project.curProject.f_name}"}`,
             start: startTime.toISOString(),
             end: endTime.toISOString(),
             step: `${step}s`

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Flex, Box, Grid, GridItem, Image, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/react';
-import { observer } from 'mobx-react-lite';
+import { Flex, Box, Grid, GridItem, Image, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Link } from '@chakra-ui/react';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Center } from '@chakra-ui/layout';
 import { useStore } from '@/store/index';
 
@@ -10,6 +10,38 @@ const Support = () => {
       env: { envs }
     }
   } = useStore();
+  const store = useLocalObservable(() => ({
+    get studioVersionLink() {
+      return `https://github.com/machinefi/w3bstream-studio/releases/tag/v${envs.value?.studioVersion}`
+    },
+    get w3bstreamVersionGithubLink() {
+      const w3bstreamVersion = envs.value?.w3bstreamVersion;
+      if (!w3bstreamVersion) {
+        return ''
+      }
+      if (!w3bstreamVersion.includes('@')) {
+        return ''
+      }
+      try {
+        let tagVersion = '';
+        const str = w3bstreamVersion.split('_')[0].split('@')[1];
+        const [a, b, ..._] = str.split('-');
+        if (b) {
+          tagVersion = `${a}-${b}`;
+        } else {
+          tagVersion = a;
+        }
+        const pattern = /v\d+/;
+        if (pattern.test(tagVersion)) {
+          return `https://github.com/machinefi/w3bstream/releases/tag/${tagVersion}`
+        } else {
+          return ''
+        }
+      } catch (error) {
+        return ''
+      }
+    },
+  }));
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -117,12 +149,22 @@ const Support = () => {
           <ModalCloseButton />
           <ModalBody pb="30px">
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>
-              <Box>Version:</Box>
-              <Box ml="10px">{envs.value?.studioVersion}</Box>
+              <Box>Studio Version:</Box>
+              <Link ml="10px" href={store.studioVersionLink} color="#946FFF" isExternal >
+                {envs.value?.studioVersion}
+              </Link>
             </Flex>
             <Flex alignItems="center" fontSize="16px" fontWeight={700}>
               <Box whiteSpace="nowrap">W3bstream Version:</Box>
-              <Box ml="10px">{envs.value?.w3bstreamVersion}</Box>
+              {
+                store.w3bstreamVersionGithubLink ? (
+                  <Link ml="10px" href={store.w3bstreamVersionGithubLink} color="#946FFF" isExternal>
+                    {envs.value?.w3bstreamVersion}
+                  </Link>
+                ) : (
+                  <Box ml="10px">{envs.value?.w3bstreamVersion}</Box>
+                )
+              }
             </Flex>
           </ModalBody>
         </ModalContent>

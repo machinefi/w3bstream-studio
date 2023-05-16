@@ -2,6 +2,7 @@ import { t } from '../trpc';
 import axios from 'axios';
 import { memoryCache } from '@/lib/cache-manager';
 import { inferProcedureOutput } from '@trpc/server';
+import pkg from "../../../package.json"
 
 export const envRouter = t.router({
   envs: t.procedure.query(async () => {
@@ -16,7 +17,7 @@ export const envRouter = t.router({
         } catch (error) {}
         return {
           w3bstreamVersion,
-          studioVersion: process.env.npm_package_version,
+          studioVersion: pkg.version,
           httpURL: process.env.NEXT_PUBLIC_GATEWAY_HTTP_URL || 'https://dev.w3bstream.com/api/w3bapp/event/:projectName',
           mqttURL: process.env.NEXT_PUBLIC_GATEWAY_MQTT_URL || 'mqtt://dev.w3bstream.com:1883'
         };

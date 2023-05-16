@@ -17,6 +17,9 @@ cp .env.tmpl .env
 
 pnpm install
 pnpm dev
+
+### Docker
+pnpm dev:docker
 ```
 
 ### Deploy
