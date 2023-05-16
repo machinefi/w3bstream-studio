@@ -856,7 +856,7 @@ export const creatColumnDataForm = (columns: ColumnType[]) => {
   // console.log('creatColumnDataForm [columns]', JSON.stringify(columns, null, 2));
   // console.log('creatColumnDataForm [schema]', JSON.stringify(schema, null, 2));
 
-  const form = new JSONSchemaFormState<ColumnSchemaType>({
+  const form = new JSONSchemaFormState({
     //@ts-ignore
     schema,
     uiSchema,

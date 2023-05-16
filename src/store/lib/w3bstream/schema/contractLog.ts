@@ -23,11 +23,11 @@ export const schema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type' },
-    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', default: "4690" },
+    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', default: '4690' },
     contractAddress: { type: 'string', title: 'Contract Address' },
     blockStart: { type: 'number', title: 'Block Start' },
     blockEnd: { type: 'number', title: 'Block End' },
-    event: {type: 'string', title: 'Event'},
+    event: { type: 'string', title: 'Event' },
     topic0: { type: 'string', title: 'Topic0' }
   },
   required: ['projectName', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
@@ -77,7 +77,8 @@ export default class ContractLogModule {
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
                       const regex = /(?:[^_]*_){2}(.*)/;
-                      const projectName = item.f_project_name.match(regex)[1]
+                      const matchArray = item.f_project_name.match(regex);
+                      const projectName = matchArray ? matchArray[1] : item.f_project_name;
                       try {
                         await axios.request({
                           method: 'delete',
@@ -160,7 +161,7 @@ export default class ContractLogModule {
       default: {
         projectName: '',
         eventType: 'DEFAULT',
-        chainID: "4690",
+        chainID: '4690',
         contractAddress: '',
         blockStart: 16737070,
         blockEnd: 16740080,
@@ -168,14 +169,11 @@ export default class ContractLogModule {
         topic0: ''
       },
       onSet(e) {
-        const {event} = e;
-        console.log('event', event);
-        if(event && event !== this.value?.event) {
-          console.log('e', ethers.utils.keccak256(ethers.utils.toUtf8Bytes(event)))
-          e.topic0 = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(event))
+        const { event } = e;
+        if (event && event !== this.value?.event) {
+          e.topic0 = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(event));
         }
-
-        return e
+        return e;
       }
     })
   });

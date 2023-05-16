@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Flex, Icon, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Spinner, Stack, Text } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { ProjectEnvs } from '@/components/JSONFormWidgets/ProjectEnvs';
@@ -64,7 +64,7 @@ const Settings = () => {
         </Box>
         <Flex alignItems="center">
           <Button
-            leftIcon={<Icon as={MdEditDocument} />}
+            leftIcon={project.projectInfo.loading.value ? <Spinner size='sm' color="#fff" /> : <Icon as={MdEditDocument} />}
             size="sm"
             {...defaultOutlineButtonStyle}
             onClick={async () => {

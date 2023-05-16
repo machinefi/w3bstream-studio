@@ -73,8 +73,7 @@ export const createProjectByWasmSchema = {
 export const importProjectSchema = {
   type: 'object',
   properties: {
-    json: { type: 'string', title: 'Project File' },
-    wasm: { type: 'string', title: 'WASM File' }
+    json: { type: 'string', title: 'Project File' }
   },
   required: []
 } as const;
@@ -151,7 +150,7 @@ export default class ProjectModule {
             switch (config.f_type) {
               case ProjectConfigType.PROJECT_DATABASE:
                 // @ts-ignore
-                p.database = config.f_value;
+                // p.database = config.f_value;
                 break;
               case ProjectConfigType.PROJECT_ENV:
                 // @ts-ignore
@@ -189,9 +188,9 @@ export default class ProjectModule {
     },
     customValidate: (formData, errors) => {
       if (formData.name) {
-        const re = /^[a-z0-9_]{6,32}$/;
+        const re = /^[a-z0-9_]{1,32}$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('name field should consist of only lowercase letters, numbers, and underscores, with no spaces; it must be at least 6 characters long and no more than 32.');
+          errors.name.addError('name field should consist of only lowercase letters, numbers, and underscores, with no spaces; it is no more than 32 characters.');
         }
       }
       return errors;
@@ -264,9 +263,9 @@ export default class ProjectModule {
     },
     customValidate: (formData, errors) => {
       if (formData.name) {
-        const re = /^[a-z0-9_]{6,32}$/;
+        const re = /^[a-z0-9_]{1,32}$/;
         if (!re.test(formData.name)) {
-          errors.name.addError('name field should consist of only lowercase letters, numbers, and underscores, with no spaces; it must be at least 6 characters long and no more than 32.');
+          errors.name.addError('name field should consist of only lowercase letters, numbers, and underscores, with no spaces; it is no more than 32 characters.');
         }
       }
       return errors;
@@ -328,7 +327,7 @@ export default class ProjectModule {
     })
   });
 
-  importProjectForm = new JSONSchemaFormState<ImportProjectSchemaType, UiSchema & { json: FileWidgetUIOptions; wasm: FileWidgetUIOptions }>({
+  importProjectForm = new JSONSchemaFormState<ImportProjectSchemaType, UiSchema & { json: FileWidgetUIOptions }>({
     //@ts-ignore
     schema: importProjectSchema,
     uiSchema: {
@@ -345,20 +344,7 @@ export default class ProjectModule {
           },
           tips: `Upload a JSON file`,
           flexProps: {
-            h: '200px',
-            borderRadius: '8px'
-          }
-        }
-      },
-      wasm: {
-        'ui:widget': FileWidget,
-        'ui:options': {
-          accept: {
-            'application/wasm': ['.wasm']
-          },
-          tips: `Upload a WASM file`,
-          flexProps: {
-            h: '100px',
+            h: '400px',
             borderRadius: '8px'
           }
         }
@@ -372,15 +358,11 @@ export default class ProjectModule {
       if (!formData.json) {
         errors.json.addError('JSON file is required');
       }
-      if (!formData.wasm) {
-        errors.wasm.addError('WASM file is required');
-      }
       return errors;
     },
     value: new JSONValue<ImportProjectSchemaType>({
       default: {
-        json: '',
-        wasm: ''
+        json: ''
       }
     })
   });
@@ -409,13 +391,20 @@ export default class ProjectModule {
     },
     customValidate: (formData, errors) => {
       if (formData.code) {
-        const json = helper.json.safeParse(formData.code);
-        if (json.name !== globalThis.store.w3s.project.curProject?.name) {
-          errors.code.addError('name is not allowed to be modified');
-        }
-        if (JSON.stringify(json.database) !== JSON.stringify(globalThis.store.w3s.project.curProject?.database)) {
-          errors.code.addError('database is not allowed to be modified');
-        }
+        const documentA = this.projectInfo.value;
+        const documentB = helper.json.safeParse(formData.code);
+        const diff = jsonpatch.compare(documentA, documentB);
+        diff.forEach((item) => {
+          if (item.path.includes('name')) {
+            errors.code.addError('name is not allowed to be modified');
+          }
+          if (item.path.includes('database')) {
+            errors.code.addError('database is not allowed to be modified');
+          }
+          if (item.path.includes('wasmFile')) {
+            errors.code.addError('wasmFile is not allowed to be modified');
+          }
+        });
       } else {
         errors.code.addError('is required');
       }
@@ -698,45 +687,51 @@ export default class ProjectModule {
     this.selectedNames = [];
   }
 
-  async getProjectInfo() {
-    if (globalThis.store.w3s.cronJob.list.value.length === 0) {
-      await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);
+  projectInfo = new PromiseState({
+    function: async () => {
+      const applet = globalThis.store.w3s.applet;
+      const curApplet = applet.allData.find((item) => item.project_name === this.curProject?.name);
+      const wasmFile = await applet.downloadWasmFile(curApplet?.f_resource_id);
+      if (globalThis.store.w3s.cronJob.list.value.length === 0) {
+        await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);
+      }
+      const schemas = await globalThis.store.w3s.dbTable.exportTables();
+      return {
+        name: this.curProject?.name,
+        description: this.curProject?.f_description,
+        wasmFile,
+        database: {
+          schemas
+        },
+        envs: this.curProject?.envs,
+        cronJob: globalThis.store.w3s.cronJob.list.value.map((i) => ({
+          eventType: i.f_event_type,
+          cronExpressions: i.f_cron_expressions
+        })),
+        contractLog: globalThis.store.w3s.contractLogs.curProjectContractLogs.map((i) => ({
+          eventType: i.f_event_type,
+          chainID: Number(i.f_chain_id),
+          contractAddress: i.f_contract_address,
+          blockStart: Number(i.f_block_start),
+          blockEnd: Number(i.f_block_end),
+          topic0: i.f_topic0
+        })),
+        chainHeight: globalThis.store.w3s.chainHeight.curProjectChainHeight.map((i) => ({
+          eventType: i.f_event_type,
+          chainID: Number(i.f_chain_id),
+          height: Number(i.f_height)
+        })),
+        eventRounting: globalThis.store.w3s.strategy.curStrategies.map((i) => ({
+          eventType: i.f_event_type,
+          handler: i.f_handler
+        }))
+      };
     }
-    const schemas = await globalThis.store.w3s.dbTable.exportTables();
-    return {
-      name: this.curProject?.name,
-      description: this.curProject?.f_description,
-      database: {
-        schemas
-      },
-      envs: this.curProject?.envs,
-      cronJob: globalThis.store.w3s.cronJob.list.value.map((i) => ({
-        eventType: i.f_event_type,
-        cronExpressions: i.f_cron_expressions
-      })),
-      contractLog: globalThis.store.w3s.contractLogs.curProjectContractLogs.map((i) => ({
-        eventType: i.f_event_type,
-        chainID: Number(i.f_chain_id),
-        contractAddress: i.f_contract_address,
-        blockStart: Number(i.f_block_start),
-        blockEnd: Number(i.f_block_end),
-        topic0: i.f_topic0
-      })),
-      chainHeight: globalThis.store.w3s.chainHeight.curProjectChainHeight.map((i) => ({
-        eventType: i.f_event_type,
-        chainID: Number(i.f_chain_id),
-        height: Number(i.f_height)
-      })),
-      eventRounting: globalThis.store.w3s.strategy.curStrategies.map((i) => ({
-        eventType: i.f_event_type,
-        handler: i.f_handler
-      }))
-    };
-  }
+  });
 
   async exportProject() {
-    const data = await this.getProjectInfo();
-    helper.download.downloadJSON(`w3bstream`, data);
+    await this.projectInfo.call();
+    helper.download.downloadJSON(`w3bstream`, this.projectInfo.value);
   }
 
   importProject = new PromiseState({
@@ -757,8 +752,12 @@ export default class ProjectModule {
         this.importProjectForm.reset();
         return;
       }
-      if (formData.json && formData.wasm) {
+      if (formData.json) {
         const json = helper.json.safeParse(formData.json);
+        if (!json.wasmFile) {
+          showNotification({ color: 'red', message: 'wasm file is required' });
+          return;
+        }
         try {
           const projectName = json.name;
           const body: any = {
@@ -782,7 +781,7 @@ export default class ProjectModule {
               });
             }
             const data = new FormData();
-            const file = dataURItoBlob(formData.wasm);
+            const file = dataURItoBlob(json.wasmFile);
             data.append('file', file.blob);
             data.append(
               'info',
@@ -853,7 +852,8 @@ export default class ProjectModule {
   });
 
   async editProjectFile() {
-    const documentA = await this.getProjectInfo();
+    await this.projectInfo.call();
+    const documentA = this.projectInfo.value;
     this.editProjectFileForm.value.set({
       code: JSON.stringify(documentA, null, 2)
     });
