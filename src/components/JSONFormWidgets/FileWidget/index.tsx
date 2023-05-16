@@ -207,7 +207,7 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
             {value && resultType === 'JSON' ? (
               <MonacoEditor
                 height="100%"
-                theme="vs-light"
+                theme="vs-dark"
                 language={resultType === 'JSON' ? 'json' : 'text'}
                 value={value}
                 onChange={(v) => {

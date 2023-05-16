@@ -12,6 +12,7 @@ import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from './definitions';
+import { helper } from '@/lib/helper';
 
 export const schema = {
   definitions: {
@@ -146,7 +147,7 @@ export default class AppletModule {
                       });
                       showNotification({ message: 'Deleted successfully' });
                       eventBus.emit('applet.delete');
-                    } catch (error) {}
+                    } catch (error) { }
                   }
                 });
               }
@@ -265,7 +266,7 @@ export default class AppletModule {
                             });
                             showNotification({ message: 'Deleted successfully' });
                             eventBus.emit('instance.delete');
-                          } catch (error) {}
+                          } catch (error) { }
                         }
                       });
                     }
@@ -331,7 +332,7 @@ export default class AppletModule {
                           });
                           showNotification({ message: 'update strategy succeeded' });
                           eventBus.emit('strategy.update');
-                        } catch (error) {}
+                        } catch (error) { }
                       }
                     }
                   },
@@ -525,7 +526,25 @@ export default class AppletModule {
         if (res) {
           showNotification({ message: 'update wasm succeeded' });
         }
-      } catch (error) {}
+      } catch (error) { }
+    }
+  }
+
+  async downloadWasmFile(resourceId: string) {
+    if (!resourceId) {
+      return null;
+    }
+    try {
+      const res = await axios.request({
+        method: 'get',
+        url: `/api/w3bapp/resource/data/${resourceId}`,
+        responseType: 'arraybuffer'
+      });
+      const arrayBuffer = res.data;
+      const byteArray = new Uint8Array(arrayBuffer);
+      return helper.Uint8ArrayToWasmBase64FileData(this.wasmName.value, byteArray);
+    } catch (error) {
+      return null
     }
   }
 }
