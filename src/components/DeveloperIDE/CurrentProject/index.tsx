@@ -36,9 +36,9 @@ const CurrentProject = observer(() => {
         <ChevronLeftIcon />
         <Box ml="10px">Back</Box>
       </Flex>
-      <Flex w="100%" h="calc(100vh - 146px)">
+      <Flex w="100%" h="calc(100vh - 180px)" overflow={'hidden'} position="relative">
         <ToolBar borderRadius="8px" overflowY="auto" />
-        <Box ml="20px" w="100%" h="100%" p="20px" bg="#fff" boxSizing='content-box' borderRadius="8px" >
+        <Box ml="20px" w="100%" h="100%" p="20px" pb="50px" bg="#fff" boxSizing='content-box' borderRadius="8px" overflow={'auto'}>
           {showContent === 'METRICS' && <Metrics />}
           {showContent === 'CURRENT_PUBLISHERS' && <Publishers />}
           {(showContent === 'CONTRACT_LOGS' || showContent === 'CHAIN_TX' || showContent === 'CHAIN_HEIGHT') && <Triggers />}

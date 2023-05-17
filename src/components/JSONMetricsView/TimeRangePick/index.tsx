@@ -8,7 +8,6 @@ export interface TimeRangePick {
 export const TimeRangePick = ({ props = {}, onChange }: { props?: SelectProps; onChange: (startTime: Date, endTime: Date, step: number) => void }) => {
   return (
     <Select
-      placeholder="Time Range"
       size="sm"
       w="200px"
       outline="none"

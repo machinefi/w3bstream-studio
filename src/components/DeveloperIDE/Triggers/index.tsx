@@ -18,7 +18,7 @@ const Triggers = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
-    <Box w="calc(100vw - 300px)" h="calc(100vh - 140px)" overflowY="auto">
+    <Box w="calc(100vw - 300px)" paddingBottom={'100px'}>
       <Flex alignItems="center">
         <Box fontSize="18px" color="#0F0F0F" fontWeight={700}>
           Event Source

@@ -57,7 +57,7 @@ const Settings = () => {
   }, [store.curApplet]);
 
   return (
-    <Box w="100%" h="calc(100vh - 140px)">
+    <Box w="100%" paddingBottom={'100px'}>
       <Flex mt="20px" justifyContent="space-between">
         <Box fontSize="18px" fontWeight={700}>
           General
@@ -87,14 +87,14 @@ const Settings = () => {
         </Flex>
       </Flex>
       <Box mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
-        <Flex alignItems={'center'} mb="20px">
+        {/* <Flex alignItems={'center'} mb="20px">
           <Box fontWeight={700} fontSize="16px" color="#0F0F0F">
             Project Name:
           </Box>
           <Text ml="10px" fontSize={'18px'} fontWeight={700}>
             {project.curProject?.f_name}
           </Text>
-        </Flex>
+        </Flex> */}
         <Flex alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>WASM file name:</Box>
           <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
@@ -130,7 +130,7 @@ const Settings = () => {
             {store.operateAddress.value}
           </Box>
         </Flex>
-        <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
+        {/* <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>Description Tags:</Box>
           <Flex ml="10px" flexWrap="wrap">
             {store.tags.map((tag) => {
@@ -141,7 +141,7 @@ const Settings = () => {
               );
             })}
           </Flex>
-        </Flex>
+        </Flex> */}
         <Box mt="30px">
           <ProjectEnvs />
         </Box>
