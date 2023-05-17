@@ -19,9 +19,9 @@ const DeveloperIDE = observer(() => {
   } = useStore();
 
   return (
-    <Box w="100vw" h="100vh" overflow="hidden" bg="#F8F8FA">
+    <Box w="100vw" h="100vh" overflow="auto" bg="#F8F8FA" paddingTop={'60px'}>
       <Header />
-      <Box mt="80px" w="100%" px="30px">
+      <Box w="100%" p="20px">
         {w3s.currentHeaderTab === 'PROJECTS' && <>{w3s.project.curProject ? <CurrentProject /> : <Projects />}</>}
         {w3s.currentHeaderTab === 'LABS' && <Labs />}
         {w3s.currentHeaderTab === 'FLOW' && <Flow />}

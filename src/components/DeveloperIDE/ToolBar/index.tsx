@@ -14,125 +14,138 @@ const ToolBar = (props: ToolBar) => {
   const { w3s } = useStore();
 
   return (
-    <Flex minW="200px" h="100%" direction="column" align="center" p="16px" bg="#fff" {...props}>
+    <Box position={'fixed'} h="calc(100vh - 100px)" overflow={'auto'}>
       <Flex
-        mb="20px"
-        mt="8px"
+        mb="15px"
         alignItems="center"
-        color="#7A7A7A"
+        color="#0F0F0F"
         fontSize="14px"
         cursor="pointer"
-      >
-        {w3s.project.curProject?.name}
-      </Flex>
-      <Flex
-        w="100%"
-        p="18px"
-        alignItems="center"
-        cursor="pointer"
-        color="rgba(15, 15, 15, 0.75)"
-        borderRadius="8px"
-        {...getSelectedStyles(w3s.showContent === 'METRICS')}
-        onClick={(e) => {
-          w3s.showContent = 'METRICS';
+        bg="#fff"
+        p="10px 15px"
+        w="86px"
+        borderRadius="4px"
+        onClick={() => {
+         w3s.project.allProjects.onSelect(-1);
+         w3s.project.resetSelectedNames();
         }}
       >
-        <Icon as={BiBarChartSquare} boxSize={6} />
-        <Box ml="15px" fontSize="16px">
-          Metrics
-        </Box>
+        <ChevronLeftIcon />
+        <Box ml="10px">Back</Box>
       </Flex>
-      <Flex
-        w="100%"
-        mt="16px"
-        p="18px"
-        alignItems="center"
-        cursor="pointer"
-        color="rgba(15, 15, 15, 0.75)"
-        borderRadius="8px"
-        {...getSelectedStyles(w3s.showContent === 'CURRENT_PUBLISHERS')}
-        onClick={(e) => {
-          w3s.showContent = 'CURRENT_PUBLISHERS';
-        }}
-      >
-        <Icon as={TbDeviceDesktop} boxSize={6} />
-        <Box ml="15px" fontSize="16px">
-          Devices
-        </Box>
+      <Flex minW="200px" direction="column" align="center" p="16px" bg="#fff" {...props}>
+        <Flex mb="20px" mt="8px" alignItems="center" color="#7A7A7A" fontSize="14px" cursor="pointer">
+          {w3s.project.curProject?.name}
+        </Flex>
+        <Flex
+          w="100%"
+          p="18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'METRICS')}
+          onClick={(e) => {
+            w3s.showContent = 'METRICS';
+          }}
+        >
+          <Icon as={BiBarChartSquare} boxSize={6} />
+          <Box ml="15px" fontSize="16px">
+            Metrics
+          </Box>
+        </Flex>
+        <Flex
+          w="100%"
+          mt="16px"
+          p="18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'CURRENT_PUBLISHERS')}
+          onClick={(e) => {
+            w3s.showContent = 'CURRENT_PUBLISHERS';
+          }}
+        >
+          <Icon as={TbDeviceDesktop} boxSize={6} />
+          <Box ml="15px" fontSize="16px">
+            Devices
+          </Box>
+        </Flex>
+        <Flex
+          w="100%"
+          mt="16px"
+          p="18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT')}
+          onClick={(e) => {
+            w3s.showContent = 'CONTRACT_LOGS';
+          }}
+        >
+          <Icon as={TbHandClick} boxSize={6} />
+          <Box ml="15px" fontSize="16px">
+            Triggers
+          </Box>
+        </Flex>
+        <Flex
+          w="100%"
+          mt="16px"
+          p="18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'DB_TABLE')}
+          onClick={(e) => {
+            w3s.showContent = 'DB_TABLE';
+          }}
+        >
+          <Icon as={HiOutlineDatabase} boxSize={6} />
+          <Box ml="15px" fontSize="16px">
+            Data
+          </Box>
+        </Flex>
+        <Flex
+          w="100%"
+          mt="16px"
+          p="18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'CURRENT_EVENT_LOGS')}
+          onClick={(e) => {
+            w3s.showContent = 'CURRENT_EVENT_LOGS';
+          }}
+        >
+          <Icon as={AiOutlineFileText} boxSize={6} />
+          <Box ml="15px" fontSize="16px">
+            Log
+          </Box>
+        </Flex>
+        <Flex
+          w="100%"
+          mt="16px"
+          p="18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'SETTINGS')}
+          onClick={(e) => {
+            w3s.showContent = 'SETTINGS';
+          }}
+        >
+          <Icon as={TbSettings} boxSize={6} />
+          <Box ml="15px" fontSize="16px">
+            Settings
+          </Box>
+        </Flex>
       </Flex>
-      <Flex
-        w="100%"
-        mt="16px"
-        p="18px"
-        alignItems="center"
-        cursor="pointer"
-        color="rgba(15, 15, 15, 0.75)"
-        borderRadius="8px"
-        {...getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT')}
-        onClick={(e) => {
-          w3s.showContent = 'CONTRACT_LOGS';
-        }}
-      >
-        <Icon as={TbHandClick} boxSize={6} />
-        <Box ml="15px" fontSize="16px">
-          Triggers
-        </Box>
-      </Flex>
-      <Flex
-        w="100%"
-        mt="16px"
-        p="18px"
-        alignItems="center"
-        cursor="pointer"
-        color="rgba(15, 15, 15, 0.75)"
-        borderRadius="8px"
-        {...getSelectedStyles(w3s.showContent === 'DB_TABLE')}
-        onClick={(e) => {
-          w3s.showContent = 'DB_TABLE';
-        }}
-      >
-        <Icon as={HiOutlineDatabase} boxSize={6} />
-        <Box ml="15px" fontSize="16px">
-          Data
-        </Box>
-      </Flex>
-      <Flex
-        w="100%"
-        mt="16px"
-        p="18px"
-        alignItems="center"
-        cursor="pointer"
-        color="rgba(15, 15, 15, 0.75)"
-        borderRadius="8px"
-        {...getSelectedStyles(w3s.showContent === 'CURRENT_EVENT_LOGS')}
-        onClick={(e) => {
-          w3s.showContent = 'CURRENT_EVENT_LOGS';
-        }}
-      >
-        <Icon as={AiOutlineFileText} boxSize={6} />
-        <Box ml="15px" fontSize="16px">
-          Log
-        </Box>
-      </Flex>
-      <Flex
-        w="100%"
-        mt="16px"
-        p="18px"
-        alignItems="center"
-        cursor="pointer"
-        color="rgba(15, 15, 15, 0.75)"
-        borderRadius="8px"
-        {...getSelectedStyles(w3s.showContent === 'SETTINGS')}
-        onClick={(e) => {
-          w3s.showContent = 'SETTINGS';
-        }}
-      >
-        <Icon as={TbSettings} boxSize={6} />
-        <Box ml="15px" fontSize="16px">
-          Settings
-        </Box>
-      </Flex>
-    </Flex>
+    </Box>
   );
 };
 

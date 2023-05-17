@@ -80,7 +80,7 @@ const EventLogs = observer(() => {
   const { loading, logs } = store;
 
   return (
-    <Box pos="relative" bg="#000" borderRadius="8px" paddingBottom={'50px'}>
+    <Box pos="relative" bg="#000" borderRadius="8px">
       <Icon
         as={AiOutlineClear}
         pos="absolute"
