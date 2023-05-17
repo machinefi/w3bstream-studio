@@ -1,10 +1,11 @@
-# W3bstream Devnet
+# W3bstream Studio
+W3bstream Studio is a web application that can interact with a W3bstream node and assist you with the following tasks:
 
 - Managing your W3bstream node
-- Code and deploy Wasm Applets
-- Publisher management
-- Test events
-- Logs viewer
+- Coding and deploying WASM Applets
+- Managing devices
+- Testing events
+- Viewing logs
 
 ![preview](https://user-images.githubusercontent.com/12439992/220250449-eb4fe29a-8184-400c-bf20-1a92dc40c218.png)
 
