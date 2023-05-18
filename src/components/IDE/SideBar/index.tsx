@@ -423,7 +423,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                 });
               }}
             >
-              <Text fontSize="16px" fontWeight={700} onClick={(e) => {
+              <Text fontSize="16px" flex={1} fontWeight={700} onClick={(e) => {
                 e.stopPropagation();
                 dbTable.setCurrentTable({
                   tableSchema,
