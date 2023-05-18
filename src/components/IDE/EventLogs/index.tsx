@@ -1,7 +1,7 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useStore } from '@/store/index';
-import { Box, Flex, Icon, Spinner, chakra, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Select } from '@chakra-ui/react';
+import { Box, Flex, Icon, Spinner, chakra, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Select, shouldForwardProp } from '@chakra-ui/react';
 import { axios } from '@/lib/axios';
 import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
@@ -13,30 +13,116 @@ import { hooks } from '@/lib/hooks';
 import { AiOutlineClear } from 'react-icons/ai';
 import { eventBus } from '@/lib/event';
 import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
+import { motion, isValidMotionProp } from 'framer-motion';
+
+const ChakraBox = chakra(motion.div, {
+  /**
+   * Allow motion props and non-Chakra props to be forwarded.
+   */
+  shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop),
+});
+
+const LiveIcon = () => {
+  return (
+    <Box w="40px" pos="relative" boxSizing='border-box'>
+      <ChakraBox
+        w="30px"
+        h="30px"
+        m="0 auto 5px"
+        borderRadius="50%"
+        border="1px solid #946FFF"
+        opacity="0.8"
+        boxSizing='border-box'
+        animate={{
+          scale: [1, 1.5],
+          opacity: [0.8, 0],
+        }}
+        transition={{
+          duration: 2,
+          ease: "easeInOut",
+          repeatType: "loop",
+          // @ts-ignore
+          repeat: Infinity,
+        }}
+      />
+      <ChakraBox
+        pos="absolute"
+        top="7px"
+        left="12px"
+        w="16px"
+        h="16px"
+        borderRadius="50%"
+        opacity="0.8"
+        boxSizing='border-box'
+        bg="#946FFF"
+        _after={{
+          content: "''",
+          display: 'block',
+          border: '2px solid #946FFF',
+          borderRadius: '50%',
+          width: '20px',
+          height: '20px',
+          top: '-4px',
+          left: '-4px',
+          position: 'absolute',
+          opacity: .8,
+        }}
+        animate={{
+          scale: [1, 1.5],
+          opacity: [0.8, 0],
+        }}
+        transition={{
+          duration: 2,
+          ease: "easeInOut",
+          repeatType: "loop",
+          // @ts-ignore
+          repeat: Infinity,
+        }}
+      />
+    </Box>
+  )
+}
 
 type LocalStoreType = {
   loading: boolean;
   initialized: boolean;
-  logs: WasmLogType[];
-  offset: number;
-  limit: number;
-  haveMore: boolean;
+  log: WasmLogType;
   showModal: boolean;
   modalContent: string;
   setData: (data: Partial<LocalStoreType>) => void;
 };
 
-const fetchWasmLogs = async ({ projectName, limit = 20, offset = 0 }: { projectName: string; limit: number; offset: number }) => {
+const fetchWasmLogs = async ({ projectName, limit = 20, page = 1 }: { projectName: string; limit?: number; page?: number }) => {
   try {
     const res = await trpc.api.wasmLogs.query({
       projectName,
       limit,
-      offset
+      page
     });
+    res.data.sort((a, b) => Number(a.f_created_at) - Number(b.f_created_at));
     return res;
   } catch (error) {
-    return [];
+    return {
+      data: [],
+      limit: 50,
+      page: 1,
+      hasNextPage: true
+    };
   }
+};
+
+const markLatestLogs = (logs: WasmLogType['data'], showAnimation = true) => {
+  const len = logs.length;
+  let latestTime;
+  for (let i = len - 1; i > 0; i--) {
+    const item = logs[i];
+    if (i === len - 1) {
+      latestTime = item.f_created_at;
+    }
+    // @ts-ignore
+    item.isLatest = showAnimation && item.f_created_at === latestTime;
+  }
+  return logs;
 };
 
 const EventLogs = observer(() => {
@@ -51,10 +137,12 @@ const EventLogs = observer(() => {
   const store = useLocalObservable<LocalStoreType>(() => ({
     loading: true,
     initialized: false,
-    logs: [],
-    limit: 50,
-    offset: 0,
-    haveMore: true,
+    log: {
+      data: [],
+      limit: 50,
+      page: 1,
+      hasNextPage: true,
+    },
     showModal: false,
     modalContent: '',
     setData(data: Partial<LocalStoreType>) {
@@ -65,19 +153,17 @@ const EventLogs = observer(() => {
   useEffect(() => {
     const projectName = curProject?.f_name;
     if (projectName && !store.initialized) {
-      fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+      fetchWasmLogs({ projectName, limit: log.limit }).then((res) => {
         store.setData({
           initialized: true,
-          logs: res,
-          offset: 0,
           loading: false,
-          haveMore: true
+          log: res,
         });
       });
     }
   }, [curProject, store.initialized]);
 
-  const { loading, logs } = store;
+  const { loading, log } = store;
 
   return (
     <Box pos="relative" bg="#000" borderRadius="8px">
@@ -93,10 +179,12 @@ const EventLogs = observer(() => {
         }}
         onClick={() => {
           store.setData({
-            logs: [],
-            offset: 0,
-            haveMore: true,
-            limit: 1
+            log: {
+              data: [],
+              limit: 50,
+              page: 1,
+              hasNextPage: true,
+            },
           });
         }}
       />
@@ -146,10 +234,10 @@ const EventLogs = observer(() => {
                 store.setData({
                   loading: true
                 });
-                fetchWasmLogs({ projectName, limit: store.limit, offset: 0 }).then((res) => {
+                fetchWasmLogs({ projectName, limit: 30 }).then((res) => {
+                  markLatestLogs(res.data);
                   store.setData({
-                    logs: res,
-                    offset: 0,
+                    log: res,
                     loading: false
                   });
                 });
@@ -197,7 +285,7 @@ const EventLogs = observer(() => {
         }}
       />
       <Flex align="center" p="10px 20px" fontSize="sm" fontWeight={700} color="#fff">
-        Logs: {loading && <Spinner ml="10px" size="sm" color="#fff" />}
+        Logs: {loading ? <Spinner ml="10px" size="sm" color="#fff" /> : <LiveIcon />}
       </Flex>
       <Box height="calc(100vh - 180px)" px="20px">
         <AutoSizer>
@@ -205,15 +293,16 @@ const EventLogs = observer(() => {
             <List
               width={width}
               height={height}
-              rowCount={logs.length}
+              rowCount={log.data.length}
               rowHeight={20}
               rowRenderer={({ index, key, style }) => {
-                const item = logs[index];
+                const item = log.data[index];
                 return (
                   <chakra.p
                     key={key}
                     style={style}
-                    color="#fff"
+                    // @ts-ignore
+                    color={item.isLatest ? '#946FFF' : '#fff'}
                     whiteSpace="nowrap"
                     overflow="hidden"
                     cursor="pointer"
@@ -232,25 +321,27 @@ const EventLogs = observer(() => {
               }}
               onScroll={async ({ clientHeight, scrollHeight, scrollTop }) => {
                 if (scrollTop + clientHeight === scrollHeight) {
-                  if (store.loading || !store.haveMore) {
+                  if (store.loading || !log.hasNextPage) {
                     return;
                   }
-                  const projectName = curProject?.name;
+                  const projectName = curProject?.f_name;
                   if (projectName) {
                     store.setData({
                       loading: true
                     });
-                    const offset = store.offset + store.limit;
                     const res = await fetchWasmLogs({
                       projectName,
-                      offset,
-                      limit: store.limit
+                      limit: log.limit,
+                      page: log.page + 1,
                     });
                     store.setData({
-                      offset,
                       loading: false,
-                      logs: logs.concat(res),
-                      haveMore: res.length === store.limit
+                      log: {
+                        data: res.data.concat(log.data),
+                        limit: res.limit,
+                        page: res.page,
+                        hasNextPage: res.hasNextPage
+                      },
                     });
                   }
                 }
