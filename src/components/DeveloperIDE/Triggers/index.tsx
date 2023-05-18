@@ -91,7 +91,7 @@ const Triggers = () => {
 
       <Flex mb="10px" alignItems="center" justifyContent="space-between">
         <Box fontSize="18px" color="#0F0F0F" fontWeight={700}>
-          Event Rounting
+          Event Routing
         </Box>
         <CreateStrategyButton />
       </Flex>
