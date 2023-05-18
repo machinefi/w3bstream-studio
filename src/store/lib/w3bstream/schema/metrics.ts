@@ -35,7 +35,6 @@ export default class MetricsModule {
             step: `${step}s`
           }
         });
-        console.log('allMetrics: ', data);
         return data.data.result;
       } catch (error) {
         return [];
@@ -83,12 +82,11 @@ export default class MetricsModule {
       type: 'LineChartCard',
       data: {
         title: 'Active Devices',
-        description: 'Number of uniaue devices that sent at least one message to this project',
+        description: 'Number of unique devices that sent at least one message to this project',
         data: [
           {
             id: 'activeDevicesMetrics',
-            color: 'hsl(0, 100%, 50%)',
-            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: i[1] }))
+            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: Number(i[1]) }))
           }
         ]
       }
@@ -107,8 +105,7 @@ export default class MetricsModule {
         data: [
           {
             id: 'dataMessagesMetrics',
-            color: 'hsl(0, 100%, 50%)',
-            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: i[1] }))
+            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: Number(i[1]) }))
           }
         ]
       }
@@ -127,8 +124,7 @@ export default class MetricsModule {
         data: [
           {
             id: 'blockchainTransactionMetrics',
-            color: 'hsl(0, 100%, 50%)',
-            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: i[1] }))
+            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: Number(i[1]) }))
           }
         ]
       }
