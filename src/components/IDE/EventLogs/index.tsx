@@ -24,7 +24,7 @@ const ChakraBox = chakra(motion.div, {
 
 const LiveIcon = () => {
   return (
-    <Box w="40px" pos="relative" boxSizing='border-box'>
+    <Box w="40px" pos="relative" boxSizing='border-box' transform="scale(0.6)">
       <ChakraBox
         w="30px"
         h="30px"
@@ -111,19 +111,35 @@ const fetchWasmLogs = async ({ projectName, limit = 20, page = 1 }: { projectNam
   }
 };
 
-const markLatestLogs = (logs: WasmLogType['data'], showAnimation = true) => {
-  const len = logs.length;
-  let latestTime;
-  for (let i = len - 1; i > 0; i--) {
-    const item = logs[i];
-    if (i === len - 1) {
-      latestTime = item.f_created_at;
-    }
-    // @ts-ignore
-    item.isLatest = showAnimation && item.f_created_at === latestTime;
+const poll = (fn: { (): Promise<void>; (): void; }, interval = 3000) => {
+  let timer;
+  const executePoll = async () => {
+    fn()
+    timer = setTimeout(executePoll, interval)
   }
-  return logs;
-};
+  return {
+    start: () => {
+      executePoll()
+    },
+    stop: () => {
+      clearTimeout(timer)
+    }
+  }
+}
+
+// const markLatestLogs = (logs: WasmLogType['data'], showAnimation = true) => {
+//   const len = logs.length;
+//   let latestTime;
+//   for (let i = len - 1; i > 0; i--) {
+//     const item = logs[i];
+//     if (i === len - 1) {
+//       latestTime = item.f_created_at;
+//     }
+//     // @ts-ignore
+//     item.isLatest = showAnimation && item.f_created_at === latestTime;
+//   }
+//   return logs;
+// };
 
 const EventLogs = observer(() => {
   const {
@@ -151,17 +167,19 @@ const EventLogs = observer(() => {
   }));
 
   useEffect(() => {
-    const projectName = curProject?.f_name;
-    if (projectName && !store.initialized) {
-      fetchWasmLogs({ projectName, limit: log.limit }).then((res) => {
-        store.setData({
-          initialized: true,
-          loading: false,
-          log: res,
-        });
+    const fetchWasmLogsPoll = poll(async () => {
+      const res = await fetchWasmLogs({ projectName: curProject?.f_name, limit: log.limit });
+      store.setData({
+        initialized: true,
+        loading: false,
+        log: res,
       });
+    })
+    fetchWasmLogsPoll.start();
+    return () => {
+      fetchWasmLogsPoll.stop();
     }
-  }, [curProject, store.initialized]);
+  }, []);
 
   const { loading, log } = store;
 
@@ -231,16 +249,16 @@ const EventLogs = observer(() => {
                 });
                 console.log('[Send test message]:', res);
                 showNotification({ color: 'green', message: 'Send event successed' });
-                store.setData({
-                  loading: true
-                });
-                fetchWasmLogs({ projectName, limit: 30 }).then((res) => {
-                  markLatestLogs(res.data);
-                  store.setData({
-                    log: res,
-                    loading: false
-                  });
-                });
+                // store.setData({
+                //   loading: true
+                // });
+                // fetchWasmLogs({ projectName, limit: 30 }).then((res) => {
+                //   markLatestLogs(res.data);
+                //   store.setData({
+                //     log: res,
+                //     loading: false
+                //   });
+                // });
               } catch (error) {
                 showNotification({ color: 'red', message: 'send event failed' });
               }
@@ -319,33 +337,33 @@ const EventLogs = observer(() => {
                   </chakra.p>
                 );
               }}
-              onScroll={async ({ clientHeight, scrollHeight, scrollTop }) => {
-                if (scrollTop + clientHeight === scrollHeight) {
-                  if (store.loading || !log.hasNextPage) {
-                    return;
-                  }
-                  const projectName = curProject?.f_name;
-                  if (projectName) {
-                    store.setData({
-                      loading: true
-                    });
-                    const res = await fetchWasmLogs({
-                      projectName,
-                      limit: log.limit,
-                      page: log.page + 1,
-                    });
-                    store.setData({
-                      loading: false,
-                      log: {
-                        data: res.data.concat(log.data),
-                        limit: res.limit,
-                        page: res.page,
-                        hasNextPage: res.hasNextPage
-                      },
-                    });
-                  }
-                }
-              }}
+            // onScroll={async ({ clientHeight, scrollHeight, scrollTop }) => {
+            //   if (scrollTop + clientHeight === scrollHeight) {
+            //     if (store.loading || !log.hasNextPage) {
+            //       return;
+            //     }
+            //     const projectName = curProject?.f_name;
+            //     if (projectName) {
+            //       store.setData({
+            //         loading: true
+            //       });
+            //       const res = await fetchWasmLogs({
+            //         projectName,
+            //         limit: log.limit,
+            //         page: log.page + 1,
+            //       });
+            //       store.setData({
+            //         loading: false,
+            //         log: {
+            //           data: res.data.concat(log.data),
+            //           limit: res.limit,
+            //           page: res.page,
+            //           hasNextPage: res.hasNextPage
+            //         },
+            //       });
+            //     }
+            //   }
+            // }}
             />
           )}
         </AutoSizer>
