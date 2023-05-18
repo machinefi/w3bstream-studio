@@ -118,28 +118,29 @@ export const w3bstreamRouter = t.router({
     .input(
       z.object({
         projectName: z.string(),
-        limit: z.number().optional().default(10),
-        offset: z.number().optional().default(0),
+        limit: z.number().min(1).max(100).nullish(),
+        page: z.number().min(1).nullish(),
         createdAt: z.number().optional()
       })
     )
     .query(async ({ ctx, input }) => {
+      const { page, limit, projectName, createdAt } = input;
       const where = {
         f_project_name: {
-          equals: input.projectName
+          equals: projectName
         }
       };
-      if (input.createdAt) {
-        where['f_log_time'] = {
-          gte: input.createdAt
+      if (createdAt) {
+        where['f_created_at'] = {
+          gte: createdAt
         };
       }
-      return ctx.prisma.t_wasm_log.findMany({
+      const data = await ctx.prisma.t_wasm_log.findMany({
         where,
-        take: input.limit,
-        skip: input.offset,
+        take: limit,
+        skip: (page - 1) * limit,
         orderBy: {
-          f_log_time: 'desc'
+          f_created_at: 'desc'
         },
         select: {
           f_id: true,
@@ -149,6 +150,12 @@ export const w3bstreamRouter = t.router({
           f_created_at: true
         }
       });
+      return {
+        data,
+        limit,
+        page,
+        hasNextPage: data.length === limit
+      };
     }),
   cronJobs: t.procedure
     .input(
@@ -208,5 +215,5 @@ export type ProjectType = ProjectOriginalType & {
 export type ContractLogType = inferProcedureOutput<W3bstreamRouter['contractLogs']>[0];
 export type ChainTxType = inferProcedureOutput<W3bstreamRouter['chainTx']>[0];
 export type ChainHeightType = inferProcedureOutput<W3bstreamRouter['chainHeight']>[0];
-export type WasmLogType = inferProcedureOutput<W3bstreamRouter['wasmLogs']>[0];
+export type WasmLogType = inferProcedureOutput<W3bstreamRouter['wasmLogs']>;
 export type CronJobsType = inferProcedureOutput<W3bstreamRouter['cronJobs']>[0];
