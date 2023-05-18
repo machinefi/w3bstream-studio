@@ -84,7 +84,7 @@ export class VmRunTimeNode extends BaseNode {
             component: 'JSONForm',
             props: {
               formState: new JSONSchemaFormState({
-                // @ts-ignore 
+                // @ts-ignore
                 schema: vmRunTimeNodeSchema,
                 uiSchema: {
                   'ui:submitButtonOptions': {

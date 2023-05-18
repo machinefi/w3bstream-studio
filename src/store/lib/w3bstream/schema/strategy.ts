@@ -62,7 +62,7 @@ export default class StrategyModule {
       },
       {
         key: 'f_handler',
-        label: 'handler'
+        label: 'Handler'
       },
       {
         key: 'actions',
