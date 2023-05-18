@@ -4,12 +4,11 @@ import axios from 'axios';
 import { makeObservable, observable } from 'mobx';
 import dayjs from 'dayjs';
 import { trpc } from '@/lib/trpc';
-import { rootStore } from '@/store/index';
 
 export enum MetricsLabel {
-  w3b_register_publisher_metrics = 'w3b_register_publisher_metrics',
-  w3b_receive_event_metrics = 'w3b_receive_event_metrics',
-  w3b_blockchain_tx_metrics = 'w3b_blockchain_tx_metrics'
+  activeDevicesMetrics = 'publishers_metrics',
+  dataMessagesMetrics = 'inbound_events_metrics',
+  blockchainTransactionMetrics = 'blockchain_tx_metrics'
 }
 
 export type Metrics = {
@@ -30,12 +29,13 @@ export default class MetricsModule {
           method: 'GET',
           url: `/api/metrics/query_range`,
           params: {
-            query: `{project="${rootStore.w3s.project.curProject.f_name}"}`,
+            query: `{project="${globalThis.store.w3s.project.curProject.f_name}"}`,
             start: startTime.toISOString(),
             end: endTime.toISOString(),
             step: `${step}s`
           }
         });
+        console.log('allMetrics: ', data);
         return data.data.result;
       } catch (error) {
         return [];
@@ -47,7 +47,7 @@ export default class MetricsModule {
     function: async () => {
       try {
         const res = await trpc.pg.dbState.query({
-          projectID: rootStore.w3s.project.curProject?.f_project_id
+          projectID: globalThis.store.w3s.project.curProject?.f_project_id
         });
         if (!res.errorMsg) {
           return {
@@ -75,47 +75,62 @@ export default class MetricsModule {
     }
   };
 
-  get publisherMetrics(): JSONMetricsView {
+  get activeDevicesMetrics(): JSONMetricsView {
     let values = [];
-    const _publisherMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.w3b_register_publisher_metrics);
-    _publisherMetrics.forEach((i) => (values = values.concat(i.values)));
-    console.log(values);
+    const _activeDevicesMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.activeDevicesMetrics);
+    _activeDevicesMetrics.forEach((i) => (values = values.concat(i.values)));
     return {
       type: 'LineChartCard',
       data: {
-        title: 'Publisher Metrics',
-        // @ts-ignore
-        data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ name: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), value: i[1] }))
+        title: 'Active Devices',
+        description: 'Number of uniaue devices that sent at least one message to this project',
+        data: [
+          {
+            id: 'activeDevicesMetrics',
+            color: 'hsl(0, 100%, 50%)',
+            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: i[1] }))
+          }
+        ]
       }
     };
   }
 
-  get eventMetrics(): JSONMetricsView {
-    let values = []; //[time,value,publisher]
-    const _publisherMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.w3b_receive_event_metrics);
-    _publisherMetrics.forEach((i) => (values = values.concat(i.values.map((t) => [t[0], t[1], i.metric.publisher]))));
-    console.log(values);
+  get dataMessagesMetrics(): JSONMetricsView {
+    let values = [];
+    const _dataMessagesMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.dataMessagesMetrics);
+    _dataMessagesMetrics.forEach((i) => (values = values.concat(i.values.map((t) => [t[0], t[1], i.metric.publisher]))));
     return {
       type: 'LineChartCard',
       data: {
-        title: 'Event Metrics',
-        // @ts-ignore
-        data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ name: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), value: i[1], extraData: { publisher: i[2] } }))
+        title: 'Data Messages',
+        description: 'Total number of messages received from all devices',
+        data: [
+          {
+            id: 'dataMessagesMetrics',
+            color: 'hsl(0, 100%, 50%)',
+            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: i[1] }))
+          }
+        ]
       }
     };
   }
 
-  get blockchainMetrics(): JSONMetricsView {
-    let values = []; //[time,value,publisher]
-    const _publisherMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.w3b_blockchain_tx_metrics);
-    _publisherMetrics.forEach((i) => (values = values.concat(i.values)));
-    console.log(values);
+  get blockchainTransactionMetrics(): JSONMetricsView {
+    let values = [];
+    const _blockchainTransactionMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.blockchainTransactionMetrics);
+    _blockchainTransactionMetrics.forEach((i) => (values = values.concat(i.values)));
     return {
       type: 'LineChartCard',
       data: {
-        title: 'Blockchain tx Metrics',
-        // @ts-ignore
-        data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ name: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), value: i[1] }))
+        title: 'Blockchain Transaction',
+        description: `Total number of blockchain transactions sent by the project's applet.`,
+        data: [
+          {
+            id: 'blockchainTransactionMetrics',
+            color: 'hsl(0, 100%, 50%)',
+            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: i[1] }))
+          }
+        ]
       }
     };
   }
@@ -146,7 +161,7 @@ export default class MetricsModule {
     }
 
     if (this.showContent === 'API') {
-      return [this.timeRangePick, this.publisherMetrics, this.eventMetrics, this.blockchainMetrics];
+      return [this.timeRangePick, this.activeDevicesMetrics, this.dataMessagesMetrics, this.blockchainTransactionMetrics];
     }
 
     return [];
