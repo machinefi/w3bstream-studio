@@ -57,8 +57,8 @@ const Settings = () => {
   }, [store.curApplet]);
 
   return (
-    <Box w="100%" paddingBottom={'100px'}>
-      <Flex mt="20px" justifyContent="space-between">
+    <Box w="100%">
+      <Flex justifyContent="space-between">
         <Box fontSize="18px" fontWeight={700}>
           General
         </Box>

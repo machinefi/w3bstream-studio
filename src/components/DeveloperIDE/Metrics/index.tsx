@@ -17,8 +17,8 @@ const Metrics = () => {
   }, []);
 
   return (
-    <Box w="100%" paddingBottom={'100px'}>
-      <Flex mb="10px" align="center" bg="#fff" borderRadius="8px" overflowY="auto">
+    <Box w="100%">
+      <Flex mb="10px" align="center" bg="#fff" borderRadius="8px">
         <Flex
           p="10px 20px"
           alignItems="center"
