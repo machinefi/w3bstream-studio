@@ -5,7 +5,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { helper, toast } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
-import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider } from '@chakra-ui/react';
+import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Button, Center } from '@chakra-ui/react';
 import { VscCloudDownload, VscDebugStart, VscFile, VscFiles, VscFileSymlinkFile, VscFileZip, VscFolder, VscTrash } from 'react-icons/vsc';
 import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
@@ -43,7 +43,7 @@ export const FileIcon = (file: FilesItemType) => {
     return <Image {...s} src="/images/icons/file.svg"></Image>;
   }
 
-  if (file?.label == 'Browser Files' || file.type == 'folder') {
+  if (file?.label == 'Browser Files') {
     return <>{file.isOpen ? <Image {...s} src="/images/icons/folder-client-open.svg"></Image> : <Image {...s} src="/images/icons/folder-client.svg"></Image>}</>;
   } else if (file?.label == VSCodeRemoteFolderName) {
     return (
@@ -258,6 +258,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                 <Flex color={item.label?.startsWith('.') || isHidden ? '#979797' : ''} px={1} py={1} alignItems={'center'} _hover={{ bg: '#f6f6f6' }} bg={item.key == curFilekey ? '#f6f6f6' : ''}>
                   {item.children && <> {item?.isOpen ? <ChevronDownIcon mr={1} /> : <ChevronRightIcon mr={1} />}</>}
                   {FileIcon(item)}
+
                   {item.isRename ? (
                     <input
                       autoFocus
@@ -285,6 +286,34 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                       {item.label}
                     </Box>
                   )}
+
+                  {item.label == VSCodeRemoteFolderName && !w3s.projectManager.isWSConnect && (
+                    <Center
+                      ml="auto"
+                      px={1}
+                      borderRadius={'3px'}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          await w3s.projectManager.connectWs();
+                        } catch (e) {
+                          if (!w3s.projectManager.isWSConnect) {
+                            window.open('vscode://dlhtx.W3BStream-vscode-extension');
+                          }
+                        }
+                      }}
+                    >
+                      <Tooltip label="Connect to VSCode w3bstream extension">
+                        <Image src="/images/icons/w3s_extension.png" h={4} w={4}></Image>
+                      </Tooltip>
+                    </Center>
+                  )}
+                  {item?.data?.size && (
+                    <Box ml="auto" color="gray" fontSize={'12px'}>
+                      {item?.data?.size}kb
+                    </Box>
+                  )}
+
                   {item?.data?.dataType == 'assemblyscript' && curFilesListSchema?.curActiveFileId == item?.key && (
                     <>
                       <Tooltip label={`Upload to Devnet`} placement="top">

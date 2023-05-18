@@ -18,6 +18,7 @@ type FileItemDataType<T = any> = {
   code?: string;
   language?: string;
   extraData?: T;
+  size?: number;
   [key: string]: any;
 };
 
@@ -63,9 +64,12 @@ export class FilesListSchema {
   }
 
   setVscodeRemotFile(files: VSCodeFilesType[]) {
+    console.log(files);
     const hasVscodeFileFolder = this.files.find((i) => i.label == VSCodeRemoteFolderName);
     if (hasVscodeFileFolder) {
       hasVscodeFileFolder.children = [];
+      console.log(this.files);
+      this.syncToIndexDb();
       if (!files) return;
       files.forEach((file) => {
         hasVscodeFileFolder.children.push({
@@ -79,7 +83,8 @@ export class FilesListSchema {
             language: helper.getFileLanguage(file.name),
             extraData: {
               raw: helper.base64ToUint8Array(file.content)
-            }
+            },
+            size: file.size
           }
         });
       });

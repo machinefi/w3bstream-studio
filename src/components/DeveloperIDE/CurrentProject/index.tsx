@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box, Tooltip, Button } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import ToolBar from '../ToolBar';
@@ -10,9 +10,12 @@ import DBTable from '../DeveloperDBTable';
 import EventLogs from '@/components/IDE/EventLogs';
 import Settings from '../Settings';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { MdRefresh } from 'react-icons/md';
+import { UnstyledButton } from '@mantine/core';
 
 const CurrentProject = observer(() => {
   const {
+    w3s,
     w3s: { showContent, project }
   } = useStore();
 
@@ -27,7 +30,7 @@ const CurrentProject = observer(() => {
         bg="#fff"
         p="10px 15px"
         w="86px"
-        borderRadius='4px'
+        borderRadius="4px"
         onClick={() => {
           project.allProjects.onSelect(-1);
           project.resetSelectedNames();
@@ -38,7 +41,18 @@ const CurrentProject = observer(() => {
       </Flex>
       <Flex w="100%" h="calc(100vh - 180px)" overflow={'hidden'} position="relative">
         <ToolBar borderRadius="8px" overflowY="auto" />
-        <Box ml="20px" w="100%" h="100%" p="20px" pb="50px" bg="#fff" boxSizing='content-box' borderRadius="8px" overflow={'auto'}>
+        <Box ml="20px" w="100%" h="100%" p="20px" pb="50px" bg="#fff" boxSizing="content-box" borderRadius="8px" overflow={'auto'}>
+          <Flex mb={4}>
+            <Button
+              ml="auto"
+              size="sm"
+              onClick={(e) => {
+                w3s.init();
+              }}
+            >
+              <MdRefresh />
+            </Button>
+          </Flex>
           {showContent === 'METRICS' && <Metrics />}
           {showContent === 'CURRENT_PUBLISHERS' && <Publishers />}
           {(showContent === 'CONTRACT_LOGS' || showContent === 'CHAIN_TX' || showContent === 'CHAIN_HEIGHT') && <Triggers />}
@@ -50,6 +64,5 @@ const CurrentProject = observer(() => {
     </Box>
   );
 });
-
 
 export default CurrentProject;
