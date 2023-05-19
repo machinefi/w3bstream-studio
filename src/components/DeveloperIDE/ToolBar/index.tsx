@@ -67,7 +67,7 @@ const ToolBar = (props: ToolBar) => {
                   cursor="pointer"
                   borderBottom={'1px solid #EDEDED'}
                   py="14px"
-                  justifyContent="center"
+                  justifyContent="flex-start"
                 >
                   <Box mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={status?.color}></Box>
                   <Text color={w3s.project.curProject.name === item.name ? status?.color : ''}>{item.name}</Text>
