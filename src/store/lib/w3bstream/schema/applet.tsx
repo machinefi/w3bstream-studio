@@ -530,21 +530,20 @@ export default class AppletModule {
     }
   }
 
-  async downloadWasmFile(resourceId: string) {
-    if (!resourceId) {
-      return null;
-    }
+  async downloadWasmFile() {
     try {
+      const curApplet = this.allData.find((item) => item.project_name === globalThis.store.w3s.project.curProject?.name);
       const res = await axios.request({
         method: 'get',
-        url: `/api/w3bapp/resource/data/${resourceId}`,
-        responseType: 'arraybuffer'
+        url: `/api/w3bapp/resource/data/${curApplet?.f_resource_id}`,
+        responseType: 'blob'
       });
-      const arrayBuffer = res.data;
-      const byteArray = new Uint8Array(arrayBuffer);
-      return helper.Uint8ArrayToWasmBase64FileData(this.wasmName.value, byteArray);
-    } catch (error) {
-      return null
-    }
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(new Blob([res.data], { type: "application/wasm" }));
+      link.download = this.wasmName.value;
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(link.href)
+    } catch (error) { }
   }
 }

@@ -139,13 +139,18 @@ const Projects = observer(() => {
                 _hover={{
                   boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
                 }}
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.stopPropagation();
                   if (instance) {
                     allProjects.onSelect(index);
                     w3s.showContent = 'METRICS';
                   } else {
-                    toast.error('No instance found, please create one first');
+                    const appletID = await w3s.applet.createAppletForDeveloper({
+                      projectName: project.name
+                    });
+                    if (appletID) {
+                      eventBus.emit('applet.create');
+                    }
                   }
                 }}
               >

@@ -99,7 +99,9 @@ const Header = observer(() => {
           <Image mr="20px" w="100px" src="https://img.shields.io/github/stars/machinefi/w3bstream-studio.svg?style=social&label=Star&maxAge=2592000" />
         </ChakraLink> */}
         <StarCount />
-        <Profile />
+        <Flex mr="10px">
+          <Profile />
+        </Flex>
       </Flex>
     </Flex>
   );

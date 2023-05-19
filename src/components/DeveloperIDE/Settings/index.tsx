@@ -64,7 +64,7 @@ const Settings = () => {
         </Box>
         <Flex alignItems="center">
           <Button
-            leftIcon={project.projectInfo.loading.value ? <Spinner size='sm' color="#fff" /> : <Icon as={MdEditDocument} />}
+            leftIcon={project.projectInfo.loading.value ? <Spinner size='sm' /> : <Icon as={MdEditDocument} />}
             size="sm"
             {...defaultOutlineButtonStyle}
             onClick={async () => {
@@ -87,14 +87,22 @@ const Settings = () => {
         </Flex>
       </Flex>
       <Box mt="24px" p="20px" border="1px solid #eee" borderRadius="8px">
-        {/* <Flex alignItems={'center'} mb="20px">
+        <Flex alignItems={'center'} mb="20px">
           <Box fontWeight={700} fontSize="16px" color="#0F0F0F">
             Project Name:
           </Box>
           <Text ml="10px" fontSize={'18px'} fontWeight={700}>
             {project.curProject?.f_name}
           </Text>
-        </Flex> */}
+        </Flex>
+        <Flex alignItems={'center'} mb="20px">
+          <Box fontWeight={700} fontSize="16px" color="#0F0F0F">
+            Project ID:
+          </Box>
+          <Text ml="10px" fontSize={'18px'} fontWeight={700}>
+            {project.curProject?.f_project_id}
+          </Text>
+        </Flex>
         <Flex alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>WASM file name:</Box>
           <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">

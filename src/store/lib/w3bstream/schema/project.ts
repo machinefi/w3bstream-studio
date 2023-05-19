@@ -73,7 +73,8 @@ export const createProjectByWasmSchema = {
 export const importProjectSchema = {
   type: 'object',
   properties: {
-    json: { type: 'string', title: 'Project File' }
+    json: { type: 'string', title: 'Project File' },
+    wasm: { type: 'string', title: 'Wasm File' }
   },
   required: []
 } as const;
@@ -327,7 +328,7 @@ export default class ProjectModule {
     })
   });
 
-  importProjectForm = new JSONSchemaFormState<ImportProjectSchemaType, UiSchema & { json: FileWidgetUIOptions }>({
+  importProjectForm = new JSONSchemaFormState<ImportProjectSchemaType, UiSchema & { json: FileWidgetUIOptions; wasm: FileWidgetUIOptions }>({
     //@ts-ignore
     schema: importProjectSchema,
     uiSchema: {
@@ -348,6 +349,19 @@ export default class ProjectModule {
             borderRadius: '8px'
           }
         }
+      },
+      wasm: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          accept: {
+            'application/wasm': ['.wasm']
+          },
+          tips: `Upload a WASM file`,
+          flexProps: {
+            h: '100px',
+            borderRadius: '8px'
+          }
+        }
       }
     },
     afterSubmit: async (e) => {
@@ -358,11 +372,15 @@ export default class ProjectModule {
       if (!formData.json) {
         errors.json.addError('JSON file is required');
       }
+      if (!formData.wasm) {
+        errors.wasm.addError('WASM file is required');
+      }
       return errors;
     },
     value: new JSONValue<ImportProjectSchemaType>({
       default: {
-        json: ''
+        json: '',
+        wasm: ''
       }
     })
   });
@@ -693,9 +711,6 @@ export default class ProjectModule {
 
   projectInfo = new PromiseState({
     function: async () => {
-      const applet = globalThis.store.w3s.applet;
-      const curApplet = applet.allData.find((item) => item.project_name === this.curProject?.name);
-      const wasmFile = await applet.downloadWasmFile(curApplet?.f_resource_id);
       if (globalThis.store.w3s.cronJob.list.value.length === 0) {
         await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);
       }
@@ -703,7 +718,6 @@ export default class ProjectModule {
       return {
         name: this.curProject?.name,
         description: this.curProject?.f_description,
-        wasmFile,
         database: {
           schemas
         },
@@ -736,6 +750,7 @@ export default class ProjectModule {
   async exportProject() {
     await this.projectInfo.call();
     helper.download.downloadJSON(`w3bstream`, this.projectInfo.value);
+    globalThis.store.w3s.applet.downloadWasmFile();
   }
 
   importProject = new PromiseState({
@@ -756,12 +771,8 @@ export default class ProjectModule {
         this.importProjectForm.reset();
         return;
       }
-      if (formData.json) {
+      if (formData.json && formData.wasm) {
         const json = helper.json.safeParse(formData.json);
-        if (!json.wasmFile) {
-          showNotification({ color: 'red', message: 'wasm file is required' });
-          return;
-        }
         try {
           const projectName = json.name;
           const body: any = {
@@ -785,7 +796,7 @@ export default class ProjectModule {
               });
             }
             const data = new FormData();
-            const file = dataURItoBlob(json.wasmFile);
+            const file = dataURItoBlob(formData.wasm);
             data.append('file', file.blob);
             data.append(
               'info',
