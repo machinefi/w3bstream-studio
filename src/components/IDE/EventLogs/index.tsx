@@ -273,7 +273,7 @@ const EventLogs = observer(() => {
       <Flex align="center" p="10px 20px" fontSize="sm" fontWeight={700} color="#fff">
         Logs: {loading ? <Spinner ml="10px" size="sm" color="#fff" /> : <LiveIcon />}
       </Flex>
-      <Box height="100%" px="20px">
+      <Box height="calc(100vh - 180px)" px="20px">
         <AutoSizer>
           {({ width, height }) => (
             <List
@@ -310,7 +310,6 @@ const EventLogs = observer(() => {
                   if (store.loading) {
                     return;
                   }
-                  console.log('onScroll----------------->', scrollTop)
                   const projectName = curProject?.f_name;
                   if (projectName) {
                     store.setData({
