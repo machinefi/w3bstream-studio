@@ -13,7 +13,9 @@ const Metrics = () => {
   } = useStore();
 
   useEffect(() => {
-    metrics.allMetrics.call();
+    metrics.activeDevices.call();
+    metrics.dataMessages.call();
+    metrics.blockchainTransaction.call();
   }, []);
 
   return (

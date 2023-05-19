@@ -5,15 +5,8 @@ import { makeObservable, observable } from 'mobx';
 import dayjs from 'dayjs';
 import { trpc } from '@/lib/trpc';
 
-export enum MetricsLabel {
-  activeDevicesMetrics = 'publishers_metrics',
-  dataMessagesMetrics = 'inbound_events_metrics',
-  blockchainTransactionMetrics = 'blockchain_tx_metrics'
-}
-
 export type Metrics = {
   metric: {
-    __name__: MetricsLabel;
     project: string;
     [key: string]: any;
   };
@@ -21,28 +14,10 @@ export type Metrics = {
 };
 
 export default class MetricsModule {
-  allMetrics = new PromiseState<any, Metrics[]>({
-    defaultValue: [],
-    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
-      try {
-        const { data } = await axios.request({
-          method: 'GET',
-          url: `/api/metrics/query_range`,
-          params: {
-            query: `{project="${globalThis.store.w3s.project.curProject.f_name}"}`,
-            start: startTime.toISOString(),
-            end: endTime.toISOString(),
-            step: `${step}s`
-          }
-        });
-        return data.data.result;
-      } catch (error) {
-        return [];
-      }
-    }
-  });
-
   dbState = new PromiseState<() => Promise<any>, any>({
+    defaultValue: {
+      usedSize: 0
+    },
     function: async () => {
       try {
         const res = await trpc.pg.dbState.query({
@@ -69,15 +44,82 @@ export default class MetricsModule {
     data: {
       props: {},
       onChange: (startTime: Date, endTime: Date, step: number) => {
-        this.allMetrics.call(startTime, endTime, step);
+        this.activeDevices.call(startTime, endTime, step);
+        this.dataMessages.call(startTime, endTime, step);
+        this.blockchainTransaction.call(startTime, endTime, step);
       }
     }
   };
 
+  activeDevices = new PromiseState<any, Metrics[]>({
+    defaultValue: [],
+    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
+      try {
+        const { data } = await axios.request({
+          method: 'GET',
+          url: `/api/metrics/query_range`,
+          params: {
+            query: `count(count_over_time(inbound_events_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"}[1d])) by (project)`,
+            start: startTime.toISOString(),
+            end: endTime.toISOString(),
+            step: `${step}s`
+          }
+        });
+        return data.data.result;
+      } catch (error) {
+        return [];
+      }
+    }
+  });
+
+  dataMessages = new PromiseState<any, Metrics[]>({
+    defaultValue: [],
+    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
+      try {
+        const { data } = await axios.request({
+          method: 'GET',
+          url: `/api/metrics/query_range`,
+          params: {
+            query: `sum by (project) (inbound_events_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"})`,
+            start: startTime.toISOString(),
+            end: endTime.toISOString(),
+            step: `${step}s`
+          }
+        });
+        return data.data.result;
+      } catch (error) {
+        return [];
+      }
+    }
+  });
+
+  blockchainTransaction = new PromiseState<any, Metrics[]>({
+    defaultValue: [],
+    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
+      try {
+        const { data } = await axios.request({
+          method: 'GET',
+          url: `/api/metrics/query_range`,
+          params: {
+            query: `sum by (project) (w3b_blockchain_tx_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"})`,
+            start: startTime.toISOString(),
+            end: endTime.toISOString(),
+            step: `${step}s`
+          }
+        });
+        return data.data.result;
+      } catch (error) {
+        return [];
+      }
+    }
+  });
+
   get activeDevicesMetrics(): JSONMetricsView {
-    let values = [];
-    const _activeDevicesMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.activeDevicesMetrics);
-    _activeDevicesMetrics.forEach((i) => (values = values.concat(i.values)));
+    const values = this.activeDevices.value[0]?.values || [];
+    const list = values
+      .slice()
+      .sort((a, b) => a[0] - b[0])
+      .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
     return {
       type: 'LineChartCard',
       data: {
@@ -86,17 +128,32 @@ export default class MetricsModule {
         data: [
           {
             id: 'activeDevicesMetrics',
-            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: Number(i[1]) }))
+            data: list
           }
-        ]
+        ],
+        xFormat: 'time:%Y-%m-%d %H:%M',
+        xScale: {
+          type: 'time',
+          format: '%Y-%m-%d %H:%M',
+          useUTC: false,
+          precision: 'millisecond'
+        },
+        axisBottom: {
+          format: '%H:%M',
+          tickValues: 'every 4 hours',
+          legend: ' ',
+          legendPosition: 'middle'
+        }
       }
     };
   }
 
   get dataMessagesMetrics(): JSONMetricsView {
-    let values = [];
-    const _dataMessagesMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.dataMessagesMetrics);
-    _dataMessagesMetrics.forEach((i) => (values = values.concat(i.values.map((t) => [t[0], t[1], i.metric.publisher]))));
+    const values = this.dataMessages.value[0]?.values || [];
+    const list = values
+      .slice()
+      .sort((a, b) => a[0] - b[0])
+      .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
     return {
       type: 'LineChartCard',
       data: {
@@ -105,17 +162,32 @@ export default class MetricsModule {
         data: [
           {
             id: 'dataMessagesMetrics',
-            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: Number(i[1]) }))
+            data: list
           }
-        ]
+        ],
+        xFormat: 'time:%Y-%m-%d %H:%M',
+        xScale: {
+          type: 'time',
+          format: '%Y-%m-%d %H:%M',
+          useUTC: false,
+          precision: 'millisecond'
+        },
+        axisBottom: {
+          format: '%H:%M',
+          tickValues: 'every 4 hours',
+          legend: ' ',
+          legendPosition: 'middle'
+        }
       }
     };
   }
 
   get blockchainTransactionMetrics(): JSONMetricsView {
-    let values = [];
-    const _blockchainTransactionMetrics = this.allMetrics.value?.filter((i) => i.metric.__name__ === MetricsLabel.blockchainTransactionMetrics);
-    _blockchainTransactionMetrics.forEach((i) => (values = values.concat(i.values)));
+    const values = this.blockchainTransaction.value[0]?.values || [];
+    const list = values
+      .slice()
+      .sort((a, b) => a[0] - b[0])
+      .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
     return {
       type: 'LineChartCard',
       data: {
@@ -124,15 +196,27 @@ export default class MetricsModule {
         data: [
           {
             id: 'blockchainTransactionMetrics',
-            data: values.sort((a, b) => a[0] - b[0]).map((i) => ({ x: dayjs(i[0] * 1000).format('MMM DD, YYYY, hh:mmA'), y: Number(i[1]) }))
+            data: list
           }
-        ]
+        ],
+        xFormat: 'time:%Y-%m-%d %H:%M',
+        xScale: {
+          type: 'time',
+          format: '%Y-%m-%d %H:%M',
+          useUTC: false,
+          precision: 'millisecond'
+        },
+        axisBottom: {
+          format: '%H:%M',
+          tickValues: 'every 4 hours',
+          legend: ' ',
+          legendPosition: 'middle'
+        }
       }
     };
   }
 
   get dataBaseMetrics(): JSONMetricsView {
-    const _dbMetrics = this.dbState.value;
     return {
       type: 'ProgressCard',
       data: {
@@ -140,7 +224,7 @@ export default class MetricsModule {
         data: [
           {
             title: 'Database size',
-            currentValue: _dbMetrics?.usedSize,
+            currentValue: this.dbState.value?.usedSize,
             total: 512,
             unit: 'MB'
           }
