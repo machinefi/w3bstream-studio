@@ -101,83 +101,83 @@ export class FilesListSchema {
     this.syncToIndexDb();
   }
 
-  async runAutoDevActions(files: VSCodeFilesType[]) {
-    if (files.some((i) => !i.studioOptions.dev)) return;
-    const tempVScodeFiles = tempVScodeFilesStorage.value;
-    const compareTempVScodeFiles = _.isEqual(
-      toJS(tempVScodeFiles),
-      files.filter((i) => i.name.endsWith('.wasm'))
-    );
-    console.log('sameWASM', compareTempVScodeFiles);
-    if (compareTempVScodeFiles) return;
-    tempVScodeFilesStorage.set(files.filter((i) => i.name.endsWith('.wasm')));
-    files
-      ?.filter((i) => i.name.endsWith('.wasm'))
-      .map(async (file) => {
-        const projectName = file.studioOptions.projectName;
-        const payload = file.studioOptions.payload;
-        const raw = helper.base64ToUint8Array(file.content);
-        //find projectName in project list
-        const project = rootStore.w3s.project.allProjects.value.find((i: ProjectType) => i.f_name == projectName);
-        //if project not exist, create project
-        console.log('project', project);
-        if (project) {
-          //delete project
-          await axios.request({
-            method: 'delete',
-            url: `/api/w3bapp/project/${project.name}`
-          });
-          await axios.request({
-            method: 'get',
-            url: '/api/w3bapp/project'
-          });
-        }
-        const projectRes = await axios.request({
-          method: 'post',
-          url: '/api/w3bapp/project',
-          data: {
-            name: projectName
-          }
-        });
-        eventBus.emit('project.create');
-        // create applet in project
-        let formData = new FormData();
-        console.log(helper.Uint8ArrayToWasmBase64FileData(file.name, raw));
-        const fileBlob = dataURItoBlob(helper.Uint8ArrayToWasmBase64FileData(file.name, raw));
-        formData.append('file', fileBlob.blob);
-        formData.append(
-          'info',
-          JSON.stringify({
-            wasmName: file.name,
-            projectID: projectRes.data.projectID,
-            appletName: file.name.replace('.wasm', '')
-          })
-        );
-        const appletRes = await axios.request({
-          method: 'post',
-          url: `http://localhost:8888/srv-applet-mgr/v0/applet/${projectRes.data.projectID}`,
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          data: formData
-        });
-        eventBus.emit('applet.create');
-        const deployRes = await rootStore.w3s.applet.deployApplet({ appletID: appletRes.data.appletID });
-        console.log('deployRes', deployRes);
-        const startRes = await rootStore.w3s.instances.handleInstance({ instanceID: deployRes.instanceID, event: 'START' });
-        //send event
-        await axios.request({
-          method: 'post',
-          url: `/api/w3bapp/event/${projectRes.data.name}`,
-          headers: {
-            'Content-Type': 'text/plain'
-          },
-          data: {
-            payload
-          }
-        });
-      });
-  }
+  // async runAutoDevActions(files: VSCodeFilesType[]) {
+  //   // if (files.some((i) => !i.studioOptions.dev)) return;
+  //   const tempVScodeFiles = tempVScodeFilesStorage.value;
+  //   const compareTempVScodeFiles = _.isEqual(
+  //     toJS(tempVScodeFiles),
+  //     files.filter((i) => i.name.endsWith('.wasm'))
+  //   );
+  //   console.log('sameWASM', compareTempVScodeFiles);
+  //   if (compareTempVScodeFiles) return;
+  //   tempVScodeFilesStorage.set(files.filter((i) => i.name.endsWith('.wasm')));
+  //   files
+  //     ?.filter((i) => i.name.endsWith('.wasm'))
+  //     .map(async (file) => {
+  //       // const projectName = file.studioOptions.projectName;
+  //       // const payload = file.studioOptions.payload;
+  //       const raw = helper.base64ToUint8Array(file.content);
+  //       //find projectName in project list
+  //       const project = rootStore.w3s.project.allProjects.value.find((i: ProjectType) => i.f_name == projectName);
+  //       //if project not exist, create project
+  //       console.log('project', project);
+  //       if (project) {
+  //         //delete project
+  //         await axios.request({
+  //           method: 'delete',
+  //           url: `/api/w3bapp/project/${project.name}`
+  //         });
+  //         await axios.request({
+  //           method: 'get',
+  //           url: '/api/w3bapp/project'
+  //         });
+  //       }
+  //       const projectRes = await axios.request({
+  //         method: 'post',
+  //         url: '/api/w3bapp/project',
+  //         data: {
+  //           name: projectName
+  //         }
+  //       });
+  //       eventBus.emit('project.create');
+  //       // create applet in project
+  //       let formData = new FormData();
+  //       console.log(helper.Uint8ArrayToWasmBase64FileData(file.name, raw));
+  //       const fileBlob = dataURItoBlob(helper.Uint8ArrayToWasmBase64FileData(file.name, raw));
+  //       formData.append('file', fileBlob.blob);
+  //       formData.append(
+  //         'info',
+  //         JSON.stringify({
+  //           wasmName: file.name,
+  //           projectID: projectRes.data.projectID,
+  //           appletName: file.name.replace('.wasm', '')
+  //         })
+  //       );
+  //       const appletRes = await axios.request({
+  //         method: 'post',
+  //         url: `http://localhost:8888/srv-applet-mgr/v0/applet/${projectRes.data.projectID}`,
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data'
+  //         },
+  //         data: formData
+  //       });
+  //       eventBus.emit('applet.create');
+  //       const deployRes = await rootStore.w3s.applet.deployApplet({ appletID: appletRes.data.appletID });
+  //       console.log('deployRes', deployRes);
+  //       const startRes = await rootStore.w3s.instances.handleInstance({ instanceID: deployRes.instanceID, event: 'START' });
+  //       //send event
+  //       await axios.request({
+  //         method: 'post',
+  //         url: `/api/w3bapp/event/${projectRes.data.name}`,
+  //         headers: {
+  //           'Content-Type': 'text/plain'
+  //         },
+  //         data: {
+  //           payload
+  //         }
+  //       });
+  //     });
+  // }
 
   findFile(objects: FilesItemType[], key: string): FilesItemType {
     for (let o of objects || []) {
