@@ -43,7 +43,13 @@ const Header = observer(() => {
         backgroundColor: 'rgba(255, 255, 255, 0.8)'
       }}
     >
-      <Flex alignItems="center">
+      <Flex
+        alignItems="center"
+        onClick={() => {
+          w3s.actions.goHome();
+        }}
+        cursor={'pointer'}
+      >
         <Image w="30px" src="/favicon.svg" alt="logo" />
         <Text ml="10px" fontWeight={900}>
           w3bstream Devnet
@@ -54,10 +60,11 @@ const Header = observer(() => {
           variant="unstyled"
           index={getTabIndex(w3s.currentHeaderTab)}
           onChange={(number) => {
-            if (number === 0) {
-              w3s.currentHeaderTab = 'PROJECTS';
-              w3s.project.resetSelectedNames();
-            }
+            // if (number === 0) {
+            //   w3s.currentHeaderTab = 'PROJECTS';
+            //   w3s.project.allProjects.onSelect(-1)
+            //   w3s.project.resetSelectedNames();
+            // }
             if (number === 1) {
               w3s.currentHeaderTab = 'LABS';
             }
@@ -70,7 +77,16 @@ const Header = observer(() => {
           }}
         >
           <TabList>
-            <Tab px="0" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab
+              onClick={() => {
+                w3s.actions.goHome();
+              }}
+              px="0"
+              h="40px"
+              fontSize="1rem"
+              fontWeight={400}
+              _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}
+            >
               Projects
             </Tab>
             <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>

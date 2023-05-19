@@ -1,5 +1,5 @@
 import NextRouter from 'next/router';
-import { configure, makeAutoObservable } from 'mobx';
+import { configure, makeAutoObservable, reaction } from 'mobx';
 import RootStore from '@/store/root';
 import { eventBus } from '@/lib/event';
 import { _ } from '@/lib/lodash';
@@ -86,10 +86,26 @@ export class W3bStream {
 
   isReady = false;
 
+  actions = {
+    goHome: () => {
+      this.currentHeaderTab = 'PROJECTS';
+      this.project.allProjects.onSelect(-1);
+    }
+  }
+
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
     this.initEvent();
+    this.initWatch()
+  }
+
+  initWatch() {
+    reaction(() => this.currentHeaderTab, () => {
+      if (this.currentHeaderTab == 'PROJECTS') {
+        this.project.allProjects.onSelect(-1);
+      }
+    })
   }
 
   initEvent() {
