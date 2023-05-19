@@ -25,7 +25,7 @@ const ToolBar = (props: ToolBar) => {
         <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
           <PopoverTrigger>
             <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} p="14px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
-              <Box mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
+              <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
               <Text mr="10px" w="130px" color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
                 {w3s.project.curProject?.name}
               </Text>
@@ -67,9 +67,9 @@ const ToolBar = (props: ToolBar) => {
                   cursor="pointer"
                   borderBottom={'1px solid #EDEDED'}
                   py="14px"
-                  justifyContent="center"
+                  justifyContent="flex-start"
                 >
-                  <Box mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={status?.color}></Box>
+                  <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={status?.color}></Box>
                   <Text color={w3s.project.curProject.name === item.name ? status?.color : ''}>{item.name}</Text>
                 </Flex>
               );
