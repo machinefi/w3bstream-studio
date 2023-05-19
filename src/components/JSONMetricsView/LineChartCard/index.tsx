@@ -38,7 +38,7 @@ export const LineChartCard = ({ title, description, data, config = {} }: LineCha
           <Box w={containerWidth} h={containerHeight} >
             <ResponsiveLine
               data={data}
-              margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+              margin={{ top: 20, right: 110, bottom: 60, left: 60 }}
               xScale={{ type: 'point' }}
               yScale={{
                 type: 'linear',
@@ -51,10 +51,10 @@ export const LineChartCard = ({ title, description, data, config = {} }: LineCha
               axisTop={null}
               axisRight={null}
               axisBottom={{
-                tickSize: 5,
+                tickSize: 0,
                 tickPadding: 5,
-                tickRotation: 0,
-                legend: 'transportation',
+                tickRotation: 25,
+                legend: '',
                 legendOffset: 36,
                 legendPosition: 'middle'
               }}
