@@ -119,26 +119,30 @@ export const w3bstreamRouter = t.router({
       z.object({
         projectName: z.string(),
         limit: z.number().min(1).max(100).nullish(),
-        page: z.number().min(1).nullish(),
-        createdAt: z.number().optional()
+        gt: z.number().optional(),
+        lt: z.number().optional()
       })
     )
     .query(async ({ ctx, input }) => {
-      const { page, limit, projectName, createdAt } = input;
+      const { limit, projectName, gt, lt } = input;
       const where = {
         f_project_name: {
           equals: projectName
         }
       };
-      if (createdAt) {
+      if (gt) {
         where['f_created_at'] = {
-          gte: createdAt
+          gt
+        };
+      }
+      if (lt) {
+        where['f_created_at'] = {
+          lt
         };
       }
       const data = await ctx.prisma.t_wasm_log.findMany({
         where,
         take: limit,
-        skip: (page - 1) * limit,
         orderBy: {
           f_created_at: 'desc'
         },
@@ -150,12 +154,7 @@ export const w3bstreamRouter = t.router({
           f_created_at: true
         }
       });
-      return {
-        data,
-        limit,
-        page,
-        hasNextPage: data.length === limit
-      };
+      return data;
     }),
   cronJobs: t.procedure
     .input(

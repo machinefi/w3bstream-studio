@@ -86,28 +86,24 @@ const LiveIcon = () => {
 type LocalStoreType = {
   loading: boolean;
   initialized: boolean;
-  log: WasmLogType;
+  logs: WasmLogType;
   showModal: boolean;
   modalContent: string;
   setData: (data: Partial<LocalStoreType>) => void;
 };
 
-const fetchWasmLogs = async ({ projectName, limit = 20, page = 1 }: { projectName: string; limit?: number; page?: number }) => {
+const fetchWasmLogs = async ({ projectName, limit = 20, gt, lt }: { projectName: string; limit?: number; gt?: number, lt?: number }) => {
   try {
-    const res = await trpc.api.wasmLogs.query({
+    const data = await trpc.api.wasmLogs.query({
       projectName,
       limit,
-      page
+      gt,
+      lt
     });
-    res.data.sort((a, b) => Number(a.f_created_at) - Number(b.f_created_at));
-    return res;
+    data.sort((a, b) => Number(a.f_created_at) - Number(b.f_created_at));
+    return data;
   } catch (error) {
-    return {
-      data: [],
-      limit: 50,
-      page: 1,
-      hasNextPage: true
-    };
+    return [];
   }
 };
 
@@ -127,20 +123,6 @@ const poll = (fn: { (): Promise<void>; (): void; }, interval = 3000) => {
   }
 }
 
-// const markLatestLogs = (logs: WasmLogType['data'], showAnimation = true) => {
-//   const len = logs.length;
-//   let latestTime;
-//   for (let i = len - 1; i > 0; i--) {
-//     const item = logs[i];
-//     if (i === len - 1) {
-//       latestTime = item.f_created_at;
-//     }
-//     // @ts-ignore
-//     item.isLatest = showAnimation && item.f_created_at === latestTime;
-//   }
-//   return logs;
-// };
-
 const EventLogs = observer(() => {
   const {
     w3s,
@@ -153,12 +135,7 @@ const EventLogs = observer(() => {
   const store = useLocalObservable<LocalStoreType>(() => ({
     loading: true,
     initialized: false,
-    log: {
-      data: [],
-      limit: 50,
-      page: 1,
-      hasNextPage: true,
-    },
+    logs: [],
     showModal: false,
     modalContent: '',
     setData(data: Partial<LocalStoreType>) {
@@ -168,11 +145,18 @@ const EventLogs = observer(() => {
 
   useEffect(() => {
     const fetchWasmLogsPoll = poll(async () => {
-      const res = await fetchWasmLogs({ projectName: curProject?.f_name, limit: log.limit });
+      const logsLen = store.logs.length;
+      const latestCreatedAt = store.logs[logsLen - 1]?.f_created_at;
+      const limit = store.initialized ? 12 : 40;
+      const res = await fetchWasmLogs({
+        limit,
+        projectName: curProject?.f_name,
+        gt: latestCreatedAt ? Number(latestCreatedAt) : undefined,
+      });
       store.setData({
         initialized: true,
         loading: false,
-        log: res,
+        logs: [...store.logs, ...res],
       });
     })
     fetchWasmLogsPoll.start();
@@ -181,7 +165,7 @@ const EventLogs = observer(() => {
     }
   }, []);
 
-  const { loading, log } = store;
+  const { loading, logs } = store;
 
   return (
     <Box pos="relative" bg="#000" borderRadius="8px">
@@ -197,12 +181,7 @@ const EventLogs = observer(() => {
         }}
         onClick={() => {
           store.setData({
-            log: {
-              data: [],
-              limit: 50,
-              page: 1,
-              hasNextPage: true,
-            },
+            logs: [],
           });
         }}
       />
@@ -247,18 +226,7 @@ const EventLogs = observer(() => {
                   },
                   data: formData.body
                 });
-                console.log('[Send test message]:', res);
                 showNotification({ color: 'green', message: 'Send event successed' });
-                // store.setData({
-                //   loading: true
-                // });
-                // fetchWasmLogs({ projectName, limit: 30 }).then((res) => {
-                //   markLatestLogs(res.data);
-                //   store.setData({
-                //     log: res,
-                //     loading: false
-                //   });
-                // });
               } catch (error) {
                 showNotification({ color: 'red', message: 'send event failed' });
               }
@@ -311,10 +279,10 @@ const EventLogs = observer(() => {
             <List
               width={width}
               height={height}
-              rowCount={log.data.length}
+              rowCount={logs.length}
               rowHeight={20}
               rowRenderer={({ index, key, style }) => {
-                const item = log.data[index];
+                const item = logs[index];
                 return (
                   <chakra.p
                     key={key}
@@ -337,33 +305,30 @@ const EventLogs = observer(() => {
                   </chakra.p>
                 );
               }}
-            // onScroll={async ({ clientHeight, scrollHeight, scrollTop }) => {
-            //   if (scrollTop + clientHeight === scrollHeight) {
-            //     if (store.loading || !log.hasNextPage) {
-            //       return;
-            //     }
-            //     const projectName = curProject?.f_name;
-            //     if (projectName) {
-            //       store.setData({
-            //         loading: true
-            //       });
-            //       const res = await fetchWasmLogs({
-            //         projectName,
-            //         limit: log.limit,
-            //         page: log.page + 1,
-            //       });
-            //       store.setData({
-            //         loading: false,
-            //         log: {
-            //           data: res.data.concat(log.data),
-            //           limit: res.limit,
-            //           page: res.page,
-            //           hasNextPage: res.hasNextPage
-            //         },
-            //       });
-            //     }
-            //   }
-            // }}
+              onScroll={async ({ clientHeight, scrollHeight, scrollTop }) => {
+                if (scrollTop === 0) {
+                  if (store.loading) {
+                    return;
+                  }
+                  console.log('onScroll----------------->', scrollTop)
+                  const projectName = curProject?.f_name;
+                  if (projectName) {
+                    store.setData({
+                      loading: true
+                    });
+                    const createdAt = store.logs[0]?.f_created_at;
+                    const res = await fetchWasmLogs({
+                      projectName,
+                      limit: 10,
+                      lt: createdAt ? Number(createdAt) : undefined,
+                    });
+                    store.setData({
+                      loading: false,
+                      logs: [...res, ...store.logs]
+                    });
+                  }
+                }
+              }}
             />
           )}
         </AutoSizer>
