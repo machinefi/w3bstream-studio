@@ -32,10 +32,10 @@ export const theme = extendTheme({
   initialColorMode: 'light',
   useSystemColorMode: false,
   fonts: {
-    body: 'Oxanium, sans-serif',
-    heading: 'Oxanium, sans-serif'
+    body: 'helvetica, sans-serif',
+    heading: 'helvetica, sans-serif'
   },
   shadows: {
     largeSoft: 'rgba(60, 64, 67, 0.15) 0px 2px 10px 6px;'
-  }
+  },
 });

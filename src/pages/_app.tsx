@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import 'focus-visible/dist/focus-visible'
 import { ChakraProvider } from '@chakra-ui/react';
 import { Toaster } from 'react-hot-toast';
 import { withTRPC } from '@trpc/next';
@@ -16,6 +17,15 @@ import superjson from 'superjson';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
+import { Global, css } from '@emotion/react'
+
+const GlobalStyles = css`
+  .js-focus-visible :focus:not([data-focus-visible-added]) {
+    outline: none;
+    box-shadow: none;
+  }
+`;
+
 
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
 export let asc: typeof import('assemblyscript/dist/asc');
@@ -24,6 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { lang, w3s, god } = useStore();
   const { token } = w3s.config.form.formData;
   const router = useRouter();
+
 
   useEffect(() => {
     lang.init();
@@ -59,6 +70,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`);
         }}
       >
+        <Global styles={GlobalStyles} />
         <ChakraProvider theme={theme}>
           <NotificationsProvider>
             <Toaster position="bottom-right" />
