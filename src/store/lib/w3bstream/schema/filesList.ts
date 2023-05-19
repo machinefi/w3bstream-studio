@@ -84,6 +84,7 @@ export class FilesListSchema {
             extraData: {
               raw: helper.base64ToUint8Array(file.content)
             },
+            dataType: file.name.endsWith('.wasm') ? 'wasm' : '',
             size: file.size
           }
         });
