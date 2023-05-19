@@ -201,7 +201,7 @@ const EventLogs = observer(() => {
             if (projectName) {
               const pub = publisher.allData.find((item) => item.project_id === curProject?.f_project_id);
               if (!pub) {
-                showNotification({ color: 'red', message: 'Please create a publisher first' });
+                showNotification({ color: 'red', message: 'Please create a device account first.' });
                 eventBus.emit('base.formModal.abort');
                 setTimeout(() => {
                   w3s.showContent = 'CURRENT_PUBLISHERS';
