@@ -287,8 +287,7 @@ const EventLogs = observer(() => {
                   <chakra.p
                     key={key}
                     style={style}
-                    // @ts-ignore
-                    color={item.isLatest ? '#946FFF' : '#fff'}
+                    color='#fff'
                     whiteSpace="nowrap"
                     overflow="hidden"
                     cursor="pointer"
