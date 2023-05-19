@@ -57,10 +57,10 @@ const Settings = () => {
   }, [store.curApplet]);
 
   return (
-    <Box w="100%">
+    <Box w="100%" minH={'calc(100vh - 158px)'}>
       <Flex justifyContent="space-between">
-        <Box fontSize="18px" fontWeight={700}>
-          General
+        <Box flex="1">
+          <Text fontSize={'1.5rem'} fontWeight={700}>General</Text>
         </Box>
         <Flex alignItems="center">
           <Button
@@ -86,7 +86,7 @@ const Settings = () => {
           </Button>
         </Flex>
       </Flex>
-      <Box mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
+      <Box mt="24px" p="20px" border="1px solid #eee" borderRadius="8px">
         <Flex alignItems={'center'} mb="20px">
           <Box fontWeight={700} fontSize="16px" color="#0F0F0F">
             Project Name:

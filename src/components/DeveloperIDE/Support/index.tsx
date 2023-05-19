@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Grid, GridItem, Image, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Link } from '@chakra-ui/react';
+import { Flex, Box, Grid, GridItem, Image, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Link, SimpleGrid } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Center } from '@chakra-ui/layout';
 import { useStore } from '@/store/index';
@@ -45,13 +45,13 @@ const Support = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Center w="100%" h="calc(100vh - 100px)">
-      <Grid templateRows="repeat(2, 1fr)" templateColumns="repeat(3, 1fr)" gap={6}>
-        <GridItem>
-          <a href="http://docs.w3bstream.com" target="_blank" rel="noopener noreferrer">
+    <Center w="70vw" mx="auto" h="calc(100vh - 110px)">
+      <SimpleGrid w="100%" columns={[1, 2, 3]} gap="24px">
+        <a href="http://docs.w3bstream.com" target="_blank" rel="noopener noreferrer">
             <Flex
-              w="300px"
-              h="300px"
+              w="100%"
+              h="30vh"
+              minH={'140px'}
               flexDir="column"
               justifyContent="center"
               alignItems="center"
@@ -65,12 +65,11 @@ const Support = () => {
               <Box mt="32px">Documentation</Box>
             </Flex>
           </a>
-        </GridItem>
-        <GridItem>
           <a href="http://developers.iotex.io/academy" target="_blank" rel="noopener noreferrer">
             <Flex
-              w="300px"
-              h="300px"
+              w="100%"
+              h="30vh"
+              minH={'140px'}
               flexDir="column"
               justifyContent="center"
               alignItems="center"
@@ -84,12 +83,11 @@ const Support = () => {
               <Box mt="32px">Tutorials</Box>
             </Flex>
           </a>
-        </GridItem>
-        <GridItem>
           <a href="https://github.com/machinefi/w3bstream/discussions" target="_blank" rel="noopener noreferrer">
             <Flex
-              w="300px"
-              h="300px"
+              w="100%"
+              h="30vh"
+              minH={'140px'}
               flexDir="column"
               justifyContent="center"
               alignItems="center"
@@ -103,12 +101,11 @@ const Support = () => {
               <Box mt="32px">File an Issue</Box>
             </Flex>
           </a>
-        </GridItem>
-        <GridItem>
           <a href="http://developers.iotex.io/grants" target="_blank" rel="noopener noreferrer">
             <Flex
-              w="300px"
-              h="300px"
+              w="100%"
+              h="30vh"
+              minH={'140px'}
               flexDir="column"
               justifyContent="center"
               alignItems="center"
@@ -122,11 +119,10 @@ const Support = () => {
               <Box mt="32px">Apply for grant</Box>
             </Flex>
           </a>
-        </GridItem>
-        <GridItem>
           <Flex
-            w="300px"
-            h="300px"
+            w="100%"
+            h="30vh"
+            minH={'140px'}
             flexDir="column"
             justifyContent="center"
             alignItems="center"
@@ -140,8 +136,7 @@ const Support = () => {
             <Image src="/images/icons/about.svg" />
             <Box mt="32px">About</Box>
           </Flex>
-        </GridItem>
-      </Grid>
+      </SimpleGrid>
       <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">
         <ModalOverlay />
         <ModalContent>

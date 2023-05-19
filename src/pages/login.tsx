@@ -6,7 +6,7 @@ import { WalletConnectButton } from '@/components/WalletConnectButton';
 const Login = observer(() => {
   return (
     <Box w="100vw" h="100vh" bg={`center / cover no-repeat url("../images/login_bg.png")`}>
-      <Flex flexDirection='column' fontFamily='Helvetica' alignItems='center' pt={{ base: '10vh', lg: '117px' }}>
+      <Flex flexDirection='column' fontFamily='helvetica' alignItems='center' pt={{ base: '10vh', lg: '117px' }}>
         <Flex alignItems="center" justifyContent='center' mb="10vh">
           <Image h={{ base: '60px', lg: '85px' }} src="../images/logo.png" alt="logo" />
         </Flex>
@@ -17,10 +17,10 @@ const Login = observer(() => {
           </Text>
         </Flex>
         <WalletConnectButton name="Login With MetaMask" customStyle={{ width: '90%', maxWidth: '520px', background: '#946FFF', color: '#Fff', height: '56px' }} />
-        <Text fontFamily='Helvetica' fontSize={{ base: '1.25rem', lg: '1.5rem' }} fontWeight={700} mt="10vh" mb="10px">
+        <Text fontFamily='helvetica' fontSize={{ base: '1.25rem', lg: '1.5rem' }} fontWeight={700} mt="10vh" mb="10px">
           Login to W3bstream Devnet
         </Text>
-        <Text fontFamily='Helvetica' fontSize={{ base: '14px', lg: '1rem' }}>
+        <Text fontFamily='helvetica' fontSize={{ base: '14px', lg: '1rem' }}>
           Your portal to connect smart devices to smart contracts
         </Text>
       </Flex>

@@ -168,7 +168,7 @@ const EventLogs = observer(() => {
   const { loading, logs } = store;
 
   return (
-    <Box pos="relative" bg="#000" borderRadius="8px">
+    <Box pos="relative" bg="#000" borderRadius="8px" minH={'calc(100vh - 158px)'}>
       <Icon
         as={AiOutlineClear}
         pos="absolute"
@@ -273,7 +273,7 @@ const EventLogs = observer(() => {
       <Flex align="center" p="10px 20px" fontSize="sm" fontWeight={700} color="#fff">
         Logs: {loading ? <Spinner ml="10px" size="sm" color="#fff" /> : <LiveIcon />}
       </Flex>
-      <Box height="calc(100vh - 180px)" px="20px">
+      <Box height="100%" px="20px">
         <AutoSizer>
           {({ width, height }) => (
             <List

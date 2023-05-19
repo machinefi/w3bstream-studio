@@ -1,45 +1,84 @@
 import React from 'react';
-import { Flex, BoxProps, Box, Icon, Text } from '@chakra-ui/react';
+import { Flex, BoxProps, Box, Icon, Text, Popover, PopoverTrigger, PopoverContent, useDisclosure } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { BiBarChartSquare } from 'react-icons/bi';
 import { TbDeviceDesktop, TbHandClick, TbSettings } from 'react-icons/tb';
 import { HiOutlineDatabase } from 'react-icons/hi';
 import { AiOutlineFileText } from 'react-icons/ai';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
+import toast from 'react-hot-toast';
 
 interface ToolBar extends BoxProps {}
 
 const ToolBar = (props: ToolBar) => {
   const { w3s } = useStore();
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
+  const curProjectInstance = w3s.instances.table.dataSource.find((option) => option.project_name === w3s.project.curProject?.name);
+  const curProjectStatus = INSTANCE_STATUS[curProjectInstance?.f_state || 0];
 
   return (
-    <Box position={'fixed'} h="calc(100vh - 100px)" overflow={'auto'}>
-      <Flex
-        mb="15px"
-        alignItems="center"
-        color="#0F0F0F"
-        fontSize="14px"
-        cursor="pointer"
-        bg="#fff"
-        p="10px 15px"
-        w="86px"
-        borderRadius="4px"
-        onClick={() => {
-         w3s.project.allProjects.onSelect(-1);
-         w3s.project.resetSelectedNames();
-        }}
-      >
-        <ChevronLeftIcon />
-        <Box ml="10px">Back</Box>
-      </Flex>
+    <Box position={'fixed'} h="100%" overflow={'auto'}>
       <Flex minW="200px" direction="column" align="center" p="16px" bg="#fff" {...props}>
-        <Flex mb="20px" mt="8px" alignItems="center" color="#7A7A7A" fontSize="14px" cursor="pointer">
-          {w3s.project.curProject?.name}
-        </Flex>
+        <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+          <PopoverTrigger>
+            <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} p="14px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
+              <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
+              <Text mr="10px" w="130px" color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
+                {w3s.project.curProject?.name}
+              </Text>
+              <ChevronDownIcon fontSize={'24px'} color={'#7A7A7A'} />
+            </Flex>
+          </PopoverTrigger>
+          <PopoverContent
+            bg="#F8F8FA"
+            w="168px"
+            overflow={'auto'}
+            px="14px"
+            outline={'none'}
+            border="none"
+            css={{
+              '.project-item': {
+                '&:last-child': {
+                  borderBottom: 'none'
+                }
+              }
+            }}
+          >
+            {w3s.project.allProjects.value.map((item, index) => {
+              const instance = w3s.instances.table.dataSource.find((option) => option.project_name === item.name);
+              const status = INSTANCE_STATUS[instance?.f_state || 0];
+              return (
+                <Flex
+                  className="project-item"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (instance) {
+                      w3s.project.allProjects.onSelect(index);
+                      w3s.showContent = 'METRICS';
+                    } else {
+                      toast.error('No instance found, please create one first');
+                    }
+                    onClose();
+                  }}
+                  alignItems={'center'}
+                  cursor="pointer"
+                  borderBottom={'1px solid #EDEDED'}
+                  py="14px"
+                  justifyContent="flex-start"
+                >
+                  <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={status?.color}></Box>
+                  <Text color={w3s.project.curProject.name === item.name ? status?.color : ''}>{item.name}</Text>
+                </Flex>
+              );
+            })}
+          </PopoverContent>
+        </Popover>
         <Flex
           w="100%"
-          p="18px"
+          p="14px 18px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
@@ -57,7 +96,7 @@ const ToolBar = (props: ToolBar) => {
         <Flex
           w="100%"
           mt="16px"
-          p="18px"
+          p="14px 18px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
@@ -75,7 +114,7 @@ const ToolBar = (props: ToolBar) => {
         <Flex
           w="100%"
           mt="16px"
-          p="18px"
+          p="14px 18px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
@@ -93,7 +132,7 @@ const ToolBar = (props: ToolBar) => {
         <Flex
           w="100%"
           mt="16px"
-          p="18px"
+          p="14px 18px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
@@ -111,7 +150,7 @@ const ToolBar = (props: ToolBar) => {
         <Flex
           w="100%"
           mt="16px"
-          p="18px"
+          p="14px 18px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
@@ -129,7 +168,7 @@ const ToolBar = (props: ToolBar) => {
         <Flex
           w="100%"
           mt="16px"
-          p="18px"
+          p="14px 18px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"

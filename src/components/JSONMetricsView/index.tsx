@@ -10,7 +10,7 @@ export interface JSONMetricsView {
 
 export const JSONMetricsView = ({ data }: { data: JSONMetricsView[] }) => {
   return (
-    <Stack minH="70vh" spacing={6} p="10px">
+    <Stack minH="70vh" spacing={6} py="10px">
       {data.map((item) => {
         switch (item.type) {
           case 'ProgressCard':

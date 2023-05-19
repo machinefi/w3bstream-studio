@@ -13,6 +13,9 @@ dependencies:
   '@chakra-ui/react':
     specifier: ^2.6.1
     version: 2.6.1(@emotion/react@11.10.4)(@emotion/styled@11.10.4)(@types/react@17.0.47)(framer-motion@7.5.3)(react-dom@18.2.0)(react@18.2.0)
+  '@emotion/core':
+    specifier: ^11.0.0
+    version: registry.npmmirror.com/@emotion/core@11.0.0
   '@emotion/react':
     specifier: ^11.10.4
     version: 11.10.4(@babel/core@7.21.3)(@types/react@17.0.47)(react@18.2.0)
@@ -145,6 +148,9 @@ dependencies:
   fast-json-patch:
     specifier: ^3.1.1
     version: 3.1.1
+  focus-visible:
+    specifier: ^5.2.0
+    version: registry.npmmirror.com/focus-visible@5.2.0
   framer-motion:
     specifier: ^7.5.3
     version: 7.5.3(react-dom@18.2.0)(react@18.2.0)
@@ -11853,6 +11859,12 @@ packages:
       lodash.mergewith: registry.npmmirror.com/lodash.mergewith@4.6.2
     dev: false
 
+  registry.npmmirror.com/@emotion/core@11.0.0:
+    resolution: {integrity: sha512-w4sE3AmHmyG6RDKf6mIbtHpgJUSJ2uGvPQb8VXFL7hFjMPibE8IiehG8cMX3Ztm4svfCQV6KqusQbeIOkurBcA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@emotion/core/-/core-11.0.0.tgz}
+    name: '@emotion/core'
+    version: 11.0.0
+    dev: false
+
   registry.npmmirror.com/@emotion/is-prop-valid@0.8.8:
     resolution: {integrity: sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@emotion/is-prop-valid/-/is-prop-valid-0.8.8.tgz}
     name: '@emotion/is-prop-valid'
@@ -13073,6 +13085,12 @@ packages:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz}
     name: fast-json-stable-stringify
     version: 2.1.0
+    dev: false
+
+  registry.npmmirror.com/focus-visible@5.2.0:
+    resolution: {integrity: sha512-Rwix9pBtC1Nuy5wysTmKy+UjbDJpIfg8eHjw0rjZ1mX4GNLz1Bmd16uDpI3Gk1i70Fgcs8Csg2lPm8HULFg9DQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/focus-visible/-/focus-visible-5.2.0.tgz}
+    name: focus-visible
+    version: 5.2.0
     dev: false
 
   registry.npmmirror.com/framesync@6.1.2:

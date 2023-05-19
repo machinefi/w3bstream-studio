@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalBody, ModalHeader, ModalCloseButton, Tabs, TabList, Tab, TabPanels, TabPanel, Box } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalBody, Flex, ModalHeader, ModalCloseButton, Tabs, TabList, Tab, TabPanels, TabPanel, Box } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { JSONForm } from '@/components/JSONForm';
 import { useStore } from '@/store/index';
@@ -23,23 +23,24 @@ const JSONModal = observer(() => {
         eventBus.emit('base.formModal.abort');
       }}
       size={formModal.size}
-      isCentered={formModal.isCentered}
+      isCentered
       closeOnOverlayClick={formModal.closeOnOverlayClick}
     >
       {formModal.showModalOverlay && <ModalOverlay />}
       <Box zIndex={9999} position="fixed" top={0} left={0} w="100vw" h="100vh">
         <Draggable handle=".draggable-handle">
           <Box>
-            <ModalContent>
+            <ModalContent borderRadius={'16px'} overflow="hidden">
               {formModal.title && (
                 <>
-                  <ModalHeader minH="45px" bg="#FAFAFA" borderBottom="1px solid #eee" cursor="move" className="draggable-handle">
+                  <ModalHeader bg="#F8F8FA"  px="1.5rem" fontSize={'24px'} py="1.5rem" fontWeight={700} cursor="move" className="draggable-handle">
                     {formModal.title}
+                    <ModalCloseButton mt="1rem" mr="0.5rem" color={'#7A7A7A'} fontSize={'1.125rem'} />
                   </ModalHeader>
-                  <ModalCloseButton />
+
                 </>
               )}
-              <ModalBody>
+              <ModalBody pb="1.5rem">
                 {formList.length > 1 ? (
                   <>
                     <Tabs

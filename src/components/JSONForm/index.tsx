@@ -124,7 +124,7 @@ const SubmitButton = ({ uiSchema }: SubmitButtonProps) => {
     return null;
   }
   return (
-    <Button w="100%" type="submit" borderRadius="base" {...defaultButtonStyle}>
+    <Button w="100%" size={'lg'} type="submit" borderRadius="base" {...defaultButtonStyle}>
       {submitText}
     </Button>
   );

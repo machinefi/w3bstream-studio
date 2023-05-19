@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Box, Tabs, TabList, TabPanels, TabPanel, Tab, Input } from '@chakra-ui/react';
+import { Flex, Box, Tabs, TabList, TabPanels, TabPanel, Tab, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import ContractLogs, { CreateContractLogButton } from '@/components/IDE/Monitor/ContractLogs';
@@ -18,15 +18,15 @@ const Triggers = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
-    <Box w="calc(100vw - 300px)">
-      <Flex alignItems="center">
-        <Box fontSize="18px" color="#0F0F0F" fontWeight={700}>
-          Event Source
+    <Box w="100%" minH={'calc(100vh - 158px)'}>
+      <Flex alignItems="center" justifyContent={'space-between'}>
+        <Box flex="1">
+          <Text fontSize={'1.5rem'} fontWeight={700}>Event Source</Text>
         </Box>
         <ShowRequestTemplatesButton
           props={{
             ml: '10px',
-            size: 'xs'
+            size: 'sm'
           }}
         />
       </Flex>
@@ -37,7 +37,7 @@ const Triggers = () => {
         <Box w="60px" fontSize="16px" color="#0F0F0F">
           Route:
         </Box>
-        <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+        <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px" wordBreak={'break-all'}>
           {envs.value?.httpURL.replace(':projectName', curProject?.f_name)}
         </Box>
       </Flex>

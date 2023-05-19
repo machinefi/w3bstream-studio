@@ -21,11 +21,11 @@ const Projects = observer(() => {
 
   if (allProjects.value.length) {
     return (
-      <Box w="100%" h="calc(100vh - 100px)" p="40px 30px" bg="#fff" borderRadius="8px">
+      <Box w="100%" h="100%" p="40px 30px" bg="#fff" borderRadius="8px">
         <Flex justifyContent="space-between" alignItems="center">
           <Flex>
             <Button
-              size="sm"
+              size="md"
               leftIcon={<AiOutlinePlus />}
               {...defaultButtonStyle}
               onClick={() => {
@@ -36,7 +36,7 @@ const Projects = observer(() => {
             </Button>
             <Button
               ml="20px"
-              size="sm"
+              size="md"
               leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
@@ -284,18 +284,20 @@ const Projects = observer(() => {
   }
 
   return (
-    <Center w="100%" h="calc(100vh - 100px)">
+    <Center w="100%" h="100%">
       {allProjects.loading.value ? (
-        <Spinner color="#946FFF" />
+        <Flex h="calc(100vh - 158px)" alignItems={'center'} justifyContent={'center'}>
+          <Spinner color="#946FFF" />
+        </Flex>
       ) : (
-        <Flex flexDir="column" alignItems="center">
+        <Flex flexDir="column" alignItems="center" justifyContent={'center'} h="calc(100vh - 158px)">
           <Image w="80px" src="/images/empty_box.svg" alt="" />
           <Text mt="16px" fontSize="14px" color="#7A7A7A">
             You haven't created any project.
           </Text>
           <Flex mt="30px">
             <Button
-              h="32px"
+              size={'md'}
               {...defaultButtonStyle}
               onClick={() => {
                 w3s.project.createProjectForDeleveloper();
@@ -305,7 +307,7 @@ const Projects = observer(() => {
             </Button>
             <Button
               ml="20px"
-              size="sm"
+              size={'md'}
               leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
