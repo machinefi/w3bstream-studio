@@ -20,20 +20,9 @@ const CurrentProject = observer(() => {
   } = useStore();
 
   return (
-      <Flex w="100%" position="relative">
+      <Flex w="100%" minH="100%" position="relative">
         <ToolBar borderRadius="8px" overflowY="auto" />
-        <Box ml="220px" w="100%" h="100%" p="20px" pb="50px" bg="#fff" boxSizing="content-box" borderRadius="8px">
-          <Flex mb={4}>
-            <Button
-              ml="auto"
-              size="sm"
-              onClick={(e) => {
-                w3s.init();
-              }}
-            >
-              <MdRefresh />
-            </Button>
-          </Flex>
+        <Box ml="220px" w="calc(100% - 220px)" minH="100%" p="24px 30px" bg="#fff" borderRadius="8px">
           {showContent === 'METRICS' && <Metrics />}
           {showContent === 'CURRENT_PUBLISHERS' && <Publishers />}
           {(showContent === 'CONTRACT_LOGS' || showContent === 'CHAIN_TX' || showContent === 'CHAIN_HEIGHT') && <Triggers />}

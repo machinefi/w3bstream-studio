@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Flex, Box, Icon } from '@chakra-ui/react';
+import { Flex, Box, Icon,Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { JSONMetricsView } from '@/components/JSONMetricsView';
@@ -19,12 +19,17 @@ const Metrics = () => {
   return (
     <Box w="100%">
       <Flex mb="10px" align="center" bg="#fff" borderRadius="8px">
+        <Box flex="1">
+          <Text fontSize={'1.5rem'} fontWeight={700}>Summary</Text>
+          <Text color={'#7A7A7A'} fontSize="14px">Metrics aggregated across all custom and workers.dev routes invoking this Worker.</Text>
+        </Box>
         <Flex
-          p="10px 20px"
+          p="6px 20px"
           alignItems="center"
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
-          borderRadius="8px"
+          boxSize='border-box'
+          borderRadius={'8px'}
           {...getSelectedStyles(metrics.showContent === 'API')}
           onClick={(e) => {
             metrics.showContent = 'API';
@@ -37,11 +42,12 @@ const Metrics = () => {
         </Flex>
         <Flex
           ml="10px"
-          p="10px 20px"
+          p="6px 20px"
           alignItems="center"
           cursor="pointer"
+          boxSize='border-box'
           color="rgba(15, 15, 15, 0.75)"
-          borderRadius="8px"
+          borderRadius={'8px'}
           {...getSelectedStyles(metrics.showContent === 'DATABASE')}
           onClick={(e) => {
             metrics.dbState.call();

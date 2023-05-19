@@ -21,11 +21,11 @@ const Projects = observer(() => {
 
   if (allProjects.value.length) {
     return (
-      <Box w="100%" h="calc(100vh - 100px)" p="40px 30px" bg="#fff" borderRadius="8px">
+      <Box w="100%" h="100%" p="40px 30px" bg="#fff" borderRadius="8px">
         <Flex justifyContent="space-between" alignItems="center">
           <Flex>
             <Button
-              size="sm"
+              size="md"
               leftIcon={<AiOutlinePlus />}
               {...defaultButtonStyle}
               onClick={() => {
@@ -36,7 +36,7 @@ const Projects = observer(() => {
             </Button>
             <Button
               ml="20px"
-              size="sm"
+              size="md"
               leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
@@ -279,7 +279,7 @@ const Projects = observer(() => {
   }
 
   return (
-    <Center w="100%" h="calc(100vh - 100px)">
+    <Center w="100%" h="100%">
       {allProjects.loading.value ? (
         <Spinner color="#946FFF" />
       ) : (
@@ -290,7 +290,7 @@ const Projects = observer(() => {
           </Text>
           <Flex mt="30px">
             <Button
-              h="32px"
+              size={'md'}
               {...defaultButtonStyle}
               onClick={() => {
                 w3s.project.createProjectForDeleveloper();
@@ -300,7 +300,7 @@ const Projects = observer(() => {
             </Button>
             <Button
               ml="20px"
-              size="sm"
+              size={'md'}
               leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {

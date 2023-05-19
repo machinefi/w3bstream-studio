@@ -7,19 +7,23 @@ import toast from 'react-hot-toast';
 export const INSTANCE_STATUS = {
   0: {
     colorScheme: 'gray',
-    text: 'Not activated'
+    text: 'Not activated',
+    color: 'gray'
   },
   1: {
     colorScheme: 'gray',
-    text: 'idle'
+    text: 'idle',
+    color: 'gray'
   },
   2: {
     colorScheme: 'green',
-    text: 'running'
+    text: 'running',
+    color: '#00B87A',
   },
   3: {
     colorScheme: 'red',
-    text: 'stop'
+    text: 'stop',
+    color: '#00B87A',
   }
 };
 

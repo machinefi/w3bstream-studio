@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { Button, Flex } from '@chakra-ui/react';
+import { Button, Flex, Box, Text } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { defaultButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
@@ -27,10 +27,14 @@ const Publishers = observer(() => {
   }, [w3s.project.curProject, w3s.showContent]);
 
   return (
-    <>
-      <Flex alignItems="center">
+    <Box minH="calc(100vh - 158px)">
+      <Flex alignItems="center" mb="24px">
+        <Box flex="1">
+          <Text fontSize={'1.5rem'} fontWeight={700}>Authorized Devices</Text>
+          <Text color={'#7A7A7A'} fontSize="14px">Go to "Settings" to switch between "All Devices" and "Authorized Devices".</Text>
+        </Box>
         <Button
-          h="32px"
+          h="36px"
           leftIcon={<AddIcon />}
           {...defaultButtonStyle}
           onClick={async (e) => {
@@ -73,7 +77,7 @@ const Publishers = observer(() => {
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.publisher} />
-    </>
+    </Box>
   );
 });
 

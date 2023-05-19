@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { defaultButtonStyle } from '@/lib/theme';
 import StarCount from '@/components/IDE/StarCount';
 import { WalletConnectButton } from '@/components/WalletConnectButton';
+import { MdRefresh } from 'react-icons/md';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'PROJECTS') {
@@ -35,7 +36,7 @@ const Header = observer(() => {
       alignItems="center"
       px="30px"
       w="100%"
-      minH="60px"
+      minH="70px"
       boxShadow="sm"
       css={{
         backdropFilter: 'saturate(180%) blur(5px)',
@@ -44,11 +45,11 @@ const Header = observer(() => {
     >
       <Flex alignItems="center">
         <Image w="30px" src="/favicon.svg" alt="logo" />
-        <Text ml="10px" fontWeight={700}>
-          W3bstream Devnet
+        <Text ml="10px" fontWeight={900}>
+          w3bstream Devnet
         </Text>
       </Flex>
-      <Flex ml="120px" alignItems="center">
+      <Flex ml="4rem" alignItems="center">
         <Tabs
           variant="unstyled"
           index={getTabIndex(w3s.currentHeaderTab)}
@@ -69,22 +70,31 @@ const Header = observer(() => {
           }}
         >
           <TabList>
-            <Tab px="0" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab px="0" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Projects
             </Tab>
-            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Labs
             </Tab>
-            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Support
             </Tab>
-            {/* <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={700} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            {/* <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Flow
             </Tab> */}
           </TabList>
         </Tabs>
       </Flex>
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
+        <Button
+          ml="auto"
+          size="sm"
+          onClick={(e) => {
+            w3s.init();
+          }}
+        >
+          <MdRefresh />
+        </Button>
         {/* <ChakraLink href="https://github.com/machinefi/w3bstream-studio" isExternal>
           <Image mr="20px" w="100px" src="https://img.shields.io/github/stars/machinefi/w3bstream-studio.svg?style=social&label=Star&maxAge=2592000" />
         </ChakraLink> */}

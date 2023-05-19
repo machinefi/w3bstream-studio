@@ -66,7 +66,7 @@ const DockerLogs = () => {
   const logStr = showHighligh ? highlightLogs.join('') : logs.join('');
 
   return (
-    <Box w="100%" h="calc(100vh - 100px)" pos="relative">
+    <Box w="100%" h="100%" pos="relative">
       <Box w="100%" h="100%" p="10px" bg="#1D262D" color="#98AABA" whiteSpace="pre-line" overflowY="auto" dangerouslySetInnerHTML={{ __html: logStr }} ref={boxRef} />
       <Box pos="absolute" bottom="20px" right="20px" bg="#000">
         <Input

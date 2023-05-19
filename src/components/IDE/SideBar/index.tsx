@@ -55,7 +55,7 @@ const SideBar = observer((props: SideBarProps) => {
         </Flex>
       </Flex>
       {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'CURRENT_EVENT_LOGS') && (
-        <Box h="calc(100vh - 100px)" overflowY="auto">
+        <Box h="100%" overflowY="auto">
           {allProjects.value.map((p, index) => {
             return (
               <Flex
@@ -259,7 +259,7 @@ const SideBar = observer((props: SideBarProps) => {
           <Flex alignItems="center" justifyContent="space-between" p={2} bg="#FAFAFA">
             <Text cursor="pointer">Files</Text>
           </Flex>
-          <Stack mt={1} h="calc(100vh - 100px)" overflowY="auto">
+          <Stack mt={1} h="100%" overflowY="auto">
             <FilesItem />
           </Stack>
         </>
@@ -270,7 +270,7 @@ const SideBar = observer((props: SideBarProps) => {
         </Box>
       )}
       {w3s.showContent === 'METRICS' && (
-        <Box h="calc(100vh - 100px)" overflowY="auto">
+        <Box h="100%" overflowY="auto">
           <Flex
             alignItems="center"
             justifyContent="space-between"
