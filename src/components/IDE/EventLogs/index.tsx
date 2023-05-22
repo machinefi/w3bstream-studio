@@ -197,39 +197,28 @@ const EventLogs = observer(() => {
         }}
         onClick={async () => {
           publisher.developerPublishEventForm.afterSubmit = async ({ formData }) => {
-            const projectName = curProject?.f_name;
-            if (projectName) {
-              const pub = publisher.allData.find((item) => item.project_id === curProject?.f_project_id);
-              if (!pub) {
-                showNotification({ color: 'red', message: 'Please create a publisher first' });
-                eventBus.emit('base.formModal.abort');
-                setTimeout(() => {
-                  w3s.showContent = 'CURRENT_PUBLISHERS';
-                }, 2000);
-                return;
-              }
-              publisher.records.push({
-                type: formData.type,
-                body: formData.body
+            publisher.records.push({
+              type: formData.type,
+              body: formData.body
+            });
+            try {
+              const token = await hooks.waitPublisher();
+              await axios.request({
+                method: 'post',
+                url: `/api/w3bapp/event/${curProject?.f_nam}`,
+                headers: {
+                  Authorization: token,
+                  'Content-Type': 'application/octet-stream'
+                },
+                params: {
+                  eventType: formData.type || 'DEFAULT',
+                  timestamp: Date.now()
+                },
+                data: formData.body
               });
-              try {
-                const res = await axios.request({
-                  method: 'post',
-                  url: `/api/w3bapp/event/${projectName}`,
-                  headers: {
-                    Authorization: pub.f_token,
-                    'Content-Type': 'application/octet-stream'
-                  },
-                  params: {
-                    eventType: formData.type || 'DEFAULT',
-                    timestamp: Date.now()
-                  },
-                  data: formData.body
-                });
-                showNotification({ color: 'green', message: 'Send event successed' });
-              } catch (error) {
-                showNotification({ color: 'red', message: 'send event failed' });
-              }
+              showNotification({ color: 'green', message: 'Send event successed' });
+            } catch (error) {
+              showNotification({ color: 'red', message: 'send event failed' });
             }
           };
           hooks.getFormData({

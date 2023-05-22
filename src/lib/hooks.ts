@@ -4,6 +4,7 @@ import { eventBus } from './event';
 import initSqlJs from 'sql.js';
 import { IndexDb } from './dexie';
 import { helper } from './helper';
+import { axios } from './axios';
 
 export const hooks = {
   async waitReady() {
@@ -73,5 +74,29 @@ export const hooks = {
         res();
       }, ms);
     });
+  },
+  async waitPublisher() {
+    const allPublisher = rootStore.w3s.publisher.allData;
+    const curProject = rootStore.w3s.project.curProject;
+    const pub = allPublisher.find((item) => item.project_id === curProject?.f_project_id);
+    if (pub) {
+      return pub.f_token;
+    } else {
+      try {
+        const key = `default`;
+        const res = await axios.request({
+          method: 'post',
+          url: `/api/w3bapp/publisher/x/${curProject?.name}`,
+          data: {
+            key,
+            name: key
+          }
+        });
+        eventBus.emit('publisher.create');
+        return res.data?.token;
+      } catch (error) {
+        return;
+      }
+    }
   }
 };
