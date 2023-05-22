@@ -11,7 +11,6 @@ import { trpc } from '@/lib/trpc';
 import { VscDebugStart } from 'react-icons/vsc';
 import { hooks } from '@/lib/hooks';
 import { AiOutlineClear } from 'react-icons/ai';
-import { eventBus } from '@/lib/event';
 import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
 import { motion, isValidMotionProp } from 'framer-motion';
 
@@ -89,6 +88,7 @@ type LocalStoreType = {
   logs: WasmLogType;
   showModal: boolean;
   modalContent: string;
+  fetchWasmLogsPoll: ReturnType<typeof poll>;
   setData: (data: Partial<LocalStoreType>) => void;
 };
 
@@ -109,16 +109,22 @@ const fetchWasmLogs = async ({ projectName, limit = 20, gt, lt }: { projectName:
 
 const poll = (fn: { (): Promise<void>; (): void; }, interval = 3000) => {
   let timer;
+  let isStop = false;
   const executePoll = async () => {
-    fn()
+    if (isStop) return;
+    await fn()
     timer = setTimeout(executePoll, interval)
+    return timer;
   }
   return {
     start: () => {
-      executePoll()
+      timer && clearTimeout(timer);
+      isStop = false;
+      executePoll();
     },
     stop: () => {
-      clearTimeout(timer)
+      isStop = true;
+      timer && clearTimeout(timer);
     }
   }
 }
@@ -137,13 +143,7 @@ const EventLogs = observer(() => {
     logs: [],
     showModal: false,
     modalContent: '',
-    setData(data: Partial<LocalStoreType>) {
-      Object.assign(store, data);
-    }
-  }));
-
-  useEffect(() => {
-    const fetchWasmLogsPoll = poll(async () => {
+    fetchWasmLogsPoll: poll(async () => {
       const logsLen = store.logs.length;
       const latestCreatedAt = store.logs[logsLen - 1]?.f_created_at;
       const limit = store.initialized ? 12 : 40;
@@ -157,10 +157,16 @@ const EventLogs = observer(() => {
         loading: false,
         logs: [...store.logs, ...res],
       });
-    })
-    fetchWasmLogsPoll.start();
+    }),
+    setData(data: Partial<LocalStoreType>) {
+      Object.assign(store, data);
+    },
+  }));
+
+  useEffect(() => {
+    store.fetchWasmLogsPoll.start();
     return () => {
-      fetchWasmLogsPoll.stop();
+      store.fetchWasmLogsPoll.stop();
     }
   }, []);
 
@@ -297,10 +303,11 @@ const EventLogs = observer(() => {
                   if (store.loading) {
                     return;
                   }
+                  store.fetchWasmLogsPoll.stop()
                   const projectName = curProject?.f_name;
                   if (projectName) {
                     store.setData({
-                      loading: true
+                      loading: true,
                     });
                     const createdAt = store.logs[0]?.f_created_at;
                     const res = await fetchWasmLogs({
@@ -313,6 +320,9 @@ const EventLogs = observer(() => {
                       logs: [...res, ...store.logs]
                     });
                   }
+                }
+                if (scrollTop + clientHeight === scrollHeight) {
+                  store.fetchWasmLogsPoll.start();
                 }
               }}
             />
