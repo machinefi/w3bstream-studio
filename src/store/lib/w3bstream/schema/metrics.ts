@@ -116,10 +116,14 @@ export default class MetricsModule {
 
   get activeDevicesMetrics(): JSONMetricsView {
     const values = this.activeDevices.value[0]?.values || [];
-    const list = values
+    let list = values
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
+    if (list.length === 1) {
+      const d = dayjs(list[0][0]);
+      list = [{ x: d.subtract(8, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    }
     return {
       type: 'LineChartCard',
       data: {
@@ -150,10 +154,14 @@ export default class MetricsModule {
 
   get dataMessagesMetrics(): JSONMetricsView {
     const values = this.dataMessages.value[0]?.values || [];
-    const list = values
+    let list = values
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
+    if (list.length === 1) {
+      const d = dayjs(list[0][0]);
+      list = [{ x: d.subtract(8, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    }
     return {
       type: 'LineChartCard',
       data: {
@@ -184,10 +192,14 @@ export default class MetricsModule {
 
   get blockchainTransactionMetrics(): JSONMetricsView {
     const values = this.blockchainTransaction.value[0]?.values || [];
-    const list = values
+    let list = values
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
+    if (list.length === 1) {
+      const d = dayjs(list[0][0]);
+      list = [{ x: d.subtract(8, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    }
     return {
       type: 'LineChartCard',
       data: {
