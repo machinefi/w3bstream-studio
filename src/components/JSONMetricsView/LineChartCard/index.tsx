@@ -41,11 +41,11 @@ export const LineChartCard = ({
   },
   yScale = {
     type: 'linear',
-    min: 0,
+    min: 'auto',
     max: 'auto',
     stacked: true,
     reverse: false,
-    nice: true,
+    nice: true
   },
   axisTop = null,
   axisRight = null,
