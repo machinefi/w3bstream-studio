@@ -210,7 +210,7 @@ const EventLogs = observer(() => {
               const token = await hooks.waitPublisher();
               await axios.request({
                 method: 'post',
-                url: `/api/w3bapp/event/${curProject?.f_nam}`,
+                url: `/api/w3bapp/event/${curProject?.f_name}`,
                 headers: {
                   Authorization: token,
                   'Content-Type': 'application/octet-stream'
