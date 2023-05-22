@@ -125,7 +125,6 @@ const poll = (fn: { (): Promise<void>; (): void; }, interval = 3000) => {
 
 const EventLogs = observer(() => {
   const {
-    w3s,
     w3s: {
       publisher,
       project: { curProject }
@@ -306,7 +305,7 @@ const EventLogs = observer(() => {
                     const createdAt = store.logs[0]?.f_created_at;
                     const res = await fetchWasmLogs({
                       projectName,
-                      limit: 10,
+                      limit: 50,
                       lt: createdAt ? Number(createdAt) : undefined,
                     });
                     store.setData({
