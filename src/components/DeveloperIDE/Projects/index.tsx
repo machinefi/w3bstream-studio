@@ -145,12 +145,10 @@ const Projects = observer(() => {
                     allProjects.onSelect(index);
                     w3s.showContent = 'METRICS';
                   } else {
-                    const appletID = await w3s.applet.createAppletForDeveloper({
-                      projectName: project.name
+                    await w3s.applet.uploadWASM({
+                      projectName: project.name,
+                      formTitle: 'Upload WASM'
                     });
-                    if (appletID) {
-                      eventBus.emit('applet.create');
-                    }
                   }
                 }}
               >
@@ -169,15 +167,13 @@ const Projects = observer(() => {
                         {...defaultButtonStyle}
                         onClick={async (e) => {
                           e.stopPropagation();
-                          const appletID = await w3s.applet.createAppletForDeveloper({
-                            projectName: project.name
+                          await w3s.applet.uploadWASM({
+                            projectName: project.name,
+                            formTitle: 'Upload WASM'
                           });
-                          if (appletID) {
-                            eventBus.emit('applet.create');
-                          }
                         }}
                       >
-                        Create instance
+                        Upload WASM
                       </Button>
                     )}
                   </Flex>

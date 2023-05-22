@@ -17,9 +17,6 @@ const Settings = () => {
   } = useStore();
 
   const store = useLocalObservable(() => ({
-    get curApplet() {
-      return applet.allData.find((item) => item.project_name === project.curProject?.name);
-    },
     get curInstance() {
       return instances.table.dataSource.find((item) => item.project_name === project.curProject?.name);
     },
@@ -51,10 +48,10 @@ const Settings = () => {
   }, []);
 
   useEffect(() => {
-    if (store.curApplet) {
-      applet.wasmName.call(store.curApplet.f_resource_id);
+    if (applet.curApplet) {
+      applet.wasmName.call(applet.curApplet.f_resource_id);
     }
-  }, [store.curApplet]);
+  }, [applet.curApplet]);
 
   return (
     <Box w="100%" minH={'calc(100vh - 158px)'}>
@@ -113,19 +110,13 @@ const Settings = () => {
             size="sm"
             {...defaultOutlineButtonStyle}
             onClick={async () => {
-              if (store.curApplet && store.curInstance) {
-                applet.form.uiSchema.projectName = {
-                  'ui:widget': 'hidden'
-                };
-                applet.form.uiSchema.appletName = {
-                  'ui:widget': 'hidden'
-                };
-                applet.form.value.set({
+              if (applet.curApplet && store.curInstance) {
+                await applet.uploadWASM({
                   projectName: project.curProject?.name,
-                  appletName: store.curApplet.f_name
+                  appletName: applet.curApplet.f_name,
+                  type: 'update',
+                  formTitle: 'Update WASM'
                 });
-                await applet.updateWASM(store.curApplet.f_applet_id, store.curApplet.f_name);
-                applet.wasmName.call(store.curApplet.f_resource_id);
               }
             }}
           >

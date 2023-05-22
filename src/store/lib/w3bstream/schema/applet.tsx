@@ -12,7 +12,6 @@ import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from './definitions';
-import { helper } from '@/lib/helper';
 
 export const schema = {
   definitions: {
@@ -27,12 +26,12 @@ export const schema = {
       title: 'Upload Single File'
     },
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
-    appletName: { type: 'string', title: 'Applet Name' }
+    appletName: { type: 'string', title: 'Applet Name' },
   },
   required: ['file', 'projectName', 'appletName']
 } as const;
 
-export const developerSchema = {
+export const uploadWASMSchema = {
   definitions: {
     projects: {
       type: 'string'
@@ -49,7 +48,7 @@ export const developerSchema = {
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
-type DeveloperSchemaType = FromSchema<typeof developerSchema>;
+type UploadWASMSchemaType = FromSchema<typeof uploadWASMSchema>;
 
 //@ts-ignore
 schema.definitions = {
@@ -88,9 +87,9 @@ export default class AppletModule {
     })
   });
 
-  developerForm = new JSONSchemaFormState<DeveloperSchemaType, UiSchema & { file: FileWidgetUIOptions }>({
+  uploadWASMForm = new JSONSchemaFormState<UploadWASMSchemaType, UiSchema & { file: FileWidgetUIOptions }>({
     //@ts-ignore
-    schema: developerSchema,
+    schema: uploadWASMSchema,
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
@@ -108,9 +107,14 @@ export default class AppletModule {
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
-      this.developerForm.reset();
+      this.uploadWASMForm.reset();
     },
-    value: new JSONValue<DeveloperSchemaType>()
+    value: new JSONValue<UploadWASMSchemaType>({
+      //@ts-ignore
+      default: {
+        file: ''
+      }
+    })
   });
 
   table = new JSONSchemaTableState<AppletType>({
@@ -379,8 +383,8 @@ export default class AppletModule {
 
   allData: AppletType[] = [];
 
-  set(v: Partial<AppletModule>) {
-    Object.assign(this, v);
+  get curApplet() {
+    return this.allData.find((item) => item.project_name === globalThis.store.w3s.project.curProject?.name);
   }
 
   wasmName = new PromiseState<(resourceId) => Promise<any>, string>({
@@ -396,6 +400,10 @@ export default class AppletModule {
       }
     }
   });
+
+  set(v: Partial<AppletModule>) {
+    Object.assign(this, v);
+  }
 
   async createApplet() {
     const formData = await hooks.getFormData({
@@ -453,18 +461,30 @@ export default class AppletModule {
     return null;
   }
 
-  async createAppletForDeveloper({ projectName, appletName = 'applet_1' }: { projectName: string; appletName?: string }) {
-    const formData = await hooks.getFormData({
-      title: 'Create instance',
-      size: 'md',
-      formList: [
-        {
-          form: this.developerForm
-        }
-      ]
-    });
+  async uploadWASM({ projectName, appletName = 'applet_1', type = 'add', formTitle = '' }: { projectName: string; appletName?: string; type?: 'add' | 'update', formTitle?: string }) {
+    let formData = {
+      file: ''
+    };
+
+    try {
+      this.uploadWASMForm.reset();
+      formData = await hooks.getFormData({
+        title: formTitle,
+        size: '2xl',
+        formList: [
+          {
+            form: this.uploadWASMForm
+          }
+        ]
+      });
+    } catch (error) {
+      this.uploadWASMForm.reset();
+      return;
+    }
+
+    const data = new FormData();
+
     if (formData.file) {
-      const data = new FormData();
       const file = dataURItoBlob(formData.file);
       data.append('file', file.blob);
       data.append(
@@ -476,54 +496,40 @@ export default class AppletModule {
           start: true
         })
       );
-      const res = await axios.request({
-        method: 'post',
-        url: `/api/file?api=applet/x/${projectName}`,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        data
-      });
-      const appletID = res.data?.appletID;
-      if (appletID) {
-        return appletID;
-      }
-      return null;
     }
-  }
 
-  async updateWASM(appletID, appletName) {
-    const formData = await hooks.getFormData({
-      title: 'Update WASM',
-      size: 'md',
-      formList: [
-        {
-          form: this.form
-        }
-      ]
-    });
-    if (formData.file) {
-      const data = new FormData();
-      const file = dataURItoBlob(formData.file);
-      data.append('file', file.blob);
-      data.append(
-        'info',
-        JSON.stringify({
-          appletName,
-          wasmName: file.name,
-          start: true
-        })
-      );
+    if (type === 'add') {
       try {
         const res = await axios.request({
-          method: 'put',
-          url: `/api/file?api=applet/${appletID}`,
+          method: 'post',
+          url: `/api/file?api=applet/x/${projectName}`,
           headers: {
             'Content-Type': 'multipart/form-data'
           },
           data
         });
-        if (res) {
+        const appletID = res.data?.appletID;
+        if (appletID) {
+          eventBus.emit('applet.create');
+        }
+      } catch (error) {
+
+      }
+    }
+
+    if (type === 'update') {
+      try {
+        const res = await axios.request({
+          method: 'put',
+          url: `/api/file?api=applet/${this.curApplet.f_applet_id}`,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          data
+        });
+        const resourceID = res.data?.resourceID;
+        if (resourceID) {
+          this.wasmName.call(resourceID);
           showNotification({ message: 'update wasm succeeded' });
         }
       } catch (error) { }
@@ -532,10 +538,9 @@ export default class AppletModule {
 
   async downloadWasmFile() {
     try {
-      const curApplet = this.allData.find((item) => item.project_name === globalThis.store.w3s.project.curProject?.name);
       const res = await axios.request({
         method: 'get',
-        url: `/api/w3bapp/resource/data/${curApplet?.f_resource_id}`,
+        url: `/api/w3bapp/resource/data/${this.curApplet?.f_resource_id}`,
         responseType: 'blob'
       });
       let link = document.createElement("a");
