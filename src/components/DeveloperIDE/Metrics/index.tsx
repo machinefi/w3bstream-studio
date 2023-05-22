@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Flex, Box, Icon,Text } from '@chakra-ui/react';
+import { Flex, Box, Icon, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { JSONMetricsView } from '@/components/JSONMetricsView';
@@ -13,9 +13,14 @@ const Metrics = () => {
   } = useStore();
 
   useEffect(() => {
-    metrics.activeDevices.call();
-    metrics.dataMessages.call();
-    metrics.blockchainTransaction.call();
+    const now = new Date();
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+    metrics.activeDevices.call(yesterday, now);
+    metrics.dataMessages.call(yesterday, now);
+    metrics.blockchainTransaction.call(yesterday, now);
   }, []);
 
   return (

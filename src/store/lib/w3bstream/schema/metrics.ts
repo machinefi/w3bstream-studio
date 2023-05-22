@@ -53,7 +53,7 @@ export default class MetricsModule {
 
   activeDevices = new PromiseState<any, Metrics[]>({
     defaultValue: [],
-    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
+    function: async (startTime: Date, endTime: Date, step = 3600) => {
       try {
         const { data } = await axios.request({
           method: 'GET',
@@ -74,7 +74,7 @@ export default class MetricsModule {
 
   dataMessages = new PromiseState<any, Metrics[]>({
     defaultValue: [],
-    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
+    function: async (startTime: Date, endTime: Date, step = 3600) => {
       try {
         const { data } = await axios.request({
           method: 'GET',
@@ -95,7 +95,7 @@ export default class MetricsModule {
 
   blockchainTransaction = new PromiseState<any, Metrics[]>({
     defaultValue: [],
-    function: async (startTime = new Date(new Date().setDate(new Date().getDate() - 1)), endTime = new Date(), step = 3600) => {
+    function: async (startTime: Date, endTime: Date, step = 3600) => {
       try {
         const { data } = await axios.request({
           method: 'GET',
@@ -122,7 +122,7 @@ export default class MetricsModule {
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
     if (list.length === 1) {
       const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
     }
     return {
       type: 'LineChartCard',
@@ -160,7 +160,7 @@ export default class MetricsModule {
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
     if (list.length === 1) {
       const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
     }
     return {
       type: 'LineChartCard',
@@ -198,7 +198,7 @@ export default class MetricsModule {
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
     if (list.length === 1) {
       const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
     }
     return {
       type: 'LineChartCard',
