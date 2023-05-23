@@ -12,7 +12,7 @@ import { eventBus } from '@/lib/event';
 import { TableType } from '@/server/routers/pg';
 import { hooks } from '@/lib/hooks';
 
-interface SideBarProps extends FlexProps {}
+interface SideBarProps extends FlexProps { }
 
 const SideBar = observer((props: SideBarProps) => {
   const {
@@ -367,7 +367,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
           collaspeState.onToggle();
         }}
       >
-        <Flex alignItems="center">
+        <Flex alignItems="center" overflowX="auto">
           <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
           <Box w="220px" fontSize="16px" fontWeight={700}>
             {tableSchema}
@@ -411,7 +411,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
               alignItems="center"
               justifyContent="space-between"
               py={1}
-              px={6}
+              px={3}
               borderBottom="1px solid rgba(0, 0, 0, 0.06)"
               sx={getSelectedStyles(dbTable.currentTable.tableId === item.tableId)}
               cursor="pointer"
@@ -423,18 +423,23 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                 });
               }}
             >
-              <Text fontSize="16px" flex={1} fontWeight={700} onClick={(e) => {
-                e.stopPropagation();
-                dbTable.setCurrentTable({
-                  tableSchema,
-                  tableId: item.tableId,
-                  tableName: item.tableName
-                });
-                dbTable.setMode('VIEW_DATA');
-              }}>
+              <Text
+                fontSize="16px"
+                fontWeight={700}
+                overflowX="auto"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dbTable.setCurrentTable({
+                    tableSchema,
+                    tableId: item.tableId,
+                    tableName: item.tableName
+                  });
+                  dbTable.setMode('VIEW_DATA');
+                }}
+              >
                 {item.tableName}
               </Text>
-              <Flex alignItems="center">
+              <Flex ml="5px" alignItems="center">
                 <Tooltip hasArrow label="Delete Table" placement="bottom">
                   <DeleteIcon
                     boxSize={4}
@@ -498,12 +503,12 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
 function getSelectedStyles(selected: boolean) {
   return selected
     ? {
-        color: '#946FFF',
-        bg: 'rgba(148, 111, 255, 0.1)'
-      }
+      color: '#946FFF',
+      bg: 'rgba(148, 111, 255, 0.1)'
+    }
     : {
-        color: '#283241'
-      };
+      color: '#283241'
+    };
 }
 
 export default SideBar;
