@@ -13,7 +13,6 @@ import { FromSchema } from 'json-schema-to-ts';
 import InitWasmTemplateWidget from '@/components/JSONFormWidgets/InitWasmTemplateWidget';
 import { eventBus } from '@/lib/event';
 import axios from 'axios';
-import { helper } from '@/lib/helper';
 import { toast } from '@/lib/helper';
 
 export const initWasmTemplateFormSchema = {
@@ -24,6 +23,15 @@ export const initWasmTemplateFormSchema = {
   required: ['template']
 } as const;
 type InitWasmTemplateFormSchemaType = FromSchema<typeof initWasmTemplateFormSchema>;
+
+export const setVscodeSettingFormSchema = {
+  type: 'object',
+  properties: {
+    port: { type: 'number', title: 'VSCode extension connect port' }
+  },
+  required: ['port']
+} as const;
+type SetVscodeSettingFormSchemaType = FromSchema<typeof setVscodeSettingFormSchema>;
 
 export type VSCodeFilesType = {
   name: string;
@@ -61,8 +69,38 @@ export class ProjectManager {
     })
   });
   wsClient: Client;
+  wsPort = 11400;
+  setVscodeSettingForm = new JSONSchemaFormState<SetVscodeSettingFormSchemaType>({
+    //@ts-ignore
+    schema: setVscodeSettingFormSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      template: {
+        'ui:widget': InitWasmTemplateWidget
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.setVscodeSettingForm.reset();
+      console.log(e.formData);
+      this.wsPort = e.formData.port;
+      await this.connectWs();
+      if (!this.isWSConnect) {
+        toast.error('Connect VSCode extension Failed!');
+      }
+    },
+    value: new JSONValue<SetVscodeSettingFormSchemaType>({
+      default: {
+        port: this.wsPort
+      }
+    })
+  });
 
   isWSConnect = false;
+  isWSConnectLoading = false;
 
   get curFilesList() {
     this.files.setCurrentId('GLOBAL');
@@ -82,7 +120,18 @@ export class ProjectManager {
     makeAutoObservable(this);
   }
 
+  get vscodeEndPoint() {
+    return {
+      ws: `ws://127.0.0.1:${this.wsPort}/graphql`,
+      http: `http://127.0.0.1:${this.wsPort}/graphql`
+    };
+  }
+
   async connectWs() {
+    try {
+      this.wsClient?.dispose();
+    } catch (e) {}
+    this.isWSConnectLoading = true;
     const query = `subscription{
       files {
         name
@@ -92,14 +141,13 @@ export class ProjectManager {
       }
   }`;
     this.wsClient = createClient({
-      url: config.VSCODE_GRAPHQL_WS_ENDPOINT
+      url: this.vscodeEndPoint.ws
     });
     await this.executeSubscribe({ query });
   }
 
   async compiler() {
-    // config.VSCODE_GRAPHQL_ENDPOINT  mutation { compiler }
-    const res = await axios.post(config.VSCODE_GRAPHQL_ENDPOINT, {
+    const res = await axios.post(this.vscodeEndPoint.http, {
       query: `mutation { compile }`
     });
     toast.success('Command Sended to VSCode!');
@@ -120,15 +168,26 @@ export class ProjectManager {
           // this.curFilesListSchema.runAutoDevActions(data.data.files);
           result = data;
           this.isWSConnect = true;
+          this.isWSConnectLoading = false;
         },
-        error: () => {
-          console.log('error Connect');
+        error: (e) => {
+          console.log('error Connect', e);
           this.curFilesListSchema.setVscodeRemotFile([]);
           this.isWSConnect = false;
-          console.log(this.isWSConnect);
+          this.isWSConnectLoading = false;
+          // toast.error('Connect VSCode extension Failed!');
           reject();
         },
-        complete: () => resolve(result)
+        complete: () => {
+          resolve(result);
+          this.isWSConnectLoading = false;
+        },
+        unsubscribe: () => {
+          // console.log('unsubscribe ');
+        },
+        start: () => {
+          // console.log('start');
+        }
       });
     });
   }
