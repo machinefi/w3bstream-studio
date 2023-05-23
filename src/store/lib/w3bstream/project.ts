@@ -12,6 +12,9 @@ import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState
 import { FromSchema } from 'json-schema-to-ts';
 import InitWasmTemplateWidget from '@/components/JSONFormWidgets/InitWasmTemplateWidget';
 import { eventBus } from '@/lib/event';
+import axios from 'axios';
+import { helper } from '@/lib/helper';
+import { toast } from '@/lib/helper';
 
 export const initWasmTemplateFormSchema = {
   type: 'object',
@@ -58,6 +61,7 @@ export class ProjectManager {
     })
   });
   wsClient: Client;
+
   isWSConnect = false;
 
   get curFilesList() {
@@ -91,6 +95,14 @@ export class ProjectManager {
       url: config.VSCODE_GRAPHQL_WS_ENDPOINT
     });
     await this.executeSubscribe({ query });
+  }
+
+  async compiler() {
+    // config.VSCODE_GRAPHQL_ENDPOINT  mutation { compiler }
+    const res = await axios.post(config.VSCODE_GRAPHQL_ENDPOINT, {
+      query: `mutation { compile }`
+    });
+    toast.success('Command Sended to VSCode!');
   }
 
   async executeSubscribe<T>(payload: SubscribePayload) {
