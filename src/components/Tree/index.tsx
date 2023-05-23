@@ -9,9 +9,10 @@ import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Button, C
 import { VscCloudDownload, VscDebugStart, VscFile, VscFiles, VscFileSymlinkFile, VscFileZip, VscFolder, VscTrash } from 'react-icons/vsc';
 import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
-import { BiPaste, BiRename } from 'react-icons/bi';
+import { BiMemoryCard, BiPaste, BiRename } from 'react-icons/bi';
 import { toJS } from 'mobx';
 import { compileAndCreateProject, debugAssemblyscript, debugSimulation } from '../IDE/Editor/EditorFunctions';
+import { ProjectManager } from '@/store/lib/w3bstream/project';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -68,6 +69,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
   const {
     w3s,
     w3s: {
+      projectManager,
       projectManager: { curFilesListSchema },
       lab
     }
@@ -235,6 +237,48 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
     transition: 'all 0.2s'
   };
 
+  const VscodeRemoteConnectButton = () => {
+    return (
+      <Center
+        ml="auto"
+        px={1}
+        borderRadius={'3px'}
+        onClick={async (e) => {
+          e.stopPropagation();
+          try {
+            await w3s.projectManager.connectWs();
+          } catch (e) {
+            if (!w3s.projectManager.isWSConnect) {
+              window.open('vscode://dlhtx.W3BStream-vscode-extension');
+            }
+          }
+        }}
+      >
+        <Tooltip label="Connect to VSCode w3bstream extension">
+          <Image src="/images/icons/w3s_extension.png" h={4} w={4}></Image>
+        </Tooltip>
+      </Center>
+    );
+  };
+
+  const VscodeRemoteCompilerButton = () => {
+    return (
+      <Tooltip ml="auto" label="Compile">
+        <Center
+          ml="auto"
+          px={1}
+          borderRadius={'3px'}
+          onClick={async (e) => {
+            e.stopPropagation();
+            projectManager.compiler();
+          }}
+        >
+          <BiMemoryCard />
+        </Center>
+      </Tooltip>
+    );
+  };
+
   return (
     <Flex flexDirection="column" cursor="pointer">
       {data?.map?.((item: FilesItemType) => {
@@ -287,27 +331,10 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                     </Box>
                   )}
 
-                  {item.label == VSCodeRemoteFolderName && !w3s.projectManager.isWSConnect && (
-                    <Center
-                      ml="auto"
-                      px={1}
-                      borderRadius={'3px'}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        try {
-                          await w3s.projectManager.connectWs();
-                        } catch (e) {
-                          if (!w3s.projectManager.isWSConnect) {
-                            window.open('vscode://dlhtx.W3BStream-vscode-extension');
-                          }
-                        }
-                      }}
-                    >
-                      <Tooltip label="Connect to VSCode w3bstream extension">
-                        <Image src="/images/icons/w3s_extension.png" h={4} w={4}></Image>
-                      </Tooltip>
-                    </Center>
-                  )}
+                  {item.label == VSCodeRemoteFolderName && !w3s.projectManager.isWSConnect && <VscodeRemoteConnectButton />}
+
+                  {item.label == VSCodeRemoteFolderName && w3s.projectManager.isWSConnect && <VscodeRemoteCompilerButton />}
+
                   {item?.data?.size && (
                     <Box ml="auto" color="gray" fontSize={'12px'}>
                       {item?.data?.size}kb
