@@ -7,6 +7,7 @@ import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import toast from 'react-hot-toast';
 import { PromiseState } from '@/store/standard/PromiseState';
+import { rootStore } from '@/store/index';
 
 export const schema = {
   type: 'object',
@@ -42,9 +43,9 @@ export default class CronJobModule {
                           url: `/api/w3bapp/cronjob/data/${item.f_cron_job_id}`
                         });
                         eventBus.emit('cronJob.delete', item.f_project_id);
-                        toast.success('Deleted successfully');
+                        toast.success(rootStore.lang.t('success.delete.msg'));
                       } catch (error) {
-                        toast.error('Delete failed');
+                        toast.error(rootStore.lang.t('error.delete.msg'));
                       }
                     }
                   });

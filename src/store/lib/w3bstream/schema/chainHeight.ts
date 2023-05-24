@@ -8,6 +8,7 @@ import { trpc } from '@/lib/trpc';
 import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
+import { rootStore } from '@/store/index';
 
 export const schema = {
   definitions: {
@@ -75,9 +76,9 @@ export default class ChainHeightModule {
                           url: `/api/w3bapp/monitor/x/${projectName}/chain_height/${item.f_chain_height_id}`
                         });
                         eventBus.emit('chainHeight.delete');
-                        toast.success('Deleted successfully');
+                        toast.success(rootStore.lang.t('success.delete.msg'));
                       } catch (error) {
-                        toast.error('Delete failed');
+                        toast.error(rootStore.lang.t('error.delete.msg'));
                       }
                     }
                   });

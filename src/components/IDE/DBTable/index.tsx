@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 const EditTable = observer(() => {
   const {
     base: { confirm },
+    lang: {t},
     w3s: {
       dbTable,
       dbTable: { currentColumns }
@@ -179,7 +180,8 @@ const EditTable = observer(() => {
 
 const ViewData = observer(() => {
   const {
-    w3s: { dbTable }
+    w3s: { dbTable },
+    lang: {t}
   } = useStore();
 
   if (!dbTable.currentTable.tableName) {
@@ -210,10 +212,10 @@ const ViewData = observer(() => {
                   dbTable.table.set({
                     dataSource: data
                   });
-                  toast.success('Upload CSV success');
+                  toast.success(t('success.upload.msg'));
                 }
               } else {
-                toast.error('CSV file is empty');
+                toast.error(t('error.csvfile.empty.msg'));
               }
               (document.getElementById('csv-input') as HTMLInputElement).value = '';
             }}

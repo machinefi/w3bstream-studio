@@ -21,7 +21,7 @@ export const WagmiProvider = observer(({ children }) => {
 });
 
 const Wallet = observer(() => {
-  const { god, w3s } = useStore();
+  const { god, w3s, lang: {t} } = useStore();
   const { chain } = useNetwork();
   const { address, connector, isConnected } = useAccount();
   const { connect, connectors, error, isLoading } = useConnect({
@@ -84,7 +84,7 @@ const Wallet = observer(() => {
             id: 'login',
             title: 'Login',
             loading: false,
-            message: 'Login successful.',
+            message: t("success.login.msg"),
             color: 'green',
             autoClose: 3000
           });
@@ -93,7 +93,7 @@ const Wallet = observer(() => {
             id: 'login',
             title: 'Login',
             loading: false,
-            message: 'Login failed',
+            message: t("error.login.msg"),
             color: 'red',
             autoClose: 1000
           });
@@ -104,7 +104,7 @@ const Wallet = observer(() => {
           id: 'login',
           title: 'Login',
           loading: false,
-          message: 'Login failed',
+          message: t("error.login.msg"),
           color: 'red',
           autoClose: 1000
         });
