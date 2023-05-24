@@ -346,8 +346,10 @@ export default class ProjectModule {
           tips: `Upload a JSON file`,
           flexProps: {
             h: '400px',
-            borderRadius: '8px'
-          }
+            borderRadius: '4px',
+            border: '1px solid #e8e8e8'
+          },
+          editorTheme: 'vs-light'
         }
       },
       wasm: {

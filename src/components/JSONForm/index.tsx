@@ -22,7 +22,7 @@ const renderLayout = (layout: any[], fields: { [k: string]: React.ReactElement }
           justify="space-between"
           sx={{
             width: '100%',
-            '& > div:not(:first-child)': {
+            '& > div:not(:first-of-type)': {
               marginLeft: even ? '10px' : '0'
             }
           }}

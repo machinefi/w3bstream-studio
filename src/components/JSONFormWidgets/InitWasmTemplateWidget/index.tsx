@@ -39,7 +39,7 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
           flexWrap="wrap"
           sx={{
             width: '100%',
-            '& > div:not(:first-child)': {
+            '& > div:not(:first-of-type)': {
               marginLeft: '10px'
             }
           }}
