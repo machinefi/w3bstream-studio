@@ -305,6 +305,11 @@ const QuerySQL = observer(() => {
       </Box>
       <Box pos="relative">
         <MonacoEditor
+          options={{
+            minimap: {
+              enabled: false
+            }
+          }}
           height={300}
           theme="vs-dark"
           language={'sql'}
@@ -329,7 +334,18 @@ const QuerySQL = observer(() => {
       <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
         Query Result:
       </Box>
-      <MonacoEditor height="calc(100vh - 480px)" theme="vs-dark" language="json" value={queryResult} options={{ readOnly: true }} />
+      <MonacoEditor
+        options={{
+          readOnly: true,
+          minimap: {
+            enabled: false
+          }
+        }}
+        height="calc(100vh - 480px)"
+        theme="vs-dark"
+        language="json"
+        value={queryResult}
+      />
     </Box>
   );
 });
