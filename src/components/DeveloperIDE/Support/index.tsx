@@ -65,7 +65,7 @@ const Support = () => {
               <Box mt="32px">Documentation</Box>
             </Flex>
           </a>
-          <a href="http://developers.iotex.io/academy" target="_blank" rel="noopener noreferrer">
+          <a href="https://developers.iotex.io/academy?w3bstream" target="_blank" rel="noopener noreferrer">
             <Flex
               w="100%"
               h="30vh"

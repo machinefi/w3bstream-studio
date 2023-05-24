@@ -123,12 +123,16 @@ const Settings = () => {
             Update WASM
           </Button>
         </Flex>
-        <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
-          <Box>Operator Address:</Box>
-          <Box ml="10px" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
-            {store.operateAddress.value}
+        <Flex mt="20px" alignItems="flex-start" fontWeight={700} fontSize="16px" color="#0F0F0F">
+          <Box flex={'none'} mt="10px">Operator Address:</Box>
+          <Box ml="10px">
+            <Box p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+              {store.operateAddress.value} <br />
+            </Box>
+            <Text mt="5px" color={'#7A7A7A'} fontSize="14px">The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction is that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are se nding your transactions.</Text>
           </Box>
         </Flex>
+
         {/* <Flex mt="20px" alignItems="center" fontWeight={700} fontSize="16px" color="#0F0F0F">
           <Box>Description Tags:</Box>
           <Flex ml="10px" flexWrap="wrap">

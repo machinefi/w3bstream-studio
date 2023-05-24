@@ -48,8 +48,8 @@ const Publishers = observer(() => {
               };
             }
             const formData = await hooks.getFormData({
-              title: 'Create Device',
-              size: 'md',
+              title: 'Add Device',
+              size: 'lg',
               formList: [
                 {
                   form: w3s.publisher.createPublisherForm

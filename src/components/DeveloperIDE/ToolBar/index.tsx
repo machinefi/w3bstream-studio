@@ -126,7 +126,7 @@ const ToolBar = (props: ToolBar) => {
         >
           <Icon as={TbHandClick} boxSize={6} />
           <Box ml="15px" fontSize="16px">
-            Triggers
+            Events
           </Box>
         </Flex>
         <Flex
