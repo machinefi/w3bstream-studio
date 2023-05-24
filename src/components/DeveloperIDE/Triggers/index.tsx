@@ -45,7 +45,7 @@ const Triggers = () => {
         MQTT
       </Box>
       <Flex mt="10px" alignItems="center">
-        <Box w="60px" fontSize="14px" color="#0F0F0F" fontSize={"12px"}>
+        <Box w="60px" color="#0F0F0F" fontSize={"12px"}>
           URL:
         </Box>
         <Box ml="14px" w="100%" p="8px 10px" fontSize={"14px"} border="1px solid #EDEDED" borderRadius="6px">
@@ -53,7 +53,7 @@ const Triggers = () => {
         </Box>
       </Flex>
       <Flex mt="10px" alignItems="center">
-        <Box w="60px" fontSize="14px" color="#0F0F0F" fontSize={"12px"}>
+        <Box w="60px" color="#0F0F0F" fontSize={"12px"}>
           Topic:
         </Box>
         <Box ml="14px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px" fontSize={"14px"}>
