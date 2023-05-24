@@ -23,6 +23,7 @@ const DeveloperDBTable = () => {
               position="relative"
               cursor="pointer"
               onClick={() => {
+                w3s.dbTable.setDefaultSQL();
                 w3s.dbTable.setMode('QUERY_SQL');
               }}
             >

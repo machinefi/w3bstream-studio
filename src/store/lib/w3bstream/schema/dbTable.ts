@@ -285,6 +285,25 @@ export default class DBTableModule {
     this.sql = v;
   }
 
+  setDefaultSQL() {
+    let sql = '';
+    const { tableSchema, tableName } = this.currentTable;
+    if (tableName) {
+      sql = tableSchema === 'public' ? `SELECT * FROM ${tableName} LIMIT 10` : `SELECT * FROM "${tableSchema}"."${tableName}" LIMIT 10`;
+    } else {
+      const table = this.allTables.value[0]?.tables[0];
+      if (table) {
+        this.setCurrentTable({
+          tableId: table.tableId,
+          tableName: table.tableName,
+          tableSchema: table.tableSchema
+        });
+        sql = table?.tableSchema === 'public' ? `SELECT * FROM ${table?.tableName} LIMIT 10` : `SELECT * FROM "${table?.tableSchema}"."${table?.tableName}" LIMIT 10`;
+      }
+    }
+    this.setSQL(sql);
+  }
+
   async querySQL() {
     if (!this.sql) {
       return {
