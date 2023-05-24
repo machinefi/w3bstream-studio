@@ -30,10 +30,10 @@ const JSONModal = observer(() => {
       <Box zIndex={9999} position="fixed" top={0} left={0} w="100vw" h="100vh">
         <Draggable handle=".draggable-handle">
           <Box>
-            <ModalContent borderRadius={'16px'} overflow="hidden">
+            <ModalContent borderRadius={'14px'} overflow="hidden">
               {formModal.title && (
                 <>
-                  <ModalHeader bg="#F8F8FA"  px="1.5rem" fontSize={'24px'} py="1.5rem" fontWeight={700} cursor="move" className="draggable-handle">
+                  <ModalHeader bg="#F8F8FA"  px="1.5rem" fontSize={'1.25rem'} py="1rem" fontWeight={700} cursor="move" className="draggable-handle">
                     {formModal.title}
                     <ModalCloseButton mt="1rem" mr="0.5rem" color={'#7A7A7A'} fontSize={'1.125rem'} />
                   </ModalHeader>

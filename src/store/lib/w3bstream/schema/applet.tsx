@@ -12,6 +12,8 @@ import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from './definitions';
+import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
+import initTemplates from '@/constants/initTemplates.json';
 
 export const schema = {
   definitions: {
@@ -39,12 +41,13 @@ export const uploadWASMSchema = {
   },
   type: 'object',
   properties: {
+    template: { type: 'string', title: 'Explore Templates' },
     file: {
       type: 'string',
       title: 'Upload a wasm file'
     }
   },
-  required: ['file']
+  required: []
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -95,15 +98,26 @@ export default class AppletModule {
         norender: false,
         submitText: 'Submit'
       },
+      template: {
+        'ui:widget': InitializationTemplateWidget,
+        flexProps: {
+          h: '200px'
+        }
+      },
       file: {
         'ui:widget': FileWidget,
         'ui:options': {
           accept: {
             'application/wasm': ['.wasm']
           },
-          tips: `Drag 'n' drop a file here, or click to select a file`
+          tips: `Code Upload`,
+          flexProps: {
+            h: '200px',
+            borderRadius: '8px'
+          }
         }
-      }
+      },
+      layout: [['template', 'file']]
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -112,7 +126,18 @@ export default class AppletModule {
     value: new JSONValue<UploadWASMSchemaType>({
       //@ts-ignore
       default: {
+        template: '',
         file: ''
+      },
+      onSet(e) {
+        const { template, file } = e;
+        if (template && template != this.value.template) {
+          e.file = '';
+        }
+        if (file && file != this.value.file) {
+          e.template = '';
+        }
+        return e;
       }
     })
   });
@@ -463,6 +488,7 @@ export default class AppletModule {
 
   async uploadWASM({ projectName, appletName = 'applet_1', type = 'add', formTitle = '' }: { projectName: string; appletName?: string; type?: 'add' | 'update', formTitle?: string }) {
     let formData = {
+      template: '',
       file: ''
     };
 
@@ -482,9 +508,48 @@ export default class AppletModule {
       return;
     }
 
-    const data = new FormData();
+    const appletId = this.curApplet?.f_applet_id;
+
+    if (formData.template) {
+      const templateData = initTemplates.templates.find((i) => i.name === formData.template);
+      const wasmURL = templateData?.project[0]?.applets[0]?.wasmURL;
+      if (!wasmURL) {
+        showNotification({ color: 'error', message: 'This template does not exist.' });
+        return;
+      }
+      try {
+        const res = await axios.request({
+          method: 'post',
+          url: `/api/upload-template-file`,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: {
+            projectName,
+            appletName,
+            appletId,
+            wasmURL,
+            uploadType: type
+          }
+        });
+        if (type === 'add') {
+          if (res.data?.appletID) {
+            eventBus.emit('applet.create');
+          }
+        }
+        if (type === 'update') {
+          if (res.data?.resourceID) {
+            this.wasmName.call(res.data.resourceID);
+            showNotification({ message: 'update wasm succeeded' });
+          }
+        }
+      } catch (error) {
+        showNotification({ color: 'error', message: error.message });
+      }
+    }
 
     if (formData.file) {
+      const data = new FormData();
       const file = dataURItoBlob(formData.file);
       data.append('file', file.blob);
       data.append(
@@ -496,43 +561,45 @@ export default class AppletModule {
           start: true
         })
       );
-    }
 
-    if (type === 'add') {
-      try {
-        const res = await axios.request({
-          method: 'post',
-          url: `/api/file?api=applet/x/${projectName}`,
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          data
-        });
-        const appletID = res.data?.appletID;
-        if (appletID) {
-          eventBus.emit('applet.create');
+      if (type === 'add') {
+        try {
+          const res = await axios.request({
+            method: 'post',
+            url: `/api/file?api=applet/x/${projectName}`,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            data
+          });
+          const appletID = res.data?.appletID;
+          if (appletID) {
+            eventBus.emit('applet.create');
+          }
+        } catch (error) {
+          showNotification({ color: 'error', message: error.message });
         }
-      } catch (error) {
-
       }
-    }
 
-    if (type === 'update') {
-      try {
-        const res = await axios.request({
-          method: 'put',
-          url: `/api/file?api=applet/${this.curApplet.f_applet_id}`,
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          data
-        });
-        const resourceID = res.data?.resourceID;
-        if (resourceID) {
-          this.wasmName.call(resourceID);
-          showNotification({ message: 'update wasm succeeded' });
+      if (type === 'update') {
+        try {
+          const res = await axios.request({
+            method: 'put',
+            url: `/api/file?api=applet/${appletId}`,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            data
+          });
+          const resourceID = res.data?.resourceID;
+          if (resourceID) {
+            this.wasmName.call(resourceID);
+            showNotification({ message: 'update wasm succeeded' });
+          }
+        } catch (error) {
+          showNotification({ color: 'error', message: error.message });
         }
-      } catch (error) { }
+      }
     }
   }
 

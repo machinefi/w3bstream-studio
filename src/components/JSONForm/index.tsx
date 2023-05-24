@@ -95,15 +95,31 @@ const ObjectFieldTemplate = ({ title, idSchema: { $id }, properties, uiSchema: {
 };
 
 const FieldTemplate = (props: FieldTemplateProps) => {
-  const { id, classNames, label, help, required, description, errors, children } = props;
+  const { id, classNames, label, help, required, description, errors, children, hidden } = props;
   return (
-    <Flex direction="column" className={classNames} position={'relative'}>
-      {children}
-      {description}
+    <Flex direction="column" className={classNames} position={'relative'} css={{
+      '.chakra-form-control': {
+        '.chakra-form__label': {
+          display: 'none'
+        }
+      },
+      '.chakra-input': {
+        height: '32px',
+        lineHeight: '32px',
+      }
+    }}>
+      {!hidden && <label style={{fontSize: '14px', color: '#0F0F0F', fontWeight: 500, marginBottom: 4}} htmlFor={id}>{label}{required ? <Text ml={'5px'} display={'inline-block'} color={'#e53e3e'}>*</Text> : null}</label>}
+      <Box color={'#7A7A7A'} fontSize="12px" lineHeight={'12px'} css={{
+        '.chakra-text': {
+          marginTop: 0
+        }
+      }}>{description}</Box>
+      {!hidden && <Box >{children}</Box>}
       {help}
     </Flex>
   );
 };
+
 
 const ErrorListTemplate = ({ errors }: ErrorListProps) => {
   return (
@@ -124,16 +140,20 @@ const SubmitButton = ({ uiSchema }: SubmitButtonProps) => {
     return null;
   }
   return (
-    <Button w="100%" size={'lg'} type="submit" borderRadius="base" {...defaultButtonStyle}>
+    <Button w="100%" size={'md'} type="submit" borderRadius="base" {...defaultButtonStyle}>
       {submitText}
     </Button>
   );
 };
 
+
+
+
 interface Props {
   formState: JSONSchemaFormState<any>;
   children?: any;
 }
+
 
 export const JSONForm = observer(({ children, formState }: Props) => {
   if (!formState.dynamicData.ready) return <></>;

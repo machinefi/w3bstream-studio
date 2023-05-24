@@ -16,7 +16,7 @@ const Labs = () => {
       <Box minW="300px" h="100%" p="20px 10px" bg="#fff" borderRadius="8px" overflowY="auto">
         <FilesItem />
       </Box>
-      <Box ml="10px" w="100%" h="100%" p="20px 10px" bg="#fff" borderRadius="8px">
+      <Box ml="10px" w="100%" h="100%" p="10px 10px" bg="#fff" borderRadius="8px">
         <Editor />
       </Box>
     </Flex>

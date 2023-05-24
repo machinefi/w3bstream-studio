@@ -24,7 +24,7 @@ const SideBar = observer((props: SideBarProps) => {
   return (
     <Box h="100%" border="1px solid rgba(0, 0, 0, 0.06)" {...props}>
       <Flex alignItems="center" justifyContent="space-between" h="60px" p={2} borderBottom="1px solid rgba(0, 0, 0, 0.06)">
-        <Text fontSize="16px" fontWeight={700}>
+        <Text fontSize="14px" fontWeight={700}>
           W3bstream Devnet
         </Text>
         <Flex alignItems="center">
@@ -142,7 +142,7 @@ const SideBar = observer((props: SideBarProps) => {
               w3s.showContent = 'ALL_APPLETS';
             }}
           >
-            <Text fontSize="16px" fontWeight={700}>
+            <Text fontSize="14px" fontWeight={700}>
               Applets
             </Text>
           </Flex>
@@ -159,7 +159,7 @@ const SideBar = observer((props: SideBarProps) => {
               w3s.showContent = 'ALL_INSTANCES';
             }}
           >
-            <Text fontSize="16px" fontWeight={700}>
+            <Text fontSize="14px" fontWeight={700}>
               Instances
             </Text>
           </Flex>
@@ -176,7 +176,7 @@ const SideBar = observer((props: SideBarProps) => {
               w3s.showContent = 'STRATEGIES';
             }}
           >
-            <Text fontSize="16px" fontWeight={700}>
+            <Text fontSize="14px" fontWeight={700}>
               Strategies
             </Text>
           </Flex>
@@ -193,7 +193,7 @@ const SideBar = observer((props: SideBarProps) => {
               w3s.showContent = 'ALL_PUBLISHERS';
             }}
           >
-            <Text fontSize="16px" fontWeight={700}>
+            <Text fontSize="14px" fontWeight={700}>
               Publishers
             </Text>
           </Flex>
@@ -214,7 +214,7 @@ const SideBar = observer((props: SideBarProps) => {
               w3s.showContent = 'CONTRACT_LOGS';
             }}
           >
-            <Text fontSize="16px" fontWeight={700}>
+            <Text fontSize="14px" fontWeight={700}>
               Smart Contract Monitor
             </Text>
           </Flex>
@@ -231,7 +231,7 @@ const SideBar = observer((props: SideBarProps) => {
               w3s.showContent = 'CHAIN_TX';
             }}
           >
-            <Text fontSize="16px" fontWeight={700}>
+            <Text fontSize="14px" fontWeight={700}>
               Chain Transaction Monitor
             </Text>
           </Flex>
@@ -248,7 +248,7 @@ const SideBar = observer((props: SideBarProps) => {
               w3s.showContent = 'CHAIN_HEIGHT';
             }}
           >
-            <Text fontSize="16px" fontWeight={700}>
+            <Text fontSize="14px" fontWeight={700}>
               Chain Height Monitor
             </Text>
           </Flex>
@@ -369,7 +369,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
       >
         <Flex alignItems="center" overflowX="auto">
           <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
-          <Box w="220px" fontSize="16px" fontWeight={700}>
+          <Box w="220px" fontSize="14px" fontWeight={700}>
             {tableSchema}
           </Box>
         </Flex>
@@ -424,8 +424,8 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
               }}
             >
               <Text
-                fontSize="16px"
-                fontWeight={700}
+                fontSize="14px"
+                fontWeight={500}
                 overflowX="auto"
                 onClick={(e) => {
                   e.stopPropagation();

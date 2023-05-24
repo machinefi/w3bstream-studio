@@ -59,10 +59,10 @@ const ImportJSON = ({ displayType = 'button', tipLabel = '', onJSON }: ImportJSO
     return (
       <Flex mb="20px" w="100%" h="100px" p="10px" direction="column" justify="center" align="center" border="2px dashed #eee" background="#000" {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
-        <Text fontSize={'16px'} color="#fff">
+        <Text fontSize={'14px'} color="#fff">
           Upload a JSON file
         </Text>
-        <Text fontSize={'16px'} color="#fff">
+        <Text fontSize={'14px'} color="#fff">
           Drag 'n' drop a file here, or click to select a file
         </Text>
       </Flex>

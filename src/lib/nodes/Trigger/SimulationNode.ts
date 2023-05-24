@@ -89,6 +89,11 @@ export class SimulationNode extends BaseNode {
                 // @ts-ignore
                 schema: dataSimulationNodeSchema,
                 uiSchema: {
+                  triggerInterval: {
+                    'ui:options': {
+                      size:"sm"
+                    }
+                  },
                   'ui:submitButtonOptions': {
                     norender: true,
                     submitText: 'OK'

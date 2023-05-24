@@ -114,14 +114,20 @@ export const ProjectEnvs = observer(() => {
   return (
     <Stack>
       <Box fontSize="16px" fontWeight={700}>
-        Project Environment Variables:
+        Environment Variables
       </Box>
+
+      <Box fontSize="14px" color="#7a7a7a">
+        Use environment variables to store API keys and other configuration values and secrets. You can access them in your code like regular environment variables
+      </Box>
+      <Box  pt="20px" >
       {store.envs.map((item) => (
         <Flex w="100%" key={item.id}>
           <Input
             w="300px"
             placeholder="Key"
             size="md"
+            fontSize={"14px"}
             value={item.key}
             onChange={(e) => {
               store.onChangeEnv(item.id, e.target.value, item.value);
@@ -132,6 +138,7 @@ export const ProjectEnvs = observer(() => {
             w="100%"
             placeholder="Value"
             size="md"
+            fontSize={"14px"}
             value={item.value}
             onChange={(e) => {
               store.onChangeEnv(item.id, item.key, e.target.value);
@@ -148,6 +155,8 @@ export const ProjectEnvs = observer(() => {
           </Button>
         </Flex>
       ))}
+      </Box>
+
       <Flex justifyContent="flex-end">
         <Button
           size="sm"

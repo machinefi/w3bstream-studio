@@ -2,6 +2,7 @@ import {
   Box,
   Flex,
   Stack,
+  Text,
   Input,
   Button,
   Checkbox,
@@ -218,12 +219,13 @@ const DefaultValueMenu = observer(({ column }: { column: WidgetColumn }) => {
   }
   return (
     <Box pos="absolute" right="0" top="0">
-      <Menu>
-        <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
-        <MenuList>
+      <Menu size="sm">
+        <MenuButton size="sm" as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
+        <MenuList >
           {menuList.map((item) => {
             return (
               <MenuItem
+
                 key={item.value}
                 onClick={() => {
                   if (column) {
@@ -239,8 +241,8 @@ const DefaultValueMenu = observer(({ column }: { column: WidgetColumn }) => {
                 }}
               >
                 <Box>
-                  <Box fontWeight={700}>{item.value}</Box>
-                  <Box>{item.desc}</Box>
+                  <Text fontWeight={600}>{item.value}</Text>
+                  <Text fontWeight={400} fontSize={"12px"} color="#7a7a7a">{item.desc}</Text>
                 </Box>
               </MenuItem>
             );
@@ -336,7 +338,7 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
       <Input
         w="200px"
         placeholder="column_name"
-        size="md"
+        size="sm"
         value={columnData.name}
         onChange={(e) => {
           if (item) {
@@ -354,6 +356,7 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
       <Select
         ml="10px"
         w="300px"
+        size="sm"
         placeholder=" --- "
         value={columnData.type}
         onChange={(e) => {
@@ -378,7 +381,7 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
       <Flex ml="10px" w="250px" pos="relative">
         <Input
           placeholder="NULL"
-          size="md"
+          size="sm"
           disabled={index === 0}
           value={columnData.defaultValue}
           onChange={(e) => {
@@ -399,6 +402,7 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
       <Flex justify="center" ml="10px" w="100px">
         <Checkbox
           isChecked={columnData.isPrimaryKey}
+          size="sm"
           sx={{
             '& > .chakra-checkbox__control[data-checked]': {
               background: '#946FFF',
@@ -437,6 +441,7 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
         <Button
           ml="30px"
           w="50px"
+          size="sm"
           variant="outline"
           onClick={() => {
             dbTable.onDeleteWidgetColumn(item.id);
@@ -452,19 +457,19 @@ const ColumnItem = observer(({ item, index }: { item?: WidgetColumn; index?: num
 const Header = () => {
   return (
     <Flex w="100%">
-      <Box w="200px" textAlign="center">
+      <Text w="200px" textAlign="center" fontSize={"14px"} fontWeight={600}>
         Name
-      </Box>
-      <Box ml="10px" w="300px" textAlign="center">
+      </Text>
+      <Text ml="10px" w="300px" textAlign="center" fontSize={"14px"} fontWeight={600}>
         Type
-      </Box>
-      <Box ml="10px" w="250px" textAlign="center">
+      </Text>
+      <Text ml="10px" w="250px" textAlign="center" fontSize={"14px"} fontWeight={600}>
         Default Value
-      </Box>
-      <Box ml="10px" w="100px" textAlign="center">
+      </Text>
+      <Text ml="10px" w="100px" textAlign="center" fontSize={"14px"} fontWeight={600}>
         Primary
-      </Box>
-      <Box ml="10px" w="50px" textAlign="center"></Box>
+      </Text>
+      <Text ml="10px" w="50px" textAlign="center" fontSize={"14px"} fontWeight={600}></Text>
     </Flex>
   );
 };
@@ -480,20 +485,22 @@ export const TableColumns = observer(() => {
   return (
     <Stack mt="10px">
       <Divider />
-      <Box fontWeight={600}>Columns</Box>
+      {/* <Box fontWeight={600}>Columns</Box> */}
       <Header />
       {widgetColumns.map((item, index) => (
         <ColumnItem key={item.id} item={item} index={index} />
       ))}
       <Flex>
         <Button
+          size="sm"
+          mt="10px"
           variant="outline"
-          fontWeight={400}
+          fontWeight={500}
           onClick={() => {
             dbTable.onAddWidgetColumn();
           }}
         >
-          Add Column
+          + Add Column
         </Button>
       </Flex>
     </Stack>

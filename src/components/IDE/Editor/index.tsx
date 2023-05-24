@@ -102,7 +102,7 @@ const Editor = observer(() => {
       {curFilesListSchema?.curActiveFile && (
         <main
           style={{
-            minHeight: '100vh',
+            minHeight: '100%',
             display: 'flex',
             flexDirection: 'column'
           }}
@@ -120,7 +120,7 @@ const Editor = observer(() => {
           >
             {curFilesListSchema?.curActiveFileIs('wasm') ? (
               <Flex flexDirection={'column'} w="full">
-                <Center fontFamily={'helvetica'} bg={'#1e1e1e'} width={'100%'} height={300} color="white">
+                <Center bg={'#1e1e1e'} width={'100%'} height={300} color="white">
                   This file is a binary file and cannot be opened in the editor!
                 </Center>
                 <ConsolePanel />

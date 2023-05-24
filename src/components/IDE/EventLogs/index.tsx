@@ -48,8 +48,8 @@ const LiveIcon = () => {
         pos="absolute"
         top="7px"
         left="12px"
-        w="16px"
-        h="16px"
+        w="14px"
+        h="14px"
         borderRadius="50%"
         opacity="0.8"
         boxSizing='border-box'
@@ -282,6 +282,7 @@ const EventLogs = observer(() => {
                     key={key}
                     style={style}
                     color='#fff'
+                    fontSize={"13px"}
                     whiteSpace="nowrap"
                     overflow="hidden"
                     cursor="pointer"
@@ -339,9 +340,9 @@ const EventLogs = observer(() => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader fontSize="sm">Received Message:</ModalHeader>
+          <ModalHeader fontSize="md">Received Message:</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb="20px" fontWeight={700}>
+          <ModalBody pb="20px" fontWeight={400} fontSize={"13px"}>
             {store.modalContent}
           </ModalBody>
         </ModalContent>

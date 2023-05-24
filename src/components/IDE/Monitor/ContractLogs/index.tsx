@@ -42,6 +42,7 @@ export const CreateContractLogButton = observer(() => {
   return (
     <Button
       h="32px"
+      size="sm"
       leftIcon={<AddIcon />}
       {...defaultButtonStyle}
       onClick={async (e) => {
@@ -55,7 +56,7 @@ export const CreateContractLogButton = observer(() => {
         }
         const formData = await hooks.getFormData({
           title: 'Add Smart Contract event monitor',
-          size: 'md',
+          size: 'xl',
           formList: [
             {
               form: w3s.contractLogs.form

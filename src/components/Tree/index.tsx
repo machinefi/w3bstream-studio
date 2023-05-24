@@ -5,7 +5,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { helper, toast } from '@/lib/helper';
 import { hooks } from '@/lib/hooks';
-import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Button, Center } from '@chakra-ui/react';
+import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Button, Center, Spinner } from '@chakra-ui/react';
 import { VscCloudDownload, VscDebugStart, VscFile, VscFiles, VscFileSymlinkFile, VscFileZip, VscFolder, VscTrash } from 'react-icons/vsc';
 import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
@@ -13,6 +13,7 @@ import { BiMemoryCard, BiPaste, BiRename } from 'react-icons/bi';
 import { toJS } from 'mobx';
 import { compileAndCreateProject, debugAssemblyscript, debugSimulation } from '../IDE/Editor/EditorFunctions';
 import { ProjectManager } from '@/store/lib/w3bstream/project';
+import { AiOutlineSetting } from 'react-icons/ai';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -255,7 +256,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
         }}
       >
         <Tooltip label="Connect to VSCode w3bstream extension">
-          <Image src="/images/icons/w3s_extension.png" h={4} w={4}></Image>
+          {projectManager.isWSConnectLoading ? <Spinner h={4} w={4} /> : <Image src="/images/icons/w3s_extension.png" h={4} w={4}></Image>}
         </Tooltip>
       </Center>
     );
@@ -274,6 +275,32 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
           }}
         >
           <BiMemoryCard />
+        </Center>
+      </Tooltip>
+    );
+  };
+
+  const VscodeRemoteSettingButton = () => {
+    return (
+      <Tooltip label="Setting">
+        <Center
+          px={1}
+          borderRadius={'3px'}
+          onClick={async (e) => {
+            e.stopPropagation();
+            // projectManager.setVscodeSettingForm.;
+            const formData = hooks.getFormData({
+              title: 'VSCode Extension Setting',
+              size: '2xl',
+              formList: [
+                {
+                  form: projectManager.setVscodeSettingForm
+                }
+              ]
+            });
+          }}
+        >
+          <AiOutlineSetting />
         </Center>
       </Tooltip>
     );
@@ -321,6 +348,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                     <Box
                       cursor={'text'}
                       as="span"
+                      fontSize={"14px"}
                       userSelect="none"
                       onDoubleClick={(e) => {
                         e.stopPropagation();
@@ -335,13 +363,15 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
 
                   {item.label == VSCodeRemoteFolderName && w3s.projectManager.isWSConnect && <VscodeRemoteCompilerButton />}
 
+                  {item.label == VSCodeRemoteFolderName && <VscodeRemoteSettingButton />}
+
                   {item?.data?.size && (
                     <Box ml="auto" color="gray" fontSize={'12px'}>
                       {item?.data?.size}kb
                     </Box>
                   )}
 
-                  {item?.data?.dataType == 'assemblyscript' && curFilesListSchema?.curActiveFileId == item?.key && (
+                  {(item?.data?.dataType == 'assemblyscript' || item?.data?.dataType == 'wasm') && curFilesListSchema?.curActiveFileId == item?.key && (
                     <>
                       <Tooltip label={`Upload to Devnet`} placement="top">
                         <Text
@@ -351,7 +381,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                           className="pi pi-cloud-upload"
                           color="black"
                           onClick={async () => {
-                            compileAndCreateProject();
+                            compileAndCreateProject(item?.data?.dataType == 'assemblyscript');
                           }}
                         ></Text>
                       </Tooltip>
@@ -359,7 +389,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                       <Box position={'relative'}>
                         <Box
                           onClick={() => {
-                            debugAssemblyscript();
+                            debugAssemblyscript(item?.data?.dataType == 'assemblyscript');
                           }}
                         >
                           <VscDebugStart
@@ -429,7 +459,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                             >
                               <Flex alignItems={'center'}>
                                 <Box mr={1}>{i.icon}</Box>
-                                <Box>{i.name}</Box>
+                                <Box fontSize={"14px"}>{i.name}</Box>
                                 {i.children && <ChevronRightIcon />}
                               </Flex>
 
@@ -471,7 +501,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                             <Box {...RightClickStyle} color={i?.color ?? ''}>
                               <Flex alignItems={'center'}>
                                 <Box mr={1}>{i.icon}</Box>
-                                <Box>{i.name}</Box>
+                                <Box fontSize={"14px"}>{i.name}</Box>
                               </Flex>
                             </Box>
                           </MenuItem>

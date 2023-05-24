@@ -170,7 +170,7 @@ export default class StrategyModule {
   async createStrategy() {
     const formData = await hooks.getFormData({
       title: 'Create Strategy',
-      size: 'md',
+      size: 'xl',
       formList: [
         {
           form: this.form

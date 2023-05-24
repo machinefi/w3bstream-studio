@@ -31,11 +31,15 @@ export const gradientButtonStyle = {
 export const theme = extendTheme({
   initialColorMode: 'light',
   useSystemColorMode: false,
-  fonts: {
-    body: 'helvetica, sans-serif',
-    heading: 'helvetica, sans-serif'
-  },
   shadows: {
     largeSoft: 'rgba(60, 64, 67, 0.15) 0px 2px 10px 6px;'
   },
+  components: {
+    Text: {
+      baseStyle: {
+        letterSpacing: "-0.020625rem",
+        fontweight: "400",
+      }
+    }
+  }
 });

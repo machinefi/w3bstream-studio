@@ -24,6 +24,8 @@ const HomePage = observer(() => {
     return <DeveloperIDE />;
   }
 
+
+
   if (accountRole === 'ADMIN') {
     return <IDE />;
   }

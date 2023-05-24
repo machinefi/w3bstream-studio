@@ -42,6 +42,7 @@ export const CreateChainHeightButton = observer(() => {
   return (
     <Button
       h="32px"
+      size="sm"
       leftIcon={<AddIcon />}
       {...defaultButtonStyle}
       onClick={async (e) => {
@@ -55,7 +56,7 @@ export const CreateChainHeightButton = observer(() => {
         }
         const formData = await hooks.getFormData({
           title: ' Create blockchain height monitor',
-          size: 'md',
+          size: 'xl',
           formList: [
             {
               form: w3s.chainHeight.form

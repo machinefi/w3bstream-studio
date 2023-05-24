@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardHeader, Heading, Stack, Flex } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Heading, Stack, Flex, Text } from '@chakra-ui/react';
 import { SiSimpleanalytics } from 'react-icons/si';
 import dynamic from "next/dynamic";
 import { DatumValue } from '@nivo/line';
@@ -71,10 +71,10 @@ export const LineChartCard = ({
     <Card>
       <CardHeader>
         <Flex alignItems={'center'}>
-          <Heading size="md">{title}</Heading>
+          <Text size="md" fontWeight="500" fontSize="16px" >{title}</Text>
         </Flex>
         {description && (
-          <Box>
+          <Box color="#7a7a7a" fontSize={'12px'}>
             {description}
           </Box>
         )}
@@ -133,7 +133,7 @@ export const LineChartCard = ({
         ) : (
           <Stack minH="100px" align="center" justify="center">
             <SiSimpleanalytics />
-            <Box>No data to show</Box>
+            <Box fontSize={"14px"}>No data to show</Box>
           </Stack>
         )}
       </CardBody>

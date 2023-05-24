@@ -44,7 +44,7 @@ export const FilesItem = observer(() => {
 
   return (
     <>
-      <Tree data={w3s.projectManager.curFilesList} onSelect={store.onSelect} />
+      <Tree  data={w3s.projectManager.curFilesList} onSelect={store.onSelect} />
     </>
   );
 });

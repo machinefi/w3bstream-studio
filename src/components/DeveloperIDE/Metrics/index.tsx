@@ -27,7 +27,7 @@ const Metrics = () => {
     <Box w="100%">
       <Flex mb="10px" align="center" bg="#fff" borderRadius="8px">
         <Box flex="1">
-          <Text fontSize={'1.5rem'} fontWeight={700}>Summary</Text>
+          <Text fontSize={'1.25rem'} fontWeight={600}>Summary</Text>
           <Text color={'#7A7A7A'} fontSize="14px">Metrics aggregated across all custom and workers.dev routes invoking this Worker.</Text>
         </Box>
         <Flex
@@ -43,7 +43,7 @@ const Metrics = () => {
           }}
         >
           <Icon as={TbApi} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             API
           </Box>
         </Flex>
@@ -62,7 +62,7 @@ const Metrics = () => {
           }}
         >
           <Icon as={HiOutlineDatabase} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Database
           </Box>
         </Flex>

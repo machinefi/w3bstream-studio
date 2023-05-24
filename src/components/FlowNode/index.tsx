@@ -191,8 +191,8 @@ export const NodeContext = React.createContext('NodeContext');
 export const NodeLayout = memo(
   ({ id, data, nodeInstance, children }: { id: string; data: FlowNodeData; nodeInstance: BaseNode; children: any }) => {
     const handleStyle = {
-      width: '16px',
-      height: '16px',
+      width: '14px',
+      height: '14px',
       borderRadius: '2px',
       backgroundColor: '#e8864b',
       // border: '4px solid #784be8',
@@ -200,8 +200,8 @@ export const NodeLayout = memo(
     };
 
     const handleVariableStyle = {
-      width: '16px',
-      height: '16px',
+      width: '14px',
+      height: '14px',
       borderRadius: '50px',
       backgroundColor: 'white',
       border: '4px solid #784be8',

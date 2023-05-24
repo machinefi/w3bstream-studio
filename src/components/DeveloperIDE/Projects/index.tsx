@@ -25,7 +25,7 @@ const Projects = observer(() => {
         <Flex justifyContent="space-between" alignItems="center">
           <Flex>
             <Button
-              size="md"
+              size="sm"
               leftIcon={<AiOutlinePlus />}
               {...defaultButtonStyle}
               onClick={() => {
@@ -36,7 +36,7 @@ const Projects = observer(() => {
             </Button>
             <Button
               ml="20px"
-              size="md"
+              size="sm"
               leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
@@ -164,6 +164,7 @@ const Projects = observer(() => {
                       <Button
                         ml="20px"
                         h="25px"
+                        size="sm"
                         {...defaultButtonStyle}
                         onClick={async (e) => {
                           e.stopPropagation();
@@ -249,7 +250,7 @@ const Projects = observer(() => {
                         />
                       ) : (
                         <Icon
-                          ml="16px"
+                          ml="14px"
                           as={AiOutlinePlayCircle}
                           boxSize={'1rem'}
                           color="#946FFF"
@@ -288,7 +289,7 @@ const Projects = observer(() => {
       ) : (
         <Flex flexDir="column" alignItems="center" justifyContent={'center'} h="calc(100vh - 158px)">
           <Image w="80px" src="/images/empty_box.svg" alt="" />
-          <Text mt="16px" fontSize="14px" color="#7A7A7A">
+          <Text mt="14px" fontSize="14px" color="#7A7A7A">
             You haven't created any project.
           </Text>
           <Flex mt="30px">
