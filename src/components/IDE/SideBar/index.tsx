@@ -421,6 +421,9 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                   tableId: item.tableId,
                   tableName: item.tableName
                 });
+                if (dbTable.mode === 'QUERY_SQL') {
+                  dbTable.setDefaultSQL();
+                }
               }}
             >
               <Text
