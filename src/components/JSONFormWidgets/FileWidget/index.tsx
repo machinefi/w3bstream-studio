@@ -100,6 +100,7 @@ type Options = {
   showDownload?: boolean;
   mode?: 'general' | 'image';
   resultType?: 'dataURL' | 'JSON';
+  editorTheme?: string;
 };
 
 export interface FileWidgetProps extends WidgetProps {
@@ -112,7 +113,7 @@ export type FileWidgetUIOptions = {
 };
 
 const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, autofocus = false, options }: FileWidgetProps) => {
-  const { mode = 'general', resultType = 'dataURL', accept, maxFiles = 0, multiple = false, tips = '', flexProps = {}, showDownload = false } = options;
+  const { mode = 'general', resultType = 'dataURL', accept, maxFiles = 0, multiple = false, tips = '', flexProps = {}, showDownload = false, editorTheme = 'vs-dark' } = options;
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
   const { uploadToS3 } = useS3Upload();
   const [loading, setLoading] = useState(false);
@@ -206,8 +207,13 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
           <>
             {value && resultType === 'JSON' ? (
               <MonacoEditor
+                options={{
+                  minimap: {
+                    enabled: false
+                  }
+                }}
                 height="100%"
-                theme="vs-dark"
+                theme={editorTheme}
                 language={resultType === 'JSON' ? 'json' : 'text'}
                 value={value}
                 onChange={(v) => {

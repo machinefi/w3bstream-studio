@@ -27,6 +27,11 @@ export const MoEditor = observer((props: any) => {
   return (
     <>
       <MonacoEditor
+        options={{
+          minimap: {
+            enabled: false
+          }
+        }}
         width={'100%'}
         height={350}
         key={curFilesListSchema?.curActiveFile.data?.language}

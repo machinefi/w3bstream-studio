@@ -128,7 +128,18 @@ const PublishEventRequestTemplates = observer(() => {
                             >
                               Copy
                             </Button>
-                            <MonacoEditor width="100%" height="calc(100vh - 180px)" theme="vs-dark" language={language} value={codeStr} />
+                            <MonacoEditor
+                              width="100%"
+                              height="calc(100vh - 180px)"
+                              theme="vs-dark"
+                              language={language}
+                              value={codeStr}
+                              options={{
+                                minimap: {
+                                  enabled: false
+                                }
+                              }}
+                            />
                           </Box>
                         </TabPanel>
                       );
@@ -170,7 +181,18 @@ const PublishEventRequestTemplates = observer(() => {
                             >
                               Copy
                             </Button>
-                            <MonacoEditor width="100%" height="calc(100vh - 180px)" theme="vs-dark" language={language} value={codeStr} />
+                            <MonacoEditor
+                              width="100%"
+                              height="calc(100vh - 180px)"
+                              theme="vs-dark"
+                              language={language}
+                              value={codeStr}
+                              options={{
+                                minimap: {
+                                  enabled: false
+                                }
+                              }}
+                            />
                           </Box>
                         </TabPanel>
                       );

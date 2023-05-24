@@ -12,6 +12,7 @@ import { StorageState } from '@/store/standard/StorageState';
 type Options = {
   emptyValue?: string;
   editorHeight?: string;
+  editorTheme?: string;
   showLanguageSelector?: boolean;
   showCodeSelector?: { label: string; value: string; id: string }[];
   showSubmitButton?: boolean;
@@ -39,7 +40,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
   } = useStore();
 
   const [language, setLanguage] = useState('json');
-  const { editorHeight = '200px', showLanguageSelector = false, showCodeSelector = [], showSubmitButton = false, onChangeLanguage, afterSubmit, readOnly = false, lang = 'json' } = options;
+  const { editorHeight = '200px', editorTheme = 'vs-dark', showLanguageSelector = false, showCodeSelector = [], showSubmitButton = false, onChangeLanguage, afterSubmit, readOnly = false, lang = 'json' } = options;
   const store = useLocalObservable(() => ({
     curCodeLabel: new StorageState<string>({ key: curFlowId + 'curCodeLabel' ?? 'EditorWidget' }),
     curCodeId: new StorageState<string>({ key: curFlowId + 'curCodeId' ?? 'EditorWidget' }),
@@ -121,9 +122,14 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
       </Flex>
       {/* fix readonly issuse > https://github.com/suren-atoyan/monaco-react/issues/114  */}
       <MonacoEditor
-        options={{ readOnly }}
+        options={{
+          readOnly,
+          minimap: {
+            enabled: false
+          }
+        }}
         height={editorHeight}
-        theme="vs-dark"
+        theme={editorTheme}
         language={showLanguageSelector ? language : lang}
         value={readOnly ? (value ? value : '') : store.curCodeId.value ? store.curEditorFile?.data?.code ?? value : value}
         onChange={handleChange}
