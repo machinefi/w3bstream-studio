@@ -41,7 +41,7 @@ export const columnSchema = {
   properties: {
     column: {
       type: 'string',
-      title: ''
+      title: 'Column'
     },
     comment: {
       type: 'string',

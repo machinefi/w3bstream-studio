@@ -104,13 +104,13 @@ const FieldTemplate = (props: FieldTemplateProps) => {
         }
       }
     }}>
-      {!hidden && <label style={{fontSize: '14px', color: '#0F0F0F', fontWeight: 700, marginBottom: 8}} htmlFor={id}>{label}{required ? <Text ml={'5px'} display={'inline-block'} color={'#e53e3e'}>*</Text> : null}</label>}
+      {!hidden && <label style={{fontSize: '14px', color: '#0F0F0F', fontWeight: 500, marginBottom: 4}} htmlFor={id}>{label}{required ? <Text ml={'5px'} display={'inline-block'} color={'#e53e3e'}>*</Text> : null}</label>}
       <Box color={'#7A7A7A'} fontSize="12px" lineHeight={'12px'} css={{
         '.chakra-text': {
           marginTop: 0
         }
       }}>{description}</Box>
-      {!hidden && <Box>{children}</Box>}
+      {!hidden && <Box >{children}</Box>}
       {help}
     </Flex>
   );

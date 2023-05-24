@@ -27,7 +27,7 @@ const Metrics = () => {
     <Box w="100%">
       <Flex mb="10px" align="center" bg="#fff" borderRadius="8px">
         <Box flex="1">
-          <Text fontSize={'1.5rem'} fontWeight={700}>Summary</Text>
+          <Text fontSize={'1.25rem'} fontWeight={600}>Summary</Text>
           <Text color={'#7A7A7A'} fontSize="14px">Metrics aggregated across all custom and workers.dev routes invoking this Worker.</Text>
         </Box>
         <Flex

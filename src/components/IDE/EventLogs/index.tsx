@@ -282,6 +282,7 @@ const EventLogs = observer(() => {
                     key={key}
                     style={style}
                     color='#fff'
+                    fontSize={"13px"}
                     whiteSpace="nowrap"
                     overflow="hidden"
                     cursor="pointer"
@@ -339,9 +340,9 @@ const EventLogs = observer(() => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader fontSize="sm">Received Message:</ModalHeader>
+          <ModalHeader fontSize="md">Received Message:</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb="20px" fontWeight={700}>
+          <ModalBody pb="20px" fontWeight={400} fontSize={"13px"}>
             {store.modalContent}
           </ModalBody>
         </ModalContent>

@@ -348,6 +348,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                     <Box
                       cursor={'text'}
                       as="span"
+                      fontSize={"14px"}
                       userSelect="none"
                       onDoubleClick={(e) => {
                         e.stopPropagation();
@@ -458,7 +459,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                             >
                               <Flex alignItems={'center'}>
                                 <Box mr={1}>{i.icon}</Box>
-                                <Box>{i.name}</Box>
+                                <Box fontSize={"14px"}>{i.name}</Box>
                                 {i.children && <ChevronRightIcon />}
                               </Flex>
 
@@ -500,7 +501,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                             <Box {...RightClickStyle} color={i?.color ?? ''}>
                               <Flex alignItems={'center'}>
                                 <Box mr={1}>{i.icon}</Box>
-                                <Box>{i.name}</Box>
+                                <Box fontSize={"14px"}>{i.name}</Box>
                               </Flex>
                             </Box>
                           </MenuItem>

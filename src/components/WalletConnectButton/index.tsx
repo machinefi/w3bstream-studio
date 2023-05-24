@@ -67,10 +67,10 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
                   alignItems="center"
                 >
                   <Box>
-                    <Box fontSize="14px" fontWeight={700}>
+                    <Box fontSize="12px" fontWeight={700}>
                       {god.currentChain.Coin.balance.format} {god.currentNetwork.currentChain.name}
                     </Box>
-                    <Box fontSize="12px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Box>
+                    <Box fontSize="10px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Box>
                   </Box>
                   <ChevronDownIcon ml="5px" boxSize="24px" />
                 </Flex>
@@ -82,12 +82,12 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
               <PopoverHeader>Account Information</PopoverHeader>
               <PopoverBody>
                 <Flex align="center">
-                  <Box fontWeight={700}>Account ID:</Box>
-                  <Box ml="5px">{config.form.formData.accountID}</Box>
+                  <Box fontSize={"14px"} fontWeight={700}>Account ID:</Box>
+                  <Box  fontSize={"12px"} ml="5px">{config.form.formData.accountID}</Box>
                 </Flex>
                 <Flex mt="10px" align="center">
-                  <Box fontWeight={700}>Address:</Box>
-                  <Box ml="5px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Box>
+                  <Box fontSize={"14px"}  fontWeight={700}>Address:</Box>
+                  <Box fontSize={"12px"} ml="5px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Box>
                   <Copy value={god.currentNetwork.account} />
                 </Flex>
                 <Flex mt="10px" align="center">

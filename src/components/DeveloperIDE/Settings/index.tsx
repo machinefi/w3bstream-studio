@@ -146,7 +146,7 @@ const Settings = () => {
         <Flex justifyContent="space-between" alignItems="center">
           <Stack>
             <Box fontWeight={700}>Delete this project</Box>
-            <Box>Deleting a project is permanent and will erase all database data, triggers, and events routing. Please proceed with caution.</Box>
+            <Box fontWeight={400} color="#7a7a7a" fontSize={"14px"}>Deleting a project is permanent and will erase all database data, triggers, and events routing. Please proceed with caution.</Box>
           </Stack>
           <Button
             ml="20px"

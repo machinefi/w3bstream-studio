@@ -83,7 +83,7 @@ export const EditorTopBarIcons = observer(() => {
                       curFilesListSchema.setCurActiveFile(i);
                     }}
                     display="flex"
-                    py={2}
+                    py={1.5}
                     px={2}
                     background={i?.key == curFilesListSchema?.curActiveFile?.key ? '#1e1e1e' : 'none'}
                     fontSize="sm"
@@ -92,7 +92,7 @@ export const EditorTopBarIcons = observer(() => {
                     alignItems={'center'}
                   >
                     {FileIcon(i)}
-                    <Text mr="4">{i?.label}</Text>
+                    <Text mr="4" fontSize={"13px"}>{i?.label}</Text>
                     <SmallCloseIcon
                       _hover={{ bg: '#3f3f3f' }}
                       color="white"

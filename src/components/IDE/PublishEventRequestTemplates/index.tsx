@@ -100,7 +100,7 @@ const PublishEventRequestTemplates = observer(() => {
                 <Tabs orientation="vertical" variant="unstyled">
                   <TabList>
                     {languages.map((item) => (
-                      <Tab key={item} _selected={{ color: '#855EFF', fontWeight: 700, borderRight: '2px solid #855EFF' }}>
+                      <Tab fontSize={"14px"} key={item} _selected={{ color: '#855EFF', fontWeight: 700, borderRight: '2px solid #855EFF' }}>
                         {item}
                       </Tab>
                     ))}
