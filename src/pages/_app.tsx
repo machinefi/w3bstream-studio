@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import 'focus-visible/dist/focus-visible'
+import 'focus-visible/dist/focus-visible';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Toaster } from 'react-hot-toast';
 import { withTRPC } from '@trpc/next';
@@ -17,7 +17,14 @@ import superjson from 'superjson';
 import { Inspector, InspectParams } from 'react-dev-inspector';
 import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
-import { Global, css } from '@emotion/react'
+import { Global, css } from '@emotion/react';
+import { Inter } from 'next/font/google';
+
+const oxanium = Inter({
+  weight: '400',
+  subsets: ['latin'],
+});
+
 
 const GlobalStyles = css`
   .js-focus-visible :focus:not([data-focus-visible-added]) {
@@ -26,7 +33,6 @@ const GlobalStyles = css`
   }
 `;
 
-
 const InspectorWrapper = process.env.NODE_ENV === 'development' ? Inspector : React.Fragment;
 export let asc: typeof import('assemblyscript/dist/asc');
 
@@ -34,7 +40,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { lang, w3s, god } = useStore();
   const { token } = w3s.config.form.formData;
   const router = useRouter();
-
 
   useEffect(() => {
     lang.init();
@@ -58,28 +63,30 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return useMemo(() => {
     return (
-      <InspectorWrapper
-        // props see docs:
-        // https://github.com/zthxxx/react-dev-inspector#inspector-component-props
-        keys={['control', 'shift', 'z']}
-        disableLaunchEditor={true}
-        onClickElement={({ codeInfo }: InspectParams) => {
-          if (!codeInfo?.absolutePath) return;
-          const { absolutePath, lineNumber, columnNumber } = codeInfo;
-          // you can change the url protocol if you are using in Web IDE
-          window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`);
-        }}
-      >
-        <Global styles={GlobalStyles} />
-        <ChakraProvider theme={theme}>
-          <NotificationsProvider>
-            <Toaster position="bottom-right" />
-            <WagmiProvider>
-              <Component {...pageProps} />
-            </WagmiProvider>
-          </NotificationsProvider>
-        </ChakraProvider>
-      </InspectorWrapper>
+      <main className={oxanium.className}>
+        <InspectorWrapper
+          // props see docs:
+          // https://github.com/zthxxx/react-dev-inspector#inspector-component-props
+          keys={['control', 'shift', 'z']}
+          disableLaunchEditor={true}
+          onClickElement={({ codeInfo }: InspectParams) => {
+            if (!codeInfo?.absolutePath) return;
+            const { absolutePath, lineNumber, columnNumber } = codeInfo;
+            // you can change the url protocol if you are using in Web IDE
+            window.open(`vscode://file/${absolutePath}:${lineNumber}:${columnNumber}`);
+          }}
+        >
+          <Global styles={GlobalStyles} />
+          <ChakraProvider theme={theme}>
+            <NotificationsProvider>
+              <Toaster position="bottom-right" />
+              <WagmiProvider>
+                <Component {...pageProps} />
+              </WagmiProvider>
+            </NotificationsProvider>
+          </ChakraProvider>
+        </InspectorWrapper>
+      </main>
     );
   }, [Component, pageProps]);
 }
