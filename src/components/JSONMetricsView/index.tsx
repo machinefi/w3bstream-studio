@@ -18,7 +18,7 @@ export const JSONMetricsView = ({ data }: { data: JSONMetricsView[] }) => {
           case 'LineChartCard':
             return <LineChartCard {...(item.data as LineChartCard)} />;
           case 'TimeRangePick':
-            return <TimeRangePick {...(item.data as TimeRangePick)} />;
+            return <TimeRangePick {...(item.data as TimeRangePick )} />;
           default:
             return null;
         }

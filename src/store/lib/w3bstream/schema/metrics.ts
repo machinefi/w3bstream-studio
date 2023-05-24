@@ -4,6 +4,8 @@ import axios from 'axios';
 import { makeObservable, observable } from 'mobx';
 import dayjs from 'dayjs';
 import { trpc } from '@/lib/trpc';
+import { useEffect } from 'react';
+import { MappingState } from '@/store/standard/MappingState';
 
 export type Metrics = {
   metric: {
@@ -43,13 +45,51 @@ export default class MetricsModule {
     type: 'TimeRangePick',
     data: {
       props: {},
-      onChange: (startTime: Date, endTime: Date, step: number) => {
+      onChange: (value: "day" | "week" | "month") => {
+        const now = new Date();
+        now.setMinutes(0);
+        now.setSeconds(0);
+        now.setMilliseconds(0);
+
+        this.timeconfig.setCurrentId(value)
+
+        const { stepTime, step } = this.timeconfig.current;
+
+        const startTime = new Date(now.getTime() - stepTime);
+        const endTime = now
+
         this.activeDevices.call(startTime, endTime, step);
         this.dataMessages.call(startTime, endTime, step);
         this.blockchainTransaction.call(startTime, endTime, step);
       }
     }
   };
+
+
+  timeconfig = new MappingState({
+    currentId: "day",
+    map: {
+      day: {
+        tickValues: 'every 1 hours',
+        stepTime: 3600*1000,
+        step: '1h',
+        axisBottomFormat: '%H:%M'
+
+      },
+      week: {
+        tickValues: 'every 1 hours',
+        stepTime: 7 * 24 * 60 * 60 * 1000,
+        step: '24h',
+        axisBottomFormat: '%Y-%m-%d'
+      },
+      month: {
+        tickValues: 'every day',
+        stepTime: 30 * 24 * 60 * 60 * 1000,
+        step: '24h',
+        axisBottomFormat: '%Y-%m-%d'
+      }
+    }
+  })
 
   activeDevices = new PromiseState<any, Metrics[]>({
     defaultValue: [],
@@ -62,7 +102,7 @@ export default class MetricsModule {
             query: `count(count_over_time(inbound_events_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"}[1d])) by (project)`,
             start: startTime.toISOString(),
             end: endTime.toISOString(),
-            step: `${step}s`
+            step
           }
         });
         return data.data.result;
@@ -83,7 +123,7 @@ export default class MetricsModule {
             query: `sum by (project) (inbound_events_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"})`,
             start: startTime.toISOString(),
             end: endTime.toISOString(),
-            step: `${step}s`
+            step
           }
         });
         return data.data.result;
@@ -104,7 +144,7 @@ export default class MetricsModule {
             query: `sum by (project) (w3b_blockchain_tx_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"})`,
             start: startTime.toISOString(),
             end: endTime.toISOString(),
-            step: `${step}s`
+            step
           }
         });
         return data.data.result;
@@ -143,8 +183,8 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%Y-%m-%d %H:%M',
-          tickValues: 'every 4 hours',
+          format: this.timeconfig.current.axisBottomFormat,
+          tickValues: this.timeconfig.current.tickValues,
           legend: ' ',
           legendPosition: 'middle'
         }
@@ -181,8 +221,8 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%Y-%m-%d %H:%M',
-          tickValues: 'every 4 hours',
+          format: this.timeconfig.current.axisBottomFormat,
+          tickValues: this.timeconfig.current.tickValues,
           legend: ' ',
           legendPosition: 'middle'
         }
@@ -219,8 +259,8 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%Y-%m-%d %H:%M',
-          tickValues: 'every 4 hours',
+          format: this.timeconfig.current.axisBottomFormat,
+          tickValues: this.timeconfig.current.tickValues,
           legend: ' ',
           legendPosition: 'middle'
         }
@@ -245,6 +285,8 @@ export default class MetricsModule {
     };
   }
 
+
+
   showContent: 'DATABASE' | 'API' = 'API';
 
   get metricsData() {
@@ -263,5 +305,20 @@ export default class MetricsModule {
     makeObservable(this, {
       showContent: observable
     });
+  }
+
+
+  use() {
+    useEffect(() => {
+      const now = new Date();
+      now.setMinutes(0);
+      now.setSeconds(0);
+      now.setMilliseconds(0);
+      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+      this.activeDevices.call(yesterday, now);
+      this.dataMessages.call(yesterday, now);
+      this.blockchainTransaction.call(yesterday, now);
+      return () => {}
+    },[])
   }
 }

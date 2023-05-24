@@ -12,16 +12,7 @@ const Metrics = () => {
     w3s: { metrics }
   } = useStore();
 
-  useEffect(() => {
-    const now = new Date();
-    now.setMinutes(0);
-    now.setSeconds(0);
-    now.setMilliseconds(0);
-    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-    metrics.activeDevices.call(yesterday, now);
-    metrics.dataMessages.call(yesterday, now);
-    metrics.blockchainTransaction.call(yesterday, now);
-  }, []);
+  metrics.use()
 
   return (
     <Box w="100%">

@@ -34,7 +34,7 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
             <Tr bg="#F5F5F5">
               {needExtendedTable && <Th></Th>}
               {columns.map((item) => (
-                <Th key={item.key} fontSize="14px" fontWeight={400} color="#0F0F0F" textTransform="none">
+                <Th key={item.key} fontSize="14px" fontWeight={500} color="#0F0F0F" textTransform="none">
                   {item.label}
                 </Th>
               ))}
@@ -94,7 +94,7 @@ function Body<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
     <Tr fontSize="14px" color="#0F0F0F">
       {columns.map((column) => {
         return (
-          <Td key={column.key} border="1px solid #F5F5F5" maxW="200px" overflowX="auto">
+          <Td key={column.key} fontSize={'12px'} border="1px solid #F5F5F5" maxW="200px" overflowX="auto">
             {column.actions
               ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
               : column.render
