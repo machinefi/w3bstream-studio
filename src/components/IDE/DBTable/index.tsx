@@ -31,23 +31,23 @@ const EditTable = observer(() => {
   return (
     <Box>
       <Flex alignItems="center">
-        <Button h="32px" leftIcon={<MdRefresh />} {...defaultOutlineButtonStyle} onClick={async (e) => { }}>
+        <Button h="32px" size="sm" leftIcon={<MdRefresh />} {...defaultOutlineButtonStyle} onClick={async (e) => { }}>
           Refresh
         </Button>
       </Flex>
       <Box mt="30px">
-        <Box fontWeight={700} fontSize="md">
+        <Box fontWeight={600} fontSize="md">
           Columns
         </Box>
         <Stack mt="10px" pl="20px">
           <Flex mb="5px" h="30px" alignItems="center">
-            <Box ml="65px" w="250px" fontWeight={700} fontSize="sm">
+            <Box ml="65px" w="250px" fontWeight={600} fontSize="sm">
               Name
             </Box>
-            <Box ml="10px" w="250px" fontWeight={700} fontSize="sm">
+            <Box ml="10px" w="250px" fontWeight={600} fontSize="sm">
               Type
             </Box>
-            <Box ml="10px" w="200px" fontWeight={700} fontSize="sm">
+            <Box ml="10px" w="200px" fontWeight={600} fontSize="sm">
               Default Value
             </Box>
           </Flex>
@@ -115,13 +115,13 @@ const EditTable = observer(() => {
                     }
                   }}
                 />
-                <Box ml="10px" w="250px" fontWeight={700} fontSize="sm">
+                <Box ml="10px" w="250px" fontWeight={400} fontSize="sm">
                   {column.name}
                 </Box>
-                <Box ml="10px" w="250px" fontWeight={700} fontSize="sm">
+                <Box ml="10px" w="250px" fontWeight={400} fontSize="sm">
                   {column.data_type}
                 </Box>
-                <Box ml="10px" w="200px" fontWeight={700} fontSize="sm">
+                <Box ml="10px" w="200px" fontWeight={400} fontSize="sm">
                   {column.default_value}
                 </Box>
               </Flex>

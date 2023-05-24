@@ -42,7 +42,7 @@ export const CreateCronJobButton = observer(() => {
       onClick={async (e) => {
         const formData = await hooks.getFormData({
           title: 'Create Cron Job',
-          size: 'md',
+          size: 'xl',
           formList: [
             {
               form: cronJob.form

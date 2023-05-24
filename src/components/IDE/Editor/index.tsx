@@ -102,7 +102,7 @@ const Editor = observer(() => {
       {curFilesListSchema?.curActiveFile && (
         <main
           style={{
-            minHeight: '100vh',
+            minHeight: '100%',
             display: 'flex',
             flexDirection: 'column'
           }}

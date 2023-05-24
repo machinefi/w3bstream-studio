@@ -72,14 +72,14 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
   return (
     <Flex flexDir="column">
       <Flex justifyContent="space-between" alignItems="center" mb="10px">
-        <Flex alignItems="center">
+        {/* <Flex alignItems="center">
           <Text>{label}</Text>
           {required && (
             <Text ml="0.25rem" color="#D34B46">
               *
             </Text>
           )}
-        </Flex>
+        </Flex> */}
         {showLanguageSelector && (
           <Select
             w="100px"

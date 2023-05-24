@@ -56,7 +56,7 @@ export const CreateChainHeightButton = observer(() => {
         }
         const formData = await hooks.getFormData({
           title: ' Create blockchain height monitor',
-          size: 'md',
+          size: 'xl',
           formList: [
             {
               form: w3s.chainHeight.form

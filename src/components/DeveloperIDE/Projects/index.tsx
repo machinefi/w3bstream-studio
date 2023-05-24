@@ -154,7 +154,7 @@ const Projects = observer(() => {
               >
                 <Flex alignItems="center" justifyContent="space-between">
                   <Flex alignItems="center" mr="5px">
-                    <Box fontWeight={700} fontSize="14px">
+                    <Box fontWeight={700} fontSize="16px">
                       {project.name}
                     </Box>
                     <Badge ml="10px" variant="outline" colorScheme={status.colorScheme} textTransform="none">
@@ -164,6 +164,7 @@ const Projects = observer(() => {
                       <Button
                         ml="20px"
                         h="25px"
+                        size="sm"
                         {...defaultButtonStyle}
                         onClick={async (e) => {
                           e.stopPropagation();

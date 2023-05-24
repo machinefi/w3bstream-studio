@@ -71,10 +71,10 @@ export const LineChartCard = ({
     <Card>
       <CardHeader>
         <Flex alignItems={'center'}>
-          <Text size="md" fontWeight="bold" fontSize="18px" >{title}</Text>
+          <Text size="md" fontWeight="500" fontSize="16px" >{title}</Text>
         </Flex>
         {description && (
-          <Box color="#7a7a7a" fontSize={'14px'}>
+          <Box color="#7a7a7a" fontSize={'12px'}>
             {description}
           </Box>
         )}
@@ -133,7 +133,7 @@ export const LineChartCard = ({
         ) : (
           <Stack minH="100px" align="center" justify="center">
             <SiSimpleanalytics />
-            <Box>No data to show</Box>
+            <Box fontSize={"14px"}>No data to show</Box>
           </Stack>
         )}
       </CardBody>

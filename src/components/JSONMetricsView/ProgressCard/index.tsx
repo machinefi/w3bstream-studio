@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardHeader, Flex, Heading, Progress, ProgressProps, Stack, StackDivider } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Flex, Heading, Progress, ProgressProps, Stack, StackDivider,Text } from '@chakra-ui/react';
 
 export interface ProgressCard {
   title: string;
@@ -9,7 +9,7 @@ export const ProgressCard = ({ title, data }: ProgressCard) => {
   return (
     <Card>
       <CardHeader>
-        <Heading size="md">{title}</Heading>
+        <Text size="md" fontWeight={600} fontSize={"18px"}>{title}</Text>
       </CardHeader>
       <CardBody pt="0">
         <Stack divider={<StackDivider />} spacing="4">
@@ -17,14 +17,14 @@ export const ProgressCard = ({ title, data }: ProgressCard) => {
             const { progressPros = {} } = item;
             return (
               <Box key={item.title}>
-                <Heading size="xs">{item.title}</Heading>
+                <Text size="xs" fontSize={'14px'}>{item.title}</Text>
                 <Box mt="10px">
                   <Flex justify="space-between">
-                    <Box>
+                    <Box fontSize={"12px"}>
                       {item.currentValue}
                       {item.unit}
                     </Box>
-                    <Box>
+                    <Box fontSize={"12px"}>
                       {item.total}
                       {item.unit}
                     </Box>

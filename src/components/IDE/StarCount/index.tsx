@@ -15,11 +15,11 @@ const StarCount = () => {
   return (
     <Link display="flex" mx="20px" alignItems="center" p="8px 14px" bg="#F3F3F3" borderRadius="60px" href="https://github.com/machinefi/w3bstream" isExternal>
       <Icon as={AiOutlineStar} />
-      <chakra.span ml="10px" fontSize="14px" fontWeight={700}>
+      <chakra.span ml="10px" fontSize="12px" fontWeight={700}>
         Star
       </chakra.span>
       <Icon mx="8px" as={TbMinusVertical} />
-      <chakra.span fontSize="14px" fontWeight={700}>
+      <chakra.span fontSize="12px" fontWeight={700}>
         {count}
       </chakra.span>
     </Link>

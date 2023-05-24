@@ -425,7 +425,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
             >
               <Text
                 fontSize="14px"
-                fontWeight={700}
+                fontWeight={500}
                 overflowX="auto"
                 onClick={(e) => {
                   e.stopPropagation();

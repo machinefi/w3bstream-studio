@@ -18,9 +18,9 @@ export const schema = {
   type: 'object',
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
-    eventType: { type: 'string', title: 'Event Type' },
-    chainID: { type: 'number', title: 'Chain ID' },
-    height: { type: 'number', title: 'Height' }
+    eventType: { type: 'string', title: 'Event Type', description: 'Please choose a unique name for theW3bstream event that should betriggered' },
+    chainID: { type: 'number', title: 'Chain ID', description: 'The BLockchain network that should be monitored' },
+    height: { type: 'number', title: 'Height', description: 'The blockchain height at which the the W3bstreamevent should be triggered.' }
   },
   required: ['projectName', 'eventType', 'chainID', 'height']
 } as const;

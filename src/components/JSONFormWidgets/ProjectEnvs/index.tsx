@@ -127,6 +127,7 @@ export const ProjectEnvs = observer(() => {
             w="300px"
             placeholder="Key"
             size="md"
+            fontSize={"14px"}
             value={item.key}
             onChange={(e) => {
               store.onChangeEnv(item.id, e.target.value, item.value);
@@ -137,6 +138,7 @@ export const ProjectEnvs = observer(() => {
             w="100%"
             placeholder="Value"
             size="md"
+            fontSize={"14px"}
             value={item.value}
             onChange={(e) => {
               store.onChangeEnv(item.id, item.key, e.target.value);

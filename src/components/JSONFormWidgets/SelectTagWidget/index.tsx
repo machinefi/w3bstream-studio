@@ -30,18 +30,17 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
 
   return (
     <>
-      <Flex alignItems="center" justifyContent="space-between">
-        <Text>{label}</Text>
+      <Flex alignItems="center" justifyContent="space-between" position={'relative'}>
+        {/* <Text>{label}</Text>
         {required && (
           <chakra.span ml="0.25rem" color="#D34B46">
             *
           </chakra.span>
-        )}
-        <Flex mr="5px" alignItems="center">
+        )} */}
+        <Flex flex={1} position="absolute" right={0} top="-30px" mr="5px" alignItems="center" justifyContent={'flex-end'}>
           {addingTagState === 'DEFAULT' && (
             <Button
-              h="30px"
-              size="sm"
+              size={'sm'}
               {...defaultButtonStyle}
               onClick={() => {
                 setSddingTagState('INPUTTING');
