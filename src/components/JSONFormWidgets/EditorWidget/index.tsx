@@ -71,8 +71,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
   );
   return (
     <Box pos="relative">
-      {(showLanguageSelector || showCodeSelector.length != 0) && <Box h="5px" />}
-      <Flex pos="absolute" right={0} top="-30px" zIndex={99} justifyContent="space-between" alignItems="center">
+      <Flex pos="absolute" right={0} top="-32px" zIndex={99} justifyContent="space-between" alignItems="center">
         {showLanguageSelector && (
           <Select
             w="100px"
@@ -116,19 +115,21 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
         )}
       </Flex>
       {/* fix readonly issuse > https://github.com/suren-atoyan/monaco-react/issues/114  */}
-      <MonacoEditor
-        options={{
-          readOnly,
-          minimap: {
-            enabled: false
-          }
-        }}
-        height={editorHeight}
-        theme={editorTheme}
-        language={showLanguageSelector ? language : lang}
-        value={readOnly ? (value ? value : '') : store.curCodeId.value ? store.curEditorFile?.data?.code ?? value : value}
-        onChange={handleChange}
-      />
+      <Box border="1px solid #ddd">
+        <MonacoEditor
+          options={{
+            readOnly,
+            minimap: {
+              enabled: false
+            }
+          }}
+          height={editorHeight}
+          theme={editorTheme}
+          language={showLanguageSelector ? language : lang}
+          value={readOnly ? (value ? value : '') : store.curCodeId.value ? store.curEditorFile?.data?.code ?? value : value}
+          onChange={handleChange}
+        />
+      </Box>
       {showSubmitButton && (
         <Flex mt={2} justifyContent="flex-end">
           <Button
