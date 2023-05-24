@@ -18,7 +18,7 @@ import { Inspector, InspectParams } from 'react-dev-inspector';
 import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
 import { Global, css } from '@emotion/react';
-import { Inter } from 'next/font/google';
+import { Inter } from '@next/font/google';
 
 const oxanium = Inter({ subsets: ['latin'] });
 
