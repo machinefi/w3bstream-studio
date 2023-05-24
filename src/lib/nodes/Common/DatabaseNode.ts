@@ -1,15 +1,8 @@
 import { FromSchema } from 'json-schema-to-ts';
 import { v4 as uuid } from 'uuid';
-import { z } from 'zod';
-import { BaseNode, BaseNodeForm } from '../baseNode';
+import { BaseNode } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
-import { asc } from 'pages/_app';
-import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
-import { FlowState } from '@/store/standard/FlowState';
-import { rootStore } from '@/store/index';
-import { eventBus } from '@/lib/event';
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
-import { helper } from '@/lib/helper';
 
 export const DatabaseNodeSchema = {
   type: 'object',
@@ -91,8 +84,7 @@ export class DatabaseNode extends BaseNode {
             }
           }
         ]
-      },
-      BaseNodeForm({ label: 'Database' })
+      }
     ]
   };
 

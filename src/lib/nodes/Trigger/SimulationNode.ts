@@ -1,13 +1,11 @@
 import { FromSchema } from 'json-schema-to-ts';
 import { v4 as uuid } from 'uuid';
-import { JSONSchemaRenderData } from '@/components/JSONRender';
-import { BaseNode, BaseNodeForm } from '../baseNode';
+import { BaseNode } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
 import { eventBus } from '@/lib/event';
 //@ts-ignore
 import { faker } from '@faker-js/faker';
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
-import { rootStore } from '@/store/index';
 
 const template = `
 //https://github.com/faker-js/faker
@@ -89,11 +87,6 @@ export class SimulationNode extends BaseNode {
                 // @ts-ignore
                 schema: dataSimulationNodeSchema,
                 uiSchema: {
-                  triggerInterval: {
-                    'ui:options': {
-                      size:"sm"
-                    }
-                  },
                   'ui:submitButtonOptions': {
                     norender: true,
                     submitText: 'OK'
@@ -101,6 +94,7 @@ export class SimulationNode extends BaseNode {
                   code: {
                     'ui:widget': 'EditorWidget',
                     'ui:options': {
+                      editorTheme: 'vs-light',
                       emptyValue: ``,
                       lang: 'javascript',
                       editorHeight: '400px',
@@ -120,10 +114,6 @@ export class SimulationNode extends BaseNode {
                       })()
                     }
                   },
-                  fieldLabelLayout: {
-                    direction: 'horizontal',
-                    labelWidth: '200px'
-                  }
                 },
                 value: new JSONValue<any>({
                   default: {
@@ -136,7 +126,6 @@ export class SimulationNode extends BaseNode {
           }
         ]
       },
-      BaseNodeForm({ label: 'Simulation' })
     ]
   };
 

@@ -2,12 +2,9 @@ import { FlowNodeData } from '@/components/FlowNode';
 import { makeAutoObservable } from 'mobx';
 import { addEdge, applyEdgeChanges, applyNodeChanges, Connection, Edge, EdgeChange, MarkerType, Node, NodeChange, OnConnectStartParams, ReactFlowInstance, updateEdge } from 'reactflow';
 import { INodeType } from '../../lib/nodes/types';
-import { axios } from '@/lib/axios';
-import { FlowNode } from './Node';
 import { PromiseState } from './PromiseState';
 import { _ } from '@/lib/lodash';
 import { v4 as uuid } from 'uuid';
-import { IndexDb } from '@/lib/dexie';
 import { nodeManager } from '@/lib/nodes';
 import { SimulationNode } from '@/lib/nodes/Trigger/SimulationNode';
 import { BaseNode } from '@/lib/nodes/baseNode';
@@ -107,15 +104,19 @@ export class FlowState {
     this.onDataChange();
   };
 
-  editNode = (id: string, data: FlowNodeData) => {
+  editNode = (id: string, data: Partial<FlowNodeData>) => {
     this.nodes = this.nodes.map((node) => {
       if (node.id === id) {
-        if (!_.isEqual(node.data, data)) {
+        const old = {};
+        Object.keys(data).forEach((key) => {
+          old[key] = node.data[key];
+        });
+        if (!_.isEqual(old, data)) {
           setTimeout(() => {
             this.onDataChange();
           }, 500);
         }
-        node.data = data;
+        Object.assign(node.data, data);
       }
       return node;
     });
