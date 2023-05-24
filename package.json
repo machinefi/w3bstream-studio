@@ -85,6 +85,7 @@
     "lodash": "4.17.21",
     "mobx": "6.2.0",
     "mobx-react-lite": "3.2.0",
+    "net": "^1.0.2",
     "next": "^13.4.3",
     "next-s3-upload": "0.3.0",
     "nextjs-cors": "2.1.2",
