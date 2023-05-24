@@ -58,7 +58,7 @@ const Settings = () => {
     { title: 'Project ID:', value: project.curProject?.f_project_id },
     { title: 'Operator Address:', value: store.operateAddress.value },
     {
-      title: 'WASM file name',
+      title: 'WASM file name:',
       value: applet.wasmName.value,
       extra: (
         <Button

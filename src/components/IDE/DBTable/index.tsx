@@ -232,12 +232,13 @@ const ViewData = observer(() => {
           />
           <Flex alignItems="center" px="20px" h="32px" borderRadius="4px" cursor="pointer" {...defaultButtonStyle}>
             <FiUpload />
-            <Box ml="10px">Upload CSV</Box>
+            <Box ml="10px" fontSize={"14px"}>Upload CSV</Box>
           </Flex>
         </label>
         <Button
           ml="20px"
           h="32px"
+          size="sm"
           leftIcon={<AddIcon />}
           {...defaultButtonStyle}
           onClick={async (e) => {
@@ -269,6 +270,7 @@ const ViewData = observer(() => {
         <Button
           ml="20px"
           h="32px"
+          size="sm"
           leftIcon={<MdRefresh />}
           {...defaultOutlineButtonStyle}
           onClick={async (e) => {

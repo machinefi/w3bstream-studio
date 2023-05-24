@@ -20,10 +20,7 @@ import '@/lib/superjson';
 import { Global, css } from '@emotion/react';
 import { Inter } from 'next/font/google';
 
-const oxanium = Inter({
-  weight: '400',
-  subsets: ['latin'],
-});
+const oxanium = Inter({ subsets: ['latin'] });
 
 
 const GlobalStyles = css`
