@@ -64,7 +64,7 @@ export const LineChartCard = ({
     tickSize: 5,
     tickPadding: 10,
     tickRotation: 0,
-    legend: 'count',
+    legend: '',
     legendOffset: -40,
     legendPosition: 'middle',
   }
@@ -125,7 +125,6 @@ export const LineChartCard = ({
                 }
               ]}
               enableArea
-              enableSlices="x"
               fill={[
                 {
                   id: 'gradientA',
