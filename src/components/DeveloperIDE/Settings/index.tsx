@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Divider, Flex, Icon, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Icon, Spinner, Stack, Text, Tooltip } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { ProjectEnvs } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
-import { FaFileExport } from 'react-icons/fa';
+import { FaFileExport, FaRegQuestionCircle } from 'react-icons/fa';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { MdEditDocument } from 'react-icons/md';
 
@@ -54,11 +54,11 @@ const Settings = () => {
   }, [applet.curApplet]);
 
   const datas = [
-    { title: 'Project Name:', value: project.curProject?.f_name },
-    { title: 'Project ID:', value: project.curProject?.f_project_id },
-    { title: 'Operator Address:', value: store.operateAddress.value },
+    { title: 'Project Name', value: project.curProject?.f_name },
+    { title: 'Project ID', value: project.curProject?.f_project_id },
+    { title: 'Operator Address', value: store.operateAddress.value, tips: 'The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction is that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are se nding your transactions.' },
     {
-      title: 'WASM file name:',
+      title: 'WASM file name',
       value: applet.wasmName.value,
       extra: (
         <Button
@@ -122,9 +122,11 @@ const Settings = () => {
         {datas.map((item) => {
           return (
             <Flex alignItems={'center'} mb="20px">
-              <Box fontWeight={'bold'} fontSize="14px" color="#0F0F0F" minWidth={150} textAlign={'left'}>
-                {item.title}
-              </Box>
+              <Flex fontWeight={'bold'} fontSize="14px" alignItems={'center'} color="#0F0F0F" minWidth={150} textAlign={'left'}>
+                {item.title} {item.tips && <Tooltip label='The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction is that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are se nding your transactions.' placement='right'>
+                <Box cursor={'pointer'}><FaRegQuestionCircle color='#797878' fontSize={14} style={{margin: 5}} /></Box>
+              </Tooltip>}:
+              </Flex>
               <Text ml="10px" fontSize={'14px'} color="#0F0F0F">
                 {item.value}
               </Text>

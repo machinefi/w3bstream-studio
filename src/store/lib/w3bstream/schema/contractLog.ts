@@ -173,7 +173,8 @@ export default class ContractLogModule {
       onSet(e) {
         const { event } = e;
         if (event && event !== this.value?.event) {
-          e.topic0 = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(event));
+          e.event = event.replace(/\s+/g,"");
+          e.topic0 = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(event.replace(/\s+/g,"")));
         }
         return e;
       }
