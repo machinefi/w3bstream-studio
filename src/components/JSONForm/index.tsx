@@ -104,17 +104,19 @@ const FieldTemplate = (props: FieldTemplateProps) => {
         }
       },
       '.chakra-input': {
-        height: '32px',
-        lineHeight: '32px',
+        height: '36px',
+        lineHeight: '36px',
       }
     }}>
-      {!hidden && <label style={{fontSize: '14px', color: '#0F0F0F', fontWeight: 500, marginBottom: 4}} htmlFor={id}>{label}{required ? <Text ml={'5px'} display={'inline-block'} color={'#e53e3e'}>*</Text> : null}</label>}
-      <Box color={'#7A7A7A'} fontSize="12px" lineHeight={'12px'} css={{
+      {!hidden && <label style={{fontSize: '14px', color: '#0F0F0F', fontWeight: 500, marginBottom: 2}} htmlFor={id}>{label}{required ? <Text ml={'5px'} display={'inline-block'} color={'#e53e3e'}>*</Text> : null}</label>}
+      <Box color={'#7A7A7A'} fontSize="12px" lineHeight={'14px'} css={{
         '.chakra-text': {
-          marginTop: 0
+          marginTop: 0,
+          marginBottom: '8px',
+
         }
       }}>{description}</Box>
-      {!hidden && <Box >{children}</Box>}
+      {!hidden && <Box>{children}</Box>}
       {help}
     </Flex>
   );
@@ -140,7 +142,7 @@ const SubmitButton = ({ uiSchema }: SubmitButtonProps) => {
     return null;
   }
   return (
-    <Button w="100%" size={'md'} type="submit" borderRadius="base" {...defaultButtonStyle}>
+    <Button w="100%" size={'md'} mt="20px" type="submit" borderRadius="base" {...defaultButtonStyle}>
       {submitText}
     </Button>
   );
