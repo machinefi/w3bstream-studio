@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Box } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -12,6 +12,8 @@ import Support from './Support';
 import PublishEventRequestTemplates from '../IDE/PublishEventRequestTemplates';
 import Flow from './Flow';
 
+const LazyLabs = lazy(() => import('./Labs'));
+
 const DeveloperIDE = observer(() => {
   const {
     w3s,
@@ -19,11 +21,15 @@ const DeveloperIDE = observer(() => {
   } = useStore();
 
   return (
-    <Box w="100vw" h="100vh" overflow="auto" bg="#F8F8FA" paddingTop={'70px'} boxSizing='border-box' >
+    <Box w="100vw" h="100vh" overflow="auto" bg="#F8F8FA" paddingTop={'70px'} boxSizing="border-box">
       <Header />
-      <Box w="100%" px="20px" minH="calc(100vh - 70px)" >
+      <Box w="100%" px="20px" minH="calc(100vh - 70px)">
         {w3s.currentHeaderTab === 'PROJECTS' && <>{w3s.project.curProject ? <CurrentProject /> : <Projects />}</>}
-        {w3s.currentHeaderTab === 'LABS' && <Labs />}
+        {w3s.currentHeaderTab === 'LABS' && (
+          <Suspense fallback={<Box>Loading</Box>}>
+            <LazyLabs />
+          </Suspense>
+        )}
         {w3s.currentHeaderTab === 'FLOW' && <Flow />}
         {w3s.currentHeaderTab === 'SUPPORT' && <Support />}
       </Box>
