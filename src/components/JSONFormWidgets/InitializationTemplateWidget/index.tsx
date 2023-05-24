@@ -24,16 +24,15 @@ function InitializationTemplateWidget({ id, options, value, required, label, onC
   }, [value]);
   return (
     <>
-      <Flex alignItems="center">
+      {/* <Flex alignItems="center">
         <Text>{label}</Text>
         {required && (
           <chakra.span ml="0.25rem" color="#D34B46">
             *
           </chakra.span>
         )}
-      </Flex>
+      </Flex> */}
       <Flex
-        mt="10px"
         id={id}
         sx={{
           width: '100%',

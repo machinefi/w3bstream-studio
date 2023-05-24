@@ -178,16 +178,15 @@ const FileWidget = ({ id, readonly, disabled, required, onChange, label, value, 
 
   return (
     <Flex flexDir="column">
-      <Flex alignItems="center">
+      {/* <Flex alignItems="center" className=''>
         <Text>{label}</Text>
         {required && (
           <chakra.span ml="0.25rem" color="#D34B46">
             *
           </chakra.span>
         )}
-      </Flex>
+      </Flex> */}
       <Flex
-        mt="10px"
         w="100%"
         h="100px"
         flexDirection="column"
