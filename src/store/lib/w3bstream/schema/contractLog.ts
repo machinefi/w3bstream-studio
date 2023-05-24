@@ -147,11 +147,9 @@ export default class ContractLogModule {
         'ui:widget': 'select'
       },
       event: {
-        'ui:widget': 'textarea',
         'ui:placeholder': 'Transfer(address, address, uint256,...)'
       },
       topic0: {
-        'ui:widget': 'textarea',
         'ui:placeholder': '0x....'
       }
     },

@@ -102,6 +102,10 @@ const FieldTemplate = (props: FieldTemplateProps) => {
         '.chakra-form__label': {
           display: 'none'
         }
+      },
+      '.chakra-input': {
+        height: '32px',
+        lineHeight: '32px',
       }
     }}>
       {!hidden && <label style={{fontSize: '14px', color: '#0F0F0F', fontWeight: 500, marginBottom: 4}} htmlFor={id}>{label}{required ? <Text ml={'5px'} display={'inline-block'} color={'#e53e3e'}>*</Text> : null}</label>}
