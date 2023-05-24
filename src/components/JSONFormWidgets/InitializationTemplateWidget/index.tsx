@@ -36,7 +36,7 @@ function InitializationTemplateWidget({ id, options, value, required, label, onC
         id={id}
         sx={{
           width: '100%',
-          '& > div:not(:first-child)': {
+          '& > div:not(:first-of-type)': {
             marginLeft: '10px'
           }
         }}
