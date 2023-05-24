@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Table as ChakraTable, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
+import { Button, Center, Table as ChakraTable, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 import SimplePagination from '../Common/SimplePagination';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { ActionButtonType, Column, ExtendedTable, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
@@ -34,7 +34,7 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
             <Tr bg="#F5F5F5">
               {needExtendedTable && <Th></Th>}
               {columns.map((item) => (
-                <Th key={item.key} fontSize="14px" fontWeight={700} color="#0F0F0F" textTransform="none">
+                <Th key={item.key} fontSize="14px" fontWeight={400} color="#0F0F0F" textTransform="none">
                   {item.label}
                 </Th>
               ))}
@@ -50,8 +50,9 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
             )}
           </Tbody>
         </ChakraTable>
+        {pagination.total == 0 && <Center mt="20px" fontSize={"14px"} color="#7a7a7a">No Data</Center>}
       </TableContainer>
-      <SimplePagination
+      {pagination.total > pagination.limit && <SimplePagination
         mt="10px"
         total={pagination.total}
         limit={pagination.limit}
@@ -61,7 +62,7 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
             page: currentPage
           });
         }}
-      />
+      />}
     </>
   );
 });
@@ -149,7 +150,7 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
                     <Tr bg="#F5F5F5">
                       {exColumns.map((exC) => {
                         return (
-                          <Th key={exC.key} fontSize="14px" fontWeight={700} color="#0F0F0F" textTransform="none">
+                          <Th key={exC.key} fontSize="14px" fontWeight={400} color="#0F0F0F" textTransform="none">
                             {exC.label}
                           </Th>
                         );

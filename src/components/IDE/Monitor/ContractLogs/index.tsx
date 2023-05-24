@@ -42,6 +42,7 @@ export const CreateContractLogButton = observer(() => {
   return (
     <Button
       h="32px"
+      size="sm"
       leftIcon={<AddIcon />}
       {...defaultButtonStyle}
       onClick={async (e) => {

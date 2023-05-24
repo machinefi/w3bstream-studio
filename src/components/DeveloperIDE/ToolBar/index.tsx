@@ -21,7 +21,7 @@ const ToolBar = (props: ToolBar) => {
 
   return (
     <Box position={'fixed'} h="100%" overflow={'auto'}>
-      <Flex minW="200px" direction="column" align="center" p="16px" bg="#fff" {...props}>
+      <Flex minW="200px" direction="column" align="center" p="14px" bg="#fff" {...props}>
         <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
           <PopoverTrigger>
             <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} p="14px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
@@ -89,13 +89,13 @@ const ToolBar = (props: ToolBar) => {
           }}
         >
           <Icon as={BiBarChartSquare} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Metrics
           </Box>
         </Flex>
         <Flex
           w="100%"
-          mt="16px"
+          mt="14px"
           p="14px 18px"
           alignItems="center"
           cursor="pointer"
@@ -107,13 +107,13 @@ const ToolBar = (props: ToolBar) => {
           }}
         >
           <Icon as={TbDeviceDesktop} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Devices
           </Box>
         </Flex>
         <Flex
           w="100%"
-          mt="16px"
+          mt="14px"
           p="14px 18px"
           alignItems="center"
           cursor="pointer"
@@ -131,7 +131,7 @@ const ToolBar = (props: ToolBar) => {
         </Flex>
         <Flex
           w="100%"
-          mt="16px"
+          mt="14px"
           p="14px 18px"
           alignItems="center"
           cursor="pointer"
@@ -143,13 +143,13 @@ const ToolBar = (props: ToolBar) => {
           }}
         >
           <Icon as={HiOutlineDatabase} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Data
           </Box>
         </Flex>
         <Flex
           w="100%"
-          mt="16px"
+          mt="14px"
           p="14px 18px"
           alignItems="center"
           cursor="pointer"
@@ -161,13 +161,13 @@ const ToolBar = (props: ToolBar) => {
           }}
         >
           <Icon as={AiOutlineFileText} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Log
           </Box>
         </Flex>
         <Flex
           w="100%"
-          mt="16px"
+          mt="14px"
           p="14px 18px"
           alignItems="center"
           cursor="pointer"
@@ -179,7 +179,7 @@ const ToolBar = (props: ToolBar) => {
           }}
         >
           <Icon as={TbSettings} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Settings
           </Box>
         </Flex>

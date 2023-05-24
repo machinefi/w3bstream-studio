@@ -41,6 +41,7 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
           {addingTagState === 'DEFAULT' && (
             <Button
               h="30px"
+              size="sm"
               {...defaultButtonStyle}
               onClick={() => {
                 setSddingTagState('INPUTTING');
@@ -53,6 +54,7 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
             <>
               <Input
                 h="30px"
+                size="sm"
                 _focus={{
                   border: '1px solid #946FFF',
                   outline: 'none'
@@ -66,6 +68,7 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
               <Button
                 ml="10px"
                 h="30px"
+                size="sm"
                 {...defaultButtonStyle}
                 onClick={() => {
                   if (inputV) {

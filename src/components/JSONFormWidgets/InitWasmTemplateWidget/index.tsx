@@ -63,7 +63,7 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
                 setTemplateName(template.label);
               }}
             >
-              <Flex mt="10px" fontWeight={700} fontSize="16px">
+              <Flex mt="10px" fontWeight={700} fontSize="14px">
                 {FileIcon(template)}
                 {template.label}
               </Flex>
