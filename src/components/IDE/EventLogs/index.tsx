@@ -48,8 +48,8 @@ const LiveIcon = () => {
         pos="absolute"
         top="7px"
         left="12px"
-        w="16px"
-        h="16px"
+        w="14px"
+        h="14px"
         borderRadius="50%"
         opacity="0.8"
         boxSizing='border-box'

@@ -143,13 +143,13 @@ const Support = () => {
           <ModalHeader>W3bstream Devnet</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb="30px">
-            <Flex alignItems="center" fontSize="16px" fontWeight={700}>
+            <Flex alignItems="center" fontSize="14px" fontWeight={700}>
               <Box>Studio Version:</Box>
               <Link ml="10px" href={store.studioVersionLink} color="#946FFF" isExternal >
                 {envs.value?.studioVersion}
               </Link>
             </Flex>
-            <Flex alignItems="center" fontSize="16px" fontWeight={700}>
+            <Flex alignItems="center" fontSize="14px" fontWeight={700}>
               <Box whiteSpace="nowrap">W3bstream Version:</Box>
               {
                 store.w3bstreamVersionGithubLink ? (

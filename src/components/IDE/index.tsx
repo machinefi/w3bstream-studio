@@ -54,7 +54,7 @@ const IDE = observer(() => {
           <LayoutCenter w="100%" h="100%">
             <Flex flexDir="column" alignItems="center">
               <Image w="80px" src="/images/empty_box.svg" alt="" />
-              <Text mt="16px" fontSize="14px" color="#7A7A7A">
+              <Text mt="14px" fontSize="14px" color="#7A7A7A">
                 You haven't created any project.
               </Text>
               <Button

@@ -61,7 +61,7 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
         return (
           <Popover>
             <PopoverTrigger>
-              <Flex alignItems="center" p="5px 16px" bg="#F3F3F3" borderRadius="60px" cursor="pointer">
+              <Flex alignItems="center" p="5px 14px" bg="#F3F3F3" borderRadius="60px" cursor="pointer">
                 <Avatar mr="8px" w="30px" h="30px" src={god.currentNetwork.chain.current.logoUrl} onClick={openChainModal} />
                 <Flex
                   alignItems="center"

@@ -35,6 +35,7 @@ const Publishers = observer(() => {
         </Box>
         <Button
           h="36px"
+          size={"sm"}
           leftIcon={<AddIcon />}
           {...defaultButtonStyle}
           onClick={async (e) => {

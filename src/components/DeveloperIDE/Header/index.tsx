@@ -36,7 +36,7 @@ const Header = observer(() => {
       alignItems="center"
       px="30px"
       w="100%"
-      minH="70px"
+      minH="60px"
       boxShadow="sm"
       css={{
         backdropFilter: 'saturate(180%) blur(5px)',

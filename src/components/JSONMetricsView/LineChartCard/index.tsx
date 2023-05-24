@@ -74,7 +74,7 @@ export const LineChartCard = ({
           <Heading size="md">{title}</Heading>
         </Flex>
         {description && (
-          <Box>
+          <Box color="#7a7a7a" fontSize={'14px'}>
             {description}
           </Box>
         )}

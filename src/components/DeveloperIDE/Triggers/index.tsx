@@ -34,10 +34,10 @@ const Triggers = () => {
         HTTP
       </Box>
       <Flex mt="10px" alignItems="center">
-        <Box w="60px" fontSize="16px" color="#0F0F0F">
+        <Box w="60px" fontSize="14px" color="#0F0F0F">
           Route:
         </Box>
-        <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px" wordBreak={'break-all'}>
+        <Box ml="14px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px" wordBreak={'break-all'}>
           {envs.value?.httpURL.replace(':projectName', curProject?.f_name)}
         </Box>
       </Flex>
@@ -45,18 +45,18 @@ const Triggers = () => {
         MQTT
       </Box>
       <Flex mt="10px" alignItems="center">
-        <Box w="60px" fontSize="16px" color="#0F0F0F">
+        <Box w="60px" fontSize="14px" color="#0F0F0F">
           URL:
         </Box>
-        <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+        <Box ml="14px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
           {envs.value?.mqttURL}
         </Box>
       </Flex>
       <Flex mt="10px" alignItems="center">
-        <Box w="60px" fontSize="16px" color="#0F0F0F">
+        <Box w="60px" fontSize="14px" color="#0F0F0F">
           Topic:
         </Box>
-        <Box ml="16px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
+        <Box ml="14px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px">
           {curProject?.f_name}
         </Box>
       </Flex>

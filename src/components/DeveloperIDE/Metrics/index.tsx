@@ -43,7 +43,7 @@ const Metrics = () => {
           }}
         >
           <Icon as={TbApi} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             API
           </Box>
         </Flex>
@@ -62,7 +62,7 @@ const Metrics = () => {
           }}
         >
           <Icon as={HiOutlineDatabase} boxSize={6} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Database
           </Box>
         </Flex>
