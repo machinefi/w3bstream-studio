@@ -36,7 +36,7 @@ const Header = observer(() => {
       alignItems="center"
       px="30px"
       w="100%"
-      minH="70px"
+      minH="60px"
       boxShadow="sm"
       css={{
         backdropFilter: 'saturate(180%) blur(5px)',
@@ -51,7 +51,7 @@ const Header = observer(() => {
         cursor={'pointer'}
       >
         <Image w="30px" src="/favicon.svg" alt="logo" />
-        <Text ml="10px" fontWeight={900}>
+        <Text ml="10px" fontWeight={700}>
           w3bstream Devnet
         </Text>
       </Flex>
@@ -76,23 +76,23 @@ const Header = observer(() => {
             }
           }}
         >
-          <TabList>
+          <TabList >
             <Tab
               onClick={() => {
                 w3s.actions.goHome();
               }}
               px="0"
               h="40px"
-              fontSize="1rem"
-              fontWeight={400}
+              fontSize={'14px'}
+
               _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}
             >
               Projects
             </Tab>
-            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab px="0" ml="60px" h="40px" fontSize={'14px'}  _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Labs
             </Tab>
-            <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+            <Tab px="0" ml="60px" h="40px"  fontSize={'14px'}  _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               Support
             </Tab>
             {/* <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>

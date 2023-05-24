@@ -22,7 +22,7 @@ const Login = observer(() => {
             <Box mt="100px" fontWeight={700} fontSize="24px">
               Documentation
             </Box>
-            <Box mt="10px" maxW="500px" fontWeight={700} fontSize="16px" color="#7A7A7A">
+            <Box mt="10px" maxW="500px" fontWeight={700} fontSize="14px" color="#7A7A7A">
               Get the most out of using Fastly for your site, service, orapplication through a series of articles and tutorials.
             </Box>
             <Link isExternal href="#" color="#946FFF" fontSize="14px">
