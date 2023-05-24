@@ -207,6 +207,7 @@ const EventLogs = observer(() => {
               body: formData.body
             });
             try {
+              store.fetchWasmLogsPoll.stop();
               const token = await hooks.waitPublisher();
               await axios.request({
                 method: 'post',
@@ -221,9 +222,11 @@ const EventLogs = observer(() => {
                 },
                 data: formData.body
               });
+              store.fetchWasmLogsPoll.start();
               showNotification({ color: 'green', message: 'Send event successed' });
             } catch (error) {
               showNotification({ color: 'red', message: 'send event failed' });
+              store.fetchWasmLogsPoll.start();
             }
           };
           hooks.getFormData({
