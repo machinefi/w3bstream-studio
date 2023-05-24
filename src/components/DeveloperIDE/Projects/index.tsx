@@ -30,7 +30,7 @@ const Projects = observer(() => {
               leftIcon={<AiOutlinePlus />}
               {...defaultButtonStyle}
               onClick={() => {
-                w3s.project.createProjectForDeleveloper();
+                w3s.project.createProjectForDeveloper.call();
               }}
             >
               Create New Project

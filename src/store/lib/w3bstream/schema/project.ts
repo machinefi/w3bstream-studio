@@ -1,6 +1,5 @@
 import { JSONValue, JSONSchemaFormState } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
 import initTemplates from '@/constants/initTemplates.json';
@@ -20,6 +19,7 @@ import { SelectSqlFileAndEnvFileWidget, SelectSqlFileAndEnvFileWidgetUIOptions }
 import { helper } from '@/lib/helper';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
 import * as jsonpatch from 'fast-json-patch';
+import toast from 'react-hot-toast';
 
 export const defaultSchema = {
   type: 'object',
@@ -486,7 +486,7 @@ export default class ProjectModule {
         });
         if (res.data?.project) {
           eventBus.emit('project.create');
-          showNotification({ message: 'create project succeeded' });
+          toast.success('create project succeeded');
         }
       } catch (error) {}
     }
@@ -513,7 +513,7 @@ export default class ProjectModule {
             });
           }
         }
-        showNotification({ message: 'Create project succeeded' });
+        toast.success('Create project succeeded');
         eventBus.emit('project.create');
       }
     }
@@ -581,105 +581,108 @@ export default class ProjectModule {
       }
     }
   }
-
-  async createProjectForDeleveloper() {
-    let formData = {
-      name: '',
-      description: '',
-      template: '',
-      file: ''
-    };
-    try {
-      formData = await hooks.getFormData({
-        title: 'Create a New Project',
-        size: '2xl',
-        closeOnOverlayClick: false,
-        formList: [
-          {
-            form: this.developerInitializationTemplateForm
+  createProjectForDeveloper = new PromiseState({
+    loadingText: 'Creating Project...',
+    context: this,
+    async function() {
+      let formData = {
+        name: '',
+        description: '',
+        template: '',
+        file: ''
+      };
+      try {
+        formData = await hooks.getFormData({
+          title: 'Create a New Project',
+          size: '2xl',
+          closeOnOverlayClick: false,
+          formList: [
+            {
+              form: this.developerInitializationTemplateForm
+            }
+          ]
+        });
+      } catch (error) {
+        this.developerInitializationTemplateForm.reset();
+        return;
+      }
+      const projectName = formData.name;
+      if (formData.template) {
+        const templateData = initTemplates.templates.find((i) => i.name === formData.template);
+        const data = JSON.parse(JSON.stringify(templateData));
+        data.project[0].name = projectName;
+        data.project[0].description = formData.description;
+        data.project[0].database = undefined;
+        try {
+          const res = await axios.request({
+            method: 'post',
+            url: `/api/init`,
+            data
+          });
+          if (res.data?.message === 'OK') {
+            const { createdProjectIds } = res.data;
+            for (let index = 0; index < createdProjectIds.length; index++) {
+              const projectID = createdProjectIds[index];
+              const database = templateData.project[index].database;
+              if (database?.schemas) {
+                await globalThis.store.w3s.dbTable.importTables({
+                  projectID,
+                  schemas: database.schemas
+                });
+              }
+            }
+            toast.success('Create project succeeded' );
           }
-        ]
-      });
-    } catch (error) {
-      this.developerInitializationTemplateForm.reset();
-      return;
-    }
-    const projectName = formData.name;
-    if (formData.template) {
-      const templateData = initTemplates.templates.find((i) => i.name === formData.template);
-      const data = JSON.parse(JSON.stringify(templateData));
-      data.project[0].name = projectName;
-      data.project[0].description = formData.description;
-      data.project[0].database = undefined;
+        } catch (error) {}
+        eventBus.emit('project.create');
+        return;
+      }
+
       try {
         const res = await axios.request({
           method: 'post',
-          url: `/api/init`,
-          data
+          url: '/api/w3bapp/project',
+          data: {
+            name: projectName,
+            description: formData.description
+          }
         });
-        if (res.data?.message === 'OK') {
-          const { createdProjectIds } = res.data;
-          for (let index = 0; index < createdProjectIds.length; index++) {
-            const projectID = createdProjectIds[index];
-            const database = templateData.project[index].database;
-            if (database?.schemas) {
-              await globalThis.store.w3s.dbTable.importTables({
-                projectID,
-                schemas: database.schemas
-              });
+        if (res.data?.projectID) {
+          if (formData.file) {
+            const data = new FormData();
+            const file = dataURItoBlob(formData.file);
+            data.append('file', file.blob);
+            data.append(
+              'info',
+              JSON.stringify({
+                projectName,
+                appletName: 'applet_01',
+                wasmName: file.name,
+                start: true
+              })
+            );
+            const res = await axios.request({
+              method: 'post',
+              url: `/api/file?api=applet/x/${projectName}`,
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+              data
+            });
+            if (res.data) {
+              eventBus.emit('project.create');
+              toast.success('create project succeeded');
             }
-          }
-          showNotification({ message: 'Create project succeeded' });
-        }
-      } catch (error) {}
-      eventBus.emit('project.create');
-      return;
-    }
-
-    try {
-      const res = await axios.request({
-        method: 'post',
-        url: '/api/w3bapp/project',
-        data: {
-          name: projectName,
-          description: formData.description
-        }
-      });
-      if (res.data?.projectID) {
-        if (formData.file) {
-          const data = new FormData();
-          const file = dataURItoBlob(formData.file);
-          data.append('file', file.blob);
-          data.append(
-            'info',
-            JSON.stringify({
-              projectName,
-              appletName: 'applet_01',
-              wasmName: file.name,
-              start: true
-            })
-          );
-          const res = await axios.request({
-            method: 'post',
-            url: `/api/file?api=applet/x/${projectName}`,
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            },
-            data
-          });
-          if (res.data) {
+          } else {
             eventBus.emit('project.create');
-            showNotification({ message: 'create project succeeded' });
+            toast.success('create project succeeded');
           }
-        } else {
-          eventBus.emit('project.create');
-          showNotification({ message: 'create project succeeded' });
         }
+      } catch (error) {
+        toast.error( error.message || 'create project failed');
       }
-    } catch (error) {
-      showNotification({ color: 'red', message: error.message });
     }
-  }
+  });
 
   async setMode(mode: 'add' | 'edit') {
     this.formMode = mode;
@@ -756,6 +759,7 @@ export default class ProjectModule {
   }
 
   importProject = new PromiseState({
+    loadingText: 'importing project...',
     function: async () => {
       let formData;
       try {
@@ -860,7 +864,7 @@ export default class ProjectModule {
               eventBus.emit('project.create');
               eventBus.emit('contractlog.create');
               eventBus.emit('chainHeight.create');
-              showNotification({ message: 'import project succeeded' });
+              toast.success('import project succeeded');
             }
           }
         } catch (error) {}

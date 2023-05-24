@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { BooleanState } from './base';
-import { showNotification } from '@mantine/notifications';
+import toast from 'react-hot-toast';
+
 
 export class PromiseState<T extends (...args: any[]) => Promise<any>, U = ReturnType<T>> {
   loading = new BooleanState();
@@ -10,6 +11,9 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
 
   autoAlert = true;
   context: any = undefined;
+
+  loadingText = null
+  loadingId = null
 
   currentIndex = 0;
   get current() {
@@ -31,6 +35,9 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
   async call(...args: Parameters<T>): Promise<Awaited<U>> {
     try {
       this.loading.setValue(true);
+      if (this.loadingText) {
+        this.loadingId = toast.loading(this.loadingText)
+      }
       const res = await this.function.apply(this.context, args);
       this.value = res;
       return res;
@@ -41,16 +48,13 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
         if (message.includes('UNAUTHORIZED')) {
           globalThis.store.w3s.config.logout();
         } else {
-          showNotification({
-            message,
-            title: 'Error',
-            color: 'red'
-          });
+          toast.error(message);
         }
       } else {
         throw error;
       }
     } finally {
+      this.loadingId && toast.dismiss(this.loadingId)
       this.loading.setValue(false);
     }
   }
