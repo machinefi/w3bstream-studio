@@ -9,6 +9,7 @@ import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { ethers } from 'ethers';
+import { rootStore } from '@/store/index';
 
 export const schema = {
   definitions: {
@@ -87,7 +88,7 @@ export default class ContractLogModule {
                         eventBus.emit('contractlog.delete');
                         toast.success('Deleted successfully');
                       } catch (error) {
-                        toast.error('Delete failed');
+                        toast.error(rootStore.lang.t('error.delete.msg'));
                       }
                     }
                   });

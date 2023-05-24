@@ -26,7 +26,8 @@ const Editor = observer(() => {
     w3s: {
       projectManager: { curFilesListSchema },
       lab
-    }
+    },
+    lang: {t}
   } = useStore();
   useEffect(() => {
     const handleSave = (event) => {
@@ -86,10 +87,10 @@ const Editor = observer(() => {
           currentFolder.children[curWasmIndex] = wasmFile;
         }
         curFilesListSchema.setActiveFiles(wasmFile);
-        toast.success('Compile Success!');
+        toast.success(t("error.compile.msg"));
       } catch (error) {
         console.log(error);
-        toast.error('Compile Error!');
+        toast.error(t("success.compile.msg"));
       }
     }
   }));

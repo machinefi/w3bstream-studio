@@ -41,5 +41,17 @@
   "view-on-explorername": "View on {{explorerName}}",
   "wallet-connect": "Wallet Connect",
   "warning": "warning",
-  "wrong-network": "Wrong Network"
+  "wrong-network": "Wrong Network",
+  "error.pause.msg": "Instance not found",
+  "success.pause.msg": "Suspended successfully",
+  "error.change.project.msg": "No instance found, please create one first",
+  "success.upload.msg": "Upload CSV success",
+  "error.csvfile.empty.msg": "CSV file is empty",
+  "error.compile.msg": "Compile Success!",
+  "success.compile.msg": "Compile Error!",
+  "success.copy.msg": "Copy Success",
+  "error.api.code.msg": "Please select the project first",
+  "error.connect.vscode.msg": "Connect VSCode extension Failed!",
+  "error.delete.msg": "Delete failed",
+  "success.delete.msg": "Deleted successfully"
 }

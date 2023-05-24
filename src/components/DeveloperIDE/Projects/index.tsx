@@ -15,7 +15,8 @@ import { FaFileImport } from 'react-icons/fa';
 const Projects = observer(() => {
   const {
     w3s,
-    base: { confirm }
+    base: { confirm },
+    lang: { t }
   } = useStore();
   const { allProjects, selectedNames } = w3s.project;
 
@@ -107,15 +108,15 @@ const Projects = observer(() => {
                       err = error.message;
                     }
                   } else {
-                    err = 'Instance not found';
+                    err = t('error.pause.msg');
                   }
                 }
                 if (err) {
-                  toast.error('Instance not found');
+                  toast.error(t('error.pause.msg'));
                 } else {
                   w3s.project.resetSelectedNames();
                   eventBus.emit('instance.handle');
-                  toast.success('Suspended successfully');
+                  toast.success(t('success.pause.msg'));
                 }
               }}
             >

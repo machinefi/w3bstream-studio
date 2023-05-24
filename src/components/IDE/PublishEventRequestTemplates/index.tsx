@@ -18,7 +18,8 @@ export const ShowRequestTemplatesButton = observer(({ props = {} }: { props?: Bu
           formData: { accountRole }
         }
       }
-    }
+    },
+    lang: { t }
   } = useStore();
   return (
     <Button
@@ -28,7 +29,7 @@ export const ShowRequestTemplatesButton = observer(({ props = {} }: { props?: Bu
         if (accountRole === 'ADMIN') {
           const { projectName } = publisher.publishEventForm.formData;
           if (!projectName) {
-            toast.error('Please select the project first');
+            toast.error(t('error.api.code.msg'));
             return;
           }
         }
