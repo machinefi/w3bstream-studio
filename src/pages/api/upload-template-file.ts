@@ -43,7 +43,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           throw new Error('appletId is required');
         }
         const updatedRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${appletId}`, {
-          method: 'post',
+          method: 'put',
           headers: {
             Authorization: token
           },
