@@ -1,5 +1,5 @@
 #build studio
-FROM node:16-slim AS build-nodejs
+FROM node:18-slim AS build-nodejs
 
 WORKDIR /w3bstream-studio
 
@@ -12,7 +12,7 @@ RUN pnpm build:standalone
 
 
 #run
-FROM node:16-slim
+FROM node:18-slim
 
 EXPOSE 3000
 
