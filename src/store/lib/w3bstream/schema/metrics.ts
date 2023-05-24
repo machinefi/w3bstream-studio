@@ -89,8 +89,8 @@ export default class MetricsModule {
   })
 
   get projectName() {
-    return "eth_0x8a68e01add9adc8b887025dc54c36cfa91432f58_pperf2"
-    // return globalThis.store.w3s.project.curProject.f_name
+    // return "eth_0x8a68e01add9adc8b887025dc54c36cfa91432f58_pperf2"
+    return globalThis.store.w3s.project.curProject.f_name
   }
 
   activeDevices = new PromiseState<any, Metrics[]>({
