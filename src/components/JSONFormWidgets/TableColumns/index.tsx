@@ -267,7 +267,7 @@ const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <SettingsIcon cursor="pointer" size="sm" />
+        <SettingsIcon cursor="pointer" />
       </PopoverTrigger>
       <PopoverContent>
         <PopoverHeader pt={4} fontWeight="bold" border="0">
