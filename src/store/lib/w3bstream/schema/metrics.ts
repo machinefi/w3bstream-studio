@@ -120,10 +120,10 @@ export default class MetricsModule {
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
-    if (list.length === 1) {
-      const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
-    }
+    // if (list.length === 1) {
+    //   const d = dayjs(list[0][0]);
+    //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    // }
     return {
       type: 'LineChartCard',
       data: {
@@ -131,7 +131,7 @@ export default class MetricsModule {
         description: 'Number of unique devices that sent at least one message to this project',
         data: [
           {
-            id: 'activeDevicesMetrics',
+            id: 'Active Devices',
             data: list
           }
         ],
@@ -143,7 +143,7 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%H:%M',
+          format: '%Y-%m-%d %H:%M',
           tickValues: 'every 4 hours',
           legend: ' ',
           legendPosition: 'middle'
@@ -158,10 +158,10 @@ export default class MetricsModule {
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
-    if (list.length === 1) {
-      const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
-    }
+    // if (list.length === 1) {
+    //   const d = dayjs(list[0][0]);
+    //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    // }
     return {
       type: 'LineChartCard',
       data: {
@@ -169,7 +169,7 @@ export default class MetricsModule {
         description: 'Total number of messages received from all devices',
         data: [
           {
-            id: 'dataMessagesMetrics',
+            id: 'Data Messages',
             data: list
           }
         ],
@@ -181,7 +181,7 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%H:%M',
+          format: '%Y-%m-%d %H:%M',
           tickValues: 'every 4 hours',
           legend: ' ',
           legendPosition: 'middle'
@@ -196,10 +196,10 @@ export default class MetricsModule {
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
-    if (list.length === 1) {
-      const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
-    }
+    // if (list.length === 1) {
+    //   const d = dayjs(list[0][0]);
+    //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    // }
     return {
       type: 'LineChartCard',
       data: {
@@ -207,7 +207,7 @@ export default class MetricsModule {
         description: `Total number of blockchain transactions sent by the project's applet.`,
         data: [
           {
-            id: 'blockchainTransactionMetrics',
+            id: 'Blockchain Transaction',
             data: list
           }
         ],
@@ -219,7 +219,7 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%H:%M',
+          format: '%Y-%m-%d %H:%M',
           tickValues: 'every 4 hours',
           legend: ' ',
           legendPosition: 'middle'
