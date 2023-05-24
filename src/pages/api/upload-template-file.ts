@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const { projectName, appletName, wasmURL, uploadType } = req.body;
+    const { projectName, appletName, appletId, wasmURL, uploadType } = req.body;
     if (!projectName || !appletName || !wasmURL || !uploadType) {
       res.status(400).json({ message: 'Bad Request' });
       return;
@@ -39,7 +39,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const data: any = await uploadRes.json();
         res.status(200).json({ message: 'success', appletID: data.appletID });
       } else if (uploadType === 'update') {
-        const updatedRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/x/${projectName}`, {
+        if (!appletId) {
+          throw new Error('appletId is required');
+        }
+        const updatedRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/${appletId}`, {
           method: 'post',
           headers: {
             Authorization: token

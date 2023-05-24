@@ -508,6 +508,8 @@ export default class AppletModule {
       return;
     }
 
+    const appletId = this.curApplet?.f_applet_id;
+
     if (formData.template) {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const wasmURL = templateData?.project[0]?.applets[0]?.wasmURL;
@@ -525,6 +527,7 @@ export default class AppletModule {
           data: {
             projectName,
             appletName,
+            appletId,
             wasmURL,
             uploadType: type
           }
@@ -582,7 +585,7 @@ export default class AppletModule {
         try {
           const res = await axios.request({
             method: 'put',
-            url: `/api/file?api=applet/${this.curApplet.f_applet_id}`,
+            url: `/api/file?api=applet/${appletId}`,
             headers: {
               'Content-Type': 'multipart/form-data'
             },
