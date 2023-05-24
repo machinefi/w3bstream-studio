@@ -1,12 +1,9 @@
 import { FromSchema } from 'json-schema-to-ts';
 import { v4 as uuid } from 'uuid';
-import { z } from 'zod';
-import { BaseNode, BaseNodeForm } from '../baseNode';
+import { BaseNode } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
 import { asc } from 'pages/_app';
 import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
-import { FlowState } from '@/store/standard/FlowState';
-import { rootStore } from '@/store/index';
 import { eventBus } from '@/lib/event';
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 
@@ -101,6 +98,7 @@ export class AssemblyScriptNode extends BaseNode {
                     // @ts-ignore
                     'ui:widget': 'EditorWidget',
                     'ui:options': {
+                      editorTheme: 'vs-light',
                       emptyValue: ``,
                       lang: 'javascript',
                       editorHeight: '400px',
@@ -138,8 +136,7 @@ export class AssemblyScriptNode extends BaseNode {
             }
           }
         ]
-      },
-      BaseNodeForm({ label: 'AssemblyScript' })
+      }
     ]
   };
 

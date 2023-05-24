@@ -1,8 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
 import MonacoEditor from '@monaco-editor/react';
-import { Button, Flex, Select, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuDivider } from '@chakra-ui/react';
-import { helper } from '@/lib/helper';
+import { Button, Flex, Select, Box, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 import { useStore } from '@/store/index';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useLocalObservable } from 'mobx-react-lite';
@@ -71,16 +70,9 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
     [onChange, options.emptyValue]
   );
   return (
-    <Flex flexDir="column">
-      <Flex justifyContent="space-between" alignItems="center" mb="10px">
-        {/* <Flex alignItems="center">
-          <Text>{label}</Text>
-          {required && (
-            <Text ml="0.25rem" color="#D34B46">
-              *
-            </Text>
-          )}
-        </Flex> */}
+    <Box pos="relative">
+      {(showLanguageSelector || showCodeSelector.length != 0) && <Box h="5px" />}
+      <Flex pos="absolute" right={0} top="-30px" zIndex={99} justifyContent="space-between" alignItems="center">
         {showLanguageSelector && (
           <Select
             w="100px"
@@ -98,13 +90,16 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
         {showCodeSelector.length != 0 && (
           <>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} h="30px" fontSize="12px">
                 {store.curCodeLabel?.value ?? 'Select Code '}
               </MenuButton>
-              <MenuList>
+              <MenuList p="8px">
                 {showCodeSelector?.map((item) => {
                   return (
                     <MenuItem
+                      key={item.id}
+                      h="20px"
+                      fontSize="12px"
                       onClick={(e) => {
                         store.curCodeLabel.save(item.label);
                         store.curCodeId.save(item.id);
@@ -147,7 +142,7 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
           </Button>
         </Flex>
       )}
-    </Flex>
+    </Box>
   );
 };
 

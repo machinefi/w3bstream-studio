@@ -122,6 +122,7 @@ export class WasmNode extends BaseNode {
                     // @ts-ignore
                     'ui:widget': 'EditorWidget',
                     'ui:options': {
+                      editorTheme: 'vs-light',
                       emptyValue: ``,
                       lang: 'javascript',
                       editorHeight: '400px',
@@ -145,8 +146,7 @@ export class WasmNode extends BaseNode {
             }
           }
         ]
-      },
-      BaseNodeForm({ label: 'WASM' })
+      }
     ]
   };
 
