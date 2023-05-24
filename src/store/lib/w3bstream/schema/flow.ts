@@ -9,6 +9,8 @@ import { PromiseState } from '@/store/standard/PromiseState';
 import { makeObservable, observable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 import { createFlowSchema, codeNodeSchema, webhookNodeSchema, CreateFlowSchemaType, WebhookNodeSchemaType, CodeNodeSchemaType, EnvSchemaType, envSchema } from './flow.schema';
+import { rootStore } from '@/store/index';
+import { t } from '@/server/trpc';
 
 export type FlowType = {
   id: number;
@@ -62,7 +64,7 @@ export default class FlowModule {
           id: 'deleteFlow',
           loading: false,
           title: 'Failed',
-          message: 'Flow deleted failed',
+          message: rootStore.lang.t("error.flow.deleted.msg"),
           color: 'red'
         });
       }
@@ -95,7 +97,7 @@ export default class FlowModule {
           id: 'duplicateFlow',
           loading: false,
           title: 'Failed',
-          message: 'Flow duplicated failed',
+          message: rootStore.lang.t("error.flow.duplicated.msg"),
           color: 'red'
         });
       }

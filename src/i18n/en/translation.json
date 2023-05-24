@@ -53,5 +53,12 @@
   "error.api.code.msg": "Please select the project first",
   "error.connect.vscode.msg": "Connect VSCode extension Failed!",
   "error.delete.msg": "Delete failed",
-  "success.delete.msg": "Deleted successfully"
+  "success.delete.msg": "Deleted successfully",
+  "success.reloaded.msg": "Reloaded",
+  "success.suspended.msg": "Successfully suspended",
+  "success.started.msg": "Successfully started",
+  "error.login.msg": "Login failed",
+  "success.login.msg": "Login successful.",
+  "error.flow.deleted.msg": "Flow deleted failed",
+  "error.flow.duplicated.msg": "Flow duplicated failed"
 }

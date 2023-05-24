@@ -1,4 +1,5 @@
 import { InstanceType, PublisherType } from '@/server/routers/w3bstream';
+import { useStore } from '@/store/index';
 import { CopyIcon } from '@chakra-ui/icons';
 import { Badge, Flex, Text } from '@chakra-ui/react';
 import copy from 'copy-to-clipboard';
@@ -64,6 +65,7 @@ export const tokenFormat = (token) => {
 };
 
 export const PublisherTokenRender = (item: PublisherType) => {
+  const { lang: {t} } = useStore()
   return (
     <Flex alignItems="center">
       <Text>{tokenFormat(item.f_token)}</Text>
@@ -72,7 +74,7 @@ export const PublisherTokenRender = (item: PublisherType) => {
         cursor="pointer"
         onClick={() => {
           copy(item.f_token);
-          toast.success('Copied');
+          toast.success(t("success.copy.msg"));
         }}
       />
     </Flex>

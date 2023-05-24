@@ -55,7 +55,7 @@ const Projects = observer(() => {
               onClick={async () => {
                 await allProjects.call();
                 w3s.projectManager.sync();
-                toast.success('Reloaded');
+                toast.success(t("success.reloaded.msg"));
               }}
             >
               Refresh
@@ -80,7 +80,7 @@ const Projects = observer(() => {
                     }
                     w3s.project.resetSelectedNames();
                     eventBus.emit('project.delete');
-                    toast.success('Deleted successfully');
+                    toast.success(t("success.delete.msg"));
                   }
                 });
               }}
@@ -245,7 +245,7 @@ const Projects = observer(() => {
                                 url: `/api/w3bapp/deploy/${instance.f_instance_id}/HUNGUP`
                               });
                               eventBus.emit('instance.handle');
-                              toast.success('Successfully suspended');
+                              toast.success(t("success.suspended.msg"));
                             } catch (error) { }
                           }}
                         />
@@ -265,7 +265,7 @@ const Projects = observer(() => {
                                 url: `/api/w3bapp/deploy/${instance.f_instance_id}/START`
                               });
                               eventBus.emit('instance.handle');
-                              toast.success('Successfully started');
+                              toast.success(t("success.started.msg"));
                             } catch (error) { }
                           }}
                         />

@@ -43,7 +43,7 @@ export default class CronJobModule {
                           url: `/api/w3bapp/cronjob/data/${item.f_cron_job_id}`
                         });
                         eventBus.emit('cronJob.delete', item.f_project_id);
-                        toast.success('Deleted successfully');
+                        toast.success(rootStore.lang.t('success.delete.msg'));
                       } catch (error) {
                         toast.error(rootStore.lang.t('error.delete.msg'));
                       }
