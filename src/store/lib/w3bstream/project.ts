@@ -160,7 +160,7 @@ export class ProjectManager {
     const res = await axios.post(this.vscodeEndPoint.http, {
       query: `mutation { compile }`
     });
-    toast.success('Command Sended to VSCode!');
+    toast.success('Compile Command Sent to VSCode!');
   }
 
   async executeSubscribe<T>(payload: SubscribePayload) {
