@@ -7,6 +7,7 @@ import { defaultButtonStyle } from '@/lib/theme';
 import StarCount from '@/components/IDE/StarCount';
 import { WalletConnectButton } from '@/components/WalletConnectButton';
 import { MdRefresh } from 'react-icons/md';
+import toast from 'react-hot-toast';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'PROJECTS') {
@@ -51,7 +52,7 @@ const Header = observer(() => {
         cursor={'pointer'}
       >
         <Image w="30px" src="/favicon.svg" alt="logo" />
-        <Text ml="10px" fontWeight={700}>
+        <Text ml="10px" fontWeight={600}>
           w3bstream Devnet
         </Text>
       </Flex>
@@ -102,15 +103,18 @@ const Header = observer(() => {
         </Tabs>
       </Flex>
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
-        <Button
+        {/* <Button
           ml="auto"
-          size="sm"
-          onClick={(e) => {
-            w3s.init();
+          size="md"
+          bg="#F3F3F3"
+          borderRadius={100}
+          onClick={async(e) => {
+            await w3s.init();
+            toast.success('Refreshed');
           }}
         >
           <MdRefresh />
-        </Button>
+        </Button> */}
         {/* <ChakraLink href="https://github.com/machinefi/w3bstream-studio" isExternal>
           <Image mr="20px" w="100px" src="https://img.shields.io/github/stars/machinefi/w3bstream-studio.svg?style=social&label=Star&maxAge=2592000" />
         </ChakraLink> */}

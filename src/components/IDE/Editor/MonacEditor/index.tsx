@@ -27,15 +27,20 @@ export const MoEditor = observer((props: any) => {
   return (
     <>
       <MonacoEditor
+        options={{
+          minimap: {
+            enabled: false
+          }
+        }}
         width={'100%'}
-        height={350}
+        height={500}
         key={curFilesListSchema?.curActiveFile.data?.language}
         theme="vs-dark"
         defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
         language={curFilesListSchema?.curActiveFile.data?.language}
         defaultValue="export function test(): void {}"
         value={curFilesListSchema?.curActiveFile?.data?.code}
-        beforeMount={(monaco) => {}}
+        beforeMount={(monaco) => { }}
         onMount={async (editor, monaco) => {
           monaco.languages.typescript.typescriptDefaults.addExtraLib(
             `

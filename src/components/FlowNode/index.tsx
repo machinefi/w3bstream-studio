@@ -1,24 +1,23 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { TbWebhook } from 'react-icons/tb';
 import { AiOutlineCar, AiOutlineCode, AiOutlineClockCircle } from 'react-icons/ai';
 import { SiAiohttp } from 'react-icons/si';
 import { MdDeleteOutline, MdOutlineCopyAll, MdOutlineHttp } from 'react-icons/md';
 import { GrRaspberry } from 'react-icons/gr';
 import { ImEqualizer } from 'react-icons/im';
-import { Handle, NodeTypes, Position } from 'reactflow';
+import { Handle, NodeTypes, Position, useStore as reactflowUseStore } from 'reactflow';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { INodeGroup, INodeIconType, INodeType } from '@/lib/nodes/types';
-import { hooks } from '@/lib/hooks';
 import { Radar2 } from 'tabler-icons-react';
 import { JSONRender, jsonRenderGlobalStore } from '../JSONRender';
-import { toJS } from 'mobx';
 import React from 'react';
 import { JSONForm } from '../JSONForm';
 import { eventBus } from '@/lib/event';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
-import { Box, Flex, Tab, TabList, TabPanels, Tabs, Tooltip, Image, TabPanel } from '@chakra-ui/react';
+import { Box, Flex, Tooltip, Image, Input } from '@chakra-ui/react';
 import { BaseNode } from '@/lib/nodes/baseNode';
+import { _ } from '@/lib/lodash';
 
 export type FlowNodeData = {
   [x: string]: any;
@@ -35,27 +34,46 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
   const store = useLocalObservable(() => ({
     realNodeInstance: new BaseNode(nodeInstance),
     curFlowNodeResult: null,
+    isLabelEditing: false,
     onFlowRunResult(result) {
       if (result.flowId == id) {
         store.curFlowNodeResult = result;
       }
-    }
+    },
   }));
+
+  const changeLabelRef = useRef(
+    _.debounce((v: string) => {
+      flow.editNode(id, {
+        label: v
+      });
+      store.isLabelEditing = false;
+    }, 800)
+  );
+
+  const changeFormDataRef = useRef(
+    _.debounce((v: {
+      id: string;
+      formData: any;
+    }) => {
+      flow.editNode(v.id, v.formData);
+    }, 1000)
+  );
 
   const copied = flow.copiedNodes.findIndex((node) => node.id === id) > -1;
 
   useEffect(() => {
-    eventBus.on('flow.run.result', store.onFlowRunResult);
-    function handleKeyDown(event) {
-      if (id == flow.curEditNodeId) {
-        flow.editNode(id, toJS(store.realNodeInstance.getJSONFormValue()) as any);
+    const formState = store.realNodeInstance?.form.formList[0].form[0]?.props.formState;
+    if (formState) {
+      formState.afterChange = e => {
+        changeFormDataRef.current && changeFormDataRef.current({
+          id,
+          formData: e.formData
+        })
       }
     }
-    document.addEventListener('click', handleKeyDown);
-    document.addEventListener('keyup', handleKeyDown);
+    eventBus.on('flow.run.result', store.onFlowRunResult);
     return () => {
-      document.removeEventListener('keyup', handleKeyDown);
-      document.removeEventListener('click', handleKeyDown);
       eventBus.off('flow.run.result', store.onFlowRunResult);
     };
   }, []);
@@ -87,9 +105,33 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
       }}
     >
       <Flex bg="#d1d1d1" h="30px" w="100%" justify={'center'} align={'center'}>
-        <Flex justify={'center'} align={'center'} flex={1} className="drag-handle">
+        <Flex justify={'center'} align={'center'} flex={1} className="drag-handle" cursor="move">
           <NodeIcon icon={store.realNodeInstance?.description?.icon} size={10} />
-          <Box ml="4">{data?.label}</Box>
+          <Box ml="4px">
+            {
+              store.isLabelEditing ? (
+                <Input
+                  h="20px"
+                  p="0 2px"
+                  borderRadius={0}
+                  border="none"
+                  focusBorderColor="#fff"
+                  defaultValue={data?.label}
+                  onChange={e => {
+                    changeLabelRef.current && changeLabelRef.current(e.target.value);
+                  }}
+                />
+              ) : (
+                <Box
+                  onDoubleClick={() => {
+                    store.isLabelEditing = true;
+                  }}
+                >
+                  {data?.label}
+                </Box>
+              )
+            }
+          </Box>
         </Flex>
         {store.curFlowNodeResult && (
           <>
@@ -104,57 +146,22 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
         )}
       </Flex>
       {/* <Flex>{JSON.stringify(data)}</Flex> */}
-      <Box style={{ fontSize: '12px' }} p={2}>
-        {store.realNodeInstance?.form.formList?.length > 1 ? (
-          <>
-            <Tabs defaultValue={store.realNodeInstance.form.formList[0].label}>
-              <TabList>
-                {store.realNodeInstance.form.formList.map((item) => (
-                  <Tab>{item.label}</Tab>
-                ))}
-              </TabList>
-              <TabPanels>
-                {store.realNodeInstance.form.formList.map((item, index) => (
-                  <TabPanel key={item.label}>
-                    <Box mt={1}>
-                      <JSONRender
-                        json={{
-                          key: 'JSONRenderContainer',
-                          component: 'div',
-                          children: store.realNodeInstance.form.formList[index].form
-                        }}
-                        data={null}
-                        store={jsonRenderGlobalStore}
-                        componentMaps={{
-                          div: Box,
-                          JSONForm: JSONForm
-                        }}
-                      />
-                    </Box>
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </Tabs>
-          </>
-        ) : (
-          <>
-            <JSONRender
-              key={id}
-              json={{
-                key: 'JSONRenderContainer' + id,
-                component: 'div',
-                children: store.realNodeInstance?.form.formList[0].form
-              }}
-              data={null}
-              // eventBus={eventBus}
-              store={jsonRenderGlobalStore}
-              componentMaps={{
-                div: Box,
-                JSONForm: JSONForm
-              }}
-            />
-          </>
-        )}
+      <Box style={{ fontSize: '12px' }} p={4}>
+        <JSONRender
+          key={id}
+          json={{
+            key: 'JSONRenderContainer' + id,
+            component: 'div',
+            children: store.realNodeInstance?.form.formList[0].form
+          }}
+          data={null}
+          // eventBus={eventBus}
+          store={jsonRenderGlobalStore}
+          componentMaps={{
+            div: Box,
+            JSONForm: JSONForm
+          }}
+        />
       </Box>
 
       {/* <NodeIcon icon={nodeInstance.description.icon} size={30} /> */}
@@ -187,6 +194,18 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
 });
 
 export const NodeContext = React.createContext('NodeContext');
+
+const Placeholder = ({ label }: { label: string }) => (
+  <Box w="200px" p="10px 10px 15px 10px" bg="#fff" border="1px solid #555" borderRadius="5px">
+    <Box w="100%" fontWeight={700} textAlign="center">{label}</Box>
+    <Box mt="10px" w="100%" h="10px" bg="#eee" />
+    <Box mt="4px" w="100%" h="10px" bg="#eee" />
+    <Box mt="4px" w="100%" h="10px" bg="#eee" />
+  </Box>
+);
+
+const zoomSelector = (s) => s.transform[2] >= 0.8;
+
 //node style , write in backand
 export const NodeLayout = memo(
   ({ id, data, nodeInstance, children }: { id: string; data: FlowNodeData; nodeInstance: BaseNode; children: any }) => {
@@ -207,6 +226,8 @@ export const NodeLayout = memo(
       border: '4px solid #784be8',
       zIndex: 99
     };
+
+    const showContent = reactflowUseStore(zoomSelector);
 
     return (
       <>
@@ -257,7 +278,7 @@ export const NodeLayout = memo(
           </>
         )}
 
-        <NodeContext.Provider value={id}> {children} </NodeContext.Provider>
+        {showContent ? <NodeContext.Provider value={id}>{children}</NodeContext.Provider> : <Placeholder label={data.label} />}
 
         {(nodeInstance?.description?.withSourceHandle || nodeInstance?.description?.isVariableNode) && (
           <>

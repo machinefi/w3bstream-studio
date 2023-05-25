@@ -46,8 +46,8 @@ const LiveIcon = () => {
       />
       <ChakraBox
         pos="absolute"
-        top="7px"
-        left="12px"
+        top="8px"
+        left="13px"
         w="14px"
         h="14px"
         borderRadius="50%"
@@ -61,8 +61,8 @@ const LiveIcon = () => {
           borderRadius: '50%',
           width: '20px',
           height: '20px',
-          top: '-4px',
-          left: '-4px',
+          top: '-5px',
+          left: '-5px',
           position: 'absolute',
           opacity: .8,
         }}
@@ -207,6 +207,7 @@ const EventLogs = observer(() => {
               body: formData.body
             });
             try {
+              store.fetchWasmLogsPoll.stop();
               const token = await hooks.waitPublisher();
               await axios.request({
                 method: 'post',
@@ -221,9 +222,11 @@ const EventLogs = observer(() => {
                 },
                 data: formData.body
               });
+              store.fetchWasmLogsPoll.start();
               showNotification({ color: 'green', message: 'Send event successed' });
             } catch (error) {
               showNotification({ color: 'red', message: 'send event failed' });
+              store.fetchWasmLogsPoll.start();
             }
           };
           hooks.getFormData({

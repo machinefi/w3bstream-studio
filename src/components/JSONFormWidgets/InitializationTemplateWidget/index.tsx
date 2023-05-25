@@ -36,7 +36,7 @@ function InitializationTemplateWidget({ id, options, value, required, label, onC
         id={id}
         sx={{
           width: '100%',
-          '& > div:not(:first-child)': {
+          '& > div:not(:first-of-type)': {
             marginLeft: '10px'
           }
         }}
@@ -67,7 +67,7 @@ function InitializationTemplateWidget({ id, options, value, required, label, onC
             {...flexProps}
           >
             <Image w="40px" src={template.image} />
-            <Box mt="10px" fontWeight={700} fontSize="14px">
+            <Box mt="10px" fontWeight={600} fontSize="14px">
               {template.name}
             </Box>
           </Flex>

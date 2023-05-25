@@ -4,6 +4,8 @@ import axios from 'axios';
 import { makeObservable, observable } from 'mobx';
 import dayjs from 'dayjs';
 import { trpc } from '@/lib/trpc';
+import { useEffect } from 'react';
+import { MappingState } from '@/store/standard/MappingState';
 
 export type Metrics = {
   metric: {
@@ -43,13 +45,53 @@ export default class MetricsModule {
     type: 'TimeRangePick',
     data: {
       props: {},
-      onChange: (startTime: Date, endTime: Date, step: number) => {
+      onChange: (value: "day" | "week" | "month") => {
+        const now = dayjs()
+        // now.setMinutes(0);
+        // now.setSeconds(0);
+        // now.setMilliseconds(0);
+
+        this.timeconfig.setCurrentId(value)
+
+        const {  step } = this.timeconfig.current;
+
+        const startTime = now.subtract(1, this.timeconfig.currentId).startOf('day').toDate()
+        const endTime = now
+
         this.activeDevices.call(startTime, endTime, step);
         this.dataMessages.call(startTime, endTime, step);
         this.blockchainTransaction.call(startTime, endTime, step);
       }
     }
   };
+
+
+  timeconfig = new MappingState({
+    currentId: "day",
+    map: {
+      day: {
+        tickValues: 'every 6 hours',
+        step: '1h',
+        axisBottomFormat: '%H:%M'
+
+      },
+      week: {
+        tickValues: 'every day',
+        step: '1d',
+        axisBottomFormat: '%Y-%m-%d'
+      },
+      month: {
+        tickValues: 'every day',
+        step: '1d',
+        axisBottomFormat: '%Y-%m-%d'
+      }
+    }
+  })
+
+  get projectName() {
+    // return "eth_0x8a68e01add9adc8b887025dc54c36cfa91432f58_pperf2"
+    return globalThis.store.w3s.project.curProject.f_name
+  }
 
   activeDevices = new PromiseState<any, Metrics[]>({
     defaultValue: [],
@@ -59,10 +101,10 @@ export default class MetricsModule {
           method: 'GET',
           url: `/api/metrics/query_range`,
           params: {
-            query: `count(count_over_time(inbound_events_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"}[1d])) by (project)`,
+            query: `count(count_over_time(inbound_events_metrics{project="${this.projectName}"}[1d])) by (project)`,
             start: startTime.toISOString(),
             end: endTime.toISOString(),
-            step: `${step}s`
+            step
           }
         });
         return data.data.result;
@@ -80,10 +122,10 @@ export default class MetricsModule {
           method: 'GET',
           url: `/api/metrics/query_range`,
           params: {
-            query: `sum by (project) (inbound_events_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"})`,
+            query: `sum by (project) (inbound_events_metrics{project="${this.projectName}"})`,
             start: startTime.toISOString(),
             end: endTime.toISOString(),
-            step: `${step}s`
+            step
           }
         });
         return data.data.result;
@@ -101,10 +143,10 @@ export default class MetricsModule {
           method: 'GET',
           url: `/api/metrics/query_range`,
           params: {
-            query: `sum by (project) (w3b_blockchain_tx_metrics{project="${globalThis.store.w3s.project.curProject.f_name}"})`,
+            query: `sum by (project) (w3b_blockchain_tx_metrics{project="${this.projectName}"})`,
             start: startTime.toISOString(),
             end: endTime.toISOString(),
-            step: `${step}s`
+            step
           }
         });
         return data.data.result;
@@ -120,10 +162,10 @@ export default class MetricsModule {
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
-    if (list.length === 1) {
-      const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
-    }
+    // if (list.length === 1) {
+    //   const d = dayjs(list[0][0]);
+    //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    // }
     return {
       type: 'LineChartCard',
       data: {
@@ -131,7 +173,7 @@ export default class MetricsModule {
         description: 'Number of unique devices that sent at least one message to this project',
         data: [
           {
-            id: 'activeDevicesMetrics',
+            id: 'Active Devices',
             data: list
           }
         ],
@@ -143,8 +185,8 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%H:%M',
-          tickValues: 'every 4 hours',
+          format: this.timeconfig.current.axisBottomFormat,
+          tickValues: this.timeconfig.current.tickValues,
           legend: ' ',
           legendPosition: 'middle'
         }
@@ -158,10 +200,10 @@ export default class MetricsModule {
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
-    if (list.length === 1) {
-      const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
-    }
+    // if (list.length === 1) {
+    //   const d = dayjs(list[0][0]);
+    //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    // }
     return {
       type: 'LineChartCard',
       data: {
@@ -169,7 +211,7 @@ export default class MetricsModule {
         description: 'Total number of messages received from all devices',
         data: [
           {
-            id: 'dataMessagesMetrics',
+            id: 'Data Messages',
             data: list
           }
         ],
@@ -181,8 +223,8 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%H:%M',
-          tickValues: 'every 4 hours',
+          format: this.timeconfig.current.axisBottomFormat,
+          tickValues: this.timeconfig.current.tickValues,
           legend: ' ',
           legendPosition: 'middle'
         }
@@ -196,10 +238,10 @@ export default class MetricsModule {
       .slice()
       .sort((a, b) => a[0] - b[0])
       .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
-    if (list.length === 1) {
-      const d = dayjs(list[0][0]);
-      list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
-    }
+    // if (list.length === 1) {
+    //   const d = dayjs(list[0][0]);
+    //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
+    // }
     return {
       type: 'LineChartCard',
       data: {
@@ -207,7 +249,7 @@ export default class MetricsModule {
         description: `Total number of blockchain transactions sent by the project's applet.`,
         data: [
           {
-            id: 'blockchainTransactionMetrics',
+            id: 'Blockchain Transaction',
             data: list
           }
         ],
@@ -219,8 +261,8 @@ export default class MetricsModule {
           precision: 'millisecond'
         },
         axisBottom: {
-          format: '%H:%M',
-          tickValues: 'every 4 hours',
+          format: this.timeconfig.current.axisBottomFormat,
+          tickValues: this.timeconfig.current.tickValues,
           legend: ' ',
           legendPosition: 'middle'
         }
@@ -245,6 +287,8 @@ export default class MetricsModule {
     };
   }
 
+
+
   showContent: 'DATABASE' | 'API' = 'API';
 
   get metricsData() {
@@ -263,5 +307,14 @@ export default class MetricsModule {
     makeObservable(this, {
       showContent: observable
     });
+  }
+
+
+  use() {
+    useEffect(() => {
+      //@ts-ignore
+      this.timeRangePick.data.onChange("day")
+      return () => {}
+    },[])
   }
 }

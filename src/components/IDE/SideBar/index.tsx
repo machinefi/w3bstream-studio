@@ -17,7 +17,8 @@ interface SideBarProps extends FlexProps { }
 const SideBar = observer((props: SideBarProps) => {
   const {
     w3s,
-    base: { confirm }
+    base: { confirm },
+    lang: { t }
   } = useStore();
   const { allProjects, curProject } = w3s.project;
 
@@ -46,7 +47,7 @@ const SideBar = observer((props: SideBarProps) => {
               onClick={async () => {
                 await allProjects.call();
                 w3s.projectManager.sync();
-                toast.success('Reloaded');
+                toast.success(t('success.reloaded.msg'));
               }}
             >
               <Icon as={MdRefresh} color="#946FFF" />
@@ -115,7 +116,7 @@ const SideBar = observer((props: SideBarProps) => {
                               url: `/api/w3bapp/project/x/${p.f_name}`
                             });
                             eventBus.emit('project.delete');
-                            toast.success('Deleted successfully');
+                            toast.success(t('success.delete.msg'));
                           }
                         });
                       }}
@@ -421,6 +422,9 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                   tableId: item.tableId,
                   tableName: item.tableName
                 });
+                if (dbTable.mode === 'QUERY_SQL') {
+                  dbTable.setDefaultSQL();
+                }
               }}
             >
               <Text

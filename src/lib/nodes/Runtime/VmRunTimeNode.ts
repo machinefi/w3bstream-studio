@@ -1,7 +1,6 @@
 import { FromSchema } from 'json-schema-to-ts';
 import { v4 as uuid } from 'uuid';
-import { JSONSchemaRenderData } from '@/components/JSONRender';
-import { BaseNode, BaseNodeForm } from '../baseNode';
+import { BaseNode } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
 import { WASM } from '@/server/wasmvm';
 import { eventBus } from '@/lib/event';
@@ -111,8 +110,7 @@ export class VmRunTimeNode extends BaseNode {
             }
           }
         ]
-      },
-      BaseNodeForm({ label: 'VM runtime' })
+      }
     ]
   };
 

@@ -124,7 +124,12 @@ export default class DBTableModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit'
+        submitText: 'Submit',
+        props: {
+          style: {
+            marginTop:"100px"
+          }
+        }
       },
       // rls_enabled: {
       //   'ui:widget': 'checkbox'
@@ -283,6 +288,25 @@ export default class DBTableModule {
 
   setSQL(v: string) {
     this.sql = v;
+  }
+
+  setDefaultSQL() {
+    let sql = '';
+    const { tableSchema, tableName } = this.currentTable;
+    if (tableName) {
+      sql = tableSchema === 'public' ? `SELECT * FROM ${tableName} LIMIT 10` : `SELECT * FROM "${tableSchema}"."${tableName}" LIMIT 10`;
+    } else {
+      const table = this.allTables.value[0]?.tables[0];
+      if (table) {
+        this.setCurrentTable({
+          tableId: table.tableId,
+          tableName: table.tableName,
+          tableSchema: table.tableSchema
+        });
+        sql = table?.tableSchema === 'public' ? `SELECT * FROM ${table?.tableName} LIMIT 10` : `SELECT * FROM "${table?.tableSchema}"."${table?.tableName}" LIMIT 10`;
+      }
+    }
+    this.setSQL(sql);
   }
 
   async querySQL() {
@@ -505,6 +529,11 @@ export default class DBTableModule {
       });
       if (errorMsg) {
         showNotification({ message: errorMsg });
+      } else {
+        const count = await this.getCurrentTableDataCount();
+        this.table.pagination.setData({
+          total: Number(count)
+        });
       }
       return errorMsg;
     } catch (error) {

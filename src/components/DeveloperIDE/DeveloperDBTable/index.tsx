@@ -10,7 +10,7 @@ const DeveloperDBTable = () => {
 
   return (
     <Flex pos="relative" w="100%" minH={'calc(100vh - 158px)'} >
-      <Box w="300px" minH={'100%'} paddingBottom={'100px'} border="1px solid rgba(230, 230, 230, 0.75)" borderRadius="8px">
+      <Box w="240px" minH={'100%'} paddingBottom={'100px'} border="1px solid rgba(230, 230, 230, 0.75)" borderRadius="8px">
         <DBTableSideBar />
       </Box>
       <Box ml="20px" flex={1} borderRadius="8px">
@@ -23,6 +23,7 @@ const DeveloperDBTable = () => {
               position="relative"
               cursor="pointer"
               onClick={() => {
+                w3s.dbTable.setDefaultSQL();
                 w3s.dbTable.setMode('QUERY_SQL');
               }}
             >

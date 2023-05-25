@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 interface ToolBar extends BoxProps {}
 
 const ToolBar = (props: ToolBar) => {
-  const { w3s } = useStore();
+  const { w3s, lang:{t} } = useStore();
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   const curProjectInstance = w3s.instances.table.dataSource.find((option) => option.project_name === w3s.project.curProject?.name);
@@ -21,7 +21,7 @@ const ToolBar = (props: ToolBar) => {
 
   return (
     <Box position={'fixed'} h="100%" overflow={'auto'}>
-      <Flex minW="200px" direction="column" align="center" p="14px" bg="#fff" {...props}>
+      <Flex minW="200px" h="100%" direction="column" align="center" p="14px" bg="#fff" {...props}>
         <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
           <PopoverTrigger >
             <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} px="14px" py="8px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
@@ -58,8 +58,16 @@ const ToolBar = (props: ToolBar) => {
                     if (instance) {
                       w3s.project.allProjects.onSelect(index);
                       w3s.showContent = 'METRICS';
+                      const now = new Date();
+                      now.setMinutes(0);
+                      now.setSeconds(0);
+                      now.setMilliseconds(0);
+                      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+                      w3s.metrics.activeDevices.call(yesterday, now);
+                      w3s.metrics.dataMessages.call(yesterday, now);
+                      w3s.metrics.blockchainTransaction.call(yesterday, now);
                     } else {
-                      toast.error('No instance found, please create one first');
+                      toast.error(t('error.change.project.msg'));
                     }
                     onClose();
                   }}
@@ -126,7 +134,7 @@ const ToolBar = (props: ToolBar) => {
           }}
         >
           <Icon as={TbHandClick} boxSize={5} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Events
           </Box>
         </Flex>

@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { FilesItem } from '@/components/IDE/SideBar/filesItem';
 import Editor from '@/components/IDE/Editor';
 import { useStore } from '@/store/index';
-import { SqlDB } from '@/server/wasmvm/sqldb';
 
 const Labs = () => {
   const { w3s } = useStore();

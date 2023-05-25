@@ -155,7 +155,7 @@ export const FunctionList = observer(({ contract }: { contract: ContractInstance
 });
 
 export const FunctiomItem = observer(({ functionItem, contract }: { functionItem: FunctionState; contract: ContractInstance }) => {
-  const { god } = useStore();
+  const { god, lang: {t} } = useStore();
   const _contract = contract;
   const store = useLocalObservable(() => ({
     loading: new BooleanState(),
@@ -222,7 +222,7 @@ export const FunctiomItem = observer(({ functionItem, contract }: { functionItem
         const Interface = new ethers.utils.Interface(abi);
         const bytecode = Interface.encodeFunctionData(functionItem.name, params);
         await navigator.clipboard.writeText(bytecode);
-        toast.success('Copy Success');
+        toast.success(t("success.copy.msg"));
       } catch (e) {
         toast.error(e.message);
       }

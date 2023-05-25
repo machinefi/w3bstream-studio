@@ -18,7 +18,8 @@ export const ShowRequestTemplatesButton = observer(({ props = {} }: { props?: Bu
           formData: { accountRole }
         }
       }
-    }
+    },
+    lang: { t }
   } = useStore();
   return (
     <Button
@@ -28,7 +29,7 @@ export const ShowRequestTemplatesButton = observer(({ props = {} }: { props?: Bu
         if (accountRole === 'ADMIN') {
           const { projectName } = publisher.publishEventForm.formData;
           if (!projectName) {
-            toast.error('Please select the project first');
+            toast.error(t('error.api.code.msg'));
             return;
           }
         }
@@ -128,7 +129,18 @@ const PublishEventRequestTemplates = observer(() => {
                             >
                               Copy
                             </Button>
-                            <MonacoEditor width="100%" height="calc(100vh - 180px)" theme="vs-dark" language={language} value={codeStr} />
+                            <MonacoEditor
+                              width="100%"
+                              height="calc(100vh - 180px)"
+                              theme="vs-dark"
+                              language={language}
+                              value={codeStr}
+                              options={{
+                                minimap: {
+                                  enabled: false
+                                }
+                              }}
+                            />
                           </Box>
                         </TabPanel>
                       );
@@ -170,7 +182,18 @@ const PublishEventRequestTemplates = observer(() => {
                             >
                               Copy
                             </Button>
-                            <MonacoEditor width="100%" height="calc(100vh - 180px)" theme="vs-dark" language={language} value={codeStr} />
+                            <MonacoEditor
+                              width="100%"
+                              height="calc(100vh - 180px)"
+                              theme="vs-dark"
+                              language={language}
+                              value={codeStr}
+                              options={{
+                                minimap: {
+                                  enabled: false
+                                }
+                              }}
+                            />
                           </Box>
                         </TabPanel>
                       );

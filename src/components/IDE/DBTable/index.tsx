@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 const EditTable = observer(() => {
   const {
     base: { confirm },
+    lang: {t},
     w3s: {
       dbTable,
       dbTable: { currentColumns }
@@ -179,7 +180,8 @@ const EditTable = observer(() => {
 
 const ViewData = observer(() => {
   const {
-    w3s: { dbTable }
+    w3s: { dbTable },
+    lang: {t}
   } = useStore();
 
   if (!dbTable.currentTable.tableName) {
@@ -210,10 +212,10 @@ const ViewData = observer(() => {
                   dbTable.table.set({
                     dataSource: data
                   });
-                  toast.success('Upload CSV success');
+                  toast.success(t('success.upload.msg'));
                 }
               } else {
-                toast.error('CSV file is empty');
+                toast.error(t('error.csvfile.empty.msg'));
               }
               (document.getElementById('csv-input') as HTMLInputElement).value = '';
             }}
@@ -305,6 +307,11 @@ const QuerySQL = observer(() => {
       </Box>
       <Box pos="relative">
         <MonacoEditor
+          options={{
+            minimap: {
+              enabled: false
+            }
+          }}
           height={300}
           theme="vs-dark"
           language={'sql'}
@@ -329,7 +336,18 @@ const QuerySQL = observer(() => {
       <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
         Query Result:
       </Box>
-      <MonacoEditor height="calc(100vh - 480px)" theme="vs-dark" language="json" value={queryResult} options={{ readOnly: true }} />
+      <MonacoEditor
+        options={{
+          readOnly: true,
+          minimap: {
+            enabled: false
+          }
+        }}
+        height="calc(100vh - 480px)"
+        theme="vs-dark"
+        language="json"
+        value={queryResult}
+      />
     </Box>
   );
 });

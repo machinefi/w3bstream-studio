@@ -2,7 +2,7 @@ import { helper } from '@/lib/helper';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { useStore } from '@/store/index';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Button, ButtonProps, Flex, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger } from '@chakra-ui/react';
+import { Avatar, Box, Button, ButtonProps, Flex, Popover, PopoverArrow, PopoverBody, Text, PopoverContent, PopoverHeader, PopoverTrigger } from '@chakra-ui/react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { observer } from 'mobx-react-lite';
 import { Copy } from '../Common/Copy';
@@ -67,10 +67,10 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
                   alignItems="center"
                 >
                   <Box>
-                    <Box fontSize="12px" fontWeight={700}>
-                      {god.currentChain.Coin.balance.format} {god.currentNetwork.currentChain.name}
-                    </Box>
-                    <Box fontSize="10px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Box>
+                    <Text fontSize="12px" fontWeight={700}>
+                      {god.currentChain.Coin.balance.format} {god.currentNetwork.currentChain.Coin.symbol}
+                    </Text>
+                    <Text fontSize="12px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Text>
                   </Box>
                   <ChevronDownIcon ml="5px" boxSize="24px" />
                 </Flex>
@@ -82,12 +82,12 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
               <PopoverHeader>Account Information</PopoverHeader>
               <PopoverBody>
                 <Flex align="center">
-                  <Box fontSize={"14px"} fontWeight={700}>Account ID:</Box>
-                  <Box  fontSize={"12px"} ml="5px">{config.form.formData.accountID}</Box>
+                  <Text fontSize={"14px"} fontWeight={700}>Account ID:</Text>
+                  <Text fontSize={"12px"} ml="5px">{config.form.formData.accountID}</Text>
                 </Flex>
                 <Flex mt="10px" align="center">
-                  <Box fontSize={"14px"}  fontWeight={700}>Address:</Box>
-                  <Box fontSize={"12px"} ml="5px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Box>
+                  <Text fontSize={"14px"} fontWeight={700}>Address:</Text>
+                  <Text fontSize={"12px"} ml="5px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Text>
                   <Copy value={god.currentNetwork.account} />
                 </Flex>
                 <Flex mt="10px" align="center">

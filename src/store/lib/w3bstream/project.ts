@@ -89,7 +89,7 @@ export class ProjectManager {
       this.wsPort = e.formData.port;
       await this.connectWs();
       if (!this.isWSConnect) {
-        toast.error('Connect VSCode extension Failed!');
+        toast.error(rootStore.lang.t("error.connect.vscode.msg"));
       }
     },
     value: new JSONValue<SetVscodeSettingFormSchemaType>({

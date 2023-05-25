@@ -8,6 +8,7 @@ import { trpc } from '@/lib/trpc';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
+import { rootStore } from '@/store/index';
 
 export const schema = {
   definitions: {
@@ -77,7 +78,7 @@ export default class ChainTxModule {
                         eventBus.emit('chainTx.delete');
                         toast.success('Deleted successfully');
                       } catch (error) {
-                        toast.error('Delete failed');
+                        toast.error(rootStore.lang.t('error.delete.msg'));
                       }
                     }
                   });

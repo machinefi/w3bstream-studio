@@ -2,6 +2,7 @@ import { IFormType, INodeType, INodeTypeDescription } from './types';
 import { v4 as uuid } from 'uuid';
 import { FlowNode } from '../../server/types';
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
+
 export const BaseNodeSettingSchema = {
   type: 'object',
   properties: {
