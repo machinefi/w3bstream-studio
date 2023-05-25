@@ -44,6 +44,8 @@ export const theme = extendTheme({
     Button: {
       baseStyle: {
         letterSpacing: "-0.020625rem",
+        fontWeight: "500",
+        fontSize: '14px'
       }
     },
     Flex: {
