@@ -13,18 +13,18 @@ export const INSTANCE_STATUS = {
   },
   1: {
     colorScheme: 'gray',
-    text: 'idle',
+    text: 'Idle',
     color: 'gray'
   },
   2: {
     colorScheme: 'green',
-    text: 'running',
+    text: 'Running',
     color: '#00B87A',
   },
   3: {
     colorScheme: 'red',
-    text: 'stop',
-    color: '#00B87A',
+    text: 'Paused',
+    color: 'red',
   }
 };
 

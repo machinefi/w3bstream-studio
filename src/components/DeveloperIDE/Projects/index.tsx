@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import { MdRefresh } from 'react-icons/md';
 import { FaFileImport } from 'react-icons/fa';
+import { ImArrowUpRight2 } from 'react-icons/im'
 
 const Projects = observer(() => {
   const {
@@ -152,15 +153,15 @@ const Projects = observer(() => {
                     });
                   }
                 }}
+                display="flex"
+                flexDirection={'column'}
               >
                 <Flex alignItems="center" justifyContent="space-between">
                   <Flex alignItems="center" mr="5px">
-                    <Box fontWeight={700} fontSize="16px">
-                      {project.name}
-                    </Box>
-                    <Badge ml="10px" variant="outline" colorScheme={status.colorScheme} textTransform="none">
-                      {status.text}
-                    </Badge>
+                    <Flex fontWeight={700} fontSize="16px" color={'rgba(15, 15, 15, 0.75)'} alignItems={'center'} gap="10px">
+                      {project.name} <ImArrowUpRight2 fontSize={14} color='#946FFF' />
+                    </Flex>
+
                     {!instance && (
                       <Button
                         ml="20px"
@@ -179,6 +180,7 @@ const Projects = observer(() => {
                       </Button>
                     )}
                   </Flex>
+
                   <Flex
                     onClick={(e) => {
                       e.stopPropagation();
@@ -215,20 +217,23 @@ const Projects = observer(() => {
                     0
                   </Box>
                 </Flex> */}
-                <Flex mt="20px" flexWrap="wrap">
+                <Flex mt="20px" flexWrap="wrap" flex="1">
                   {project.f_description &&
                     project.f_description.split(',').map((tag) => {
                       return (
-                        <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#000" fontSize="xs" border="1px solid #EDEDED" borderRadius="6px">
+                        <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#946FFF" fontSize="xs" bg="#F2EEFF" borderRadius="6px">
                           {tag}
                         </Box>
                       );
                     })}
                 </Flex>
 
-                <Flex mt="10px" justifyContent="flex-end">
+                <Flex mt="10px" justifyContent="space-between">
+                  <Flex color={status.color} alignItems="center">
+                    <Box w="6px" h="6px" bg={status.color} mr="6px" borderRadius="50%"></Box> <Text fontWeight={400}>{status.text}</Text>
+                  </Flex>
                   {instance && (
-                    <>
+                    <Flex alignItems={'center'}>
                       {instance.f_state === 2 ? (
                         <Icon
                           ml="20px"
@@ -270,7 +275,8 @@ const Projects = observer(() => {
                           }}
                         />
                       )}
-                    </>
+                      <Text ml="10px" fontSize={14} color={'#946FFF'}>Pause</Text>
+                    </Flex>
                   )}
                 </Flex>
               </GridItem>

@@ -24,12 +24,12 @@ export const schema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name', description: ''  },
     eventType: { type: 'string', title: 'W3bstream Event Name', description: 'Choose a unique name for the W3bstream event that should be Triggered'  },
-    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', default: '4690', description: 'Input the chain id where the smart contract is deploved'  },
+    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', default: '4690', description: 'Input the chain id where the smart contract is deployed'  },
     contractAddress: { type: 'string', title: 'Contract Address', description: 'The address of the smart contract to be monitored'  },
     blockStart: { type: 'number', title: 'Start Height', description: 'The initial height from which the smart contract should be monitored.'  },
-    blockEnd: { type: 'number', title: 'End Height', description: 'The address of the smart contract to be monitored'  },
+    blockEnd: { type: 'number', title: 'End Height', description: 'The final height at which the monitoring should cease. Input "0" for "never"'  },
     event: { type: 'string', title: 'Smart Contract Event', description: 'The signature of the smart contract event that, when emitted, should trigger the W3bstream event.'  },
-    topic0: { type: 'string', title: "Smart contract Event's topic0", description: 'This is automatically calculated when typing the event signature aboveHowever, if you know the topic0, you can directly input it here.'  }
+    topic0: { type: 'string', title: "Smart contract Event's topic0", description: 'This is automatically calculated when typing the event signature above. However, if you know the topic0, you can directly input it here.'  }
   },
   required: ['projectName', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
 } as const;

@@ -13,7 +13,7 @@ export const schema = {
   type: 'object',
   properties: {
     eventType: { type: 'string', title: 'Event Type', description: 'Please choose a unique name for the W3bstream event that should be triggered' },
-    cronExpressions: { type: 'string', title: 'Cron Expressions', description: 'The quick and simple editor for cron schedule expressions: https://crontab.guru/' }
+    cronExpressions: { type: 'string', title: 'Cron Expressions', description: 'This is the cron setup expression. Check out crontab.guru for an easy to use editor' }
   },
   required: ['eventType', 'cronExpressions']
 } as const;
