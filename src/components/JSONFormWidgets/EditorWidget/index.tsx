@@ -75,7 +75,9 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
         {showLanguageSelector && (
           <Select
             w="100px"
-            size="sm"
+            h="28px"
+            fontSize="12px"
+            borderRadius="4px"
             onChange={(v) => {
               const language = v.target.value as 'json' | 'text';
               setLanguage(language);
@@ -87,31 +89,29 @@ const EditorWidget = ({ id, label, options = {}, value, required, onChange }: Ed
           </Select>
         )}
         {showCodeSelector.length != 0 && (
-          <>
-            <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} h="30px" fontSize="12px">
-                {store.curCodeLabel?.value ?? 'Select Code '}
-              </MenuButton>
-              <MenuList p="8px">
-                {showCodeSelector?.map((item) => {
-                  return (
-                    <MenuItem
-                      key={item.id}
-                      h="20px"
-                      fontSize="12px"
-                      onClick={(e) => {
-                        store.curCodeLabel.save(item.label);
-                        store.curCodeId.save(item.id);
-                        handleChange(item.value);
-                      }}
-                    >
-                      {item.label}
-                    </MenuItem>
-                  );
-                })}
-              </MenuList>
-            </Menu>
-          </>
+          <Menu>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} ml="10px" h="30px" fontSize="12px">
+              {store.curCodeLabel?.value ?? 'Select Code '}
+            </MenuButton>
+            <MenuList p="8px">
+              {showCodeSelector?.map((item) => {
+                return (
+                  <MenuItem
+                    key={item.id}
+                    h="20px"
+                    fontSize="12px"
+                    onClick={(e) => {
+                      store.curCodeLabel.save(item.label);
+                      store.curCodeId.save(item.id);
+                      handleChange(item.value);
+                    }}
+                  >
+                    {item.label}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Menu>
         )}
       </Flex>
       {/* fix readonly issuse > https://github.com/suren-atoyan/monaco-react/issues/114  */}
