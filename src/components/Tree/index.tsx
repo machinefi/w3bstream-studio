@@ -321,8 +321,8 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
             </Box>
           ) : (
             <Box>
-              <Text>Click to connect w3bstream vscode plugin</Text>
-              <Text mt={1}>It may be because you don't have the w3bstream plugin installed, or it's not started.</Text>
+              <Text>Click here to connect to the VS Code Plugin.</Text>
+              <Text mt={1}>If the gray dot doesn't turn green, please make sure you have installed the W3bstream Plugin for VS Code and that it's enabled. Some browsers, like Brave, may block the connection: please check the navigation bar for any <i>Blocked Content</i> notification.</Text>
             </Box>
           )
         }
@@ -338,7 +338,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
             }
           }}
         >
-          {projectManager.isWSConnectLoading ? <Spinner h={2} w={2} /> : <GrStatusGoodSmall color={w3s.projectManager.isWSConnect ? 'green' : 'red'} style={{ width: '12px', height: '12px' }} />}
+          {projectManager.isWSConnectLoading ? <Spinner h={2} w={2} /> : <GrStatusGoodSmall color={w3s.projectManager.isWSConnect ? 'green' : 'lightgray'} style={{ width: '12px', height: '12px' }} />}
         </Box>
       </Tooltip>
     );
