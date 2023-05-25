@@ -80,9 +80,9 @@ export const LineChartCard = ({
           </Text>
         </Flex>
         {description && (
-          <Box color="#7a7a7a" fontSize={'12px'}>
+          <Text color="#7a7a7a" fontSize={'12px'}>
             {description}
-          </Box>
+          </Text>
         )}
       </CardHeader>
       <CardBody pt="0">

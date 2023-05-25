@@ -124,7 +124,12 @@ export default class DBTableModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit'
+        submitText: 'Submit',
+        props: {
+          style: {
+            marginTop:"100px"
+          }
+        }
       },
       // rls_enabled: {
       //   'ui:widget': 'checkbox'

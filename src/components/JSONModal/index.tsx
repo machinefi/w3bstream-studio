@@ -40,7 +40,7 @@ const JSONModal = observer(() => {
 
                 </>
               )}
-              <ModalBody pb="1.5rem">
+              <ModalBody pb="1.5rem" minH={"400px"}>
                 {formList.length > 1 ? (
                   <>
                     <Tabs

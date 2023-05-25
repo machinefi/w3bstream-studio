@@ -38,9 +38,9 @@ const Triggers = () => {
         <Box w="60px" fontSize="12px" color="#0F0F0F" fontWeight={400}>
           Route:
         </Box>
-        <Box ml="14px" w="100%" p="8px 10px" fontSize={"14px"}  border="1px solid #EDEDED" borderRadius="6px" wordBreak={'break-all'}>
+        <Text ml="14px" w="100%" p="8px 10px" fontSize={"14px"}  border="1px solid #EDEDED" borderRadius="6px" wordBreak={'break-all'}>
           {envs.value?.httpURL.replace(':projectName', curProject?.f_name)}
-        </Box>
+        </Text>
       </Flex>
       <Box mt="10px" fontSize="14px" color="#7A7A7A">
         MQTT
@@ -49,17 +49,17 @@ const Triggers = () => {
         <Box w="60px" color="#0F0F0F" fontSize={"12px"}>
           URL:
         </Box>
-        <Box ml="14px" w="100%" p="8px 10px" fontSize={"14px"} border="1px solid #EDEDED" borderRadius="6px">
+        <Text ml="14px" w="100%" p="8px 10px" fontSize={"14px"} border="1px solid #EDEDED" borderRadius="6px">
           {envs.value?.mqttURL}
-        </Box>
+        </Text>
       </Flex>
       <Flex mt="10px" alignItems="center">
         <Box w="60px" color="#0F0F0F" fontSize={"12px"}>
           Topic:
         </Box>
-        <Box ml="14px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px" fontSize={"14px"}>
+        <Text ml="14px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px" fontSize={"14px"}>
           {curProject?.f_name}
-        </Box>
+        </Text>
       </Flex>
 
       {/* <Text mt="40px" fontSize="1.25rem" fontWeight={600}>
@@ -95,9 +95,9 @@ const Triggers = () => {
 
       <Flex mb="10px" alignItems="flex-start" justifyContent="space-between">
         <Flex flexDirection={'column'}>
-          <Box fontSize="1.25rem" color="#0F0F0F" fontWeight={600}>
+          <Text fontSize="1.25rem" color="#0F0F0F" fontWeight={600}>
             Event Routing
-          </Box>
+          </Text>
           <Text color={'#7A7A7A'} fontSize="14px">Once a W3bstream event is raised by a certain source,it can be "routed"to an handler function exported in your applet. Each time that event is raised in W3bstream, the event payload is passed as an argument to the handler, and the handler is then executed by W3bstream.</Text>
         </Flex>
         <Box flex={1}>

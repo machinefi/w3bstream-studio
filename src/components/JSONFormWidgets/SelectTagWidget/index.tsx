@@ -42,6 +42,7 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
             <Button
               size={'sm'}
               {...defaultButtonStyle}
+              fontSize={"12px"}
               onClick={() => {
                 setSddingTagState('INPUTTING');
               }}
@@ -52,7 +53,6 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
           {addingTagState === 'INPUTTING' && (
             <>
               <Input
-                h="30px"
                 size="sm"
                 _focus={{
                   border: '1px solid #946FFF',
@@ -68,6 +68,7 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
                 ml="10px"
                 h="30px"
                 size="sm"
+                fontSize={"12px"}
                 {...defaultButtonStyle}
                 onClick={() => {
                   if (inputV) {
@@ -105,7 +106,7 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
                 }
               }}
             >
-              <Text>{tag}</Text>
+              <Text fontSize={"12px"}>{tag}</Text>
             </Flex>
           );
         })}

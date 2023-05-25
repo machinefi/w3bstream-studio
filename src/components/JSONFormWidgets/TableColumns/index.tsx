@@ -218,7 +218,7 @@ const DefaultValueMenu = observer(({ column }: { column: WidgetColumn }) => {
     return null;
   }
   return (
-    <Box pos="absolute" right="0" top="0">
+    <Box pos="absolute" right="0" top="0" >
       <Menu size="sm">
         <MenuButton size="sm" as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
         <MenuList >
@@ -241,8 +241,8 @@ const DefaultValueMenu = observer(({ column }: { column: WidgetColumn }) => {
                 }}
               >
                 <Box>
-                  <Text fontWeight={600}>{item.value}</Text>
-                  <Text fontWeight={400} fontSize={"12px"} color="#7a7a7a">{item.desc}</Text>
+                  <Text fontWeight={600} fontSize={"12px"}>{item.value}</Text>
+                  <Text fontWeight={400} fontSize={"10px"} color="gray.500">{item.desc}</Text>
                 </Box>
               </MenuItem>
             );
@@ -270,7 +270,7 @@ const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
         <SettingsIcon cursor="pointer" />
       </PopoverTrigger>
       <PopoverContent>
-        <PopoverHeader pt={4} fontWeight="bold" border="0">
+        <PopoverHeader fontWeight="bold" fontSize={"14px"} border="0">
           Extra Options
         </PopoverHeader>
         <PopoverArrow />
@@ -280,10 +280,12 @@ const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
             return (
               <Box key={item.label} mb="10px">
                 <Checkbox
+                  size={"sm"}
                   disabled={item.field === 'isIdentity'}
                   colorScheme="green"
-                  fontWeight={700}
+                  fontWeight={600}
                   isChecked={item.value}
+
                   sx={{
                     '& > .chakra-checkbox__control[data-checked]': {
                       background: '#946FFF',
@@ -311,9 +313,9 @@ const ExtraOptions = observer(({ column }: { column: WidgetColumn }) => {
                     }
                   }}
                 >
-                  {item.label}
+                  <Text fontSize={"12px"}>{item.label}</Text>
                 </Checkbox>
-                <Box pl="22px">{item.desc}</Box>
+                <Text pl="22px" fontSize={"10px"} color="gray.500">{item.desc}</Text>
               </Box>
             );
           })}
@@ -483,7 +485,7 @@ export const TableColumns = observer(() => {
   } = useStore();
 
   return (
-    <Stack mt="10px">
+    <Stack mt="10px" minH={340}>
       <Divider />
       {/* <Box fontWeight={600}>Columns</Box> */}
       <Header />
@@ -494,7 +496,7 @@ export const TableColumns = observer(() => {
         <Button
           size="sm"
           mt="10px"
-          variant="outline"
+          // variant="outline"
           fontWeight={500}
           onClick={() => {
             dbTable.onAddWidgetColumn();
