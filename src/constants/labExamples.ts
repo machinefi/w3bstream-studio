@@ -43,62 +43,66 @@ export const labExamples: FilesItemType[] = [
         label: 't_iot.json',
         data: {
           dataType: 'sql',
-          code: `{
-            "schemas": [
-              {
-                "schemaName": "public",
-                "tables": [
-                  {
-                    "tableName": "t_iot",
-                    "tableSchema": "public",
-                    "comment": "iot table",
-                    "columns": [
-                      {
-                        "name": "snr",
-                        "type": "int8",
-                        "isIdentity": true,
-                        "isNullable": false,
-                        "isUnique": false,
-                        "isPrimaryKey": true,
-                        "comment": "primary id"
-                      },
-                      {
-                        "name": "lat",
-                        "type": "float4",
-                        "defaultValue": null,
-                        "isIdentity": false,
-                        "isNullable": true,
-                        "isUnique": false,
-                        "isPrimaryKey": false,
-                        "comment": null
-                      },
-                      {
-                        "name": "long",
-                        "type": "float4",
-                        "defaultValue": null,
-                        "isIdentity": false,
-                        "isNullable": true,
-                        "isUnique": false,
-                        "isPrimaryKey": false,
-                        "comment": null
-                      },
-                      {
-                        "name": "temperature",
-                        "type": "int8",
-                        "defaultValue": null,
-                        "isIdentity": false,
-                        "isNullable": false,
-                        "isUnique": false,
-                        "isPrimaryKey": false,
-                        "comment": null
-                      }
-                    ],
-                    "relationships": []
-                  }
-                ]
-              }
-            ]
-          }`,
+          code: JSON.stringify(
+            {
+              schemas: [
+                {
+                  schemaName: 'public',
+                  tables: [
+                    {
+                      tableName: 't_iot',
+                      tableSchema: 'public',
+                      comment: 'iot table',
+                      columns: [
+                        {
+                          name: 'snr',
+                          type: 'int8',
+                          isIdentity: true,
+                          isNullable: false,
+                          isUnique: false,
+                          isPrimaryKey: true,
+                          comment: 'primary id'
+                        },
+                        {
+                          name: 'lat',
+                          type: 'float4',
+                          defaultValue: null,
+                          isIdentity: false,
+                          isNullable: true,
+                          isUnique: false,
+                          isPrimaryKey: false,
+                          comment: null
+                        },
+                        {
+                          name: 'long',
+                          type: 'float4',
+                          defaultValue: null,
+                          isIdentity: false,
+                          isNullable: true,
+                          isUnique: false,
+                          isPrimaryKey: false,
+                          comment: null
+                        },
+                        {
+                          name: 'temperature',
+                          type: 'int8',
+                          defaultValue: null,
+                          isIdentity: false,
+                          isNullable: false,
+                          isUnique: false,
+                          isPrimaryKey: false,
+                          comment: null
+                        }
+                      ],
+                      relationships: []
+                    }
+                  ]
+                }
+              ]
+            },
+            null,
+            2
+          ),
           language: 'json'
         },
         isRename: false
