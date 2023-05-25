@@ -524,6 +524,11 @@ export default class DBTableModule {
       });
       if (errorMsg) {
         showNotification({ message: errorMsg });
+      } else {
+        const count = await this.getCurrentTableDataCount();
+        this.table.pagination.setData({
+          total: Number(count)
+        });
       }
       return errorMsg;
     } catch (error) {
