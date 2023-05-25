@@ -33,14 +33,14 @@ const JSONModal = observer(() => {
             <ModalContent borderRadius={'14px'} overflow="hidden">
               {formModal.title && (
                 <>
-                  <ModalHeader bg="#F8F8FA"  px="1.5rem" fontSize={'1.25rem'} py="1rem" fontWeight={700} cursor="move" className="draggable-handle">
+                  <ModalHeader bg="#F8F8FA"  px="1.5rem" fontSize={'1.2rem'} py="1rem" fontWeight={600} cursor="move" className="draggable-handle">
                     {formModal.title}
-                    <ModalCloseButton mt="1rem" mr="0.5rem" color={'#7A7A7A'} fontSize={'1.125rem'} />
+                    <ModalCloseButton mt=".25rem" mr="0.5rem" color={'#7A7A7A'} fontSize={'1rem'} />
                   </ModalHeader>
 
                 </>
               )}
-              <ModalBody pb="1.5rem" minH={"400px"}>
+              <ModalBody pb="1.5rem">
                 {formList.length > 1 ? (
                   <>
                     <Tabs

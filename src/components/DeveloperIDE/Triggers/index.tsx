@@ -31,32 +31,32 @@ const Triggers = () => {
           }}
         />
       </Flex>
-      <Box mt="20px" fontSize="14px" color="#7A7A7A">
+      <Text mt="20px" fontSize="14px" color="#7A7A7A">
         HTTP
-      </Box>
+      </Text>
       <Flex mt="10px" alignItems="center">
-        <Box w="60px" fontSize="12px" color="#0F0F0F" fontWeight={400}>
+        <Text w="60px" fontSize="12px" color="#0F0F0F" fontWeight={400}>
           Route:
-        </Box>
+        </Text>
         <Text ml="14px" w="100%" p="8px 10px" fontSize={"14px"}  border="1px solid #EDEDED" borderRadius="6px" wordBreak={'break-all'}>
           {envs.value?.httpURL.replace(':projectName', curProject?.f_name)}
         </Text>
       </Flex>
-      <Box mt="10px" fontSize="14px" color="#7A7A7A">
+      <Text mt="10px" fontSize="14px" color="#7A7A7A">
         MQTT
-      </Box>
+      </Text>
       <Flex mt="10px" alignItems="center">
-        <Box w="60px" color="#0F0F0F" fontSize={"12px"}>
+        <Text w="60px" color="#0F0F0F" fontSize={"12px"}>
           URL:
-        </Box>
+        </Text>
         <Text ml="14px" w="100%" p="8px 10px" fontSize={"14px"} border="1px solid #EDEDED" borderRadius="6px">
           {envs.value?.mqttURL}
         </Text>
       </Flex>
       <Flex mt="10px" alignItems="center">
-        <Box w="60px" color="#0F0F0F" fontSize={"12px"}>
+        <Text w="60px" color="#0F0F0F" fontSize={"12px"}>
           Topic:
-        </Box>
+        </Text>
         <Text ml="14px" w="100%" p="8px 10px" border="1px solid #EDEDED" borderRadius="6px" fontSize={"14px"}>
           {curProject?.f_name}
         </Text>
@@ -68,12 +68,14 @@ const Triggers = () => {
       <Tabs  index={tabIndex} onChange={(index) => setTabIndex(index)} mt="20px">
         <Flex alignItems="center" justifyContent="space-between">
           <TabList>
-            <Tab fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Cron Job</Tab>
-            <Tab fontSize={'14px'} ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-              Smart Contract Monitor
+            <Tab fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+              <Text>Cron Job</Text>
             </Tab>
             <Tab fontSize={'14px'} ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-              Chain Height Monitor
+              <Text>Smart Contract Monitor</Text>
+            </Tab>
+            <Tab fontSize={'14px'} ml="100px" _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+              <Text>Chain Height Monitor</Text>
             </Tab>
           </TabList>
           {tabIndex === 0 && <CreateCronJobButton />}
@@ -81,19 +83,19 @@ const Triggers = () => {
           {tabIndex === 2 && <CreateChainHeightButton />}
         </Flex>
         <TabPanels>
-          <TabPanel px="0px">
+          <TabPanel  p="0">
             <CronJobs />
           </TabPanel>
-          <TabPanel px="0px">
+          <TabPanel  p="0">
             <ContractLogs />
           </TabPanel>
-          <TabPanel px="0px">
+          <TabPanel  p="0">
             <ChainHeight />
           </TabPanel>
         </TabPanels>
       </Tabs>
 
-      <Flex mb="10px" alignItems="flex-start" justifyContent="space-between">
+      <Flex mb="10px" mt="30px" alignItems="flex-start" justifyContent="space-between">
         <Flex flexDirection={'column'}>
           <Text fontSize="1.25rem" color="#0F0F0F" fontWeight={600}>
             Event Routing

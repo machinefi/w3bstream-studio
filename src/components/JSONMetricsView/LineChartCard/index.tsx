@@ -162,7 +162,7 @@ export const LineChartCard = ({
         ) : (
           <Stack minH="100px" align="center" justify="center">
             <SiSimpleanalytics />
-            <Box fontSize={'14px'}>No data to show</Box>
+            <Box fontSize={'14px'} >No data to show</Box>
           </Stack>
         )}
       </CardBody>

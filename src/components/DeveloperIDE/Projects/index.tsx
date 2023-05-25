@@ -158,8 +158,9 @@ const Projects = observer(() => {
               >
                 <Flex alignItems="center" justifyContent="space-between">
                   <Flex alignItems="center" mr="5px">
-                    <Flex fontWeight={700} fontSize="16px" color={'rgba(15, 15, 15, 0.75)'} alignItems={'center'} gap="10px">
-                      {project.name} <ImArrowUpRight2 fontSize={14} color="#946FFF" />
+                    <Flex fontWeight={600} fontSize="16px" color={'rgba(15, 15, 15, 0.75)'} alignItems={'center'} gap="10px">
+                      <Text>{project.name} </Text>
+                      <ImArrowUpRight2 fontSize={14} color="#946FFF" />
                     </Flex>
 
                     {!instance && (

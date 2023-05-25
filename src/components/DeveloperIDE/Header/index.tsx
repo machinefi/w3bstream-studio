@@ -51,7 +51,7 @@ const Header = observer(() => {
         cursor={'pointer'}
       >
         <Image w="30px" src="/favicon.svg" alt="logo" />
-        <Text ml="10px" fontWeight={700}>
+        <Text ml="10px" fontWeight={600}>
           w3bstream Devnet
         </Text>
       </Flex>

@@ -115,19 +115,20 @@ const Settings = () => {
         </Flex>
       </Flex>
       <Box mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
-        <Text fontSize={'18px'} fontWeight={700}>
+        <Text fontSize={'18px'} fontWeight={600}>
           General
         </Text>
         <Divider my="15px" />
         {datas.map((item) => {
           return (
             <Flex alignItems={'center'} mb="20px">
-              <Flex fontWeight={'600'} fontSize="14px" alignItems={'center'} color="#0F0F0F" minWidth={150} textAlign={'left'}>
-                {item.title} {item.tips && <Tooltip label='The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are sending your transactions.' placement='right'>
+              <Flex fontWeight={'500'} fontSize="14px" alignItems={'center'} color="blackAlpha.900" minWidth={150} textAlign={'left'}>
+                <Text>{item.title}</Text>
+                {item.tips && <Tooltip label='The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are sending your transactions.' placement='right'>
                 <Box cursor={'pointer'}><FaRegQuestionCircle color='#797878' fontSize={14} style={{margin: 5}} /></Box>
               </Tooltip>}:
               </Flex>
-              <Text ml="10px" fontSize={'14px'} color="#0F0F0F">
+              <Text ml="10px" fontSize={'14px'} color="blackAlpha.700" >
                 {item.value}
               </Text>
               {item.extra}
@@ -145,8 +146,8 @@ const Settings = () => {
       <Stack mt="10px" p="20px" border="1px solid #F9CFCE" borderRadius="8px">
         <Flex justifyContent="space-between" alignItems="center">
           <Stack>
-            <Box fontWeight={700}>Delete this project</Box>
-            <Box fontWeight={400} color="#7a7a7a" fontSize={"14px"}>Deleting a project is permanent and will erase all database data, triggers, and events routing. Please proceed with caution.</Box>
+            <Text fontWeight={600}>Delete this project</Text>
+            <Text fontWeight={400} color="#7a7a7a" fontSize={"14px"}>Deleting a project is permanent and will erase all database data, triggers, and events routing. Please proceed with caution.</Text>
           </Stack>
           <Button
             ml="20px"
@@ -174,7 +175,7 @@ const Settings = () => {
               });
             }}
           >
-            Delete this project
+            <Text>Delete this project</Text>
           </Button>
         </Flex>
       </Stack>
