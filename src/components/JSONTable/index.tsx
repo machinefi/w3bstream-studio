@@ -94,7 +94,7 @@ function Body<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
     <Tr fontSize="14px" color="#0F0F0F">
       {columns.map((column) => {
         return (
-          <Td key={column.key} fontSize={'12px'} border="1px solid #F5F5F5" maxW="200px" overflowX="auto">
+          <Td key={column.key} fontSize={'12px'} border="1px solid #F5F5F5" maxW="200px" overflowX="auto" >
             {column.actions
               ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
               : column.render

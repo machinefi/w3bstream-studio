@@ -22,7 +22,7 @@ const CurrentProject = observer(() => {
   return (
       <Flex w="100%" minH="100%" position="relative">
         <ToolBar borderRadius="8px" overflowY="auto" />
-        <Box ml="220px" w="calc(100% - 220px)" minH="100%" p="14px 30px" bg="#fff" borderRadius="8px">
+        <Box ml="220px" w="calc(100% - 220px)" minH="100%" p="12px 24px" bg="#fff" borderRadius="8px">
           {showContent === 'METRICS' && <Metrics />}
           {showContent === 'CURRENT_PUBLISHERS' && <Publishers />}
           {(showContent === 'CONTRACT_LOGS' || showContent === 'CHAIN_TX' || showContent === 'CHAIN_HEIGHT') && <Triggers />}
