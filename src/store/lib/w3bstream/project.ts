@@ -13,7 +13,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import InitWasmTemplateWidget from '@/components/JSONFormWidgets/InitWasmTemplateWidget';
 import { eventBus } from '@/lib/event';
 import axios from 'axios';
-import { toast } from '@/lib/helper';
+import { toast, helper } from '@/lib/helper';
 
 export const initWasmTemplateFormSchema = {
   type: 'object',
@@ -69,7 +69,7 @@ export class ProjectManager {
     })
   });
   wsClient: Client;
-  wsPort = 11400;
+
   setVscodeSettingForm = new JSONSchemaFormState<SetVscodeSettingFormSchemaType>({
     //@ts-ignore
     schema: setVscodeSettingFormSchema,
@@ -84,23 +84,21 @@ export class ProjectManager {
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
-      this.setVscodeSettingForm.reset();
       console.log(e.formData);
-      this.wsPort = e.formData.port;
-      await this.connectWs();
-      if (!this.isWSConnect) {
-        toast.error(rootStore.lang.t("error.connect.vscode.msg"));
-      }
     },
     value: new JSONValue<SetVscodeSettingFormSchemaType>({
       default: {
-        port: this.wsPort
+        port: 11400
       }
     })
   });
 
   isWSConnect = false;
   isWSConnectLoading = false;
+
+  get wsPort() {
+    return this.setVscodeSettingForm.value.value.port;
+  }
 
   get curFilesList() {
     this.files.setCurrentId('GLOBAL');
@@ -127,11 +125,23 @@ export class ProjectManager {
     };
   }
 
+  async uiConnectWs() {
+    try {
+      this.isWSConnectLoading = true;
+      await this.connectWs();
+    } catch (e) {
+      toast.error(`Connect to port ${this.wsPort} failed!`);
+      if (!this.isWSConnect) {
+        window.open('vscode://w3bstream.w3bstream-vscode-extension');
+      }
+    }
+  }
   async connectWs() {
     try {
       this.wsClient?.dispose();
     } catch (e) {}
     this.isWSConnectLoading = true;
+    // await helper.promise.sleep(2000);
     const query = `subscription{
       files {
         name
@@ -181,19 +191,24 @@ export class ProjectManager {
         complete: () => {
           resolve(result);
           this.isWSConnectLoading = false;
-        },
-        unsubscribe: () => {
-          // console.log('unsubscribe ');
-        },
-        start: () => {
-          // console.log('start');
         }
+      });
+
+      this.wsClient.on('closed', (e) => {
+        console.log('closed');
       });
     });
   }
+
+  async unsubscribe() {
+    this.wsClient?.dispose();
+    this.curFilesListSchema.setVscodeRemotFile([]);
+    this.isWSConnect = false;
+    this.isWSConnectLoading = false;
+  }
+
   sync() {
     _.each([undefined], async (v: ProjectType, k) => {
-      console.log('ssssync');
       const project_id = 'GLOBAL';
       const IndexDbFile = await IndexDb.findFilesById(project_id);
       if (IndexDbFile[0]) {
