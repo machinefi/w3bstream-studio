@@ -118,7 +118,7 @@ const Settings = () => {
         <Text fontSize={'18px'} fontWeight={600}>
           General
         </Text>
-        <Divider my="15px" />
+        <Divider my="10px" />
         {datas.map((item) => {
           return (
             <Flex alignItems={'center'} mb="20px">

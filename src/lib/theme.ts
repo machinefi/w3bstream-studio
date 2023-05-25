@@ -45,6 +45,11 @@ export const theme = extendTheme({
       baseStyle: {
         letterSpacing: "-0.020625rem",
       }
+    },
+    Flex: {
+      baseStyle: {
+        letterSpacing: "-0.020625rem",
+      }
     }
   }
 });
