@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { TbWebhook } from 'react-icons/tb';
 import { AiOutlineCar, AiOutlineCode, AiOutlineClockCircle } from 'react-icons/ai';
 import { SiAiohttp } from 'react-icons/si';
@@ -17,6 +17,7 @@ import { eventBus } from '@/lib/event';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
 import { Box, Flex, Tooltip, Image, Input } from '@chakra-ui/react';
 import { BaseNode } from '@/lib/nodes/baseNode';
+import { _ } from '@/lib/lodash';
 
 export type FlowNodeData = {
   [x: string]: any;
@@ -33,6 +34,7 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
   const store = useLocalObservable(() => ({
     realNodeInstance: new BaseNode(nodeInstance),
     curFlowNodeResult: null,
+    isLabelEditing: false,
     onFlowRunResult(result) {
       if (result.flowId == id) {
         store.curFlowNodeResult = result;
@@ -40,13 +42,34 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
     },
   }));
 
+  const changeLabelRef = useRef(
+    _.debounce((v: string) => {
+      flow.editNode(id, {
+        label: v
+      });
+      store.isLabelEditing = false;
+    }, 800)
+  );
+
+  const changeFormDataRef = useRef(
+    _.debounce((v: {
+      id: string;
+      formData: any;
+    }) => {
+      flow.editNode(v.id, v.formData);
+    }, 1000)
+  );
+
   const copied = flow.copiedNodes.findIndex((node) => node.id === id) > -1;
 
   useEffect(() => {
     const formState = store.realNodeInstance?.form.formList[0].form[0]?.props.formState;
     if (formState) {
       formState.afterChange = e => {
-        flow.editNode(id, e.formData);
+        changeFormDataRef.current && changeFormDataRef.current({
+          id,
+          formData: e.formData
+        })
       }
     }
     eventBus.on('flow.run.result', store.onFlowRunResult);
@@ -85,19 +108,29 @@ export const NodeContainer = observer(({ id, nodeInstance, data }: { id: string;
         <Flex justify={'center'} align={'center'} flex={1} className="drag-handle" cursor="move">
           <NodeIcon icon={store.realNodeInstance?.description?.icon} size={10} />
           <Box ml="4px">
-            <Input
-              h="20px"
-              p="0 2px"
-              borderRadius={0}
-              border="none"
-              focusBorderColor="#fff"
-              value={data?.label}
-              onChange={e => {
-                flow.editNode(id, {
-                  label: e.target.value
-                });
-              }}
-            />
+            {
+              store.isLabelEditing ? (
+                <Input
+                  h="20px"
+                  p="0 2px"
+                  borderRadius={0}
+                  border="none"
+                  focusBorderColor="#fff"
+                  defaultValue={data?.label}
+                  onChange={e => {
+                    changeLabelRef.current && changeLabelRef.current(e.target.value);
+                  }}
+                />
+              ) : (
+                <Box
+                  onDoubleClick={() => {
+                    store.isLabelEditing = true;
+                  }}
+                >
+                  {data?.label}
+                </Box>
+              )
+            }
           </Box>
         </Flex>
         {store.curFlowNodeResult && (
