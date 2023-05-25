@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import { MdRefresh } from 'react-icons/md';
 import { FaFileImport } from 'react-icons/fa';
-import { ImArrowUpRight2 } from 'react-icons/im'
+import { ImArrowUpRight2 } from 'react-icons/im';
 
 const Projects = observer(() => {
   const {
@@ -39,7 +39,7 @@ const Projects = observer(() => {
             <Button
               ml="20px"
               size="sm"
-              leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
+              leftIcon={w3s.project.importProject.loading.value ? <Spinner size="sm" color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
                 w3s.project.importProject.call();
@@ -56,7 +56,7 @@ const Projects = observer(() => {
               onClick={async () => {
                 await allProjects.call();
                 w3s.projectManager.sync();
-                toast.success(t("success.reloaded.msg"));
+                toast.success(t('success.reloaded.msg'));
               }}
             >
               Refresh
@@ -81,7 +81,7 @@ const Projects = observer(() => {
                     }
                     w3s.project.resetSelectedNames();
                     eventBus.emit('project.delete');
-                    toast.success(t("success.delete.msg"));
+                    toast.success(t('success.delete.msg'));
                   }
                 });
               }}
@@ -159,7 +159,7 @@ const Projects = observer(() => {
                 <Flex alignItems="center" justifyContent="space-between">
                   <Flex alignItems="center" mr="5px">
                     <Flex fontWeight={700} fontSize="16px" color={'rgba(15, 15, 15, 0.75)'} alignItems={'center'} gap="10px">
-                      {project.name} <ImArrowUpRight2 fontSize={14} color='#946FFF' />
+                      {project.name} <ImArrowUpRight2 fontSize={14} color="#946FFF" />
                     </Flex>
 
                     {!instance && (
@@ -217,7 +217,7 @@ const Projects = observer(() => {
                     0
                   </Box>
                 </Flex> */}
-                <Flex mt="20px" flexWrap="wrap" flex="1">
+                <Flex mt="10px" flexWrap="wrap" flex="1">
                   {project.f_description &&
                     project.f_description.split(',').map((tag) => {
                       return (
@@ -230,18 +230,16 @@ const Projects = observer(() => {
 
                 <Flex mt="10px" justifyContent="space-between">
                   <Flex color={status.color} alignItems="center">
-                    <Box w="6px" h="6px" bg={status.color} mr="6px" borderRadius="50%"></Box> <Text fontWeight={400}>{status.text}</Text>
+                    <Box w="6px" h="6px" bg={status.color} mr="6px" borderRadius="50%"></Box>{' '}
+                    <Text fontWeight={400} fontSize={'12px'}>
+                      {status.text}
+                    </Text>
                   </Flex>
                   {instance && (
                     <Flex alignItems={'center'}>
                       {instance.f_state === 2 ? (
-                        <Icon
-                          ml="20px"
-                          as={AiOutlinePauseCircle}
-                          boxSize={'1rem'}
-                          color="#946FFF"
-                          cursor="pointer"
-                          _hover={{ color: '#7D44FF' }}
+                        <Flex
+                          alignItems={'center'}
                           onClick={async (e) => {
                             e.stopPropagation();
                             try {
@@ -250,18 +248,18 @@ const Projects = observer(() => {
                                 url: `/api/w3bapp/deploy/${instance.f_instance_id}/HUNGUP`
                               });
                               eventBus.emit('instance.handle');
-                              toast.success(t("success.suspended.msg"));
-                            } catch (error) { }
+                              toast.success(t('success.suspended.msg'));
+                            } catch (error) {}
                           }}
-                        />
+                        >
+                          <Icon ml="20px" as={AiOutlinePauseCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
+                          <Text ml="10px" fontSize={14} color={'#946FFF'}>
+                            Pause
+                          </Text>
+                        </Flex>
                       ) : (
-                        <Icon
-                          ml="14px"
-                          as={AiOutlinePlayCircle}
-                          boxSize={'1rem'}
-                          color="#946FFF"
-                          cursor="pointer"
-                          _hover={{ color: '#7D44FF' }}
+                        <Flex
+                          alignItems={'center'}
                           onClick={async (e) => {
                             e.stopPropagation();
                             try {
@@ -270,12 +268,16 @@ const Projects = observer(() => {
                                 url: `/api/w3bapp/deploy/${instance.f_instance_id}/START`
                               });
                               eventBus.emit('instance.handle');
-                              toast.success(t("success.started.msg"));
-                            } catch (error) { }
+                              toast.success(t('success.started.msg'));
+                            } catch (error) {}
                           }}
-                        />
+                        >
+                          <Icon ml="14px" as={AiOutlinePlayCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
+                          <Text ml="10px" fontSize={14} color={'#946FFF'}>
+                            Start
+                          </Text>
+                        </Flex>
                       )}
-                      <Text ml="10px" fontSize={14} color={'#946FFF'}>Pause</Text>
                     </Flex>
                   )}
                 </Flex>
@@ -312,7 +314,7 @@ const Projects = observer(() => {
             <Button
               ml="20px"
               size={'md'}
-              leftIcon={w3s.project.importProject.loading.value ? <Spinner size='sm' color="#946FFF" /> : <Icon as={FaFileImport} />}
+              leftIcon={w3s.project.importProject.loading.value ? <Spinner size="sm" color="#946FFF" /> : <Icon as={FaFileImport} />}
               {...defaultOutlineButtonStyle}
               onClick={() => {
                 w3s.project.importProject.call();

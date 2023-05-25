@@ -48,7 +48,7 @@ export const ConsolePanel = observer(() => {
         id="terminal"
         fontFamily="monospace"
         w="100%"
-        h="calc(100vh - 580px)"
+        h="calc(100vh - 650px)"
         p="10px"
         bg="#1e1e1e"
         color="white"

@@ -62,10 +62,10 @@ const Triggers = () => {
         </Box>
       </Flex>
 
-      <Text mt="40px" fontSize="1.25rem" fontWeight={600}>
+      {/* <Text mt="40px" fontSize="1.25rem" fontWeight={600}>
         Event Monitor
-        </Text>
-      <Tabs  index={tabIndex} onChange={(index) => setTabIndex(index)} mt="10px">
+        </Text> */}
+      <Tabs  index={tabIndex} onChange={(index) => setTabIndex(index)} mt="20px">
         <Flex alignItems="center" justifyContent="space-between">
           <TabList>
             <Tab fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>Cron Job</Tab>

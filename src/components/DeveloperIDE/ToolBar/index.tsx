@@ -21,7 +21,7 @@ const ToolBar = (props: ToolBar) => {
 
   return (
     <Box position={'fixed'} h="100%" overflow={'auto'}>
-      <Flex minW="200px" direction="column" align="center" p="14px" bg="#fff" {...props}>
+      <Flex minW="200px" h="100%" direction="column" align="center" p="14px" bg="#fff" {...props}>
         <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
           <PopoverTrigger >
             <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} px="14px" py="8px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
@@ -134,7 +134,7 @@ const ToolBar = (props: ToolBar) => {
           }}
         >
           <Icon as={TbHandClick} boxSize={5} />
-          <Box ml="15px" fontSize="16px">
+          <Box ml="15px" fontSize="14px">
             Events
           </Box>
         </Flex>

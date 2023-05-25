@@ -122,7 +122,7 @@ const Settings = () => {
         {datas.map((item) => {
           return (
             <Flex alignItems={'center'} mb="20px">
-              <Flex fontWeight={'bold'} fontSize="14px" alignItems={'center'} color="#0F0F0F" minWidth={150} textAlign={'left'}>
+              <Flex fontWeight={'600'} fontSize="14px" alignItems={'center'} color="#0F0F0F" minWidth={150} textAlign={'left'}>
                 {item.title} {item.tips && <Tooltip label='The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are sending your transactions.' placement='right'>
                 <Box cursor={'pointer'}><FaRegQuestionCircle color='#797878' fontSize={14} style={{margin: 5}} /></Box>
               </Tooltip>}:
