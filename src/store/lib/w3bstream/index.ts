@@ -23,6 +23,7 @@ import LabModule from './schema/lab';
 import CronJobModule from './schema/cronJob';
 import ENVModule from './schema/envs';
 import BlockChainModule from './schema/blockChain';
+import toast from 'react-hot-toast';
 
 configure({
   enforceActions: 'never'
