@@ -20,6 +20,9 @@ import { Transaction, AccessListEIP2930TxData, FeeMarketEIP1559TxData, TxData } 
 import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
 import { hexToBytes } from 'ethereum-cryptography/utils';
 import ERC20Bytecode from '@/constants/bytecode/ERC20.json';
+import ERC20Abi from '@/constants/abis/ERC20.json';
+import Web3 from 'web3';
+
 
 type TransactionsData = TxData | AccessListEIP2930TxData | FeeMarketEIP1559TxData
 
@@ -256,14 +259,20 @@ class Wallet {
 class BlockChain {
   block: Block
   constructor() {
-    this.block = Block.fromBlockData({ header: { extraData: new Uint8Array(97) } }, { common })
+    this.block = Block.fromBlockData({ header: { extraData: new Uint8Array(97) } }, { common });
   }
 
   async deploy(contract: string, wallet: Wallet) {
-    const vm = await VM.create({ common })
-    const bytecode = ERC20Bytecode.bytecode
-    const contractAddress = await deployContract(vm, this.block, wallet.accountPk, bytecode, '')
-    return contractAddress.toString();
+    const vm = await VM.create({ common });
+    const bytecode = ERC20Bytecode.bytecode;
+    const contractAddress = await deployContract(vm, this.block, wallet.accountPk, bytecode, '');
+    const web3 = new Web3('http://localhost:8545');
+    // @ts-ignore
+    const contractInstance = new web3.eth.Contract(ERC20Abi, contractAddress);
+    return {
+      contractAddress,
+      contractInstance,
+    };
   }
 }
 
@@ -274,8 +283,9 @@ export const debugDemo = async () => {
   let errMsg = '';
   let msg = '';
   try {
-    msg = await new Function('Wallet', 'BlockChain', code)(Wallet, BlockChain);
-    console.log('[Demo Return Value]:', msg);
+    const res = await new Function('Wallet', 'BlockChain', code)(Wallet, BlockChain);
+    console.log('[Demo Return Value]:', res);
+    msg = `contract address: ${res.contractAddress.toString()}`;
   } catch (error) {
     errMsg = error.message;
   }

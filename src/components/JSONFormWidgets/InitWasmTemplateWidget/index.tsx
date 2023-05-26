@@ -76,7 +76,7 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
   return (
     <>
       {templates(assemblyScriptExample, 'AssemblyScript')}
-      {templates(demoExample, 'Demo')}
+      {templates(demoExample, 'Test')}
       <Flex mt="20px" pb="10px" alignItems="center" cursor="pointer" borderBottom="1px solid #eee" onClick={onToggle}>
         {isOpen ? <ChevronDownIcon w={6} h={6} /> : <ChevronRightIcon w={6} h={6} />}
         <Text ml="5px">Other templates</Text>

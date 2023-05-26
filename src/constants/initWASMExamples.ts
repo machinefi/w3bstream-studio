@@ -347,7 +347,7 @@ export const demoExample: FilesItemType = {
     {
       type: 'file',
       key: uuidv4(),
-      label: `demo.ts`,
+      label: `demo.test.ts`,
       data: {
         dataType: 'demo',
         language: 'typescript',
@@ -355,8 +355,8 @@ export const demoExample: FilesItemType = {
 async function main() {
   const wallet = new Wallet()
   const blockchain = new BlockChain()
-  const contractAddress = await blockchain.deploy("ERC20.abi.json", wallet)
-  return contractAddress
+  const contract = await blockchain.deploy("ERC20.abi.json", wallet)
+  return contract
 }
 return main()
 `
