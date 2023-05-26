@@ -6,9 +6,9 @@ import { defaultButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const ChainTx = observer(() => {
   const { w3s } = useStore();
@@ -57,7 +57,7 @@ const ChainTx = observer(() => {
                 data: formData
               });
               if (res.data) {
-                showNotification({ message: 'Blockchain transaction monitor successfully created' });
+                toast.success('Blockchain transaction monitor successfully created');
                 eventBus.emit('chainTx.create');
               }
             }

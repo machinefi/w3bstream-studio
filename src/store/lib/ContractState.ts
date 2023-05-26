@@ -99,14 +99,6 @@ export class WriteFunction<T> {
 
   handleToast() {
     if (this.showToast || this.defaultToast) {
-      // helper.toast(
-      //   this.defaultToast
-      //     ? {
-      //         title: `${this.name.charAt(0).toUpperCase() + this.name.slice(1)} Success`,
-      //         status: 'success'
-      //       }
-      //     : this.showToast()
-      // );
     }
   }
 
@@ -132,7 +124,6 @@ export class WriteFunction<T> {
     } catch (error) {
       console.log(error);
       this.loading.setValue(false);
-      // helper.toast({ title: error.data?.message || error.message, status: 'error' });
       throw new Error(error.message);
     }
   }

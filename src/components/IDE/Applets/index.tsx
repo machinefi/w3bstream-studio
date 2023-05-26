@@ -7,9 +7,9 @@ import JSONTable from '@/components/JSONTable';
 import { useEffect } from 'react';
 import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
+import toast from 'react-hot-toast';
 
 const AddBtn = observer(() => {
   const { w3s } = useStore();
@@ -60,7 +60,7 @@ const AddBtn = observer(() => {
           if (projectName) {
             const pub = w3s.publisher.allData.find((item) => item.f_publisher_id.toString() === formData.publisher);
             if (!pub) {
-              showNotification({ message: 'publisher not found' });
+              toast.error('publisher not found');
               return;
             }
             const res = await axios.request({
@@ -77,7 +77,7 @@ const AddBtn = observer(() => {
               data: formData.body
             });
             if (res.data) {
-              showNotification({ message: 'publish event succeeded' });
+              toast.success('publish event succeeded');
               eventBus.emit('applet.publish-event');
             }
           }

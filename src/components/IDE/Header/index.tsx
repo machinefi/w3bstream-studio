@@ -7,11 +7,11 @@ import { useStore } from '@/store/index';
 import Link from 'next/link';
 import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import StarCount from '../StarCount';
+import toast from 'react-hot-toast';
 
 const getTabIndex = (showContent) => {
   if (showContent === 'CURRENT_APPLETS') {
@@ -158,7 +158,7 @@ const Header = observer(() => {
                 }
               });
             }
-            showNotification({ message: 'requset succeeded' });
+            toast.success('requset succeeded');
             eventBus.emit('postman.request');
           }}
         />
@@ -207,7 +207,7 @@ const Profile = observer(() => {
                     url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
                     data: formData
                   });
-                  showNotification({ message: 'update password succeeded' });
+                  toast.success('update password succeeded');
                   eventBus.emit('user.update-pwd');
                   w3s.config.logout();
                 }

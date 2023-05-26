@@ -13,7 +13,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import InitWasmTemplateWidget from '@/components/JSONFormWidgets/InitWasmTemplateWidget';
 import { eventBus } from '@/lib/event';
 import axios from 'axios';
-import { toast } from '@/lib/helper';
+import toast from 'react-hot-toast';
 
 export const initWasmTemplateFormSchema = {
   type: 'object',

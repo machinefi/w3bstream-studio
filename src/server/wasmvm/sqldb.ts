@@ -1,6 +1,6 @@
 import { IndexDb } from '@/lib/dexie';
 import { eventBus } from '@/lib/event';
-import { toast } from '@/lib/helper';
+import toast from 'react-hot-toast';
 import { hooks } from '@/lib/hooks';
 import { rootStore } from '@/store/index';
 import { ExportTableType } from '@/store/lib/w3bstream/schema/dbTable';
