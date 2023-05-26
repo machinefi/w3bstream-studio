@@ -65,7 +65,7 @@ export const MoEditor = observer((props: any) => {
       declare class BlockChain {
         block: Block
         constructor();
-        async deploy(contract: string, wallet: Wallet): string;
+        async deploy(contract: string, wallet: Wallet): { contractAddress: Address, contractInstance: Contract };
       }
       `,
             'sdk/index.d.ts'
