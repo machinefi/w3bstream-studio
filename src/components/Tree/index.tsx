@@ -11,8 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
 import { BiMemoryCard, BiPaste, BiRename } from 'react-icons/bi';
 import { toJS } from 'mobx';
-import { compileAndCreateProject, debugAssemblyscript, debugSimulation } from '../IDE/Editor/EditorFunctions';
-import { ProjectManager } from '@/store/lib/w3bstream/project';
+import { compileAndCreateProject, debugAssemblyscript, debugSimulation, debugDemo } from '../IDE/Editor/EditorFunctions';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { GrStatusGoodSmall } from 'react-icons/gr';
 import { useTranslation } from 'react-i18next';
@@ -443,6 +442,20 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                   {item?.data?.dataType == 'simulation' && curFilesListSchema?.curActiveFileId == item?.key && (
                     <Box ml="auto">
                       <Box onClick={debugSimulation}>
+                        <VscDebugStart
+                          color="black"
+                          style={{
+                            marginRight: '10px',
+                            cursor: 'pointer'
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                  )}
+
+                  {item?.data?.dataType == 'demo' && curFilesListSchema?.curActiveFileId == item?.key && (
+                    <Box ml="auto">
+                      <Box onClick={debugDemo}>
                         <VscDebugStart
                           color="black"
                           style={{

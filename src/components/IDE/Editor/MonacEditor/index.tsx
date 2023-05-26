@@ -58,6 +58,15 @@ export const MoEditor = observer((props: any) => {
       declare const hexToInt(hex: string): i32;
       declare const hexToBool(hex: string): bool;
       declare const hexToAddress(hex: string): string;
+      declare class Wallet {
+        accountAddress: Address
+        constructor();
+      };
+      declare class BlockChain {
+        block: Block
+        constructor();
+        async deploy(contract: string, wallet: Wallet): string;
+      }
       `,
             'sdk/index.d.ts'
           );

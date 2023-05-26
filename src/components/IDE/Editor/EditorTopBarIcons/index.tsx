@@ -8,7 +8,7 @@ import { BsDatabaseFillAdd } from 'react-icons/bs';
 import { FileIcon } from '@/components/Tree';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { asc } from 'pages/_app';
-import { compileAndCreateProject, debugAssemblyscript, debugSimulation, onCreateDB } from '../EditorFunctions';
+import { compileAndCreateProject, debugAssemblyscript, debugDemo, debugSimulation, onCreateDB } from '../EditorFunctions';
 import { HorizontalScrollBox } from '@/components/Common/HorizontalScrollBox';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 
@@ -22,7 +22,7 @@ export const CurActiveFileRightClickMenu = observer(({ activeFile }: { activeFil
   return (
     <>
       <Portal>
-        <ContextMenu id={`ActiveFileContent${activeFile?.key}`} onShow={() => {}} onHide={() => {}}>
+        <ContextMenu id={`ActiveFileContent${activeFile?.key}`} onShow={() => { }} onHide={() => { }}>
           <Box p={2} bg="#fff" boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px">
             <MenuItem
               onClick={() => {
@@ -199,6 +199,20 @@ export const EditorTopBarIcons = observer(() => {
       {curFilesListSchema?.curActiveFile?.data?.dataType == 'simulation' && (
         <Box ml="auto">
           <Box onClick={debugSimulation}>
+            <VscDebugStart
+              color="white"
+              style={{
+                marginRight: '10px',
+                cursor: 'pointer'
+              }}
+            />
+          </Box>
+        </Box>
+      )}
+
+      {curFilesListSchema?.curActiveFile?.data?.dataType == 'demo' && (
+        <Box ml="auto">
+          <Box onClick={debugDemo}>
             <VscDebugStart
               color="white"
               style={{
