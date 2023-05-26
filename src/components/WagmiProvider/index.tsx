@@ -21,7 +21,7 @@ export const WagmiProvider = observer(({ children }) => {
 });
 
 const Wallet = observer(() => {
-  const { god, w3s, lang: {t} } = useStore();
+  const { god, w3s, lang: { t } } = useStore();
   const { chain } = useNetwork();
   const { address, connector, isConnected } = useAccount();
   const { connect, connectors, error, isLoading } = useConnect({
@@ -161,11 +161,10 @@ const Wallet = observer(() => {
     const { ethereum } = window;
     if (ethereum && ethereum.on) {
       const handleChainChanged = (e) => {
-        // window.location.reload();
         god.currentNetwork.loadBalance();
       };
       const handleAccountChanged = (e) => {
-        god.currentNetwork.loadBalance();
+        store.logout();
       };
       ethereum.on('networkChanged', handleChainChanged);
       ethereum.on('close', handleChainChanged);
