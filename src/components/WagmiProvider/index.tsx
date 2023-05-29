@@ -48,7 +48,7 @@ const Wallet = observer(() => {
       connect({ connector: connectors[0] });
     },
     async login() {
-      toast.loading('Please confirm the login request in your wallet.');
+      // toast.loading('Please confirm the login request in your wallet.');
       try {
         const address = god.currentNetwork.account;
         const chainId = god.currentNetwork.currentChain.chainId;
