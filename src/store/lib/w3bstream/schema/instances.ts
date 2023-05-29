@@ -4,7 +4,7 @@ import { eventBus } from '@/lib/event';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { InstanceType } from '@/server/routers/w3bstream';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
-import { showNotification } from '@mantine/notifications';
+import toast from 'react-hot-toast';
 
 export default class InstancesModule {
   table = new JSONSchemaTableState<InstanceType>({
@@ -92,7 +92,7 @@ export default class InstancesModule {
                           method: 'put',
                           url: `/api/w3bapp/deploy/${item.f_instance_id}/REMOVE`
                         });
-                        showNotification({ message: 'Deleted successfully' });
+                        toast.error('Deleted successfully');
                         eventBus.emit('instance.delete');
                       } catch (error) {}
                     }

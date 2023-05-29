@@ -8,9 +8,9 @@ import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { v4 as uuidv4 } from 'uuid';
 import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidgets/TableColumns';
-import { showNotification } from '@mantine/notifications';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import EditorWidget from '@/components/JSONFormWidgets/EditorWidget';
+import toast from 'react-hot-toast';
 
 export const createTableSchema = {
   type: 'object',
@@ -97,6 +97,7 @@ export type ExportTableType = {
 
 export default class DBTableModule {
   allTables = new PromiseState<() => Promise<any>, { schemaName: string; tables: TableType[] }[]>({
+    loadingText: 'please waiting...',
     defaultValue: [],
     function: async () => {
       return this.fetchTables({
@@ -323,16 +324,16 @@ export default class DBTableModule {
         sql: this.sql
       });
       if (errorMsg) {
-        showNotification({ message: errorMsg });
+        toast.error(errorMsg);
         return {
           errorMsg
         };
       } else {
-        showNotification({ message: 'This SQL was executed successfully' });
+        toast.success('This SQL was executed successfully');
         return data;
       }
     } catch (error) {
-      showNotification({ message: error.message });
+      toast.error(error.message);
       return {
         errorMsg: error.message
       };
@@ -346,7 +347,7 @@ export default class DBTableModule {
         projectID: curProjectId
       });
       if (errorMsg) {
-        showNotification({ message: errorMsg });
+        toast.error(errorMsg);
       } else {
         if (schemas?.length) {
           const includedSchemas = schemas.map((s) => s.name);
@@ -397,7 +398,7 @@ export default class DBTableModule {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
       }
       return tableId;
     }
@@ -421,7 +422,7 @@ export default class DBTableModule {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
       }
     }
   }
@@ -435,14 +436,14 @@ export default class DBTableModule {
         ...column
       });
       if (errorMsg) {
-        showNotification({ message: `Failed to create column "${column.name}". Reason: ${errorMsg}` });
+        toast.error(`Failed to create column "${column.name}". Reason: ${errorMsg}`);
       }
       return errorMsg;
     } catch (error) {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
         return error.message;
       }
     }
@@ -457,14 +458,14 @@ export default class DBTableModule {
         ...column
       });
       if (errorMsg) {
-        showNotification({ message: `Failed to update column "${column.name}". Reason: ${errorMsg}` });
+        toast.error(`Failed to update column "${column.name}". Reason: ${errorMsg}`);
       }
       return errorMsg;
     } catch (error) {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
         return error.message;
       }
     }
@@ -479,7 +480,7 @@ export default class DBTableModule {
         cascade
       });
       if (errorMsg) {
-        showNotification({ message: errorMsg });
+        toast.error(errorMsg);
       } else {
         const cols = await this.getCurrentTableCols();
         this.setCurrentColumns(cols);
@@ -488,7 +489,7 @@ export default class DBTableModule {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
       }
     }
   }
@@ -515,7 +516,7 @@ export default class DBTableModule {
   async createTableData(keys: string[], values: any[]) {
     const { tableSchema, tableName } = this.currentTable;
     if (!keys.length) {
-      showNotification({ message: 'No data provided' });
+      toast.error('No data provided');
       return 'No data provided';
     }
     try {
@@ -528,7 +529,7 @@ export default class DBTableModule {
         values
       });
       if (errorMsg) {
-        showNotification({ message: errorMsg });
+        toast.error(errorMsg);
       } else {
         const count = await this.getCurrentTableDataCount();
         this.table.pagination.setData({
@@ -540,7 +541,7 @@ export default class DBTableModule {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
       }
     }
   }
@@ -557,7 +558,7 @@ export default class DBTableModule {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
       }
       return [];
     }
@@ -573,7 +574,7 @@ export default class DBTableModule {
         tableName
       });
       if (errorMsg) {
-        showNotification({ message: errorMsg });
+        toast.error(errorMsg);
         return 0;
       } else {
         return data[0].count;
@@ -582,7 +583,7 @@ export default class DBTableModule {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
       }
       return 0;
     }
@@ -600,7 +601,7 @@ export default class DBTableModule {
         pageSize: this.table.pagination.limit
       });
       if (errorMsg) {
-        showNotification({ message: errorMsg });
+        toast.error(errorMsg);
         return [];
       } else {
         return data;
@@ -609,7 +610,7 @@ export default class DBTableModule {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
       }
       return [];
     }
@@ -617,7 +618,7 @@ export default class DBTableModule {
 
   async deleteTableData(name, value) {
     if (!name || !value) {
-      showNotification({ message: 'No data provided' });
+      toast.error('No data provided');
       return 'No data provided';
     }
     const { tableSchema, tableName } = this.currentTable;
@@ -631,14 +632,14 @@ export default class DBTableModule {
         value
       });
       if (errorMsg) {
-        showNotification({ message: errorMsg });
+        toast.error(errorMsg);
       }
       return errorMsg;
     } catch (error) {
       if (error.message.includes('UNAUTHORIZED')) {
         globalThis.store.w3s.config.logout();
       } else {
-        showNotification({ message: error.message });
+        toast.error(error.message);
       }
     }
   }
@@ -738,18 +739,18 @@ export default class DBTableModule {
 
   async importTables({ projectID, schemas }: { projectID: string; schemas: ExportTableType[] }) {
     if (!schemas || !Array.isArray(schemas)) {
-      showNotification({ message: 'No data provided' });
+      toast.error('No data provided')
       return;
     }
     for (const schema of schemas) {
       const tables = schema?.tables;
       if (!tables || !Array.isArray(tables)) {
-        showNotification({ message: 'No data provided' });
+        toast.error('No data provided')
         return;
       }
       for (const t of tables) {
         if (!t.tableName || !t.tableSchema) {
-          showNotification({ message: 'No data provided' });
+          toast.error('No data provided')
           return;
         }
         try {

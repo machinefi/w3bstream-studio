@@ -6,9 +6,9 @@ import { defaultButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const ContractLogs = observer(() => {
   const { w3s } = useStore();
@@ -71,7 +71,7 @@ export const CreateContractLogButton = observer(() => {
             data: formData
           });
           if (res.data) {
-            showNotification({ message: 'Smart Contract event monitor successfully created.' });
+            toast.success('Smart Contract event monitor successfully created.');
             eventBus.emit('contractlog.create');
           }
         }

@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Button, Flex } from '@chakra-ui/react';
-import { helper, toast } from '@/lib/helper';
+import { helper } from '@/lib/helper';
+import toast from 'react-hot-toast';
 import _ from 'lodash';
 import { hooks } from '@/lib/hooks';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
@@ -31,7 +32,7 @@ export const EditorEmptyArea = observer(() => {
             ]
           });
           if (!formData.template) {
-            return toast.warning('Please select a template!');
+            return toast.error('Please select a template!');
           }
           w3s.projectManager.curFilesListSchema.createFileFormFolder(w3s.projectManager.curFilesList[0], 'file', helper.json.safeParse(formData.template) ?? null);
         }}

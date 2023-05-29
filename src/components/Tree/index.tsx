@@ -3,7 +3,8 @@ import { FilesItemType, VSCodeRemoteFolderName } from '@/store/lib/w3bstream/sch
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import { helper, toast } from '@/lib/helper';
+import { helper } from '@/lib/helper';
+import toast from 'react-hot-toast';
 import { hooks } from '@/lib/hooks';
 import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Button, Center, Spinner } from '@chakra-ui/react';
 import { VscCloudDownload, VscDebugStart, VscFile, VscFiles, VscFileSymlinkFile, VscFileZip, VscFolder, VscTrash } from 'react-icons/vsc';
@@ -94,7 +95,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
             ]
           });
           if (!formData.template) {
-            return toast.warning('Please select a template!');
+            return toast.error('Please select a template!');
           }
           w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', helper.json.safeParse(formData.template) ?? null);
         }
@@ -377,7 +378,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                         item.label = e.target.value;
                       }}
                       onBlur={() => {
-                        if (item.label == '') return toast.warning('name can not empty');
+                        if (item.label == '') return toast.error('name can not empty');
                         item.isRename = false;
                       }}
                     ></input>

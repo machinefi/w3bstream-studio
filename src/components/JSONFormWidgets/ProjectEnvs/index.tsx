@@ -6,9 +6,9 @@ import { useStore } from '@/store/index';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { v4 as uuidv4 } from 'uuid';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { WidgetProps } from '@rjsf/utils';
 import { eventBus } from '@/lib/event';
+import toast from 'react-hot-toast';
 
 interface Env {
   id: string;
@@ -76,16 +76,13 @@ export const ProjectEnvs = observer(() => {
         if (projectName) {
           try {
             await axios.post(`/api/w3bapp/project_config/x/${projectName}/PROJECT_ENV`, { env: values });
-            showNotification({ message: 'Save environment variables successfully' });
+            toast.success('Save environment variables successfully');
             eventBus.emit('project.update');
           } catch (error) {
             throw error;
           }
         } else {
-          showNotification({
-            color: 'red',
-            message: 'Project name is empty'
-          });
+          toast.error('Project name is empty');
         }
       }
     }

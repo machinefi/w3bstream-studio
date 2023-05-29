@@ -39,7 +39,8 @@ import {
 } from '@chakra-ui/react';
 import { MinusIcon, LinkIcon, RepeatIcon, CopyIcon } from '@chakra-ui/icons';
 import { toJS } from 'mobx';
-import { helper, toast } from '@/lib/helper';
+import { helper } from '@/lib/helper';
+import toast from 'react-hot-toast';
 import { ContractInstance, FunctionState } from '@/store/lib/ContractInstance';
 import { BooleanState } from '@/store/standard/base';
 import BigNumber from 'bignumber.js';
@@ -162,7 +163,7 @@ export const FunctiomItem = observer(({ functionItem, contract }: { functionItem
     async onCall(func: FunctionState, address) {
       console.log(contract);
       if (!address) {
-        return toast.warning('Please set address');
+        return toast.error('Please set address');
       }
       func.setCallError('');
       const options = {} as any;
@@ -316,7 +317,7 @@ export const EventItem = observer(({ functionItem, contract }: { functionItem: F
     async onCall(func: FunctionState, address) {
       console.log(contract);
       if (!address) {
-        return toast.warning('Please set address');
+        return toast.error('Please set address');
       }
       func.setCallError('');
       const options = {} as any;

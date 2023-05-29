@@ -1,4 +1,5 @@
-import { helper, toast } from "@/lib/helper";
+import { helper } from "@/lib/helper";
+import toast from 'react-hot-toast';
 import { rootStore } from "@/store/index";
 import reactHotToast from 'react-hot-toast';
 import { asc } from 'pages/_app';

@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { WagmiConfig, useAccount, useConnect, useDisconnect, useNetwork, useSignMessage } from 'wagmi';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { showNotification, updateNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { SiweMessage } from 'siwe';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import toast from 'react-hot-toast';
 
 export const WagmiProvider = observer(({ children }) => {
   const { god } = useStore();
@@ -48,14 +48,7 @@ const Wallet = observer(() => {
       connect({ connector: connectors[0] });
     },
     async login() {
-      showNotification({
-        id: 'login',
-        title: 'Login',
-        loading: true,
-        message: 'Please confirm the login request in your wallet.',
-        color: 'yellow',
-        autoClose: false
-      });
+      toast.loading('Please confirm the login request in your wallet.');
       try {
         const address = god.currentNetwork.account;
         const chainId = god.currentNetwork.currentChain.chainId;
@@ -144,13 +137,7 @@ const Wallet = observer(() => {
           });
         } else {
           god.isWrongNetwork.setValue(true);
-          showNotification({
-            id: 'wrongNetwork',
-            title: 'Wrong Network',
-            message: 'Please switch to the correct network.',
-            color: 'red',
-            autoClose: true
-          });
+          toast.error('Please switch to the correct network.');
         }
       });
     }
