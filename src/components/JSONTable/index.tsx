@@ -28,7 +28,7 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
 
   return (
     <>
-      <TableContainer {...containerProps}>
+      <TableContainer {...containerProps} overflowX="auto">
         <ChakraTable>
           <Thead>
             <Tr bg="#F5F5F5">

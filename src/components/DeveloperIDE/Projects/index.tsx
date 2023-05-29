@@ -81,6 +81,7 @@ const Projects = observer(() => {
                     }
                     w3s.project.resetSelectedNames();
                     eventBus.emit('project.delete');
+                    console.log(t("success.delete.msg"))
                     toast.success(t("success.delete.msg"));
                   }
                 });

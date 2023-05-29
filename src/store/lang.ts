@@ -23,7 +23,8 @@ export class LangStore {
     const urlParams = new URLSearchParams(window.location.search);
     const langFromQuery = urlParams.get('lang');
     const browserLang = navigator.languages ? navigator.languages[0] : navigator.language;
-    let lang = langFromQuery || localStorage.getItem('lang') || browserLang;
+    // let lang = langFromQuery || localStorage.getItem('lang') || browserLang;
+    let lang = "en"
     if (fileNameMapping[lang]) {
       lang = fileNameMapping[lang];
     }
