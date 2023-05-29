@@ -60,5 +60,6 @@
   "error.login.msg": "Login failed",
   "success.login.msg": "Login successful.",
   "error.flow.deleted.msg": "Flow deleted failed",
-  "error.flow.duplicated.msg": "Flow duplicated failed"
+  "error.flow.duplicated.msg": "Flow duplicated failed",
+  "connect-failed": "Connect Failed"
 }

@@ -24,7 +24,7 @@ export const INSTANCE_STATUS = {
   3: {
     colorScheme: 'red',
     text: 'Paused',
-    color: 'red',
+    color: '#F76B1C',
   }
 };
 

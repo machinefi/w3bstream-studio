@@ -1,4 +1,4 @@
-import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
+import { extendTheme, type ThemeConfig, Button } from '@chakra-ui/react';
 
 export const defaultButtonStyle = {
   bg: '#946FFF',
@@ -39,6 +39,18 @@ export const theme = extendTheme({
       baseStyle: {
         letterSpacing: "-0.020625rem",
         fontweight: "400",
+      }
+    },
+    Button: {
+      baseStyle: {
+        letterSpacing: "-0.020625rem",
+        fontWeight: "500",
+        fontSize: '14px'
+      }
+    },
+    Flex: {
+      baseStyle: {
+        letterSpacing: "-0.020625rem",
       }
     }
   }

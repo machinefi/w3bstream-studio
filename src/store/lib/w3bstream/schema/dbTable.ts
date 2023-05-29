@@ -125,7 +125,12 @@ export default class DBTableModule {
     uiSchema: {
       'ui:submitButtonOptions': {
         norender: false,
-        submitText: 'Submit'
+        submitText: 'Submit',
+        props: {
+          style: {
+            marginTop:"100px"
+          }
+        }
       },
       // rls_enabled: {
       //   'ui:widget': 'checkbox'
@@ -525,6 +530,11 @@ export default class DBTableModule {
       });
       if (errorMsg) {
         toast.error(errorMsg);
+      } else {
+        const count = await this.getCurrentTableDataCount();
+        this.table.pagination.setData({
+          total: Number(count)
+        });
       }
       return errorMsg;
     } catch (error) {

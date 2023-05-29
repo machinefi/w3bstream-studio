@@ -73,7 +73,7 @@ const Publishers = observer(() => {
             }
           }}
         >
-          Add Device
+          <Text>Add Device</Text>
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.publisher} />

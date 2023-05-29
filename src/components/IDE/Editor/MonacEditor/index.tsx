@@ -33,7 +33,7 @@ export const MoEditor = observer((props: any) => {
           }
         }}
         width={'100%'}
-        height={350}
+        height={500}
         key={curFilesListSchema?.curActiveFile.data?.language}
         theme="vs-dark"
         defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
@@ -58,6 +58,15 @@ export const MoEditor = observer((props: any) => {
       declare const hexToInt(hex: string): i32;
       declare const hexToBool(hex: string): bool;
       declare const hexToAddress(hex: string): string;
+      declare class Wallet {
+        accountAddress: Address
+        constructor();
+      };
+      declare class BlockChain {
+        block: Block
+        constructor();
+        async deploy(contract: string, wallet: Wallet): { contractAddress: Address, contractInstance: Contract };
+      }
       `,
             'sdk/index.d.ts'
           );

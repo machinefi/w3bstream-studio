@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Box, Flex, Stack, Input, Button } from '@chakra-ui/react';
+import { Box, Flex, Stack, Input, Button,Text } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -110,13 +110,13 @@ export const ProjectEnvs = observer(() => {
 
   return (
     <Stack>
-      <Box fontSize="16px" fontWeight={700}>
+      <Text fontSize="16px" fontWeight={600}>
         Environment Variables
-      </Box>
+      </Text>
 
-      <Box fontSize="14px" color="#7a7a7a">
+      <Text fontSize="14px" color="#7a7a7a">
         Use environment variables to store API keys and other configuration values and secrets. You can access them in your code like regular environment variables
-      </Box>
+      </Text>
       <Box  pt="20px" >
       {store.envs.map((item) => (
         <Flex w="100%" key={item.id}>
@@ -164,7 +164,7 @@ export const ProjectEnvs = observer(() => {
             store.onAddEnv();
           }}
         >
-          Add Environment Variable
+          <Text>Add Environment Variable</Text>
         </Button>
         {formMode === 'edit' && (
           <Button

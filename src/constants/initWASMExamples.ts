@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { templatecode } from './templatecode';
 import ERC20 from './abis/ERC20.json';
 import ERC721 from './abis/ERC721.json';
+import ERC20Bytecode from './bytecode/ERC20.json';
+import ERC721Bytecode from './bytecode/ERC721.json';
 // case "INT":
 //   return DATATYPE__INT, nil
 // case "INT8":
@@ -307,6 +309,7 @@ export const abiExample: FilesItemType = {
         code: JSON.stringify(
           {
             address: '',
+            bytecode: ERC20Bytecode.bytecode,
             abi: ERC20
           },
           null,
@@ -324,12 +327,39 @@ export const abiExample: FilesItemType = {
         code: JSON.stringify(
           {
             address: '',
+            bytecode: ERC721Bytecode.bytecode,
             abi: ERC721
           },
           null,
           2
         ),
         language: 'json'
+      }
+    }
+  ]
+};
+
+export const demoExample: FilesItemType = {
+  type: 'folder',
+  key: uuidv4(),
+  label: `Examples`,
+  children: [
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `demo.test.ts`,
+      data: {
+        dataType: 'demo',
+        language: 'typescript',
+        code: `
+async function main() {
+  const wallet = new Wallet()
+  const blockchain = new BlockChain()
+  const contract = await blockchain.deploy("ERC20.abi.json", wallet)
+  return contract
+}
+return main()
+`
       }
     }
   ]

@@ -142,6 +142,7 @@ const Editor = observer(() => {
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && <ConsolePanel />}
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'sql' && <DBpanel />}
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'simulation' && <ConsolePanel />}
+                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'demo' && <ConsolePanel />}
                     </Flex>
                   </>
                 )}
