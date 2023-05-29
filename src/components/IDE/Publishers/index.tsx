@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import toast from 'react-hot-toast';
 
 const Publishers = observer(() => {
   const { w3s } = useStore();

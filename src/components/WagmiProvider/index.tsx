@@ -73,34 +73,13 @@ const Wallet = observer(() => {
         if (data.token) {
           w3s.config.form.value.set({ token: data.token, accountID: data.accountID, accountRole: data.accountRole });
           eventBus.emit('user.login');
-          updateNotification({
-            id: 'login',
-            title: 'Login',
-            loading: false,
-            message: t("success.login.msg"),
-            color: 'green',
-            autoClose: 3000
-          });
+          toast.success(t("success.login.msg"));
         } else {
-          updateNotification({
-            id: 'login',
-            title: 'Login',
-            loading: false,
-            message: t("error.login.msg"),
-            color: 'red',
-            autoClose: 1000
-          });
+          toast.error(t("error.login.msg"));
           disconnectAsync();
         }
       } catch (error) {
-        updateNotification({
-          id: 'login',
-          title: 'Login',
-          loading: false,
-          message: t("error.login.msg"),
-          color: 'red',
-          autoClose: 1000
-        });
+        toast.error(t("error.login.msg"));
         disconnectAsync();
       }
     },

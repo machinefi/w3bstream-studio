@@ -1,5 +1,4 @@
 import { JSONValue, JSONSchemaFormState, JSONModalValue } from '@/store/standard/JSONSchemaState';
-import {  updateNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 // import { FlowType } from '@/server/routers/flow';
 import { FlowState } from '@/store/standard/FlowState';
@@ -44,24 +43,11 @@ export default class FlowModule {
         //   id
         // });
         // if (result) {
-        //   updateNotification({
-        //     id: 'deleteFlow',
-        //     loading: false,
-        //     title: 'Success',
-        //     message: 'Flow deleted',
-        //     color: 'green'
-        //   });
         //   this.list.call();
         // }
         // return result;
       } catch (e) {
-        updateNotification({
-          id: 'deleteFlow',
-          loading: false,
-          title: 'Failed',
-          message: rootStore.lang.t("error.flow.deleted.msg"),
-          color: 'red'
-        });
+        toast.error(rootStore.lang.t("error.flow.deleted.msg"))
       }
     }
   });
@@ -71,24 +57,11 @@ export default class FlowModule {
       try {
         // const result = await client.flow.create.mutate(flow);
         // if (result) {
-        //   updateNotification({
-        //     id: 'duplicateFlow',
-        //     loading: false,
-        //     title: 'Success',
-        //     message: 'Flow duplicated',
-        //     color: 'green'
-        //   });
         //   this.list.call();
         // }
         // return result;
       } catch (e) {
-        updateNotification({
-          id: 'duplicateFlow',
-          loading: false,
-          title: 'Failed',
-          message: rootStore.lang.t("error.flow.duplicated.msg"),
-          color: 'red'
-        });
+        toast.error(rootStore.lang.t("error.flow.duplicated.msg"))
       }
     }
   });
