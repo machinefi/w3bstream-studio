@@ -83,6 +83,83 @@ async function deployContract(vm: VM, block: Block, senderPrivateKey: Uint8Array
   return deploymentResult.createdAddress!;
 }
 
+async function awaitProjectReady(assemblyScript: string) {
+  const { curFilesListSchema } = globalThis.store.w3s.projectManager;
+  const wasmFiles = curFilesListSchema.findFilesByLabel(curFilesListSchema.files, assemblyScript);
+  const wasmFile = wasmFiles[0];
+  if (!wasmFile) {
+    throw new Error('AssemblyScript file not found');
+  }
+  const wasmName = wasmFile.label;
+  const projectName = `demo_${wasmName.replace('.ts', '')}`;
+  const p = globalThis.store.w3s.project.allProjects.value.find((p) => p.name === projectName);
+  if (p) {
+    return p.f_project_id;
+  }
+  const { error, binary } = await compileAssemblyscript(wasmFile.data.code);
+  if (error) {
+    throw new Error(error.message);
+  }
+  const wasmRaw = helper.Uint8ArrayToWasmBase64FileData(wasmName.replace('.ts', '.wasm'), binary);
+  const projectData = {
+    name: projectName,
+    description: '',
+    applets: [{ wasmRaw, appletName: 'applet_01' }],
+    datas: []
+  };
+  const res = await axios.request({
+    method: 'post',
+    url: `/api/init`,
+    data: {
+      project: [projectData]
+    }
+  });
+  if (res.data?.message === 'OK') {
+    const projectID = res.data.createdProjectIds[0];
+    await globalThis.store.w3s.dbTable.importTables({
+      projectID,
+      schemas: [
+        {
+          schemaName: 'public',
+          tables: [
+            {
+              tableName: 'demo',
+              tableSchema: 'public',
+              comment: '',
+              columns: [
+                {
+                  name: 'id',
+                  type: 'int8',
+                  isIdentity: true,
+                  isNullable: false,
+                  isUnique: false,
+                  isPrimaryKey: true,
+                  comment: 'primary id'
+                },
+                {
+                  name: 'data',
+                  type: 'jsonb',
+                  defaultValue: null,
+                  isIdentity: false,
+                  isNullable: true,
+                  isUnique: false,
+                  isPrimaryKey: false,
+                  comment: ''
+                }
+              ],
+              relationships: []
+            }
+          ]
+        }
+      ]
+    });
+    eventBus.emit('project.create');
+    return projectID;
+  } else {
+    throw new Error('create project failed');
+  }
+}
+
 class Wallet {
   accountPk: Uint8Array;
   accountAddress: Address;
@@ -139,87 +216,9 @@ class W3bstream {
     Object.assign(this, args);
   }
 
-  async createProject() {
-    const { curFilesListSchema } = globalThis.store.w3s.projectManager;
-    const wasmFiles = curFilesListSchema.findFilesByLabel(curFilesListSchema.files, this.assemblyScript);
-    const wasmFile = wasmFiles[0];
-    if (!wasmFile) {
-      throw new Error('AssemblyScript file not found');
-    }
-    const wasmName = wasmFile.label;
-    const projectName = `demo_${wasmName.replace('.ts', '')}`;
-    const p = globalThis.store.w3s.project.allProjects.value.find((p) => p.name === projectName);
-    if (p) {
-      this.projectID = p.f_project_id;
-      return;
-    }
-    const { error, binary } = await compileAssemblyscript(wasmFile.data.code);
-    if (error) {
-      throw new Error(error.message);
-    }
-    const wasmRaw = helper.Uint8ArrayToWasmBase64FileData(wasmName.replace('.ts', '.wasm'), binary);
-    const projectData = {
-      name: projectName,
-      description: '',
-      applets: [{ wasmRaw, appletName: 'applet_01' }],
-      datas: []
-    };
-    const res = await axios.request({
-      method: 'post',
-      url: `/api/init`,
-      data: {
-        project: [projectData]
-      }
-    });
-    if (res.data?.message === 'OK') {
-      this.projectID = res.data.createdProjectIds[0];
-      await globalThis.store.w3s.dbTable.importTables({
-        projectID: this.projectID,
-        schemas: [
-          {
-            schemaName: 'public',
-            tables: [
-              {
-                tableName: 'demo',
-                tableSchema: 'public',
-                comment: '',
-                columns: [
-                  {
-                    name: 'id',
-                    type: 'int8',
-                    isIdentity: true,
-                    isNullable: false,
-                    isUnique: false,
-                    isPrimaryKey: true,
-                    comment: 'primary id'
-                  },
-                  {
-                    name: 'data',
-                    type: 'jsonb',
-                    defaultValue: null,
-                    isIdentity: false,
-                    isNullable: true,
-                    isUnique: false,
-                    isPrimaryKey: false,
-                    comment: ''
-                  }
-                ],
-                relationships: []
-              }
-            ]
-          }
-        ]
-      });
-      eventBus.emit('project.create');
-    } else {
-      throw new Error('create project failed');
-    }
-  }
-
   async upload(json: { data: { [x: string]: any } }[]) {
-    await this.createProject();
     if (!this.projectID) {
-      throw new Error('projectID not found');
+      this.projectID = await awaitProjectReady(this.assemblyScript);
     }
     for (const item of json) {
       await trpc.pg.createTableData.mutate({
@@ -234,7 +233,7 @@ class W3bstream {
 
   async getProof(query: string) {
     if (!this.projectID) {
-      throw new Error('projectID not found');
+      this.projectID = await awaitProjectReady(this.assemblyScript);
     }
     const { data, errorMsg } = await trpc.pg.query.mutate({
       projectID: this.projectID,
@@ -243,8 +242,14 @@ class W3bstream {
     if (errorMsg) {
       throw new Error(errorMsg);
     }
+
+    const row = data[0];
+    if (!row) {
+      throw new Error('No data found');
+    }
+
     return {
-      data
+      data: row
     };
   }
 }
