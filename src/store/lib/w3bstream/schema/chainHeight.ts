@@ -132,6 +132,7 @@ export default class ChainHeightModule {
       this.form.reset();
     },
     value: new JSONValue<SchemaType>({
+      // @ts-ignore
       default: {
         projectName: '',
         eventType: 'DEFAULT',
