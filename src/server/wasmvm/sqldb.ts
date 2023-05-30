@@ -59,7 +59,6 @@ export class SqlDB {
   async createTableByJSONSchema(tableJson: TableJSONSchema) {
     const schemas = tableJson.schemas;
     let sqlResult = CREATDB_TYPE.ERROR;
-
     for (const schema of schemas) {
       const tables = schema.tables;
       for (const table of tables) {
