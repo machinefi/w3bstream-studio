@@ -8,11 +8,13 @@ import { hexToBytes } from 'ethereum-cryptography/utils';
 import Web3 from 'web3';
 import { StdIOType } from '@/server/wasmvm';
 import { helper } from '@/lib/helper';
-import { Contract } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import { trpc } from '@/lib/trpc';
 import { compileAssemblyscript } from '.';
+import stringify from 'json-stable-stringify';
+import { PromiseState } from '@/store/standard/PromiseState';
 
 type TransactionsData = TxData | AccessListEIP2930TxData | FeeMarketEIP1559TxData;
 
@@ -189,6 +191,15 @@ class BlockChain {
     const address = contractAddress.toString();
     const web3 = new Web3('http://localhost:8545');
     const instance = new web3.eth.Contract(abi, address);
+    instance.methods.mintWithProof = ({ to, amount, proof }: { to: string; amount: number; proof: any }) => {
+      const publicKey = '0x046d9038945ff8f4669201ba1e806c9a46a5034a578e4d52c031521985380392944efd6c702504d9130573bb939f5c124af95d38168546cc7207a7e0baf14172ff';
+      const recoveredPublicKey = ethers.utils.recoverPublicKey(ethers.utils.hashMessage(proof.message), proof.signature);
+      if (publicKey.toLowerCase() === recoveredPublicKey.toLowerCase()) {
+        return instance.methods.mint(to, amount);
+      } else {
+        throw new Error('Invalid signature');
+      }
+    };
     return {
       address,
       instance
@@ -231,13 +242,14 @@ class W3bstream {
     }
   }
 
-  async getProof(query: string) {
+  async getProof(query?: string) {
+    const sql = query ? query : `SELECT * FROM demo ORDER BY id DESC LIMIT 1`;
     if (!this.projectID) {
       this.projectID = await awaitProjectReady(this.assemblyScript);
     }
     const { data, errorMsg } = await trpc.pg.query.mutate({
-      projectID: this.projectID,
-      sql: query
+      sql,
+      projectID: this.projectID
     });
     if (errorMsg) {
       throw new Error(errorMsg);
@@ -248,25 +260,54 @@ class W3bstream {
       throw new Error('No data found');
     }
 
+    const privateKey = this.operator.accountPk;
+    const message = stringify(row.data);
+    const signingKey = new ethers.utils.SigningKey(privateKey);
+    const messageHash = ethers.utils.hashMessage(message);
+    const signature = signingKey.signDigest(messageHash);
+
     return {
-      data: row
+      data: row,
+      proof: {
+        message: message,
+        signature
+      }
     };
   }
 }
 
-export const debugDemo = async () => {
-  const lab = globalThis.store.w3s.lab;
-  const code = globalThis.store.w3s.projectManager.curFilesListSchema.curActiveFile.data.code;
+export const debugDemo = new PromiseState<() => Promise<any>, any>({
+  function: async () => {
+    const lab = globalThis.store.w3s.lab;
+    const code = globalThis.store.w3s.projectManager.curFilesListSchema.curActiveFile.data.code;
 
-  let errMsg = '';
-  let msg = '';
-  try {
-    const res = await new Function('Wallet', 'BlockChain', 'W3bstream', code)(Wallet, BlockChain, W3bstream);
-    console.log('[Demo Return Value]:', res);
-  } catch (error) {
-    errMsg = error.message;
+    let errMsg = '';
+    let msg = '';
+    try {
+      const res = await new Function('Wallet', 'BlockChain', 'W3bstream', code)(Wallet, BlockChain, W3bstream);
+      console.log('[Demo Return Value]:', res);
+    } catch (error) {
+      errMsg = error.message;
+    }
+
+    const stdio: StdIOType = errMsg ? { '@lv': 'error', msg: errMsg, '@ts': Date.now(), prefix: '' } : { '@lv': 'info', msg, '@ts': Date.now(), prefix: '' };
+    lab.stdout.push(stdio);
   }
+});
 
-  const stdio: StdIOType = errMsg ? { '@lv': 'error', msg: errMsg, '@ts': Date.now(), prefix: '' } : { '@lv': 'info', msg, '@ts': Date.now(), prefix: '' };
-  lab.stdout.push(stdio);
-};
+// export const debugDemo = async () => {
+//   const lab = globalThis.store.w3s.lab;
+//   const code = globalThis.store.w3s.projectManager.curFilesListSchema.curActiveFile.data.code;
+
+//   let errMsg = '';
+//   let msg = '';
+//   try {
+//     const res = await new Function('Wallet', 'BlockChain', 'W3bstream', code)(Wallet, BlockChain, W3bstream);
+//     console.log('[Demo Return Value]:', res);
+//   } catch (error) {
+//     errMsg = error.message;
+//   }
+
+//   const stdio: StdIOType = errMsg ? { '@lv': 'error', msg: errMsg, '@ts': Date.now(), prefix: '' } : { '@lv': 'info', msg, '@ts': Date.now(), prefix: '' };
+//   lab.stdout.push(stdio);
+// };

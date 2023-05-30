@@ -6,7 +6,7 @@ import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { helper } from '@/lib/helper';
 import toast from 'react-hot-toast';
 import { hooks } from '@/lib/hooks';
-import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Button, Center, Spinner } from '@chakra-ui/react';
+import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Center, Spinner } from '@chakra-ui/react';
 import { VscCloudDownload, VscDebugStart, VscFile, VscFiles, VscFileSymlinkFile, VscFileZip, VscFolder, VscTrash } from 'react-icons/vsc';
 import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
@@ -456,14 +456,24 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
 
                   {item?.data?.dataType == 'demo' && curFilesListSchema?.curActiveFileId == item?.key && (
                     <Box ml="auto">
-                      <Box onClick={debugDemo}>
-                        <VscDebugStart
-                          color="black"
-                          style={{
-                            marginRight: '10px',
-                            cursor: 'pointer'
-                          }}
-                        />
+                      <Box
+                        w="22px"
+                        h="22px"
+                        onClick={() => {
+                          debugDemo.call()
+                        }}
+                      >
+                        {
+                          debugDemo.loading.value
+                            ? <Spinner size="sm" color="#946FFF" />
+                            : <VscDebugStart
+                              color="black"
+                              style={{
+                                marginRight: '10px',
+                                cursor: 'pointer'
+                              }}
+                            />
+                        }
                       </Box>
                     </Box>
                   )}

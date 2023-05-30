@@ -83,7 +83,7 @@ export const MoEditor = observer((props: any) => {
           };
         });
         async upload(json: { data: { [x: string]: any } }[]): void;
-        async getProof(query: string): { data: { [x: string]: any }; proof: any };
+        async getProof(query?: string): { data: { [x: string]: any }; proof: any };
       }
       `,
             'sdk/index.d.ts'

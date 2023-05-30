@@ -88,6 +88,7 @@
     "json-format": "1.0.1",
     "json-schema": "0.4.0",
     "json-schema-to-ts": "2.5.5",
+    "json-stable-stringify": "^1.0.2",
     "jsonwebtoken": "9.0.0",
     "lodash": "4.17.21",
     "mobx": "6.2.0",

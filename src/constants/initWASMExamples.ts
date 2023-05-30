@@ -360,11 +360,18 @@ export const demoExample: FilesItemType = {
     operator: account,
   })
 
-  await w3bstream.upload([{ data: { address: "0x" } }])
+  await w3bstream.upload([{ data: { address: "0x", amount: 1 } }])
 
-  const { data, proof } = await w3bstream.getProof('SELECT * FROM demo LIMIT 1')
+  const { data, proof } = await w3bstream.getProof('SELECT * FROM demo ORDER BY id DESC LIMIT 1')
 
-  return data
+  const res = contract.instance.methods.mintWithProof({ to: data.data.address, amount: 1, proof })
+
+  return {
+    contract,
+    data,
+    proof,
+    res,
+  }
 }
 
 return main()
