@@ -64,7 +64,6 @@ const createProject = async (
     }
     const data: any = await response.json();
     if (data.projectID) {
-      console.log('create project success');
       return {
         projectID: data.projectID,
         projectName: data.name

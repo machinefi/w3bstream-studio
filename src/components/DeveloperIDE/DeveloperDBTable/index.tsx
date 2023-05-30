@@ -13,7 +13,7 @@ const DeveloperDBTable = () => {
       <Box w="240px" minH={'100%'} paddingBottom={'100px'} border="1px solid rgba(230, 230, 230, 0.75)" borderRadius="8px">
         <DBTableSideBar />
       </Box>
-      <Box ml="20px" flex={1} borderRadius="8px">
+      <Box ml="20px" flex={1} borderRadius="8px" overflow={'hidden'}>
         <DBTable />
       </Box>
       {w3s.showContent === 'DB_TABLE' && (

@@ -6,9 +6,9 @@ import { defaultButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const ChainHeight = observer(() => {
   const { w3s } = useStore();
@@ -47,9 +47,8 @@ export const CreateChainHeightButton = observer(() => {
       {...defaultButtonStyle}
       onClick={async (e) => {
         if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-          w3s.chainHeight.form.value.set({
-            projectName: w3s.project.curProject?.name
-          });
+          // @ts-ignore
+          w3s.chainHeight.form.value.set({projectName: w3s.project.curProject?.name});
           w3s.chainHeight.form.uiSchema.projectName = {
             'ui:widget': 'hidden'
           };
@@ -70,7 +69,7 @@ export const CreateChainHeightButton = observer(() => {
             data: formData
           });
           if (res.data) {
-            showNotification({ message: 'Blockchain height monitor sucessfully created.' });
+            toast.success('Blockchain height monitor sucessfully created.');
             eventBus.emit('chainHeight.create');
           }
         }

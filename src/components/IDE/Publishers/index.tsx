@@ -7,8 +7,8 @@ import JSONTable from '@/components/JSONTable';
 import { useEffect } from 'react';
 import { hooks } from '@/lib/hooks';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
+import toast from 'react-hot-toast';
 
 const Publishers = observer(() => {
   const { w3s } = useStore();
@@ -68,7 +68,7 @@ const Publishers = observer(() => {
                     name: key
                   }
                 });
-                showNotification({ message: 'create publisher succeeded' });
+                toast.success('Device successfully added');
                 eventBus.emit('publisher.create');
               } catch (error) {}
             }

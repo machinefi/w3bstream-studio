@@ -5,11 +5,11 @@ import { NumberState, StringState } from '@/store/standard/base';
 import { rootStore } from '@/store/index';
 import BigNumber from 'bignumber.js';
 import { _ } from './lodash';
-import { showNotification } from '@mantine/notifications';
 import { ethers } from 'ethers';
 import { metamaskUtils } from './metaskUtils';
 import JSONFormat from 'json-format';
 import request from 'sync-request';
+import toast from 'react-hot-toast';
 
 const valMap = {
   undefined: '',
@@ -23,29 +23,6 @@ export interface RouterParsed {
   query: Record<string, string | string[] | undefined>;
 }
 
-export const toast = {
-  success: (msg: string) => {
-    showNotification({
-      title: rootStore.lang.t('notification'),
-      color: 'green',
-      message: msg
-    });
-  },
-  error: (msg: string) => {
-    showNotification({
-      title: rootStore.lang.t('error'),
-      color: 'red',
-      message: msg
-    });
-  },
-  warning: (msg: string) => {
-    showNotification({
-      title: rootStore.lang.t('warning'),
-      color: 'yellow',
-      message: msg
-    });
-  }
-};
 
 export const helper = {
   setChain(god, chainId) {
@@ -289,11 +266,7 @@ export const helper = {
       } catch (error) {
         console.log(error);
         if (autoAlert) {
-          showNotification({
-            title: 'Error',
-            message: error.data?.message || error.message,
-            color: 'red'
-          });
+          toast.error(error.data?.message || error.message)
         }
         onError && onError(error);
         throw error;

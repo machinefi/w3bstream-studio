@@ -715,6 +715,7 @@ export default class ProjectModule {
   }
 
   projectInfo = new PromiseState({
+    loadingText: 'please waiting...',
     function: async () => {
       if (globalThis.store.w3s.cronJob.list.value.length === 0) {
         await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);

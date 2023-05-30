@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { WagmiConfig, useAccount, useConnect, useDisconnect, useNetwork, useSignMessage } from 'wagmi';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { showNotification, updateNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { SiweMessage } from 'siwe';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import toast from 'react-hot-toast';
 
 export const WagmiProvider = observer(({ children }) => {
   const { god } = useStore();
@@ -21,7 +21,7 @@ export const WagmiProvider = observer(({ children }) => {
 });
 
 const Wallet = observer(() => {
-  const { god, w3s, lang: {t} } = useStore();
+  const { god, w3s, lang: { t } } = useStore();
   const { chain } = useNetwork();
   const { address, connector, isConnected } = useAccount();
   const { connect, connectors, error, isLoading } = useConnect({
@@ -48,14 +48,7 @@ const Wallet = observer(() => {
       connect({ connector: connectors[0] });
     },
     async login() {
-      showNotification({
-        id: 'login',
-        title: 'Login',
-        loading: true,
-        message: 'Please confirm the login request in your wallet.',
-        color: 'yellow',
-        autoClose: false
-      });
+      // toast.loading('Please confirm the login request in your wallet.');
       try {
         const address = god.currentNetwork.account;
         const chainId = god.currentNetwork.currentChain.chainId;
@@ -80,34 +73,13 @@ const Wallet = observer(() => {
         if (data.token) {
           w3s.config.form.value.set({ token: data.token, accountID: data.accountID, accountRole: data.accountRole });
           eventBus.emit('user.login');
-          updateNotification({
-            id: 'login',
-            title: 'Login',
-            loading: false,
-            message: t("success.login.msg"),
-            color: 'green',
-            autoClose: 3000
-          });
+          toast.success(t("success.login.msg"));
         } else {
-          updateNotification({
-            id: 'login',
-            title: 'Login',
-            loading: false,
-            message: t("error.login.msg"),
-            color: 'red',
-            autoClose: 1000
-          });
+          toast.error(t("error.login.msg"));
           disconnectAsync();
         }
       } catch (error) {
-        updateNotification({
-          id: 'login',
-          title: 'Login',
-          loading: false,
-          message: t("error.login.msg"),
-          color: 'red',
-          autoClose: 1000
-        });
+        toast.error(t("error.login.msg"));
         disconnectAsync();
       }
     },
@@ -144,13 +116,7 @@ const Wallet = observer(() => {
           });
         } else {
           god.isWrongNetwork.setValue(true);
-          showNotification({
-            id: 'wrongNetwork',
-            title: 'Wrong Network',
-            message: 'Please switch to the correct network.',
-            color: 'red',
-            autoClose: true
-          });
+          toast.error('Please switch to the correct network.');
         }
       });
     }
@@ -161,11 +127,10 @@ const Wallet = observer(() => {
     const { ethereum } = window;
     if (ethereum && ethereum.on) {
       const handleChainChanged = (e) => {
-        // window.location.reload();
         god.currentNetwork.loadBalance();
       };
       const handleAccountChanged = (e) => {
-        god.currentNetwork.loadBalance();
+        store.logout();
       };
       ethereum.on('networkChanged', handleChainChanged);
       ethereum.on('close', handleChainChanged);

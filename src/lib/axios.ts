@@ -1,6 +1,6 @@
 import Axios from 'axios';
+import toast from 'react-hot-toast';
 import { rootStore } from '../store/index';
-import { showNotification } from '@mantine/notifications';
 
 export const axios = Axios.create({});
 
@@ -13,16 +13,10 @@ function checkErr(err) {
     if (message.includes('UNAUTHORIZED')) {
       globalThis.store.w3s.config.logout();
     } else {
-      showNotification({
-        message,
-        color: 'red'
-      });
+      toast.error(message);
     }
   } else {
-    showNotification({
-      color: 'red',
-      message: 'Network error'
-    });
+    toast.error('Network error');
   }
 }
 axios.interceptors.request.use((req) => {

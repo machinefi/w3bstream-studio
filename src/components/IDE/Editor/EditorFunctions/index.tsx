@@ -1,4 +1,5 @@
-import { helper, toast } from "@/lib/helper";
+import { helper } from "@/lib/helper";
+import toast from 'react-hot-toast';
 import { rootStore } from "@/store/index";
 import reactHotToast from 'react-hot-toast';
 import { asc } from 'pages/_app';
@@ -104,7 +105,7 @@ export const debugAssemblyscript = async (needCompile = true) => {
           const wasmPayload = JSON.parse(formData.wasmPayload);
           await lab.onDebugWASM(wasmPayload, needCompile, formData.handleFunc);
           lab.simulationEventHistory.push({ wasmPayload, handleFunc: formData.handleFunc });
-        } catch (error) {}
+        } catch (error) { }
       }
     };
     lab.simulationIndexerForm.afterSubmit = async ({ formData }) => {
@@ -142,7 +143,7 @@ export const debugAssemblyscript = async (needCompile = true) => {
         }
       ]
     });
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const debugSimulation = () => {
@@ -158,3 +159,5 @@ export const onCreateDB = async () => {
   const tableJSONSchema: TableJSONSchema = JSON.parse(curActiveFile?.data?.code);
   await rootStore.god.sqlDB.createTableByJSONSchema(tableJSONSchema);
 };
+
+export { debugDemo } from './demo';

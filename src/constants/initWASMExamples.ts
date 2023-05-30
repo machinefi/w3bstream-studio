@@ -301,13 +301,14 @@ export const abiExample: FilesItemType = {
     {
       type: 'file',
       key: uuidv4(),
-      label: `ERC20.abi.json`,
+      label: `ERC20.json`,
       data: {
         dataType: 'abi',
         code: JSON.stringify(
           {
             address: '',
-            abi: ERC20
+            bytecode: ERC20.bytecode,
+            abi: ERC20.abi
           },
           null,
           2
@@ -318,18 +319,63 @@ export const abiExample: FilesItemType = {
     {
       type: 'file',
       key: uuidv4(),
-      label: `ERC721.abi.json`,
+      label: `ERC721.json`,
       data: {
         dataType: 'abi',
         code: JSON.stringify(
           {
             address: '',
-            abi: ERC721
+            bytecode: ERC721.bytecode,
+            abi: ERC721.abi
           },
           null,
           2
         ),
         language: 'json'
+      }
+    }
+  ]
+};
+
+export const demoExample: FilesItemType = {
+  type: 'folder',
+  key: uuidv4(),
+  label: `Examples`,
+  children: [
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `demo.test.ts`,
+      data: {
+        dataType: 'demo',
+        language: 'typescript',
+        code: `async function main() {
+  const account = new Wallet()
+  const blockChain = new BlockChain()
+  const contract = await blockChain.deploy("ERC20.json", account)
+
+  const w3bstream = new W3bstream({
+    contract,
+    assemblyScript: "log.ts",
+    operator: account,
+  })
+
+  await w3bstream.upload([{ data: { address: "0x", amount: 1 } }])
+
+  const { data, proof } = await w3bstream.getProof('SELECT * FROM demo ORDER BY id DESC LIMIT 1')
+
+  const res = contract.instance.methods.mintWithProof({ to: data.data.address, amount: 1, proof })
+
+  return {
+    contract,
+    data,
+    proof,
+    res,
+  }
+}
+
+return main()
+`
       }
     }
   ]

@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
 import {
   Text,
   Flex,
+  useDisclosure,
+  Collapse
 } from '@chakra-ui/react';
-import { abiExample, assemblyScriptExample, envExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
-import { helper } from '@/lib/helper';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { abiExample, assemblyScriptExample, demoExample, envExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
+import { observer } from 'mobx-react-lite';
 import { v4 as uuidv4 } from 'uuid';
 import { FileIcon } from '@/components/Tree';
+import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
+
 type Options = {};
 
 export interface InitWasmTemplateWidgetProps extends WidgetProps {
@@ -23,9 +25,7 @@ export interface InitWasmTemplateWidgetUIOptions {
 
 const InitWasmTemplate = observer(({ id, options, value, required, label, onChange }: InitWasmTemplateWidgetProps) => {
   const [templateName, setTemplateName] = useState('');
-  const store = useLocalObservable<{ curTemplate: typeof assemblyScriptExample }>(() => ({
-    curTemplate: null
-  }));
+  const { isOpen, onToggle } = useDisclosure();
 
   const templates = (v: typeof assemblyScriptExample, label: string) => {
     return (
@@ -76,11 +76,18 @@ const InitWasmTemplate = observer(({ id, options, value, required, label, onChan
   return (
     <>
       {templates(assemblyScriptExample, 'AssemblyScript')}
-      {templates(flowExample, 'Flow')}
-      {templates(simulationExample, 'Simulation')}
-      {templates(SqlExample, 'Database')}
-      {templates(envExample, 'ENV')}
-      {templates(abiExample, 'ABI')}
+      {templates(demoExample, 'Test')}
+      <Flex mt="20px" pb="10px" alignItems="center" cursor="pointer" borderBottom="1px solid #eee" onClick={onToggle}>
+        {isOpen ? <ChevronDownIcon w={6} h={6} /> : <ChevronRightIcon w={6} h={6} />}
+        <Text ml="5px">Other templates</Text>
+      </Flex>
+      <Collapse in={isOpen} animateOpacity>
+        {templates(flowExample, 'Flow')}
+        {templates(simulationExample, 'Simulation')}
+        {templates(SqlExample, 'Database')}
+        {templates(envExample, 'ENV')}
+        {templates(abiExample, 'ABI')}
+      </Collapse>
     </>
   );
 });

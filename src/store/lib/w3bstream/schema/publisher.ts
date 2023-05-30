@@ -2,7 +2,6 @@ import { JSONSchemaFormState, JSONValue, JSONSchemaTableState } from '@/store/st
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from './definitions';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { PublisherType } from '@/server/routers/w3bstream';
 import { PublisherTokenRender } from '@/components/JSONTable/FieldRender';
@@ -12,6 +11,7 @@ import { makeObservable, observable } from 'mobx';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { JSONHistoryState } from '@/store/standard/JSONHistoryState';
+import toast from 'react-hot-toast';
 
 export const createPublisherSchema = {
   definitions: {
@@ -200,7 +200,7 @@ export default class PublisherModule {
                           name: key
                         }
                       });
-                      showNotification({ message: 'update publisher succeeded' });
+                      toast.success('update publisher succeeded');
                       eventBus.emit('publisher.update');
                     } catch (error) {}
                   }
@@ -225,7 +225,7 @@ export default class PublisherModule {
                           publisherIDs: item.f_publisher_id
                         }
                       });
-                      showNotification({ message: 'Deleted successfully' });
+                      toast.success('Deleted successfully');
                       eventBus.emit('strategy.delete');
                     }
                   });

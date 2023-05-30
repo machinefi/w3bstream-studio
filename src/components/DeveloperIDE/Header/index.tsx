@@ -52,9 +52,9 @@ const Header = observer(() => {
         cursor={'pointer'}
       >
         <Image w="30px" src="/favicon.svg" alt="logo" />
-        <Text ml="10px" fontWeight={600}>
-          w3bstream Devnet
-        </Text>
+        <Flex ml="10px" fontWeight={600} alignItems="flex-start">
+          w3bstream Devnet <Text mt="-2px" ml="2px" fontSize={10} color="#946FFF">{w3s.env.envs?.value?.w3bstreamVersion?.split('@')?.[1]?.split('_')?.[0]}</Text>
+        </Flex>
       </Flex>
       <Flex ml="4rem" alignItems="center">
         <Tabs

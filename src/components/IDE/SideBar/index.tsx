@@ -360,8 +360,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
       <Flex
         alignItems="center"
         justifyContent="space-between"
-        py={1}
-        px={2}
+        pl={1}
         borderBottom="1px solid rgba(0, 0, 0, 0.06)"
         cursor="pointer"
         onClick={() => {
@@ -369,9 +368,9 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
         }}
       >
         <Flex alignItems="center" overflowX="auto">
-          <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={8} cursor="pointer" />
-          <Box w="220px" fontSize="14px" fontWeight={700}>
-            {tableSchema}
+          <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={6} cursor="pointer" />
+          <Box w="220px" fontSize="16x" fontWeight={700}>
+            {/* {tableSchema} */} Default
           </Box>
         </Flex>
         <Flex alignItems="center">
@@ -429,7 +428,7 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
             >
               <Text
                 fontSize="14px"
-                fontWeight={500}
+                fontWeight={600}
                 overflowX="auto"
                 onClick={(e) => {
                   e.stopPropagation();

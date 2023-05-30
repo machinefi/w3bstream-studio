@@ -154,10 +154,10 @@ const Support = () => {
               {
                 store.w3bstreamVersionGithubLink ? (
                   <Link ml="10px" href={store.w3bstreamVersionGithubLink} color="#946FFF" isExternal>
-                    {envs.value?.w3bstreamVersion}
+                    {envs.value?.w3bstreamVersion?.split('@')?.[1]?.split('_')?.[0]}
                   </Link>
                 ) : (
-                  <Box ml="10px">{envs.value?.w3bstreamVersion}</Box>
+                  <Box ml="10px">{envs.value?.w3bstreamVersion?.split('@')?.[1]?.split('_')?.[0]}</Box>
                 )
               }
             </Flex>

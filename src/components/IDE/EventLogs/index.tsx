@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useStore } from '@/store/index';
 import { Box, Flex, Icon, Spinner, chakra, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Select, shouldForwardProp } from '@chakra-ui/react';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { List, AutoSizer } from 'react-virtualized';
 import { WasmLogType } from '@/server/routers/w3bstream';
 import dayjs from '@/lib/dayjs';
@@ -13,6 +12,7 @@ import { hooks } from '@/lib/hooks';
 import { AiOutlineClear } from 'react-icons/ai';
 import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
 import { motion, isValidMotionProp } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 const ChakraBox = chakra(motion.div, {
   /**
@@ -223,9 +223,9 @@ const EventLogs = observer(() => {
                 data: formData.body
               });
               store.fetchWasmLogsPoll.start();
-              showNotification({ color: 'green', message: 'Send event successed' });
+              toast.success('Send event successed');
             } catch (error) {
-              showNotification({ color: 'red', message: 'send event failed' });
+              toast.error('Send event failed');
               store.fetchWasmLogsPoll.start();
             }
           };

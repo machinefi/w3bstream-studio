@@ -70,7 +70,7 @@ export class FilesListSchema {
       hasVscodeFileFolder.children = [];
       console.log(this.files);
       this.syncToIndexDb();
-      if (!files) return;
+      if (!files) return (hasVscodeFileFolder.children = []);
       files.forEach((file) => {
         hasVscodeFileFolder.children.push({
           type: 'file',
@@ -98,9 +98,8 @@ export class FilesListSchema {
       });
       this.setVscodeRemotFile(files);
     }
-    this.syncToIndexDb();
+    // this.syncToIndexDb();
   }
-
   // async runAutoDevActions(files: VSCodeFilesType[]) {
   //   // if (files.some((i) => !i.studioOptions.dev)) return;
   //   const tempVScodeFiles = tempVScodeFilesStorage.value;

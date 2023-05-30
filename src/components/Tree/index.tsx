@@ -3,17 +3,19 @@ import { FilesItemType, VSCodeRemoteFolderName } from '@/store/lib/w3bstream/sch
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import { helper, toast } from '@/lib/helper';
+import { helper } from '@/lib/helper';
+import toast from 'react-hot-toast';
 import { hooks } from '@/lib/hooks';
-import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Button, Center, Spinner } from '@chakra-ui/react';
+import { Image, ImageProps, Box, Flex, Portal, Text, Tooltip, Divider, Center, Spinner } from '@chakra-ui/react';
 import { VscCloudDownload, VscDebugStart, VscFile, VscFiles, VscFileSymlinkFile, VscFileZip, VscFolder, VscTrash } from 'react-icons/vsc';
 import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
 import { BiMemoryCard, BiPaste, BiRename } from 'react-icons/bi';
 import { toJS } from 'mobx';
-import { compileAndCreateProject, debugAssemblyscript, debugSimulation } from '../IDE/Editor/EditorFunctions';
-import { ProjectManager } from '@/store/lib/w3bstream/project';
+import { compileAndCreateProject, debugAssemblyscript, debugSimulation, debugDemo } from '../IDE/Editor/EditorFunctions';
 import { AiOutlineSetting } from 'react-icons/ai';
+import { GrStatusGoodSmall } from 'react-icons/gr';
+import { useTranslation } from 'react-i18next';
 
 export const FileIcon = (file: FilesItemType) => {
   const {
@@ -75,6 +77,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
       lab
     }
   } = useStore();
+  const { t } = useTranslation();
 
   const store = useLocalObservable(() => ({
     FolderSetting: [
@@ -92,7 +95,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
             ]
           });
           if (!formData.template) {
-            return toast.warning('Please select a template!');
+            return toast.error('Please select a template!');
           }
           w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', helper.json.safeParse(formData.template) ?? null);
         }
@@ -238,35 +241,34 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
     transition: 'all 0.2s'
   };
 
-  const VscodeRemoteConnectButton = () => {
-    return (
-      <Center
-        ml="auto"
-        px={1}
-        borderRadius={'3px'}
-        onClick={async (e) => {
-          e.stopPropagation();
-          try {
-            await w3s.projectManager.connectWs();
-          } catch (e) {
-            if (!w3s.projectManager.isWSConnect) {
-              window.open('vscode://dlhtx.W3BStream-vscode-extension');
-            }
-          }
-        }}
-      >
-        <Tooltip label="Connect to VSCode w3bstream extension">
-          {projectManager.isWSConnectLoading ? <Spinner h={4} w={4} /> : <Image src="/images/icons/w3s_extension.png" h={4} w={4}></Image>}
-        </Tooltip>
-      </Center>
-    );
-  };
+  // const VscodeRemoteConnectButton = () => {
+  //   return (
+  //     <Center
+  //       ml="auto"
+  //       px={1}
+  //       borderRadius={'3px'}
+  //       onClick={async (e) => {
+  //         e.stopPropagation();
+  //         try {
+  //           await w3s.projectManager.connectWs();
+  //         } catch (e) {
+  //           if (!w3s.projectManager.isWSConnect) {
+  //             window.open('vscode://dlhtx.W3BStream-vscode-extension');
+  //           }
+  //         }
+  //       }}
+  //     >
+  //       <Tooltip label="Connect to VSCode w3bstream extension">
+  //         {projectManager.isWSConnectLoading ? <Spinner h={4} w={4} /> : <Image src="/images/icons/w3s_extension.png" h={4} w={4}></Image>}
+  //       </Tooltip>
+  //     </Center>
+  //   );
+  // };
 
   const VscodeRemoteCompilerButton = () => {
     return (
-      <Tooltip ml="auto" label="Compile">
+      <Tooltip label="Compile">
         <Center
-          ml="auto"
           px={1}
           borderRadius={'3px'}
           onClick={async (e) => {
@@ -284,12 +286,13 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
     return (
       <Tooltip label="Setting">
         <Center
+          ml="auto"
           px={1}
           borderRadius={'3px'}
           onClick={async (e) => {
             e.stopPropagation();
-            // projectManager.setVscodeSettingForm.;
-            const formData = hooks.getFormData({
+            // projectManager.setVscodeSettingForm.value.value.port = projectManager.wsPort;
+            await hooks.getFormData({
               title: 'VSCode Extension Setting',
               size: '2xl',
               formList: [
@@ -298,6 +301,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                 }
               ]
             });
+            await projectManager.uiConnectWs();
           }}
         >
           <AiOutlineSetting />
@@ -305,6 +309,40 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
       </Tooltip>
     );
   };
+
+  const VSCodeRemoteState = observer(() => {
+    return (
+      <Tooltip
+        label={
+          w3s.projectManager.isWSConnect ? (
+            <Box>
+              <Text>Click to stop connect</Text>
+              <Text>[Connect port {w3s.projectManager.wsPort} Success]</Text>
+            </Box>
+          ) : (
+            <Box>
+              <Text>Click here to connect to the VS Code Plugin.</Text>
+              <Text mt={1}>If the gray dot doesn't turn green, please make sure you have installed the W3bstream Plugin for VS Code and that it's enabled. Some browsers, like Brave, may block the connection: please check the navigation bar for any <i>Blocked Content</i> notification.</Text>
+            </Box>
+          )
+        }
+      >
+        <Box
+          ml="1"
+          onClick={async (e) => {
+            e.stopPropagation();
+            if (w3s.projectManager.isWSConnect) {
+              await w3s.projectManager.unsubscribe();
+            } else {
+              await projectManager.uiConnectWs();
+            }
+          }}
+        >
+          {projectManager.isWSConnectLoading ? <Spinner h={2} w={2} /> : <GrStatusGoodSmall color={w3s.projectManager.isWSConnect ? 'green' : 'lightgray'} style={{ width: '12px', height: '12px' }} />}
+        </Box>
+      </Tooltip>
+    );
+  });
 
   return (
     <Flex flexDirection="column" cursor="pointer">
@@ -340,7 +378,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                         item.label = e.target.value;
                       }}
                       onBlur={() => {
-                        if (item.label == '') return toast.warning('name can not empty');
+                        if (item.label == '') return toast.error('name can not empty');
                         item.isRename = false;
                       }}
                     ></input>
@@ -348,7 +386,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                     <Box
                       cursor={'text'}
                       as="span"
-                      fontSize={"14px"}
+                      fontSize={'14px'}
                       userSelect="none"
                       onDoubleClick={(e) => {
                         e.stopPropagation();
@@ -358,12 +396,10 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                       {item.label}
                     </Box>
                   )}
-
-                  {item.label == VSCodeRemoteFolderName && !w3s.projectManager.isWSConnect && <VscodeRemoteConnectButton />}
-
-                  {item.label == VSCodeRemoteFolderName && w3s.projectManager.isWSConnect && <VscodeRemoteCompilerButton />}
-
+                  {item.label == VSCodeRemoteFolderName && <VSCodeRemoteState />}
                   {item.label == VSCodeRemoteFolderName && <VscodeRemoteSettingButton />}
+                  {/* {item.label == VSCodeRemoteFolderName && !w3s.projectManager.isWSConnect && <VscodeRemoteConnectButton />} */}
+                  {item.label == VSCodeRemoteFolderName && w3s.projectManager.isWSConnect && <VscodeRemoteCompilerButton />}
 
                   {item?.data?.size && (
                     <Box ml="auto" color="gray" fontSize={'12px'}>
@@ -417,6 +453,30 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                       </Box>
                     </Box>
                   )}
+
+                  {item?.data?.dataType == 'demo' && curFilesListSchema?.curActiveFileId == item?.key && (
+                    <Box ml="auto">
+                      <Box
+                        w="22px"
+                        h="22px"
+                        onClick={() => {
+                          debugDemo.call()
+                        }}
+                      >
+                        {
+                          debugDemo.loading.value
+                            ? <Spinner size="sm" color="#946FFF" />
+                            : <VscDebugStart
+                              color="black"
+                              style={{
+                                marginRight: '10px',
+                                cursor: 'pointer'
+                              }}
+                            />
+                        }
+                      </Box>
+                    </Box>
+                  )}
                 </Flex>
                 {item.children && item.isOpen && <Tree isHidden={isHidden ? true : item.label.startsWith('.')} data={item.children} onSelect={onSelect} />}
               </ContextMenuTrigger>
@@ -459,7 +519,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                             >
                               <Flex alignItems={'center'}>
                                 <Box mr={1}>{i.icon}</Box>
-                                <Box fontSize={"14px"}>{i.name}</Box>
+                                <Box fontSize={'14px'}>{i.name}</Box>
                                 {i.children && <ChevronRightIcon />}
                               </Flex>
 
@@ -501,7 +561,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                             <Box {...RightClickStyle} color={i?.color ?? ''}>
                               <Flex alignItems={'center'}>
                                 <Box mr={1}>{i.icon}</Box>
-                                <Box fontSize={"14px"}>{i.name}</Box>
+                                <Box fontSize={'14px'}>{i.name}</Box>
                               </Flex>
                             </Box>
                           </MenuItem>

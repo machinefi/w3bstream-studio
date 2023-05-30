@@ -4,7 +4,8 @@ import { rootStore, useStore } from '@/store/index';
 import { Box, Button, Center, Flex, Portal, Select, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
-import { helper, toast } from '@/lib/helper';
+import { helper } from '@/lib/helper';
+import toast from 'react-hot-toast';
 import _ from 'lodash';
 import { eventBus } from '@/lib/event';
 import { StdIOType } from '@/server/wasmvm';
@@ -141,6 +142,7 @@ const Editor = observer(() => {
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && <ConsolePanel />}
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'sql' && <DBpanel />}
                       {curFilesListSchema?.curActiveFile?.data?.dataType == 'simulation' && <ConsolePanel />}
+                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'demo' && <ConsolePanel />}
                     </Flex>
                   </>
                 )}

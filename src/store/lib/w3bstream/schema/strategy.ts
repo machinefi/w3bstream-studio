@@ -2,12 +2,12 @@ import { JSONSchemaFormState, JSONValue, JSONSchemaTableState } from '@/store/st
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from '@/store/lib/w3bstream/schema/definitions';
 import { axios } from '@/lib/axios';
-import { showNotification } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import { StrategyType } from '@/server/routers/w3bstream';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { makeObservable, observable, set } from 'mobx';
+import toast from 'react-hot-toast';
 
 export const schema = {
   definitions: {
@@ -105,7 +105,7 @@ export default class StrategyModule {
                           handler
                         }
                       });
-                      showNotification({ message: 'update strategy succeeded' });
+                      toast.success('update strategy succeeded');
                       eventBus.emit('strategy.update');
                     } catch (error) {}
                   }
@@ -134,7 +134,7 @@ export default class StrategyModule {
                           strategyID: item.f_strategy_id
                         }
                       });
-                      showNotification({ message: 'Deleted successfully' });
+                      toast.success('Deleted successfully')
                       eventBus.emit('strategy.delete');
                     }
                   });
@@ -194,7 +194,7 @@ export default class StrategyModule {
             handler
           }
         });
-        showNotification({ message: 'create strategy succeeded' });
+        toast.success('create strategy succeeded');
         eventBus.emit('strategy.create');
       } catch (error) {}
     }

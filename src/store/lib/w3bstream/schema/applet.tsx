@@ -8,12 +8,12 @@ import { trpc } from '@/lib/trpc';
 import { AppletType } from '@/server/routers/w3bstream';
 import { JSONSchemaFormState, JSONSchemaTableState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { showNotification } from '@mantine/notifications';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from './definitions';
 import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
 import initTemplates from '@/constants/initTemplates.json';
+import toast from 'react-hot-toast';
 
 export const schema = {
   definitions: {
@@ -174,7 +174,7 @@ export default class AppletModule {
                         method: 'delete',
                         url: `/api/w3bapp/applet/${item.f_applet_id}`
                       });
-                      showNotification({ message: 'Deleted successfully' });
+                      toast.success('Deleted successfully');
                       eventBus.emit('applet.delete');
                     } catch (error) { }
                   }
@@ -293,7 +293,7 @@ export default class AppletModule {
                               method: 'put',
                               url: `/api/w3bapp/deploy/${item.f_instance_id}/REMOVE`
                             });
-                            showNotification({ message: 'Deleted successfully' });
+                            toast.success('Deleted successfully');
                             eventBus.emit('instance.delete');
                           } catch (error) { }
                         }
@@ -359,7 +359,7 @@ export default class AppletModule {
                               handler
                             }
                           });
-                          showNotification({ message: 'update strategy succeeded' });
+                          toast.success('Updated successfully');
                           eventBus.emit('strategy.update');
                         } catch (error) { }
                       }
@@ -388,7 +388,7 @@ export default class AppletModule {
                               strategyID: item.f_strategy_id
                             }
                           });
-                          showNotification({ message: 'Deleted successfully' });
+                          toast.success('Deleted successfully');
                           eventBus.emit('strategy.delete');
                         }
                       });
@@ -463,7 +463,7 @@ export default class AppletModule {
       });
       const appletID = res.data?.appletID;
       if (appletID) {
-        showNotification({ message: 'create applet succeeded' });
+        toast.success('create applet succeeded');
         eventBus.emit('applet.create');
         return appletID;
       }
@@ -514,7 +514,7 @@ export default class AppletModule {
       const templateData = initTemplates.templates.find((i) => i.name === formData.template);
       const wasmURL = templateData?.project[0]?.applets[0]?.wasmURL;
       if (!wasmURL) {
-        showNotification({ color: 'error', message: 'This template does not exist.' });
+        toast.error('This template does not exist.');
         return;
       }
       try {
@@ -540,11 +540,11 @@ export default class AppletModule {
         if (type === 'update') {
           if (res.data?.resourceID) {
             this.wasmName.call(res.data.resourceID);
-            showNotification({ message: 'update wasm succeeded' });
+            toast.success('update wasm succeeded');
           }
         }
       } catch (error) {
-        showNotification({ color: 'error', message: error.message });
+        toast.error(error.message)
       }
     }
 
@@ -577,7 +577,7 @@ export default class AppletModule {
             eventBus.emit('applet.create');
           }
         } catch (error) {
-          showNotification({ color: 'error', message: error.message });
+          toast.error(error.message)
         }
       }
 
@@ -594,10 +594,10 @@ export default class AppletModule {
           const resourceID = res.data?.resourceID;
           if (resourceID) {
             this.wasmName.call(resourceID);
-            showNotification({ message: 'update wasm succeeded' });
+            toast.success('update wasm succeeded');
           }
         } catch (error) {
-          showNotification({ color: 'error', message: error.message });
+          toast.error(error.message)
         }
       }
     }
