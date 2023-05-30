@@ -20,7 +20,7 @@ export const schema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type', description: 'Please choose a unique name for the W3bstream event that should be triggered' },
-    chainID: { type: 'number', title: 'Chain ID', description: 'The blockchain network that should be monitored' },
+    chainID: { $ref: '#/definitions/blockChains',  type: 'string', title: 'Chain ID', description: 'The blockchain network that should be monitored' },
     height: { type: 'number', title: 'Height', description: 'The blockchain height at which the the W3bstream event should be triggered.' }
   },
   required: ['projectName', 'eventType', 'chainID', 'height']
@@ -30,7 +30,8 @@ type SchemaType = FromSchema<typeof schema>;
 
 //@ts-ignore
 schema.definitions = {
-  projects: definitions.projectName
+  projects: definitions.projectName,
+  blockChains: definitions.blockChains
 };
 
 export default class ChainHeightModule {
@@ -121,7 +122,10 @@ export default class ChainHeightModule {
       'ui:submitButtonOptions': {
         norender: false,
         submitText: 'Submit'
-      }
+      },
+      chainID: {
+        'ui:widget': 'select'
+      },
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -131,9 +135,9 @@ export default class ChainHeightModule {
       default: {
         projectName: '',
         eventType: 'DEFAULT',
-        chainID: 4690,
+        chainID: '4690',
         height: 0
-      }
+      },
     })
   });
 }
