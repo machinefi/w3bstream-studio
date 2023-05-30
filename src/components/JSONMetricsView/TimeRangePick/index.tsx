@@ -21,9 +21,9 @@ export const TimeRangePick = ({props, onChange}: TimeRangePick) => {
         onChange(v);
       }}
     >
-      <option value="day">One Day</option>
-      <option value="week">One Week</option>
-      <option value="month">One Month</option>
+      <option value="day">Daily</option>
+      <option value="week">Weekly</option>
+      <option value="month">Monthly</option>
     </Select>
   );
 };
