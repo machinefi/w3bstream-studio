@@ -13,8 +13,10 @@ export const envRouter = t.router({
         try {
           const url = `${process.env.NEXT_PUBLIC_API_URL}/version`;
           const res = await axios.get(url);
-          w3bstreamVersion = res?.data || '';
-        } catch (error) {}
+          w3bstreamVersion = res?.data ? res?.data.match(/v(\d+\.\d+\.\d+(?:-\w+)?)/)[0] : ''
+        } catch (error) {
+          console.error(error)
+        }
         return {
           w3bstreamVersion,
           studioVersion: pkg.version,
