@@ -13,15 +13,14 @@ const CronJobs = observer(() => {
   const {
     w3s: {
       cronJob,
-      project: { curProject }
     }
   } = useStore();
 
   useEffect(() => {
-    if (curProject) {
-      cronJob.list.call(curProject.f_project_id);
-    }
-  }, [curProject]);
+    cronJob.table.set({
+      dataSource: cronJob.curCronJobs
+    });
+  }, [cronJob.curCronJobs]);
 
   return <JSONTable jsonstate={cronJob} />;
 });

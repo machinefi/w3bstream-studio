@@ -6,7 +6,7 @@ import { DEFAULT_POOL_CONFIG, getConnectionString, getDatabaseName, PG_CONNECTIO
 import format from 'pg-format';
 
 export const pgRouter = t.router({
-  dbState: t.procedure
+  dbState: authProcedure
     .input(
       z.object({
         projectID: z.string()

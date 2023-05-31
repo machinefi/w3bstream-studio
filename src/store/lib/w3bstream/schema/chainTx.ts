@@ -3,12 +3,10 @@ import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { definitions } from './definitions';
 import { ChainTxType } from '@/server/routers/w3bstream';
-import { PromiseState } from '@/store/standard/PromiseState';
-import { trpc } from '@/lib/trpc';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
-import { rootStore } from '@/store/index';
+import { makeObservable, observable } from 'mobx';
 
 export const schema = {
   definitions: {
@@ -34,22 +32,11 @@ schema.definitions = {
 };
 
 export default class ChainTxModule {
-  allChainTx = new PromiseState<() => Promise<any>, ChainTxType[]>({
-    defaultValue: [],
-    function: async () => {
-      const res = await trpc.api.chainTx.query();
-      if (res) {
-        this.table.set({
-          dataSource: res
-        });
-      }
-      return res;
-    }
-  });
+  allChainTx: ChainTxType[] = [];
 
   get curProjectChainTx() {
     const curProject = globalThis.store.w3s.project.curProject;
-    return this.allChainTx.value.filter((c) => c.f_project_name === curProject?.f_name);
+    return this.allChainTx.filter((c) => c.f_project_name === curProject?.f_name);
   }
 
   table = new JSONSchemaTableState<ChainTxType>({
@@ -69,7 +56,7 @@ export default class ChainTxModule {
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
                       const regex = /(?:[^_]*_){2}(.*)/;
-                      const projectName = item.f_project_name.match(regex)[1]
+                      const projectName = item.f_project_name.match(regex)[1];
                       try {
                         await axios.request({
                           method: 'delete',
@@ -78,7 +65,7 @@ export default class ChainTxModule {
                         eventBus.emit('chainTx.delete');
                         toast.success('Deleted successfully');
                       } catch (error) {
-                        toast.error(rootStore.lang.t('error.delete.msg'));
+                        toast.error(globalThis.store.lang.t('error.delete.msg'));
                       }
                     }
                   });
@@ -152,4 +139,10 @@ export default class ChainTxModule {
       autoReset: true
     }
   });
+
+  constructor() {
+    makeObservable(this, {
+      allChainTx: observable
+    });
+  }
 }

@@ -1,9 +1,6 @@
-import { rootStore } from '@/store/index';
 import { JSONHistoryState } from '@/store/standard/JSONHistoryState';
-import { StorageState } from '@/store/standard/StorageState';
 import { ethers } from 'ethers';
 import { helper } from '../helper';
-import { metamaskUtils } from '../metaskUtils';
 
 export class Indexer {
   blockLimit = 100;
@@ -28,10 +25,10 @@ export class Indexer {
     key: 'lab.indexerHistory'
   });
   get provider() {
-    return rootStore.god.currentNetwork.signer.provider;
+    return globalThis.store.god.currentNetwork.signer.provider;
   }
   get signer() {
-    return rootStore.god.currentNetwork.signer;
+    return globalThis.store.god.currentNetwork.signer;
   }
 
   get contract() {
@@ -52,8 +49,8 @@ export class Indexer {
         }
         this.status = 'running';
         if (this.status === 'running') {
-          if (this.formData.chainId !== rootStore.god.currentNetwork.currentChain.chainId) {
-            await helper.setChain(rootStore.god, this.formData.chainId);
+          if (this.formData.chainId !== globalThis.store.god.currentNetwork.currentChain.chainId) {
+            await helper.setChain(globalThis.store.god, this.formData.chainId);
           }
           //@ts-ignore
           await this.contract.queryFilter(this.contract.filters[this.formData.contractEventName], from, to).then(async (e) => {

@@ -355,22 +355,17 @@ export const demoExample: FilesItemType = {
   const contract = await blockChain.deploy("ERC20.json", account)
 
   const w3bstream = new W3bstream({
-    contract,
-    assemblyScript: "log.ts",
+    assemblyScript: "demo.ts",
     operator: account,
   })
 
   await w3bstream.upload([{ data: { address: "0x", amount: 1 } }])
 
-  const { data, proof } = await w3bstream.getProof('SELECT * FROM demo ORDER BY id DESC LIMIT 1')
-
-  const res = contract.instance.methods.mintWithProof({ to: data.data.address, amount: 1, proof })
+  const data = await w3bstream.getData('SELECT * FROM demo ORDER BY id DESC LIMIT 1')
 
   return {
     contract,
     data,
-    proof,
-    res,
   }
 }
 

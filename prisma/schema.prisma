@@ -75,6 +75,7 @@ model t_project {
   applets       t_applet[]
   publishers    t_publisher[]
   configs       t_config[]
+  cronJobs      t_cron_job[]
 
   @@unique([f_project_id])
   @@unique([f_project_id, f_deleted_at], map: "t_project_ui_project_id")
@@ -168,6 +169,8 @@ model t_cron_job {
   f_created_at       BigInt @default(0)
   f_updated_at       BigInt @default(0)
   f_deleted_at       BigInt @default(0)
+
+  project t_project @relation(fields: [f_project_id], references: [f_project_id])
 
   @@unique([f_project_id, f_cron_expressions, f_event_type, f_deleted_at], map: "t_cron_job_ui_cron")
   @@unique([f_cron_job_id, f_deleted_at], map: "t_cron_job_ui_cron_job_id")

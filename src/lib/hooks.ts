@@ -1,5 +1,4 @@
 import { FormModalState } from '@/store/base';
-import { rootStore } from '@/store/index';
 import { eventBus } from './event';
 import initSqlJs from 'sql.js';
 import { IndexDb } from './dexie';
@@ -9,7 +8,7 @@ import { axios } from './axios';
 export const hooks = {
   async waitReady() {
     return new Promise<void>((res, rej) => {
-      if (rootStore.w3s.isReady) {
+      if (globalThis.store.w3s.isReady) {
         res();
       } else {
         eventBus.once('app.ready', res);
@@ -43,7 +42,7 @@ export const hooks = {
   },
   async waitLogin() {
     return new Promise<void>((res, rej) => {
-      if (rootStore.w3s.config.isLogin) {
+      if (globalThis.store.w3s.config.isLogin) {
         res();
       } else {
         eventBus.once('user.login', res);
@@ -52,18 +51,18 @@ export const hooks = {
   },
   async getFormData<T = any>(v: Partial<FormModalState>) {
     return new Promise<T>((resolve, reject) => {
-      rootStore.base.formModal.setData({
+      globalThis.store.base.formModal.setData({
         ...v,
         isOpen: true
       });
       eventBus.once('base.formModal.afterSubmit', (formData: T) => {
-        if (rootStore.base.formModal.isAutomaticallyClose) {
-          rootStore.base.formModal.close();
+        if (globalThis.store.base.formModal.isAutomaticallyClose) {
+          globalThis.store.base.formModal.close();
         }
         resolve(formData);
       });
       eventBus.once('base.formModal.abort', () => {
-        rootStore.base.formModal.close();
+        globalThis.store.base.formModal.close();
         reject('abort');
       });
     });
@@ -76,9 +75,8 @@ export const hooks = {
     });
   },
   async waitPublisher() {
-    const allPublisher = rootStore.w3s.publisher.allData;
-    const curProject = rootStore.w3s.project.curProject;
-    const pub = allPublisher.find((item) => item.project_id === curProject?.f_project_id);
+    const curProject = globalThis.store.w3s.project.curProject;
+    const pub = curProject?.publishers.find((item) => item.f_project_id === curProject?.f_project_id);
     if (pub) {
       return pub.f_token;
     } else {

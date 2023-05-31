@@ -1,6 +1,6 @@
 import React from 'react';
-import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Badge, Spinner } from '@chakra-ui/react';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { Flex, Image, Text, Box, Button, Grid, GridItem, Icon, Checkbox, Spinner } from '@chakra-ui/react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Center } from '@chakra-ui/layout';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
@@ -99,7 +99,8 @@ const Projects = observer(() => {
                 e.stopPropagation();
                 let err = '';
                 for (const name of selectedNames) {
-                  const instance = w3s.instances.table.dataSource.find((item) => item.project_name === name);
+                  const p = allProjects.value.find((item) => item.name === name);
+                  const instance = p.applets[0]?.instances[0];
                   if (instance) {
                     try {
                       await axios.request({
@@ -128,7 +129,7 @@ const Projects = observer(() => {
         </Flex>
         <Grid mt="20px" gridTemplateRows="repeat(6, 1fr)" templateColumns="repeat(2, 1fr)" gap={6} h="calc(100vh - 210px)" overflow="auto">
           {allProjects.value.map((project, index) => {
-            const instance = w3s.instances.table.dataSource.find((item) => item.project_name === project.name);
+            const instance = project.applets[0]?.instances[0];
             const status = INSTANCE_STATUS[instance?.f_state || 0];
             return (
               <GridItem
@@ -251,7 +252,7 @@ const Projects = observer(() => {
                               });
                               eventBus.emit('instance.handle');
                               toast.success(t('success.suspended.msg'));
-                            } catch (error) {}
+                            } catch (error) { }
                           }}
                         >
                           <Icon ml="20px" as={AiOutlinePauseCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
@@ -271,7 +272,7 @@ const Projects = observer(() => {
                               });
                               eventBus.emit('instance.handle');
                               toast.success(t('success.started.msg'));
-                            } catch (error) {}
+                            } catch (error) { }
                           }}
                         >
                           <Icon ml="14px" as={AiOutlinePlayCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />

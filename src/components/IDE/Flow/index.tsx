@@ -1,3 +1,4 @@
+import 'reactflow/dist/style.css';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
@@ -5,7 +6,6 @@ import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import ReactFlow, { Background, Controls, MarkerType, NodeTypes } from 'reactflow';
 import { useStore } from '@/store/index';
 import { generateNodeGroupMenu, generateReactFlowNode, NodeIcon, NodeMenuItem } from '@/components/FlowNode';
-import 'reactflow/dist/style.css';
 import { INodeType } from '@/lib/nodes/types';
 import { helper } from '@/lib/helper';
 import { _ } from '@/lib/lodash';
@@ -15,7 +15,6 @@ import { eventBus } from '@/lib/event';
 import { BaseNode } from '@/lib/nodes/baseNode';
 
 const MenuItemCollapse = ({ nodeMenuItem, addNode }: { nodeMenuItem: NodeMenuItem; addNode: (event: any, nodeInstance: INodeType) => void }) => {
-  // const { classes } = useStyles();
   const [opened, setOpened] = useState(true);
   return (
     <>

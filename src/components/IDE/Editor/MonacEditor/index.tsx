@@ -65,25 +65,17 @@ export const MoEditor = observer((props: any) => {
       declare class BlockChain {
         block: Block;
         constructor();
-        async deploy(contract: string, wallet: Wallet): { address: string, instance: Contract };
+        async deploy(contract: string, wallet: Wallet): { [x: string]: any, createdAddress: Address };
       }
       declare class W3bstream {
         assemblyScript: string;
         operator: Wallet;
-        contract: {
-          address: string;
-          instance: Contract;
-        };
         constructor(args: {
           assemblyScript: string;
           operator: Wallet;
-          contract: {
-            address: string;
-            instance: Contract;
-          };
         });
         async upload(json: { data: { [x: string]: any } }[]): void;
-        async getProof(query?: string): { data: { [x: string]: any }; proof: any };
+        async getData(query?: string): { [x: string]: any };
       }
       `,
             'sdk/index.d.ts'

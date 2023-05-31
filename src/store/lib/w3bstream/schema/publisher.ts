@@ -70,6 +70,10 @@ publishEventSchema.definitions = {
 };
 
 export default class PublisherModule {
+  get curPublishers() {
+    return globalThis.store.w3s.project.curProject?.publishers || [];
+  }
+
   createPublisherForm = new JSONSchemaFormState<CreatePublisherSchemaType>({
     //@ts-ignore
     schema: createPublisherSchema,
@@ -177,7 +181,7 @@ export default class PublisherModule {
                     };
                   }
                   this.createPublisherForm.value.set({
-                    projectName: item.project_name,
+                    projectName: globalThis.store.w3s.project.curProject?.name,
                     key: item.f_key
                   });
                   const formData = await hooks.getFormData({
@@ -218,9 +222,10 @@ export default class PublisherModule {
                     title: 'Warning',
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
+                      const curProject = globalThis.store.w3s.project.curProject;
                       await axios.request({
                         method: 'delete',
-                        url: `/api/w3bapp/publisher/x/${item.project_name}`,
+                        url: `/api/w3bapp/publisher/x/${curProject?.name}`,
                         params: {
                           publisherIDs: item.f_publisher_id
                         }
@@ -240,8 +245,6 @@ export default class PublisherModule {
     rowKey: 'f_publisher_id',
     containerProps: { mt: '10px' }
   });
-
-  allData: PublisherType[] = [];
 
   records = new JSONHistoryState<{
     type: string;

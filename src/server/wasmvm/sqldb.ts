@@ -2,7 +2,6 @@ import { IndexDb } from '@/lib/dexie';
 import { eventBus } from '@/lib/event';
 import toast from 'react-hot-toast';
 import { hooks } from '@/lib/hooks';
-import { rootStore } from '@/store/index';
 import { ExportTableType } from '@/store/lib/w3bstream/schema/dbTable';
 //https://sql.js.org/#/
 //https://sqliteonline.com/
@@ -59,7 +58,6 @@ export class SqlDB {
   async createTableByJSONSchema(tableJson: TableJSONSchema) {
     const schemas = tableJson.schemas;
     let sqlResult = CREATDB_TYPE.ERROR;
-
     for (const schema of schemas) {
       const tables = schema.tables;
       for (const table of tables) {
@@ -140,7 +138,7 @@ export class SqlDB {
 
   conflicateDialog(tableName, sql): Promise<boolean> {
     return new Promise((res, rej) => {
-      rootStore?.base.confirm.show({
+      globalThis.store?.base.confirm.show({
         title: 'Warning',
         description: `The table '${tableName}' already exists. Do you want to overwrite it?`,
         onOk: async () => {

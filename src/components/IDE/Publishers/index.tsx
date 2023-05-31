@@ -15,16 +15,11 @@ const Publishers = observer(() => {
 
   useEffect(() => {
     if (w3s.showContent === 'CURRENT_PUBLISHERS') {
-      const publishers = w3s.project.curProject?.publishers || [];
       w3s.publisher.table.set({
-        dataSource: publishers
-      });
-    } else {
-      w3s.publisher.table.set({
-        dataSource: w3s.publisher.allData
+        dataSource: w3s.publisher.curPublishers
       });
     }
-  }, [w3s.project.curProject, w3s.showContent]);
+  }, [w3s.publisher.curPublishers, w3s.showContent]);
 
   return (
     <Box minH="calc(100vh - 158px)">

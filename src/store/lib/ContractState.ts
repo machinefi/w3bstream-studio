@@ -1,9 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { makeAutoObservable, reaction } from 'mobx';
-import { rootStore } from '../index';
+import { makeAutoObservable } from 'mobx';
 import { BooleanState } from '../standard/base';
-import { helper } from '../../lib/helper';
-import { eventBus } from '@/lib/event';
 
 export interface ContractState {
   address: string;
@@ -90,11 +87,11 @@ export class WriteFunction<T> {
   }
 
   get god() {
-    return rootStore.god;
+    return globalThis.store.god;
   }
 
   get network() {
-    return rootStore.god.currentNetwork;
+    return globalThis.store.god.currentNetwork;
   }
 
   handleToast() {

@@ -1,17 +1,11 @@
 import { IndexDb } from '@/lib/dexie';
-import _ from 'lodash';
+import { _ } from '@/lib/lodash';
 import { toJS, makeAutoObservable } from 'mobx';
 import { v4 as uuidv4 } from 'uuid';
-import { templatecode } from '../../../../constants/templatecode';
 import { VSCodeFilesType } from '../project';
 import { helper } from '@/lib/helper';
-import { rootStore } from '@/store/index';
-import { ProjectType } from '@/server/routers/w3bstream';
-import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
-import { dataURItoBlob } from '@rjsf/utils';
 import { StorageState } from '@/store/standard/StorageState';
-import { assemblyScriptExample } from '@/constants/initWASMExamples';
 
 type FileItemDataType<T = any> = {
   dataType?: string; // simulation flow assemblyscript abi env
@@ -117,7 +111,7 @@ export class FilesListSchema {
   //       // const payload = file.studioOptions.payload;
   //       const raw = helper.base64ToUint8Array(file.content);
   //       //find projectName in project list
-  //       const project = rootStore.w3s.project.allProjects.value.find((i: ProjectType) => i.f_name == projectName);
+  //       const project = globalThis.store.w3s.project.allProjects.value.find((i: ProjectType) => i.f_name == projectName);
   //       //if project not exist, create project
   //       console.log('project', project);
   //       if (project) {
@@ -161,9 +155,9 @@ export class FilesListSchema {
   //         data: formData
   //       });
   //       eventBus.emit('applet.create');
-  //       const deployRes = await rootStore.w3s.applet.deployApplet({ appletID: appletRes.data.appletID });
+  //       const deployRes = await globalThis.store.w3s.applet.deployApplet({ appletID: appletRes.data.appletID });
   //       console.log('deployRes', deployRes);
-  //       const startRes = await rootStore.w3s.instances.handleInstance({ instanceID: deployRes.instanceID, event: 'START' });
+  //       const startRes = await globalThis.store.w3s.instances.handleInstance({ instanceID: deployRes.instanceID, event: 'START' });
   //       //send event
   //       await axios.request({
   //         method: 'post',

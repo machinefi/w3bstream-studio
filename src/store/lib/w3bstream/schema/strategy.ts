@@ -6,7 +6,6 @@ import { eventBus } from '@/lib/event';
 import { StrategyType } from '@/server/routers/w3bstream';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
-import { makeObservable, observable, set } from 'mobx';
 import toast from 'react-hot-toast';
 
 export const schema = {
@@ -32,6 +31,10 @@ schema.definitions = {
 };
 
 export default class StrategyModule {
+  get curStrategies() {
+    return globalThis.store.w3s.applet.curApplet?.strategies || [];
+  }
+
   form = new JSONSchemaFormState<SchemaType>({
     //@ts-ignore
     schema,
@@ -74,11 +77,9 @@ export default class StrategyModule {
                 size: 'xs',
                 ...defaultButtonStyle,
                 onClick: async () => {
-                  if (globalThis.store.w3s.config.form.formData.accountRole === 'DEVELOPER') {
-                    this.form.uiSchema.appletID = {
-                      'ui:widget': 'hidden'
-                    };
-                  }
+                  this.form.uiSchema.appletID = {
+                    'ui:widget': 'hidden'
+                  };
                   this.form.value.set({
                     appletID: item.f_applet_id.toString(),
                     eventType: String(item.f_event_type),
@@ -134,7 +135,7 @@ export default class StrategyModule {
                           strategyID: item.f_strategy_id
                         }
                       });
-                      toast.success('Deleted successfully')
+                      toast.success('Deleted successfully');
                       eventBus.emit('strategy.delete');
                     }
                   });
@@ -150,24 +151,17 @@ export default class StrategyModule {
     containerProps: { mt: '10px' }
   });
 
-  allData: StrategyType[] = [];
-
-  get curStrategies() {
-    const curProject = globalThis.store.w3s.project.curProject;
-    return this.allData.filter((i) => i.f_project_id === curProject?.f_project_id);
-  }
-
-  constructor() {
-    makeObservable(this, {
-      allData: observable
-    });
-  }
-
-  set(v: Partial<StrategyModule>) {
-    Object.assign(this, v);
-  }
-
   async createStrategy() {
+    const curApplet = globalThis.store.w3s.applet.curApplet;
+    const curProject = globalThis.store.w3s.project.curProject;
+    if (curApplet) {
+      this.form.value.set({
+        appletID: curApplet.f_applet_id.toString()
+      });
+      this.form.uiSchema.appletID = {
+        'ui:widget': 'hidden'
+      };
+    }
     const formData = await hooks.getFormData({
       title: 'Create Strategy',
       size: 'xl',
@@ -179,15 +173,10 @@ export default class StrategyModule {
     });
     const { appletID, eventType, handler } = formData;
     if (appletID && eventType && handler) {
-      const allApplets = globalThis.store.w3s.applet.allData;
-      const applet = allApplets.find((item) => String(item.f_applet_id) === appletID);
-      if (!applet) {
-        return;
-      }
       try {
         await axios.request({
           method: 'post',
-          url: `/api/w3bapp/strategy/x/${applet.project_name}`,
+          url: `/api/w3bapp/strategy/x/${curProject?.name}`,
           data: {
             appletID,
             eventType,

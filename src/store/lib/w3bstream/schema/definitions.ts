@@ -1,6 +1,5 @@
 import { helper } from '@/lib/helper';
 import { Indexer } from '@/lib/indexer';
-import { rootStore } from '@/store/index';
 import { ContractInstance } from '../../ContractInstance';
 
 export const definitions = {
@@ -25,32 +24,32 @@ export const definitions = {
   publishers: {
     type: 'string',
     get enum() {
-      const allPublishers = globalThis.store.w3s.publisher.allData;
-      return allPublishers.length ? allPublishers.map((i) => `${i.f_publisher_id}`) : [''];
+      const publishers = globalThis.store.w3s.publisher.curPublishers;
+      return publishers.length ? publishers.map((i) => `${i.f_publisher_id}`) : [''];
     },
     get enumNames() {
-      const allPublishers = globalThis.store.w3s.publisher.allData;
-      return allPublishers.length ? allPublishers.map((i) => `${i.f_key}`) : [''];
+      const publishers = globalThis.store.w3s.publisher.curPublishers;
+      return publishers.length ? publishers.map((i) => `${i.f_key}`) : [''];
     }
   },
   applets: {
     type: 'string',
     get enum() {
-      const allApplets = globalThis.store.w3s.applet.allData;
-      return allApplets.map((i) => i.f_applet_id);
+      const applets = globalThis.store.w3s.project.curProject?.applets || [];
+      return applets.map((i) => i.f_applet_id);
     },
     get enumNames() {
-      const allApplets = globalThis.store.w3s.applet.allData;
-      return allApplets.map((i) => `${i.f_name}`);
+      const applets = globalThis.store.w3s.project.curProject?.applets || [];
+      return applets.map((i) => `${i.f_name}`);
     }
   },
   blockChains: {
     type: 'string',
     get enum() {
-      return globalThis.store.w3s.blockChain.allBlockChain.value?.map((i) => `${i.f_chain_id}`) || [];
+      return globalThis.store.w3s.blockChain.allBlockChain.map((i) => Number(i.f_chain_id)) || [];
     },
     get enumNames() {
-      return globalThis.store.w3s.blockChain.allBlockChain.value?.map((i) => `${i.f_chain_id}`) || [];
+      return globalThis.store.w3s.blockChain.allBlockChain.map((i) => Number(i.f_chain_id)) || [];
     }
   },
   labContracts: {
@@ -88,7 +87,7 @@ export const definitions = {
     type: 'string',
     get enum() {
       let files = [];
-      const { abi, address } = helper.string.validAbi(rootStore.w3s.lab.simulationIndexerForm.value.value.contract);
+      const { abi, address } = helper.string.validAbi(globalThis.store.w3s.lab.simulationIndexerForm.value.value.contract);
       if (!abi) return [];
       const contractInstance = new ContractInstance({ abi });
       files = contractInstance.events.map((i) => i.name);
@@ -96,7 +95,7 @@ export const definitions = {
     },
     get enumNames() {
       let files = [];
-      const { abi, address } = helper.string.validAbi(rootStore.w3s.lab.simulationIndexerForm.value.value.contract);
+      const { abi, address } = helper.string.validAbi(globalThis.store.w3s.lab.simulationIndexerForm.value.value.contract);
       if (!abi) return [];
       const contractInstance = new ContractInstance({ abi });
       files = contractInstance.events.map((i) => i.name);

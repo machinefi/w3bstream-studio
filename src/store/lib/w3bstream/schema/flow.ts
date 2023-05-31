@@ -1,6 +1,5 @@
 import { JSONValue, JSONSchemaFormState, JSONModalValue } from '@/store/standard/JSONSchemaState';
 import { eventBus } from '@/lib/event';
-// import { FlowType } from '@/server/routers/flow';
 import { FlowState } from '@/store/standard/FlowState';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
 import { UiSchema } from '@rjsf/utils';
@@ -8,8 +7,6 @@ import { PromiseState } from '@/store/standard/PromiseState';
 import { makeObservable, observable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 import { createFlowSchema, codeNodeSchema, webhookNodeSchema, CreateFlowSchemaType, WebhookNodeSchemaType, CodeNodeSchemaType, EnvSchemaType, envSchema } from './flow.schema';
-import { rootStore } from '@/store/index';
-import { t } from '@/server/trpc';
 import toast from 'react-hot-toast';
 
 export type FlowType = {
@@ -47,7 +44,7 @@ export default class FlowModule {
         // }
         // return result;
       } catch (e) {
-        toast.error(rootStore.lang.t("error.flow.deleted.msg"))
+        toast.error(globalThis.store.lang.t('error.flow.deleted.msg'));
       }
     }
   });
@@ -61,7 +58,7 @@ export default class FlowModule {
         // }
         // return result;
       } catch (e) {
-        toast.error(rootStore.lang.t("error.flow.duplicated.msg"))
+        toast.error(globalThis.store.lang.t('error.flow.duplicated.msg'));
       }
     }
   });

@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Box, Flex, Portal, Spinner, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
-import _ from 'lodash';
 import { VscDebugStart } from 'react-icons/vsc';
 import { BsDatabaseFillAdd } from 'react-icons/bs';
 import { FileIcon } from '@/components/Tree';

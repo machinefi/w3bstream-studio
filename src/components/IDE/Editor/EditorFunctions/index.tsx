@@ -1,6 +1,5 @@
 import { helper } from "@/lib/helper";
 import toast from 'react-hot-toast';
-import { rootStore } from "@/store/index";
 import reactHotToast from 'react-hot-toast';
 import { asc } from 'pages/_app';
 import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
@@ -34,24 +33,24 @@ export const compileAssemblyscript = async (code: string) => {
 };
 
 export const compileAndCreateProject = async (needCompile: boolean = true) => {
-  const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
+  const curActiveFile = globalThis.store?.w3s.projectManager.curFilesListSchema.curActiveFile;
   if (needCompile) {
     const { error, binary, text, stats, stderr } = await compileAssemblyscript(curActiveFile.data.code);
     if (error) {
       console.log(error);
       return toast.error(error.message);
     }
-    rootStore?.w3s.project.createProjectByWasmForm.value.set({
+    globalThis.store?.w3s.project.createProjectByWasmForm.value.set({
       file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), binary)
     });
   } else {
-    rootStore?.w3s.project.createProjectByWasmForm.value.set({
+    globalThis.store?.w3s.project.createProjectByWasmForm.value.set({
       file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), curActiveFile.data.extraData.raw)
     });
   }
 
   try {
-    await rootStore?.w3s.project.createProjectByWasm();
+    await globalThis.store?.w3s.project.createProjectByWasm();
     reactHotToast(
       (t) => (
         <span>
@@ -61,11 +60,11 @@ export const compileAndCreateProject = async (needCompile: boolean = true) => {
             ml={2}
             onClick={async () => {
               reactHotToast.dismiss(t.id);
-              rootStore.w3s.currentHeaderTab = 'PROJECTS';
-              rootStore.w3s.project.resetSelectedNames();
-              await rootStore?.w3s.project.allProjects.call();
-              rootStore.w3s.project.allProjects.onSelect(0);
-              rootStore.w3s.showContent = 'METRICS';
+              globalThis.store.w3s.currentHeaderTab = 'PROJECTS';
+              globalThis.store.w3s.project.resetSelectedNames();
+              await globalThis.store?.w3s.project.allProjects.call();
+              globalThis.store.w3s.project.allProjects.onSelect(0);
+              globalThis.store.w3s.showContent = 'METRICS';
             }}
           >
             Go to
@@ -83,8 +82,8 @@ export const compileAndCreateProject = async (needCompile: boolean = true) => {
 };
 
 export const debugAssemblyscript = async (needCompile = true) => {
-  const lab = rootStore?.w3s.lab;
-  const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
+  const lab = globalThis.store?.w3s.lab;
+  const curActiveFile = globalThis.store?.w3s.projectManager.curFilesListSchema.curActiveFile;
   const payloadCache = new StorageState<string>({
     key: curActiveFile.key + '_payload'
   });
@@ -155,9 +154,9 @@ export const debugSimulation = () => {
 };
 
 export const onCreateDB = async () => {
-  const curActiveFile = rootStore?.w3s.projectManager.curFilesListSchema.curActiveFile;
+  const curActiveFile = globalThis.store?.w3s.projectManager.curFilesListSchema.curActiveFile;
   const tableJSONSchema: TableJSONSchema = JSON.parse(curActiveFile?.data?.code);
-  await rootStore.god.sqlDB.createTableByJSONSchema(tableJSONSchema);
+  await globalThis.store.god.sqlDB.createTableByJSONSchema(tableJSONSchema);
 };
 
 export { debugDemo } from './demo';

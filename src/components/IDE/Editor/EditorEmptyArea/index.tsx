@@ -3,13 +3,11 @@ import { useStore } from '@/store/index';
 import { Button, Flex } from '@chakra-ui/react';
 import { helper } from '@/lib/helper';
 import toast from 'react-hot-toast';
-import _ from 'lodash';
 import { hooks } from '@/lib/hooks';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 
 export const EditorEmptyArea = observer(() => {
   const {
-    w3s,
     w3s: { projectManager }
   } = useStore();
   return (
@@ -27,14 +25,14 @@ export const EditorEmptyArea = observer(() => {
             size: '2xl',
             formList: [
               {
-                form: w3s.projectManager.initWasmTemplateForm
+                form: projectManager.initWasmTemplateForm
               }
             ]
           });
           if (!formData.template) {
             return toast.error('Please select a template!');
           }
-          w3s.projectManager.curFilesListSchema.createFileFormFolder(w3s.projectManager.curFilesList[0], 'file', helper.json.safeParse(formData.template) ?? null);
+          projectManager.curFilesListSchema.createFileFormFolder(projectManager.curFilesList[0], 'file', helper.json.safeParse(formData.template) ?? null);
         }}
       >
         New File

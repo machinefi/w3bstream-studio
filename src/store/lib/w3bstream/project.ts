@@ -2,19 +2,15 @@ import { ProjectType } from '@/server/routers/w3bstream';
 import { makeAutoObservable } from 'mobx';
 import { MappingState } from '@/store/standard/MappingState';
 import { FilesListSchema } from './schema/filesList';
-import _ from 'lodash';
-import { rootStore } from '../../index';
+import { _ } from '@/lib/lodash';
 import { IndexDb } from '@/lib/dexie';
-import { config } from '@/lib/config';
 import { createClient, SubscribePayload, Client } from 'graphql-ws';
-import { v4 as uuidv4 } from 'uuid';
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 import { FromSchema } from 'json-schema-to-ts';
 import InitWasmTemplateWidget from '@/components/JSONFormWidgets/InitWasmTemplateWidget';
 import { eventBus } from '@/lib/event';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
 
 export const initWasmTemplateFormSchema = {
   type: 'object',

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Flex, Box, Tabs, TabList, TabPanels, TabPanel, Tab, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import ContractLogs, { CreateContractLogButton } from '@/components/IDE/Monitor/ContractLogs';
-import ChainHeight, { CreateChainHeightButton } from '@/components/IDE/Monitor/ChainHeight';
-import Strategies, { CreateStrategyButton } from '@/components/IDE/Strategies';
-import { ShowRequestTemplatesButton } from '@/components/IDE/PublishEventRequestTemplates';
+import ContractLogs, { CreateContractLogButton } from '../Monitor/ContractLogs';
+import ChainHeight, { CreateChainHeightButton } from '../Monitor/ChainHeight';
+import Strategies, { CreateStrategyButton } from '../Strategies';
+import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
 import CronJobs, { CreateCronJobButton } from '../CronJob';
 
 const Triggers = () => {

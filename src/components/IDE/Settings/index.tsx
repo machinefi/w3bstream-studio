@@ -18,7 +18,7 @@ const Settings = () => {
 
   const store = useLocalObservable(() => ({
     get curInstance() {
-      return instances.table.dataSource.find((item) => item.project_name === project.curProject?.name);
+      return applet.curApplet?.instances[0];
     },
     get tags() {
       if (project.curProject?.f_description) {
@@ -121,12 +121,12 @@ const Settings = () => {
         <Divider my="10px" />
         {datas.map((item) => {
           return (
-            <Flex alignItems={'center'} mb="20px">
+            <Flex key={item.title} alignItems={'center'} mb="20px">
               <Flex fontWeight={'500'} fontSize="14px" alignItems={'center'} color="blackAlpha.900" minWidth={150} textAlign={'left'}>
                 <Text>{item.title}</Text>
                 {item.tips && <Tooltip label='The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are sending your transactions.' placement='right'>
-                <Box cursor={'pointer'}><FaRegQuestionCircle color='#797878' fontSize={14} style={{margin: 5}} /></Box>
-              </Tooltip>}:
+                  <Box cursor={'pointer'}><FaRegQuestionCircle color='#797878' fontSize={14} style={{ margin: 5 }} /></Box>
+                </Tooltip>}:
               </Flex>
               <Text ml="10px" fontSize={'14px'} color="blackAlpha.700" >
                 {item.value}
@@ -141,7 +141,7 @@ const Settings = () => {
         <ProjectEnvs />
       </Box>
 
-      <Box mt="60px" fontSize="16px"  fontWeight={700}>
+      <Box mt="60px" fontSize="16px" fontWeight={700}>
       </Box>
       <Stack mt="10px" p="20px" border="1px solid #F9CFCE" borderRadius="8px">
         <Flex justifyContent="space-between" alignItems="center">
@@ -169,7 +169,7 @@ const Settings = () => {
                       eventBus.emit('project.delete');
                       project.allProjects.onSelect(-1);
                       project.resetSelectedNames();
-                    } catch (error) {}
+                    } catch (error) { }
                   }
                 }
               });

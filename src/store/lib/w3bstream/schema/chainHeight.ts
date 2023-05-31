@@ -3,12 +3,10 @@ import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { definitions } from './definitions';
 import { ChainHeightType } from '@/server/routers/w3bstream';
-import { PromiseState } from '@/store/standard/PromiseState';
-import { trpc } from '@/lib/trpc';
 import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
-import { rootStore } from '@/store/index';
+import { makeObservable, observable } from 'mobx';
 
 export const schema = {
   definitions: {
@@ -20,7 +18,7 @@ export const schema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type', description: 'Please choose a unique name for the W3bstream event that should be triggered' },
-    chainID: { $ref: '#/definitions/blockChains',  type: 'string', title: 'Chain ID', description: 'The blockchain network that should be monitored' },
+    chainID: { $ref: '#/definitions/blockChains', type: 'number', title: 'Chain ID', description: 'The blockchain network that should be monitored' },
     height: { type: 'number', title: 'Height', description: 'The blockchain height at which the the W3bstream event should be triggered.' }
   },
   required: ['projectName', 'eventType', 'chainID', 'height']
@@ -35,22 +33,11 @@ schema.definitions = {
 };
 
 export default class ChainHeightModule {
-  allChainHeight = new PromiseState<() => Promise<any>, ChainHeightType[]>({
-    defaultValue: [],
-    function: async () => {
-      const res = await trpc.api.chainHeight.query();
-      if (res) {
-        this.table.set({
-          dataSource: res
-        });
-      }
-      return res;
-    }
-  });
+  allChainHeight: ChainHeightType[] = [];
 
   get curProjectChainHeight() {
     const curProject = globalThis.store.w3s.project.curProject;
-    return this.allChainHeight.value.filter((c) => c.f_project_name === curProject?.f_name);
+    return this.allChainHeight.filter((c) => c.f_project_name === curProject?.f_name);
   }
 
   table = new JSONSchemaTableState<ChainHeightType>({
@@ -70,16 +57,16 @@ export default class ChainHeightModule {
                     description: 'Are you sure you want to delete it?',
                     async onOk() {
                       const regex = /(?:[^_]*_){2}(.*)/;
-                      const projectName = item.f_project_name.match(regex)[1]
+                      const projectName = item.f_project_name.match(regex)[1];
                       try {
                         await axios.request({
                           method: 'delete',
                           url: `/api/w3bapp/monitor/x/${projectName}/chain_height/${item.f_chain_height_id}`
                         });
                         eventBus.emit('chainHeight.delete');
-                        toast.success(rootStore.lang.t('success.delete.msg'));
+                        toast.success(globalThis.store.lang.t('success.delete.msg'));
                       } catch (error) {
-                        toast.error(rootStore.lang.t('error.delete.msg'));
+                        toast.error(globalThis.store.lang.t('error.delete.msg'));
                       }
                     }
                   });
@@ -125,7 +112,7 @@ export default class ChainHeightModule {
       },
       chainID: {
         'ui:widget': 'select'
-      },
+      }
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -136,9 +123,15 @@ export default class ChainHeightModule {
       default: {
         projectName: '',
         eventType: 'DEFAULT',
-        chainID: '4690',
+        chainID: 4690,
         height: 0
-      },
+      }
     })
   });
+
+  constructor() {
+    makeObservable(this, {
+      allChainHeight: observable
+    });
+  }
 }

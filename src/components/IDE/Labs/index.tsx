@@ -1,8 +1,8 @@
 import React, {  useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { FilesItem } from '@/components/IDE/SideBar/filesItem';
-import Editor from '@/components/IDE/Editor';
+import { FilesItem } from './filesItem';
+import Editor from '../Editor';
 import { useStore } from '@/store/index';
 
 const Labs = () => {

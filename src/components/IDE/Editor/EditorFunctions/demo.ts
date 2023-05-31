@@ -2,21 +2,16 @@ import { VM } from '@ethereumjs/vm';
 import { Address } from '@ethereumjs/util';
 import { Chain, Common, Hardfork } from '@ethereumjs/common';
 import { Block } from '@ethereumjs/block';
-import { Transaction, AccessListEIP2930TxData, FeeMarketEIP1559TxData, TxData } from '@ethereumjs/tx';
-import { defaultAbiCoder as AbiCoder } from '@ethersproject/abi';
+import { Transaction, TxData } from '@ethereumjs/tx';
 import { hexToBytes } from 'ethereum-cryptography/utils';
-import Web3 from 'web3';
+import { defaultAbiCoder } from '@ethersproject/abi';
 import { StdIOType } from '@/server/wasmvm';
 import { helper } from '@/lib/helper';
-import { Contract, ethers } from 'ethers';
-import { axios } from '@/lib/axios';
-import { eventBus } from '@/lib/event';
-import { trpc } from '@/lib/trpc';
 import { compileAssemblyscript } from '.';
-import stringify from 'json-stable-stringify';
 import { PromiseState } from '@/store/standard/PromiseState';
+import ERC20 from '@/constants/abis/ERC20.json';
 
-type TransactionsData = TxData | AccessListEIP2930TxData | FeeMarketEIP1559TxData;
+type TransactionsData = TxData;
 
 const common = new Common({ chain: Chain.Rinkeby, hardfork: Hardfork.Istanbul });
 
@@ -29,7 +24,7 @@ export const encodeDeployment = (
 ) => {
   const deploymentData = '0x' + bytecode;
   if (params) {
-    const argumentsEncoded = AbiCoder.encode(params.types, params.values);
+    const argumentsEncoded = defaultAbiCoder.encode(params.types, params.values);
     return deploymentData + argumentsEncoded.slice(2);
   }
   return deploymentData;
@@ -60,13 +55,10 @@ export const buildTransaction = (data: Partial<TransactionsData>): TransactionsD
   };
 };
 
-async function deployContract(vm: VM, block: Block, senderPrivateKey: Uint8Array, deploymentBytecode: string, greeting: string): Promise<Address> {
-  // Contracts are deployed by sending their deployment bytecode to the address 0
-  // The contract params should be abi-encoded and appended to the deployment bytecode.
-
+async function deployContract(vm: VM, block: Block, senderPrivateKey: Uint8Array, deploymentBytecode: string) {
   const data = encodeDeployment(deploymentBytecode, {
     types: ['string'],
-    values: [greeting]
+    values: ['']
   });
 
   const txData = {
@@ -82,85 +74,50 @@ async function deployContract(vm: VM, block: Block, senderPrivateKey: Uint8Array
     throw deploymentResult.execResult.exceptionError;
   }
 
-  return deploymentResult.createdAddress!;
+  return deploymentResult;
 }
 
-async function awaitProjectReady(assemblyScript: string) {
-  const { curFilesListSchema } = globalThis.store.w3s.projectManager;
-  const wasmFiles = curFilesListSchema.findFilesByLabel(curFilesListSchema.files, assemblyScript);
-  const wasmFile = wasmFiles[0];
-  if (!wasmFile) {
-    throw new Error('AssemblyScript file not found');
-  }
-  const wasmName = wasmFile.label;
-  const projectName = `demo_${wasmName.replace('.ts', '')}`;
-  const p = globalThis.store.w3s.project.allProjects.value.find((p) => p.name === projectName);
-  if (p) {
-    return p.f_project_id;
-  }
-  const { error, binary } = await compileAssemblyscript(wasmFile.data.code);
-  if (error) {
-    throw new Error(error.message);
-  }
-  const wasmRaw = helper.Uint8ArrayToWasmBase64FileData(wasmName.replace('.ts', '.wasm'), binary);
-  const projectData = {
-    name: projectName,
-    description: '',
-    applets: [{ wasmRaw, appletName: 'applet_01' }],
-    datas: []
-  };
-  const res = await axios.request({
-    method: 'post',
-    url: `/api/init`,
-    data: {
-      project: [projectData]
-    }
-  });
-  if (res.data?.message === 'OK') {
-    const projectID = res.data.createdProjectIds[0];
-    await globalThis.store.w3s.dbTable.importTables({
-      projectID,
-      schemas: [
-        {
-          schemaName: 'public',
-          tables: [
-            {
-              tableName: 'demo',
-              tableSchema: 'public',
-              comment: '',
-              columns: [
-                {
-                  name: 'id',
-                  type: 'int8',
-                  isIdentity: true,
-                  isNullable: false,
-                  isUnique: false,
-                  isPrimaryKey: true,
-                  comment: 'primary id'
-                },
-                {
-                  name: 'data',
-                  type: 'jsonb',
-                  defaultValue: null,
-                  isIdentity: false,
-                  isNullable: true,
-                  isUnique: false,
-                  isPrimaryKey: false,
-                  comment: ''
-                }
-              ],
-              relationships: []
-            }
-          ]
-        }
-      ]
-    });
-    eventBus.emit('project.create');
-    return projectID;
-  } else {
-    throw new Error('create project failed');
-  }
+const demoAssemblyScript = `export function start(rid: i32): i32 {
+  Log("start from typescript");
+  const message = GetDataByRID(rid);
+  Log("wasm received message:" + message);
+  return 0;
 }
+`;
+
+const demoDbSchemas = [
+  {
+    schemaName: 'public',
+    tables: [
+      {
+        tableName: 'demo',
+        tableSchema: 'public',
+        comment: '',
+        columns: [
+          {
+            name: 'id',
+            type: 'int8',
+            isIdentity: true,
+            isNullable: false,
+            isUnique: false,
+            isPrimaryKey: true,
+            comment: 'primary id'
+          },
+          {
+            name: 'data',
+            type: 'jsonb',
+            defaultValue: null,
+            isIdentity: false,
+            isNullable: true,
+            isUnique: false,
+            isPrimaryKey: false,
+            comment: ''
+          }
+        ]
+      }
+    ]
+  }
+];
 
 class Wallet {
   accountPk: Uint8Array;
@@ -182,97 +139,80 @@ class BlockChain {
     const { curFilesListSchema } = globalThis.store.w3s.projectManager;
     const contractFiles = curFilesListSchema.findFilesByLabel(curFilesListSchema.files, contract);
     const contractFile = contractFiles[0];
-    if (!contractFile) {
-      throw new Error('Contract file not found');
-    }
-    const { bytecode, abi } = helper.json.safeParse(contractFile.data.code);
+    const contractJson = contractFile ? helper.json.safeParse(contractFile.data.code) : ERC20;
     const vm = await VM.create({ common });
-    const contractAddress = await deployContract(vm, this.block, wallet.accountPk, bytecode, '');
-    const address = contractAddress.toString();
-    const web3 = new Web3('http://localhost:8545');
-    const instance = new web3.eth.Contract(abi, address);
-    instance.methods.mintWithProof = ({ to, amount, proof }: { to: string; amount: number; proof: any }) => {
-      const publicKey = '0x046d9038945ff8f4669201ba1e806c9a46a5034a578e4d52c031521985380392944efd6c702504d9130573bb939f5c124af95d38168546cc7207a7e0baf14172ff';
-      const recoveredPublicKey = ethers.utils.recoverPublicKey(ethers.utils.hashMessage(proof.message), proof.signature);
-      if (publicKey.toLowerCase() === recoveredPublicKey.toLowerCase()) {
-        return instance.methods.mint(to, amount);
-      } else {
-        throw new Error('Invalid signature');
-      }
-    };
-    return {
-      address,
-      instance
-    };
+    const deploymentResult = await deployContract(vm, this.block, wallet.accountPk, contractJson.bytecode);
+    return deploymentResult;
   }
 }
 
 class W3bstream {
   assemblyScript: string;
   operator: Wallet;
-  contract: {
-    address: string;
-    instance: Contract;
-  };
-  projectID: string;
-
-  constructor(args: {
-    assemblyScript: string;
-    operator: Wallet;
-    contract: {
-      address: string;
-      instance: Contract;
-    };
-  }) {
+  wasmBuffer: Buffer;
+  constructor(args: { assemblyScript: string; operator: Wallet }) {
     Object.assign(this, args);
   }
 
-  async upload(json: { data: { [x: string]: any } }[]) {
-    if (!this.projectID) {
-      this.projectID = await awaitProjectReady(this.assemblyScript);
+  async awaitWasmReady() {
+    if (this.wasmBuffer) {
+      return;
     }
+    const { curFilesListSchema } = globalThis.store.w3s.projectManager;
+    const wasmFiles = curFilesListSchema.findFilesByLabel(curFilesListSchema.files, this.assemblyScript);
+    const wasmFile = wasmFiles[0];
+    const assemblyScriptCode = wasmFile ? wasmFile.data.code : demoAssemblyScript;
+    const { error, binary } = await compileAssemblyscript(assemblyScriptCode);
+    if (error) {
+      throw error;
+    }
+    this.wasmBuffer = Buffer.from(binary);
+  }
+
+  async awaitDatabaseReady() {
+    const sqlDB = globalThis.store.god.sqlDB;
+    const tableName = demoDbSchemas[0].tables[0].tableName;
+    if (sqlDB.findDBExist(tableName)) {
+      return;
+    }
+    const sqlResult = await sqlDB.createTableByJSONSchema({
+      schemas: demoDbSchemas
+    });
+    return sqlResult;
+  }
+
+  async upload(json: { data: { [x: string]: any } }[]) {
+    await this.awaitDatabaseReady();
     for (const item of json) {
-      await trpc.pg.createTableData.mutate({
-        projectID: this.projectID,
-        tableSchema: 'public',
-        tableName: 'demo',
-        keys: Object.keys(item),
-        values: Object.values(item)
-      });
+      const keys = Object.keys(item).join(',');
+      const values = Object.values(item)
+        .map((i) => `'${JSON.stringify(i)}'`)
+        .join(',');
+      const sql = `INSERT INTO demo (${keys}) VALUES (${values})`;
+      await globalThis.store.god.sqlDB.db.exec(sql);
     }
   }
 
-  async getProof(query?: string) {
+  async getData(query?: string) {
+    await this.awaitDatabaseReady();
     const sql = query ? query : `SELECT * FROM demo ORDER BY id DESC LIMIT 1`;
-    if (!this.projectID) {
-      this.projectID = await awaitProjectReady(this.assemblyScript);
+    const res = globalThis.store.god.sqlDB.db.exec(sql);
+    const columnNames = demoDbSchemas[0].tables[0].columns.map((c) => c.name);
+    const dataSource = [];
+    if (res.length > 0) {
+      res[0].values.forEach((i) => {
+        const obj: { [key: string]: any } = {};
+        i.forEach((j, index) => {
+          obj[columnNames[index]] = helper.json.safeParse(j);
+        });
+        dataSource.push(obj);
+      });
     }
-    const { data, errorMsg } = await trpc.pg.query.mutate({
-      sql,
-      projectID: this.projectID
-    });
-    if (errorMsg) {
-      throw new Error(errorMsg);
-    }
-
-    const row = data[0];
-    if (!row) {
+    const data = dataSource[0];
+    if (!data) {
       throw new Error('No data found');
     }
-
-    const privateKey = this.operator.accountPk;
-    const message = stringify(row.data);
-    const signingKey = new ethers.utils.SigningKey(privateKey);
-    const messageHash = ethers.utils.hashMessage(message);
-    const signature = signingKey.signDigest(messageHash);
-
-    return {
-      data: row,
-      proof: {
-        message: message,
-        signature
-      }
-    };
+    return data;
   }
 }
 
@@ -294,20 +234,3 @@ export const debugDemo = new PromiseState<() => Promise<any>, any>({
     lab.stdout.push(stdio);
   }
 });
-
-// export const debugDemo = async () => {
-//   const lab = globalThis.store.w3s.lab;
-//   const code = globalThis.store.w3s.projectManager.curFilesListSchema.curActiveFile.data.code;
-
-//   let errMsg = '';
-//   let msg = '';
-//   try {
-//     const res = await new Function('Wallet', 'BlockChain', 'W3bstream', code)(Wallet, BlockChain, W3bstream);
-//     console.log('[Demo Return Value]:', res);
-//   } catch (error) {
-//     errMsg = error.message;
-//   }
-
-//   const stdio: StdIOType = errMsg ? { '@lv': 'error', msg: errMsg, '@ts': Date.now(), prefix: '' } : { '@lv': 'info', msg, '@ts': Date.now(), prefix: '' };
-//   lab.stdout.push(stdio);
-// };

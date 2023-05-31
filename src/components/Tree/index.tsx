@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { labExamples } from '@/constants/labExamples';
 import { BiMemoryCard, BiPaste, BiRename } from 'react-icons/bi';
 import { toJS } from 'mobx';
-import { compileAndCreateProject, debugAssemblyscript, debugSimulation, debugDemo } from '../IDE/Editor/EditorFunctions';
+import { compileAndCreateProject, debugAssemblyscript, debugSimulation, debugDemo } from '@/components/IDE/Editor/EditorFunctions';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { GrStatusGoodSmall } from 'react-icons/gr';
 import { useTranslation } from 'react-i18next';

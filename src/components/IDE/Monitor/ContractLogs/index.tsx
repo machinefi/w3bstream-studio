@@ -14,26 +14,13 @@ const ContractLogs = observer(() => {
   const { w3s } = useStore();
 
   useEffect(() => {
-    if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-      w3s.contractLogs.table.set({
-        dataSource: w3s.contractLogs.curProjectContractLogs
-      });
-    } else {
-      w3s.contractLogs.table.set({
-        dataSource: w3s.contractLogs.allContractLogs.value
-      });
-    }
-  }, [w3s.contractLogs.allContractLogs.value]);
+    w3s.contractLogs.table.set({
+      dataSource: w3s.contractLogs.curProjectContractLogs
+    });
+  }, [w3s.contractLogs.curProjectContractLogs]);
 
   return (
-    <>
-      {w3s.config.form.formData.accountRole === 'ADMIN' && (
-        <Flex alignItems="center">
-          <CreateContractLogButton />
-        </Flex>
-      )}
-      <JSONTable jsonstate={w3s.contractLogs} />
-    </>
+    <JSONTable jsonstate={w3s.contractLogs} />
   );
 });
 
@@ -46,14 +33,12 @@ export const CreateContractLogButton = observer(() => {
       leftIcon={<AddIcon />}
       {...defaultButtonStyle}
       onClick={async (e) => {
-        if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-          w3s.contractLogs.form.value.set({
-            projectName: w3s.project.curProject?.name
-          });
-          w3s.contractLogs.form.uiSchema.projectName = {
-            'ui:widget': 'hidden'
-          };
-        }
+        w3s.contractLogs.form.value.set({
+          projectName: w3s.project.curProject?.name
+        });
+        w3s.contractLogs.form.uiSchema.projectName = {
+          'ui:widget': 'hidden'
+        };
         const formData = await hooks.getFormData({
           title: 'Add Smart Contract event monitor',
           size: 'xl',

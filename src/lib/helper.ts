@@ -2,7 +2,6 @@ import numeral from 'numeral';
 import BN from 'bignumber.js';
 import { BigNumberState } from '@/store/standard/BigNumberState';
 import { NumberState, StringState } from '@/store/standard/base';
-import { rootStore } from '@/store/index';
 import BigNumber from 'bignumber.js';
 import { _ } from './lodash';
 import { ethers } from 'ethers';
@@ -22,7 +21,6 @@ export interface RouterParsed {
   hash: string;
   query: Record<string, string | string[] | undefined>;
 }
-
 
 export const helper = {
   setChain(god, chainId) {
@@ -58,7 +56,7 @@ export const helper = {
     async sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
-    async runAsync<T, U = Error>(promise: Promise<T>): Promise<[U | null, T | null]> {
+    async runAsync<T = any, U = Error>(promise: Promise<T>): Promise<[U | null, T | null]> {
       return promise.then<[null, T]>((data: T) => [null, data]).catch<[U, null]>((err) => [err, null]);
     }
   },
@@ -243,8 +241,8 @@ export const helper = {
       try {
         if (!chainId || !address || !data) throw new Error('chainId, address, data is required');
 
-        if (rootStore.god.currentChain.chainId !== chainId) {
-          await helper.setChain(rootStore.god, chainId);
+        if (globalThis.store.god.currentChain.chainId !== chainId) {
+          await helper.setChain(globalThis.store.god, chainId);
         }
         let sendTransactionParam: ethers.utils.Deferrable<ethers.providers.TransactionRequest> = _.omitBy(
           {
@@ -255,7 +253,7 @@ export const helper = {
           },
           _.isNil
         );
-        const res = await rootStore.god.eth.signer.sendTransaction(sendTransactionParam);
+        const res = await globalThis.store.god.eth.signer.sendTransaction(sendTransactionParam);
         const receipt = await res.wait();
         if (receipt.status) {
           toast.success(`Success`);
@@ -266,18 +264,18 @@ export const helper = {
       } catch (error) {
         console.log(error);
         if (autoAlert) {
-          toast.error(error.data?.message || error.message)
+          toast.error(error.data?.message || error.message);
         }
         onError && onError(error);
         throw error;
       }
     },
     callContractSync({ chainId, to, data }): string {
-      if (rootStore.god.currentChain.chainId !== chainId) {
-        helper.setChain(rootStore.god, chainId);
+      if (globalThis.store.god.currentChain.chainId !== chainId) {
+        helper.setChain(globalThis.store.god, chainId);
       }
       const contractAddress = to;
-      const response = request('POST', rootStore.god.currentNetwork.currentChain.rpcUrl, {
+      const response = request('POST', globalThis.store.god.currentNetwork.currentChain.rpcUrl, {
         headers: {
           'Content-Type': 'application/json'
         },
