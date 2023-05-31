@@ -51,7 +51,7 @@ const Header = observer(() => {
       >
         <Image w="30px" src="/favicon.svg" alt="logo" />
         <Flex ml="10px" fontWeight={600} alignItems="flex-start">
-          w3bstream Devnet <Text mt="-2px" ml="2px" fontSize={10} color="#946FFF">{w3s.env.envs?.value?.w3bstreamVersion?.split('@')?.[1]?.split('_')?.[0]}</Text>
+          w3bstream Devnet <Text mt="-2px" ml="2px" fontSize={10} color="#946FFF">{w3s.env.envs?.value?.w3bstreamVersion}</Text>
         </Flex>
       </Flex>
       <Flex ml="4rem" alignItems="center">

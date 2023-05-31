@@ -16,30 +16,7 @@ const Support = () => {
     },
     get w3bstreamVersionGithubLink() {
       const w3bstreamVersion = envs.value?.w3bstreamVersion;
-      if (!w3bstreamVersion) {
-        return ''
-      }
-      if (!w3bstreamVersion.includes('@')) {
-        return ''
-      }
-      try {
-        let tagVersion = '';
-        const str = w3bstreamVersion.split('_')[0].split('@')[1];
-        const [a, b, ..._] = str.split('-');
-        if (b) {
-          tagVersion = `${a}-${b}`;
-        } else {
-          tagVersion = a;
-        }
-        const pattern = /v\d+/;
-        if (pattern.test(tagVersion)) {
-          return `https://github.com/machinefi/w3bstream/releases/tag/${tagVersion}`
-        } else {
-          return ''
-        }
-      } catch (error) {
-        return ''
-      }
+      return `https://github.com/machinefi/w3bstream/releases/tag/${w3bstreamVersion}`
     },
   }));
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -154,10 +131,10 @@ const Support = () => {
               {
                 store.w3bstreamVersionGithubLink ? (
                   <Link ml="10px" href={store.w3bstreamVersionGithubLink} color="#946FFF" isExternal>
-                    {envs.value?.w3bstreamVersion?.split('@')?.[1]?.split('_')?.[0]}
+                    {envs.value?.w3bstreamVersion}
                   </Link>
                 ) : (
-                  <Box ml="10px">{envs.value?.w3bstreamVersion?.split('@')?.[1]?.split('_')?.[0]}</Box>
+                  <Box ml="10px">{envs.value?.w3bstreamVersion}</Box>
                 )
               }
             </Flex>
