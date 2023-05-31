@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
-import { prisma, monitor } from './prisma';
+import { prisma } from './prisma';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface CreateContextOptions extends trpcNext.CreateNextContextOptions {
@@ -13,7 +13,7 @@ interface CreateContextOptions extends trpcNext.CreateNextContextOptions {
  * This is useful for testing when we don't want to mock Next.js' request/response
  */
 export async function createContextInner(_opts: CreateContextOptions) {
-  return { prisma, monitor, req: _opts.req, res: _opts.res, user: null };
+  return { prisma, req: _opts.req, res: _opts.res, user: null };
 }
 
 export type Context = trpc.inferAsyncReturnType<typeof createContextInner>;

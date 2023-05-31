@@ -18,7 +18,7 @@
     "test": "concurrently \"yarn start \"",
     "test:ci": "cypress run --headless",
     "postinstall": "npm run gen",
-    "gen": "prisma generate; prisma generate --schema ./prisma/monitor.prisma",
+    "gen": "prisma generate",
     "db:pull": "npx prisma db pull",
     "dev:docker": "dp -f docker-compose-dev.yaml build; dp -f docker-compose-dev.yaml  up -d"
   },
@@ -48,7 +48,7 @@
     "@nivo/core": "0.83.0",
     "@nivo/line": "0.83.0",
     "@nivo/scales": "0.83.0",
-    "@prisma/client": "4.4.0",
+    "@prisma/client": "4.15.0",
     "@rainbow-me/rainbowkit": "0.12.1",
     "@rjsf/chakra-ui": "5.0.0-beta.9",
     "@rjsf/core": "5.0.0-beta.13",
@@ -154,7 +154,7 @@
     "@types/swagger-ui-react": "4.11.0",
     "@types/uuid": "8.3.4",
     "concurrently": "6.5.1",
-    "prisma": "4.4.0",
+    "prisma": "4.15.0",
     "typescript": "4.9.5"
   },
   "resolutions": {

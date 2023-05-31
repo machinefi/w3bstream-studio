@@ -12,7 +12,7 @@ import { MdEditDocument } from 'react-icons/md';
 
 const Settings = () => {
   const {
-    w3s: { project, applet, instances },
+    w3s: { project, applet },
     base: { confirm }
   } = useStore();
 

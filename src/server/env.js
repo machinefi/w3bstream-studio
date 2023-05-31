@@ -1,7 +1,6 @@
 const { z } = require('zod');
 
 const envSchema = z.object({
-  DATABASE_URL_APPLET_MANAGEMENT: z.string().url(),
   NODE_ENV: z.enum(['development', 'test', 'production'])
 });
 

@@ -46,10 +46,12 @@ export const definitions = {
   blockChains: {
     type: 'string',
     get enum() {
-      return globalThis.store.w3s.blockChain.allBlockChain.map((i) => Number(i.f_chain_id)) || [];
+      const blockChains = globalThis.store.w3s.env.envs.value?.blockChains || [];
+      return blockChains.map((i) => `${i.f_chain_id}`);
     },
     get enumNames() {
-      return globalThis.store.w3s.blockChain.allBlockChain.map((i) => Number(i.f_chain_id)) || [];
+      const blockChains = globalThis.store.w3s.env.envs.value?.blockChains || [];
+      return blockChains.map((i) => `${i.f_chain_id}`);
     }
   },
   labContracts: {

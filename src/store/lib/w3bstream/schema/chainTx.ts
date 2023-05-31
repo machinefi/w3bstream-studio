@@ -6,7 +6,6 @@ import { ChainTxType } from '@/server/routers/w3bstream';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
-import { makeObservable, observable } from 'mobx';
 
 export const schema = {
   definitions: {
@@ -18,7 +17,7 @@ export const schema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project ID' },
     eventType: { type: 'string', title: 'Event Type' },
-    chainID: { type: 'number', title: 'Chain ID' },
+    chainID: { type: 'string', title: 'Chain ID' },
     txAddress: { type: 'string', title: 'txAddress' }
   },
   required: ['projectName', 'eventType', 'chainID', 'txAddress']
@@ -32,11 +31,8 @@ schema.definitions = {
 };
 
 export default class ChainTxModule {
-  allChainTx: ChainTxType[] = [];
-
   get curProjectChainTx() {
-    const curProject = globalThis.store.w3s.project.curProject;
-    return this.allChainTx.filter((c) => c.f_project_name === curProject?.f_name);
+    return globalThis.store.w3s.project.curProject?.chainTxs || [];
   }
 
   table = new JSONSchemaTableState<ChainTxType>({
@@ -126,7 +122,7 @@ export default class ChainTxModule {
       default: {
         projectName: '',
         eventType: 'DEFAULT',
-        chainID: 4690,
+        chainID: '4690',
         txAddress: ''
       }
     })
@@ -139,10 +135,4 @@ export default class ChainTxModule {
       autoReset: true
     }
   });
-
-  constructor() {
-    makeObservable(this, {
-      allChainTx: observable
-    });
-  }
 }
