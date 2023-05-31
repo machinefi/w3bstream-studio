@@ -26,7 +26,7 @@ const Publishers = observer(() => {
       <Flex alignItems="center" mb="24px">
         <Box flex="1">
           <Text fontSize={'1.25rem'} fontWeight={600}>Authorized Devices</Text>
-          <Text color={'#7A7A7A'} fontSize="14px">Go to "Settings" to switch between "All Devices" and "Authorized Devices".</Text>
+          <Text color={'#7A7A7A'} fontSize="14px">In this section, you can create and manage unique authentication tokens for your authorized devices. These tokens act as digital keys, ensuring that only trusted devices can send messages to your project and have them accepted.</Text>
         </Box>
         <Button
           h="36px"
