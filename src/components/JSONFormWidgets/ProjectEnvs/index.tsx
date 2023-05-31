@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Box, Flex, Stack, Input, Button,Text } from '@chakra-ui/react';
+import { Box, Flex, Stack, Input, Button, Text } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -113,46 +113,45 @@ export const ProjectEnvs = observer(() => {
       <Text fontSize="16px" fontWeight={600}>
         Environment Variables
       </Text>
-
       <Text fontSize="14px" color="#7a7a7a">
         Use environment variables to store API keys and other configuration values and secrets. You can access them in your code like regular environment variables
       </Text>
-      <Box  pt="20px" >
-      {store.envs.map((item) => (
-        <Flex w="100%" key={item.id}>
-          <Input
-            w="300px"
-            placeholder="Key"
-            size="md"
-            fontSize={"14px"}
-            value={item.key}
-            onChange={(e) => {
-              store.onChangeEnv(item.id, e.target.value, item.value);
-            }}
-          />
-          <Input
-            ml="10px"
-            w="100%"
-            placeholder="Value"
-            size="md"
-            fontSize={"14px"}
-            value={item.value}
-            onChange={(e) => {
-              store.onChangeEnv(item.id, item.key, e.target.value);
-            }}
-          />
-          <Button
-            ml="10px"
-            variant="outline"
-            onClick={() => {
-              store.onDeleteEnv(item.id);
-            }}
-          >
-            <DeleteIcon />
-          </Button>
-        </Flex>
-      ))}
-      </Box>
+      <Stack pt="20px">
+        {store.envs.map((item) => (
+          <Flex w="100%" key={item.id}>
+            <Input
+              w="300px"
+              placeholder="Key"
+              size="md"
+              fontSize={"14px"}
+              value={item.key}
+              onChange={(e) => {
+                store.onChangeEnv(item.id, e.target.value, item.value);
+              }}
+            />
+            <Input
+              ml="10px"
+              w="100%"
+              placeholder="Value"
+              size="md"
+              fontSize={"14px"}
+              value={item.value}
+              onChange={(e) => {
+                store.onChangeEnv(item.id, item.key, e.target.value);
+              }}
+            />
+            <Button
+              ml="10px"
+              variant="outline"
+              onClick={() => {
+                store.onDeleteEnv(item.id);
+              }}
+            >
+              <DeleteIcon />
+            </Button>
+          </Flex>
+        ))}
+      </Stack>
 
       <Flex justifyContent="flex-end">
         <Button

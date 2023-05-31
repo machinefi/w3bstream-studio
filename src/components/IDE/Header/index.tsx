@@ -1,27 +1,24 @@
 import React from 'react';
-import { Box, Button, Flex, Icon, Tab, TabList, Tabs, Tooltip, Image, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
-import { EditIcon } from '@chakra-ui/icons';
+import { Button, Flex, Text, TabList, Tabs, Image, Tab } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { MdHttp, MdLogout } from 'react-icons/md';
 import { useStore } from '@/store/index';
 import Link from 'next/link';
-import { hooks } from '@/lib/hooks';
-import { axios } from '@/lib/axios';
-import { eventBus } from '@/lib/event';
-import { helper } from '@/lib/helper';
-import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
+import { defaultButtonStyle } from '@/lib/theme';
 import StarCount from '../StarCount';
-import toast from 'react-hot-toast';
+import { WalletConnectButton } from '@/components/WalletConnectButton';
 
 const getTabIndex = (showContent) => {
-  if (showContent === 'CURRENT_APPLETS') {
+  if (showContent === 'PROJECTS') {
     return 0;
   }
-  if (showContent === 'CURRENT_PUBLISHERS') {
+  if (showContent === 'LABS') {
     return 1;
   }
-  if (showContent === 'CURRENT_EVENT_LOGS') {
+  if (showContent === 'SUPPORT') {
     return 2;
+  }
+  if (showContent === 'FLOW') {
+    return 3;
   }
   return 0;
 };
@@ -33,208 +30,117 @@ const Header = observer(() => {
       as="header"
       position="fixed"
       top="0px"
-      left="350px"
+      left="0px"
       zIndex="999"
       alignItems="center"
       px="30px"
-      w="calc(100vw - 350px)"
-      h="60px"
+      w="100%"
+      minH="60px"
       boxShadow="sm"
-      borderBottom="1px solid rgba(0, 0, 0, 0.1)"
       css={{
         backdropFilter: 'saturate(180%) blur(5px)',
         backgroundColor: 'rgba(255, 255, 255, 0.8)'
       }}
     >
-      {(w3s.showContent === 'CURRENT_APPLETS' || w3s.showContent === 'CURRENT_PUBLISHERS' || w3s.showContent === 'CURRENT_EVENT_LOGS') && (
+      <Flex
+        alignItems="center"
+        onClick={() => {
+          w3s.actions.goHome();
+        }}
+        cursor={'pointer'}
+      >
+        <Image w="30px" src="/favicon.svg" alt="logo" />
+        <Flex ml="10px" fontWeight={600} alignItems="flex-start">
+          w3bstream Devnet <Text mt="-2px" ml="2px" fontSize={10} color="#946FFF">{w3s.env.envs?.value?.w3bstreamVersion?.split('@')?.[1]?.split('_')?.[0]}</Text>
+        </Flex>
+      </Flex>
+      <Flex ml="4rem" alignItems="center">
         <Tabs
           variant="unstyled"
-          index={getTabIndex(w3s.showContent)}
+          index={getTabIndex(w3s.currentHeaderTab)}
           onChange={(number) => {
-            if (number === 0) {
-              w3s.showContent = 'CURRENT_APPLETS';
-            }
+            // if (number === 0) {
+            //   w3s.currentHeaderTab = 'PROJECTS';
+            //   w3s.project.allProjects.onSelect(-1)
+            //   w3s.project.resetSelectedNames();
+            // }
             if (number === 1) {
-              w3s.showContent = 'CURRENT_PUBLISHERS';
+              w3s.currentHeaderTab = 'LABS';
             }
             if (number === 2) {
-              w3s.showContent = 'CURRENT_EVENT_LOGS';
+              w3s.currentHeaderTab = 'SUPPORT';
             }
-          }}
-          sx={{
-            '.chakra-tabs__tablist': {
-              border: '1px solid rgba(148, 111, 255, 0.4)',
-              borderRadius: '10px'
+            if (number === 3) {
+              w3s.currentHeaderTab = 'FLOW';
             }
           }}
         >
-          <TabList>
-            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderLeftRadius="8px" _selected={{ color: 'white', bg: '#946FFF' }}>
-              Applet
-            </Tab>
+          <TabList >
             <Tab
-              w="70px"
-              h="30px"
-              fontSize="xs"
-              fontWeight={700}
-              borderLeft="1px solid rgba(148, 111, 255, 0.4)"
-              borderRight="1px solid rgba(148, 111, 255, 0.4)"
-              _selected={{ color: 'white', bg: '#946FFF' }}
+              onClick={() => {
+                w3s.actions.goHome();
+              }}
+              px="0"
+              h="40px"
+              fontSize={'14px'}
+
+              _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}
             >
-              Publisher
+              Projects
             </Tab>
-            <Tab w="60px" h="30px" fontSize="xs" fontWeight={700} borderRightRadius="8px" _selected={{ color: 'white', bg: '#946FFF' }}>
-              Log
+            <Tab px="0" ml="60px" h="40px" fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+              Labs
             </Tab>
+            <Tab px="0" ml="60px" h="40px" fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+              Support
+            </Tab>
+            {/* <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
+              Flow
+            </Tab> */}
           </TabList>
         </Tabs>
-      )}
-      {w3s.showContent === 'DB_TABLE' && (
-        <Tooltip label="Query SQL" placement="bottom">
-          <Box
-            position="relative"
-            cursor="pointer"
-            onClick={() => {
-              w3s.dbTable.setMode('QUERY_SQL');
-            }}
-          >
-            <Image p={1} h={10} w={10} borderRadius="4px" _hover={{ background: 'gray.200' }} src="/images/icons/execute_sql.svg" />
-          </Box>
-        </Tooltip>
-      )}
+      </Flex>
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
-        <Icon
-          as={MdHttp}
-          mr="20px"
-          w="22px"
-          h="21px"
-          cursor="pointer"
-          onClick={async () => {
-            w3s.postman.form.value.set({
-              headers: {
-                Authorization: `Bearer ${w3s.config.form.formData.token}`
-              }
-            });
-            const formData = await hooks.getFormData({
-              title: 'Postman',
-              size: '2xl',
-              formList: [
-                {
-                  form: w3s.postman.form
-                }
-              ],
-              children: (
-                <Button
-                  mt="10px"
-                  w="100%"
-                  h="32px"
-                  onClick={() => {
-                    w3s.postman.form.reset({ force: true });
-                  }}
-                >
-                  Reset
-                </Button>
-              )
-            });
-            const { url, method, body, protocol, topic } = formData;
-            if (protocol === 'http/https' && url) {
-              await axios.request({
-                url,
-                method,
-                data: JSON.parse(body)
-              });
-            }
-            if (protocol === 'mqtt' && topic) {
-              const message = JSON.parse(formData.message);
-              if (message.payload) {
-                message.payload = helper.stringToBase64(message.payload);
-              }
-              await axios.request({
-                url: '/api/mqtt',
-                method: 'post',
-                data: {
-                  topic,
-                  message
-                }
-              });
-            }
-            toast.success('requset succeeded');
-            eventBus.emit('postman.request');
+        {/* <Button
+          ml="auto"
+          size="md"
+          bg="#F3F3F3"
+          borderRadius={100}
+          onClick={async(e) => {
+            await w3s.init();
+            toast.success('Refreshed');
           }}
-        />
+        >
+          <MdRefresh />
+        </Button> */}
+        {/* <ChakraLink href="https://github.com/machinefi/w3bstream-studio" isExternal>
+          <Image mr="20px" w="100px" src="https://img.shields.io/github/stars/machinefi/w3bstream-studio.svg?style=social&label=Star&maxAge=2592000" />
+        </ChakraLink> */}
         <StarCount />
-        <Profile />
+        <Flex mr="10px">
+          <Profile />
+        </Flex>
       </Flex>
     </Flex>
   );
 });
 
+const accountAddressFormat = (address) => {
+  const len = address.length;
+  return `${address.substring(0, 10)}...${address.substring(len - 9, len)}`;
+};
+
 const Profile = observer(() => {
-  const {
-    w3s,
-    base: { confirm }
-  } = useStore();
+  const { w3s } = useStore();
   const { accountID } = w3s.config.form.formData;
 
   if (accountID) {
     return (
-      <Popover>
-        <PopoverTrigger>
-          <Button bg="#F3F3F3" borderRadius="60px">
-            accountID: {accountID}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent bg="#fff" w="260px">
-          <PopoverArrow bg="#fff" />
-          <PopoverBody mt="10px">
-            <Button
-              w="100%"
-              leftIcon={<EditIcon />}
-              {...defaultOutlineButtonStyle}
-              onClick={async () => {
-                const formData = await hooks.getFormData({
-                  title: 'Update Password',
-                  size: 'md',
-                  formList: [
-                    {
-                      form: w3s.user.pwdForm
-                    }
-                  ]
-                });
-                if (formData.password) {
-                  await axios.request({
-                    method: 'put',
-                    url: `/api/w3bapp/account/${w3s.config.form.formData.accountID}`,
-                    data: formData
-                  });
-                  toast.success('update password succeeded');
-                  eventBus.emit('user.update-pwd');
-                  w3s.config.logout();
-                }
-              }}
-            >
-              Update password
-            </Button>
-            <Button
-              mt="10px"
-              w="100%"
-              leftIcon={<MdLogout />}
-              {...defaultOutlineButtonStyle}
-              onClick={() => {
-                confirm.show({
-                  title: 'Warning',
-                  description: 'Are you sure you want to log out?',
-                  async onOk() {
-                    w3s.config.logout();
-                  }
-                });
-              }}
-            >
-              Log out
-            </Button>
-          </PopoverBody>
-        </PopoverContent>
-      </Popover>
+      <WalletConnectButton
+        customStyle={{
+          leftIcon: <Image boxSize="20px" objectFit="cover" src="/images/icons/metamask.svg" alt="MetaMask" />
+        }}
+      />
     );
   }
 

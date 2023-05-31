@@ -1,132 +1,228 @@
 import React from 'react';
-import { Flex, BoxProps, Image, Tooltip, Box } from '@chakra-ui/react';
+import { Flex, BoxProps, Box, Icon, Text, Popover, PopoverTrigger, PopoverContent, useDisclosure } from '@chakra-ui/react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
+import { BiBarChartSquare } from 'react-icons/bi';
+import { TbDeviceDesktop, TbHandClick, TbSettings } from 'react-icons/tb';
+import { HiOutlineDatabase } from 'react-icons/hi';
+import { AiOutlineFileText } from 'react-icons/ai';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
+import toast from 'react-hot-toast';
 
 interface ToolBar extends BoxProps {}
 
 const ToolBar = (props: ToolBar) => {
-  const { w3s } = useStore();
-  const iconStyle = {
-    p: '1',
-    h: '8',
-    w: '8',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    _hover: { background: 'gray.200' }
-  };
+  const { w3s, lang:{t} } = useStore();
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
+  const curProjectInstance = w3s.instances.table.dataSource.find((option) => option.project_name === w3s.project.curProject?.name);
+  const curProjectStatus = INSTANCE_STATUS[curProjectInstance?.f_state || 0];
 
   return (
-    <Flex h="100%" direction="column" justify="space-between" align="center" py={2} {...props}>
-      <Flex direction="column">
-        <Image mt="8px" mb="18px" w="30px" src="/favicon.svg" alt="logo" />
-        <Tooltip label="Project" placement="right">
-          <Image
-            src="/images/icons/project.svg"
-            onClick={() => {
-              w3s.showContent = 'CURRENT_APPLETS';
+    <Box position={'fixed'} h="100%" overflow={'auto'}>
+      <Flex minW="200px" h="100%" direction="column" align="center" p="14px" bg="#fff" {...props}>
+        <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+          <PopoverTrigger >
+            <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} px="14px" py="8px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
+              <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
+              <Text mr="10px" w="130px"  fontSize={"14px"} color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
+                {w3s.project.curProject?.name}
+              </Text>
+              <ChevronDownIcon fontSize={'24px'} color={'#7A7A7A'} />
+            </Flex>
+          </PopoverTrigger>
+          <PopoverContent
+            bg="#F8F8FA"
+            w="168px"
+            overflow={'auto'}
+            px="14px"
+            outline={'none'}
+            border="none"
+            css={{
+              '.project-item': {
+                '&:last-child': {
+                  borderBottom: 'none'
+                }
+              }
             }}
-            {...iconStyle}
-            {...getSelectedStyles(w3s.showContent === 'CURRENT_APPLETS')}
-          />
-        </Tooltip>
-
-        <Tooltip label="Collection" placement="right">
-          <Box position="relative">
-            <Image
-              mt="10px"
-              src="/images/icons/collection.svg"
-              onClick={() => {
-                w3s.showContent = 'ALL_APPLETS';
-              }}
-              {...iconStyle}
-              {...getSelectedStyles(w3s.showContent === 'ALL_APPLETS' || w3s.showContent === 'ALL_INSTANCES' || w3s.showContent === 'STRATEGIES' || w3s.showContent === 'ALL_PUBLISHERS')}
-            />
+          >
+            {w3s.project.allProjects.value.map((item, index) => {
+              const instance = w3s.instances.table.dataSource.find((option) => option.project_name === item.name);
+              const status = INSTANCE_STATUS[instance?.f_state || 0];
+              return (
+                <Flex
+                  className="project-item"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (instance) {
+                      w3s.project.allProjects.onSelect(index);
+                      w3s.showContent = 'METRICS';
+                      const now = new Date();
+                      now.setMinutes(0);
+                      now.setSeconds(0);
+                      now.setMilliseconds(0);
+                      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+                      w3s.metrics.activeDevices.call(yesterday, now);
+                      w3s.metrics.dataMessages.call(yesterday, now);
+                      w3s.metrics.blockchainTransaction.call(yesterday, now);
+                    } else {
+                      toast.error(t('error.change.project.msg'));
+                    }
+                    onClose();
+                  }}
+                  alignItems={'center'}
+                  cursor="pointer"
+                  borderBottom={'1px solid #EDEDED'}
+                  py="8px"
+                  fontSize={'14px'}
+                  justifyContent="flex-start"
+                >
+                  <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={status?.color}></Box>
+                  <Text color={w3s.project.curProject.name === item.name ? status?.color : ''}>{item.name}</Text>
+                </Flex>
+              );
+            })}
+          </PopoverContent>
+        </Popover>
+        <Flex
+          w="100%"
+          p="14px 18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'METRICS')}
+          onClick={(e) => {
+            w3s.showContent = 'METRICS';
+          }}
+        >
+          <Icon as={BiBarChartSquare} boxSize={5} />
+          <Box ml="15px" fontSize="14px">
+            Metrics
           </Box>
-        </Tooltip>
-
-        <Tooltip label="Monitor" placement="right">
-          <Box position="relative">
-            <Image
-              mt="10px"
-              src="/images/icons/monitor.svg"
-              onClick={() => {
-                w3s.showContent = 'CONTRACT_LOGS';
-              }}
-              {...iconStyle}
-              {...getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT')}
-            />
+        </Flex>
+        <Flex
+          w="100%"
+          mt="14px"
+          p="14px 18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'CURRENT_PUBLISHERS')}
+          onClick={(e) => {
+            w3s.showContent = 'CURRENT_PUBLISHERS';
+          }}
+        >
+          <Icon as={TbDeviceDesktop} boxSize={5} />
+          <Box ml="15px" fontSize="14px">
+            Devices
           </Box>
-        </Tooltip>
-
-        <Tooltip label="Database Tables" placement="right">
-          <Box position="relative">
-            <Image
-              mt="10px"
-              src="/images/icons/table.svg"
-              onClick={() => {
-                w3s.showContent = 'DB_TABLE';
-              }}
-              {...iconStyle}
-              {...getSelectedStyles(w3s.showContent === 'DB_TABLE')}
-            />
+        </Flex>
+        <Flex
+          w="100%"
+          mt="14px"
+          p="14px 18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT')}
+          onClick={(e) => {
+            w3s.showContent = 'CONTRACT_LOGS';
+          }}
+        >
+          <Icon as={TbHandClick} boxSize={5} />
+          <Box ml="15px" fontSize="14px">
+            Events
           </Box>
-        </Tooltip>
-
-        <Tooltip label="Metrics" placement="right">
-          <Box position="relative">
-            <Image
-              mt="10px"
-              src="/images/icons/metrics.svg"
-              onClick={() => {
-                w3s.showContent = 'METRICS';
-              }}
-              {...iconStyle}
-              {...getSelectedStyles(w3s.showContent === 'METRICS')}
-            />
+        </Flex>
+        <Flex
+          w="100%"
+          mt="14px"
+          p="14px 18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'DB_TABLE')}
+          onClick={(e) => {
+            w3s.showContent = 'DB_TABLE';
+          }}
+        >
+          <Icon as={HiOutlineDatabase} boxSize={5} />
+          <Box ml="15px" fontSize="14px">
+            Data
           </Box>
-        </Tooltip>
-
-        <Tooltip label="Editor" placement="right">
-          <Box position="relative" mt="10px">
-            <Image
-              mt="10px"
-              src="/images/icons/code.svg"
-              onClick={() => {
-                w3s.showContent = 'EDITOR';
-              }}
-              {...iconStyle}
-              {...getSelectedStyles(w3s.showContent === 'EDITOR')}
-            />
-            <Box fontSize="12px" color="white" bg="black" borderRadius="3px" px={1} position="absolute" right={'-2px'} top={'1px'}>
-              Lab
-            </Box>
+        </Flex>
+        <Flex
+          w="100%"
+          mt="14px"
+          p="14px 18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'CURRENT_EVENT_LOGS')}
+          onClick={(e) => {
+            w3s.showContent = 'CURRENT_EVENT_LOGS';
+          }}
+        >
+          <Icon as={AiOutlineFileText} boxSize={5} />
+          <Box ml="15px" fontSize="14px">
+            Log
           </Box>
-        </Tooltip>
-
-        {process.env.NODE_ENV === 'development' && (
-          <Tooltip label="Docker Logs" placement="right">
-            <Image
-              mt="10px"
-              src="/images/icons/docker.svg"
-              onClick={() => {
-                w3s.showContent = 'DOCKER_LOGS';
-              }}
-              {...iconStyle}
-              {...getSelectedStyles(w3s.showContent === 'DOCKER_LOGS')}
-            />
-          </Tooltip>
-        )}
+        </Flex>
+        <Flex
+          w="100%"
+          mt="14px"
+          p="14px 18px"
+          alignItems="center"
+          cursor="pointer"
+          color="rgba(15, 15, 15, 0.75)"
+          borderRadius="8px"
+          {...getSelectedStyles(w3s.showContent === 'SETTINGS')}
+          onClick={(e) => {
+            w3s.showContent = 'SETTINGS';
+          }}
+        >
+          <Icon as={TbSettings} boxSize={5} />
+          <Box ml="15px" fontSize="14px">
+            Settings
+          </Box>
+        </Flex>
       </Flex>
-    </Flex>
+    </Box>
   );
 };
 
-function getSelectedStyles(selected: boolean) {
+export function getSelectedStyles(selected: boolean) {
   return selected
-    ? { background: 'gray.200' }
+    ? {
+        sx: {
+          background: 'rgba(148, 111, 255, 0.1)',
+          '& > svg': {
+            color: '#946FFF'
+          },
+          '& > div': {
+            color: '#946FFF'
+          }
+        }
+      }
     : {
-        background: 'transparent'
+        sx: {
+          ':hover': {
+            '& > svg': {
+              color: '#946FFF'
+            },
+            '& > div': {
+              color: '#946FFF'
+            },
+            background: 'rgba(148, 111, 255, 0.1)'
+          }
+        }
       };
 }
 
-export default ToolBar;
+export default observer(ToolBar);

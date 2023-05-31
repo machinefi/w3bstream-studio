@@ -5,7 +5,7 @@ import { inferProcedureOutput } from '@trpc/server';
 export const w3bstreamRouter = t.router({
   projects: authProcedure.query(async ({ ctx }) => {
     const accountID = BigInt(ctx.user.Payload);
-    const res = await ctx.prisma.t_project.findMany({
+    const projects = await ctx.prisma.t_project.findMany({
       where: {
         f_account_id: {
           equals: accountID
@@ -20,6 +20,7 @@ export const w3bstreamRouter = t.router({
         f_description: true,
         publishers: {
           select: {
+            f_project_id: true,
             f_publisher_id: true,
             f_name: true,
             f_key: true,
@@ -55,13 +56,20 @@ export const w3bstreamRouter = t.router({
             f_value: true,
             f_type: true
           }
+        },
+        cronJobs: {
+          select: {
+            f_cron_job_id: true,
+            f_project_id: true,
+            f_cron_expressions: true,
+            f_event_type: true,
+            f_created_at: true
+          }
         }
       }
     });
-    return res;
-  }),
-  contractLogs: t.procedure.query(({ ctx, input }) => {
-    return ctx.monitor.t_contract_log.findMany({
+
+    const contractLogs = await ctx.monitor.t_contract_log.findMany({
       select: {
         f_contractlog_id: true,
         f_project_name: true,
@@ -76,9 +84,8 @@ export const w3bstreamRouter = t.router({
         f_updated_at: true
       }
     });
-  }),
-  chainTx: t.procedure.query(({ ctx, input }) => {
-    return ctx.monitor.t_chain_tx.findMany({
+
+    const chainTxs = await ctx.monitor.t_chain_tx.findMany({
       select: {
         f_chaintx_id: true,
         f_project_name: true,
@@ -90,9 +97,8 @@ export const w3bstreamRouter = t.router({
         f_updated_at: true
       }
     });
-  }),
-  chainHeight: t.procedure.query(({ ctx, input }) => {
-    return ctx.monitor.t_chain_height.findMany({
+
+    const chainHeights = await ctx.monitor.t_chain_height.findMany({
       select: {
         f_chain_height_id: true,
         f_project_name: true,
@@ -104,17 +110,24 @@ export const w3bstreamRouter = t.router({
         f_updated_at: true
       }
     });
-  }),
-  blockChain: t.procedure.query(({ ctx, input }) => {
-    return ctx.monitor.t_blockchain.findMany({
+
+    const blockChains = await ctx.monitor.t_blockchain.findMany({
       select: {
         f_id: true,
         f_chain_id: true,
         f_chain_address: true
       }
     });
+
+    return {
+      projects,
+      contractLogs,
+      chainTxs,
+      chainHeights,
+      blockChains
+    };
   }),
-  wasmLogs: t.procedure
+  wasmLogs: authProcedure
     .input(
       z.object({
         projectName: z.string(),
@@ -156,30 +169,7 @@ export const w3bstreamRouter = t.router({
       });
       return data;
     }),
-  cronJobs: t.procedure
-    .input(
-      z.object({
-        projectId: z.string()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const res = await ctx.prisma.t_cron_job.findMany({
-        where: {
-          f_project_id: {
-            equals: BigInt(input.projectId)
-          }
-        },
-        select: {
-          f_cron_job_id: true,
-          f_project_id: true,
-          f_cron_expressions: true,
-          f_event_type: true,
-          f_created_at: true
-        }
-      });
-      return res;
-    }),
-  wasmName: t.procedure
+  wasmName: authProcedure
     .input(
       z.object({
         resourceId: z.string()
@@ -201,18 +191,17 @@ export const w3bstreamRouter = t.router({
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
-export type ProjectOriginalType = inferProcedureOutput<W3bstreamRouter['projects']>[0];
+export type ProjectOriginalType = inferProcedureOutput<W3bstreamRouter['projects']>['projects'][0];
 export type AppletType = ProjectOriginalType['applets'][0] & { project_name: string };
 export type StrategyType = AppletType['strategies'][0];
 export type InstanceType = AppletType['instances'][0] & { project_name: string; applet_name: string };
 export type PublisherType = ProjectOriginalType['publishers'][0] & { project_id: string; project_name: string };
 export type ProjectType = ProjectOriginalType & {
   name: string;
-  applets: AppletType[];
-  publishers: PublisherType[];
 };
-export type ContractLogType = inferProcedureOutput<W3bstreamRouter['contractLogs']>[0];
-export type ChainTxType = inferProcedureOutput<W3bstreamRouter['chainTx']>[0];
-export type ChainHeightType = inferProcedureOutput<W3bstreamRouter['chainHeight']>[0];
+export type ContractLogType = inferProcedureOutput<W3bstreamRouter['projects']>['contractLogs'][0];
+export type ChainTxType = inferProcedureOutput<W3bstreamRouter['projects']>['chainTxs'][0];
+export type ChainHeightType = inferProcedureOutput<W3bstreamRouter['projects']>['chainHeights'][0];
+export type BlockchainType = inferProcedureOutput<W3bstreamRouter['projects']>['blockChains'][0];
+export type CronJobsType = ProjectOriginalType['cronJobs'][0];
 export type WasmLogType = inferProcedureOutput<W3bstreamRouter['wasmLogs']>;
-export type CronJobsType = inferProcedureOutput<W3bstreamRouter['cronJobs']>[0];

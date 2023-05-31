@@ -1,18 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { rootStore, useStore } from '@/store/index';
-import { Box, Button, Center, Flex, Portal, Select, Text, Tooltip } from '@chakra-ui/react';
+import { useStore } from '@/store/index';
+import { Box, Center, Flex } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { v4 as uuidv4 } from 'uuid';
-import { helper } from '@/lib/helper';
 import toast from 'react-hot-toast';
-import _ from 'lodash';
+import { _ } from '@/lib/lodash';
 import { eventBus } from '@/lib/event';
 import { StdIOType } from '@/server/wasmvm';
-import Flow, { FlowErrorFallback } from '@/components/DeveloperIDE/Flow';
-import { hooks } from '@/lib/hooks';
+import Flow, { FlowErrorFallback } from '@/components/IDE/Flow';
 import ErrorBoundary from '@/components/Common/ErrorBoundary';
-import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { ConsolePanel } from './EditorBottomPanels/ConsolePanel';
 import { ABIPanel } from './EditorBottomPanels/ABIPanel';
 import { DBpanel } from './EditorBottomPanels/DBpanel';
@@ -23,12 +20,11 @@ import { EditorEmptyArea } from './EditorEmptyArea';
 
 const Editor = observer(() => {
   const {
-    w3s,
     w3s: {
       projectManager: { curFilesListSchema },
       lab
     },
-    lang: {t}
+    lang: { t }
   } = useStore();
   useEffect(() => {
     const handleSave = (event) => {
@@ -69,7 +65,7 @@ const Editor = observer(() => {
         }
         const currentFolder = curFilesListSchema.findCurFolder(curFilesListSchema.files);
         const wasmFileName = filesItem?.label.replace('.ts', '') + '.wasm';
-        const curWasmIndex = _.findIndex(currentFolder.children, (i) => i.label == wasmFileName);
+        const curWasmIndex = _.findIndex(currentFolder.children, (i: any) => i.label == wasmFileName);
         const wasmFile: FilesItemType = {
           key: uuidv4(),
           label: wasmFileName,

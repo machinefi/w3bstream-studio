@@ -1,8 +1,5 @@
 import { eventBus } from '@/lib/event';
 import { helper } from '@/lib/helper';
-import { rootStore } from '@/store/index';
-import BigNumber from 'bignumber.js';
-import { SqlDB } from './sqldb';
 export type StdIOType = {
   '@lv': 'info' | 'error';
   '@ts': number;
@@ -157,7 +154,7 @@ export class WASM {
         ws_get_env(kaddr, ksize, vaddr, vsize) {
           const k_view = new Uint8Array(_this.memory.buffer, kaddr, ksize);
           const k = new TextDecoder().decode(k_view); //{statement: string, params: any[]}
-          const v = rootStore.w3s.projectManager.curFilesListSchema.findENV(k);
+          const v = globalThis.store.w3s.projectManager.curFilesListSchema.findENV(k);
           if (!v) {
             _this.writeStderr({
               message: `env key not found: ${k}`
@@ -181,9 +178,9 @@ export class WASM {
             });
             return;
           }
-          const sqlStatement = rootStore.god.sqlDB.toSQL(sqlJSON);
+          const sqlStatement = globalThis.store.god.sqlDB.toSQL(sqlJSON);
           try {
-            rootStore.god.sqlDB.exec(sqlStatement);
+            globalThis.store.god.sqlDB.exec(sqlStatement);
             _this.writeStdout({
               message: `run sql ${sqlStatement}`
             });
@@ -205,11 +202,11 @@ export class WASM {
             });
             return;
           }
-          const sqlStatement = rootStore.god.sqlDB.toSQL(sqlJSON);
+          const sqlStatement = globalThis.store.god.sqlDB.toSQL(sqlJSON);
           try {
-            const res = rootStore.god.sqlDB.exec(sqlStatement);
-            console.log(rootStore.god.sqlDB.parseResult(res));
-            const resStr = JSON.stringify(rootStore.god.sqlDB.parseResult(res));
+            const res = globalThis.store.god.sqlDB.exec(sqlStatement);
+            console.log(globalThis.store.god.sqlDB.parseResult(res));
+            const resStr = JSON.stringify(globalThis.store.god.sqlDB.parseResult(res));
             _this.copyToWasm(resStr, vmAddr, vmSizePtr);
           } catch (e) {
             console.log(e);

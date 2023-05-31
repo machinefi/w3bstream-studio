@@ -23,7 +23,6 @@ import LabModule from './schema/lab';
 import CronJobModule from './schema/cronJob';
 import ENVModule from './schema/envs';
 import BlockChainModule from './schema/blockChain';
-import toast from 'react-hot-toast';
 
 configure({
   enforceActions: 'never'
@@ -36,19 +35,11 @@ export class W3bStream {
   flowModule = new FlowModule();
   projectManager = new ProjectManager();
   project = new ProjectModule({
-    onLoadCompleted: ({ applets, publishers, strategies, instances }) => {
-      this.applet.set({
-        allData: applets
-      });
-      this.publisher.set({
-        allData: publishers
-      });
-      this.instances.table.set({
-        dataSource: instances
-      });
-      this.strategy.set({
-        allData: strategies
-      });
+    onLoadCompleted: ({ contractLogs, chainTxs, chainHeights, blockChains }) => {
+      this.contractLogs.allContractLogs = contractLogs;
+      this.chainTx.allChainTx = chainTxs;
+      this.chainHeight.allChainHeight = chainHeights;
+      this.blockChain.allBlockChain = blockChains;
     }
   });
   applet = new AppletModule();
@@ -67,21 +58,16 @@ export class W3bStream {
   blockChain = new BlockChainModule();
 
   showContent:
-    | 'CURRENT_APPLETS'
-    | 'ALL_APPLETS'
+    | 'METRICS'
     | 'CURRENT_PUBLISHERS'
-    | 'ALL_PUBLISHERS'
     | 'CURRENT_EVENT_LOGS'
-    | 'ALL_INSTANCES'
-    | 'STRATEGIES'
     | 'EDITOR'
     | 'DOCKER_LOGS'
     | 'CONTRACT_LOGS'
     | 'CHAIN_TX'
     | 'CHAIN_HEIGHT'
-    | 'METRICS'
     | 'SETTINGS'
-    | 'DB_TABLE' = 'CURRENT_APPLETS';
+    | 'DB_TABLE' = 'METRICS';
 
   currentHeaderTab: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'FLOW' = 'PROJECTS';
 
@@ -92,21 +78,24 @@ export class W3bStream {
       this.currentHeaderTab = 'PROJECTS';
       this.project.allProjects.onSelect(-1);
     }
-  }
+  };
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
     this.initEvent();
-    this.initWatch()
+    this.initWatch();
   }
 
   initWatch() {
-    reaction(() => this.currentHeaderTab, () => {
-      if (this.currentHeaderTab == 'PROJECTS') {
-        this.project.allProjects.onSelect(-1);
+    reaction(
+      () => this.currentHeaderTab,
+      () => {
+        if (this.currentHeaderTab == 'PROJECTS') {
+          this.project.allProjects.onSelect(-1);
+        }
       }
-    })
+    );
   }
 
   initEvent() {
@@ -129,9 +118,6 @@ export class W3bStream {
       })
       .on('project.delete', async () => {
         await this.project.allProjects.call();
-        this.contractLogs.allContractLogs.call();
-        this.chainTx.allChainTx.call();
-        this.chainHeight.allChainHeight.call();
       })
       .on('applet.create', async () => {
         await this.project.allProjects.call();
@@ -181,28 +167,28 @@ export class W3bStream {
         await this.project.allProjects.call();
       })
       .on('contractlog.create', async () => {
-        this.contractLogs.allContractLogs.call();
+        this.project.allProjects.call();
       })
       .on('contractlog.delete', async () => {
-        this.contractLogs.allContractLogs.call();
+        this.project.allProjects.call();
       })
       .on('chainTx.create', async () => {
-        this.chainTx.allChainTx.call();
+        this.project.allProjects.call();
       })
       .on('chainTx.delete', async () => {
-        this.chainTx.allChainTx.call();
+        this.project.allProjects.call();
       })
       .on('chainHeight.create', async () => {
-        this.chainHeight.allChainHeight.call();
+        this.project.allProjects.call();
       })
       .on('chainHeight.delete', async () => {
-        this.chainHeight.allChainHeight.call();
+        this.project.allProjects.call();
       })
-      .on('cronJob.create', async (projectId: bigint) => {
-        this.cronJob.list.call(projectId);
+      .on('cronJob.create', async () => {
+        this.project.allProjects.call();
       })
-      .on('cronJob.delete', async (projectId: bigint) => {
-        this.cronJob.list.call(projectId);
+      .on('cronJob.delete', async () => {
+        this.project.allProjects.call();
       });
   }
 
@@ -210,11 +196,7 @@ export class W3bStream {
     hooks.waitLogin().then(async () => {
       await this.project.allProjects.call();
       this.projectManager.sync();
-      this.contractLogs.allContractLogs.call();
-      this.chainTx.allChainTx.call();
-      this.chainHeight.allChainHeight.call();
       this.env.envs.call();
-      this.blockChain.allBlockChain.call();
     });
   }
 }

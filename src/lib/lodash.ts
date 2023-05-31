@@ -12,6 +12,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
 import uniqWith from 'lodash/uniqWith';
+import findIndex from 'lodash/findIndex';
+import remove from 'lodash/remove';
 
 export const _ = {
   throttle,
@@ -27,5 +29,7 @@ export const _ = {
   cloneDeep,
   groupBy,
   isEqual,
-  uniqWith
+  uniqWith,
+  findIndex,
+  remove
 };

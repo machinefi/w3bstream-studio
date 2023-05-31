@@ -59,6 +59,10 @@ schema.definitions = {
 };
 
 export default class AppletModule {
+  get curApplet() {
+    return globalThis.store.w3s.project.curProject?.applets[0];
+  }
+
   form = new JSONSchemaFormState<SchemaType, UiSchema & { file: FileWidgetUIOptions }>({
     //@ts-ignore
     schema,
@@ -184,28 +188,12 @@ export default class AppletModule {
             text: 'Delete'
           };
 
-          const addStrategyBtn = {
-            props: {
-              ml: '10px',
-              size: 'xs',
-              ...defaultButtonStyle,
-              onClick: async () => {
-                globalThis.store.w3s.strategy.form.value.set({
-                  appletID: item.f_applet_id.toString()
-                });
-                globalThis.store.w3s.strategy.createStrategy();
-              }
-            },
-            text: 'Add Strategy'
-          };
-
           if (item.instances.length) {
-            return [deleteBtn, addStrategyBtn];
+            return [deleteBtn];
           }
 
           return [
             deleteBtn,
-            addStrategyBtn,
             {
               props: {
                 ml: '10px',
@@ -348,7 +336,7 @@ export default class AppletModule {
                       });
                       const { appletID, eventType, handler } = formData;
                       if (appletID && eventType && handler) {
-                        const applet = this.allData.find((item) => String(item.f_applet_id) === appletID);
+                        const applet = this.curApplet;
                         try {
                           await axios.request({
                             method: 'put',
@@ -406,12 +394,6 @@ export default class AppletModule {
     containerProps: { mt: 4, h: 'calc(100vh - 200px)', overflowY: 'auto' }
   });
 
-  allData: AppletType[] = [];
-
-  get curApplet() {
-    return this.allData.find((item) => item.project_name === globalThis.store.w3s.project.curProject?.name);
-  }
-
   wasmName = new PromiseState<(resourceId) => Promise<any>, string>({
     defaultValue: '',
     function: async (resourceId) => {
@@ -425,10 +407,6 @@ export default class AppletModule {
       }
     }
   });
-
-  set(v: Partial<AppletModule>) {
-    Object.assign(this, v);
-  }
 
   async createApplet() {
     const formData = await hooks.getFormData({

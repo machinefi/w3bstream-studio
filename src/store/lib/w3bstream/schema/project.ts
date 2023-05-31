@@ -8,7 +8,7 @@ import { ProjectEnvsWidget } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
 import { hooks } from '@/lib/hooks';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { AppletType, ProjectType, PublisherType, InstanceType, StrategyType, ContractLogType, CronJobsType, ChainHeightType } from '@/server/routers/w3bstream';
+import { ProjectType, StrategyType, ContractLogType, CronJobsType, ChainHeightType, ChainTxType, BlockchainType } from '@/server/routers/w3bstream';
 import { trpc } from '@/lib/trpc';
 import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
@@ -95,10 +95,10 @@ type ImportProjectSchemaType = FromSchema<typeof importProjectSchema>;
 type EditProjectFileSchemaType = FromSchema<typeof editProjectFileSchema>;
 
 interface OnLoadCompletedProps {
-  applets: AppletType[];
-  publishers: PublisherType[];
-  instances: InstanceType[];
-  strategies: StrategyType[];
+  contractLogs: ContractLogType[];
+  chainTxs: ChainTxType[];
+  chainHeights: ChainHeightType[];
+  blockChains: BlockchainType[];
 }
 
 enum ProjectConfigType {
@@ -111,40 +111,12 @@ export default class ProjectModule {
   allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
     function: async () => {
-      const projects = await trpc.api.projects.query();
+      const { projects, contractLogs, chainTxs, chainHeights, blockChains } = await trpc.api.projects.query();
       if (projects) {
-        const applets = [];
-        const instances = [];
-        let strategies = [];
-        let publishers = [];
         const regex = /(?:[^_]*_){2}(.*)/;
         projects.forEach((p: ProjectType) => {
           const matchArray = p.f_name.match(regex);
           p.name = matchArray ? matchArray[1] : p.f_name;
-          p.applets.forEach((a: AppletType) => {
-            a.project_name = p.name;
-            a.instances.forEach((i) => {
-              instances.push({
-                project_id: p.f_project_id,
-                project_name: p.name,
-                applet_id: a.f_applet_id,
-                applet_name: a.f_name,
-                ...i
-              });
-            });
-            applets.push({
-              ...a,
-              project_name: p.name
-            });
-            strategies = strategies.concat(a.strategies);
-          });
-          p.publishers.forEach((pub) => {
-            // @ts-ignore
-            pub.project_id = p.f_project_id;
-            // @ts-ignore
-            pub.project_name = p.name;
-            publishers.push(pub);
-          });
           p.configs.forEach((config) => {
             // buffer to string cause by prisma client parse error
             config.f_value && (config.f_value = JSON.parse(config.f_value.toString()));
@@ -161,10 +133,10 @@ export default class ProjectModule {
           });
         });
         this.onLoadCompleted({
-          applets,
-          publishers,
-          instances,
-          strategies
+          contractLogs,
+          chainTxs,
+          chainHeights,
+          blockChains
         });
       }
       return projects;
@@ -631,7 +603,7 @@ export default class ProjectModule {
                 });
               }
             }
-            toast.success('Create project succeeded' );
+            toast.success('Create project succeeded');
           }
         } catch (error) {}
         eventBus.emit('project.create');
@@ -679,7 +651,7 @@ export default class ProjectModule {
           }
         }
       } catch (error) {
-        toast.error( error.message || 'create project failed');
+        toast.error(error.message || 'create project failed');
       }
     }
   });
@@ -717,9 +689,6 @@ export default class ProjectModule {
   projectInfo = new PromiseState({
     loadingText: 'please waiting...',
     function: async () => {
-      if (globalThis.store.w3s.cronJob.list.value.length === 0) {
-        await globalThis.store.w3s.cronJob.list.call(this.curProject?.f_project_id);
-      }
       const schemas = await globalThis.store.w3s.dbTable.exportTables();
       return {
         name: this.curProject?.name,
@@ -728,7 +697,7 @@ export default class ProjectModule {
           schemas
         },
         envs: this.curProject?.envs,
-        cronJob: globalThis.store.w3s.cronJob.list.value.map((i) => ({
+        cronJob: globalThis.store.w3s.cronJob.curCronJobs.map((i) => ({
           eventType: i.f_event_type,
           cronExpressions: i.f_cron_expressions
         })),
@@ -863,8 +832,6 @@ export default class ProjectModule {
                 });
               }
               eventBus.emit('project.create');
-              eventBus.emit('contractlog.create');
-              eventBus.emit('chainHeight.create');
               toast.success('import project succeeded');
             }
           }
@@ -1098,8 +1065,6 @@ export default class ProjectModule {
       }
       if (diff.length > 0) {
         eventBus.emit('project.create');
-        eventBus.emit('contractlog.create');
-        eventBus.emit('chainHeight.create');
       }
     }
   }

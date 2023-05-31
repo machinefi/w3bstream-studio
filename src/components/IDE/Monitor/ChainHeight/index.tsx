@@ -14,26 +14,13 @@ const ChainHeight = observer(() => {
   const { w3s } = useStore();
 
   useEffect(() => {
-    if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-      w3s.chainHeight.table.set({
-        dataSource: w3s.chainHeight.curProjectChainHeight
-      });
-    } else {
-      w3s.chainHeight.table.set({
-        dataSource: w3s.chainHeight.allChainHeight.value
-      });
-    }
-  }, [w3s.chainHeight.allChainHeight.value]);
+    w3s.chainHeight.table.set({
+      dataSource: w3s.chainHeight.curProjectChainHeight
+    });
+  }, [w3s.chainHeight.curProjectChainHeight]);
 
   return (
-    <>
-      {w3s.config.form.formData.accountRole === 'ADMIN' && (
-        <Flex alignItems="center">
-          <CreateChainHeightButton />
-        </Flex>
-      )}
-      <JSONTable jsonstate={w3s.chainHeight} />
-    </>
+    <JSONTable jsonstate={w3s.chainHeight} />
   );
 });
 
@@ -46,13 +33,11 @@ export const CreateChainHeightButton = observer(() => {
       leftIcon={<AddIcon />}
       {...defaultButtonStyle}
       onClick={async (e) => {
-        if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-          // @ts-ignore
-          w3s.chainHeight.form.value.set({projectName: w3s.project.curProject?.name});
-          w3s.chainHeight.form.uiSchema.projectName = {
-            'ui:widget': 'hidden'
-          };
-        }
+        // @ts-ignore
+        w3s.chainHeight.form.value.set({ projectName: w3s.project.curProject?.name });
+        w3s.chainHeight.form.uiSchema.projectName = {
+          'ui:widget': 'hidden'
+        };
         const formData = await hooks.getFormData({
           title: ' Create blockchain height monitor',
           size: 'xl',

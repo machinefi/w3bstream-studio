@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
@@ -20,7 +20,6 @@ export const FilesItem = observer(() => {
     w3s.projectManager.connectWs();
   }, []);
 
-  const cm = useRef(null);
 
   const menu: any = [
     {
@@ -42,9 +41,5 @@ export const FilesItem = observer(() => {
     }
   ];
 
-  return (
-    <>
-      <Tree  data={w3s.projectManager.curFilesList} onSelect={store.onSelect} />
-    </>
-  );
+  return <Tree data={w3s.projectManager.curFilesList} onSelect={store.onSelect} />;
 });

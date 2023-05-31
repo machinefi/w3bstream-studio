@@ -26,13 +26,6 @@ export const ShowRequestTemplatesButton = observer(({ props = {} }: { props?: Bu
       {...defaultOutlineButtonStyle}
       {...props}
       onClick={() => {
-        if (accountRole === 'ADMIN') {
-          const { projectName } = publisher.publishEventForm.formData;
-          if (!projectName) {
-            toast.error(t('error.api.code.msg'));
-            return;
-          }
-        }
         eventBus.emit('base.formModal.abort');
         publisher.showPublishEventRequestTemplates = true;
       }}
@@ -56,14 +49,11 @@ const PublishEventRequestTemplates = observer(() => {
     }
   } = useStore();
   const languages = ['javascript', 'go', 'rust'];
-  const formData = accountRole === 'ADMIN' ? publisher.publishEventForm.formData : publisher.developerPublishEventForm.formData;
-  const projectName = (accountRole === 'ADMIN' ? formData.projectName : curProject?.f_name) || ':projectName';
+  const formData = publisher.developerPublishEventForm.formData;
+  const projectName = curProject?.f_name || ':projectName';
   const getHttpProps = () => {
     const eventType = (formData.type || 'DEFAULT') as string;
-    const pub =
-      accountRole === 'ADMIN'
-        ? publisher.allData.find((item) => formData.publisher === item.f_publisher_id.toString())
-        : publisher.allData.find((item) => item.project_id === curProject?.f_project_id);
+    const pub = publisher.curPublishers.find((item) => item.f_project_id === curProject?.f_project_id)
     return {
       url: envs.value?.httpURL.replace(':projectName', projectName),
       body: formData.body,

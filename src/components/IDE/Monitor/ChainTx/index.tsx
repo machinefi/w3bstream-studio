@@ -14,16 +14,10 @@ const ChainTx = observer(() => {
   const { w3s } = useStore();
 
   useEffect(() => {
-    if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-      w3s.chainTx.table.set({
-        dataSource: w3s.chainTx.curProjectChainTx
-      });
-    } else {
-      w3s.chainTx.table.set({
-        dataSource: w3s.chainTx.allChainTx.value
-      });
-    }
-  }, [w3s.chainTx.allChainTx.value]);
+    w3s.chainTx.table.set({
+      dataSource: w3s.chainTx.curProjectChainTx
+    });
+  }, [w3s.chainTx.curProjectChainTx]);
 
   return (
     <>
@@ -33,14 +27,12 @@ const ChainTx = observer(() => {
           leftIcon={<AddIcon />}
           {...defaultButtonStyle}
           onClick={async (e) => {
-            if (w3s.config.form.formData.accountRole === 'DEVELOPER') {
-              w3s.chainTx.form.value.set({
-                projectName: w3s.project.curProject?.name
-              });
-              w3s.chainTx.form.uiSchema.projectName = {
-                'ui:widget': 'hidden'
-              };
-            }
+            w3s.chainTx.form.value.set({
+              projectName: w3s.project.curProject?.name
+            });
+            w3s.chainTx.form.uiSchema.projectName = {
+              'ui:widget': 'hidden'
+            };
             const formData = await hooks.getFormData({
               title: 'Add blockchain transaction monitor',
               size: 'md',
