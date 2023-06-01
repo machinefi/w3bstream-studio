@@ -17,9 +17,6 @@ const Settings = () => {
   } = useStore();
 
   const store = useLocalObservable(() => ({
-    get curInstance() {
-      return applet.curApplet?.instances[0];
-    },
     get tags() {
       if (project.curProject?.f_description) {
         return project.curProject.f_description.split(',');
@@ -66,7 +63,7 @@ const Settings = () => {
           size="sm"
           {...defaultOutlineButtonStyle}
           onClick={async () => {
-            if (applet.curApplet && store.curInstance) {
+            if (applet.curApplet) {
               await applet.uploadWASM({
                 projectName: project.curProject?.name,
                 appletName: applet.curApplet.f_name,

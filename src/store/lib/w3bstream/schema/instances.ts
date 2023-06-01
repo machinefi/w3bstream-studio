@@ -7,6 +7,10 @@ import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import toast from 'react-hot-toast';
 
 export default class InstancesModule {
+  get curInstance() {
+    return globalThis.store.w3s.project.curApplet?.instances[0];
+  }
+
   table = new JSONSchemaTableState<InstanceType>({
     columns: [
       {
