@@ -10,14 +10,23 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import toast from 'react-hot-toast';
 
-interface ToolBar extends BoxProps {}
+interface ToolBar extends BoxProps { }
 
 const ToolBar = (props: ToolBar) => {
-  const { w3s, lang:{t} } = useStore();
+  const {
+    w3s,
+    w3s: {
+      project: {
+        curProject,
+        allProjects
+      },
+      metrics,
+      instances,
+    },
+    lang: { t } } = useStore();
   const { onOpen, onClose, isOpen } = useDisclosure();
 
-  const curProjectInstance = w3s.instances.table.dataSource.find((option) => option.project_name === w3s.project.curProject?.name);
-  const curProjectStatus = INSTANCE_STATUS[curProjectInstance?.f_state || 0];
+  const curProjectStatus = INSTANCE_STATUS[instances.curInstance?.f_state || 0];
 
   return (
     <Box position={'fixed'} h="100%" overflow={'auto'}>
@@ -26,8 +35,8 @@ const ToolBar = (props: ToolBar) => {
           <PopoverTrigger >
             <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} px="14px" py="8px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
               <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
-              <Text mr="10px" w="130px"  fontSize={"14px"} color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
-                {w3s.project.curProject?.name}
+              <Text mr="10px" w="130px" fontSize={"14px"} color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
+                {curProject?.name}
               </Text>
               <ChevronDownIcon fontSize={'24px'} color={'#7A7A7A'} />
             </Flex>
@@ -47,8 +56,8 @@ const ToolBar = (props: ToolBar) => {
               }
             }}
           >
-            {w3s.project.allProjects.value.map((item, index) => {
-              const instance = w3s.instances.table.dataSource.find((option) => option.project_name === item.name);
+            {allProjects.value.map((item, index) => {
+              const instance = item.applets[0]?.instances[0];
               const status = INSTANCE_STATUS[instance?.f_state || 0];
               return (
                 <Flex
@@ -56,16 +65,16 @@ const ToolBar = (props: ToolBar) => {
                   onClick={(e) => {
                     e.stopPropagation();
                     if (instance) {
-                      w3s.project.allProjects.onSelect(index);
+                      allProjects.onSelect(index);
                       w3s.showContent = 'METRICS';
                       const now = new Date();
                       now.setMinutes(0);
                       now.setSeconds(0);
                       now.setMilliseconds(0);
                       const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-                      w3s.metrics.activeDevices.call(yesterday, now);
-                      w3s.metrics.dataMessages.call(yesterday, now);
-                      w3s.metrics.blockchainTransaction.call(yesterday, now);
+                      metrics.activeDevices.call(yesterday, now);
+                      metrics.dataMessages.call(yesterday, now);
+                      metrics.blockchainTransaction.call(yesterday, now);
                     } else {
                       toast.error(t('error.change.project.msg'));
                     }
@@ -79,7 +88,7 @@ const ToolBar = (props: ToolBar) => {
                   justifyContent="flex-start"
                 >
                   <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={status?.color}></Box>
-                  <Text color={w3s.project.curProject.name === item.name ? status?.color : ''}>{item.name}</Text>
+                  <Text color={curProject.name === item.name ? status?.color : ''}>{item.name}</Text>
                 </Flex>
               );
             })}
@@ -200,29 +209,29 @@ const ToolBar = (props: ToolBar) => {
 export function getSelectedStyles(selected: boolean) {
   return selected
     ? {
-        sx: {
-          background: 'rgba(148, 111, 255, 0.1)',
+      sx: {
+        background: 'rgba(148, 111, 255, 0.1)',
+        '& > svg': {
+          color: '#946FFF'
+        },
+        '& > div': {
+          color: '#946FFF'
+        }
+      }
+    }
+    : {
+      sx: {
+        ':hover': {
           '& > svg': {
             color: '#946FFF'
           },
           '& > div': {
             color: '#946FFF'
-          }
+          },
+          background: 'rgba(148, 111, 255, 0.1)'
         }
       }
-    : {
-        sx: {
-          ':hover': {
-            '& > svg': {
-              color: '#946FFF'
-            },
-            '& > div': {
-              color: '#946FFF'
-            },
-            background: 'rgba(148, 111, 255, 0.1)'
-          }
-        }
-      };
+    };
 }
 
 export default observer(ToolBar);
