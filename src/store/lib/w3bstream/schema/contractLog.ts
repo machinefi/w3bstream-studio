@@ -7,7 +7,6 @@ import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { ethers } from 'ethers';
-import { makeObservable, observable } from 'mobx';
 
 export const schema = {
   definitions: {
@@ -22,7 +21,7 @@ export const schema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name', description: '' },
     eventType: { type: 'string', title: 'W3bstream Event Name', description: 'Choose a unique name for the W3bstream event that should be Triggered' },
-    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', default: '4690', description: 'Input the chain id where the smart contract is deployed' },
+    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', description: 'Input the chain id where the smart contract is deployed' },
     contractAddress: { type: 'string', title: 'Contract Address', description: 'The address of the smart contract to be monitored' },
     blockStart: { type: 'number', title: 'Start Height', description: 'The initial height from which the smart contract should be monitored.' },
     blockEnd: { type: 'number', title: 'End Height', description: 'The final height at which the monitoring should cease. Input "0" for "never"' },
@@ -45,11 +44,8 @@ schema.definitions = {
 };
 
 export default class ContractLogModule {
-  allContractLogs: ContractLogType[] = [];
-
   get curProjectContractLogs() {
-    const curProject = globalThis.store.w3s.project.curProject;
-    return this.allContractLogs.filter((c) => c.f_project_name === curProject?.f_name);
+    return globalThis.store.w3s.project.curProject?.contractLogs || [];
   }
 
   table = new JSONSchemaTableState<ContractLogType>({
@@ -170,10 +166,4 @@ export default class ContractLogModule {
       }
     })
   });
-
-  constructor() {
-    makeObservable(this, {
-      allContractLogs: observable
-    });
-  }
 }

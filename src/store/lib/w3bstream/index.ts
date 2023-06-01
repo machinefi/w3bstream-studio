@@ -22,7 +22,6 @@ import FlowModule from './schema/flow';
 import LabModule from './schema/lab';
 import CronJobModule from './schema/cronJob';
 import ENVModule from './schema/envs';
-import BlockChainModule from './schema/blockChain';
 
 configure({
   enforceActions: 'never'
@@ -34,14 +33,7 @@ export class W3bStream {
   user = new UserModule();
   flowModule = new FlowModule();
   projectManager = new ProjectManager();
-  project = new ProjectModule({
-    onLoadCompleted: ({ contractLogs, chainTxs, chainHeights, blockChains }) => {
-      this.contractLogs.allContractLogs = contractLogs;
-      this.chainTx.allChainTx = chainTxs;
-      this.chainHeight.allChainHeight = chainHeights;
-      this.blockChain.allBlockChain = blockChains;
-    }
-  });
+  project = new ProjectModule();
   applet = new AppletModule();
   instances = new InstancesModule();
   publisher = new PublisherModule();
@@ -55,7 +47,6 @@ export class W3bStream {
   lab = new LabModule();
   cronJob = new CronJobModule();
   env = new ENVModule();
-  blockChain = new BlockChainModule();
 
   showContent:
     | 'METRICS'

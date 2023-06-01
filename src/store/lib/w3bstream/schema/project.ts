@@ -8,7 +8,7 @@ import { ProjectEnvsWidget } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
 import { hooks } from '@/lib/hooks';
 import { PromiseState } from '@/store/standard/PromiseState';
-import { ProjectType, StrategyType, ContractLogType, CronJobsType, ChainHeightType, ChainTxType, BlockchainType } from '@/server/routers/w3bstream';
+import { ProjectType, StrategyType, ContractLogType, CronJobsType, ChainHeightType, ChainTxType } from '@/server/routers/w3bstream';
 import { trpc } from '@/lib/trpc';
 import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
 import { dataURItoBlob, UiSchema } from '@rjsf/utils';
@@ -94,13 +94,6 @@ type CreateProjectByWasmSchemaType = FromSchema<typeof createProjectByWasmSchema
 type ImportProjectSchemaType = FromSchema<typeof importProjectSchema>;
 type EditProjectFileSchemaType = FromSchema<typeof editProjectFileSchema>;
 
-interface OnLoadCompletedProps {
-  contractLogs: ContractLogType[];
-  chainTxs: ChainTxType[];
-  chainHeights: ChainHeightType[];
-  blockChains: BlockchainType[];
-}
-
 enum ProjectConfigType {
   PROJECT_DATABASE = 1,
   CONFIG_TYPE__INSTANCE_CACHE = 2,
@@ -111,7 +104,7 @@ export default class ProjectModule {
   allProjects = new PromiseState<() => Promise<any>, ProjectType[]>({
     defaultValue: [],
     function: async () => {
-      const { projects, contractLogs, chainTxs, chainHeights, blockChains } = await trpc.api.projects.query();
+      const projects = await trpc.api.projects.query();
       if (projects) {
         const regex = /(?:[^_]*_){2}(.*)/;
         projects.forEach((p: ProjectType) => {
@@ -131,12 +124,6 @@ export default class ProjectModule {
                 break;
             }
           });
-        });
-        this.onLoadCompleted({
-          contractLogs,
-          chainTxs,
-          chainHeights,
-          blockChains
         });
       }
       return projects;
@@ -415,22 +402,12 @@ export default class ProjectModule {
     return this.allProjects.current;
   }
 
-  constructor({
-    onLoadCompleted
-  }: Partial<{
-    onLoadCompleted: (data: OnLoadCompletedProps) => void;
-  }> = {}) {
+  constructor() {
     makeObservable(this, {
       formMode: observable,
       selectedNames: observable
     });
-
-    if (onLoadCompleted) {
-      this.onLoadCompleted = onLoadCompleted;
-    }
   }
-
-  onLoadCompleted(data: OnLoadCompletedProps) {}
 
   async createProject() {
     this.setMode('add');

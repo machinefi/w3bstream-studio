@@ -6,7 +6,6 @@ import { ChainHeightType } from '@/server/routers/w3bstream';
 import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
-import { makeObservable, observable } from 'mobx';
 
 export const schema = {
   definitions: {
@@ -18,7 +17,7 @@ export const schema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type', description: 'Please choose a unique name for the W3bstream event that should be triggered' },
-    chainID: { $ref: '#/definitions/blockChains', type: 'number', title: 'Chain ID', description: 'The blockchain network that should be monitored' },
+    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', description: 'The blockchain network that should be monitored' },
     height: { type: 'number', title: 'Height', description: 'The blockchain height at which the the W3bstream event should be triggered.' }
   },
   required: ['projectName', 'eventType', 'chainID', 'height']
@@ -33,11 +32,8 @@ schema.definitions = {
 };
 
 export default class ChainHeightModule {
-  allChainHeight: ChainHeightType[] = [];
-
   get curProjectChainHeight() {
-    const curProject = globalThis.store.w3s.project.curProject;
-    return this.allChainHeight.filter((c) => c.f_project_name === curProject?.f_name);
+    return globalThis.store.w3s.project.curProject?.chainHeights || [];
   }
 
   table = new JSONSchemaTableState<ChainHeightType>({
@@ -123,15 +119,9 @@ export default class ChainHeightModule {
       default: {
         projectName: '',
         eventType: 'DEFAULT',
-        chainID: 4690,
+        chainID: '4690',
         height: 0
       }
     })
   });
-
-  constructor() {
-    makeObservable(this, {
-      allChainHeight: observable
-    });
-  }
 }
