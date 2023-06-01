@@ -8,7 +8,9 @@ import toast from 'react-hot-toast';
 
 export default class InstancesModule {
   get curInstance() {
-    return globalThis.store.w3s.project.curApplet?.instances[0];
+    const curProject = globalThis.store.w3s.project.curProject;
+    const instance = curProject?.applets[0]?.instances[0];
+    return instance;
   }
 
   table = new JSONSchemaTableState<InstanceType>({
