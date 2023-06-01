@@ -66,6 +66,13 @@ export class FilesListSchema {
       this.syncToIndexDb();
       if (!files) return (hasVscodeFileFolder.children = []);
       files.forEach((file) => {
+        let dataType = 'wasm';
+        if (file.name.endsWith('.abi.json')) {
+          dataType = 'abi';
+        } else if (file.name.endsWith('.wasm')) {
+          dataType = 'wasm';
+        }
+
         hasVscodeFileFolder.children.push({
           type: 'file',
           key: helper.stringToBase64(VSCodeRemoteFolderName + file.name),
@@ -78,7 +85,7 @@ export class FilesListSchema {
             extraData: {
               raw: helper.base64ToUint8Array(file.content)
             },
-            dataType: file.name.endsWith('.wasm') ? 'wasm' : '',
+            dataType,
             size: file.size
           }
         });
