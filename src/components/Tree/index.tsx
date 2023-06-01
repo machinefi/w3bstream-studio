@@ -322,7 +322,10 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
           ) : (
             <Box>
               <Text>Click here to connect to the VS Code Plugin.</Text>
-              <Text mt={1}>If the gray dot doesn't turn green, please make sure you have installed the W3bstream Plugin for VS Code and that it's enabled. Some browsers, like Brave, may block the connection: please check the navigation bar for any <i>Blocked Content</i> notification.</Text>
+              <Text mt={1}>
+                If the gray dot doesn't turn green, please make sure you have installed the W3bstream Plugin for VS Code and that it's enabled. Some browsers, like Brave, may block the connection:
+                please check the navigation bar for any <i>Blocked Content</i> notification.
+              </Text>
             </Box>
           )
         }
@@ -401,7 +404,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                   {/* {item.label == VSCodeRemoteFolderName && !w3s.projectManager.isWSConnect && <VscodeRemoteConnectButton />} */}
                   {item.label == VSCodeRemoteFolderName && w3s.projectManager.isWSConnect && <VscodeRemoteCompilerButton />}
 
-                  {item?.data?.size && (
+                  {item?.data?.size != null && (
                     <Box ml="auto" color="gray" fontSize={'12px'}>
                       {item?.data?.size}kb
                     </Box>
@@ -460,20 +463,20 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                         w="22px"
                         h="22px"
                         onClick={() => {
-                          debugDemo.call()
+                          debugDemo.call();
                         }}
                       >
-                        {
-                          debugDemo.loading.value
-                            ? <Spinner size="sm" color="#946FFF" />
-                            : <VscDebugStart
-                              color="black"
-                              style={{
-                                marginRight: '10px',
-                                cursor: 'pointer'
-                              }}
-                            />
-                        }
+                        {debugDemo.loading.value ? (
+                          <Spinner size="sm" color="#946FFF" />
+                        ) : (
+                          <VscDebugStart
+                            color="black"
+                            style={{
+                              marginRight: '10px',
+                              cursor: 'pointer'
+                            }}
+                          />
+                        )}
                       </Box>
                     </Box>
                   )}
