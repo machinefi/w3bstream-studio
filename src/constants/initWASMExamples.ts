@@ -363,6 +363,8 @@ export const demoExample: FilesItemType = {
 
   const data = await w3bstream.getData('SELECT * FROM demo ORDER BY id DESC LIMIT 1')
 
+  Log(data)
+
   return {
     contract,
     data,

@@ -1,15 +1,26 @@
 import dayjs from '@/lib/dayjs';
+import { StdIOType } from '@/server/wasmvm';
 import { useStore } from '@/store/index';
 import { Box, Flex } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useRef } from 'react';
-import { VscClearAll, VscDebugStart } from 'react-icons/vsc';
+import { VscClearAll } from 'react-icons/vsc';
+
+const stringify = (val: Partial<StdIOType>) => {
+  try {
+    return JSON.stringify(val);
+  } catch (error) {
+    return JSON.stringify({
+      '@lv': val['@lv'],
+      '@ts': val['@ts'],
+      msg: error.message
+    });
+  }
+}
 
 export const ConsolePanel = observer(() => {
   const {
-    w3s,
     w3s: {
-      projectManager: { curFilesListSchema },
       lab
     }
   } = useStore();
@@ -59,12 +70,18 @@ export const ConsolePanel = observer(() => {
         {lab.stdout?.map((i) => {
           return (
             <Flex color={i?.['@lv'] == 'error' ? 'red' : ''}>
-              <Flex maxW="200px" mr={2} whiteSpace="nowrap">
-                [<Box color="#d892ff">{i.prefix} </Box>
+              <Flex mr={2} whiteSpace="nowrap">
+                [<Box color="#d892ff">{i.prefix}</Box>
                 <Box color="#ffd300">{dayjs(i?.['@ts']).format('hh:mm:ss')}</Box>]
               </Flex>
-              <Flex w="90%" overflowWrap={'anywhere'}>
-                {JSON.stringify(i)}
+              <Flex>
+                {stringify(
+                  {
+                    '@lv': i?.['@lv'],
+                    '@ts': i?.['@ts'],
+                    msg: i?.msg
+                  }
+                )}
               </Flex>
             </Flex>
           );

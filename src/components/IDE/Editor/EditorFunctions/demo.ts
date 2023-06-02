@@ -216,21 +216,20 @@ class W3bstream {
   }
 }
 
+const Log = (msg: string) => {
+  const lab = globalThis.store.w3s.lab;
+  lab.stdout.push({ '@lv': 'info', msg, '@ts': Date.now(), prefix: '' });
+};
+
 export const debugDemo = new PromiseState<() => Promise<any>, any>({
   function: async () => {
     const lab = globalThis.store.w3s.lab;
     const code = globalThis.store.w3s.projectManager.curFilesListSchema.curActiveFile.data.code;
-
-    let errMsg = '';
-    let msg = '';
     try {
-      const res = await new Function('Wallet', 'BlockChain', 'W3bstream', code)(Wallet, BlockChain, W3bstream);
+      const res = await new Function('Wallet', 'BlockChain', 'W3bstream', 'Log', code)(Wallet, BlockChain, W3bstream, Log);
       console.log('[Demo Return Value]:', res);
     } catch (error) {
-      errMsg = error.message;
+      lab.stdout.push({ '@lv': 'error', msg: error.message, '@ts': Date.now(), prefix: '' });
     }
-
-    const stdio: StdIOType = errMsg ? { '@lv': 'error', msg: errMsg, '@ts': Date.now(), prefix: '' } : { '@lv': 'info', msg, '@ts': Date.now(), prefix: '' };
-    lab.stdout.push(stdio);
   }
 });

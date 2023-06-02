@@ -44,7 +44,7 @@ export const MoEditor = observer((props: any) => {
         onMount={async (editor, monaco) => {
           monaco.languages.typescript.typescriptDefaults.addExtraLib(
             `
-      declare const Log: (message:string) => void;
+      declare const Log: (message: string | { [x: string]: any }) => void;
       declare const SetDB: (key: string, value: number) => void;
       declare const GetDB: (key: string) => string;
       declare const SendTx: (chainId: number, to:string, value:string ,data:string) => string | null;
