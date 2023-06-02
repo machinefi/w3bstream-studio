@@ -98,7 +98,12 @@ export type ExportTableType = {
 export default class DBTableModule {
   allTables = new PromiseState<() => Promise<any>, { schemaName: string; tables: TableType[] }[]>({
     loadingText: 'please waiting...',
-    defaultValue: [],
+    defaultValue: [
+      {
+        schemaName: 'public',
+        tables: []
+      }
+    ],
     function: async () => {
       return this.fetchTables({
         includeColumns: false
@@ -128,7 +133,7 @@ export default class DBTableModule {
         submitText: 'Submit',
         props: {
           style: {
-            marginTop:"100px"
+            marginTop: '100px'
           }
         }
       },
@@ -310,35 +315,29 @@ export default class DBTableModule {
     this.setSQL(sql);
   }
 
-  async querySQL() {
-    if (!this.sql) {
-      return {
-        errorMsg: 'SQL is empty'
-      };
-    }
-
-    try {
-      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
-      const { data, errorMsg } = await trpc.pg.query.mutate({
-        projectID: curProjectId,
-        sql: this.sql
-      });
-      if (errorMsg) {
-        toast.error(errorMsg);
-        return {
-          errorMsg
-        };
-      } else {
-        toast.success('This SQL was executed successfully');
-        return data;
+  querySQL = new PromiseState({
+    loadingText: 'please waiting...',
+    defaultValue: '',
+    function: async () => {
+      if (!this.sql) {
+        return 'SQL is empty';
       }
-    } catch (error) {
-      toast.error(error.message);
-      return {
-        errorMsg: error.message
-      };
+      try {
+        const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
+        const { data, errorMsg } = await trpc.pg.query.mutate({
+          projectID: curProjectId,
+          sql: this.sql
+        });
+        if (errorMsg) {
+          return errorMsg;
+        } else {
+          return JSON.stringify(data, null, 2);
+        }
+      } catch (error) {
+        return error.message;
+      }
     }
-  }
+  });
 
   async fetchTables({ includeColumns }: { includeColumns: boolean }) {
     const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
@@ -589,32 +588,35 @@ export default class DBTableModule {
     }
   }
 
-  async getCurrentTableData() {
-    const { tableSchema, tableName } = this.currentTable;
-    try {
-      const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
-      const { data, errorMsg } = await trpc.pg.tableData.query({
-        projectID: curProjectId,
-        tableSchema,
-        tableName,
-        page: this.table.pagination.page,
-        pageSize: this.table.pagination.limit
-      });
-      if (errorMsg) {
-        toast.error(errorMsg);
+  getCurrentTableData = new PromiseState({
+    loadingText: 'please waiting...',
+    function: async () => {
+      const { tableSchema, tableName } = this.currentTable;
+      try {
+        const curProjectId = globalThis.store.w3s.project.curProject?.f_project_id;
+        const { data, errorMsg } = await trpc.pg.tableData.query({
+          projectID: curProjectId,
+          tableSchema,
+          tableName,
+          page: this.table.pagination.page,
+          pageSize: this.table.pagination.limit
+        });
+        if (errorMsg) {
+          toast.error(errorMsg);
+          return [];
+        } else {
+          return data;
+        }
+      } catch (error) {
+        if (error.message.includes('UNAUTHORIZED')) {
+          globalThis.store.w3s.config.logout();
+        } else {
+          toast.error(error.message);
+        }
         return [];
-      } else {
-        return data;
       }
-    } catch (error) {
-      if (error.message.includes('UNAUTHORIZED')) {
-        globalThis.store.w3s.config.logout();
-      } else {
-        toast.error(error.message);
-      }
-      return [];
     }
-  }
+  });
 
   async deleteTableData(name, value) {
     if (!name || !value) {
@@ -644,63 +646,65 @@ export default class DBTableModule {
     }
   }
 
-  async init() {
-    if (this.currentTable.tableSchema && this.currentTable.tableName) {
-      const [cols, count] = await Promise.all([this.getCurrentTableCols(), this.getCurrentTableDataCount()]);
-      const columns: Column[] = cols.map((item) => {
-        return {
-          key: item.name,
-          label: item.name
-        };
-      });
+  init = new PromiseState({
+    loadingText: 'please waiting...',
+    function: async () => {
+      if (this.currentTable.tableSchema && this.currentTable.tableName) {
+        const [cols, count] = await Promise.all([this.getCurrentTableCols(), this.getCurrentTableDataCount()]);
+        const columns: Column[] = cols.map((item) => {
+          return {
+            key: item.name,
+            label: item.name
+          };
+        });
+        const idName = cols[0]?.name;
+        columns.push({
+          key: 'action',
+          label: 'Action',
+          actions: (item) => {
+            return [
+              {
+                props: {
+                  size: 'xs',
+                  ...defaultOutlineButtonStyle,
+                  onClick: async () => {
+                    globalThis.store.base.confirm.show({
+                      title: 'Warning',
+                      description: 'Are you sure you want to delete it?',
+                      onOk: async () => {
+                        try {
+                          await this.deleteTableData(idName, item[idName]);
+                          const data = await this.getCurrentTableData.call();
+                          this.table.set({
+                            dataSource: data
+                          });
+                        } catch (error) {}
+                      }
+                    });
+                  }
+                },
+                text: 'Delete'
+              }
+            ];
+          }
+        });
 
-      const idName = cols[0]?.name;
-      columns.push({
-        key: 'action',
-        label: 'Action',
-        actions: (item) => {
-          return [
-            {
-              props: {
-                size: 'xs',
-                ...defaultOutlineButtonStyle,
-                onClick: async () => {
-                  globalThis.store.base.confirm.show({
-                    title: 'Warning',
-                    description: 'Are you sure you want to delete it?',
-                    onOk: async () => {
-                      try {
-                        await this.deleteTableData(idName, item[idName]);
-                        const data = await this.getCurrentTableData();
-                        this.table.set({
-                          dataSource: data
-                        });
-                      } catch (error) {}
-                    }
-                  });
-                }
-              },
-              text: 'Delete'
-            }
-          ];
-        }
-      });
+        this.table.set({
+          columns
+        });
 
-      this.table.set({
-        columns
-      });
+        this.table.pagination.setData({
+          page: 1,
+          total: Number(count)
+        });
 
-      this.table.pagination.setData({
-        page: 1,
-        total: Number(count)
-      });
-
-      this.setCurrentColumns(cols);
+        this.setCurrentColumns(cols);
+      }
     }
-  }
+  });
 
   async onPageChange() {
-    const data = await this.getCurrentTableData();
+    const data = await this.getCurrentTableData.call();
     this.table.set({
       dataSource: data
     });
@@ -739,18 +743,18 @@ export default class DBTableModule {
 
   async importTables({ projectID, schemas }: { projectID: string; schemas: ExportTableType[] }) {
     if (!schemas || !Array.isArray(schemas)) {
-      toast.error('No data provided')
+      toast.error('No data provided');
       return;
     }
     for (const schema of schemas) {
       const tables = schema?.tables;
       if (!tables || !Array.isArray(tables)) {
-        toast.error('No data provided')
+        toast.error('No data provided');
         return;
       }
       for (const t of tables) {
         if (!t.tableName || !t.tableSchema) {
-          toast.error('No data provided')
+          toast.error('No data provided');
           return;
         }
         try {

@@ -2,7 +2,6 @@ import { makeAutoObservable } from 'mobx';
 import { BooleanState } from './base';
 import toast from 'react-hot-toast';
 
-
 export class PromiseState<T extends (...args: any[]) => Promise<any>, U = ReturnType<T>> {
   loading = new BooleanState();
   value?: Awaited<U> = null;
@@ -12,12 +11,15 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
   autoAlert = true;
   context: any = undefined;
 
-  loadingText = null
-  loadingId = null
+  loadingText = null;
+  loadingId = null;
 
   currentIndex = 0;
   get current() {
-    return this.value[this.currentIndex];
+    if (Array.isArray(this.value)) {
+      return this.value[this.currentIndex];
+    }
+    return null;
   }
 
   constructor(args: Partial<PromiseState<T, U>> = {}) {
@@ -36,7 +38,7 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
     try {
       this.loading.setValue(true);
       if (this.loadingText) {
-        this.loadingId = toast.loading(this.loadingText)
+        this.loadingId = toast.loading(this.loadingText);
       }
       const res = await this.function.apply(this.context, args);
       this.value = res;
@@ -54,7 +56,7 @@ export class PromiseState<T extends (...args: any[]) => Promise<any>, U = Return
         throw error;
       }
     } finally {
-      this.loadingId && toast.dismiss(this.loadingId)
+      this.loadingId && toast.dismiss(this.loadingId);
       this.loading.setValue(false);
     }
   }
