@@ -17,14 +17,18 @@ const DeveloperDBTable = () => {
         <DBTable />
       </Box>
       {w3s.showContent === 'DB_TABLE' && (
-        <Box pos="absolute" right="0px" top="0px">
+        <Box pos="absolute" right={2} top="0px">
           <Tooltip label="Query SQL" placement="bottom">
             <Box
               position="relative"
               cursor="pointer"
               onClick={() => {
-                w3s.dbTable.setDefaultSQL();
-                w3s.dbTable.setMode('QUERY_SQL');
+                if (w3s.dbTable.mode === 'QUERY_SQL') {
+                  w3s.dbTable.setMode('VIEW_DATA');
+                } else {
+                  w3s.dbTable.setDefaultSQL();
+                  w3s.dbTable.setMode('QUERY_SQL');
+                }
               }}
             >
               <Image h={10} w={10} src="/images/icons/execute_sql.svg" />

@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { Box, Button, Flex, Stack, Image } from '@chakra-ui/react';
+import { Box, Button, Flex, Stack, Image, Spinner, Text } from '@chakra-ui/react';
 import JSONTable from '@/components/JSONTable';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import { MdRefresh } from 'react-icons/md';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
@@ -190,6 +190,38 @@ const ViewData = observer(() => {
   return (
     <>
       <Flex alignItems="center">
+        <Button
+          mr="20px"
+          h="32px"
+          size="sm"
+          leftIcon={<AddIcon />}
+          {...defaultButtonStyle}
+          onClick={async (e) => {
+            const form = creatColumnDataForm(dbTable.currentColumns);
+            const formData = await hooks.getFormData({
+              title: `Insert data to '${dbTable.currentTable.tableName}'`,
+              size: 'md',
+              formList: [
+                {
+                  form
+                }
+              ]
+            });
+            try {
+              const keys = Object.keys(formData);
+              const values = Object.values(formData);
+              const errorMsg = await dbTable.createTableData(keys, values);
+              if (!errorMsg) {
+                const data = await dbTable.getCurrentTableData.call();
+                dbTable.table.set({
+                  dataSource: data
+                });
+              }
+            } catch (error) { }
+          }}
+        >
+          Insert
+        </Button>
         <label>
           <CSVReader
             label=""
@@ -207,7 +239,7 @@ const ViewData = observer(() => {
                 if (errorMsg) {
                   toast.error(errorMsg);
                 } else {
-                  const data = await dbTable.getCurrentTableData();
+                  const data = await dbTable.getCurrentTableData.call();
                   dbTable.table.set({
                     dataSource: data
                   });
@@ -231,43 +263,11 @@ const ViewData = observer(() => {
             inputName="csv-input"
             inputStyle={{ display: 'none' }}
           />
-          <Flex alignItems="center" px="20px" h="32px" borderRadius="4px" cursor="pointer" {...defaultButtonStyle}>
+          <Flex alignItems="center" px="10px" h="32px" borderRadius="6px" cursor="pointer" {...defaultButtonStyle}>
             <FiUpload />
-            <Box ml="10px" fontSize={"14px"}>Upload CSV</Box>
+            <Text ml="10px" fontSize="12px" fontWeight={600}>Upload CSV</Text>
           </Flex>
         </label>
-        <Button
-          ml="20px"
-          h="32px"
-          size="sm"
-          leftIcon={<AddIcon />}
-          {...defaultButtonStyle}
-          onClick={async (e) => {
-            const form = creatColumnDataForm(dbTable.currentColumns);
-            const formData = await hooks.getFormData({
-              title: `Insert data to '${dbTable.currentTable.tableName}'`,
-              size: 'md',
-              formList: [
-                {
-                  form
-                }
-              ]
-            });
-            try {
-              const keys = Object.keys(formData);
-              const values = Object.values(formData);
-              const errorMsg = await dbTable.createTableData(keys, values);
-              if (!errorMsg) {
-                const data = await dbTable.getCurrentTableData();
-                dbTable.table.set({
-                  dataSource: data
-                });
-              }
-            } catch (error) { }
-          }}
-        >
-          Insert
-        </Button>
         <Button
           ml="20px"
           h="32px"
@@ -275,7 +275,7 @@ const ViewData = observer(() => {
           leftIcon={<MdRefresh />}
           {...defaultOutlineButtonStyle}
           onClick={async (e) => {
-            dbTable.init();
+            dbTable.init.call();
           }}
         >
           Refresh
@@ -296,8 +296,6 @@ const QuerySQL = observer(() => {
       dbTable.setSQL(codeStr);
     }, 800)
   );
-
-  const [queryResult, setQueryResult] = useState('');
 
   return (
     <Box bg="#000">
@@ -321,15 +319,21 @@ const QuerySQL = observer(() => {
         />
         <Box
           pos="absolute"
-          bottom={4}
+          bottom={1}
           right={4}
           cursor="pointer"
-          onClick={async () => {
-            const result = await dbTable.querySQL();
-            setQueryResult(JSON.stringify(result, null, 2));
+          onClick={() => {
+            if (dbTable.querySQL.loading.value) {
+              return;
+            }
+            dbTable.querySQL.call();
           }}
         >
-          <Image p={1} h={6} w={6} borderRadius="4px" bg="#946FFF" _hover={{ background: 'gray.200' }} src="/images/icons/execute.svg" />
+          {
+            dbTable.querySQL.loading.value
+              ? <Spinner size="sm" color='#fff' />
+              : <Image p={1} h={6} w={6} borderRadius="4px" bg="#946FFF" _hover={{ background: 'gray.200' }} src="/images/icons/execute.svg" />
+          }
         </Box>
       </Box>
       <Box p="1" fontSize="sm" fontWeight={700} color="#fff">
@@ -345,7 +349,7 @@ const QuerySQL = observer(() => {
         height="calc(100vh - 480px)"
         theme="vs-dark"
         language="json"
-        value={queryResult}
+        value={dbTable.querySQL.value}
       />
     </Box>
   );
@@ -357,7 +361,7 @@ const DBTable = observer(() => {
   } = useStore();
 
   useEffect(() => {
-    dbTable.init();
+    dbTable.init.call();
   }, [dbTable.currentTable.tableSchema, dbTable.currentTable.tableName]);
 
   useEffect(() => {

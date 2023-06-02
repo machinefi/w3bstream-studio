@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Flex, Box, Text, Tooltip, Button, useDisclosure, Collapse, Spinner } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronRightIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronRightIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { MdAddBox } from 'react-icons/md';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -18,14 +18,6 @@ export const DBTableSideBar = observer(() => {
   useEffect(() => {
     allTables.call();
   }, []);
-
-  if (allTables.loading.value) {
-    return (
-      <Flex w="100%" h="100%" justify="center">
-        <Spinner mt="100px" color="#946FFF" />
-      </Flex>
-    );
-  }
 
   if (!allTables.value) {
     return null;
@@ -64,10 +56,11 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
         <Flex alignItems="center" overflowX="auto">
           <Icon as={collaspeState.isOpen ? ChevronDownIcon : ChevronRightIcon} boxSize={6} cursor="pointer" />
           <Box w="220px" fontSize="16x" fontWeight={700}>
-            {/* {tableSchema} */} Default
+            {tableSchema === 'public' ? "Default" : tableSchema}
           </Box>
         </Flex>
         <Flex alignItems="center">
+          {dbTable.allTables.loading.value && <Spinner size="sm" color="#946FFF" />}
           <Tooltip hasArrow label="Create a new table" placement="bottom">
             <Button
               p={0}
@@ -109,30 +102,20 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
               borderBottom="1px solid rgba(0, 0, 0, 0.06)"
               sx={getSelectedStyles(dbTable.currentTable.tableId === item.tableId)}
               cursor="pointer"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 dbTable.setCurrentTable({
                   tableSchema,
                   tableId: item.tableId,
                   tableName: item.tableName
                 });
-                if (dbTable.mode === 'QUERY_SQL') {
-                  dbTable.setDefaultSQL();
-                }
+                dbTable.setMode('VIEW_DATA');
               }}
             >
               <Text
                 fontSize="14px"
                 fontWeight={600}
                 overflowX="auto"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dbTable.setCurrentTable({
-                    tableSchema,
-                    tableId: item.tableId,
-                    tableName: item.tableName
-                  });
-                  dbTable.setMode('VIEW_DATA');
-                }}
               >
                 {item.tableName}
               </Text>
@@ -169,22 +152,6 @@ const TableNames = observer(({ tableSchema, tables }: { tableSchema: string; tab
                         tableName: item.tableName
                       });
                       dbTable.setMode('EDIT_TABLE');
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip hasArrow label="View Data" placement="bottom">
-                  <ViewIcon
-                    ml="12px"
-                    boxSize={4}
-                    cursor="pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      dbTable.setCurrentTable({
-                        tableSchema,
-                        tableId: item.tableId,
-                        tableName: item.tableName
-                      });
-                      dbTable.setMode('VIEW_DATA');
                     }}
                   />
                 </Tooltip>
