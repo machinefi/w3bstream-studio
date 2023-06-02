@@ -26,11 +26,11 @@ const nextConfig = {
     return [
       {
         source: '/api/w3bapp/event/:path*',
-        destination: `${process.env.NEXT_PUBLIC_EVENT_URL}/srv-applet-mgr/v0/event/:path*`
+        destination: `${process.env.NEXT_PUBLIC_EVENT_URL || 'http://localhost:8889'}/srv-applet-mgr/v0/event/:path*`
       },
       {
         source: '/api/w3bapp/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/:path*`
+        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8889'}/srv-applet-mgr/v0/:path*`
       }
     ];
   }
