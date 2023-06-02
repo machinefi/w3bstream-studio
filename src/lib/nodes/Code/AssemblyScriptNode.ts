@@ -2,10 +2,10 @@ import { FromSchema } from 'json-schema-to-ts';
 import { v4 as uuid } from 'uuid';
 import { BaseNode } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
-import { asc } from 'pages/_app';
 import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
 import { eventBus } from '@/lib/event';
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { asc } from '@/components/IDE/Labs';
 
 export const AssemblyScriptNodeSchema = {
   type: 'object',
@@ -49,11 +49,13 @@ export class AssemblyScriptNode extends BaseNode {
   static node_type = 'AssemblyScriptNode';
   static async execute({ input, output, node, callStack, callStackCurIdx, flow, webhookCtx }) {
     const code = wasm_vm_sdk + node?.data?.code;
-    const { error, binary, text, stats, stderr } = await asc.compileString(code, {
+    const { error, binary, text, stats, stderr } = await (
+      await asc()
+    ).compileString(code, {
       optimizeLevel: 4,
       runtime: 'stub',
       lib: 'assemblyscript-json/assembly/index',
-      debug: true,
+      debug: true
     });
     if (error) {
       console.log(error);

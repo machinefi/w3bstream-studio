@@ -1,9 +1,19 @@
-import React, {  useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { FilesItem } from './filesItem';
 import Editor from '../Editor';
 import { useStore } from '@/store/index';
+
+export const asc = async () => {
+  return await import('assemblyscript/dist/asc');
+};
+
+export const faker = async (): Promise<{ faker: any }> => {
+  // @ts-ignore
+  return await import('@faker-js/faker');
+};
+
 
 const Labs = () => {
   const { w3s } = useStore();
