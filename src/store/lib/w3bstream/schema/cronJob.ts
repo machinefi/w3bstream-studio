@@ -5,16 +5,21 @@ import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
 import toast from 'react-hot-toast';
+import { InnerHTMLWidget } from '@/components/JSONFormWidgets/InnerHTMLWidget';
 
 export const schema = {
   type: 'object',
   properties: {
     eventType: { type: 'string', title: 'Event Type', description: 'Please choose a unique name for the W3bstream event that should be triggered' },
-    cronExpressions: { type: 'string', title: 'Cron Expressions', description: 'This is the cron setup expression. Check out crontab.guru for an easy to use editor' }
+    cronExpressions: {
+      type: 'string',
+      title: 'Cron Expressions',
+      description: InnerHTMLWidget('This is the cron setup expression. Check out <a style="color:#946FFF" target="_blank" href="https://crontab.guru/">crontab.guru</a> for an easy to use editor')
+    }
   },
   required: ['eventType', 'cronExpressions']
 } as const;
-
+// @ts-ignore
 type SchemaType = FromSchema<typeof schema>;
 
 export default class CronJobModule {
