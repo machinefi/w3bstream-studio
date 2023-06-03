@@ -2,7 +2,7 @@ import { assemblyscriptJSONDTS } from '@/server/wasmvm/assemblyscript-json-d';
 import { useStore } from '@/store/index';
 import MonacoEditor, { useMonaco } from '@monaco-editor/react';
 import { observer } from 'mobx-react-lite';
-import { asc } from 'pages/_app';
+import { asc } from '../../Labs';
 
 export const MoEditor = observer((props: any) => {
   const {
@@ -40,7 +40,7 @@ export const MoEditor = observer((props: any) => {
         language={curFilesListSchema?.curActiveFile.data?.language}
         defaultValue="export function test(): void {}"
         value={curFilesListSchema?.curActiveFile?.data?.code}
-        beforeMount={(monaco) => { }}
+        beforeMount={(monaco) => {}}
         onMount={async (editor, monaco) => {
           monaco.languages.typescript.typescriptDefaults.addExtraLib(
             `
@@ -81,7 +81,7 @@ export const MoEditor = observer((props: any) => {
             'sdk/index.d.ts'
           );
           monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-          if (asc) monaco.languages.typescript.typescriptDefaults.addExtraLib(asc.definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
+          if (await asc()) monaco.languages.typescript.typescriptDefaults.addExtraLib((await asc()).definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
         }}
         onChange={(e) => {
           curFilesListSchema.setCurFileCode(e);

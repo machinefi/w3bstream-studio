@@ -4,8 +4,8 @@ import { BaseNode } from '../baseNode';
 import { IFormType, INodeTypeDescription } from '../types';
 import { eventBus } from '@/lib/event';
 //@ts-ignore
-import { faker } from '@faker-js/faker';
 import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
+import { faker } from '@/components/IDE/Labs';
 
 const template = `
 //https://github.com/faker-js/faker
@@ -57,7 +57,7 @@ export class SimulationNode extends BaseNode {
     try {
       node.input = {};
       //sdk https://github.com/nuysoft/Mock/wiki/Getting-Started mockjs
-      const res = new Function('faker', node.data.code)(faker);
+      const res = new Function('faker', node.data.code)((await faker()).faker);
       node.output = res;
       eventBus.emit('flow.run.result', {
         flowId: node.id,
@@ -89,7 +89,7 @@ export class SimulationNode extends BaseNode {
                 uiSchema: {
                   triggerInterval: {
                     'ui:options': {
-                      size:"sm"
+                      size: 'sm'
                     }
                   },
                   'ui:submitButtonOptions': {
@@ -118,7 +118,7 @@ export class SimulationNode extends BaseNode {
                         return files || [];
                       })()
                     }
-                  },
+                  }
                 },
                 value: new JSONValue<any>({
                   default: {
@@ -130,7 +130,7 @@ export class SimulationNode extends BaseNode {
             }
           }
         ]
-      },
+      }
     ]
   };
 

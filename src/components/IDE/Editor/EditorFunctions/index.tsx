@@ -1,20 +1,20 @@
-import { helper } from "@/lib/helper";
+import { helper } from '@/lib/helper';
 import toast from 'react-hot-toast';
 import reactHotToast from 'react-hot-toast';
-import { asc } from 'pages/_app';
 import { wasm_vm_sdk } from '@/server/wasmvm/sdk';
-import { Button } from "@chakra-ui/react";
-import { CheckCircleIcon } from "@chakra-ui/icons";
+import { Button } from '@chakra-ui/react';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import { Indexer } from '@/lib/indexer';
 import { hooks } from '@/lib/hooks';
-import { StorageState } from "@/store/standard/StorageState";
-import { TableJSONSchema } from "@/server/wasmvm/sqldb";
-import { StdIOType } from "@/server/wasmvm";
-//@ts-ignore
-import { faker } from '@faker-js/faker';
+import { StorageState } from '@/store/standard/StorageState';
+import { TableJSONSchema } from '@/server/wasmvm/sqldb';
+import { StdIOType } from '@/server/wasmvm';
+import { asc, faker } from '../../Labs';
 
 export const compileAssemblyscript = async (code: string) => {
-  let { error, binary, text, stats, stderr } = await asc.compileString(wasm_vm_sdk + code, {
+  let { error, binary, text, stats, stderr } = await (
+    await asc()
+  ).compileString(wasm_vm_sdk + code, {
     optimizeLevel: 4,
     runtime: 'stub',
     lib: 'assemblyscript-json/assembly/index',
@@ -104,7 +104,7 @@ export const debugAssemblyscript = async (needCompile = true) => {
           const wasmPayload = JSON.parse(formData.wasmPayload);
           await lab.onDebugWASM(wasmPayload, needCompile, formData.handleFunc);
           lab.simulationEventHistory.push({ wasmPayload, handleFunc: formData.handleFunc });
-        } catch (error) { }
+        } catch (error) {}
       }
     };
     lab.simulationIndexerForm.afterSubmit = async ({ formData }) => {
@@ -142,13 +142,13 @@ export const debugAssemblyscript = async (needCompile = true) => {
         }
       ]
     });
-  } catch (e) { }
+  } catch (e) {}
 };
 
-export const debugSimulation = () => {
+export const debugSimulation = async () => {
   const lab = globalThis.store.w3s.lab;
   const code = globalThis.store.w3s.projectManager.curFilesListSchema.curActiveFile.data.code;
-  const res = new Function('faker', code)(faker);
+  const res = new Function('faker', code)((await faker()).faker);
   const stdio: StdIOType = { '@lv': 'info', msg: res, '@ts': Date.now(), prefix: '' };
   lab.stdout.push(stdio);
 };
