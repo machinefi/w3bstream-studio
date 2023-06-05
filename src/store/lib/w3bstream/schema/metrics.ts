@@ -45,18 +45,18 @@ export default class MetricsModule {
     type: 'TimeRangePick',
     data: {
       props: {},
-      onChange: (value: "day" | "week" | "month") => {
-        const now = dayjs()
+      onChange: (value: 'day' | 'week' | 'month') => {
+        const now = dayjs();
         // now.setMinutes(0);
         // now.setSeconds(0);
         // now.setMilliseconds(0);
 
-        this.timeconfig.setCurrentId(value)
+        this.timeconfig.setCurrentId(value);
 
-        const {  step } = this.timeconfig.current;
+        const { step } = this.timeconfig.current;
 
-        const startTime = now.subtract(1, this.timeconfig.currentId).startOf('day').toDate()
-        const endTime = now
+        const startTime = now.subtract(1, this.timeconfig.currentId).startOf('day').unix();
+        const endTime = now.unix();
 
         this.activeDevices.call(startTime, endTime, step);
         this.dataMessages.call(startTime, endTime, step);
@@ -65,15 +65,13 @@ export default class MetricsModule {
     }
   };
 
-
   timeconfig = new MappingState({
-    currentId: "day",
+    currentId: 'day',
     map: {
       day: {
         tickValues: 'every 6 hours',
         step: '1h',
         axisBottomFormat: '%H:%M'
-
       },
       week: {
         tickValues: 'every day',
@@ -86,24 +84,24 @@ export default class MetricsModule {
         axisBottomFormat: '%Y-%m-%d'
       }
     }
-  })
+  });
 
   get projectName() {
     // return "eth_0x8a68e01add9adc8b887025dc54c36cfa91432f58_pperf2"
-    return globalThis.store.w3s.project.curProject.f_name
+    return globalThis.store.w3s.project.curProject.f_name;
   }
 
   activeDevices = new PromiseState<any, Metrics[]>({
     defaultValue: [],
-    function: async (startTime: Date, endTime: Date, step = 3600) => {
+    function: async (startTime: number, endTime: number, step = 3600) => {
       try {
         const { data } = await axios.request({
           method: 'GET',
           url: `/api/metrics/query_range`,
           params: {
             query: `count(count_over_time(inbound_events_metrics{project="${this.projectName}"}[1d])) by (project)`,
-            start: startTime.toISOString(),
-            end: endTime.toISOString(),
+            start: startTime,
+            end: endTime,
             step
           }
         });
@@ -116,15 +114,15 @@ export default class MetricsModule {
 
   dataMessages = new PromiseState<any, Metrics[]>({
     defaultValue: [],
-    function: async (startTime: Date, endTime: Date, step = 3600) => {
+    function: async (startTime: number, endTime: number, step = 3600) => {
       try {
         const { data } = await axios.request({
           method: 'GET',
           url: `/api/metrics/query_range`,
           params: {
             query: `sum by (project) (inbound_events_metrics{project="${this.projectName}"})`,
-            start: startTime.toISOString(),
-            end: endTime.toISOString(),
+            start: startTime,
+            end: endTime,
             step
           }
         });
@@ -137,15 +135,15 @@ export default class MetricsModule {
 
   blockchainTransaction = new PromiseState<any, Metrics[]>({
     defaultValue: [],
-    function: async (startTime: Date, endTime: Date, step = 3600) => {
+    function: async (startTime: number, endTime: number, step = 3600) => {
       try {
         const { data } = await axios.request({
           method: 'GET',
           url: `/api/metrics/query_range`,
           params: {
             query: `sum by (project) (w3b_blockchain_tx_metrics{project="${this.projectName}"})`,
-            start: startTime.toISOString(),
-            end: endTime.toISOString(),
+            start: startTime,
+            end: endTime,
             step
           }
         });
@@ -287,8 +285,6 @@ export default class MetricsModule {
     };
   }
 
-
-
   showContent: 'DATABASE' | 'API' = 'API';
 
   get metricsData() {
@@ -309,12 +305,11 @@ export default class MetricsModule {
     });
   }
 
-
   use() {
     useEffect(() => {
       //@ts-ignore
-      this.timeRangePick.data.onChange("day")
-      return () => {}
-    },[])
+      this.timeRangePick.data.onChange('day');
+      return () => {};
+    }, []);
   }
 }
