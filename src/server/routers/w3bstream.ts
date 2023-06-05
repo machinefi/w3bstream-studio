@@ -297,7 +297,9 @@ export type InstanceType = AppletType['instances'][0] & { project_name: string; 
 export type PublisherType = ProjectOriginalType['publishers'][0] & { project_id: string; project_name: string };
 export type ProjectType = ProjectOriginalType & {
   name: string;
-  envs: Record<string, string>;
+  envs: {
+    env: [string,any][];
+  };
 };
 export type ContractLogType = ProjectOriginalType['contractLogs'][0];
 export type ChainTxType = ProjectOriginalType['chainTxs'][0];
