@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, BoxProps, Box, Icon, Text, Popover, PopoverTrigger, PopoverContent, useDisclosure } from '@chakra-ui/react';
+import { Flex, BoxProps, Box, Icon, Text, Popover, PopoverTrigger, PopoverContent, useDisclosure, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { BiBarChartSquare } from 'react-icons/bi';
@@ -10,20 +10,18 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import toast from 'react-hot-toast';
 
-interface ToolBar extends BoxProps { }
+interface ToolBar extends BoxProps {}
 
 const ToolBar = (props: ToolBar) => {
   const {
     w3s,
     w3s: {
-      project: {
-        curProject,
-        allProjects
-      },
+      project: { curProject, allProjects },
       metrics,
-      instances,
+      instances
     },
-    lang: { t } } = useStore();
+    lang: { t }
+  } = useStore();
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   const curProjectStatus = INSTANCE_STATUS[instances.curInstance?.f_state || 0];
@@ -32,14 +30,18 @@ const ToolBar = (props: ToolBar) => {
     <Box position={'fixed'} h="100%" overflow={'auto'}>
       <Flex minW="200px" h="100%" direction="column" align="center" p="14px" bg="#fff" {...props}>
         <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-          <PopoverTrigger >
-            <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} px="14px" py="8px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
-              <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
-              <Text mr="10px" w="130px" fontSize={"14px"} color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
-                {curProject?.name}
-              </Text>
-              <ChevronDownIcon fontSize={'24px'} color={'#7A7A7A'} />
-            </Flex>
+          <PopoverTrigger>
+            {curProject ? (
+              <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} px="14px" py="8px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
+                <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
+                <Text mr="10px" w="130px" fontSize={'14px'} color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
+                  {curProject?.name}
+                </Text>
+                <ChevronDownIcon fontSize={'24px'} color={'#7A7A7A'} />
+              </Flex>
+            ) : (
+              <></>
+            )}
           </PopoverTrigger>
           <PopoverContent
             bg="#F8F8FA"
@@ -71,7 +73,7 @@ const ToolBar = (props: ToolBar) => {
                       now.setMinutes(0);
                       now.setSeconds(0);
                       now.setMilliseconds(0);
-                      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+                      const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
                       metrics.activeDevices.call(yesterday, now);
                       metrics.dataMessages.call(yesterday, now);
                       metrics.blockchainTransaction.call(yesterday, now);
@@ -88,7 +90,7 @@ const ToolBar = (props: ToolBar) => {
                   justifyContent="flex-start"
                 >
                   <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={status?.color}></Box>
-                  <Text color={curProject.name === item.name ? status?.color : ''}>{item.name}</Text>
+                  <Text color={curProject?.name === item.name ? status?.color : ''}>{item.name}</Text>
                 </Flex>
               );
             })}
@@ -209,29 +211,29 @@ const ToolBar = (props: ToolBar) => {
 export function getSelectedStyles(selected: boolean) {
   return selected
     ? {
-      sx: {
-        background: 'rgba(148, 111, 255, 0.1)',
-        '& > svg': {
-          color: '#946FFF'
-        },
-        '& > div': {
-          color: '#946FFF'
-        }
-      }
-    }
-    : {
-      sx: {
-        ':hover': {
+        sx: {
+          background: 'rgba(148, 111, 255, 0.1)',
           '& > svg': {
             color: '#946FFF'
           },
           '& > div': {
             color: '#946FFF'
-          },
-          background: 'rgba(148, 111, 255, 0.1)'
+          }
         }
       }
-    };
+    : {
+        sx: {
+          ':hover': {
+            '& > svg': {
+              color: '#946FFF'
+            },
+            '& > div': {
+              color: '#946FFF'
+            },
+            background: 'rgba(148, 111, 255, 0.1)'
+          }
+        }
+      };
 }
 
 export default observer(ToolBar);

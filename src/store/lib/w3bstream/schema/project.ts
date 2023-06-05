@@ -130,6 +130,38 @@ export default class ProjectModule {
     }
   });
 
+  projectDetail = new PromiseState<() => Promise<any>, ProjectType>({
+    // defaultValue: [],
+    function: async () => {
+      const projects = await trpc.api.projectDetail.query({
+        projectID: String(this.allProjects.current.f_project_id)
+      });
+      if (projects) {
+        const regex = /(?:[^_]*_){2}(.*)/;
+        projects.forEach((p: ProjectType) => {
+          const matchArray = p.f_name.match(regex);
+          p.name = matchArray ? matchArray[1] : p.f_name;
+          p.configs.forEach((config) => {
+            // buffer to string cause by prisma client parse error
+            config.f_value && (config.f_value = JSON.parse(config.f_value.toString()));
+            switch (config.f_type) {
+              case ProjectConfigType.PROJECT_DATABASE:
+                // @ts-ignore
+                // p.database = config.f_value;
+                break;
+              case ProjectConfigType.PROJECT_ENV:
+                // @ts-ignore
+                p.envs = config.f_value;
+                break;
+            }
+          });
+        });
+        return projects[0];
+      }
+      return null;
+    }
+  });
+
   form = new JSONSchemaFormState<DefaultSchemaType>({
     //@ts-ignore
     schema: defaultSchema,
@@ -399,7 +431,7 @@ export default class ProjectModule {
   selectedNames = [];
 
   get curProject() {
-    return this.allProjects.current;
+    return this.projectDetail.value;
   }
 
   constructor() {

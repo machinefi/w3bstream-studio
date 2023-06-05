@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import dynamic from 'next/dynamic';
@@ -31,21 +31,39 @@ const DynamicSettings = dynamic(() => import('../Settings'), {
 
 const CurrentProject = observer(() => {
   const {
-    w3s: { showContent }
+    w3s,
+    w3s: { showContent },
+    lang: { t }
   } = useStore();
+  const { projectDetail } = w3s.project;
 
   return (
-    <Flex w="100%" minH="100%" position="relative">
-      <ToolBar borderRadius="8px" overflowY="auto" />
-      <Box ml="220px" w="calc(100% - 220px)" minH="100%" p="12px 24px" bg="#fff" borderRadius="8px">
-        {showContent === 'METRICS' && <DynamicMetrics />}
-        {showContent === 'CURRENT_PUBLISHERS' && <DynamicPublishers />}
-        {(showContent === 'CONTRACT_LOGS' || showContent === 'CHAIN_TX' || showContent === 'CHAIN_HEIGHT') && <DynamicTriggers />}
-        {showContent === 'DB_TABLE' && <DynamicDBTable />}
-        {showContent === 'CURRENT_EVENT_LOGS' && <DynamicEventLogs />}
-        {showContent === 'SETTINGS' && <DynamicSettings />}
-      </Box>
-    </Flex>
+    <>
+      {/* {projectDetail.loading.value ? (
+        <Flex h="calc(100vh - 158px)" alignItems={'center'} justifyContent={'center'}>
+          <Spinner color="#946FFF" />
+        </Flex>
+      ) : ( */}
+      <Flex w="100%" minH="100%" position="relative">
+        <ToolBar borderRadius="8px" overflowY="auto" />
+        <Box ml="220px" w="calc(100% - 220px)" minH="100%" p="12px 24px" bg="#fff" borderRadius="8px">
+          {!projectDetail.value ? (
+            <Flex h="calc(100vh - 158px)" alignItems={'center'} justifyContent={'center'}>
+              <Spinner color="#946FFF" />
+            </Flex>
+          ) : (
+            <>
+              {showContent === 'METRICS' && <DynamicMetrics />}
+              {showContent === 'CURRENT_PUBLISHERS' && <DynamicPublishers />}
+              {(showContent === 'CONTRACT_LOGS' || showContent === 'CHAIN_TX' || showContent === 'CHAIN_HEIGHT') && <DynamicTriggers />}
+              {showContent === 'DB_TABLE' && <DynamicDBTable />}
+              {showContent === 'CURRENT_EVENT_LOGS' && <DynamicEventLogs />}
+              {showContent === 'SETTINGS' && <DynamicSettings />}
+            </>
+          )}
+        </Box>
+      </Flex>
+    </>
   );
 });
 

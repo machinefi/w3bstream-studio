@@ -19,7 +19,7 @@ const Projects = observer(() => {
     base: { confirm },
     lang: { t }
   } = useStore();
-  const { allProjects, selectedNames } = w3s.project;
+  const { allProjects, selectedNames, projectDetail } = w3s.project;
 
   if (allProjects.value.length) {
     return (
@@ -145,8 +145,9 @@ const Projects = observer(() => {
                 onClick={async (e) => {
                   e.stopPropagation();
                   if (instance) {
-                    allProjects.onSelect(index);
                     w3s.showContent = 'METRICS';
+                    allProjects.onSelect(index);
+                    projectDetail.call();
                   } else {
                     await w3s.applet.uploadWASM({
                       projectName: project.name,
@@ -251,7 +252,7 @@ const Projects = observer(() => {
                               });
                               eventBus.emit('instance.handle');
                               toast.success(t('success.suspended.msg'));
-                            } catch (error) { }
+                            } catch (error) {}
                           }}
                         >
                           <Icon ml="20px" as={AiOutlinePauseCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
@@ -271,7 +272,7 @@ const Projects = observer(() => {
                               });
                               eventBus.emit('instance.handle');
                               toast.success(t('success.started.msg'));
-                            } catch (error) { }
+                            } catch (error) {}
                           }}
                         >
                           <Icon ml="14px" as={AiOutlinePlayCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
