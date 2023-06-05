@@ -14,6 +14,7 @@ import IndexerHistoryWidget from '@/components/JSONFormWidgets/IndexerHistoryWid
 import { JSONHistoryState } from '@/store/standard/JSONHistoryState';
 import labSimulateHistoryWidget from '@/components/JSONFormWidgets/labSimulateHistoryWidget';
 import { compileAssemblyscript } from '@/components/IDE/Editor/EditorFunctions';
+import labSimulateWidget from '@/components/JSONFormWidgets/labSimulateWidget';
 
 export const uploadWasmTemplateFormSchema = {
   type: 'object',
@@ -29,7 +30,8 @@ export const simulationEventSchema = {
   properties: {
     handleFunc: { type: 'string', title: 'Handle Function' },
     wasmPayload: { type: 'string', title: '' },
-    history: { type: 'string', title: 'History' }
+    history: { type: 'string', title: 'History' },
+    simulator: { type: 'string', title: 'Simulator' }
   },
   required: ['handleFunc']
 } as const;
@@ -83,7 +85,10 @@ export default class LabModule {
       history: {
         'ui:widget': labSimulateHistoryWidget
       },
-      layout: ['handleFunc', 'wasmPayload', 'history']
+      simulator: {
+        'ui:widget': labSimulateWidget
+      },
+      layout: ['handleFunc', 'wasmPayload', 'history', 'simulator']
     },
     value: new JSONValue<SimulationEventSchemaType>({
       default: {
@@ -137,6 +142,24 @@ export default class LabModule {
     size: 10,
     key: 'lab.simulationEventHistory'
   });
+
+  get simulations() {
+    const files = [];
+    const findAssemblyScriptCode = (arr) => {
+      arr?.forEach((i) => {
+        if (i.data?.dataType === 'simulation') {
+          files.push({
+            label: i.label,
+            code: i.data?.code
+          });
+        } else if (i.type === 'folder') {
+          findAssemblyScriptCode(i.children);
+        }
+      });
+    };
+    findAssemblyScriptCode(globalThis.store?.w3s?.projectManager.curFilesList ?? []);
+    return files || [];
+  }
 
   uploadWasmForm = new JSONSchemaFormState<UploadWasmTemplateFormSchemaType>({
     //@ts-ignore
