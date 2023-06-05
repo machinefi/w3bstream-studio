@@ -18,31 +18,31 @@ export const w3bstreamRouter = t.router({
         f_project_id: true,
         f_name: true,
         f_description: true,
-        publishers: {
-          select: {
-            f_project_id: true,
-            f_publisher_id: true,
-            f_name: true,
-            f_key: true,
-            f_created_at: true,
-            f_token: true
-          }
-        },
+        // publishers: {
+        //   select: {
+        //     f_project_id: true,
+        //     f_publisher_id: true,
+        //     f_name: true,
+        //     f_key: true,
+        //     f_created_at: true,
+        //     f_token: true
+        //   }
+        // },
         applets: {
           select: {
             f_name: true,
             f_applet_id: true,
             f_project_id: true,
             f_resource_id: true,
-            strategies: {
-              select: {
-                f_strategy_id: true,
-                f_applet_id: true,
-                f_project_id: true,
-                f_event_type: true,
-                f_handler: true
-              }
-            },
+            // strategies: {
+            //   select: {
+            //     f_strategy_id: true,
+            //     f_applet_id: true,
+            //     f_project_id: true,
+            //     f_event_type: true,
+            //     f_handler: true
+            //   }
+            // },
             instances: {
               select: {
                 f_instance_id: true,
@@ -56,60 +56,176 @@ export const w3bstreamRouter = t.router({
             f_value: true,
             f_type: true
           }
-        },
-        cronJobs: {
-          select: {
-            f_cron_job_id: true,
-            f_project_id: true,
-            f_cron_expressions: true,
-            f_event_type: true,
-            f_created_at: true
-          }
-        },
-        contractLogs: {
-          select: {
-            f_contractlog_id: true,
-            f_project_name: true,
-            f_event_type: true,
-            f_chain_id: true,
-            f_contract_address: true,
-            f_block_start: true,
-            f_block_current: true,
-            f_block_end: true,
-            f_topic0: true,
-            f_created_at: true,
-            f_updated_at: true
-          }
-        },
-        chainHeights: {
-          select: {
-            f_chain_height_id: true,
-            f_project_name: true,
-            f_finished: true,
-            f_event_type: true,
-            f_chain_id: true,
-            f_height: true,
-            f_created_at: true,
-            f_updated_at: true
-          }
-        },
-        chainTxs: {
-          select: {
-            f_chaintx_id: true,
-            f_project_name: true,
-            f_finished: true,
-            f_event_type: true,
-            f_chain_id: true,
-            f_tx_address: true,
-            f_created_at: true,
-            f_updated_at: true
-          }
         }
+        // cronJobs: {
+        //   select: {
+        //     f_cron_job_id: true,
+        //     f_project_id: true,
+        //     f_cron_expressions: true,
+        //     f_event_type: true,
+        //     f_created_at: true
+        //   }
+        // },
+        // contractLogs: {
+        //   select: {
+        //     f_contractlog_id: true,
+        //     f_project_name: true,
+        //     f_event_type: true,
+        //     f_chain_id: true,
+        //     f_contract_address: true,
+        //     f_block_start: true,
+        //     f_block_current: true,
+        //     f_block_end: true,
+        //     f_topic0: true,
+        //     f_created_at: true,
+        //     f_updated_at: true
+        //   }
+        // },
+        // chainHeights: {
+        //   select: {
+        //     f_chain_height_id: true,
+        //     f_project_name: true,
+        //     f_finished: true,
+        //     f_event_type: true,
+        //     f_chain_id: true,
+        //     f_height: true,
+        //     f_created_at: true,
+        //     f_updated_at: true
+        //   }
+        // },
+        // chainTxs: {
+        //   select: {
+        //     f_chaintx_id: true,
+        //     f_project_name: true,
+        //     f_finished: true,
+        //     f_event_type: true,
+        //     f_chain_id: true,
+        //     f_tx_address: true,
+        //     f_created_at: true,
+        //     f_updated_at: true
+        //   }
+        // }
       }
     });
 
     return projects;
   }),
+  projectDetail: authProcedure
+    .input(
+      z.object({
+        projectID: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const accountID = BigInt(ctx.user.Payload);
+      const projects = await ctx.prisma.t_project.findMany({
+        where: {
+          f_account_id: {
+            equals: accountID
+          },
+          f_project_id: {
+            equals: BigInt(input.projectID)
+          }
+        },
+        orderBy: {
+          f_created_at: 'desc'
+        },
+        select: {
+          f_project_id: true,
+          f_name: true,
+          f_description: true,
+          publishers: {
+            select: {
+              f_project_id: true,
+              f_publisher_id: true,
+              f_name: true,
+              f_key: true,
+              f_created_at: true,
+              f_token: true
+            }
+          },
+          applets: {
+            select: {
+              f_name: true,
+              f_applet_id: true,
+              f_project_id: true,
+              f_resource_id: true,
+              strategies: {
+                select: {
+                  f_strategy_id: true,
+                  f_applet_id: true,
+                  f_project_id: true,
+                  f_event_type: true,
+                  f_handler: true
+                }
+              },
+              instances: {
+                select: {
+                  f_instance_id: true,
+                  f_state: true
+                }
+              }
+            }
+          },
+          configs: {
+            select: {
+              f_value: true,
+              f_type: true
+            }
+          },
+          cronJobs: {
+            select: {
+              f_cron_job_id: true,
+              f_project_id: true,
+              f_cron_expressions: true,
+              f_event_type: true,
+              f_created_at: true
+            }
+          },
+          contractLogs: {
+            select: {
+              f_contractlog_id: true,
+              f_project_name: true,
+              f_event_type: true,
+              f_chain_id: true,
+              f_contract_address: true,
+              f_block_start: true,
+              f_block_current: true,
+              f_block_end: true,
+              f_topic0: true,
+              f_created_at: true,
+              f_updated_at: true
+            }
+          },
+          chainHeights: {
+            select: {
+              f_chain_height_id: true,
+              f_project_name: true,
+              f_finished: true,
+              f_event_type: true,
+              f_chain_id: true,
+              f_height: true,
+              f_created_at: true,
+              f_updated_at: true
+            }
+          },
+          chainTxs: {
+            select: {
+              f_chaintx_id: true,
+              f_project_name: true,
+              f_finished: true,
+              f_event_type: true,
+              f_chain_id: true,
+              f_tx_address: true,
+              f_created_at: true,
+              f_updated_at: true
+            }
+          }
+        }
+      });
+
+      return projects;
+    }),
   wasmLogs: authProcedure
     .input(
       z.object({
@@ -174,13 +290,14 @@ export const w3bstreamRouter = t.router({
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
-export type ProjectOriginalType = inferProcedureOutput<W3bstreamRouter['projects']>[0];
+export type ProjectOriginalType = inferProcedureOutput<W3bstreamRouter['projectDetail']>[0];
 export type AppletType = ProjectOriginalType['applets'][0] & { project_name: string };
 export type StrategyType = AppletType['strategies'][0];
 export type InstanceType = AppletType['instances'][0] & { project_name: string; applet_name: string };
 export type PublisherType = ProjectOriginalType['publishers'][0] & { project_id: string; project_name: string };
 export type ProjectType = ProjectOriginalType & {
   name: string;
+  envs: Record<string, string>;
 };
 export type ContractLogType = ProjectOriginalType['contractLogs'][0];
 export type ChainTxType = ProjectOriginalType['chainTxs'][0];

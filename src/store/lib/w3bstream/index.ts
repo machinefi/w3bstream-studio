@@ -68,6 +68,7 @@ export class W3bStream {
     goHome: () => {
       this.currentHeaderTab = 'PROJECTS';
       this.project.allProjects.onSelect(-1);
+      this.project.projectDetail.value = null;
     }
   };
 
@@ -105,6 +106,7 @@ export class W3bStream {
       })
       .on('project.update', async () => {
         await this.project.allProjects.call();
+        await this.project.projectDetail.call();
         this.projectManager.sync();
       })
       .on('project.delete', async () => {
@@ -116,15 +118,18 @@ export class W3bStream {
       })
       .on('applet.update', async () => {
         await this.project.allProjects.call();
+        await this.project.projectDetail.call();
         this.projectManager.sync();
       })
       .on('applet.delete', async () => {
         await this.project.allProjects.call();
+        await this.project.projectDetail.call();
         this.projectManager.sync();
       })
       .on('applet.publish-event', () => {})
       .on('instance.deploy', async () => {
         await this.project.allProjects.call();
+        await this.project.projectDetail.call();
         this.projectManager.sync();
       })
       .on('instance.handle', async () => {
@@ -136,50 +141,50 @@ export class W3bStream {
         this.projectManager.sync();
       })
       .on('publisher.create', async () => {
-        await this.project.allProjects.call();
+        await this.project.projectDetail.call();
         this.projectManager.sync();
       })
       .on('postman.request', async () => {
-        await this.project.allProjects.call();
+        await this.project.projectDetail.call();
       })
       .on('publisher.update', async () => {
-        await this.project.allProjects.call();
+        await this.project.projectDetail.call();
       })
       .on('publisher.delete', async () => {
-        await this.project.allProjects.call();
+        await this.project.projectDetail.call();
       })
       .on('strategy.create', async () => {
-        await this.project.allProjects.call();
+        await this.project.projectDetail.call();
       })
       .on('strategy.update', async () => {
-        await this.project.allProjects.call();
+        await this.project.projectDetail.call();
       })
       .on('strategy.delete', async () => {
-        await this.project.allProjects.call();
+        await this.project.projectDetail.call();
       })
       .on('contractlog.create', async () => {
-        this.project.allProjects.call();
+        this.project.projectDetail.call();
       })
       .on('contractlog.delete', async () => {
-        this.project.allProjects.call();
+        this.project.projectDetail.call();
       })
       .on('chainTx.create', async () => {
-        this.project.allProjects.call();
+        this.project.projectDetail.call();
       })
       .on('chainTx.delete', async () => {
-        this.project.allProjects.call();
+        this.project.projectDetail.call();
       })
       .on('chainHeight.create', async () => {
-        this.project.allProjects.call();
+        this.project.projectDetail.call();
       })
       .on('chainHeight.delete', async () => {
-        this.project.allProjects.call();
+        this.project.projectDetail.call();
       })
       .on('cronJob.create', async () => {
-        this.project.allProjects.call();
+        this.project.projectDetail.call();
       })
       .on('cronJob.delete', async () => {
-        this.project.allProjects.call();
+        this.project.projectDetail.call();
       });
   }
 

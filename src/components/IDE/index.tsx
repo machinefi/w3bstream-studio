@@ -18,7 +18,7 @@ const DynamicProjects = dynamic(() => import('./Projects'), {
 
 const DynamicLabs = dynamic(() => import('./Labs'), {
   ssr: false,
-  loading: () => <p>Loading</p>,
+  loading: () => <p>Loading</p>
 });
 
 const DynamicFlow = dynamic(() => import('./Flow'), {
@@ -28,7 +28,6 @@ const DynamicFlow = dynamic(() => import('./Flow'), {
 const DynamicSupport = dynamic(() => import('./Support'), {
   ssr: false
 });
-
 
 const IDE = observer(() => {
   const {
@@ -40,8 +39,8 @@ const IDE = observer(() => {
     <Box w="100vw" h="100vh" overflow="auto" bg="#F8F8FA" paddingTop={'70px'} boxSizing="border-box">
       <Header />
       <Box w="100%" px="20px" minH="calc(100vh - 70px)">
-        {w3s.currentHeaderTab === 'PROJECTS' && <>{w3s.project.curProject ? <DynamicCurrentProject /> : <DynamicProjects />}</>}
-        {w3s.currentHeaderTab === 'LABS' && (<DynamicLabs />)}
+        {w3s.currentHeaderTab === 'PROJECTS' && <>{w3s.project.allProjects.currentIndex != -1 ? <DynamicCurrentProject /> : <DynamicProjects />}</>}
+        {w3s.currentHeaderTab === 'LABS' && <DynamicLabs />}
         {w3s.currentHeaderTab === 'FLOW' && <DynamicFlow />}
         {w3s.currentHeaderTab === 'SUPPORT' && <DynamicSupport />}
       </Box>
