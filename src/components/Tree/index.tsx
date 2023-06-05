@@ -234,7 +234,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
   const RightClickStyle = {
     cursor: 'pointer',
     _hover: {
-      bg: '#f6f6f6'
+      bg: 'rgba(255, 255, 255, 0.1)'
     },
     borderRadius: 8,
     p: 1,
@@ -367,7 +367,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
               }}
             >
               <ContextMenuTrigger id={`ProjectItemContext${item.key}`} holdToDisplay={-1}>
-                <Flex color={item.label?.startsWith('.') || isHidden ? '#979797' : ''} px={1} py={1} alignItems={'center'} _hover={{ bg: '#f6f6f6' }} bg={item.key == curFilekey ? '#f6f6f6' : ''}>
+                <Flex color={item.label?.startsWith('.') || isHidden ? '#979797' : ''} px={1} py={1} alignItems={'center'} _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }} bg={item.key == curFilekey ? 'rgba(255, 255, 255, 0.1)' : ''}>
                   {item.children && <> {item?.isOpen ? <ChevronDownIcon mr={1} /> : <ChevronRightIcon mr={1} />}</>}
                   {FileIcon(item)}
 
@@ -375,7 +375,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                     <input
                       autoFocus
                       type="text"
-                      style={{ outline: 'none' }}
+                      style={{ outline: 'none', color: '#000' }}
                       value={item.label}
                       onChange={(e) => {
                         item.label = e.target.value;
@@ -390,6 +390,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                       cursor={'text'}
                       as="span"
                       fontSize={'14px'}
+                      fontWeight={600}
                       userSelect="none"
                       onDoubleClick={(e) => {
                         e.stopPropagation();
