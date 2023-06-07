@@ -18,6 +18,9 @@ export const envRouter = t.router({
           const res = await axios.get(url);
           w3bstreamVersion = res?.data ? res?.data.match(/v(\d+\.\d+\.\d+(?:-\w+)?)/)[0] : '';
           w3bstreamVersion = w3bstreamVersion.split('_')[0];
+          if (!w3bstreamVersion.includes('-rc')) {
+            w3bstreamVersion = w3bstreamVersion.split('-')[0];
+          }
         } catch (error) {
           console.error(error);
         }
