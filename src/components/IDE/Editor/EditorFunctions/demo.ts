@@ -5,11 +5,11 @@ import { Block } from '@ethereumjs/block';
 import { Transaction, TxData } from '@ethereumjs/tx';
 import { hexToBytes } from 'ethereum-cryptography/utils';
 import { defaultAbiCoder } from '@ethersproject/abi';
-import { StdIOType } from '@/server/wasmvm';
 import { helper } from '@/lib/helper';
 import { compileAssemblyscript } from '.';
 import { PromiseState } from '@/store/standard/PromiseState';
 import ERC20 from '@/constants/abis/ERC20.json';
+import { Contract } from 'ethers';
 
 type TransactionsData = TxData;
 
@@ -142,7 +142,12 @@ class BlockChain {
     const contractJson = contractFile ? helper.json.safeParse(contractFile.data.code) : ERC20;
     const vm = await VM.create({ common });
     const deploymentResult = await deployContract(vm, this.block, wallet.accountPk, contractJson.bytecode);
-    return deploymentResult;
+    if (deploymentResult.execResult.exceptionError) {
+      throw deploymentResult.execResult.exceptionError;
+    }
+    const createdAddress = deploymentResult.createdAddress.toString();
+    const instance = new Contract(createdAddress, contractJson.abi);
+    return instance;
   }
 }
 
