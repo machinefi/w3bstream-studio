@@ -6,7 +6,7 @@ WORKDIR /w3bstream-studio
 RUN npm i pnpm -g
 COPY package.json pnpm-lock.yaml ./
 COPY prisma ./prisma
-RUN pnpm i
+RUN pnpm i --frozen-lockfile
 COPY . .
 RUN pnpm build:standalone
 

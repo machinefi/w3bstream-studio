@@ -20,7 +20,7 @@
     "postinstall": "npm run gen",
     "gen": "prisma generate",
     "db:pull": "npx prisma db pull",
-    "dev:docker": "dp -f docker-compose-dev.yaml build; dp -f docker-compose-dev.yaml  up -d"
+    "dev:docker": "docker-compose -f docker-compose-dev.yaml build; docker-compose -f docker-compose-dev.yaml  up -d"
   },
   "dependencies": {
     "@chakra-ui/icons": "2.0.11",
