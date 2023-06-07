@@ -20,9 +20,7 @@ func main() {
 
   method := "POST"
 
-  payload := strings.NewReader(
-    ${JSON.stringify(body)}
-  )
+  payload := strings.NewReader(${JSON.stringify(body)})
 
   client := &http.Client {}
 
