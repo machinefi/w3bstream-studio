@@ -23,7 +23,6 @@
     "dev:docker": "dp -f docker-compose-dev.yaml build; dp -f docker-compose-dev.yaml  up -d"
   },
   "dependencies": {
-    "@ampproject/remapping": "^2.2.1",
     "@chakra-ui/icons": "2.0.11",
     "@chakra-ui/layout": "2.0.1",
     "@chakra-ui/react": "2.6.1",
