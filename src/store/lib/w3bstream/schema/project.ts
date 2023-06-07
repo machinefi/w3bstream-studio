@@ -152,6 +152,7 @@ export default class ProjectModule {
               case ProjectConfigType.PROJECT_ENV:
                 // @ts-ignore
                 p.envs = config.f_value;
+                console.log(config.f_value,'config.f_value')
                 break;
             }
           });
