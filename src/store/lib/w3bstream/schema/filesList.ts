@@ -213,13 +213,13 @@ export class FilesListSchema {
 
   moveFileFromKey(srouceKey: string, targetKey: string) {
     //find Parent folder, if folder is same , swap the index
-    console.log(srouceKey, targetKey, toJS(this.files));
+    // console.log(srouceKey, targetKey, toJS(this.files));
     const sourceFile = this.findFile(this.files, srouceKey);
     const targetFile = this.findFile(this.files, targetKey);
-    console.log(toJS(sourceFile), toJS(targetFile));
+    // console.log(toJS(sourceFile), toJS(targetFile));
     const sourceFolder = this.findParentFolder(this.files, srouceKey);
     const targetFolder = targetFile.type == 'folder' ? targetFile : this.findParentFolder(this.files, targetKey);
-    console.log(sourceFile.label, targetFile.label, targetFolder.label);
+    // console.log(sourceFile.label, targetFile.label, targetFolder.label);
     if (targetFile.label == 'VSCode Files' || sourceFile == targetFile) return;
     if (sourceFolder.key == targetFolder.key) {
       const sourceIndex = _.findIndex(sourceFolder.children, (i) => i.key == srouceKey);
@@ -227,11 +227,11 @@ export class FilesListSchema {
       const temp = sourceFolder.children[sourceIndex];
       sourceFolder.children[sourceIndex] = sourceFolder.children[targetIndex];
       sourceFolder.children[targetIndex] = temp;
-      console.log('sourceFolder.key == targetFolder.key');
+      // console.log('sourceFolder.key == targetFolder.key');
       eventBus.emit('file.change');
       this.syncToIndexDb();
     } else {
-      console.log('remove');
+      // console.log('remove');
       _.remove(sourceFolder.children, (i) => i.key == srouceKey);
       targetFolder.children.push(sourceFile);
       eventBus.emit('file.change');

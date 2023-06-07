@@ -26,7 +26,7 @@ export const FileActions = observer(({ item }: { item: FilesItemType }) => {
         <input
           autoFocus
           type="text"
-          style={{ outline: 'none', color: '#000' }}
+          style={{ outline: 'none', color: '#000', width: '130px' }}
           value={item.label}
           onChange={(e) => {
             item.label = e.target.value;
