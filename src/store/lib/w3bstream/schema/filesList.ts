@@ -6,6 +6,7 @@ import { VSCodeFilesType } from '../project';
 import { helper } from '@/lib/helper';
 import { eventBus } from '@/lib/event';
 import { StorageState } from '@/store/standard/StorageState';
+import { DNDTreeDataType } from '@/components/Tree';
 
 type FileItemDataType<T = any> = {
   dataType?: string; // simulation flow assemblyscript abi env
@@ -50,6 +51,25 @@ export class FilesListSchema {
       children: []
     }
   ];
+  get filesFlatten() {
+    const flattenData: DNDTreeDataType[] = [];
+    const flatten = (data: FilesItemType[], parent: string) => {
+      data?.forEach((item) => {
+        flattenData.push({
+          id: item?.key,
+          parent: parent,
+          droppable: item.type == 'folder',
+          text: item.label,
+          data: item
+        });
+        if (item.children) {
+          flatten(item.children, item.key);
+        }
+      });
+    };
+    flatten(this.files, '0');
+    return flattenData;
+  }
   currentCopyFile: FilesItemType | null = null;
 
   constructor(args: Partial<FilesListSchema>) {
@@ -101,84 +121,6 @@ export class FilesListSchema {
     }
     // this.syncToIndexDb();
   }
-  // async runAutoDevActions(files: VSCodeFilesType[]) {
-  //   // if (files.some((i) => !i.studioOptions.dev)) return;
-  //   const tempVScodeFiles = tempVScodeFilesStorage.value;
-  //   const compareTempVScodeFiles = _.isEqual(
-  //     toJS(tempVScodeFiles),
-  //     files.filter((i) => i.name.endsWith('.wasm'))
-  //   );
-  //   console.log('sameWASM', compareTempVScodeFiles);
-  //   if (compareTempVScodeFiles) return;
-  //   tempVScodeFilesStorage.set(files.filter((i) => i.name.endsWith('.wasm')));
-  //   files
-  //     ?.filter((i) => i.name.endsWith('.wasm'))
-  //     .map(async (file) => {
-  //       // const projectName = file.studioOptions.projectName;
-  //       // const payload = file.studioOptions.payload;
-  //       const raw = helper.base64ToUint8Array(file.content);
-  //       //find projectName in project list
-  //       const project = globalThis.store.w3s.project.allProjects.value.find((i: ProjectType) => i.f_name == projectName);
-  //       //if project not exist, create project
-  //       console.log('project', project);
-  //       if (project) {
-  //         //delete project
-  //         await axios.request({
-  //           method: 'delete',
-  //           url: `/api/w3bapp/project/${project.name}`
-  //         });
-  //         await axios.request({
-  //           method: 'get',
-  //           url: '/api/w3bapp/project'
-  //         });
-  //       }
-  //       const projectRes = await axios.request({
-  //         method: 'post',
-  //         url: '/api/w3bapp/project',
-  //         data: {
-  //           name: projectName
-  //         }
-  //       });
-  //       eventBus.emit('project.create');
-  //       // create applet in project
-  //       let formData = new FormData();
-  //       console.log(helper.Uint8ArrayToWasmBase64FileData(file.name, raw));
-  //       const fileBlob = dataURItoBlob(helper.Uint8ArrayToWasmBase64FileData(file.name, raw));
-  //       formData.append('file', fileBlob.blob);
-  //       formData.append(
-  //         'info',
-  //         JSON.stringify({
-  //           wasmName: file.name,
-  //           projectID: projectRes.data.projectID,
-  //           appletName: file.name.replace('.wasm', '')
-  //         })
-  //       );
-  //       const appletRes = await axios.request({
-  //         method: 'post',
-  //         url: `http://localhost:8888/srv-applet-mgr/v0/applet/${projectRes.data.projectID}`,
-  //         headers: {
-  //           'Content-Type': 'multipart/form-data'
-  //         },
-  //         data: formData
-  //       });
-  //       eventBus.emit('applet.create');
-  //       const deployRes = await globalThis.store.w3s.applet.deployApplet({ appletID: appletRes.data.appletID });
-  //       console.log('deployRes', deployRes);
-  //       const startRes = await globalThis.store.w3s.instances.handleInstance({ instanceID: deployRes.instanceID, event: 'START' });
-  //       //send event
-  //       await axios.request({
-  //         method: 'post',
-  //         url: `/api/w3bapp/event/${projectRes.data.name}`,
-  //         headers: {
-  //           'Content-Type': 'text/plain'
-  //         },
-  //         data: {
-  //           payload
-  //         }
-  //       });
-  //     });
-  // }
-
   findFile(objects: FilesItemType[], key: string): FilesItemType {
     for (let o of objects || []) {
       if (o.key == key) return o;
@@ -200,6 +142,14 @@ export class FilesListSchema {
     for (let o of objects || []) {
       if (o.children?.find((i) => i.key == this.curActiveFileId)) return o;
       const o_ = this.findCurFolder(o.children);
+      if (o_) return o_;
+    }
+  }
+
+  findParentFolder(objects: FilesItemType[], key: string): FilesItemType {
+    for (let o of objects || []) {
+      if (o.children?.find((i) => i.key == key)) return o;
+      const o_ = this.findParentFolder(o.children, key);
       if (o_) return o_;
     }
   }
@@ -259,6 +209,34 @@ export class FilesListSchema {
     }
     eventBus.emit('file.change');
     this.syncToIndexDb();
+  }
+
+  moveFileFromKey(srouceKey: string, targetKey: string) {
+    //find Parent folder, if folder is same , swap the index
+    // console.log(srouceKey, targetKey, toJS(this.files));
+    const sourceFile = this.findFile(this.files, srouceKey);
+    const targetFile = this.findFile(this.files, targetKey);
+    // console.log(toJS(sourceFile), toJS(targetFile));
+    const sourceFolder = this.findParentFolder(this.files, srouceKey);
+    const targetFolder = targetFile.type == 'folder' ? targetFile : this.findParentFolder(this.files, targetKey);
+    // console.log(sourceFile.label, targetFile.label, targetFolder.label);
+    if (targetFile.label == 'VSCode Files' || sourceFile == targetFile) return;
+    if (sourceFolder.key == targetFolder.key) {
+      const sourceIndex = _.findIndex(sourceFolder.children, (i) => i.key == srouceKey);
+      const targetIndex = _.findIndex(sourceFolder.children, (i) => i.key == targetKey);
+      const temp = sourceFolder.children[sourceIndex];
+      sourceFolder.children[sourceIndex] = sourceFolder.children[targetIndex];
+      sourceFolder.children[targetIndex] = temp;
+      // console.log('sourceFolder.key == targetFolder.key');
+      eventBus.emit('file.change');
+      this.syncToIndexDb();
+    } else {
+      // console.log('remove');
+      _.remove(sourceFolder.children, (i) => i.key == srouceKey);
+      targetFolder.children.push(sourceFile);
+      eventBus.emit('file.change');
+      this.syncToIndexDb();
+    }
   }
 
   deleteFile(file: FilesItemType) {

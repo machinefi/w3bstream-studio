@@ -1,7 +1,7 @@
 import { ProjectType } from '@/server/routers/w3bstream';
 import { makeAutoObservable } from 'mobx';
 import { MappingState } from '@/store/standard/MappingState';
-import { FilesListSchema } from './schema/filesList';
+import { FilesItemType, FilesListSchema } from './schema/filesList';
 import { _ } from '@/lib/lodash';
 import { IndexDb } from '@/lib/dexie';
 import { createClient, SubscribePayload, Client } from 'graphql-ws';
@@ -171,7 +171,7 @@ export class ProjectManager {
           };
         }) => {
           console.log(data, 'data');
-          this.curFilesListSchema.setVscodeRemotFile(data.data.files);
+          this.curFilesListSchema?.setVscodeRemotFile(data.data.files);
           // this.curFilesListSchema.runAutoDevActions(data.data.files);
           result = data;
           this.isWSConnect = true;
@@ -179,7 +179,7 @@ export class ProjectManager {
         },
         error: (e) => {
           console.log('error Connect', e);
-          this.curFilesListSchema.setVscodeRemotFile([]);
+          this.curFilesListSchema?.setVscodeRemotFile([]);
           this.isWSConnect = false;
           this.isWSConnectLoading = false;
           // toast.error('Connect VSCode extension Failed!');

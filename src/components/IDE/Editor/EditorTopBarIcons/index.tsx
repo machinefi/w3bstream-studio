@@ -4,11 +4,11 @@ import { Box, Flex, Portal, Spinner, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { VscDebugStart } from 'react-icons/vsc';
 import { BsDatabaseFillAdd } from 'react-icons/bs';
-import { FileIcon } from '@/components/Tree';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { compileAndCreateProject, debugAssemblyscript, debugDemo, debugSimulation, onCreateDB } from '../EditorFunctions';
 import { HorizontalScrollBox } from '@/components/Common/HorizontalScrollBox';
 import { SmallCloseIcon } from '@chakra-ui/icons';
+import { FileIcon } from '@/components/Tree/fileIcon';
 
 export const CurActiveFileRightClickMenu = observer(({ activeFile }: { activeFile: FilesItemType }) => {
   const {
@@ -20,7 +20,7 @@ export const CurActiveFileRightClickMenu = observer(({ activeFile }: { activeFil
   return (
     <>
       <Portal>
-        <ContextMenu id={`ActiveFileContent${activeFile?.key}`} onShow={() => { }} onHide={() => { }}>
+        <ContextMenu id={`ActiveFileContent${activeFile?.key}`} onShow={() => {}} onHide={() => {}}>
           <Box p={2} bg="#fff" boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px">
             <MenuItem
               onClick={() => {
@@ -90,7 +90,9 @@ export const EditorTopBarIcons = observer(() => {
                     alignItems={'center'}
                   >
                     {FileIcon(i)}
-                    <Text mr="4" fontSize={"13px"}>{i?.label}</Text>
+                    <Text mr="4" fontSize={'13px'}>
+                      {i?.label}
+                    </Text>
                     <SmallCloseIcon
                       _hover={{ bg: '#3f3f3f' }}
                       color="white"
@@ -214,20 +216,20 @@ export const EditorTopBarIcons = observer(() => {
             w="22px"
             h="22px"
             onClick={() => {
-              debugDemo.call()
+              debugDemo.call();
             }}
           >
-            {
-              debugDemo.loading.value
-                ? <Spinner size="sm" color="#946FFF" />
-                : <VscDebugStart
-                  color="white"
-                  style={{
-                    marginRight: '10px',
-                    cursor: 'pointer'
-                  }}
-                />
-            }
+            {debugDemo.loading.value ? (
+              <Spinner size="sm" color="#946FFF" />
+            ) : (
+              <VscDebugStart
+                color="white"
+                style={{
+                  marginRight: '10px',
+                  cursor: 'pointer'
+                }}
+              />
+            )}
           </Box>
         </Box>
       )}
