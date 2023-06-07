@@ -59,11 +59,11 @@ export class FilesListSchema {
           id: item?.key,
           parent: parent,
           droppable: item.type == 'folder',
-          text: item.label,
+          text: item?.label,
           data: item
         });
-        if (item.children) {
-          flatten(item.children, item.key);
+        if (item?.children) {
+          flatten(item?.children, item?.key);
         }
       });
     };
