@@ -9,8 +9,8 @@ import {
 import { abiExample, assemblyScriptExample, demoExample, envExample, flowExample, simulationExample, SqlExample } from '@/constants/initWASMExamples';
 import { observer } from 'mobx-react-lite';
 import { v4 as uuidv4 } from 'uuid';
-import { FileIcon } from '@/components/Tree';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { FileIcon } from '@/components/Tree/fileIcon';
 
 type Options = {};
 
