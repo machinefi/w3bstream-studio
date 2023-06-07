@@ -23,13 +23,21 @@ export const envRouter = t.router({
         }
 
         try {
-          blockChains = await prisma.t_blockchain.findMany({
-            select: {
-              f_id: true,
-              f_chain_id: true,
-              f_chain_address: true
-            }
-          });
+          // blockChains = await prisma.t_blockchain.findMany({
+          //   select: {
+          //     f_id: true,
+          //     f_chain_id: true,
+          //     f_chain_address: true
+          //   }
+          // });
+          const ethClientRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/configuration/eth_client`);
+          const clients: { [key: string]: string } = JSON.parse(ethClientRes.data.clients);
+          for (let key in clients) {
+            const f_chain_address = clients[key];
+            const f_chain_id = BigInt(key);
+            const f_id = BigInt(key);
+            blockChains.push({ f_id, f_chain_id, f_chain_address });
+          }
         } catch (error) {
           console.error(error);
         }
