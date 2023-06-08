@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { trpc } from '@/lib/trpc';
 import { useEffect } from 'react';
 import { MappingState } from '@/store/standard/MappingState';
+import { TimeRangePick } from '@/components/JSONMetricsView/TimeRangePick';
 
 export type Metrics = {
   metric: {
@@ -41,8 +42,7 @@ export default class MetricsModule {
     }
   });
 
-  timeRangePick: JSONMetricsView = {
-    type: 'TimeRangePick',
+  timeRangePick: { data: TimeRangePick } = {
     data: {
       props: {},
       value: 'day',
@@ -248,7 +248,7 @@ export default class MetricsModule {
     }
 
     if (this.showContent === 'API') {
-      return [this.timeRangePick, this.activeDevicesMetrics, this.dataMessagesMetrics, this.blockchainTransactionMetrics];
+      return [this.activeDevicesMetrics, this.dataMessagesMetrics, this.blockchainTransactionMetrics, this.dataBaseMetrics];
     }
 
     return [];
@@ -264,6 +264,8 @@ export default class MetricsModule {
     useEffect(() => {
       //@ts-ignore
       this.timeRangePick.data.onChange('hour');
+      this.dbState.call();
+
       return () => {};
     }, []);
   }
