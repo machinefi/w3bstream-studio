@@ -35,7 +35,7 @@ const ToolBar = (props: ToolBar) => {
               <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} px="14px" py="8px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
                 <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
                 <Text mr="10px" w="130px" fontSize={'14px'} color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
-                  {curProject?.name}
+                  {projectDetail.loading.value ? <Spinner w="10px" h="10px" /> : curProject?.name}
                 </Text>
                 <ChevronDownIcon fontSize={'24px'} color={'#7A7A7A'} />
               </Flex>
@@ -65,6 +65,7 @@ const ToolBar = (props: ToolBar) => {
                 <Flex
                   className="project-item"
                   onClick={async (e) => {
+                    onClose();
                     e.stopPropagation();
                     if (instance) {
                       allProjects.onSelect(index);
@@ -81,7 +82,6 @@ const ToolBar = (props: ToolBar) => {
                     } else {
                       toast.error(t('error.change.project.msg'));
                     }
-                    onClose();
                   }}
                   alignItems={'center'}
                   cursor="pointer"
