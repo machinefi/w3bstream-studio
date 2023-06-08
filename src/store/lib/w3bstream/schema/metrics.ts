@@ -44,7 +44,7 @@ export default class MetricsModule {
   timeRangePick: JSONMetricsView = {
     type: 'TimeRangePick',
     data: {
-      props: {},
+      // props: {},
       value: 'day',
       onChange: (value: 'day' | 'week' | 'month') => {
         const now = dayjs();
