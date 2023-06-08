@@ -1,5 +1,5 @@
 import { Box, Card, CardBody, CardHeader, Flex, Heading, Progress, ProgressProps, Stack, StackDivider, Text } from '@chakra-ui/react';
-import { ProgressBar } from '@tremor/react';
+import { ProgressBar, Col } from '@tremor/react';
 
 export interface ProgressCard {
   title: string;
@@ -38,11 +38,11 @@ export const ProgressCard = ({ title, data }: ProgressCard) => {
                   {/* <Progress mt="5px" value={item.currentValue} min={0} max={item.total} colorScheme="purple" size="sm" {...progressPros} /> */}
                   <ProgressBar value={percentageValue} color="purple" className="mt-3" />
                 </Box>
-              </Box>
-            );
-          })}
-        </Stack>
-      </CardBody>
-    </Card>
+              );
+            })}
+          </Stack>
+        </CardBody>
+      </Card>
+    </Col>
   );
 };

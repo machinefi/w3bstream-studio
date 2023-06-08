@@ -46,7 +46,7 @@ const CurrentProject = observer(() => {
       ) : ( */}
       <Flex w="100%" minH="100%" position="relative">
         <ToolBar borderRadius="8px" overflowY="auto" />
-        <Box ml="220px" w="calc(100% - 220px)" minH="100%" p="12px 24px" bg="#fff" borderRadius="8px">
+        <Box ml="220px" w="calc(100% - 220px)" minH="100%" p="12px 24px" bg="#fff" borderRadius="8px" paddingBottom={200}>
           {!projectDetail.value ? (
             <Flex h="calc(100vh - 158px)" alignItems={'center'} justifyContent={'center'}>
               <Spinner color="#946FFF" />
