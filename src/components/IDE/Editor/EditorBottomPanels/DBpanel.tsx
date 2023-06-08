@@ -13,7 +13,7 @@ export const DBpanel = observer(() => {
   const {
     god: { sqlDB },
     w3s: {
-      projectManager: { curFilesListSchema },
+      projectManager: { curFilesListSchema }
     }
   } = useStore();
   const store = useLocalObservable(() => ({
@@ -73,7 +73,7 @@ export const DBpanel = observer(() => {
   }, [curFilesListSchema.curActiveFile]);
 
   return (
-    <Box mt={2}>
+    <Box mt={2} bg="white">
       {store.tables.length > 0 && (
         <>
           <Flex align="center">
@@ -99,7 +99,7 @@ export const DBpanel = observer(() => {
               })}
             </TabList>
 
-            <Box mt={2} id="terminal" fontFamily="monospace" w="100%" h="calc(100vh - 630px)" whiteSpace="pre-line" overflowY="auto" position="relative">
+            <Box mt={2} id="terminal" fontFamily="monospace" w="100%" h="calc(100vh - 720px)" whiteSpace="pre-line" overflowY="auto" position="relative">
               <TabPanels>
                 {store?.tables?.map((i) => {
                   return (

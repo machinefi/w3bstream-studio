@@ -197,7 +197,7 @@ const Flow = observer(() => {
   );
 
   return (
-    <Flex w="100%" h="calc(100vh - 180px)">
+    <Flex w="100%" h="calc(100vh - 120px)" bg="white">
       <Box pos="relative" w="100%" h="100%">
         <>
           <ContextMenuTrigger id="flow-box" holdToDisplay={-1}>
