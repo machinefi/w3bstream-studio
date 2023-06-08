@@ -9,7 +9,7 @@ import { AiOutlineFileText } from 'react-icons/ai';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import toast from 'react-hot-toast';
-
+import { Select, SelectItem } from '@tremor/react';
 interface ToolBar extends BoxProps {}
 
 const ToolBar = (props: ToolBar) => {
@@ -29,6 +29,18 @@ const ToolBar = (props: ToolBar) => {
   return (
     <Box position={'fixed'} h="100%" overflow={'auto'}>
       <Flex minW="200px" h="100%" direction="column" align="center" p="14px" bg="#fff" {...props}>
+        <Select
+          className="w-4"
+          // defaultValue={value}
+          // onValueChange={(v) => {
+          //   onChange(v);
+          // }}
+        >
+          <SelectItem value="hour">Hourly</SelectItem>
+          <SelectItem value="day">Daily</SelectItem>
+          <SelectItem value="week">Weekly</SelectItem>
+          <SelectItem value="month">Monthly</SelectItem>
+        </Select>
         <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
           <PopoverTrigger>
             {curProject ? (
