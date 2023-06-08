@@ -52,7 +52,7 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
 
         if (chain.unsupported) {
           return (
-            <Box p="10px 20px" color="#e53b3b" fontWeight={700} flexWrap="nowrap" borderRadius="6px" background="#ffe2e2" onClick={openChainModal}>
+            <Box p="10px 20px" color="#e53b3b" fontWeight={700} flexWrap="nowrap" borderRadius="6px" background="#ffe2e2" >
               Wrong network
             </Box>
           );
@@ -62,7 +62,7 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
           <Popover>
             <PopoverTrigger>
               <Flex alignItems="center" p="5px 14px" bg="#F3F3F3" borderRadius="60px" cursor="pointer">
-                <Avatar mr="8px" w="30px" h="30px" src={god.currentNetwork.chain.current.logoUrl} onClick={openChainModal} />
+                <Avatar mr="8px" w="30px" h="30px" src={god.currentNetwork.chain.current.logoUrl}  />
                 <Flex
                   alignItems="center"
                 >
