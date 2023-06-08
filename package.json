@@ -3,9 +3,6 @@
   "version": "1.2.4-rc1",
   "license": "MIT",
   "description": "Starter pack using Nextjs, React, Typescript, tRPC, Mantine and Cypress",
-  "engines": {
-    "node": "16.20.0"
-  },
   "keywords": [
     "next",
     "react",
