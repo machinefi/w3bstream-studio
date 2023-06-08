@@ -12,6 +12,7 @@ import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import { MdRefresh } from 'react-icons/md';
 import { FaFileImport } from 'react-icons/fa';
 import { ImArrowUpRight2 } from 'react-icons/im';
+import { Card } from '@tremor/react';
 
 const Projects = observer(() => {
   const {
@@ -134,14 +135,14 @@ const Projects = observer(() => {
               <GridItem
                 key={project.name}
                 w="100%"
-                p="24px"
-                bg="rgba(248, 248, 250, 0.5)"
-                border="1px solid #EDEDED"
-                borderRadius="8px"
+                // p="24px"
+                // bg="rgba(248, 248, 250, 0.5)"
+                // border="1px solid #EDEDED"
+                // borderRadius="8px"
                 cursor="pointer"
-                _hover={{
-                  boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
-                }}
+                // _hover={{
+                //   boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+                // }}
                 onClick={async (e) => {
                   e.stopPropagation();
                   if (instance) {
@@ -155,63 +156,63 @@ const Projects = observer(() => {
                     });
                   }
                 }}
-                display="flex"
-                flexDirection={'column'}
               >
-                <Flex alignItems="center" justifyContent="space-between">
-                  <Flex alignItems="center" mr="5px">
-                    <Flex fontWeight={600} fontSize="16px" color={'rgba(15, 15, 15, 0.75)'} alignItems={'center'} gap="10px">
-                      <Text>{project.name} </Text>
-                      <ImArrowUpRight2 fontSize={14} color="#946FFF" />
+                <Card className="hover:shadow-md flex flex-col justify-between" style={{ minHeight: '145px' }}>
+                  <Flex alignItems="center" justifyContent="space-between">
+                    <Flex alignItems="center" mr="5px">
+                      <Flex fontWeight={600} fontSize="16px" color={'rgba(15, 15, 15, 0.75)'} alignItems={'center'} gap="10px">
+                        <Text>{project.name} </Text>
+                        <ImArrowUpRight2 fontSize={14} color="#946FFF" />
+                      </Flex>
+
+                      {!instance && (
+                        <Button
+                          ml="20px"
+                          h="25px"
+                          size="sm"
+                          {...defaultButtonStyle}
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            await w3s.applet.uploadWASM({
+                              projectName: project.name,
+                              formTitle: 'Upload WASM'
+                            });
+                          }}
+                        >
+                          Upload WASM
+                        </Button>
+                      )}
                     </Flex>
 
-                    {!instance && (
-                      <Button
-                        ml="20px"
-                        h="25px"
-                        size="sm"
-                        {...defaultButtonStyle}
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          await w3s.applet.uploadWASM({
-                            projectName: project.name,
-                            formTitle: 'Upload WASM'
-                          });
+                    <Flex
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Checkbox
+                        size="md"
+                        sx={{
+                          '& > .chakra-checkbox__control[data-checked]': {
+                            background: '#946FFF',
+                            borderColor: '#946FFF',
+                            '&:hover': {
+                              background: '#946FFF',
+                              borderColor: '#946FFF'
+                            },
+                            '&[data-hover]': {
+                              background: '#946FFF',
+                              borderColor: '#946FFF'
+                            }
+                          }
                         }}
-                      >
-                        Upload WASM
-                      </Button>
-                    )}
+                        onChange={(e) => {
+                          w3s.project.selectProjectName(project.name, e.target.checked);
+                        }}
+                      />
+                    </Flex>
                   </Flex>
 
-                  <Flex
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <Checkbox
-                      size="md"
-                      sx={{
-                        '& > .chakra-checkbox__control[data-checked]': {
-                          background: '#946FFF',
-                          borderColor: '#946FFF',
-                          '&:hover': {
-                            background: '#946FFF',
-                            borderColor: '#946FFF'
-                          },
-                          '&[data-hover]': {
-                            background: '#946FFF',
-                            borderColor: '#946FFF'
-                          }
-                        }
-                      }}
-                      onChange={(e) => {
-                        w3s.project.selectProjectName(project.name, e.target.checked);
-                      }}
-                    />
-                  </Flex>
-                </Flex>
-                {/* <Flex mt="12px" alignItems="center" fontSize="14px">
+                  {/* <Flex mt="12px" alignItems="center" fontSize="14px">
                   <Icon as={AiOutlineLineChart} color="#7A7A7A" />
                   <Box ml="5px" color="#7A7A7A">
                     Requests per hour:
@@ -220,70 +221,71 @@ const Projects = observer(() => {
                     0
                   </Box>
                 </Flex> */}
-                <Flex mt="10px" flexWrap="wrap" flex="1">
-                  {project.f_description &&
-                    project.f_description.split(',').map((tag) => {
-                      return (
-                        <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#946FFF" fontSize="xs" bg="#F2EEFF" borderRadius="6px">
-                          {tag}
-                        </Box>
-                      );
-                    })}
-                </Flex>
-
-                <Flex mt="10px" justifyContent="space-between">
-                  <Flex color={status.color} alignItems="center">
-                    <Box w="6px" h="6px" bg={status.color} mr="6px" borderRadius="50%"></Box>{' '}
-                    <Text fontWeight={400} fontSize={'12px'}>
-                      {status.text}
-                    </Text>
+                  <Flex mt="10px" flexWrap="wrap">
+                    {project.f_description &&
+                      project.f_description.split(',').map((tag) => {
+                        return (
+                          <Box key={tag} mb="5px" mr="5px" p="5px 10px" alignItems="center" color="#946FFF" fontSize="xs" bg="#F2EEFF" borderRadius="6px">
+                            <Text size="xs">{tag}</Text>
+                          </Box>
+                        );
+                      })}
                   </Flex>
-                  {instance && (
-                    <Flex alignItems={'center'}>
-                      {instance.f_state === 2 ? (
-                        <Flex
-                          alignItems={'center'}
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            try {
-                              await axios.request({
-                                method: 'put',
-                                url: `/api/w3bapp/deploy/${instance.f_instance_id}/HUNGUP`
-                              });
-                              eventBus.emit('instance.handle');
-                              toast.success(t('success.suspended.msg'));
-                            } catch (error) {}
-                          }}
-                        >
-                          <Icon ml="20px" as={AiOutlinePauseCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
-                          <Text ml="10px" fontSize={14} color={'#946FFF'}>
-                            Pause
-                          </Text>
-                        </Flex>
-                      ) : (
-                        <Flex
-                          alignItems={'center'}
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            try {
-                              await axios.request({
-                                method: 'put',
-                                url: `/api/w3bapp/deploy/${instance.f_instance_id}/START`
-                              });
-                              eventBus.emit('instance.handle');
-                              toast.success(t('success.started.msg'));
-                            } catch (error) {}
-                          }}
-                        >
-                          <Icon ml="14px" as={AiOutlinePlayCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
-                          <Text ml="10px" fontSize={14} color={'#946FFF'}>
-                            Start
-                          </Text>
-                        </Flex>
-                      )}
+
+                  <Flex mt="10px" justifyContent="space-between">
+                    <Flex color={status.color} alignItems="center">
+                      <Box w="6px" h="6px" bg={status.color} mr="6px" borderRadius="50%"></Box>{' '}
+                      <Text fontWeight={400} fontSize={'12px'}>
+                        {status.text}
+                      </Text>
                     </Flex>
-                  )}
-                </Flex>
+                    {instance && (
+                      <Flex alignItems={'center'}>
+                        {instance.f_state === 2 ? (
+                          <Flex
+                            alignItems={'center'}
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                await axios.request({
+                                  method: 'put',
+                                  url: `/api/w3bapp/deploy/${instance.f_instance_id}/HUNGUP`
+                                });
+                                eventBus.emit('instance.handle');
+                                toast.success(t('success.suspended.msg'));
+                              } catch (error) {}
+                            }}
+                          >
+                            <Icon ml="20px" as={AiOutlinePauseCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
+                            <Text ml="10px" fontSize={14} color={'#946FFF'}>
+                              Pause
+                            </Text>
+                          </Flex>
+                        ) : (
+                          <Flex
+                            alignItems={'center'}
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                await axios.request({
+                                  method: 'put',
+                                  url: `/api/w3bapp/deploy/${instance.f_instance_id}/START`
+                                });
+                                eventBus.emit('instance.handle');
+                                toast.success(t('success.started.msg'));
+                              } catch (error) {}
+                            }}
+                          >
+                            <Icon ml="14px" as={AiOutlinePlayCircle} boxSize={'1.25rem'} color="#946FFF" cursor="pointer" _hover={{ color: '#7D44FF' }} />
+                            <Text ml="10px" fontSize={14} color={'#946FFF'}>
+                              Start
+                            </Text>
+                          </Flex>
+                        )}
+                      </Flex>
+                    )}
+                  </Flex>
+                </Card>
               </GridItem>
             );
           })}
