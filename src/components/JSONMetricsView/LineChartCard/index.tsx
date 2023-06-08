@@ -5,12 +5,12 @@ import { AreaChart, ValueFormatter } from '@tremor/react';
 export interface LineChartCard {
   title: string;
   description?: string;
-  categories: string[];
+  categories?: string[];
   data: {
     date?: string;
     [key: string]: any;
   }[];
-  valueFormatter: ValueFormatter;
+  valueFormatter?: ValueFormatter;
   config?: {
     containerWidth?: string | number;
     containerHeight?: string | number;
