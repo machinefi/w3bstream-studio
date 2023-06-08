@@ -19,6 +19,8 @@ import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
 import { Global, css } from '@emotion/react';
 import { Inter } from '@next/font/google';
+import "../constants/global.css"
+
 const oxanium = Inter({ subsets: ['latin'] });
 
 

@@ -45,6 +45,7 @@ export default class MetricsModule {
     type: 'TimeRangePick',
     data: {
       props: {},
+      value: 'day',
       onChange: (value: 'day' | 'week' | 'month') => {
         const now = dayjs();
         // now.setMinutes(0);
@@ -52,10 +53,12 @@ export default class MetricsModule {
         // now.setMilliseconds(0);
 
         this.timeconfig.setCurrentId(value);
+        //@ts-ignore
+        this.timeRangePick.data.value = value;
 
         const { step } = this.timeconfig.current;
 
-        const startTime = now.subtract(1, this.timeconfig.currentId).startOf('day').unix();
+        const startTime = now.subtract(1, this.timeconfig.currentId).unix();
         const endTime = now.unix();
 
         this.activeDevices.call(startTime, endTime, step);
@@ -68,29 +71,35 @@ export default class MetricsModule {
   timeconfig = new MappingState({
     currentId: 'day',
     map: {
+      hour: {
+        tickValues: 'every 10 minutes',
+        step: '14',
+        axisBottomFormat: '%H:%M'
+      },
       day: {
         tickValues: 'every 6 hours',
-        step: '1h',
+        step: '345',
         axisBottomFormat: '%H:%M'
       },
       week: {
-        tickValues: 'every day',
-        step: '1d',
+        tickValues: 'every 1 days',
+        step: '2419',
         axisBottomFormat: '%Y-%m-%d'
       },
       month: {
-        tickValues: 'every day',
-        step: '1d',
+        tickValues: 'every 1 days',
+        step: '9676',
         axisBottomFormat: '%Y-%m-%d'
       }
     }
   });
 
   get projectName() {
-    // return "eth_0x8a68e01add9adc8b887025dc54c36cfa91432f58_pperf2"
+    // return 'eth_0x8a68e01add9adc8b887025dc54c36cfa91432f58_pperf2';
     return globalThis.store.w3s.project.curProject.f_name;
   }
 
+  // TODO: cache 1m
   activeDevices = new PromiseState<any, Metrics[]>({
     defaultValue: [],
     function: async (startTime: number, endTime: number, step = 3600) => {
@@ -159,7 +168,7 @@ export default class MetricsModule {
     let list = values
       .slice()
       .sort((a, b) => a[0] - b[0])
-      .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
+      .map((i) => ({ date: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), 'Active Devices': Number(i[1]) }));
     // if (list.length === 1) {
     //   const d = dayjs(list[0][0]);
     //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
@@ -169,25 +178,7 @@ export default class MetricsModule {
       data: {
         title: 'Active Devices',
         description: 'Number of unique devices that sent at least one message to this project',
-        data: [
-          {
-            id: 'Active Devices',
-            data: list
-          }
-        ],
-        xFormat: 'time:%Y-%m-%d %H:%M',
-        xScale: {
-          type: 'time',
-          format: '%Y-%m-%d %H:%M',
-          useUTC: false,
-          precision: 'millisecond'
-        },
-        axisBottom: {
-          format: this.timeconfig.current.axisBottomFormat,
-          tickValues: this.timeconfig.current.tickValues,
-          legend: ' ',
-          legendPosition: 'middle'
-        }
+        data: list
       }
     };
   }
@@ -197,7 +188,7 @@ export default class MetricsModule {
     let list = values
       .slice()
       .sort((a, b) => a[0] - b[0])
-      .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
+      .map((i) => ({ date: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), 'Data Messages': Number(i[1]) }));
     // if (list.length === 1) {
     //   const d = dayjs(list[0][0]);
     //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
@@ -207,25 +198,7 @@ export default class MetricsModule {
       data: {
         title: 'Data Messages',
         description: 'Total number of messages received from all devices',
-        data: [
-          {
-            id: 'Data Messages',
-            data: list
-          }
-        ],
-        xFormat: 'time:%Y-%m-%d %H:%M',
-        xScale: {
-          type: 'time',
-          format: '%Y-%m-%d %H:%M',
-          useUTC: false,
-          precision: 'millisecond'
-        },
-        axisBottom: {
-          format: this.timeconfig.current.axisBottomFormat,
-          tickValues: this.timeconfig.current.tickValues,
-          legend: ' ',
-          legendPosition: 'middle'
-        }
+        data: list
       }
     };
   }
@@ -235,7 +208,7 @@ export default class MetricsModule {
     let list = values
       .slice()
       .sort((a, b) => a[0] - b[0])
-      .map((i) => ({ x: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), y: Number(i[1]) }));
+      .map((i) => ({ date: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), 'Blockchain Transaction': Number(i[1]) }));
     // if (list.length === 1) {
     //   const d = dayjs(list[0][0]);
     //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
@@ -245,25 +218,7 @@ export default class MetricsModule {
       data: {
         title: 'Blockchain Transaction',
         description: `Total number of blockchain transactions sent by the project's applet.`,
-        data: [
-          {
-            id: 'Blockchain Transaction',
-            data: list
-          }
-        ],
-        xFormat: 'time:%Y-%m-%d %H:%M',
-        xScale: {
-          type: 'time',
-          format: '%Y-%m-%d %H:%M',
-          useUTC: false,
-          precision: 'millisecond'
-        },
-        axisBottom: {
-          format: this.timeconfig.current.axisBottomFormat,
-          tickValues: this.timeconfig.current.tickValues,
-          legend: ' ',
-          legendPosition: 'middle'
-        }
+        data: list
       }
     };
   }
@@ -308,7 +263,7 @@ export default class MetricsModule {
   use() {
     useEffect(() => {
       //@ts-ignore
-      this.timeRangePick.data.onChange('day');
+      this.timeRangePick.data.onChange('hour');
       return () => {};
     }, []);
   }
