@@ -2,27 +2,26 @@ import { Stack } from '@chakra-ui/react';
 import { LineChartCard } from './LineChartCard';
 import { ProgressCard } from './ProgressCard';
 import { TimeRangePick } from './TimeRangePick';
+import { Grid } from '@tremor/react';
 
 export interface JSONMetricsView {
-  type: 'ProgressCard' | 'LineChartCard' | 'TimeRangePick';
-  data: ProgressCard | LineChartCard | TimeRangePick;
+  type: 'ProgressCard' | 'LineChartCard';
+  data: ProgressCard | LineChartCard;
 }
+
+const components = {
+  ProgressCard,
+  LineChartCard
+};
 
 export const JSONMetricsView = ({ data }: { data: JSONMetricsView[] }) => {
   return (
-    <Stack minH="70vh" spacing={6} py="10px">
+    <Grid numCols={1} numColsSm={1} numColsLg={2} numColsMd={2} className="gap-2">
       {data.map((item) => {
-        switch (item.type) {
-          case 'ProgressCard':
-            return <ProgressCard {...(item.data as ProgressCard)} />;
-          case 'LineChartCard':
-            return <LineChartCard {...(item.data as LineChartCard)} />;
-          case 'TimeRangePick':
-            return <TimeRangePick {...(item.data as TimeRangePick )} />;
-          default:
-            return null;
-        }
+        let Component = components[item.type];
+        //@ts-ignore
+        return <Component {...item.data} />;
       })}
-    </Stack>
+    </Grid>
   );
 };
