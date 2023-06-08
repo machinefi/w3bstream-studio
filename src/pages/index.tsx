@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '../store';
 import IDE from '@/components/IDE';
 
+
 const HomePage = observer(() => {
   const {
     w3s: {
