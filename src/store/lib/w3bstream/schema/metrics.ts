@@ -228,9 +228,9 @@ export default class MetricsModule {
       type: 'ProgressCard',
       data: {
         title: 'Database usage',
+        description: 'The size of the total project data currently stored in the database. ',
         data: [
           {
-            title: 'Database size',
             currentValue: this.dbState.value?.usedSize,
             total: 512,
             unit: 'MB'
