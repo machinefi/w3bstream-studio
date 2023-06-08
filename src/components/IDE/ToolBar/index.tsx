@@ -9,7 +9,6 @@ import { AiOutlineFileText } from 'react-icons/ai';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import toast from 'react-hot-toast';
-import { Select, SelectItem } from '@tremor/react';
 interface ToolBar extends BoxProps {}
 
 const ToolBar = (props: ToolBar) => {
@@ -25,26 +24,13 @@ const ToolBar = (props: ToolBar) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   const curProjectStatus = INSTANCE_STATUS[instances.curInstance?.f_state || 0];
-
   return (
     <Box position={'fixed'} h="100%" overflow={'auto'}>
       <Flex minW="200px" h="100%" direction="column" align="center" p="14px" bg="#fff" {...props}>
-        <Select
-          className="w-4"
-          // defaultValue={value}
-          // onValueChange={(v) => {
-          //   onChange(v);
-          // }}
-        >
-          <SelectItem value="hour">Hourly</SelectItem>
-          <SelectItem value="day">Daily</SelectItem>
-          <SelectItem value="week">Weekly</SelectItem>
-          <SelectItem value="month">Monthly</SelectItem>
-        </Select>
         <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
           <PopoverTrigger>
             {curProject ? (
-              <Flex w="168px" cursor={'pointer'} borderRadius={'8px'} px="14px" py="8px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
+              <Flex w="168px" cursor={'pointer'} borderRadius={'10px'} px="14px" py="6px" alignItems={'center'} mb="20px" border={'1px solid #EDEDED'}>
                 <Box flex="none" mr="8px" w={'6px'} h="6px" borderRadius={'50%'} bg={curProjectStatus?.color}></Box>
                 <Text mr="10px" w="130px" fontSize={'14px'} color={curProjectStatus?.color} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>
                   {projectDetail.loading.value ? <Spinner w="10px" h="10px" /> : curProject?.name}
@@ -56,12 +42,12 @@ const ToolBar = (props: ToolBar) => {
             )}
           </PopoverTrigger>
           <PopoverContent
-            bg="#F8F8FA"
+            bg="#ffffff"
+            border="1px solid #EDEDED"
             w="168px"
             overflow={'auto'}
             px="14px"
             outline={'none'}
-            border="none"
             css={{
               '.project-item': {
                 '&:last-child': {
