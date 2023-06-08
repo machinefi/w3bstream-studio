@@ -16,7 +16,7 @@ const ToolBar = (props: ToolBar) => {
   const {
     w3s,
     w3s: {
-      project: { curProject, allProjects },
+      project: { curProject, allProjects, projectDetail },
       metrics,
       instances
     },
@@ -64,10 +64,11 @@ const ToolBar = (props: ToolBar) => {
               return (
                 <Flex
                   className="project-item"
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation();
                     if (instance) {
                       allProjects.onSelect(index);
+                      await projectDetail.call();
                       w3s.showContent = 'METRICS';
                       const now = new Date();
                       now.setMinutes(0);
