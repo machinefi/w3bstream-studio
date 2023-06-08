@@ -16,7 +16,7 @@ const components = {
 
 export const JSONMetricsView = ({ data }: { data: JSONMetricsView[] }) => {
   return (
-    <Grid numCols={1} numColsSm={1} numColsLg={2} numColsMd={2} className="gap-2">
+    <Grid numItems={1} numItemsSm={1} numItemsLg={2} numItemsMd={2} className="gap-2">
       {data.map((item) => {
         let Component = components[item.type];
         //@ts-ignore
