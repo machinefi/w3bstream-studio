@@ -140,7 +140,7 @@ const Projects = observer(() => {
                 borderRadius="8px"
                 cursor="pointer"
                 _hover={{
-                  boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+                  boxShadow: 'md'
                 }}
                 onClick={async (e) => {
                   e.stopPropagation();

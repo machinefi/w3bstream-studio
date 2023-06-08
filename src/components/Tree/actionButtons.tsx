@@ -41,8 +41,9 @@ export const FileActions = observer(({ item }: { item: FilesItemType }) => {
           cursor={'text'}
           as="span"
           fontSize={'14px'}
-          fontWeight={600}
+          fontWeight={400}
           userSelect="none"
+          color="rgb(255,255,255,0.8)"
           onDoubleClick={(e) => {
             e.stopPropagation();
             item.isRename = true;
@@ -69,7 +70,7 @@ export const FileActions = observer(({ item }: { item: FilesItemType }) => {
               cursor="pointer"
               mr={4}
               className="pi pi-cloud-upload"
-              color="black"
+              color="white"
               onClick={async () => {
                 compileAndCreateProject(item?.data?.dataType == 'assemblyscript');
               }}
@@ -83,7 +84,7 @@ export const FileActions = observer(({ item }: { item: FilesItemType }) => {
               }}
             >
               <VscDebugStart
-                color="black"
+                color="white"
                 style={{
                   marginRight: '10px',
                   cursor: 'pointer'
@@ -98,7 +99,7 @@ export const FileActions = observer(({ item }: { item: FilesItemType }) => {
         <Box ml="auto">
           <Box onClick={debugSimulation}>
             <VscDebugStart
-              color="black"
+              color="white"
               style={{
                 marginRight: '10px',
                 cursor: 'pointer'
@@ -121,7 +122,7 @@ export const FileActions = observer(({ item }: { item: FilesItemType }) => {
               <Spinner size="sm" color="#946FFF" />
             ) : (
               <VscDebugStart
-                color="black"
+                color="white"
                 style={{
                   marginRight: '10px',
                   cursor: 'pointer'
