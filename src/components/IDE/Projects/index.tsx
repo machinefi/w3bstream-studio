@@ -137,8 +137,8 @@ const Projects = observer(() => {
                 w="100%"
                 // p="24px"
                 // bg="rgba(248, 248, 250, 0.5)"
-                // border="1px solid #EDEDED"
-                // borderRadius="8px"
+                border="1px solid #EDEDED"
+                borderRadius="8px"
                 cursor="pointer"
                 // _hover={{
                 //   boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
