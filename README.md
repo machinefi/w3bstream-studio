@@ -56,6 +56,7 @@ curl https://raw.githubusercontent.com/machinefi/w3bstream-studio/main/docker-co
 Edit the config in the `yaml` file if needed. Then run
 
 ```bash
+docker-compose pull
 docker-compose -p w3bstream -f ./docker-compose.yaml up -d
 ```
 
