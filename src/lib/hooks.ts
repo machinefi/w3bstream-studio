@@ -4,6 +4,7 @@ import initSqlJs from 'sql.js';
 import { IndexDb } from './dexie';
 import { helper } from './helper';
 import { axios } from './axios';
+import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState';
 
 export const hooks = {
   async waitReady() {
@@ -96,5 +97,51 @@ export const hooks = {
         return;
       }
     }
+  },
+  async getSimpleFormData<T>(data: T, metadata: { [key: string]: any } & Partial<JSONSchemaFormState<any>>, config: Partial<FormModalState>) {
+    const value = {};
+    const uiProps = {};
+    const props = Object.entries(data).reduce((p, c) => {
+      const [k, v] = c;
+      p[k] = {
+        type: typeof v,
+        title: metadata[k].title || v
+      };
+      delete metadata[k].title;
+      value[k] = v;
+      return p;
+    }, {});
+    const schema = {
+      type: 'object',
+      properties: props
+    };
+    const form = new FormModalState({
+      ...config,
+      isOpen: true,
+      formList: [
+        {
+          form: new JSONSchemaFormState({
+            //@ts-ignore
+            schema,
+            uiSchema: {
+              'ui:submitButtonOptions': {
+                norender: false,
+                submitText: 'Submit'
+              },
+              ...metadata
+            },
+            afterSubmit(e) {
+              eventBus.emit('base.formModal.afterSubmit', e.formData);
+              this.reset();
+            },
+            value: new JSONValue({
+              default: value
+            })
+          })
+        }
+      ]
+    });
+
+    return hooks.getFormData<T>(form);
   }
 };
