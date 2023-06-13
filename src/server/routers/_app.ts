@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { webhookRouter } from './webhook';
 import { pgRouter } from './pg';
 import { envRouter } from './env';
+import { metricsRouter } from './metrics';
 
 /**
  * Create your application's root router
@@ -20,7 +21,8 @@ export const appRouter = t.router({
   api: w3bstreamRouter,
   webhook: webhookRouter,
   pg: pgRouter,
-  env: envRouter
+  env: envRouter,
+  metrics: metricsRouter
 });
 /**
  * Add data transformers

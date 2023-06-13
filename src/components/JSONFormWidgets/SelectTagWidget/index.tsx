@@ -61,7 +61,7 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
                 value={inputV}
                 onChange={(e) => {
                   const v = e.target.value;
-                  v && setInputV(v);
+                  setInputV(v);
                 }}
               />
               <Button

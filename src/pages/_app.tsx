@@ -15,7 +15,6 @@ import { NotificationsProvider } from '@mantine/notifications';
 import { eventBus } from '@/lib/event';
 import superjson from 'superjson';
 import { Inspector, InspectParams } from 'react-dev-inspector';
-import { WagmiProvider } from '@/components/WagmiProvider';
 import '@/lib/superjson';
 import { Global, css } from '@emotion/react';
 import { Inter } from '@next/font/google';
@@ -73,9 +72,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <ChakraProvider theme={theme}>
             <NotificationsProvider>
               <Toaster position="bottom-right" />
-              <WagmiProvider>
                 <Component {...pageProps} />
-              </WagmiProvider>
             </NotificationsProvider>
           </ChakraProvider>
         </InspectorWrapper>

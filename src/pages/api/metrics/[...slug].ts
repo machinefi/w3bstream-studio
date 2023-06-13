@@ -6,6 +6,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { slug, ...params } = query;
   const path = Array.isArray(slug) ? slug.join('/') : slug;
   const url = `${process.env.NEXT_PUBLIC_METRICS_URL}/api/v1/${path}`;
+  console.log(url,params)
   try {
     const axiosResponse = await axios.request({
       url,
