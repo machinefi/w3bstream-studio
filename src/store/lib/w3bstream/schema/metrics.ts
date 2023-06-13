@@ -104,15 +104,26 @@ export default class MetricsModule {
     defaultValue: [],
     function: async (startTime: number, endTime: number, step = 3600) => {
       try {
-        const { data } = await axios.request({
-          method: 'GET',
-          url: `/api/metrics/query_range`,
+        // const { data } = await axios.request({
+        //   method: 'GET',
+        //   url: `/api/metrics/query_range`,
+        //   params: {
+        //     query: `count(count_over_time(inbound_events_metrics{project="${this.projectName}"}[1d])) by (project)`,
+        //     start: startTime,
+        //     end: endTime,
+        //     step
+        //   }
+        // });
+        // return data.data.result;
+        const data = await trpc.metrics.metrics.query({
+          path: 'query_range',
           params: {
             query: `count(count_over_time(inbound_events_metrics{project="${this.projectName}"}[1d])) by (project)`,
             start: startTime,
             end: endTime,
             step
-          }
+          },
+          method: 'GET'
         });
         return data.data.result;
       } catch (error) {
@@ -125,9 +136,9 @@ export default class MetricsModule {
     defaultValue: [],
     function: async (startTime: number, endTime: number, step = 3600) => {
       try {
-        const { data } = await axios.request({
+        const data = await trpc.metrics.metrics.query({
           method: 'GET',
-          url: `/api/metrics/query_range`,
+          path: `/query_range`,
           params: {
             query: `sum by (project) (inbound_events_metrics{project="${this.projectName}"})`,
             start: startTime,
@@ -146,9 +157,9 @@ export default class MetricsModule {
     defaultValue: [],
     function: async (startTime: number, endTime: number, step = 3600) => {
       try {
-        const { data } = await axios.request({
+        const data = await trpc.metrics.metrics.query({
           method: 'GET',
-          url: `/api/metrics/query_range`,
+          path: `/query_range`,
           params: {
             query: `sum by (project) (w3b_blockchain_tx_metrics{project="${this.projectName}"})`,
             start: startTime,
