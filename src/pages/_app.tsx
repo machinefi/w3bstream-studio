@@ -18,10 +18,9 @@ import { Inspector, InspectParams } from 'react-dev-inspector';
 import '@/lib/superjson';
 import { Global, css } from '@emotion/react';
 import { Inter } from '@next/font/google';
-import "../constants/global.css"
+import '../constants/global.css';
 
 const oxanium = Inter({ subsets: ['latin'] });
-
 
 const GlobalStyles = css`
   .js-focus-visible :focus:not([data-focus-visible-added]) {
@@ -49,9 +48,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
 
     if (token) {
+      if (['/login'].includes(router.pathname)) {
+        NextRouter.replace('/');
+      }
       w3s.init();
     }
-  }, [token]);
+  }, [token, router.pathname]);
 
   return useMemo(() => {
     return (
@@ -72,7 +74,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <ChakraProvider theme={theme}>
             <NotificationsProvider>
               <Toaster position="bottom-right" />
-                <Component {...pageProps} />
+              <Component {...pageProps} />
             </NotificationsProvider>
           </ChakraProvider>
         </InspectorWrapper>
