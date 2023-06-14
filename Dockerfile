@@ -1,7 +1,8 @@
 #build studio
-FROM node:18-slim AS build-nodejs
+FROM node:18 AS build-nodejs
 
 WORKDIR /w3bstream-studio
+
 
 RUN npm i pnpm -g
 COPY package.json pnpm-lock.yaml ./
@@ -12,7 +13,7 @@ RUN pnpm build:standalone
 
 
 #run
-FROM node:18-slim
+FROM node:18
 
 EXPOSE 3000
 
