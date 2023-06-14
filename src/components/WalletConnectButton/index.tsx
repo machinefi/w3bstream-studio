@@ -30,7 +30,7 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
 
   useEffect(() => {
     wallet.autoConnect();
-  },[]);
+  }, []);
 
   const store = useLocalStore(() => ({
     isConnect: false,
@@ -45,7 +45,7 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
         const message = new SiweMessage({
           address,
           chainId,
-          expirationTime: new Date(Date.now() + 1 * 60 * 1000).toISOString(),
+          expirationTime: new Date(Date.now() + 3 * 60 * 1000).toISOString(),
           domain: document.location.host,
           uri: document.location.origin,
           version: '1'
