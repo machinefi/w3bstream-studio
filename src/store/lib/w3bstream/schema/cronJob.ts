@@ -14,7 +14,7 @@ export const schema = {
     cronExpressions: {
       type: 'string',
       title: 'Cron Expressions',
-      description: InnerHTMLWidget('This is the cron setup expression. Check out <a style="color:#946FFF" target="_blank" href="https://crontab.guru/">crontab.guru</a> for an easy to use editor')
+      description: 'This is the cron setup expression. Check out https://crontab.guru/ for an easy to use editor'
     }
   },
   required: ['eventType', 'cronExpressions']
