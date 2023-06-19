@@ -78,7 +78,7 @@ export const ABIPanel = observer(() => {
 
   return (
     <>
-      <Flex color="white"  height="calc(100%)" overflowY={'scroll'} w="100%">
+      <Flex color="white"  height="calc(100%)" overflowY={'scroll'} w="100%" bg="white">
         <Box position="relative" w="100%">
           <Card bg="none" borderRadius={0} w="100%">
             <Box overflow="auto" h="100%" w="100%">

@@ -1,8 +1,10 @@
+import { HorizontalScrollBox } from '@/components/Common/HorizontalScrollBox';
 import JSONTable from '@/components/JSONTable';
 import { eventBus } from '@/lib/event';
 import { TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { useStore } from '@/store/index';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { SmallCloseIcon } from '@chakra-ui/icons';
 import { Box, Flex, Input, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
@@ -19,6 +21,7 @@ export const DBpanel = observer(() => {
   const store = useLocalObservable(() => ({
     tables: [],
     sql: ``,
+    tabIndex: 0,
     initDBTable: () => {
       store.tables = [];
       try {
@@ -74,7 +77,7 @@ export const DBpanel = observer(() => {
 
   return (
     <Box mt={2} bg="white">
-      {store.tables.length > 0 && (
+      {sqlDB.tables.length > 0 && (
         <>
           <Flex align="center">
             <Input placeholder="write sql here" w="96%" value={store.sql} onChange={(e) => (store.sql = e.target.value)}></Input>
@@ -92,16 +95,43 @@ export const DBpanel = observer(() => {
               }}
             ></VscDebugStart>
           </Flex>
-          <Tabs>
-            <TabList>
-              {store?.tables?.map((i) => {
-                return <Tab key={i.tableName}>{i.tableName}</Tab>;
+          <Tabs index={store.tabIndex}>
+            <HorizontalScrollBox w="calc(100vw - 320px)">
+              {sqlDB?.tables?.map((i, index) => {
+                return (
+                  <Box
+                    borderBottom={`2px solid ${store.tabIndex == index ? '#855eff' : '#e1e8f0'} `}
+                    key={i?.tableName}
+                    w="max-content"
+                    whiteSpace={'nowrap'}
+                    onClick={() => {
+                      store.tabIndex = index;
+                    }}
+                    display="flex"
+                    py={1.5}
+                    px={2}
+                    fontSize="sm"
+                    color={store.tabIndex == index ? '#855eff' : 'black'}
+                    cursor="pointer"
+                    alignItems={'center'}
+                  >
+                    {i?.tableName}
+                    <SmallCloseIcon
+                      _hover={{ bg: '#3f3f3f' }}
+                      color="#e1e8f0"
+                      ml="auto"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        sqlDB.deleteTable(i.tableName);
+                      }}
+                    />
+                  </Box>
+                );
               })}
-            </TabList>
-
+            </HorizontalScrollBox>
             <Box mt={2} id="terminal" fontFamily="monospace" w="100%" h="calc(100vh - 720px)" whiteSpace="pre-line" overflowY="auto" position="relative">
               <TabPanels>
-                {store?.tables?.map((i) => {
+                {sqlDB.tables?.map((i) => {
                   return (
                     <TabPanel p={0} key={i.tableName}>
                       <JSONTable

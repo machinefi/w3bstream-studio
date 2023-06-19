@@ -6,6 +6,8 @@ import { ExportTableType } from '@/store/lib/w3bstream/schema/dbTable';
 //https://sql.js.org/#/
 //https://sqliteonline.com/
 import { Statement } from 'sql.js';
+import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
+import { makeAutoObservable } from 'mobx';
 interface sqlTypes {
   int32?: number;
   int64?: number;
@@ -28,10 +30,15 @@ export interface TableJSONSchema {
 
 export class SqlDB {
   db: any;
+  tables: { tableName: string; table: JSONSchemaTableState }[] = [];
   constructor() {
+    makeAutoObservable(this);
     try {
       if (this.db) return;
-      hooks.waitSQLJSReady().then((db) => (this.db = db));
+      hooks.waitSQLJSReady().then((db) => {
+        this.db = db;
+        this.getAllTables();
+      });
     } catch (error) {}
   }
 
@@ -125,14 +132,17 @@ export class SqlDB {
           sqlResult = CREATDB_TYPE.SUCCESS;
           toast.success(`Create Table '${tableName}' Success`);
           eventBus.emit('sql.change');
+          this.syncToIndexDB();
         } catch (e) {
           sqlResult = CREATDB_TYPE.ERROR;
           toast.error(e.message);
           eventBus.emit('sql.change');
+          this.syncToIndexDB();
           continue;
         }
       }
     }
+
     return sqlResult;
   }
 
@@ -155,6 +165,25 @@ export class SqlDB {
     });
   }
 
+  deleteTable(tableName: string): Promise<boolean> {
+    return new Promise((res, rej) => {
+      globalThis.store?.base.confirm.show({
+        title: 'Warning',
+        description: `Do you want to delete this table?`,
+        onOk: async () => {
+          this.exec(`DROP TABLE IF EXISTS ${tableName}`);
+          toast.success(`Delete Table '${tableName}' Success`);
+          eventBus.emit('sql.change');
+          this.syncToIndexDB();
+          res(true);
+        },
+        onCancel: () => {
+          res(false);
+        }
+      });
+    });
+  }
+
   exec(sql: string) {
     try {
       const res = this.db.exec(sql);
@@ -165,6 +194,47 @@ export class SqlDB {
       toast.error(e.message);
       throw new Error(e.message);
     }
+  }
+
+  getAllTables() {
+    const sql = `SELECT name FROM sqlite_master WHERE type='table'`;
+    const res = this.db.exec(sql);
+    const tables = [];
+    res[0].values.forEach((value) => {
+      const tableName = value[0];
+      if (tableName == 'sqlite_sequence') {
+        return;
+      }
+      const columnRes = this.db.exec(`PRAGMA table_info(${tableName})`);
+      const columnNames = columnRes[0].values.map((value) => {
+        return value[1];
+      });
+      const res = this.db.exec(`SELECT * FROM ${tableName}`);
+      const dataSource: { [key: string]: any }[] = [];
+      if (res.length > 0) {
+        res[0].values.forEach((i) => {
+          const obj: { [key: string]: any } = {};
+          i.forEach((j, index) => {
+            obj[columnNames[index]] = j;
+          });
+          dataSource.push(obj);
+        });
+      }
+
+      tables.push({
+        tableName,
+        table: new JSONSchemaTableState<any>({
+          dataSource,
+          columns: columnNames.map((i) => {
+            return {
+              key: i,
+              label: i
+            };
+          })
+        })
+      });
+    });
+    this.tables = tables;
   }
 
   parseResult(sqlRes: { columns: string[]; values: any[] }) {
@@ -188,6 +258,7 @@ export class SqlDB {
   }
 
   syncToIndexDB() {
+    this.getAllTables();
     let data = this.db.export();
     let buffer = new Buffer(data);
     let base64 = buffer.toString('base64');
