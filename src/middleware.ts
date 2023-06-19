@@ -4,11 +4,16 @@ import type { NextRequest } from 'next/server';
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname.replace('/api/w3bapp', '');
   const newPath = '/srv-applet-mgr/v0' + path;
-
+  console.log(path)
+  const searchParams = new URLSearchParams(req.nextUrl.search);
   if (path.startsWith('/event')) {
-    return NextResponse.rewrite(new URL(newPath, process.env.NEXT_PUBLIC_EVENT_URL));
+    const newURL = new URL(newPath, process.env.NEXT_PUBLIC_EVENT_URL)
+    newURL.search = searchParams.toString()
+    return NextResponse.rewrite(newURL);
   }
-  return NextResponse.rewrite(new URL(newPath, process.env.NEXT_PUBLIC_API_URL));
+  const newURL = new URL(newPath, process.env.NEXT_PUBLIC_API_URL)
+  newURL.search = searchParams.toString()
+  return NextResponse.rewrite(newURL);
 }
 
 export const config = {
