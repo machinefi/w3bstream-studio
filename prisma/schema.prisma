@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
 }
 
@@ -26,16 +26,16 @@ model t_account {
 }
 
 model t_applet {
-  f_id          BigInt @id @default(autoincrement())
+  f_id          BigInt       @id @default(autoincrement())
   f_project_id  BigInt
-  f_applet_id   BigInt @unique(map: "t_applet_ui_applet_id")
+  f_applet_id   BigInt       @unique(map: "t_applet_ui_applet_id")
   f_resource_id BigInt
-  f_name        String @db.VarChar(255)
-  f_created_at  BigInt @default(0)
-  f_updated_at  BigInt @default(0)
-  project      t_project    @relation(fields: [f_project_id], references: [f_project_id])
-  instances    t_instance[]
-  strategies   t_strategy[]
+  f_name        String       @db.VarChar(255)
+  f_created_at  BigInt       @default(0)
+  f_updated_at  BigInt       @default(0)
+  project       t_project    @relation(fields: [f_project_id], references: [f_project_id])
+  instances     t_instance[]
+  strategies    t_strategy[]
 
   @@unique([f_project_id, f_name], map: "t_applet_ui_project_name")
   @@schema("applet_management")
@@ -64,22 +64,22 @@ model t_instance {
   f_created_at  BigInt @default(0)
   f_updated_at  BigInt @default(0)
 
-  applet        t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
+  applet t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
 
   @@schema("applet_management")
 }
 
 model t_project {
-  f_id          BigInt @id @default(autoincrement())
+  f_id          BigInt           @id @default(autoincrement())
   f_project_id  BigInt
   f_account_id  BigInt
-  f_name        String @db.VarChar(255)
-  f_version     String @default("") @db.VarChar(255)
-  f_proto       Int    @default(0)
-  f_description String @default("") @db.VarChar(255)
-  f_created_at  BigInt @default(0)
-  f_updated_at  BigInt @default(0)
-  f_deleted_at  BigInt @default(0)
+  f_name        String           @db.VarChar(255)
+  f_version     String           @default("") @db.VarChar(255)
+  f_proto       Int              @default(0)
+  f_description String           @default("") @db.VarChar(255)
+  f_created_at  BigInt           @default(0)
+  f_updated_at  BigInt           @default(0)
+  f_deleted_at  BigInt           @default(0)
   applets       t_applet[]
   publishers    t_publisher[]
   configs       t_config[]
@@ -122,7 +122,7 @@ model t_strategy {
   f_updated_at  BigInt @default(0)
   f_deleted_at  BigInt @default(0)
 
-  applet        t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
+  applet t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
 
   @@unique([f_project_id, f_applet_id, f_event_type, f_handler, f_deleted_at], map: "t_strategy_ui_prj_app_event")
   @@unique([f_strategy_id, f_deleted_at], map: "t_strategy_ui_strategy_id")
@@ -219,7 +219,8 @@ model t_contract_log {
   f_topic3           String @default("") @db.VarChar(255)
   f_created_at       BigInt @default(0)
   f_updated_at       BigInt @default(0)
-  
+  f_paused           Int    @default(2)
+
   project t_project @relation(fields: [f_project_name], references: [f_name])
 
   @@unique([f_project_name, f_event_type, f_chain_id, f_contract_address, f_topic0, f_topic1, f_topic2, f_topic3, f_uniq], map: "t_contract_log_ui_contract_log_uniq")
