@@ -30,6 +30,11 @@ export const schema = {
       type: 'string',
       title: "Smart contract Event's topic0",
       description: 'This is automatically calculated when typing the event signature above. However, if you know the topic0, you can directly input it here.'
+    },
+    paused: {
+      type: 'boolean',
+      title: 'Pause',
+      description: 'A suspended monitor will be created'
     }
   },
   required: ['projectName', 'eventType', 'chainID', 'contractAddress', 'blockStart', 'blockEnd', 'topic0']
@@ -82,6 +87,30 @@ export default class ContractLogModule {
                 }
               },
               text: 'Delete'
+            },
+            {
+              props: {
+                ml: '2',
+                size: 'xs',
+                ...defaultOutlineButtonStyle,
+                onClick: async () => {
+                  const regex = /(?:[^_]*_){2}(.*)/;
+                  const matchArray = item.f_project_name.match(regex);
+                  const projectName = matchArray ? matchArray[1] : item.f_project_name;
+                  try {
+                    await axios.request({
+                      method: 'put',
+                      url: `/api/w3bapp/monitor/x/${projectName}/contract_log/${item.f_paused == 1 ? 'START' : 'PAUSE'}`,
+                      data: { ids: [String(item.f_contractlog_id)] }
+                    });
+                    eventBus.emit('contractlog.delete');
+                    toast.success((item.f_paused == 1 ? 'start' : 'pause') + ' successfully');
+                  } catch (error) {
+                    toast.error(globalThis.store.lang.t('operation-failure'));
+                  }
+                }
+              },
+              text: item.f_paused == 1 ? 'START' : 'PAUSE'
             }
           ];
         }
@@ -154,7 +183,8 @@ export default class ContractLogModule {
         blockStart: 16737070,
         blockEnd: 16740080,
         event: '',
-        topic0: ''
+        topic0: '',
+        paused: false
       },
       onSet(e) {
         const { event } = e;

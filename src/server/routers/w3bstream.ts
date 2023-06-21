@@ -194,7 +194,8 @@ export const w3bstreamRouter = t.router({
               f_block_end: true,
               f_topic0: true,
               f_created_at: true,
-              f_updated_at: true
+              f_updated_at: true,
+              f_paused: true
             }
           },
           chainHeights: {
@@ -298,7 +299,7 @@ export type PublisherType = ProjectOriginalType['publishers'][0] & { project_id:
 export type ProjectType = ProjectOriginalType & {
   name: string;
   envs: {
-    env: [string,any][];
+    env: [string, any][];
   };
 };
 export type ContractLogType = ProjectOriginalType['contractLogs'][0];
