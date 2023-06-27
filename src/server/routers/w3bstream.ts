@@ -287,7 +287,26 @@ export const w3bstreamRouter = t.router({
         }
       });
       return res;
-    })
+    }),
+  userSetting: authProcedure.query(async ({ ctx, input }) => {
+    const res = await ctx.prisma.t_account_access_key.findMany({
+      where: {
+        f_account_id: {
+          equals: BigInt(ctx.user.Payload)
+        }
+      },
+      select: {
+        f_access_key: true,
+        f_name: true,
+        f_updated_at: true,
+        f_expired_at: true,
+        f_desc: true
+      }
+    });
+    return {
+      apikeys: res
+    };
+  })
 });
 
 export type W3bstreamRouter = typeof w3bstreamRouter;
@@ -307,3 +326,4 @@ export type ChainTxType = ProjectOriginalType['chainTxs'][0];
 export type ChainHeightType = ProjectOriginalType['chainHeights'][0];
 export type CronJobsType = ProjectOriginalType['cronJobs'][0];
 export type WasmLogType = inferProcedureOutput<W3bstreamRouter['wasmLogs']>;
+export type UserSettingType = inferProcedureOutput<W3bstreamRouter['userSetting']>;

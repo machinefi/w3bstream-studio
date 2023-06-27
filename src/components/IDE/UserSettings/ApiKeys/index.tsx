@@ -1,14 +1,9 @@
 import { useEffect } from 'react';
-import { Box, Flex, Stack, Input, Button, Text, Divider } from '@chakra-ui/react';
+import { Box, Flex, Stack, Input, Button, Text, Divider, Spinner, Center } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
-import { v4 as uuidv4 } from 'uuid';
-import { axios } from '@/lib/axios';
-import { WidgetProps } from '@rjsf/utils';
-import { eventBus } from '@/lib/event';
-import toast from 'react-hot-toast';
 import JSONTable from '@/components/JSONTable';
 import { hooks } from '@/lib/hooks';
 
@@ -26,6 +21,7 @@ export const ApiKeys = observer(() => {
           size="sm"
           fontWeight={400}
           {...defaultButtonStyle}
+          isLoading={w3s.apiKeys?.createApiKey?.loading?.value}
           onClick={async () => {
             const formData = await hooks.getFormData({
               title: 'Create Api Key',
@@ -36,7 +32,7 @@ export const ApiKeys = observer(() => {
                 }
               ]
             });
-            const res = await w3s.apiKeys.createApiKey(formData);
+            const res = await w3s.apiKeys.createApiKey.call(formData);
           }}
         >
           Create API Key
@@ -49,7 +45,13 @@ export const ApiKeys = observer(() => {
 
       <Divider my="10px" />
 
-      <JSONTable jsonstate={w3s.apiKeys}></JSONTable>
+      {w3s.user.userSetting.loading.value ? (
+        <Center w="full">
+          <Spinner />
+        </Center>
+      ) : (
+        <JSONTable jsonstate={w3s.apiKeys}></JSONTable>
+      )}
     </>
   );
 });

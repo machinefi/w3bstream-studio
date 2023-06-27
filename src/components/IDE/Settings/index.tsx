@@ -9,7 +9,6 @@ import { eventBus } from '@/lib/event';
 import { FaFileExport, FaRegQuestionCircle } from 'react-icons/fa';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { MdEditDocument } from 'react-icons/md';
-import { ApiKeys } from './ApiKeys';
 
 const Settings = () => {
   const {
@@ -139,9 +138,7 @@ const Settings = () => {
         <ProjectEnvs />
       </Box>
 
-      <Box mt="30px" p="20px" border="1px solid #eee" borderRadius="8px">
-        <ApiKeys />
-      </Box>
+
 
       <Box mt="60px" fontSize="16px" fontWeight={700}>
       </Box>

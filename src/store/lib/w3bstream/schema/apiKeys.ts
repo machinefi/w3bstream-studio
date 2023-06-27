@@ -2,11 +2,15 @@ import { JSONValue, JSONSchemaFormState, JSONSchemaTableState } from '@/store/st
 import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { definitions } from './definitions';
-import { ContractLogType } from '@/server/routers/w3bstream';
+import { ContractLogType, UserSettingType } from '@/server/routers/w3bstream';
 import { axios } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { ethers } from 'ethers';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { Box } from '@chakra-ui/react';
+import { helper } from '@/lib/helper';
+import { TruncateStringWithCopy } from '@/components/Common/TruncateStringWithCopy';
 
 export const schema = {
   definitions: {
@@ -18,7 +22,7 @@ export const schema = {
   properties: {
     name: { type: 'string', title: 'Name' },
     expirationDays: { type: 'number', title: 'Expiration Days' },
-    description: { type: 'string', title: 'Description' }
+    desc: { type: 'string', title: 'Description' }
   },
   required: ['name', 'expirationDays']
 } as const;
@@ -36,7 +40,7 @@ export default class ApiKeysModule {
   //   return globalThis.store.w3s.project.curProject?.contractLogs || [];
   // }
 
-  table = new JSONSchemaTableState({
+  table = new JSONSchemaTableState<UserSettingType['apikeys'][0]>({
     columns: [
       {
         key: 'actions',
@@ -47,7 +51,16 @@ export default class ApiKeysModule {
               props: {
                 size: 'xs',
                 ...defaultOutlineButtonStyle,
-                onClick() {}
+                isLoading: this.deleteApikey.loading.value,
+                onClick: () => {
+                  globalThis.store.base.confirm.show({
+                    title: 'Warning',
+                    description: 'Are you sure you want to delete it?',
+                    onOk: async () => {
+                      await this.deleteApikey.call(item.f_name);
+                    }
+                  });
+                }
               },
               text: 'Delete'
             }
@@ -55,23 +68,29 @@ export default class ApiKeysModule {
         }
       },
       {
-        key: 'f_event_type',
+        key: 'f_name',
         label: 'Name'
       },
       {
-        key: 'f_chain_id',
-        label: 'Key'
+        key: 'f_access_key',
+        label: 'Token',
+        render: (item) => {
+          return TruncateStringWithCopy({ fullString: item.f_access_key, strLen: 12 });
+        }
       },
       {
-        key: 'f_contract_address',
-        label: 'expirationDays'
+        key: 'f_expired_at',
+        label: 'Expiration',
+        render: (item) => {
+          return item.f_expired_at ? new Date(Number(item.f_expired_at) * 1000).toLocaleString() : '';
+        }
       },
       {
-        key: 'f_block_start',
+        key: 'f_desc',
         label: 'Description'
       }
     ],
-    rowKey: 'f_contractlog_id',
+    rowKey: 'f_id',
     containerProps: { mt: '10px' }
   });
 
@@ -92,29 +111,33 @@ export default class ApiKeysModule {
       default: {
         name: '',
         expirationDays: 30,
-        description: ''
+        desc: ''
       }
     })
   });
 
-  async createApiKey({ name, expirationDays, description }) {
-    await axios.request({
-      method: 'post',
-      url: `/api/w3bapp/access_key`,
-      data: { name, expirationDays, description }
-    });
+  createApiKey = new PromiseState({
+    function: async (data: { name: string; expirationDays: number; desc: string }) => {
+      await axios.request({
+        method: 'post',
+        url: `/api/w3bapp/access_key`,
+        data
+      });
 
-    toast.success('Created successfully');
-    eventBus.emit('apikey.change');
-  }
+      toast.success('Created successfully');
+      eventBus.emit('userSetting.change');
+    }
+  });
 
-  async deleteApiKey(name: string) {
-    await axios.request({
-      method: 'delete',
-      url: `/api/w3bapp/access_key/${name}`
-    });
+  deleteApikey = new PromiseState({
+    function: async (name: string) => {
+      await axios.request({
+        method: 'delete',
+        url: `/api/w3bapp/access_key/${name}`
+      });
 
-    toast.success('Deleted successfully');
-    eventBus.emit('apikey.change');
-  }
+      toast.success('Deleted successfully');
+      eventBus.emit('userSetting.change');
+    }
+  });
 }

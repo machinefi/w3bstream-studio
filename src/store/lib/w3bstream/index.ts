@@ -52,7 +52,7 @@ export class W3bStream {
 
   showContent: 'METRICS' | 'CURRENT_PUBLISHERS' | 'CURRENT_EVENT_LOGS' | 'EDITOR' | 'DOCKER_LOGS' | 'CONTRACT_LOGS' | 'CHAIN_TX' | 'CHAIN_HEIGHT' | 'SETTINGS' | 'DB_TABLE' = 'METRICS';
 
-  currentHeaderTab: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'FLOW' = 'PROJECTS';
+  currentHeaderTab: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'FLOW' | 'SETTING' = 'PROJECTS';
 
   isReady = false;
 
@@ -177,6 +177,9 @@ export class W3bStream {
       })
       .on('cronJob.delete', async () => {
         this.project.projectDetail.call();
+      })
+      .on('userSetting.change', async () => {
+        this.user.userSetting.call();
       });
   }
 
