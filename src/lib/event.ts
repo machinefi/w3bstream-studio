@@ -49,6 +49,7 @@ interface MessageEvents {
   'flow.run.result': ({ flowId, success, errMsg, extra }: { flowId: string; success: boolean; errMsg?: string; extra?: { [key: string]: any } }) => void;
   'file.change': () => void;
   'sql.change': () => void;
+  'apikey.change': () => void;
   signer: (signer: any) => void;
   provider: (signer: any) => void;
 }

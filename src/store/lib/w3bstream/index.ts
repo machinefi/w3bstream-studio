@@ -22,6 +22,7 @@ import FlowModule from './schema/flow';
 import LabModule from './schema/lab';
 import CronJobModule from './schema/cronJob';
 import ENVModule from './schema/envs';
+import ApiKeysModule from './schema/apiKeys';
 
 configure({
   enforceActions: 'never'
@@ -40,6 +41,7 @@ export class W3bStream {
   postman = new PostmanModule();
   strategy = new StrategyModule();
   contractLogs = new ContractLogModule();
+  apiKeys = new ApiKeysModule();
   chainTx = new ChainTxModule();
   chainHeight = new ChainHeightModule();
   dbTable = new DBTableModule();
@@ -48,17 +50,7 @@ export class W3bStream {
   cronJob = new CronJobModule();
   env = new ENVModule();
 
-  showContent:
-    | 'METRICS'
-    | 'CURRENT_PUBLISHERS'
-    | 'CURRENT_EVENT_LOGS'
-    | 'EDITOR'
-    | 'DOCKER_LOGS'
-    | 'CONTRACT_LOGS'
-    | 'CHAIN_TX'
-    | 'CHAIN_HEIGHT'
-    | 'SETTINGS'
-    | 'DB_TABLE' = 'METRICS';
+  showContent: 'METRICS' | 'CURRENT_PUBLISHERS' | 'CURRENT_EVENT_LOGS' | 'EDITOR' | 'DOCKER_LOGS' | 'CONTRACT_LOGS' | 'CHAIN_TX' | 'CHAIN_HEIGHT' | 'SETTINGS' | 'DB_TABLE' = 'METRICS';
 
   currentHeaderTab: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'FLOW' = 'PROJECTS';
 
