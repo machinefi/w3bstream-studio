@@ -138,6 +138,14 @@ export const helper = {
       } catch (error) {
         return { abi: [], address: '' };
       }
+    },
+    random(count: number) {
+      const chars = 'abcdefghijklmnopqrstuvwxyz';
+      let result = '';
+      for (let i = 0; i < count; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
     }
   },
   number: {

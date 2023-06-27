@@ -109,12 +109,6 @@ const Editor = observer(() => {
             style={{
               display: 'flex'
             }}
-            onMouseEnter={() => {
-              curFilesListSchema.unlockFile();
-            }}
-            onMouseLeave={() => {
-              curFilesListSchema.lockedFile();
-            }}
           >
             {curFilesListSchema?.curActiveFileIs('wasm') ? (
               <Flex flexDirection={'column'} w="full">
@@ -131,7 +125,7 @@ const Editor = observer(() => {
                   </ErrorBoundary>
                 )}
 
-                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env']) && curFilesListSchema?.curActiveFile?.data?.dataType != 'abi' && (
+                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env','as']) && curFilesListSchema?.curActiveFile?.data?.dataType != 'abi' && (
                   <>
                     <Flex flexDirection={'column'} w="full">
                       <MoEditor />

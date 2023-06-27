@@ -43,7 +43,7 @@ export const assemblyScriptExample: FilesItemType = {
     {
       type: 'file',
       key: uuidv4(),
-      label: `json.ts`,
+      label: `json.as`,
       data: {
         dataType: 'assemblyscript',
         code: templatecode['json.ts'],
@@ -64,31 +64,31 @@ export const assemblyScriptExample: FilesItemType = {
     {
       type: 'file',
       key: uuidv4(),
-      label: `log.ts`,
+      label: `log.as`,
       data: { dataType: 'assemblyscript', code: templatecode['log.ts'], language: 'typescript' }
     },
     {
       type: 'file',
       key: uuidv4(),
-      label: `sendTx.ts`,
+      label: `sendTx.as`,
       data: { dataType: 'assemblyscript', code: templatecode['sendTx.ts'], language: 'typescript' }
     },
     {
       type: 'file',
       key: uuidv4(),
-      label: `setDB.ts`,
+      label: `setDB.as`,
       data: { dataType: 'assemblyscript', code: templatecode['setDB.ts'], language: 'typescript' }
     },
     {
       type: 'file',
       key: uuidv4(),
-      label: `sql.ts`,
+      label: `sql.as`,
       data: { dataType: 'assemblyscript', code: templatecode['sql.ts'], language: 'typescript' }
     },
     {
       type: 'file',
       key: uuidv4(),
-      label: `env.ts`,
+      label: `env.as`,
       data: { dataType: 'assemblyscript', code: templatecode['env.ts'], language: 'typescript' }
     }
   ]
