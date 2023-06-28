@@ -2,6 +2,9 @@ import { JSONSchemaFormState, JSONValue } from '@/store/standard/JSONSchemaState
 import { FromSchema } from 'json-schema-to-ts';
 import { axios } from '@/lib/axios';
 import { eventBus } from '@/lib/event';
+import { PromiseState } from '@/store/standard/PromiseState';
+import { trpc } from '@/lib/trpc';
+import { rootStore } from '@/store/index';
 
 export const loginSchema = {
   // title: 'Login',
@@ -77,5 +80,13 @@ export default class UserModule {
         password: ''
       }
     })
+  });
+
+  userSetting = new PromiseState({
+    function: async () => {
+      const res = await trpc.api.userSetting.query();
+      rootStore.w3s.apiKeys.table.dataSource = res.apikeys;
+      return res;
+    }
   });
 }
