@@ -511,13 +511,6 @@ export default class ProjectModule {
         }
       ]
     });
-    // formData.file
-    // {
-    //   "name": "mint_nft_template",
-    //   "description": "",
-    //   "applets": [{ "wasmRaw": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-ts-sdk/main/examples/wasms/mint_nft.wasm", "appletName": "applet_01" }],
-    //   "datas": []
-    // }
     if (formData.file && formData.projectName) {
       const projectData: InitProject = {
         name: formData.projectName,
@@ -547,6 +540,7 @@ export default class ProjectModule {
           }
         });
         if (res.data?.message === 'OK') {
+          console.log(sqlSchema,'json.database.schemas')
           if (sqlSchema) {
             const projectID = res.data.createdProjectIds[0];
             await globalThis.store.w3s.dbTable.importTables({
@@ -555,7 +549,7 @@ export default class ProjectModule {
             });
           }
           eventBus.emit('project.create');
-          eventBus.emit('contractlog.create');
+          // eventBus.emit('contractlog.create');
         }
       } catch (error) {
         console.log('error', error);
@@ -774,6 +768,7 @@ export default class ProjectModule {
             data: body
           });
           const projectID = res.data?.projectID;
+         
           if (projectID) {
             if (json.database?.schemas) {
               await globalThis.store.w3s.dbTable.importTables({

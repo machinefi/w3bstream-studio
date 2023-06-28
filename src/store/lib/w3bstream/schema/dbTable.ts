@@ -762,7 +762,7 @@ export default class DBTableModule {
             projectID,
             schema: t.tableSchema,
             name: t.tableName,
-            comment: t.comment
+            comment: t.comment ?? ''
           });
           const tableId = tableRes.id;
           if (tableId) {

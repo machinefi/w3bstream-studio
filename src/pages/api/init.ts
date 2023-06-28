@@ -116,7 +116,7 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
     }
     throw data;
   } catch (e) {
-    throw new Error('create applet failed');
+    throw new Error(`create applet failed.Cause by "${e.message}"`);
   }
 };
 
