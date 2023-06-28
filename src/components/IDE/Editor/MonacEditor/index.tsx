@@ -25,25 +25,24 @@ export const MoEditor = observer((props: any) => {
     });
   }
   return (
-    <>
-      <MonacoEditor
-        options={{
-          minimap: {
-            enabled: false
-          }
-        }}
-        width={'100%'}
-        height={'100%'}
-        key={curFilesListSchema?.curActiveFile.data?.language}
-        theme="vs-dark"
-        defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
-        language={curFilesListSchema?.curActiveFile.data?.language}
-        defaultValue="export function test(): void {}"
-        value={curFilesListSchema?.curActiveFile?.data?.code}
-        beforeMount={(monaco) => {}}
-        onMount={async (editor, monaco) => {
-          monaco.languages.typescript.typescriptDefaults.addExtraLib(
-            `
+    <MonacoEditor
+      options={{
+        minimap: {
+          enabled: false
+        }
+      }}
+      width={'100%'}
+      height={'100%'}
+      key={curFilesListSchema?.curActiveFile.data?.language}
+      theme="vs-dark"
+      defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}
+      language={curFilesListSchema?.curActiveFile.data?.language}
+      defaultValue="export function test(): void {}"
+      value={curFilesListSchema?.curActiveFile?.data?.code}
+      beforeMount={(monaco) => {}}
+      onMount={async (editor, monaco) => {
+        monaco.languages.typescript.typescriptDefaults.addExtraLib(
+          `
       declare const Log: (message: string | { [x: string]: any }) => void;
       declare const SetDB: (key: string, value: number) => void;
       declare const GetDB: (key: string) => string;
@@ -78,16 +77,15 @@ export const MoEditor = observer((props: any) => {
         async getData(query?: string): { [x: string]: any };
       }
       `,
-            'sdk/index.d.ts'
-          );
-          monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
-          if (await asc()) monaco.languages.typescript.typescriptDefaults.addExtraLib((await asc()).definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
-        }}
-        onChange={(e) => {
-          curFilesListSchema.setCurFileCode(e);
-        }}
-        {...props}
-      />
-    </>
+          'sdk/index.d.ts'
+        );
+        monaco.languages.typescript.typescriptDefaults.addExtraLib(assemblyscriptJSONDTS, 'assemblyscript-json/index.d.ts');
+        if (await asc()) monaco.languages.typescript.typescriptDefaults.addExtraLib((await asc()).definitionFiles.assembly, 'assemblyscript/std/assembly/index.d.ts');
+      }}
+      onChange={(e) => {
+        curFilesListSchema.setCurFileCode(e);
+      }}
+      {...props}
+    />
   );
 });

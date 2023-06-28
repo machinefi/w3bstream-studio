@@ -76,10 +76,10 @@ export const DBpanel = observer(() => {
   }, [curFilesListSchema.curActiveFile]);
 
   return (
-    <Box mt={2} bg="white">
+    <Box mt={2} bg="white" h="full" borderRadius={'0 0 8px 0'}>
       {sqlDB.tables.length > 0 && (
         <>
-          <Flex align="center">
+          <Flex align="center" mt={2}>
             <Input placeholder="write sql here" w="96%" value={store.sql} onChange={(e) => (store.sql = e.target.value)}></Input>
             <VscDebugStart
               style={{ marginLeft: 'auto', marginRight: '10px' }}

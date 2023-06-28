@@ -90,24 +90,19 @@ const Editor = observer(() => {
         console.log(error);
         toast.error(t('success.compile.msg'));
       }
-    },
-    get currentEidtorHeight() {
-      if (boxRef?.current?.clientHeight) {
-        return boxRef?.current?.clientHeight - 20;
-      }
     }
   }));
 
   if (!curFilesListSchema?.curActiveFile) return <EditorEmptyArea />;
   return (
     <ReactSplit direction={SplitDirection.Vertical} initialSizes={[70, 30]}>
-      <Box ref={boxRef} h={'full'}>
+      <Box ref={boxRef} h="full" w="full">
         {/* Active Bar Headers  */}
         {/* {boxRef.current?.clientHeight} */}
         <EditorTopBarIcons />
         {/* Editor Body  */}
         {curFilesListSchema?.curActiveFile && (
-          <Flex>
+          <Flex h="full" w="full">
             {curFilesListSchema?.curActiveFileIs('wasm') ? (
               <Flex flexDirection={'column'} w="full">
                 <Center bg={'#1e1e1e'} width={'100%'} height={300} color="white">
@@ -116,17 +111,15 @@ const Editor = observer(() => {
                 <ConsolePanel />
               </Flex>
             ) : (
-              <>
+              <Box h="calc(100% - 40px)" w="full">
                 {curFilesListSchema?.curActiveFileIs('flow') && (
                   <ErrorBoundary fallback={<FlowErrorFallback />}>
                     <Flow />
                   </ErrorBoundary>
                 )}
-                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env', 'as']) && curFilesListSchema?.curActiveFile?.data?.dataType != 'abi' && (
-                  <MoEditor height={store.currentEidtorHeight} />
-                )}
-                {curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' && <MoEditor height={store.currentEidtorHeight} />}
-              </>
+                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env', 'as']) && curFilesListSchema?.curActiveFile?.data?.dataType != 'abi' && <MoEditor />}
+                {curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' && <MoEditor />}
+              </Box>
             )}
           </Flex>
         )}
