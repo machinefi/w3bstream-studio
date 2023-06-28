@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { FilesItem } from './filesItem';
 import Editor from '../Editor';
 import { useStore } from '@/store/index';
+import ReactSplit, { SplitDirection } from '@devbookhq/splitter';
 
 export const asc = async () => {
   return await import('assemblyscript/dist/asc');
@@ -21,12 +22,14 @@ const Labs = () => {
   }, []);
   return (
     <Flex w="100%" alignItems={'stretch'} height="calc(100vh - 96px)">
-      <Box minW="248px" color={'#fff'} h="100%" bg="#2f3030" p="20px 10px" borderRadius={'8px 0px 0px 8px'} overflowY="auto">
-        <FilesItem />
-      </Box>
-      <Box w="100%" h="100%" bg="#1e1e1e" borderRadius="8px">
-        <Editor />
-      </Box>
+      <ReactSplit initialSizes={[20,80]} direction={SplitDirection.Horizontal}>
+        <Box minW="248px" color={'#fff'} h="100%" bg="#2f3030" p="20px 10px" borderRadius={'8px 0px 0px 8px'} overflowY="auto">
+          <FilesItem />
+        </Box>
+        <Box w="100%" h="100%" bg="#1e1e1e" borderRadius="0 8px 8px 0">
+          <Editor />
+        </Box>
+      </ReactSplit>
     </Flex>
   );
 };

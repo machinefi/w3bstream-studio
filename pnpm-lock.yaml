@@ -13,6 +13,9 @@ dependencies:
   '@chakra-ui/react':
     specifier: 2.6.1
     version: 2.6.1(@emotion/react@11.10.4)(@emotion/styled@11.10.4)(@types/react@17.0.0)(framer-motion@7.5.3)(react-dom@18.2.0)(react@18.2.0)
+  '@devbookhq/splitter':
+    specifier: ^1.4.0
+    version: 1.4.0
   '@emotion/core':
     specifier: 11.0.0
     version: 11.0.0
@@ -3119,6 +3122,12 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+    dev: false
+
+  /@devbookhq/splitter@1.4.0:
+    resolution: {integrity: sha512-/Wfh8YqbV9o0Dm2tNOshulZKGmN1ObcUYU0qsc8h1OlcvX62YGcINWRH9zZN70zGK7EflDkyiNPR5u7wOyY0Vg==}
+    dependencies:
+      react-is: 17.0.2
     dev: false
 
   /@emotion/babel-plugin@11.11.0:

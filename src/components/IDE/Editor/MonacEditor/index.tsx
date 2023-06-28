@@ -33,7 +33,7 @@ export const MoEditor = observer((props: any) => {
           }
         }}
         width={'100%'}
-        height={500}
+        height={'100%'}
         key={curFilesListSchema?.curActiveFile.data?.language}
         theme="vs-dark"
         defaultLanguage={curFilesListSchema?.curActiveFile.data?.language}

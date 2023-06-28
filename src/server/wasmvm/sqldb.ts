@@ -200,7 +200,7 @@ export class SqlDB {
     const sql = `SELECT name FROM sqlite_master WHERE type='table'`;
     const res = this.db.exec(sql);
     const tables = [];
-    res[0].values.forEach((value) => {
+    res?.[0]?.values?.forEach((value) => {
       const tableName = value[0];
       if (tableName == 'sqlite_sequence') {
         return;
