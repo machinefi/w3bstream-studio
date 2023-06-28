@@ -107,7 +107,13 @@ export const templatecode = {
   </script>
   `,
   'json.ts': `
-//sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+/**
+ * This file is written in AssemblyScript,
+ * which is a subset of TypeScript that compiles to WebAssembly.
+ * You can refer to https://www.assemblyscript.org/introduction.html for the specific syntax.
+ * The SDK used in this file is w3bstream's SDK, which provides a w3bstream interface to stream data.
+ * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
+ */
 export function start(rid: i32): i32 {
   Log(rid.toString());
   const message = GetDataByRID(rid);
@@ -148,7 +154,13 @@ export function start(rid: i32): i32 {
 }
   `,
   'log.ts': `
-  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+  /**
+   * This file is written in AssemblyScript,
+   * which is a subset of TypeScript that compiles to WebAssembly.
+   * You can refer to https://www.assemblyscript.org/introduction.html for the specific syntax.
+   * The SDK used in this file is w3bstream's SDK, which provides a w3bstream interface to stream data.
+   * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
+   */
   export function start(rid: i32): i32 {
     Log("start from typescript");
     const message = GetDataByRID(rid);
@@ -157,7 +169,13 @@ export function start(rid: i32): i32 {
   }
   `,
   'sendTx.ts': `
-//sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+  /**
+   * This file is written in AssemblyScript,
+   * which is a subset of TypeScript that compiles to WebAssembly.
+   * You can refer to https://www.assemblyscript.org/introduction.html for the specific syntax.
+   * The SDK used in this file is w3bstream's SDK, which provides a w3bstream interface to stream data.
+   * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
+   */
 export function start(rid: i32): i32 {
   Log("Log:start from typescript123");
   const ERC20Addr = "0xa00744882684c3e4747faefd68d283ea44099d03";
@@ -174,7 +192,13 @@ export function start(rid: i32): i32 {
 }
 `,
   'setDB.ts': `
-  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+  /**
+ * This file is written in AssemblyScript,
+ * which is a subset of TypeScript that compiles to WebAssembly.
+ * You can refer to https://www.assemblyscript.org/introduction.html for the specific syntax.
+ * The SDK used in this file is w3bstream's SDK, which provides a w3bstream interface to stream data.
+ * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
+ */
    export function start(rid: i32): i32 {
      Log("Log:start from typescript123");
      SetDB("count",1);
@@ -186,6 +210,13 @@ export function start(rid: i32): i32 {
    }
   `,
   'sql.ts': `
+  /**
+ * This file is written in AssemblyScript,
+ * which is a subset of TypeScript that compiles to WebAssembly.
+ * You can refer to https://www.assemblyscript.org/introduction.html for the specific syntax.
+ * The SDK used in this file is w3bstream's SDK, which provides a w3bstream interface to stream data.
+ * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
+ */
   export function start(rid: i32): i32 {
     const value = ExecSQL(\`INSERT INTO "t_log" (number,text,boolean) VALUES (?,?,?);\`, [new SQL.Int32(1), new SQL.String("test"),new SQL.Bool(false)]);
     const res = QuerySQL(\`SELECT * FROM "t_log";\`);
@@ -193,7 +224,13 @@ export function start(rid: i32): i32 {
   }
   `,
   'env.ts': `
-  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk
+  /**
+   * This file is written in AssemblyScript,
+   * which is a subset of TypeScript that compiles to WebAssembly.
+   * You can refer to https://www.assemblyscript.org/introduction.html for the specific syntax.
+   * The SDK used in this file is w3bstream's SDK, which provides a w3bstream interface to stream data.
+   * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
+   */
   export function start(rid: i32): i32 {
     Log(rid.toString());
     const message = GetDataByRID(rid);

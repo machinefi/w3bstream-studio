@@ -200,7 +200,7 @@ export class SqlDB {
     const sql = `SELECT name FROM sqlite_master WHERE type='table'`;
     const res = this.db.exec(sql);
     const tables = [];
-    res[0].values.forEach((value) => {
+    res?.[0]?.values?.forEach((value) => {
       const tableName = value[0];
       if (tableName == 'sqlite_sequence') {
         return;
@@ -208,6 +208,9 @@ export class SqlDB {
       const columnRes = this.db.exec(`PRAGMA table_info(${tableName})`);
       const columnNames = columnRes[0].values.map((value) => {
         return value[1];
+      });
+      const columnTypes = columnRes[0].values.map((value) => {
+        return value[2];
       });
       const res = this.db.exec(`SELECT * FROM ${tableName}`);
       const dataSource: { [key: string]: any }[] = [];
@@ -220,15 +223,31 @@ export class SqlDB {
           dataSource.push(obj);
         });
       }
-
+      // "INT"	integer
+      // "INT8"	integer
+      // "INT16"	integer
+      // "INT32"	integer
+      // "INT64"	bigint
+      // "UINT"	integer
+      // "UINT8"	integer
+      // "UINT16"	integer
+      // "UINT32"	integer
+      // "UINT64"	bigint
+      // "FLOAT32"	real
+      // "FLOAT64"	double precision
+      // "TEXT"	character varying
+      // "BOOL"	boolean
+      // "TIMESTAMP"	bigint
+      // "DECIMAL"	numeric
+      // "NUMERIC"	numeric
       tables.push({
         tableName,
         table: new JSONSchemaTableState<any>({
           dataSource,
-          columns: columnNames.map((i) => {
+          columns: columnNames.map((i, index) => {
             return {
               key: i,
-              label: i
+              label: i + `(${columnTypes[index]})`
             };
           })
         })

@@ -32,7 +32,13 @@ export const EditorEmptyArea = observer(() => {
           if (!formData.template) {
             return toast.error('Please select a template!');
           }
-          projectManager.curFilesListSchema.createFileFormFolder(projectManager.curFilesList[0], 'file', helper.json.safeParse(formData.template) ?? null);
+          const template = helper.json.safeParse(formData.template) ?? null;
+          if (template && !template?.label?.startsWith('.')) {
+            const [firstWord, ...rest] = template.label.split('.');
+            const newFileName = `${firstWord}_${helper.string.random(4)}.${rest.join('.')}`;
+            template.label = newFileName;
+          }
+          projectManager.curFilesListSchema.createFileFormFolder(projectManager.curFilesList[0], 'file', template);
         }}
       >
         New File

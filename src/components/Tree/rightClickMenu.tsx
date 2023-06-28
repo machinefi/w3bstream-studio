@@ -50,7 +50,13 @@ export const RightClickMenu = observer(({ item }: { item: FilesItemType }) => {
           if (!formData.template) {
             return toast.error('Please select a template!');
           }
-          w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', helper.json.safeParse(formData.template) ?? null);
+          const template = helper.json.safeParse(formData.template) ?? null;
+          if (template && !template?.label?.startsWith('.')) {
+            const [firstWord, ...rest] = template.label.split('.');
+            const newFileName = `${firstWord}_${helper.string.random(4)}.${rest.join('.')}`;
+            template.label = newFileName;
+          }
+          w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'file', template);
         }
       },
       {
@@ -79,7 +85,7 @@ export const RightClickMenu = observer(({ item }: { item: FilesItemType }) => {
         }
       },
       {
-        name: 'Upload File',
+        name: 'Upload WASM',
         icon: <VscFileSymlinkFile />,
         onClick: async (item) => {
           const formData = await hooks.getFormData({
@@ -107,6 +113,33 @@ export const RightClickMenu = observer(({ item }: { item: FilesItemType }) => {
         }
       },
       {
+        name: 'Import File',
+        icon: <VscFileSymlinkFile />,
+        onClick: async (item) => {
+          const formData = await hooks.getFormData({
+            title: 'Upload a File',
+            size: '2xl',
+            formList: [
+              {
+                form: w3s.lab.uploadProjectForm
+              }
+            ]
+          });
+          const fileInfo = formData.file.match(/name=(.*);base64,(.*)$/);
+          const fileName = fileInfo?.[1];
+          const fileData = fileInfo?.[2];
+          console.log(fileName, atob(fileData));
+          try {
+            const res = helper.json.safeParse(atob(fileData));
+            if (res && res.fileType == 'w3bstream.file.schema') {
+              w3s.projectManager.curFilesListSchema.createFileFormFolder(item, res?.type ?? 'file', res);
+            }
+          } catch (error) {
+            toast.error('Import project error');
+          }
+        }
+      },
+      {
         name: 'New Folder',
         icon: <VscFolder />,
         onClick: (item) => w3s.projectManager.curFilesListSchema.createFileFormFolder(item, 'folder')
@@ -129,7 +162,7 @@ export const RightClickMenu = observer(({ item }: { item: FilesItemType }) => {
         icon: <VscCloudDownload />,
         onClick: (item) => {
           //download json file
-          console.log(toJS(item));
+          item.fileType = 'w3bstream.file.schema';
           const dataStr = JSON.stringify(toJS(item));
           const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
           const exportFileDefaultName = item.label + '.json';
@@ -163,7 +196,8 @@ export const RightClickMenu = observer(({ item }: { item: FilesItemType }) => {
         icon: <VscCloudDownload />,
         onClick: (item) => {
           //download json file
-          const dataStr = JSON.stringify(item.data);
+          item.fileType = 'w3bstream.file.schema';
+          const dataStr = JSON.stringify(item);
           const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
           const exportFileDefaultName = item.label + '.json';
           const linkElement = document.createElement('a');

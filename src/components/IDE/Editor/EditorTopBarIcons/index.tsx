@@ -75,6 +75,9 @@ export const EditorTopBarIcons = observer(() => {
               <ContextMenuTrigger id={`ActiveFileContent${i?.key}`} holdToDisplay={-1}>
                 {i?.label && (
                   <Box
+                    _hover={{
+                      opacity: 0.8
+                    }}
                     w="max-content"
                     whiteSpace={'nowrap'}
                     onClick={() => {

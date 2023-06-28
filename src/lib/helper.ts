@@ -86,6 +86,27 @@ export const helper = {
     }
   },
   json: {
+    safeResult(a) {
+      if (typeof a === 'bigint') {
+        return a.toString();
+      } else if (Array.isArray(a)) {
+        return a.map((item) => helper.json.safeResult(item));
+      } else if (typeof a === 'object') {
+        const newObj = {};
+        for (const [key, value] of Object.entries(a)) {
+          if (typeof value === 'bigint') {
+            newObj[key] = value.toString();
+          } else if (Array.isArray(value) || typeof value === 'object') {
+            newObj[key] = helper.json.safeResult(value);
+          } else {
+            newObj[key] = value;
+          }
+        }
+        return newObj;
+      } else {
+        return a;
+      }
+    },
     safeParse(val: any) {
       try {
         return JSON.parse(val);
@@ -138,6 +159,14 @@ export const helper = {
       } catch (error) {
         return { abi: [], address: '' };
       }
+    },
+    random(count: number) {
+      const chars = 'abcdefghijklmnopqrstuvwxyz';
+      let result = '';
+      for (let i = 0; i < count; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
     }
   },
   number: {

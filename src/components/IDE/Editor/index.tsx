@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { Box, Center, Flex } from '@chakra-ui/react';
@@ -17,6 +17,7 @@ import { compileAssemblyscript } from './EditorFunctions';
 import { EditorTopBarIcons } from './EditorTopBarIcons';
 import { MoEditor } from './MonacEditor';
 import { EditorEmptyArea } from './EditorEmptyArea';
+import ReactSplit, { SplitDirection } from '@devbookhq/splitter';
 
 const Editor = observer(() => {
   const {
@@ -44,7 +45,7 @@ const Editor = observer(() => {
       window.removeEventListener('keydown', handleSave);
     };
   }, []);
-
+  const boxRef = useRef(null);
   const store = useLocalObservable(() => ({
     curPreviewRawData: null,
     lockFile: true,
@@ -84,38 +85,29 @@ const Editor = observer(() => {
           currentFolder.children[curWasmIndex] = wasmFile;
         }
         curFilesListSchema.setActiveFiles(wasmFile);
-        toast.success(t("error.compile.msg"));
+        toast.success(t('error.compile.msg'));
       } catch (error) {
         console.log(error);
-        toast.error(t("success.compile.msg"));
+        toast.error(t('success.compile.msg'));
+      }
+    },
+    get currentEidtorHeight() {
+      if (boxRef?.current?.clientHeight) {
+        return boxRef?.current?.clientHeight - 20;
       }
     }
   }));
 
+  if (!curFilesListSchema?.curActiveFile) return <EditorEmptyArea />;
   return (
-    <Box>
-      {/* Active Bar Headers  */}
-      <EditorTopBarIcons />
-      {/* Editor Body  */}
-      {curFilesListSchema?.curActiveFile && (
-        <main
-          style={{
-            minHeight: '100%',
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-        >
-          <div
-            style={{
-              display: 'flex'
-            }}
-            onMouseEnter={() => {
-              curFilesListSchema.unlockFile();
-            }}
-            onMouseLeave={() => {
-              curFilesListSchema.lockedFile();
-            }}
-          >
+    <ReactSplit direction={SplitDirection.Vertical} initialSizes={[70, 30]}>
+      <Box ref={boxRef} h={'full'}>
+        {/* Active Bar Headers  */}
+        {/* {boxRef.current?.clientHeight} */}
+        <EditorTopBarIcons />
+        {/* Editor Body  */}
+        {curFilesListSchema?.curActiveFile && (
+          <Flex>
             {curFilesListSchema?.curActiveFileIs('wasm') ? (
               <Flex flexDirection={'column'} w="full">
                 <Center bg={'#1e1e1e'} width={'100%'} height={300} color="white">
@@ -130,33 +122,27 @@ const Editor = observer(() => {
                     <Flow />
                   </ErrorBoundary>
                 )}
-
-                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env']) && curFilesListSchema?.curActiveFile?.data?.dataType != 'abi' && (
-                  <>
-                    <Flex flexDirection={'column'} w="full">
-                      <MoEditor />
-                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && <ConsolePanel />}
-                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'sql' && <DBpanel />}
-                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'simulation' && <ConsolePanel />}
-                      {curFilesListSchema?.curActiveFile?.data?.dataType == 'demo' && <ConsolePanel />}
-                    </Flex>
-                  </>
+                {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env', 'as']) && curFilesListSchema?.curActiveFile?.data?.dataType != 'abi' && (
+                  <MoEditor height={store.currentEidtorHeight} />
                 )}
-
-                {curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' && (
-                  <Flex flexDirection={'row'} width="calc(100vw - 380px)" ml="auto" h="calc(100vh - 190px)">
-                    <MoEditor height="auto" w="50%" />
-                    <ABIPanel />
-                  </Flex>
-                )}
+                {curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' && <MoEditor height={store.currentEidtorHeight} />}
               </>
             )}
-          </div>
-        </main>
+          </Flex>
+        )}
+      </Box>
+
+      {curFilesListSchema?.curActiveFileIs(['ts', 'json', 'wasm', 'env', 'as']) && curFilesListSchema?.curActiveFile?.data?.dataType != 'abi' && (
+        <>
+          {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && <ConsolePanel />}
+          {curFilesListSchema?.curActiveFile?.data?.dataType == 'sql' && <DBpanel />}
+          {curFilesListSchema?.curActiveFile?.data?.dataType == 'simulation' && <ConsolePanel />}
+          {curFilesListSchema?.curActiveFile?.data?.dataType == 'demo' && <ConsolePanel />}
+        </>
       )}
 
-      {!curFilesListSchema?.curActiveFile && <EditorEmptyArea />}
-    </Box>
+      {curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' && <ABIPanel />}
+    </ReactSplit>
   );
 });
 

@@ -119,7 +119,7 @@ export const DBpanel = observer(() => {
                     <SmallCloseIcon
                       _hover={{ bg: '#3f3f3f' }}
                       color="#e1e8f0"
-                      ml="auto"
+                      ml="2"
                       onClick={(e) => {
                         e.stopPropagation();
                         sqlDB.deleteTable(i.tableName);

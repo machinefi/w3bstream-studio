@@ -168,9 +168,9 @@ export class FilesListSchema {
 
   curActiveFileIs(label: string | string[]) {
     if (Array.isArray(label)) {
-      return label.some((i) => this.curActiveFile?.label.endsWith(`.${i}`));
+      return label.some((i) => this.curActiveFile?.label?.endsWith(`.${i}`));
     }
-    return this?.curActiveFile?.label.endsWith(`.${label}`);
+    return this?.curActiveFile?.label?.endsWith(`.${label}`);
   }
 
   regenFileKey(file: FilesItemType) {
@@ -298,7 +298,6 @@ export class FilesListSchema {
   }
 
   setCurFileCode(code: string) {
-    if (this.lockFile) return;
     this.curActiveFile.data.code = code;
     _.debounce(() => {
       this.syncToIndexDb();

@@ -19,7 +19,7 @@ export const labExamples: FilesItemType[] = [
       {
         type: 'file',
         key: '36b173d3-2258-4db5-a4f4-1284c0f5ba4b',
-        label: 'index.ts',
+        label: 'index.as',
         data: {
           dataType: 'assemblyscript',
           code: '\n  //sdk docs:https://github.com/machinefi/w3bstream-wasm-ts-sdk\n  export function start(rid: i32): i32 {\n    const message = GetDataByRID(rid);\n    const deviceName = GetEnv(\'DEVICE_NAME\');\n    Log("wasm received message:" + message);\n    Log("deviceName:" + deviceName)\n    let JSONMessage: JSON.Obj = JSON.parse(message) as JSON.Obj;\n    let snr: JSON.Integer | null = JSONMessage.getInteger("snr");\n    let latitude: JSON.Float | null = JSONMessage.getFloat("latitude");\n    let longitude: JSON.Float | null = JSONMessage.getFloat("longitude");\n    let temperature: JSON.Integer | null = JSONMessage.getInteger("temperature");\n    if(snr && latitude && longitude && temperature){\n      let _snr:i64 = snr.valueOf();\n      let _latitude:f64 = latitude.valueOf();\n      let _longitude:f64 = longitude.valueOf();\n      let _temperature:i64 = temperature.valueOf();\n      Log(_snr.toString());\n      Log(_latitude.toString());\n      Log(_longitude.toString());\n      Log(_temperature.toString());\n\n      ExecSQL("INSERT INTO t_iot (snr,lat,long,temperature) VALUES (?,?,?,?);",[new SQL.Int64(_snr),new SQL.Float64(_latitude),new SQL.Float64(_longitude),new SQL.Int64(_temperature)])\n    }\n  \n    // if()\n    return 0;\n  }\n  ',

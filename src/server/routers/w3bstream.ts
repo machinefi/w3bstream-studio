@@ -1,6 +1,7 @@
 import { authProcedure, t } from '../trpc';
 import { z } from 'zod';
 import { inferProcedureOutput } from '@trpc/server';
+import { helper } from '@/lib/helper';
 
 export const w3bstreamRouter = t.router({
   projects: authProcedure.query(async ({ ctx }) => {
@@ -226,6 +227,41 @@ export const w3bstreamRouter = t.router({
       });
 
       return projects;
+    }),
+  publishers: authProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/publishers'
+      }
+    })
+    .input(
+      z.object({
+        projectID: z.string(),
+        name: z.string().optional()
+      })
+    )
+    .output(z.any())
+    .query(async ({ ctx, input }) => {
+      const publishers = await ctx.prisma.t_publisher.findMany({
+        where: {
+          f_project_id: {
+            equals: BigInt(input.projectID)
+          },
+          f_name: {
+            contains: input.name
+          }
+        },
+        select: {
+          f_project_id: true,
+          f_publisher_id: true,
+          f_name: true,
+          f_key: true,
+          f_created_at: true,
+          f_token: true
+        }
+      });
+      return { result: helper.json.safeResult(publishers), ok: true };
     }),
   wasmLogs: authProcedure
     .input(

@@ -194,6 +194,39 @@ export default class LabModule {
     })
   });
 
+  uploadProjectForm = new JSONSchemaFormState<UploadWasmTemplateFormSchemaType>({
+    //@ts-ignore
+    schema: uploadWasmTemplateFormSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+      file: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          accept: {
+            'application/json': ['.json']
+          },
+          tips: `JSON File Upload`,
+          flexProps: {
+            h: '200px',
+            borderRadius: '8px'
+          }
+        }
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.uploadWasmForm.reset();
+    },
+    value: new JSONValue<UploadWasmTemplateFormSchemaType>({
+      default: {
+        file: ''
+      }
+    })
+  });
+
   constructor() {
     makeObservable(this, {
       stdout: observable,

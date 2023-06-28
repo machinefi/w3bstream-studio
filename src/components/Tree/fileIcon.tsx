@@ -18,7 +18,9 @@ export const FileIcon = (file: FilesItemType) => {
     return <Image {...s} src="/images/icons/html.svg"></Image>;
   } else if (file?.label?.endsWith('.ts')) {
     return <Image {...s} src="/images/icons/typescript.svg"></Image>;
-  } else if (file?.label?.endsWith('.wasm')) {
+  } else if (file?.label?.endsWith('.as')) {
+    return <Image {...s} src="/images/icons/assemblyscript.svg" w={4} h={4}></Image>;
+  }else if (file?.label?.endsWith('.wasm')) {
     return <Image {...s} src="/images/icons/assembly.svg"></Image>;
   } else if (file?.label?.endsWith('.flow')) {
     return <Image {...s} src="/images/icons/tree.svg"></Image>;
