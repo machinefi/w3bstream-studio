@@ -29,6 +29,10 @@ const DynamicSupport = dynamic(() => import('./Support'), {
   ssr: false
 });
 
+const DynamicUserSettings = dynamic(() => import('./UserSettings'), {
+  ssr: false
+});
+
 const IDE = observer(() => {
   const {
     w3s,
@@ -43,6 +47,7 @@ const IDE = observer(() => {
         {w3s.currentHeaderTab === 'LABS' && <DynamicLabs />}
         {w3s.currentHeaderTab === 'FLOW' && <DynamicFlow />}
         {w3s.currentHeaderTab === 'SUPPORT' && <DynamicSupport />}
+        {w3s.currentHeaderTab === 'SETTING' && <DynamicUserSettings />}
       </Box>
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />
       <JSONModal />

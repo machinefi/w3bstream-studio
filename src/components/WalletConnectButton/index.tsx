@@ -12,6 +12,8 @@ import { useEffect } from 'react';
 import { eventBus } from '@/lib/event';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import toast from 'react-hot-toast';
+import { BiLogOut } from 'react-icons/bi';
+import { MdSettings } from 'react-icons/md';
 
 interface WalletConnectButtonProps {
   name?: string;
@@ -173,8 +175,22 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
               onClick={async () => {
                 wallet.disconnect();
               }}
+              leftIcon={<BiLogOut />}
             >
               Sign out
+            </Button>
+
+            <Button
+              w="100%"
+              size="sm"
+              ml={2}
+              {...defaultOutlineButtonStyle}
+              onClick={async () => {
+                w3s.currentHeaderTab = 'SETTING';
+              }}
+              leftIcon={<MdSettings />}
+            >
+              Setting
             </Button>
           </Flex>
         </PopoverBody>
