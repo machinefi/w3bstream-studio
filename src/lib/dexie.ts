@@ -7,7 +7,6 @@ export interface Files {
   data: FilesListSchema;
 }
 
-
 export interface Kvs {
   key: string;
   value: string;
@@ -27,6 +26,10 @@ class IndexDatabase extends Dexie {
 
   findFilesById(id: string) {
     return this.files.filter((i) => i.id == id).toArray();
+  }
+
+  clearFiles() {
+    return this.files.clear();
   }
 }
 export const IndexDb = new IndexDatabase();
