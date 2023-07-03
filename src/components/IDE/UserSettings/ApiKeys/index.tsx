@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
-import { Box, Flex, Stack, Input, Button, Text, Divider, Spinner, Center } from '@chakra-ui/react';
+import { Box, Flex, Stack, Input, Button, Text, Divider, Spinner, Center, Alert, AlertIcon, CloseButton } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import JSONTable from '@/components/JSONTable';
 import { hooks } from '@/lib/hooks';
+import { TruncateStringWithCopy } from '@/components/Common/TruncateStringWithCopy';
 
 export const ApiKeys = observer(() => {
   const { w3s } = useStore();
+  useEffect(() => {
+    w3s.apiKeys.apikey = null;
+  }, []);
   return (
     <>
       <Flex>
@@ -42,6 +46,24 @@ export const ApiKeys = observer(() => {
       <Text fontSize="14px" color="#7a7a7a">
         Create your api keys
       </Text>
+
+      {w3s.apiKeys.apikey && (
+        <Alert background="#efe9ff" mt={2} status="success" borderRadius={4} flexDirection={'column'} display={'flex'} alignItems={'left'}>
+          <Flex>
+            <Text fontWeight={700}> Make sure to copy your personal access token now as you will not be able to see this again.</Text>
+            {/* <CloseButton
+              ml="auto"
+              onClick={(e) => {
+                w3s.apiKeys.apikey = null;
+                console.log(w3s.apiKeys.apikey);
+              }}
+            /> */}
+          </Flex>
+          <Divider my="5px" />
+          <Flex>Name: {w3s.apiKeys.apikey?.name}</Flex>
+          <TruncateStringWithCopy fullString={w3s.apiKeys.apikey?.accessKey} strLen={60} />
+        </Alert>
+      )}
 
       <Divider my="10px" />
 
