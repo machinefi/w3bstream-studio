@@ -15,13 +15,19 @@ import { TruncateStringWithCopy } from '@/components/Common/TruncateStringWithCo
 export const schema = {
   definitions: {
     projects: {
-      type: 'string'
+      type: 'string',
+      get enum() {
+        return ['0', '7', '30', '90', '180', '365'];
+      },
+      get enumNames() {
+        return ['Forever', '7 days', '30 days', '90 days', '180 days', '365 days'];
+      }
     }
   },
   type: 'object',
   properties: {
     name: { type: 'string', title: 'Name' },
-    expirationDays: { type: 'number', title: 'Expiration Days' },
+    expirationDays: { $ref: '#/definitions/projects', title: 'Expiration Days' },
     desc: { type: 'string', title: 'Description' }
   },
   required: ['name', 'expirationDays']
@@ -29,16 +35,17 @@ export const schema = {
 
 type SchemaType = FromSchema<typeof schema>;
 
-//@ts-ignore
-schema.definitions = {
-  projects: definitions.projectName,
-  blockChains: definitions.blockChains
-};
+// //@ts-ignore
+// schema.definitions = {
+//   projects: definitions.projectName,
+//   blockChains: definitions.blockChains
+// };
 
 export default class ApiKeysModule {
   // get curProjectContractLogs() {
   //   return globalThis.store.w3s.project.curProject?.contractLogs || [];
   // }
+  apikey = null;
 
   table = new JSONSchemaTableState<UserSettingType['apikeys'][0]>({
     columns: [
@@ -72,17 +79,10 @@ export default class ApiKeysModule {
         label: 'Name'
       },
       {
-        key: 'f_access_key',
-        label: 'Token',
-        render: (item) => {
-          return TruncateStringWithCopy({ fullString: item.f_access_key, strLen: 12 });
-        }
-      },
-      {
         key: 'f_expired_at',
         label: 'Expiration',
         render: (item) => {
-          return item.f_expired_at ? new Date(Number(item.f_expired_at) * 1000).toLocaleString() : '';
+          return Number(item.f_expired_at) != 0 ? new Date(Number(item.f_expired_at) * 1000).toLocaleString() : 'Forever';
         }
       },
       {
@@ -110,7 +110,7 @@ export default class ApiKeysModule {
     value: new JSONValue<SchemaType>({
       default: {
         name: '',
-        expirationDays: 30,
+        expirationDays: '0',
         desc: ''
       }
     })
@@ -118,12 +118,14 @@ export default class ApiKeysModule {
 
   createApiKey = new PromiseState({
     function: async (data: { name: string; expirationDays: number; desc: string }) => {
-      await axios.request({
+      data.expirationDays = Number(data.expirationDays);
+      const res = await axios.request({
         method: 'post',
-        url: `/api/w3bapp/access_key`,
+        url: `/api/w3bapp/account_access_key`,
         data
       });
-
+      console.log(res);
+      this.apikey = res.data;
       toast.success('Created successfully');
       eventBus.emit('userSetting.change');
     }
@@ -133,11 +135,22 @@ export default class ApiKeysModule {
     function: async (name: string) => {
       await axios.request({
         method: 'delete',
-        url: `/api/w3bapp/access_key/${name}`
+        url: `/api/w3bapp/account_access_key/${name}`
       });
 
       toast.success('Deleted successfully');
       eventBus.emit('userSetting.change');
+    }
+  });
+
+  listApikey = new PromiseState({
+    function: async () => {
+      const res = await axios.request({
+        method: 'GET',
+        url: `/api/w3bapp/accont_access_key/datalist`
+      });
+      console.log(res);
+      return res;
     }
   });
 }

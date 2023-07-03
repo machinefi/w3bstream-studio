@@ -273,19 +273,21 @@ model t_blockchain {
   @@schema("monitor")
 }
 
+model t_access_key {
+  f_id            BigInt @id @default(autoincrement())
+  f_account_id    BigInt
+  f_identity_id   BigInt
+  f_identity_type Int
+  f_name          String @db.VarChar(255)
+  f_rand          String @db.VarChar(255)
+  f_expired_at    BigInt @default(0)
+  f_last_used     BigInt @default(0)
+  f_desc          String @default("") @db.VarChar(255)
+  f_created_at    BigInt @default(0)
+  f_updated_at    BigInt @default(0)
+  f_deleted_at    BigInt @default(0)
 
-model t_account_access_key {
-  f_id         BigInt @id @default(autoincrement())
-  f_account_id BigInt
-  f_name       String @db.VarChar(255)
-  f_access_key String @db.VarChar(255)
-  f_expired_at BigInt @default(0)
-  f_created_at BigInt @default(0)
-  f_updated_at BigInt @default(0)
-  f_deleted_at BigInt @default(0)
-  f_desc       String @default("") @db.VarChar(255)
-
-  @@unique([f_access_key, f_deleted_at], map: "t_account_access_key_ui_access_key")
-  @@unique([f_account_id, f_name, f_deleted_at], map: "t_account_access_key_ui_account_key_name")
+  @@unique([f_account_id, f_name, f_deleted_at], map: "t_access_key_ui_name")
+  @@unique([f_rand, f_deleted_at], map: "t_access_key_ui_rand")
   @@schema("applet_management")
 }

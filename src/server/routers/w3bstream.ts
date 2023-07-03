@@ -325,14 +325,13 @@ export const w3bstreamRouter = t.router({
       return res;
     }),
   userSetting: authProcedure.query(async ({ ctx, input }) => {
-    const res = await ctx.prisma.t_account_access_key.findMany({
+    const res = await ctx.prisma.t_access_key.findMany({
       where: {
         f_account_id: {
           equals: BigInt(ctx.user.Payload)
         }
       },
       select: {
-        f_access_key: true,
         f_name: true,
         f_updated_at: true,
         f_expired_at: true,
