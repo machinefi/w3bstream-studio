@@ -1,6 +1,6 @@
 {
   "name": "w3bstream-devnet",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "license": "MIT",
   "description": "Starter pack using Nextjs, React, Typescript, tRPC, Mantine and Cypress",
   "keywords": [
