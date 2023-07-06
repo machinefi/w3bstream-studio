@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import dynamic from 'next/dynamic';
 import ToolBar from '../ToolBar';
+import { useRouter } from 'next/router';
 
 const DynamicMetrics = dynamic(() => import('../Metrics'), {
   ssr: false
@@ -36,6 +37,8 @@ const CurrentProject = observer(() => {
     lang: { t }
   } = useStore();
   const { projectDetail } = w3s.project;
+  const router = useRouter();
+  const tab = router.query.tab;
 
   return (
     <>
@@ -53,12 +56,12 @@ const CurrentProject = observer(() => {
             </Flex>
           ) : (
             <>
-              {showContent === 'METRICS' && <DynamicMetrics />}
-              {showContent === 'CURRENT_PUBLISHERS' && <DynamicPublishers />}
-              {(showContent === 'CONTRACT_LOGS' || showContent === 'CHAIN_TX' || showContent === 'CHAIN_HEIGHT') && <DynamicTriggers />}
-              {showContent === 'DB_TABLE' && <DynamicDBTable />}
-              {showContent === 'CURRENT_EVENT_LOGS' && <DynamicEventLogs />}
-              {showContent === 'SETTINGS' && <DynamicSettings />}
+              {tab === 'METRICS' && <DynamicMetrics />}
+              {tab === 'CURRENT_PUBLISHERS' && <DynamicPublishers />}
+              {(tab === 'CONTRACT_LOGS' || tab === 'CHAIN_TX' || tab === 'CHAIN_HEIGHT') && <DynamicTriggers />}
+              {tab === 'DB_TABLE' && <DynamicDBTable />}
+              {tab === 'CURRENT_EVENT_LOGS' && <DynamicEventLogs />}
+              {tab === 'SETTINGS' && <DynamicSettings />}
             </>
           )}
         </Box>

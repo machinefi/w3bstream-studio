@@ -1,21 +1,23 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import dynamic from 'next/dynamic';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '../store';
-import IDE from '@/components/IDE';
+import { useStore } from '@/store/index';
 
-
-const HomePage = observer(() => {
-  const {
-    w3s: {
-      flowModule,
-    }
-  } = useStore();
-
-  useEffect(() => {
-    flowModule.flow.initNodes.call();
-  }, []);
-
-  return <IDE />;
+const DynamicCurrentProject = dynamic(() => import('../components/IDE/CurrentProject'), {
+  ssr: false
 });
 
-export default HomePage;
+const DynamicProjects = dynamic(() => import('../components/IDE/Projects'), {
+  ssr: false
+});
+
+const Page = observer(() => {
+  const {
+    w3s,
+    base: { confirm }
+  } = useStore();
+
+  return <>{w3s.project.allProjects.currentIndex != -1 ? <DynamicCurrentProject /> : <DynamicProjects />}</>;
+});
+
+export default Page;

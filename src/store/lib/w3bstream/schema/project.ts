@@ -130,11 +130,11 @@ export default class ProjectModule {
     }
   });
 
-  projectDetail = new PromiseState<() => Promise<any>, ProjectType>({
+  projectDetail = new PromiseState<(project_id?: number) => Promise<any>, ProjectType>({
     // defaultValue: [],
-    function: async () => {
+    function: async (project_id = undefined) => {
       const projects = await trpc.api.projectDetail.query({
-        projectID: String(this.allProjects.current.f_project_id)
+        projectID: String(this.allProjects?.current?.f_project_id ?? project_id)
       });
       if (projects) {
         const regex = /(?:[^_]*_){2}(.*)/;
@@ -152,7 +152,7 @@ export default class ProjectModule {
               case ProjectConfigType.PROJECT_ENV:
                 // @ts-ignore
                 p.envs = config.f_value;
-                console.log(config.f_value,'config.f_value')
+                console.log(config.f_value, 'config.f_value');
                 break;
             }
           });

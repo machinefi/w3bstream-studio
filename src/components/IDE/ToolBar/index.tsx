@@ -9,6 +9,7 @@ import { AiOutlineFileText } from 'react-icons/ai';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 interface ToolBar extends BoxProps {}
 
 const ToolBar = (props: ToolBar) => {
@@ -22,7 +23,20 @@ const ToolBar = (props: ToolBar) => {
     lang: { t }
   } = useStore();
   const { onOpen, onClose, isOpen } = useDisclosure();
-
+  const router = useRouter();
+  const jumpTab = (tab: string) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          tab,
+          id: router.query.id
+        }
+      },
+      null,
+      { shallow: true }
+    );
+  };
   const curProjectStatus = INSTANCE_STATUS[instances.curInstance?.f_state || 0];
   return (
     <Box position={'fixed'} h="100%" overflow={'auto'}>
@@ -102,9 +116,11 @@ const ToolBar = (props: ToolBar) => {
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
           borderRadius="8px"
-          {...getSelectedStyles(w3s.showContent === 'METRICS')}
+          {...getSelectedStyles(router.query.tab === 'METRICS')}
           onClick={(e) => {
-            w3s.showContent = 'METRICS';
+            // w3s.showContent = 'METRICS';
+            console.log(router);
+            jumpTab('METRICS');
           }}
         >
           <Icon as={BiBarChartSquare} boxSize={5} />
@@ -120,9 +136,10 @@ const ToolBar = (props: ToolBar) => {
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
           borderRadius="8px"
-          {...getSelectedStyles(w3s.showContent === 'CURRENT_PUBLISHERS')}
+          {...getSelectedStyles(router.query.tab === 'CURRENT_PUBLISHERS')}
           onClick={(e) => {
-            w3s.showContent = 'CURRENT_PUBLISHERS';
+            // w3s.showContent = 'CURRENT_PUBLISHERS';
+            jumpTab('CURRENT_PUBLISHERS');
           }}
         >
           <Icon as={TbDeviceDesktop} boxSize={5} />
@@ -138,9 +155,10 @@ const ToolBar = (props: ToolBar) => {
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
           borderRadius="8px"
-          {...getSelectedStyles(w3s.showContent === 'CONTRACT_LOGS' || w3s.showContent === 'CHAIN_TX' || w3s.showContent === 'CHAIN_HEIGHT')}
+          {...getSelectedStyles(router.query.tab === 'CONTRACT_LOGS' || router.query.tab === 'CHAIN_TX' || router.query.tab === 'CHAIN_HEIGHT')}
           onClick={(e) => {
-            w3s.showContent = 'CONTRACT_LOGS';
+            // w3s.showContent = 'CONTRACT_LOGS';
+            jumpTab('CONTRACT_LOGS');
           }}
         >
           <Icon as={TbHandClick} boxSize={5} />
@@ -156,9 +174,10 @@ const ToolBar = (props: ToolBar) => {
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
           borderRadius="8px"
-          {...getSelectedStyles(w3s.showContent === 'DB_TABLE')}
+          {...getSelectedStyles(router.query.tab === 'DB_TABLE')}
           onClick={(e) => {
-            w3s.showContent = 'DB_TABLE';
+            // w3s.showContent = 'DB_TABLE';
+            jumpTab('DB_TABLE');
           }}
         >
           <Icon as={HiOutlineDatabase} boxSize={5} />
@@ -174,9 +193,10 @@ const ToolBar = (props: ToolBar) => {
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
           borderRadius="8px"
-          {...getSelectedStyles(w3s.showContent === 'CURRENT_EVENT_LOGS')}
+          {...getSelectedStyles(router.query.tab === 'CURRENT_EVENT_LOGS')}
           onClick={(e) => {
-            w3s.showContent = 'CURRENT_EVENT_LOGS';
+            // w3s.showContent = 'CURRENT_EVENT_LOGS';
+            jumpTab('CURRENT_EVENT_LOGS');
           }}
         >
           <Icon as={AiOutlineFileText} boxSize={5} />
@@ -192,9 +212,10 @@ const ToolBar = (props: ToolBar) => {
           cursor="pointer"
           color="rgba(15, 15, 15, 0.75)"
           borderRadius="8px"
-          {...getSelectedStyles(w3s.showContent === 'SETTINGS')}
+          {...getSelectedStyles(router.query.tab === 'SETTINGS')}
           onClick={(e) => {
-            w3s.showContent = 'SETTINGS';
+            // w3s.showContent = 'SETTINGS';
+            jumpTab('SETTINGS');
           }}
         >
           <Icon as={TbSettings} boxSize={5} />

@@ -12,6 +12,8 @@ import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import { MdRefresh } from 'react-icons/md';
 import { FaFileImport } from 'react-icons/fa';
 import { ImArrowUpRight2 } from 'react-icons/im';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Projects = observer(() => {
   const {
@@ -20,6 +22,7 @@ const Projects = observer(() => {
     lang: { t }
   } = useStore();
   const { allProjects, selectedNames, projectDetail } = w3s.project;
+  const router = useRouter();
 
   if (allProjects.value.length) {
     return (
@@ -145,9 +148,10 @@ const Projects = observer(() => {
                 onClick={async (e) => {
                   e.stopPropagation();
                   if (instance) {
-                    w3s.showContent = 'METRICS';
-                    allProjects.onSelect(index);
-                    projectDetail.call();
+                    router.push(`/project/${project.f_project_id}?tab=METRICS`);
+                    // w3s.showContent = 'METRICS';
+                    // allProjects.onSelect(index);
+                    // projectDetail.call();
                   } else {
                     await w3s.applet.uploadWASM({
                       projectName: project.name,
