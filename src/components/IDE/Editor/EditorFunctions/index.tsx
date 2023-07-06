@@ -41,11 +41,11 @@ export const compileAndCreateProject = async (needCompile: boolean = true) => {
       return toast.error(error.message);
     }
     globalThis.store?.w3s.project.createProjectByWasmForm.value.set({
-      file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), binary)
+      file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.as', '.wasm'), binary)
     });
   } else {
     globalThis.store?.w3s.project.createProjectByWasmForm.value.set({
-      file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.ts', '.wasm'), curActiveFile.data.extraData.raw)
+      file: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.as', '.wasm'), curActiveFile.data.extraData.raw)
     });
   }
 

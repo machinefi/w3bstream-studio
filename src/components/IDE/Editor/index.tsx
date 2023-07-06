@@ -95,7 +95,7 @@ const Editor = observer(() => {
 
   if (!curFilesListSchema?.curActiveFile) return <EditorEmptyArea />;
   return (
-    <ReactSplit direction={SplitDirection.Vertical} initialSizes={[70, 30]}>
+    <ReactSplit direction={curFilesListSchema?.curActiveFile?.data?.dataType == 'abi' ? SplitDirection.Horizontal : SplitDirection.Vertical} initialSizes={[70, 30]}>
       <Box ref={boxRef} h="full" w="full">
         {/* Active Bar Headers  */}
         {/* {boxRef.current?.clientHeight} */}
