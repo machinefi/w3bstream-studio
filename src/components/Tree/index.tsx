@@ -59,7 +59,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
                   onSelect(node.data);
                 }
               }}
-              color={node.data.label?.startsWith('.') || isHidden ? '#979797' : ''}
+              color={node.data?.label?.startsWith('.') || isHidden ? '#979797' : ''}
               px={1}
               py={1}
               alignItems={'center'}

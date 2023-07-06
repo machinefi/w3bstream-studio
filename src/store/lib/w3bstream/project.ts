@@ -204,6 +204,11 @@ export class ProjectManager {
     this.isWSConnectLoading = false;
   }
 
+  async unsafeClearFile() {
+    await IndexDb.clearFiles();
+    this.sync();
+  }
+
   sync() {
     _.each([undefined], async (v: ProjectType, k) => {
       const project_id = 'GLOBAL';
