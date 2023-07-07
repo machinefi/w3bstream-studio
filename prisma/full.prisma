@@ -1,0 +1,387 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["applet_management", "monitor"]
+}
+
+model t_account {
+  f_id         BigInt @id @default(autoincrement())
+  f_account_id BigInts
+  f_role       Int    @default(2)
+  f_state      Int    @default(1)
+  f_avatar     String @default("") @db.VarChar(255)
+  f_meta       String @default("{}")
+  f_prvkey     String @default("") @db.VarChar(255)
+  f_created_at BigInt @default(0)
+  f_updated_at BigInt @default(0)
+  f_deleted_at BigInt @default(0)
+
+  @@unique([f_account_id, f_deleted_at], map: "t_account_ui_account_id")
+  @@schema("applet_management")
+}
+
+model t_applet {
+  f_id          BigInt @id @default(autoincrement())
+  f_project_id  BigInt
+  f_applet_id   BigInt @unique(map: "t_applet_ui_applet_id")
+  f_resource_id BigInt
+  f_name        String @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+
+  @@unique([f_project_id, f_name], map: "t_applet_ui_project_name")
+  @@schema("applet_management")
+}
+
+model t_event_log {
+  f_id           BigInt @id @default(autoincrement())
+  f_event_id     BigInt @unique(map: "t_event_log_ui_event_id")
+  f_project_id   BigInt
+  f_applet_id    BigInt
+  f_publisher_id BigInt
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
+
+  @@index([f_project_id], map: "t_event_log_i_applet_id")
+  @@index([f_project_id], map: "t_event_log_i_project_id")
+  @@index([f_publisher_id], map: "t_event_log_i_publisher_id")
+  @@schema("applet_management")
+}
+
+model t_instance {
+  f_id          BigInt @id @default(autoincrement())
+  f_instance_id BigInt @unique(map: "t_instance_ui_instance_id")
+  f_applet_id   BigInt @unique(map: "t_instance_ui_applet_id")
+  f_state       Int
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+
+  @@schema("applet_management")
+}
+
+model t_project {
+  f_id          BigInt @id @default(autoincrement())
+  f_project_id  BigInt
+  f_account_id  BigInt
+  f_name        String @db.VarChar(255)
+  f_version     String @default("") @db.VarChar(255)
+  f_proto       Int    @default(0)
+  f_description String @default("") @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
+
+  @@unique([f_project_id, f_deleted_at], map: "t_project_ui_project_id")
+  @@unique([f_name, f_deleted_at], map: "t_project_ui_name")
+  @@schema("applet_management")
+}
+
+model t_publisher {
+  f_id           BigInt @id @default(autoincrement())
+  f_project_id   BigInt
+  f_publisher_id BigInt @unique(map: "t_publisher_ui_publisher_id")
+  f_name         String @db.VarChar(255)
+  f_key          String @db.VarChar(255)
+  f_token        String @default("") @db.VarChar(255)
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
+
+  @@unique([f_project_id, f_key], map: "t_publisher_ui_project_id_publisher_key")
+  @@schema("applet_management")
+}
+
+model t_strategy {
+  f_id          BigInt @id @default(autoincrement())
+  f_strategy_id BigInt
+  f_project_id  BigInt
+  f_applet_id   BigInt
+  f_event_type  String @db.VarChar(255)
+  f_handler     String @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
+
+  @@unique([f_project_id, f_applet_id, f_event_type, f_deleted_at], map: "t_strategy_ui_prj_app_event")
+  @@unique([f_strategy_id, f_deleted_at], map: "t_strategy_ui_strategy_id")
+  @@schema("applet_management")
+}
+
+model t_config {
+  f_id         BigInt @id @default(autoincrement())
+  f_config_id  BigInt @unique(map: "t_config_ui_config_id")
+  f_rel_id     BigInt
+  f_type       Int
+  f_value      Bytes  @default("")
+  f_created_at BigInt @default(0)
+  f_updated_at BigInt @default(0)
+
+  @@unique([f_rel_id, f_type], map: "t_config_ui_rel_type")
+  @@schema("applet_management")
+}
+
+model t_resource {
+  f_id          BigInt @id @default(autoincrement())
+  f_resource_id BigInt @unique(map: "t_resource_ui_resource_id")
+  f_path        String @default("") @db.VarChar(255)
+  f_md5         String @unique(map: "t_resource_ui_md5") @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+
+  @@schema("applet_management")
+}
+
+model t_wasm_log {
+  f_id           BigInt @id @default(autoincrement())
+  f_wasm_log_id  BigInt @unique(map: "t_wasm_log_ui_wasm_log_id")
+  f_project_name String @db.VarChar(255)
+  f_applet_name  String @default("") @db.VarChar(255)
+  f_instance_id  BigInt @default(0)
+  f_src          String @default("") @db.VarChar(255)
+  f_level        String @default("") @db.VarChar(255)
+  f_log_time     BigInt @default(0)
+  f_msg          String @default("") @db.VarChar(1024)
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
+
+  @@schema("applet_management")
+}
+
+model t_cron_job {
+  f_id               BigInt @id @default(autoincrement())
+  f_cron_job_id      BigInt
+  f_project_id       BigInt
+  f_cron_expressions String @db.VarChar(255)
+  f_event_type       String @db.VarChar(255)
+  f_created_at       BigInt @default(0)
+  f_updated_at       BigInt @default(0)
+  f_deleted_at       BigInt @default(0)
+
+  @@unique([f_project_id, f_cron_expressions, f_event_type, f_deleted_at], map: "t_cron_job_ui_cron")
+  @@unique([f_cron_job_id, f_deleted_at], map: "t_cron_job_ui_cron_job_id")
+  @@schema("applet_management")
+}
+
+model t_resource_ownership {
+  f_id          BigInt @id @default(autoincrement())
+  f_resource_id BigInt
+  f_account_id  BigInt
+  f_uploaded_at BigInt
+  f_expire_at   BigInt @default(0)
+  f_filename    String @default("") @db.VarChar(255)
+  f_comment     String @default("") @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+
+  @@unique([f_resource_id, f_account_id], map: "t_resource_ownership_ui_resource_account")
+  @@schema("applet_management")
+}
+
+model t_contract_log {
+  f_id               BigInt @id @default(autoincrement())
+  f_contractlog_id   BigInt @unique(map: "t_contract_log_ui_contract_log_id")
+  f_project_name     String @db.VarChar(255)
+  f_uniq             BigInt @default(0)
+  f_event_type       String @db.VarChar(255)
+  f_chain_id         BigInt
+  f_contract_address String @db.VarChar(255)
+  f_block_start      BigInt
+  f_block_current    BigInt
+  f_block_end        BigInt @default(0)
+  f_topic0           String @default("") @db.VarChar(255)
+  f_topic1           String @default("") @db.VarChar(255)
+  f_topic2           String @default("") @db.VarChar(255)
+  f_topic3           String @default("") @db.VarChar(255)
+  f_created_at       BigInt @default(0)
+  f_updated_at       BigInt @default(0)
+  f_paused           Int    @default(2)
+
+  @@unique([f_project_name, f_event_type, f_chain_id, f_contract_address, f_block_start, f_block_end, f_topic0, f_topic1, f_topic2, f_topic3, f_uniq], map: "t_contract_log_ui_contract_log_uniq")
+  @@schema("monitor")
+}
+
+model t_chain_height {
+  f_id              BigInt @id @default(autoincrement())
+  f_chain_height_id BigInt @unique(map: "t_chain_height_ui_chain_height_id")
+  f_project_name    String @db.VarChar(255)
+  f_finished        Int    @default(2)
+  f_uniq            BigInt @default(0)
+  f_event_type      String @db.VarChar(255)
+  f_chain_id        BigInt
+  f_height          BigInt
+  f_created_at      BigInt @default(0)
+  f_updated_at      BigInt @default(0)
+  f_paused          Int    @default(2)
+
+  @@unique([f_project_name, f_event_type, f_chain_id, f_height, f_uniq], map: "t_chain_height_ui_chain_height_uniq")
+  @@schema("monitor")
+}
+
+model t_chain_tx {
+  f_id           BigInt @id @default(autoincrement())
+  f_chaintx_id   BigInt @unique(map: "t_chain_tx_ui_chain_tx_id")
+  f_project_name String @db.VarChar(255)
+  f_finished     Int    @default(2)
+  f_uniq         BigInt @default(0)
+  f_event_type   String @db.VarChar(255)
+  f_chain_id     BigInt
+  f_tx_address   String @db.VarChar(255)
+  f_created_at   BigInt @default(0)
+  f_updated_at   BigInt @default(0)
+  f_paused       Int    @default(2)
+
+  @@unique([f_project_name, f_event_type, f_chain_id, f_tx_address, f_uniq], map: "t_chain_tx_ui_chain_tx_uniq")
+  @@schema("monitor")
+}
+
+model t_blockchain {
+  f_id            BigInt @id @default(autoincrement())
+  f_chain_id      BigInt @unique(map: "t_blockchain_ui_chain_id")
+  f_chain_address String @db.VarChar(255)
+  f_created_at    BigInt @default(0)
+  f_updated_at    BigInt @default(0)
+
+  @@schema("monitor")
+}
+
+model t_access_key {
+  f_id            BigInt @id @default(autoincrement())
+  f_account_id    BigInt
+  f_identity_id   BigInt
+  f_identity_type Int
+  f_name          String @db.VarChar(255)
+  f_rand          String @db.VarChar(255)
+  f_expired_at    BigInt @default(0)
+  f_last_used     BigInt @default(0)
+  f_desc          String @default("") @db.VarChar(255)
+  f_created_at    BigInt @default(0)
+  f_updated_at    BigInt @default(0)
+  f_deleted_at    BigInt @default(0)
+
+  @@unique([f_account_id, f_name, f_deleted_at], map: "t_access_key_ui_name")
+  @@unique([f_rand, f_deleted_at], map: "t_access_key_ui_rand")
+  @@schema("applet_management")
+}
+
+model t_account_access_key {
+  f_id         BigInt @id @default(autoincrement())
+  f_account_id BigInt
+  f_name       String @db.VarChar(255)
+  f_access_key String @db.VarChar(255)
+  f_expired_at BigInt @default(0)
+  f_created_at BigInt @default(0)
+  f_updated_at BigInt @default(0)
+  f_deleted_at BigInt @default(0)
+  f_desc       String @default("") @db.VarChar(255)
+
+  @@unique([f_access_key, f_deleted_at], map: "t_account_access_key_ui_access_key")
+  @@unique([f_account_id, f_name, f_deleted_at], map: "t_account_access_key_ui_account_key_name")
+  @@schema("applet_management")
+}
+
+model t_account_identity {
+  f_id          BigInt @id @default(autoincrement())
+  f_account_id  BigInt
+  f_type        Int
+  f_identity_id String @db.VarChar(255)
+  f_source      Int
+  f_meta        String @default("")
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
+
+  @@unique([f_account_id, f_type, f_deleted_at], map: "t_account_identity_ui_account_identity")
+  @@unique([f_type, f_identity_id, f_deleted_at], map: "t_account_identity_ui_identity_id")
+  @@index([f_identity_id], map: "t_account_identity_i_identity_id")
+  @@index([f_source], map: "t_account_identity_i_source")
+  @@schema("applet_management")
+}
+
+model t_account_password {
+  f_account_id  BigInt
+  f_password_id BigInt @id
+  f_type        Int
+  f_password    String @db.VarChar(32)
+  f_scope       String @default("") @db.VarChar(255)
+  f_remark      String @default("") @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
+
+  @@unique([f_account_id, f_type, f_deleted_at], map: "t_account_password_ui_account_password")
+  @@schema("applet_management")
+}
+
+model t_operator {
+  f_id          BigInt @id @default(autoincrement())
+  f_account_id  BigInt
+  f_operator_id BigInt
+  f_private_key String @db.VarChar(255)
+  f_name        String @db.VarChar(255)
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
+
+  @@unique([f_account_id, f_name, f_deleted_at], map: "t_operator_ui_name")
+  @@unique([f_operator_id, f_deleted_at], map: "t_operator_ui_operator_id")
+  @@schema("applet_management")
+}
+
+model t_project_operator {
+  f_id          BigInt @id @default(autoincrement())
+  f_project_id  BigInt
+  f_operator_id BigInt
+  f_created_at  BigInt @default(0)
+  f_updated_at  BigInt @default(0)
+  f_deleted_at  BigInt @default(0)
+
+  @@unique([f_project_id, f_deleted_at], map: "t_project_operator_ui_project_id")
+  @@schema("applet_management")
+}
+
+model applet_management_t_sql_meta_enum {
+  f_table_name  String @db.VarChar(64)
+  f_column_name String @db.VarChar(64)
+  f_value       Int
+  f_type        String @db.VarChar(255)
+  f_key         String @db.VarChar(255)
+  f_label       String @db.VarChar(255)
+
+  @@unique([f_table_name, f_column_name, f_value], map: "t_sql_meta_enum_i_enum")
+  @@map("t_sql_meta_enum")
+  @@schema("applet_management")
+}
+
+model t_traffic_limit {
+  f_id               BigInt @id @default(autoincrement())
+  f_traffic_limit_id BigInt
+  f_project_id       BigInt
+  f_threshold        Int
+  f_duration         BigInt
+  f_api_type         Int
+  f_created_at       BigInt @default(0)
+  f_updated_at       BigInt @default(0)
+  f_deleted_at       BigInt @default(0)
+  f_start_at         BigInt @default(0)
+
+  @@unique([f_project_id, f_api_type, f_deleted_at], map: "t_traffic_limit_ui_prj_api_type")
+  @@unique([f_traffic_limit_id, f_deleted_at], map: "t_traffic_limit_ui_traffic_limit_id")
+  @@schema("applet_management")
+}
+
+model monitor_t_sql_meta_enum {
+  f_table_name  String @db.VarChar(64)
+  f_column_name String @db.VarChar(64)
+  f_value       Int
+  f_type        String @db.VarChar(255)
+  f_key         String @db.VarChar(255)
+  f_label       String @db.VarChar(255)
+
+  @@unique([f_table_name, f_column_name, f_value], map: "t_sql_meta_enum_i_enum")
+  @@map("t_sql_meta_enum")
+  @@schema("monitor")
+}

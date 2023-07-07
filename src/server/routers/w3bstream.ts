@@ -329,13 +329,15 @@ export const w3bstreamRouter = t.router({
       where: {
         f_account_id: {
           equals: BigInt(ctx.user.Payload)
-        }
+        },
+        f_identity_type: 1
       },
       select: {
         f_name: true,
         f_updated_at: true,
         f_expired_at: true,
-        f_desc: true
+        f_desc: true,
+        f_identity_type: true
       }
     });
     return {
