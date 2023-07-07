@@ -46,6 +46,9 @@ declare function ws_get_env(kaddr: usize, ksize: i32, vaddr: usize, vsize: i32):
 @external("env", "ws_get_sql_db")
   declare function ws_get_sql_db(ptr: usize, size: i32, rAddr: u32, rSize: u32): i32
 
+@external("stat", "ws_submit_metrics")
+  declare function ws_submit_metrics(ptr:usize,size:i32): i32
+
 export function alloc(size: usize): usize {
     return heap.alloc(size);
 }
@@ -53,6 +56,17 @@ export function alloc(size: usize): usize {
 export function freeResource(rid: i32): void {
     heap.free(rid);
 }
+
+export function SubmitMetrics(data:string):i32 {
+  let dataEncoded = String.UTF8.encode(data, false);
+  let ptr = changetype<usize>(dataEncoded);
+  let size = dataEncoded.byteLength;
+  let code = ws_submit_metrics(ptr,size);
+  if (code !== 0) {
+    assert(false, "fail to submit metrics");
+  }
+  return 0
+} 
 
 export function GetEnv(key: string): string {
   let kstrEncoded = String.UTF8.encode(key, false);

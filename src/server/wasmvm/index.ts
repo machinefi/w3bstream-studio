@@ -328,6 +328,14 @@ export class WASM {
           _this.writeStdout({ message });
           return ResultStatusCode.OK;
         }
+      },
+      stat: {
+        ws_submit_metrics(kptr, ksize) {
+          _this.writeStdout({
+            message: `Submit metrics success`
+          });
+          return ResultStatusCode.OK;
+        }
       }
     };
   }
