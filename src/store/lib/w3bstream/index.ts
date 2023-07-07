@@ -58,7 +58,7 @@ export class W3bStream {
 
   actions = {
     goHome: () => {
-      this.currentHeaderTab = 'PROJECTS';
+      // this.currentHeaderTab = 'PROJECTS';
       this.project.allProjects.onSelect(-1);
       this.project.projectDetail.value = null;
     }

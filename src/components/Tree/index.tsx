@@ -84,7 +84,7 @@ export const Tree = observer(({ data, onSelect, isHidden = false }: IProps) => {
       <DndProvider backend={MultiBackend} options={getBackendOptions()}>
         <DNDTree
           enableAnimateExpand={true}
-          tree={projectManager?.curFilesListSchema?.filesFlatten}
+          tree={projectManager?.curFilesListSchema?.filesFlatten ?? []}
           dragPreviewRender={(monitorProps) => <CustomDragPreview monitorProps={monitorProps} />}
           rootId={'0'}
           onDrop={(newTreeData, options) => {
