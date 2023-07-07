@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
@@ -14,6 +14,12 @@ const Page = observer(() => {
     base: { confirm }
   } = useStore();
   const router = useRouter();
+  useEffect(() => {
+    if (router.query.tab) {
+      //@ts-ignore
+      w3s.showContent = router.query.tab;
+    }
+  }, [router.query.tab]);
 
   React.useEffect(() => {
     if (router.query.id) {

@@ -80,9 +80,19 @@ const ToolBar = (props: ToolBar) => {
                     onClose();
                     e.stopPropagation();
                     if (instance) {
+                      router.push(
+                        {
+                          pathname: router.pathname,
+                          query: {
+                            tab: 'METRICS',
+                            id: item.f_project_id.toString()
+                          }
+                        },
+                        null,
+                        { shallow: true }
+                      );
                       allProjects.onSelect(index);
                       await projectDetail.call();
-                      w3s.showContent = 'METRICS';
                       const now = new Date();
                       now.setMinutes(0);
                       now.setSeconds(0);

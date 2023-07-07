@@ -56,12 +56,12 @@ const CurrentProject = observer(() => {
             </Flex>
           ) : (
             <>
-              {tab === 'METRICS' && <DynamicMetrics />}
-              {tab === 'CURRENT_PUBLISHERS' && <DynamicPublishers />}
-              {(tab === 'CONTRACT_LOGS' || tab === 'CHAIN_TX' || tab === 'CHAIN_HEIGHT') && <DynamicTriggers />}
-              {tab === 'DB_TABLE' && <DynamicDBTable />}
-              {tab === 'CURRENT_EVENT_LOGS' && <DynamicEventLogs />}
-              {tab === 'SETTINGS' && <DynamicSettings />}
+              {showContent === 'METRICS' && <DynamicMetrics />}
+              {showContent === 'CURRENT_PUBLISHERS' && <DynamicPublishers />}
+              {(showContent === 'CONTRACT_LOGS' || showContent === 'CHAIN_TX' || showContent === 'CHAIN_HEIGHT') && <DynamicTriggers />}
+              {showContent === 'DB_TABLE' && <DynamicDBTable />}
+              {showContent === 'CURRENT_EVENT_LOGS' && <DynamicEventLogs />}
+              {showContent === 'SETTINGS' && <DynamicSettings />}
             </>
           )}
         </Box>
