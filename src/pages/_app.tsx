@@ -19,6 +19,7 @@ import '@/lib/superjson';
 import { Global, css } from '@emotion/react';
 import { Inter } from '@next/font/google';
 import '../constants/global.css';
+import AppLayout from '@/components/Layout';
 
 const oxanium = Inter({ subsets: ['latin'] });
 
@@ -55,6 +56,17 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [token, router.pathname]);
 
+  const RenderLayout = () => {
+    if (['/', '/labs', '/support', '/setting', '/project/[id]'].includes(router.pathname)) {
+      return (
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
+      );
+    }
+    return <Component {...pageProps} />;
+  };
+
   return useMemo(() => {
     return (
       <main className={oxanium.className}>
@@ -74,7 +86,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <ChakraProvider theme={theme}>
             <NotificationsProvider>
               <Toaster position="bottom-right" />
-              <Component {...pageProps} />
+              <RenderLayout />
             </NotificationsProvider>
           </ChakraProvider>
         </InspectorWrapper>

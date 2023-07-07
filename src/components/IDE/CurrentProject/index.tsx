@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import dynamic from 'next/dynamic';
 import ToolBar from '../ToolBar';
+import { useRouter } from 'next/router';
 
 const DynamicMetrics = dynamic(() => import('../Metrics'), {
   ssr: false
@@ -36,6 +37,8 @@ const CurrentProject = observer(() => {
     lang: { t }
   } = useStore();
   const { projectDetail } = w3s.project;
+  const router = useRouter();
+  const tab = router.query.tab;
 
   return (
     <>

@@ -1,29 +1,28 @@
-import React from 'react';
-import { Button, Flex, Text, TabList, Tabs, Image, Tab } from '@chakra-ui/react';
-import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
+import { Button, Flex, Text, TabList, Tabs, Image, Tab, Box } from '@chakra-ui/react';
+import { observer, useLocalStore } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import Link from 'next/link';
 import { defaultButtonStyle } from '@/lib/theme';
 import StarCount from '../StarCount';
 import { WalletConnectButton } from '@/components/WalletConnectButton';
-
-const getTabIndex = (showContent) => {
-  if (showContent === 'PROJECTS') {
-    return 0;
-  }
-  if (showContent === 'LABS') {
-    return 1;
-  }
-  if (showContent === 'SUPPORT') {
-    return 2;
-  }
-  if (showContent === 'FLOW') {
-    return 3;
-  }
-  return 0;
-};
+import { useRouter } from 'next/router';
 
 const Header = observer(() => {
+  const router = useRouter();
+  const getTabIndex = (showContent) => {
+    switch (router.pathname) {
+      case '/':
+        return 0;
+      case '/labs':
+        return 1;
+      case '/support':
+        return 2;
+      default:
+        return 0;
+    }
+  };
+
   const { w3s } = useStore();
   return (
     <Flex
@@ -51,7 +50,10 @@ const Header = observer(() => {
       >
         <Image w="30px" src="/favicon.svg" alt="logo" />
         <Flex ml="10px" fontWeight={600} alignItems="flex-start">
-          w3bstream Devnet <Text mt="-2px" ml="2px" fontSize={10} color="#946FFF">{w3s.env.envs?.value?.w3bstreamVersion}</Text>
+          w3bstream Devnet{' '}
+          <Text mt="-2px" ml="2px" fontSize={10} color="#946FFF">
+            {w3s.env.envs?.value?.w3bstreamVersion}
+          </Text>
         </Flex>
       </Flex>
       <Flex ml="4rem" alignItems="center">
@@ -65,17 +67,16 @@ const Header = observer(() => {
             //   w3s.project.resetSelectedNames();
             // }
             if (number === 1) {
-              w3s.currentHeaderTab = 'LABS';
+              // w3s.currentHeaderTab = 'LABS';
+              // router.push('/labs');
             }
             if (number === 2) {
-              w3s.currentHeaderTab = 'SUPPORT';
-            }
-            if (number === 3) {
-              w3s.currentHeaderTab = 'FLOW';
+              // w3s.currentHeaderTab = 'SUPPORT';
+              // router.push('/support');
             }
           }}
         >
-          <TabList >
+          <TabList>
             <Tab
               onClick={() => {
                 w3s.actions.goHome();
@@ -83,39 +84,20 @@ const Header = observer(() => {
               px="0"
               h="40px"
               fontSize={'14px'}
-
               _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}
             >
-              Projects
+              <Link href={'/'}>Projects</Link>
             </Tab>
             <Tab px="0" ml="60px" h="40px" fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-              Labs
+              <Link href={'/labs'}>Labs</Link>
             </Tab>
             <Tab px="0" ml="60px" h="40px" fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-              Support
+              <Link href={'/support'}>Support</Link>
             </Tab>
-            {/* <Tab px="0" ml="60px" h="40px" fontSize="1rem" fontWeight={400} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-              Flow
-            </Tab> */}
           </TabList>
         </Tabs>
       </Flex>
       <Flex flex={{ base: 1, md: 'auto' }} justify="flex-end" alignItems="center">
-        {/* <Button
-          ml="auto"
-          size="md"
-          bg="#F3F3F3"
-          borderRadius={100}
-          onClick={async(e) => {
-            await w3s.init();
-            toast.success('Refreshed');
-          }}
-        >
-          <MdRefresh />
-        </Button> */}
-        {/* <ChakraLink href="https://github.com/machinefi/w3bstream-studio" isExternal>
-          <Image mr="20px" w="100px" src="https://img.shields.io/github/stars/machinefi/w3bstream-studio.svg?style=social&label=Star&maxAge=2592000" />
-        </ChakraLink> */}
         <StarCount />
         <Flex mr="10px">
           <Profile />
@@ -133,8 +115,14 @@ const accountAddressFormat = (address) => {
 const Profile = observer(() => {
   const { w3s } = useStore();
   const { accountID } = w3s.config.form.formData;
+  const store = useLocalStore(() => ({
+    accountID: null
+  }));
+  useEffect(() => {
+    store.accountID = accountID;
+  }, []);
 
-  if (accountID) {
+  if (store.accountID) {
     return (
       <WalletConnectButton
         customStyle={{

@@ -238,5 +238,18 @@ export function start(rid: i32): i32 {
     Log(env);
     return 0;
   }
+  `,
+  'metrics.ts':`
+  /**
+   * This file is written in AssemblyScript,
+   * which is a subset of TypeScript that compiles to WebAssembly.
+   * You can refer to https://www.assemblyscript.org/introduction.html for the specific syntax.
+   * The SDK used in this file is w3bstream's SDK, which provides a w3bstream interface to stream data.
+   * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
+   */
+  export function start(rid: i32): i32 {
+    SubmitMetrics('{"name": "jone","age": 28}');
+    return 0;
+  }
   `
 };

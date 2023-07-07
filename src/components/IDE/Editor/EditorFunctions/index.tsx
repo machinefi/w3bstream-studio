@@ -10,6 +10,7 @@ import { StorageState } from '@/store/standard/StorageState';
 import { TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { StdIOType } from '@/server/wasmvm';
 import { asc, faker } from '../../Labs';
+import { redirect } from 'next/navigation';
 
 export const compileAssemblyscript = async (code: string) => {
   let { error, binary, text, stats, stderr } = await (
@@ -60,7 +61,9 @@ export const compileAndCreateProject = async (needCompile: boolean = true) => {
             ml={2}
             onClick={async () => {
               reactHotToast.dismiss(t.id);
-              globalThis.store.w3s.currentHeaderTab = 'PROJECTS';
+              // globalThis.store.w3s.currentHeaderTab = 'PROJECTS';
+              // redirect('./')
+              // todo : project detail
               globalThis.store.w3s.project.resetSelectedNames();
               await globalThis.store?.w3s.project.allProjects.call();
               globalThis.store.w3s.project.allProjects.onSelect(0);
