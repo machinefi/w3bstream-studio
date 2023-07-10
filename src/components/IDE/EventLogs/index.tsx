@@ -13,17 +13,18 @@ import { AiOutlineClear } from 'react-icons/ai';
 import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
 import { motion, isValidMotionProp } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { helper } from '@/lib/helper';
 
 const ChakraBox = chakra(motion.div, {
   /**
    * Allow motion props and non-Chakra props to be forwarded.
    */
-  shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop),
+  shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop)
 });
 
 const LiveIcon = () => {
   return (
-    <Box w="40px" pos="relative" boxSizing='border-box' transform="scale(0.6)">
+    <Box w="40px" pos="relative" boxSizing="border-box" transform="scale(0.6)">
       <ChakraBox
         w="30px"
         h="30px"
@@ -31,17 +32,17 @@ const LiveIcon = () => {
         borderRadius="50%"
         border="1px solid #946FFF"
         opacity="0.8"
-        boxSizing='border-box'
+        boxSizing="border-box"
         animate={{
           scale: [1, 1.5],
-          opacity: [0.8, 0],
+          opacity: [0.8, 0]
         }}
         transition={{
           duration: 2,
-          ease: "easeInOut",
-          repeatType: "loop",
+          ease: 'easeInOut',
+          repeatType: 'loop',
           // @ts-ignore
-          repeat: Infinity,
+          repeat: Infinity
         }}
       />
       <ChakraBox
@@ -52,7 +53,7 @@ const LiveIcon = () => {
         h="14px"
         borderRadius="50%"
         opacity="0.8"
-        boxSizing='border-box'
+        boxSizing="border-box"
         bg="#946FFF"
         _after={{
           content: "''",
@@ -64,23 +65,23 @@ const LiveIcon = () => {
           top: '-5px',
           left: '-5px',
           position: 'absolute',
-          opacity: .8,
+          opacity: 0.8
         }}
         animate={{
           scale: [1, 1.5],
-          opacity: [0.8, 0],
+          opacity: [0.8, 0]
         }}
         transition={{
           duration: 2,
-          ease: "easeInOut",
-          repeatType: "loop",
+          ease: 'easeInOut',
+          repeatType: 'loop',
           // @ts-ignore
-          repeat: Infinity,
+          repeat: Infinity
         }}
       />
     </Box>
-  )
-}
+  );
+};
 
 type LocalStoreType = {
   loading: boolean;
@@ -88,11 +89,12 @@ type LocalStoreType = {
   logs: WasmLogType;
   showModal: boolean;
   modalContent: string;
+  latestCreatedAt: number | null;
   fetchWasmLogsPoll: ReturnType<typeof poll>;
   setData: (data: Partial<LocalStoreType>) => void;
 };
 
-const fetchWasmLogs = async ({ projectName, limit = 20, gt, lt }: { projectName: string; limit?: number; gt?: number, lt?: number }) => {
+const fetchWasmLogs = async ({ projectName, limit = 20, gt, lt }: { projectName: string; limit?: number; gt?: number; lt?: number }) => {
   try {
     const data = await trpc.api.wasmLogs.query({
       projectName,
@@ -100,22 +102,22 @@ const fetchWasmLogs = async ({ projectName, limit = 20, gt, lt }: { projectName:
       gt,
       lt
     });
-    data.sort((a, b) => Number(a.f_created_at) - Number(b.f_created_at));
+    data.sort((a, b) => Number(a.f_log_time) - Number(b.f_log_time));
     return data;
   } catch (error) {
     return [];
   }
 };
 
-const poll = (fn: { (): Promise<void>; (): void; }, interval = 3000) => {
+const poll = (fn: { (): Promise<void>; (): void }, interval = 3000) => {
   let timer;
   let isStop = false;
   const executePoll = async () => {
     if (isStop) return;
-    await fn()
-    timer = setTimeout(executePoll, interval)
+    await fn();
+    timer = setTimeout(executePoll, interval);
     return timer;
-  }
+  };
   return {
     start: () => {
       timer && clearTimeout(timer);
@@ -126,8 +128,8 @@ const poll = (fn: { (): Promise<void>; (): void; }, interval = 3000) => {
       isStop = true;
       timer && clearTimeout(timer);
     }
-  }
-}
+  };
+};
 
 const EventLogs = observer(() => {
   const {
@@ -143,31 +145,39 @@ const EventLogs = observer(() => {
     logs: [],
     showModal: false,
     modalContent: '',
+    latestCreatedAt: null,
     fetchWasmLogsPoll: poll(async () => {
       const logsLen = store.logs.length;
-      const latestCreatedAt = store.logs[logsLen - 1]?.f_created_at;
+      let latestCreatedAt;
+
+      if (logsLen > 0) {
+        latestCreatedAt = store.logs[logsLen - 1]?.f_created_at;
+      } else {
+        latestCreatedAt = store.latestCreatedAt;
+      }
       const limit = store.initialized ? 12 : 40;
+      console.log({ limit, projectName: curProject?.f_name, gt: latestCreatedAt ? Number(latestCreatedAt) : undefined });
       const res = await fetchWasmLogs({
         limit,
         projectName: curProject?.f_name,
-        gt: latestCreatedAt ? Number(latestCreatedAt) : undefined,
+        gt: latestCreatedAt ? Number(latestCreatedAt) : undefined
       });
       store.setData({
         initialized: true,
         loading: false,
-        logs: [...store.logs, ...res],
+        logs: [...store.logs, ...res]
       });
     }),
     setData(data: Partial<LocalStoreType>) {
       Object.assign(store, data);
-    },
+    }
   }));
 
   useEffect(() => {
     store.fetchWasmLogsPoll.start();
     return () => {
       store.fetchWasmLogsPoll.stop();
-    }
+    };
   }, []);
 
   const { loading, logs } = store;
@@ -185,8 +195,9 @@ const EventLogs = observer(() => {
           color: '#946FFF'
         }}
         onClick={() => {
+          store.latestCreatedAt = Math.floor(Date.now() / 1000);
           store.setData({
-            logs: [],
+            logs: []
           });
         }}
       />
@@ -222,6 +233,7 @@ const EventLogs = observer(() => {
                 },
                 data: formData.body
               });
+              await helper.wait(800);
               store.fetchWasmLogsPoll.start();
               toast.success('Send event successed');
             } catch (error) {
@@ -284,8 +296,8 @@ const EventLogs = observer(() => {
                   <chakra.p
                     key={key}
                     style={style}
-                    color='#fff'
-                    fontSize={"13px"}
+                    color="#fff"
+                    fontSize={'13px'}
                     whiteSpace="nowrap"
                     overflow="hidden"
                     cursor="pointer"
@@ -307,17 +319,17 @@ const EventLogs = observer(() => {
                   if (store.loading) {
                     return;
                   }
-                  store.fetchWasmLogsPoll.stop()
+                  store.fetchWasmLogsPoll.stop();
                   const projectName = curProject?.f_name;
                   if (projectName) {
                     store.setData({
-                      loading: true,
+                      loading: true
                     });
                     const createdAt = store.logs[0]?.f_created_at;
                     const res = await fetchWasmLogs({
                       projectName,
                       limit: 50,
-                      lt: createdAt ? Number(createdAt) : undefined,
+                      lt: createdAt ? Number(createdAt) : undefined
                     });
                     store.setData({
                       loading: false,
@@ -345,7 +357,7 @@ const EventLogs = observer(() => {
         <ModalContent>
           <ModalHeader fontSize="md">Received Message:</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb="20px" fontWeight={400} fontSize={"13px"}>
+          <ModalBody pb="20px" fontWeight={400} fontSize={'13px'}>
             {store.modalContent}
           </ModalBody>
         </ModalContent>
