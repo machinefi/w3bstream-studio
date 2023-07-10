@@ -156,7 +156,6 @@ const EventLogs = observer(() => {
         latestCreatedAt = store.latestCreatedAt;
       }
       const limit = store.initialized ? 12 : 40;
-      console.log({ limit, projectName: curProject?.f_name, gt: latestCreatedAt ? Number(latestCreatedAt) : undefined });
       const res = await fetchWasmLogs({
         limit,
         projectName: curProject?.f_name,
