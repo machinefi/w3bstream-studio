@@ -409,5 +409,12 @@ export const helper = {
   Uint8ArrayToWasmBase64FileData(name: string, raw: Uint8Array | string): string {
     //@ts-ignore
     return `data:application/wasm;name=${name};base64,${Buffer.from(raw, 'binary').toString('base64')}`;
+  },
+  async wait(time: number) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, time);
+    });
   }
 };
