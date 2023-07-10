@@ -293,7 +293,7 @@ export const w3bstreamRouter = t.router({
         where,
         take: limit,
         orderBy: {
-          f_created_at: 'desc'
+          f_log_time: 'desc'
         },
         select: {
           f_id: true,
