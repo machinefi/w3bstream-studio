@@ -44,6 +44,7 @@ const Header = observer(() => {
       <Flex
         alignItems="center"
         onClick={() => {
+          router.push('/')
           w3s.actions.goHome();
         }}
         cursor={'pointer'}
