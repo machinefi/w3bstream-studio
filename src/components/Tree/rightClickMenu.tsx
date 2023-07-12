@@ -215,6 +215,22 @@ export const RightClickMenu = observer(({ item }: { item: FilesItemType }) => {
       }
     ]
   }));
+  const GetColor = (item: FilesItemType, i: (typeof store.FolderSetting)[0]) => {
+    if (item.label == 'VSCode Files') {
+      return '#979797';
+    }
+    if (i.name == 'Paste') {
+      return w3s.projectManager.curFilesListSchema.currentCopyFile ? '' : '#979797';
+    }
+    return i.color ?? '';
+  };
+
+  const GetDisabled = (item: FilesItemType, i: (typeof store.FolderSetting)[0]) => {
+    if (item.label == 'VSCode Files') {
+      return true;
+    }
+    return false;
+  };
 
   return (
     <Portal>
@@ -237,18 +253,21 @@ export const RightClickMenu = observer(({ item }: { item: FilesItemType }) => {
                 return (
                   <MenuItem
                     onClick={() => {
+                      if (GetDisabled(item, i)) return;
                       i?.onClick?.(item);
                     }}
                   >
                     {i.divider && <Divider />}
                     <Box
                       {...RightClickStyle}
-                      color={i?.color ?? (i.name == 'Paste' ? (w3s.projectManager.curFilesListSchema.currentCopyFile ? '' : '#979797') : '')}
+                      color={GetColor(item, i)}
                       position="relative"
                       onMouseEnter={(e) => {
+                        if (GetDisabled(item, i)) return;
                         i.showChildren = true;
                       }}
                       onMouseLeave={(e) => {
+                        if (GetDisabled(item, i)) return;
                         i.showChildren = false;
                       }}
                     >

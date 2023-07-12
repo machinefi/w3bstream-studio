@@ -12,7 +12,7 @@ const Support = () => {
   } = useStore();
   const store = useLocalObservable(() => ({
     get studioVersionLink() {
-      return `https://github.com/machinefi/w3bstream-studio/releases/tag/v${envs.value?.studioVersion}`
+      return `https://github.com/machinefi/w3bstream-studio/releases/tag/${envs.value?.studioVersion}`
     },
     get w3bstreamVersionGithubLink() {
       const w3bstreamVersion = envs.value?.w3bstreamVersion;
