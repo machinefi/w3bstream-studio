@@ -26,7 +26,7 @@ const Page = observer(() => {
       w3s.project.allProjects.call().then((res) => {
         w3s.project.allProjects.onSelect(res?.findIndex((i) => Number(i.f_project_id) == Number(router.query.id)) ?? 0);
       });
-      w3s.project.projectDetail.call(Number(router.query.id));
+      w3s.project.projectDetail.call(String(router.query.id));
     }
   }, [router.query.id]);
 

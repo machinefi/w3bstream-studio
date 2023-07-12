@@ -130,11 +130,12 @@ export default class ProjectModule {
     }
   });
 
-  projectDetail = new PromiseState<(project_id?: number) => Promise<any>, ProjectType>({
+  projectDetail = new PromiseState<(project_id?: string) => Promise<any>, ProjectType>({
     // defaultValue: [],
     function: async (project_id = undefined) => {
+      console.log('project_id', project_id);
       const projects = await trpc.api.projectDetail.query({
-        projectID: String(this.allProjects?.current?.f_project_id ?? project_id)
+        projectID: String(project_id ?? this.allProjects?.current?.f_project_id)
       });
       if (projects) {
         const regex = /(?:[^_]*_){2}(.*)/;
@@ -540,7 +541,7 @@ export default class ProjectModule {
           }
         });
         if (res.data?.message === 'OK') {
-          console.log(sqlSchema,'json.database.schemas')
+          console.log(sqlSchema, 'json.database.schemas');
           if (sqlSchema) {
             const projectID = res.data.createdProjectIds[0];
             await globalThis.store.w3s.dbTable.importTables({
@@ -768,7 +769,7 @@ export default class ProjectModule {
             data: body
           });
           const projectID = res.data?.projectID;
-         
+
           if (projectID) {
             if (json.database?.schemas) {
               await globalThis.store.w3s.dbTable.importTables({

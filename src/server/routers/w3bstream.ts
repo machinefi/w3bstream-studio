@@ -119,10 +119,11 @@ export const w3bstreamRouter = t.router({
     )
     .query(async ({ ctx, input }) => {
       const accountID = BigInt(ctx.user.Payload);
+
       const projects = await ctx.prisma.t_project.findMany({
         where: {
           f_account_id: {
-            equals: accountID
+            equals: BigInt(accountID)
           },
           f_project_id: {
             equals: BigInt(input.projectID)
@@ -225,7 +226,7 @@ export const w3bstreamRouter = t.router({
           }
         }
       });
-
+      console.log('projects', projects);
       return projects;
     }),
   publishers: authProcedure
