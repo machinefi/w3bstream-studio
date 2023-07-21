@@ -23,6 +23,7 @@ import LabModule from './schema/lab';
 import CronJobModule from './schema/cronJob';
 import ENVModule from './schema/envs';
 import ApiKeysModule from './schema/apiKeys';
+import SettingModule from './schema/setting';
 
 configure({
   enforceActions: 'never'
@@ -49,6 +50,7 @@ export class W3bStream {
   lab = new LabModule();
   cronJob = new CronJobModule();
   env = new ENVModule();
+  setting = new SettingModule();
 
   showContent: 'METRICS' | 'CURRENT_PUBLISHERS' | 'CURRENT_EVENT_LOGS' | 'EDITOR' | 'DOCKER_LOGS' | 'CONTRACT_LOGS' | 'CHAIN_TX' | 'CHAIN_HEIGHT' | 'SETTINGS' | 'DB_TABLE' = 'METRICS';
 

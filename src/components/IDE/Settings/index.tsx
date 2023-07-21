@@ -9,10 +9,12 @@ import { eventBus } from '@/lib/event';
 import { FaFileExport, FaRegQuestionCircle } from 'react-icons/fa';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { MdEditDocument } from 'react-icons/md';
+import { hooks } from '@/lib/hooks';
+import toast from 'react-hot-toast';
 
 const Settings = () => {
   const {
-    w3s: { project, applet },
+    w3s: { project, applet, setting },
     base: { confirm }
   } = useStore();
 
@@ -53,7 +55,11 @@ const Settings = () => {
   const datas = [
     { title: 'Project Name', value: project.curProject?.f_name },
     { title: 'Project ID', value: project.curProject?.f_project_id },
-    { title: 'Operator Address', value: store.operateAddress.value, tips: 'The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction is that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are se nding your transactions.' },
+    {
+      title: 'Operator Address',
+      value: store.operateAddress.value,
+      tips: 'The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction is that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are se nding your transactions.'
+    },
     {
       title: 'WASM file name',
       value: applet.wasmName.value,
@@ -74,6 +80,33 @@ const Settings = () => {
           }}
         >
           Update WASM
+        </Button>
+      )
+    },
+    {
+      title: 'Project Flow',
+      value: '',
+      extra: (
+        <Button
+          size="sm"
+          {...defaultOutlineButtonStyle}
+          onClick={async () => {
+            const { code } = await hooks.getFormData({
+              title: 'Update Flow',
+              size: 'lg',
+              formList: [
+                {
+                  form: setting.updateFlowForm
+                }
+              ]
+            });
+            await axios.post(`/api/w3bapp/project_config/x/${project.curProject?.name}/PROJECT_FLOW`, {
+              ...JSON.parse(code)
+            });
+            toast.success('Update flow success');
+          }}
+        >
+          Update Flow
         </Button>
       )
     }
@@ -121,11 +154,19 @@ const Settings = () => {
             <Flex key={item.title} alignItems={'center'} mb="20px">
               <Flex fontWeight={'500'} fontSize="14px" alignItems={'center'} color="blackAlpha.900" minWidth={150} textAlign={'left'}>
                 <Text>{item.title}</Text>
-                {item.tips && <Tooltip label='The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are sending your transactions.' placement='right'>
-                  <Box cursor={'pointer'}><FaRegQuestionCircle color='#797878' fontSize={14} style={{ margin: 5 }} /></Box>
-                </Tooltip>}:
+                {item.tips && (
+                  <Tooltip
+                    label="The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are sending your transactions."
+                    placement="right"
+                  >
+                    <Box cursor={'pointer'}>
+                      <FaRegQuestionCircle color="#797878" fontSize={14} style={{ margin: 5 }} />
+                    </Box>
+                  </Tooltip>
+                )}
+                :
               </Flex>
-              <Text ml="10px" fontSize={'14px'} color="blackAlpha.700" >
+              <Text ml="10px" fontSize={'14px'} color="blackAlpha.700">
                 {item.value}
               </Text>
               {item.extra}
@@ -138,21 +179,19 @@ const Settings = () => {
         <ProjectEnvs />
       </Box>
 
-
-
-      <Box mt="60px" fontSize="16px" fontWeight={700}>
-      </Box>
+      <Box mt="60px" fontSize="16px" fontWeight={700}></Box>
       <Stack mt="10px" p="20px" border="1px solid #F9CFCE" borderRadius="8px">
         <Flex justifyContent="space-between" alignItems="center">
           <Stack>
             <Text fontWeight={600}>Delete this project</Text>
-            <Text fontWeight={400} color="#7a7a7a" fontSize={"14px"}>Deleting a project is permanent and will erase all database data, triggers, and events routing. Please proceed with caution.</Text>
+            <Text fontWeight={400} color="#7a7a7a" fontSize={'14px'}>
+              Deleting a project is permanent and will erase all database data, triggers, and events routing. Please proceed with caution.
+            </Text>
           </Stack>
           <Button
             ml="20px"
             size="sm"
-
-            colorScheme='red'
+            colorScheme="red"
             onClick={async (e) => {
               confirm.show({
                 title: 'Warning',
@@ -168,7 +207,7 @@ const Settings = () => {
                       eventBus.emit('project.delete');
                       project.allProjects.onSelect(-1);
                       project.resetSelectedNames();
-                    } catch (error) { }
+                    } catch (error) {}
                   }
                 }
               });
