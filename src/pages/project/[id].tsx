@@ -23,10 +23,17 @@ const Page = observer(() => {
 
   React.useEffect(() => {
     if (router.query.id) {
-      w3s.project.allProjects.call().then((res) => {
-        w3s.project.allProjects.onSelect(res?.findIndex((i) => Number(i.f_project_id) == Number(router.query.id)) ?? 0);
-      });
-      w3s.project.projectDetail.call(String(router.query.id));
+      if (/^\d+$/.test(String(router.query.id))) {
+        w3s.project.allProjects.call().then((res) => {
+          w3s.project.allProjects.onSelect(res?.findIndex((i) => Number(i.f_project_id) == Number(router.query.id)) ?? 0);
+        });
+        w3s.project.projectDetail.call(String(router.query.id));
+      } else {
+        w3s.project.allProjects.call().then((res) => {
+          w3s.project.allProjects.onSelect(res?.findIndex((i) => Number(i.f_name) == Number(router.query.id)) ?? 0);
+        });
+        w3s.project.projectDetail.call(String(router.query.id));
+      }
     }
   }, [router.query.id]);
 
