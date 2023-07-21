@@ -11,6 +11,9 @@ import { PromiseState } from '@/store/standard/PromiseState';
 import { Box } from '@chakra-ui/react';
 import { helper } from '@/lib/helper';
 import { TruncateStringWithCopy } from '@/components/Common/TruncateStringWithCopy';
+import { useEffect } from 'react';
+import PrivilegesWidget from '@/components/JSONFormWidgets/PrivilegesWidget';
+import { hooks } from '@/lib/hooks';
 
 export const schema = {
   definitions: {
@@ -28,7 +31,8 @@ export const schema = {
   properties: {
     name: { type: 'string', title: 'Name' },
     expirationDays: { $ref: '#/definitions/projects', title: 'Expiration Days' },
-    desc: { type: 'string', title: 'Description' }
+    // desc: { type: 'string', title: 'Description' },
+    privileges: { type: 'string', title: 'Privileges' }
   },
   required: ['name', 'expirationDays']
 } as const;
@@ -46,6 +50,11 @@ export default class ApiKeysModule {
   //   return globalThis.store.w3s.project.curProject?.contractLogs || [];
   // }
   apikey = null;
+  privileges = [];
+
+  set(args: Partial<ApiKeysModule>) {
+    Object.assign(this, args);
+  }
 
   table = new JSONSchemaTableState<UserSettingType['apikeys'][0]>({
     columns: [
@@ -70,6 +79,43 @@ export default class ApiKeysModule {
                 }
               },
               text: 'Delete'
+            },
+            {
+              props: {
+                size: 'xs',
+                ...defaultOutlineButtonStyle,
+                ml: 4,
+                isLoading: this.updateApikey.loading.value,
+                onClick: async () => {
+                  this.privileges = [];
+                  const p = helper.json.safeParse(item.f_privileges);
+                  for (const i in p) {
+                    if (p[i]) {
+                      this.privileges.push({
+                        name: i,
+                        perm: p[i]
+                      });
+                    }
+                  }
+                  console.log(this.privileges, Math.floor((Number(item.f_expired_at) - Number(item.f_updated_at)) / 86400).toString());
+                  this.form.value.set({
+                    name: item.f_name,
+                    expirationDays: item.f_expired_at.toString() == '0' ? item.f_expired_at.toString() : Math.floor((Number(item.f_expired_at) - Number(item.f_updated_at)) / 86400).toString()
+                  });
+                  const formData = await hooks.getFormData({
+                    title: 'Update Api Key',
+                    size: 'xl',
+                    formList: [
+                      {
+                        form: this.form
+                      }
+                    ]
+                  });
+                  const res = await this.updateApikey.call(formData);
+                  this.privileges = [];
+                }
+              },
+              text: 'Update'
             }
           ];
         }
@@ -84,10 +130,6 @@ export default class ApiKeysModule {
         render: (item) => {
           return Number(item.f_expired_at) != 0 ? new Date(Number(item.f_expired_at) * 1000).toLocaleString() : 'Forever';
         }
-      },
-      {
-        key: 'f_desc',
-        label: 'Description'
       }
     ],
     rowKey: 'f_id',
@@ -101,6 +143,9 @@ export default class ApiKeysModule {
       'ui:submitButtonOptions': {
         norender: false,
         submitText: 'Submit'
+      },
+      privileges: {
+        'ui:widget': PrivilegesWidget
       }
     },
     afterSubmit: async (e) => {
@@ -111,22 +156,54 @@ export default class ApiKeysModule {
       default: {
         name: '',
         expirationDays: '0',
-        desc: ''
+        privileges: ''
       }
     })
   });
 
   createApiKey = new PromiseState({
-    function: async (data: { name: string; expirationDays: number; desc: string }) => {
+    function: async (data: { name: string; expirationDays: number; privileges: any }) => {
       data.expirationDays = Number(data.expirationDays);
+      if (!data.privileges) {
+        delete data.privileges;
+      } else {
+        data.privileges = JSON.parse(data.privileges);
+      }
       const res = await axios.request({
         method: 'post',
         url: `/api/w3bapp/account_access_key`,
-        data
+        data: {
+          ...data,
+          desc: ''
+        }
       });
       console.log(res);
       this.apikey = res.data;
       toast.success('Created successfully');
+      eventBus.emit('userSetting.change');
+    }
+  });
+
+  updateApikey = new PromiseState({
+    function: async (data: { name: string; expirationDays: number; privileges: any }) => {
+      data.expirationDays = Number(data.expirationDays);
+      console.log(data);
+      if (!data.privileges) {
+        delete data.privileges;
+      } else {
+        data.privileges = JSON.parse(data.privileges);
+      }
+      const res = await axios.request({
+        method: 'put',
+        url: `/api/w3bapp/account_access_key/${data.name}`,
+        data: {
+          ...data,
+          desc: ''
+        }
+      });
+      console.log(res);
+      this.apikey = null;
+      toast.success('Update successfully');
       eventBus.emit('userSetting.change');
     }
   });
@@ -153,4 +230,22 @@ export default class ApiKeysModule {
       return res;
     }
   });
+
+  operatorGrounpMetas = new PromiseState({
+    function: async () => {
+      const res = await axios.request({
+        method: 'GET',
+        url: `/api/w3bapp/account_access_key/operator_group_metas`
+      });
+      console.log(res);
+      return res.data;
+    }
+  });
+
+  use() {
+    useEffect(() => {
+      this.apikey = null;
+      this.operatorGrounpMetas.call();
+    }, []);
+  }
 }

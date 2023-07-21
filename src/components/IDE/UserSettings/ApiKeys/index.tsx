@@ -10,9 +10,10 @@ import { TruncateStringWithCopy } from '@/components/Common/TruncateStringWithCo
 
 export const ApiKeys = observer(() => {
   const { w3s } = useStore();
-  useEffect(() => {
-    w3s.apiKeys.apikey = null;
-  }, []);
+  w3s.apiKeys.use();
+  // useEffect(() => {
+  //   w3s.apiKeys.apikey = null;
+  // }, []);
   return (
     <>
       <Flex>

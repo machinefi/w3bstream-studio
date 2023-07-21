@@ -11,7 +11,7 @@ datasource db {
 
 model t_account {
   f_id         BigInt @id @default(autoincrement())
-  f_account_id BigInts
+  f_account_id BigInt
   f_role       Int    @default(2)
   f_state      Int    @default(1)
   f_avatar     String @default("") @db.VarChar(255)
@@ -196,9 +196,9 @@ model t_contract_log {
   f_topic1           String @default("") @db.VarChar(255)
   f_topic2           String @default("") @db.VarChar(255)
   f_topic3           String @default("") @db.VarChar(255)
+  f_paused           Int    @default(2)
   f_created_at       BigInt @default(0)
   f_updated_at       BigInt @default(0)
-  f_paused           Int    @default(2)
 
   @@unique([f_project_name, f_event_type, f_chain_id, f_contract_address, f_block_start, f_block_end, f_topic0, f_topic1, f_topic2, f_topic3, f_uniq], map: "t_contract_log_ui_contract_log_uniq")
   @@schema("monitor")
@@ -213,9 +213,9 @@ model t_chain_height {
   f_event_type      String @db.VarChar(255)
   f_chain_id        BigInt
   f_height          BigInt
+  f_paused          Int    @default(2)
   f_created_at      BigInt @default(0)
   f_updated_at      BigInt @default(0)
-  f_paused          Int    @default(2)
 
   @@unique([f_project_name, f_event_type, f_chain_id, f_height, f_uniq], map: "t_chain_height_ui_chain_height_uniq")
   @@schema("monitor")
@@ -230,9 +230,9 @@ model t_chain_tx {
   f_event_type   String @db.VarChar(255)
   f_chain_id     BigInt
   f_tx_address   String @db.VarChar(255)
+  f_paused       Int    @default(2)
   f_created_at   BigInt @default(0)
   f_updated_at   BigInt @default(0)
-  f_paused       Int    @default(2)
 
   @@unique([f_project_name, f_event_type, f_chain_id, f_tx_address, f_uniq], map: "t_chain_tx_ui_chain_tx_uniq")
   @@schema("monitor")
@@ -258,28 +258,13 @@ model t_access_key {
   f_expired_at    BigInt @default(0)
   f_last_used     BigInt @default(0)
   f_desc          String @default("") @db.VarChar(255)
+  f_privileges    String @default("[]")
   f_created_at    BigInt @default(0)
   f_updated_at    BigInt @default(0)
   f_deleted_at    BigInt @default(0)
 
   @@unique([f_account_id, f_name, f_deleted_at], map: "t_access_key_ui_name")
   @@unique([f_rand, f_deleted_at], map: "t_access_key_ui_rand")
-  @@schema("applet_management")
-}
-
-model t_account_access_key {
-  f_id         BigInt @id @default(autoincrement())
-  f_account_id BigInt
-  f_name       String @db.VarChar(255)
-  f_access_key String @db.VarChar(255)
-  f_expired_at BigInt @default(0)
-  f_created_at BigInt @default(0)
-  f_updated_at BigInt @default(0)
-  f_deleted_at BigInt @default(0)
-  f_desc       String @default("") @db.VarChar(255)
-
-  @@unique([f_access_key, f_deleted_at], map: "t_account_access_key_ui_access_key")
-  @@unique([f_account_id, f_name, f_deleted_at], map: "t_account_access_key_ui_account_key_name")
   @@schema("applet_management")
 }
 
@@ -363,10 +348,10 @@ model t_traffic_limit {
   f_threshold        Int
   f_duration         BigInt
   f_api_type         Int
+  f_start_at         BigInt @default(0)
   f_created_at       BigInt @default(0)
   f_updated_at       BigInt @default(0)
   f_deleted_at       BigInt @default(0)
-  f_start_at         BigInt @default(0)
 
   @@unique([f_project_id, f_api_type, f_deleted_at], map: "t_traffic_limit_ui_prj_api_type")
   @@unique([f_traffic_limit_id, f_deleted_at], map: "t_traffic_limit_ui_traffic_limit_id")
