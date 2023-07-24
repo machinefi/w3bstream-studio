@@ -1,60 +1,129 @@
 const getGolangTemplate = (url: string, projectName: string, message: string) => `package main
-import (
-  "fmt"
-  "time"
 
-  mqtt "github.com/eclipse/paho.mqtt.golang"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"path"
+	"strconv"
+	"strings"
+	"time"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/golang/protobuf/proto"
+	"github.com/google/uuid"
+	"github.com/pkg/errors"
+
+	"github.com/machinefi/w3bstream/pkg/depends/base/types"
+	confmqtt "github.com/machinefi/w3bstream/pkg/depends/conf/mqtt"
+	"github.com/machinefi/w3bstream/pkg/depends/protocol/eventpb"
+	"github.com/machinefi/w3bstream/pkg/depends/x/misc/retry"
+	"github.com/machinefi/w3bstream/pkg/modules/event"
 )
 
-var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-  fmt.Printf("Topic: %s | %s\n", msg.Topic(), msg.Payload())
-}
+var (
+	broker *confmqtt.Broker
+	raw    []byte         // mqtt message
+	msg    *eventpb.Event // mqtt message (protobuf)
+	topic  string
+	cid    string
+)
 
-var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
-  fmt.Println("Connected")
-}
+func init() {
 
-var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
-  fmt.Printf("Connect lost: %+v", err)
+	cid = uuid.NewString()
+	token := "${headers.Authorization}"
+	topic = "${projectName}"
+	data := ""
+	urls := strings.Split("${url}", ":")
+	scheme := urls[0]
+	host := urls[1][2:]
+	port, _ := strconv.Atoi(urls[2])
+
+	broker = &confmqtt.Broker{
+		Server: types.Endpoint{
+			Scheme:   scheme,
+			Hostname: host,
+			Port:     uint16(port),
+			// if have username and password
+			//Username: "",
+			//Password: types.Password(""),
+		},
+		Retry:     *retry.Default,
+		Timeout:   types.Duration(time.Second * time.Duration(10)),
+		Keepalive: types.Duration(time.Second * time.Duration(10)),
+		QoS:       confmqtt.QOS__ONCE,
+	}
+
+	broker.SetDefault()
+	if err := broker.Init(); err != nil {
+		panic(errors.Wrap(err, "init broker"))
+	}
+
+	var err error
+
+	pl := []byte(data)
+	if len(data) > 0 && data[0] == '@' {
+		pl, err = os.ReadFile(data[1:])
+		if err != nil {
+			panic(errors.Wrap(err, "read file: "+data[1:]))
+		}
+	}
+
+	msg = &eventpb.Event{
+		Header: &eventpb.Header{
+			Token:   token,
+			PubTime: time.Now().UTC().UnixMicro(),
+			EventId: uuid.NewString(),
+			PubId:   uuid.NewString(),
+		},
+		Payload: pl,
+	}
+
+	raw, err = proto.Marshal(msg)
+	if err != nil {
+		panic(errors.Wrap(err, "build message"))
+	}
 }
 
 func main() {
-  opts := mqtt.NewClientOptions()
-  opts.AddBroker(fmt.Sprintf("${url}"))
-  opts.SetClientID("go_mqtt_client")
-  opts.SetUsername("admin")
-  opts.SetPassword("instar")
-  opts.SetDefaultPublishHandler(messagePubHandler)
-  opts.OnConnect = connectHandler
-  opts.OnConnectionLost = connectLostHandler
-  client := mqtt.NewClient(opts)
-  if token := client.Connect(); token.Wait() && token.Error() != nil {
-    panic(token.Error())
-  }
+	c, err := broker.Client(cid)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	err = c.WithTopic(topic).Publish(raw)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(">>>> message published")
 
-  sub(client)
-  publish(client)
+	rspChannel := path.Join(topic, cid)
+	rspChan := make(chan interface{}, 0)
 
-  client.Disconnect(250)
-}
-
-func publish(client mqtt.Client) {
-  // Turn privacy mask 1 on and off again after 15s
-  nums := []int{1, 0}
-  for _, num := range nums {
-    value := fmt.Sprintf("%d", num)
-    token := client.Publish("cameras/115/multimedia/privacy/region1/enable/raw", 0, false, value)
-    token.Wait()
-    time.Sleep(15 * time.Second)
-  }
-}
-
-func sub(client mqtt.Client) {
-  // Subscribe to the LWT connection status
-  topic := "${projectName}"
-  token := client.Subscribe(topic, 1, nil)
-  token.Wait()
-  fmt.Println("Subscribed to LWT", topic)
+	err = c.WithTopic(rspChannel).Subscribe(func(cli mqtt.Client, msg mqtt.Message) {
+		fmt.Println("<<<< message ack received")
+		rsp := &event.EventRsp{}
+		if err = json.Unmarshal(msg.Payload(), rsp); err != nil {
+			fmt.Println(err)
+		}
+		ack, err := json.MarshalIndent(rsp, "", "  ")
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(string(ack))
+		rspChan <- 0
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+	select {
+	case <-rspChan:
+	case <-time.After(time.Second * time.Duration(10)):
+		fmt.Println("**** message ack timeout")
+	}
+	_ = c.WithTopic(rspChannel).Unsubscribe()
 }
 `;
 
