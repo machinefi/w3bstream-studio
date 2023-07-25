@@ -283,6 +283,7 @@ model t_access_key {
   f_expired_at    BigInt @default(0)
   f_last_used     BigInt @default(0)
   f_desc          String @default("") @db.VarChar(255)
+  f_privileges    String @default("[]")
   f_created_at    BigInt @default(0)
   f_updated_at    BigInt @default(0)
   f_deleted_at    BigInt @default(0)

@@ -338,7 +338,8 @@ export const w3bstreamRouter = t.router({
         f_updated_at: true,
         f_expired_at: true,
         f_desc: true,
-        f_identity_type: true
+        f_identity_type: true,
+        f_privileges: true
       }
     });
     return {
