@@ -32,10 +32,10 @@ var (
 func init() {
 
 	cid = uuid.NewString()
-	token := "${headers.Authorization}"
-	topic = "${projectName}"
+	token := "\${headers.Authorization}"
+	topic = "\${projectName}"
 	data := ""
-	urls := strings.Split("${url}", ":")
+	urls := strings.Split("\${url}", ":")
 	scheme := urls[0]
 	host := urls[1][2:]
 	port, _ := strconv.Atoi(urls[2])
