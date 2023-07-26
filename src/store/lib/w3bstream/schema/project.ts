@@ -135,7 +135,7 @@ export default class ProjectModule {
     function: async (projectIDorName = undefined) => {
       console.log('projectIDorName', projectIDorName);
       const projects = await trpc.api.projectDetail.query({
-        projectID: String(projectIDorName ?? this.allProjects?.current?.f_project_id)
+        projectIDorName: String(projectIDorName ?? this.allProjects?.current?.f_project_id)
       });
       if (projects) {
         const regex = /(?:[^_]*_){2}(.*)/;

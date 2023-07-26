@@ -30,7 +30,8 @@ const Page = observer(() => {
         w3s.project.projectDetail.call(String(router.query.id));
       } else {
         w3s.project.allProjects.call().then((res) => {
-          w3s.project.allProjects.onSelect(res?.findIndex((i) => Number(i.f_name) == Number(router.query.id)) ?? 0);
+          w3s.project.allProjects.onSelect(res?.findIndex((i) => String(i.f_name) == String(router.query.id)) ?? 0);
+          console.log(w3s.project.allProjects.currentIndex,' w3s.project.allProjects');
         });
         w3s.project.projectDetail.call(String(router.query.id));
       }

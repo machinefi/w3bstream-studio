@@ -133,7 +133,7 @@ export const w3bstreamRouter = t.router({
   projectDetail: authProcedure
     .input(
       z.object({
-        projectIDorName: z.string().optional(),
+        projectIDorName: z.string().optional()
       })
     )
     .query(async ({ ctx, input }) => {
@@ -145,17 +145,16 @@ export const w3bstreamRouter = t.router({
           }
         }
       };
-      if (input.projectID) {
+
+      if (/^\d+$/.test(input.projectIDorName)) {
         //@ts-ignore
         _where.where.f_project_id = {
-          equals: BigInt(input.projectID)
+          equals: BigInt(input.projectIDorName)
         };
-      }
-
-      if (input.projectName) {
+      } else {
         //@ts-ignore
         _where.where.f_name = {
-          equals: input.projectName
+          equals: input.projectIDorName
         };
       }
 

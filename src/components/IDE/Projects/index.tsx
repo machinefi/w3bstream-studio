@@ -148,7 +148,7 @@ const Projects = observer(() => {
                 onClick={async (e) => {
                   e.stopPropagation();
                   if (instance) {
-                    router.push(`/project/${project.f_project_id}?tab=METRICS`);
+                    router.push(`/project/${project.f_name}?tab=METRICS`);
                     // w3s.showContent = 'METRICS';
                     // allProjects.onSelect(index);
                     // projectDetail.call();
