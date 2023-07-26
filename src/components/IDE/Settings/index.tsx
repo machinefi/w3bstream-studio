@@ -82,7 +82,10 @@ const Settings = () => {
           Update WASM
         </Button>
       )
-    },
+    }
+  ];
+
+  const streamComputingDatas = [
     {
       title: 'Project Flow',
       value: '',
@@ -165,6 +168,29 @@ const Settings = () => {
                   </Tooltip>
                 )}
                 :
+              </Flex>
+              <Text ml="10px" fontSize={'14px'} color="blackAlpha.700">
+                {item.value}
+              </Text>
+              {item.extra}
+            </Flex>
+          );
+        })}
+      </Box>
+
+      <Box mt="10px" p="20px" border="1px solid #eee" borderRadius="8px">
+        <Text fontSize={'18px'} fontWeight={600}>
+          Stream computing beta
+        </Text>
+        <Text fontSize="14px" color="#7a7a7a">
+          If you want to experience the streaming computation feature.please click "update flow"to upload the configuration and update wasm
+        </Text>
+        <Divider my="10px" mb="10px"/>
+        {streamComputingDatas.map((item) => {
+          return (
+            <Flex key={item.title} alignItems={'center'} mb="20px">
+              <Flex fontWeight={'500'} fontSize="14px" alignItems={'center'} color="blackAlpha.900" minWidth={150} textAlign={'left'}>
+                <Text>{item.title}</Text>
               </Flex>
               <Text ml="10px" fontSize={'14px'} color="blackAlpha.700">
                 {item.value}
