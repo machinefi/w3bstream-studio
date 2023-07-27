@@ -85,7 +85,7 @@ const ToolBar = (props: ToolBar) => {
                           pathname: router.pathname,
                           query: {
                             tab: 'METRICS',
-                            id: item.f_project_id.toString()
+                            id: item.f_name.toString()
                           }
                         },
                         null,

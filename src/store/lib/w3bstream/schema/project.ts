@@ -130,12 +130,12 @@ export default class ProjectModule {
     }
   });
 
-  projectDetail = new PromiseState<(project_id?: string) => Promise<any>, ProjectType>({
+  projectDetail = new PromiseState<(projectIDorName?: string) => Promise<any>, ProjectType>({
     // defaultValue: [],
-    function: async (project_id = undefined) => {
-      console.log('project_id', project_id);
+    function: async (projectIDorName = undefined) => {
+      console.log('projectIDorName', projectIDorName);
       const projects = await trpc.api.projectDetail.query({
-        projectID: String(project_id ?? this.allProjects?.current?.f_project_id)
+        projectIDorName: String(projectIDorName ?? this.allProjects?.current?.f_project_id)
       });
       if (projects) {
         const regex = /(?:[^_]*_){2}(.*)/;

@@ -4,6 +4,25 @@ import { inferProcedureOutput } from '@trpc/server';
 import { helper } from '@/lib/helper';
 
 export const w3bstreamRouter = t.router({
+  updateProjectTag: authProcedure
+    .input(
+      z.object({
+        projectID: z.string(),
+        description: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { projectID, description } = input;
+      const project = await ctx.prisma.t_project.update({
+        where: {
+          f_project_id: BigInt(projectID)
+        },
+        data: {
+          f_description: description
+        }
+      });
+      return project;
+    }),
   projects: authProcedure.query(async ({ ctx }) => {
     const accountID = BigInt(ctx.user.Payload);
     const projects = await ctx.prisma.t_project.findMany({
@@ -114,21 +133,33 @@ export const w3bstreamRouter = t.router({
   projectDetail: authProcedure
     .input(
       z.object({
-        projectID: z.string()
+        projectIDorName: z.string().optional()
       })
     )
     .query(async ({ ctx, input }) => {
       const accountID = BigInt(ctx.user.Payload);
-
-      const projects = await ctx.prisma.t_project.findMany({
+      let _where = {
         where: {
           f_account_id: {
             equals: BigInt(accountID)
-          },
-          f_project_id: {
-            equals: BigInt(input.projectID)
           }
-        },
+        }
+      };
+
+      if (/^\d+$/.test(input.projectIDorName)) {
+        //@ts-ignore
+        _where.where.f_project_id = {
+          equals: BigInt(input.projectIDorName)
+        };
+      } else {
+        //@ts-ignore
+        _where.where.f_name = {
+          equals: input.projectIDorName
+        };
+      }
+
+      const projects = await ctx.prisma.t_project.findMany({
+        ..._where,
         orderBy: {
           f_created_at: 'desc'
         },

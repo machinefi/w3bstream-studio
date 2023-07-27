@@ -5,7 +5,9 @@ import { defaultButtonStyle } from '@/lib/theme';
 
 type Options = {
   tags: string[];
+  selectedTags?: string[];
   flexProps?: FlexProps;
+  ButtonProps?: FlexProps;
 };
 
 export interface SelectTagWidgetProps extends WidgetProps {
@@ -19,10 +21,10 @@ export interface SelectTagWidgetUIOptions {
 
 function SelectTagWidget({ id, options, value, required, label, onChange }: SelectTagWidgetProps) {
   const [tags, setTags] = useState(options.tags || []);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState(options.selectedTags || []);
   const [addingTagState, setSddingTagState] = useState<'DEFAULT' | 'INPUTTING'>('DEFAULT');
   const [inputV, setInputV] = useState('');
-  const { flexProps = {} } = options;
+  const { flexProps = {}, ButtonProps = {} } = options;
 
   useEffect(() => {
     onChange(selectedTags.join(','));
@@ -31,18 +33,12 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" position={'relative'}>
-        {/* <Text>{label}</Text>
-        {required && (
-          <chakra.span ml="0.25rem" color="#D34B46">
-            *
-          </chakra.span>
-        )} */}
-        <Flex flex={1} position="absolute" right={0} top="-30px" mr="5px" alignItems="center" justifyContent={'flex-end'}>
+        <Flex flex={1} position="absolute" right={0} top="-30px" mr="5px" alignItems="center" justifyContent={'flex-end'} {...ButtonProps}>
           {addingTagState === 'DEFAULT' && (
             <Button
               size={'sm'}
               {...defaultButtonStyle}
-              fontSize={"12px"}
+              fontSize={'12px'}
               onClick={() => {
                 setSddingTagState('INPUTTING');
               }}
@@ -62,18 +58,21 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
                 onChange={(e) => {
                   const v = e.target.value;
                   setInputV(v);
+
                 }}
               />
               <Button
                 ml="10px"
                 h="30px"
                 size="sm"
-                fontSize={"12px"}
+                fontSize={'12px'}
                 {...defaultButtonStyle}
                 onClick={() => {
                   if (inputV) {
+                    if(tags.includes(inputV)) return;
                     setTags([...tags, inputV]);
                     setSddingTagState('DEFAULT');
+                    setSelectedTags([...selectedTags, inputV]);
                   }
                 }}
               >
@@ -106,7 +105,7 @@ function SelectTagWidget({ id, options, value, required, label, onChange }: Sele
                 }
               }}
             >
-              <Text fontSize={"12px"}>{tag}</Text>
+              <Text fontSize={'12px'}>{tag}</Text>
             </Flex>
           );
         })}
