@@ -818,7 +818,9 @@ export default class ProjectModule {
               }
               if (json.contractLog && Array.isArray(json.contractLog)) {
                 await createData({
-                  list: json.contractLog,
+                  list: json.contractLog.map((i) => {
+                    return { ...i, paused: true };
+                  }),
                   getPostUrl: () => `/api/w3bapp/monitor/x/${projectName}/contract_log`
                 });
               }
