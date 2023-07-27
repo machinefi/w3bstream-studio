@@ -4,6 +4,7 @@ import { inferProcedureOutput, TRPCError } from '@trpc/server';
 import { PostgresMeta } from '@/postgres-meta/index';
 import { DEFAULT_POOL_CONFIG, getConnectionString, getDatabaseName, PG_CONNECTION } from '@/constants/postgres-meta';
 import format from 'pg-format';
+import { formatColumn } from '@/postgres-meta/helpers';
 
 export const pgRouter = t.router({
   dbState: authProcedure
@@ -97,6 +98,80 @@ export const pgRouter = t.router({
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
       }
       return data;
+    }),
+  importTables: authProcedure
+    .input(
+      z.object({
+        projectID: z.string(),
+        schemas: z.array(
+          z.object({
+            schemaName: z.string(),
+            tables: z.array(
+              z.object({
+                tableName: z.string(),
+                tableSchema: z.string(),
+                comment: z.string().optional().nullable(),
+                columns: z.array(
+                  z.object({
+                    name: z.string(),
+                    type: z.string(),
+                    defaultValue: z.any().optional().nullable(),
+                    isIdentity: z.boolean().optional(),
+                    isNullable: z.boolean().optional(),
+                    isUnique: z.boolean().optional(),
+                    isPrimaryKey: z.boolean().optional(),
+                    comment: z.string().optional().nullable()
+                  })
+                ),
+              })
+            )
+          })
+        )
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { schemas } = input;
+      const pgMeta = new PostgresMeta({ ...DEFAULT_POOL_CONFIG, connectionString: getConnectionString(input.projectID) });
+      const errorMsgs = [];
+      for (const schema of schemas) {
+        const tables = schema.tables;
+        for (const t of tables) {
+          const { data, error } = await pgMeta.tables.create({
+            schema: t.tableSchema,
+            name: t.tableName,
+            comment: t.comment ?? ''
+          });
+          if (error) {
+            errorMsgs.push(error.message);
+            break;
+          }
+          const tableId = data.id;
+          for (const column of t.columns) {
+            // @ts-ignore
+            const columnData = formatColumn(column);
+            const { error } = await pgMeta.columns.create({
+              table_id: tableId,
+              name: columnData.name,
+              type: columnData.type,
+              default_value: columnData.defaultValue,
+              // @ts-ignore
+              default_value_format: columnData.defaultValueFormat,
+              is_identity: columnData.isIdentity,
+              is_nullable: columnData.isNullable,
+              is_unique: columnData.isUnique,
+              is_primary_key: columnData.isPrimaryKey,
+              comment: columnData.comment
+            });
+
+            if (error) {
+              errorMsgs.push(error.message);
+              break;
+            }
+          }
+        }
+      }
+      await pgMeta.end();
+      return { errorMsgs };
     }),
   updateTable: authProcedure
     .input(

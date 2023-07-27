@@ -11,6 +11,7 @@ import { ColumnItemWidget, TableColumnsWidget } from '@/components/JSONFormWidge
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import EditorWidget from '@/components/JSONFormWidgets/EditorWidget';
 import toast from 'react-hot-toast';
+import { ExportTableType, WidgetColumn, formatColumns } from '@/postgres-meta/helpers';
 
 export const createTableSchema = {
   type: 'object',
@@ -52,48 +53,6 @@ export const columnSchema = {
 
 type CreateTableSchemaType = FromSchema<typeof createTableSchema>;
 type ColumnSchemaType = FromSchema<typeof columnSchema>;
-
-export interface WidgetColumn {
-  id: string;
-  name: string;
-  type: string;
-  defaultValue?: string;
-  isPrimaryKey: boolean;
-  isUnique: boolean;
-  isNullable?: boolean;
-  isIdentity: boolean;
-  isDefineASArray?: boolean;
-  comment?: string;
-}
-
-export type ExportTableType = {
-  schemaName: string;
-  tables: {
-    tableName: string;
-    tableSchema: string;
-    comment: string;
-    columns: {
-      name: string;
-      type: string;
-      defaultValue: string;
-      isIdentity: boolean;
-      isNullable: boolean;
-      isUnique: boolean;
-      isPrimaryKey: boolean;
-      comment: string;
-    }[];
-    relationships: {
-      id: number;
-      constraint_name: string;
-      source_schema: string;
-      source_table_name: string;
-      source_column_name: string;
-      target_table_schema: string;
-      target_table_name: string;
-      target_column_name: string;
-    }[];
-  }[];
-};
 
 export default class DBTableModule {
   allTables = new PromiseState<() => Promise<any>, { schemaName: string; tables: TableType[] }[]>({
@@ -742,88 +701,19 @@ export default class DBTableModule {
   }
 
   async importTables({ projectID, schemas }: { projectID: string; schemas: ExportTableType[] }) {
-    if (!schemas || !Array.isArray(schemas)) {
-      toast.error('No data provided');
-      return;
-    }
-    for (const schema of schemas) {
-      const tables = schema?.tables;
-      if (!tables || !Array.isArray(tables)) {
-        toast.error('No data provided');
-        return;
+    try {
+      const { errorMsgs } = await trpc.pg.importTables.mutate({
+        projectID,
+        schemas
+      });
+      if (errorMsgs?.length) {
+        toast.error(errorMsgs.join('\n'));
       }
-      for (const t of tables) {
-        if (!t.tableName || !t.tableSchema) {
-          toast.error('No data provided');
-          return;
-        }
-        try {
-          const tableRes = await trpc.pg.createTable.mutate({
-            projectID,
-            schema: t.tableSchema,
-            name: t.tableName,
-            comment: t.comment ?? ''
-          });
-          const tableId = tableRes.id;
-          if (tableId) {
-            for (const column of t.columns) {
-              try {
-                // @ts-ignore
-                const columnData = formatColumn(column);
-                await trpc.pg.createColumn.mutate({
-                  projectID,
-                  tableId,
-                  ...columnData
-                });
-              } catch (error) {}
-            }
-          }
-        } catch (error) {}
-      }
+    } catch (error) {
+      toast.error(error.message);
     }
   }
 }
-
-export const formatColumn = (column: WidgetColumn) => {
-  const { id, ...rest } = column;
-  if (column.defaultValue === 'NULL' || column.defaultValue === '') {
-    rest.defaultValue = null;
-  }
-  if (column.defaultValue === 'Empty string') {
-    rest.defaultValue = '';
-  }
-  if (column.defaultValue?.includes('now()') || column.defaultValue?.includes('uuid_generate_v4()')) {
-    // @ts-ignore
-    rest.defaultValueFormat = 'expression';
-  }
-  if (column.isDefineASArray) {
-    rest.type = `${column.type}[]`;
-    delete rest.isDefineASArray;
-  } else {
-    delete rest.isDefineASArray;
-  }
-  if (rest.comment === null) {
-    delete rest.comment;
-  }
-  if (column.type === 'text' || column.type === 'varchar') {
-    // @ts-ignore
-    rest.comment = '';
-  }
-  if (rest.isPrimaryKey) {
-    delete rest.defaultValue;
-  }
-  return rest;
-};
-
-export const formatColumns = (columns: WidgetColumn[]) => {
-  return columns
-    .filter((item) => {
-      return item.name && item.type;
-    })
-    .map((item) => {
-      return formatColumn(item);
-    });
-};
 
 export const creatColumnDataForm = (columns: ColumnType[]) => {
   const formatType = (type) => {

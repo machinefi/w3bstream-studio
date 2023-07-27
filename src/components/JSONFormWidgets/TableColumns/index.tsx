@@ -24,7 +24,7 @@ import {
 import { DeleteIcon, HamburgerIcon, SettingsIcon } from '@chakra-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
-import { WidgetColumn } from '@/store/lib/w3bstream/schema/dbTable';
+import { WidgetColumn } from '@/postgres-meta/helpers';
 
 // const ColumnTypes = ['int4', 'int8', 'float4', 'float8', 'numeric', 'json', 'jsonb', 'text', 'varchar', 'uuid', 'time', 'timetz', 'timestamp', 'timestamptz', 'date', 'bool', 'bytea'];
 const ColumnTypes = [
