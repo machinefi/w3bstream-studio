@@ -8,11 +8,12 @@ import { MdRefresh } from 'react-icons/md';
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { FiUpload } from 'react-icons/fi';
 import { hooks } from '@/lib/hooks';
-import { formatColumn, creatColumnDataForm } from '@/store/lib/w3bstream/schema/dbTable';
+import { creatColumnDataForm } from '@/store/lib/w3bstream/schema/dbTable';
 import MonacoEditor from '@monaco-editor/react';
 import { _ } from '@/lib/lodash';
 import CSVReader from 'react-csv-reader';
 import toast from 'react-hot-toast';
+import { formatColumn } from '@/postgres-meta/helpers';
 
 const EditTable = observer(() => {
   const {

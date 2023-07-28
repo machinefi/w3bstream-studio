@@ -2,12 +2,13 @@ import { IndexDb } from '@/lib/dexie';
 import { eventBus } from '@/lib/event';
 import toast from 'react-hot-toast';
 import { hooks } from '@/lib/hooks';
-import { ExportTableType } from '@/store/lib/w3bstream/schema/dbTable';
+import { ExportTableType } from '@/postgres-meta/helpers';
 //https://sql.js.org/#/
 //https://sqliteonline.com/
 import { Statement } from 'sql.js';
 import { JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
 import { makeAutoObservable } from 'mobx';
+
 interface sqlTypes {
   int32?: number;
   int64?: number;
