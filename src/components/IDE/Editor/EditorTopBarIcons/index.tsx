@@ -3,9 +3,10 @@ import { useStore } from '@/store/index';
 import { Box, Flex, Portal, Spinner, Text, Tooltip } from '@chakra-ui/react';
 import { FilesItemType } from '@/store/lib/w3bstream/schema/filesList';
 import { VscDebugStart } from 'react-icons/vsc';
+import { MdUploadFile } from 'react-icons/md';
 import { BsDatabaseFillAdd } from 'react-icons/bs';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import { compileAndCreateProject, debugAssemblyscript, debugDemo, debugSimulation, onCreateDB } from '../EditorFunctions';
+import { compileAndCreateProject, compileAndUpdateProject, debugAssemblyscript, debugDemo, debugSimulation, onCreateDB } from '../EditorFunctions';
 import { HorizontalScrollBox } from '@/components/Common/HorizontalScrollBox';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { FileIcon } from '@/components/Tree/fileIcon';
@@ -116,11 +117,27 @@ export const EditorTopBarIcons = observer(() => {
 
       {curFilesListSchema?.curActiveFile?.data?.dataType == 'assemblyscript' && (
         <>
+          <Tooltip label={`Upload to Project`} placement="top" color={'white'}>
+            <Box>
+              <MdUploadFile
+                color="white"
+                style={{
+                  marginLeft: 'auto',
+                  cursor: 'pointer',
+                  color: 'white'
+                }}
+                onClick={() => {
+                  compileAndUpdateProject();
+                }}
+              />
+            </Box>
+          </Tooltip>
+
           <Tooltip label={`Upload to Devnet`} placement="top">
             <Text
-              ml="auto"
               cursor="pointer"
               mr={4}
+              ml={4}
               className="pi pi-cloud-upload"
               color="white"
               onClick={async () => {

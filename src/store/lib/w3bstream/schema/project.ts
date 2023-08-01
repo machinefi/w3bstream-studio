@@ -20,6 +20,7 @@ import { helper } from '@/lib/helper';
 import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidgets/EditorWidget';
 import * as jsonpatch from 'fast-json-patch';
 import toast from 'react-hot-toast';
+import { definitions } from './definitions';
 
 export const defaultSchema = {
   type: 'object',
@@ -79,6 +80,20 @@ export const importProjectSchema = {
   required: []
 } as const;
 
+export let updateProjectWasmSchema = {
+  definitions: {
+    projects: {
+      type: 'string'
+    }
+  },
+  type: 'object',
+  properties: {
+    projectID: { $ref: '#/definitions/projects', title: 'Project ID' },
+    wasm: { type: 'string', title: 'Wasm File' }
+  },
+  required: ['projectID', 'wasm']
+} as const;
+
 export const editProjectFileSchema = {
   type: 'object',
   properties: {
@@ -93,6 +108,12 @@ type DeveloperInitializationTemplateSchemaType = FromSchema<typeof developerInit
 type CreateProjectByWasmSchemaType = FromSchema<typeof createProjectByWasmSchema>;
 type ImportProjectSchemaType = FromSchema<typeof importProjectSchema>;
 type EditProjectFileSchemaType = FromSchema<typeof editProjectFileSchema>;
+type UpdateProjectWasmSchemaType = FromSchema<typeof updateProjectWasmSchema>;
+
+// @ts-ignore
+updateProjectWasmSchema.definitions = {
+  projects: definitions.projects
+};
 
 enum ProjectConfigType {
   PROJECT_DATABASE = 1,
@@ -429,6 +450,38 @@ export default class ProjectModule {
     }
   });
 
+  updateProjectWasmForm = new JSONSchemaFormState<UpdateProjectWasmSchemaType, UiSchema & { wasm: FileWidgetUIOptions }>({
+    //@ts-ignore
+    schema: updateProjectWasmSchema,
+    uiSchema: {
+      'ui:submitButtonOptions': {
+        norender: false,
+        submitText: 'Submit'
+      },
+
+      wasm: {
+        'ui:widget': FileWidget,
+        'ui:options': {
+          accept: {
+            'application/wasm': ['.wasm']
+          },
+          tips: `Drag 'n' drop a file here, or click to select a file`,
+          showDownload: true
+        }
+      }
+    },
+    afterSubmit: async (e) => {
+      eventBus.emit('base.formModal.afterSubmit', e.formData);
+      this.updateProjectWasmForm.reset();
+    },
+    value: new JSONValue<UpdateProjectWasmSchemaType>({
+      default: {
+        projectID: '',
+        wasm: ''
+      }
+    })
+  });
+
   formMode: 'add' | 'edit' = 'add';
   selectedNames = [];
 
@@ -502,7 +555,7 @@ export default class ProjectModule {
     }
   }
 
-  async createProjectByWasm() {
+  async createProjectByWasm(): Promise<{ projectID: any }> {
     const formData = await hooks.getFormData({
       title: 'Create Project By Wasm',
       size: 'md',
@@ -542,14 +595,15 @@ export default class ProjectModule {
         });
         if (res.data?.message === 'OK') {
           console.log(sqlSchema, 'json.database.schemas');
+          const projectID = res.data.createdProjectIds[0];
           if (sqlSchema) {
-            const projectID = res.data.createdProjectIds[0];
             await globalThis.store.w3s.dbTable.importTables({
               projectID,
               schemas: sqlSchema.schemas
             });
           }
           eventBus.emit('project.create');
+          return { projectID };
           // eventBus.emit('contractlog.create');
         }
       } catch (error) {
@@ -558,6 +612,39 @@ export default class ProjectModule {
       }
     }
   }
+
+  async updateProjectWasm(): Promise<{ projectID: any }> {
+    const { projectID, wasm } = await hooks.getFormData({
+      title: 'Update Project By Wasm',
+      size: 'md',
+      formList: [
+        {
+          form: this.updateProjectWasmForm
+        }
+      ]
+    });
+    const appletName = this.allProjects.value?.find((i) => i.f_project_id === projectID)?.applets[0].f_name;
+    const appletId = this.allProjects.value?.find((i) => i.f_project_id === projectID)?.applets[0].f_applet_id;
+    if (!appletId) {
+      toast.error('This project has no wasm file');
+      throw new Error('This project has no wasm file');
+    }
+    const projectName = this.allProjects.value?.find((i) => i.f_project_id === projectID)?.f_name;
+
+    const res = await axios.request({
+      method: 'post',
+      url: `/api/upload-template-file`,
+      data: {
+        projectName,
+        appletName,
+        appletId,
+        wasmRaw: wasm,
+        uploadType: 'update'
+      }
+    });
+    return { projectID };
+  }
+
   createProjectForDeveloper = new PromiseState({
     loadingText: 'Creating Project...',
     context: this,
