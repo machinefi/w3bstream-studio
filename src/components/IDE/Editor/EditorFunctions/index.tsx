@@ -10,7 +10,7 @@ import { StorageState } from '@/store/standard/StorageState';
 import { TableJSONSchema } from '@/server/wasmvm/sqldb';
 import { StdIOType } from '@/server/wasmvm';
 import { asc, faker } from '../../Labs';
-import { redirect } from 'next/navigation';
+import router from 'next/router';
 
 export const compileAssemblyscript = async (code: string) => {
   let { error, binary, text, stats, stderr } = await (
@@ -51,7 +51,8 @@ export const compileAndCreateProject = async (needCompile: boolean = true) => {
   }
 
   try {
-    await globalThis.store?.w3s.project.createProjectByWasm();
+    const { projectID } = await globalThis.store?.w3s.project.createProjectByWasm();
+    console.log(projectID);
     reactHotToast(
       (t) => (
         <span>
@@ -61,13 +62,45 @@ export const compileAndCreateProject = async (needCompile: boolean = true) => {
             ml={2}
             onClick={async () => {
               reactHotToast.dismiss(t.id);
-              // globalThis.store.w3s.currentHeaderTab = 'PROJECTS';
-              // redirect('./')
-              // todo : project detail
-              globalThis.store.w3s.project.resetSelectedNames();
-              await globalThis.store?.w3s.project.allProjects.call();
-              globalThis.store.w3s.project.allProjects.onSelect(0);
-              globalThis.store.w3s.showContent = 'METRICS';
+              router.push(`/project/${projectID}`);
+            }}
+          >
+            Go to
+          </Button>
+        </span>
+      ),
+      {
+        duration: 5000,
+        icon: <CheckCircleIcon color={'green'} />
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const compileAndUpdateProject = async () => {
+  const curActiveFile = globalThis.store?.w3s.projectManager.curFilesListSchema.curActiveFile;
+  const { error, binary, text, stats, stderr } = await compileAssemblyscript(curActiveFile.data.code);
+  if (error) {
+    console.log(error);
+    return toast.error(error.message);
+  }
+  globalThis.store?.w3s.project.updateProjectWasmForm.value.set({
+    wasm: helper.Uint8ArrayToWasmBase64FileData(curActiveFile.label.replace('.as', '.wasm'), binary)
+  });
+  try {
+    const { projectID } = await globalThis.store?.w3s.project.updateProjectWasm();
+    reactHotToast(
+      (t) => (
+        <span>
+          Update Project Success
+          <Button
+            size="sm"
+            ml={2}
+            onClick={async () => {
+              reactHotToast.dismiss(t.id);
+              router.push(`/project/${projectID}`);
             }}
           >
             Go to

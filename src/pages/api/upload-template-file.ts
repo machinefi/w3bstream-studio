@@ -3,28 +3,47 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const { projectName, appletName, appletId, wasmURL, uploadType } = req.body;
-    if (!projectName || !appletName || !wasmURL || !uploadType) {
+    const { projectName, appletName, appletId, wasmURL, wasmRaw, uploadType } = req.body;
+    if (!projectName || !appletName || !uploadType || (!wasmURL && !wasmRaw)) {
       res.status(400).json({ message: 'Bad Request' });
       return;
     }
     const token = req.headers.authorization.replace('Bearer ', '');
     try {
       const formData = new FormData();
-      const response = await fetch(wasmURL);
-      const blob = await response.blob();
-      const wasmName = wasmURL.split('/').pop();
-      const file = new File([blob], wasmName, { type: 'application/wasm' });
-      formData.set('file', file, wasmName);
-      formData.set(
-        'info',
-        JSON.stringify({
-          projectName,
-          appletName,
-          wasmName,
-          start: true
-        })
-      );
+
+      if (wasmURL) {
+        const response = await fetch(wasmURL);
+        const blob = await response.blob();
+        const wasmName = wasmURL.split('/').pop();
+        const file = new File([blob], wasmName, { type: 'application/wasm' });
+        formData.set('file', file, wasmName);
+        formData.set(
+          'info',
+          JSON.stringify({
+            projectName,
+            appletName,
+            wasmName,
+            start: true
+          })
+        );
+      }
+
+      if (wasmRaw) {
+        const buffer = Buffer.from(wasmRaw.replace(/data:application\/wasm;(?:name=(.+)\.wasm);base64,/, ''), 'base64');
+        const wasmName = wasmRaw.match(/name=(.+)\.wasm/)[1];
+        formData.set('file', new Blob([buffer], { type: 'application/wasm' }));
+        formData.set(
+          'info',
+          JSON.stringify({
+            projectName,
+            appletName,
+            wasmName,
+            start: true
+          })
+        );
+      }
+
       if (uploadType === 'add') {
         const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/applet/x/${projectName}`, {
           method: 'post',
