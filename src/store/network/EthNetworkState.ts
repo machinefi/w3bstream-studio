@@ -6,6 +6,7 @@ import { NetworkState } from './NetworkState';
 import { GodStore } from '../god';
 import BigNumber from 'bignumber.js';
 import { CallParams } from '../lib/ContractState';
+import { BigNumberState } from '../standard/BigNumberState';
 
 export class EthNetworkState implements NetworkState {
   god: GodStore;
@@ -33,6 +34,14 @@ export class EthNetworkState implements NetworkState {
     }
     const balance = await this.signer.provider.getBalance(this.account);
     this.currentChain.Coin.balance.setValue(new BigNumber(balance.toString()));
+  }
+
+  async loadBalanceFromAddress(address: string): Promise<BigNumberState> {
+    if (!this.signer) {
+      return new BigNumberState({ value: new BigNumber(0) });
+    }
+    const balance = await this.signer.provider.getBalance(address);
+    return new BigNumberState({ value: new BigNumber(balance.toString()) });
   }
 
   set(args: Partial<EthNetworkState>) {

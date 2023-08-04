@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Divider, Flex,HStack, Icon, Spinner, Stack, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, HStack, Icon, Spinner, Stack, Text, Tooltip } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useStore } from '@/store/index';
+import { rootStore, useStore } from '@/store/index';
 import { ProjectEnvs } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
@@ -42,12 +42,25 @@ const Settings = () => {
           return '';
         }
       }
+    }),
+    operateBalance: new PromiseState<() => Promise<any>, string>({
+      defaultValue: null,
+      function: async () => {
+        try {
+          console.log(await rootStore.god.currentNetwork.loadBalanceFromAddress(store.operateAddress.value));
+          return await (await rootStore.god.currentNetwork.loadBalanceFromAddress(store.operateAddress.value)).format;
+        } catch (error) {
+          return '';
+        }
+      }
     })
   }));
 
   useEffect(() => {
     project.setMode('edit');
-    store.operateAddress.call();
+    store.operateAddress.call().then(() => {
+      store.operateBalance.call();
+    });
   }, []);
 
   useEffect(() => {
@@ -64,10 +77,15 @@ const Settings = () => {
       value: store.operateAddress.value,
       tips: 'The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction is that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are se nding your transactions.',
       extra: (
-        <HStack spacing='4px' ml={2} >
-          <ExternalLink tooltipLabel="Jump to explorer" link="`https://iotexscan.io/address/${store.operateAddress.value}?format=0x`" />
-          <Copy  value={store.operateAddress.value} />
-        </HStack>
+        <>
+          {store.operateAddress && (
+            <HStack spacing="4px" ml={2}>
+              {store.operateBalance.value != null && <Box fontSize="sm">({store.operateBalance.value} IOTX)</Box>}
+              <ExternalLink tooltipLabel="Jump to explorer" link={`https://iotexscan.io/address/${store.operateAddress.value}?format=0x`} />
+              <Copy value={store.operateAddress.value} />
+            </HStack>
+          )}
+        </>
       )
     },
     {
