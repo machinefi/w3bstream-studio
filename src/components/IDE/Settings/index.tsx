@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Divider, Flex, Icon, Spinner, Stack, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, HStack, Icon, Spinner, Stack, Text, Tooltip } from '@chakra-ui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useStore } from '@/store/index';
+import { rootStore, useStore } from '@/store/index';
 import { ProjectEnvs } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { defaultOutlineButtonStyle } from '@/lib/theme';
 import { axios } from '@/lib/axios';
@@ -9,9 +9,12 @@ import { eventBus } from '@/lib/event';
 import { FaFileExport, FaRegQuestionCircle } from 'react-icons/fa';
 import { PromiseState } from '@/store/standard/PromiseState';
 import { MdEditDocument } from 'react-icons/md';
+import { FiExternalLink } from 'react-icons/fi';
 import SelectTagWidget from '@/components/JSONFormWidgets/SelectTagWidget';
 import { trpc } from '@/lib/trpc';
 import toast from 'react-hot-toast';
+import { Copy } from '@/components/Common/Copy';
+import { ExternalLink } from '@/components/Common/ExternalLink';
 
 const Settings = () => {
   const {
@@ -39,12 +42,25 @@ const Settings = () => {
           return '';
         }
       }
+    }),
+    operateBalance: new PromiseState<() => Promise<any>, string>({
+      defaultValue: null,
+      function: async () => {
+        try {
+          console.log(await rootStore.god.currentNetwork.loadBalanceFromAddress(store.operateAddress.value));
+          return await (await rootStore.god.currentNetwork.loadBalanceFromAddress(store.operateAddress.value)).format;
+        } catch (error) {
+          return '';
+        }
+      }
     })
   }));
 
   useEffect(() => {
     project.setMode('edit');
-    store.operateAddress.call();
+    store.operateAddress.call().then(() => {
+      store.operateBalance.call();
+    });
   }, []);
 
   useEffect(() => {
@@ -59,7 +75,18 @@ const Settings = () => {
     {
       title: 'Operator Address',
       value: store.operateAddress.value,
-      tips: 'The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction is that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are se nding your transactions.'
+      tips: 'The operator account is randomly generated and assigned to your project. It is used by W3bstream to sign transaction is that your applet sends to the blockchain. Please ensure that you fund this address with the tokens required for gas on the destination chain to which you are se nding your transactions.',
+      extra: (
+        <>
+          {store.operateAddress && (
+            <HStack spacing="4px" ml={2}>
+              {store.operateBalance.value != null && <Box fontSize="sm">({store.operateBalance.value} IOTX)</Box>}
+              <ExternalLink tooltipLabel="Jump to explorer" link={`https://iotexscan.io/address/${store.operateAddress.value}?format=0x`} />
+              <Copy value={store.operateAddress.value} />
+            </HStack>
+          )}
+        </>
+      )
     },
     {
       title: 'WASM file name',
@@ -163,6 +190,7 @@ const Settings = () => {
               <Text ml="10px" fontSize={'14px'} color="blackAlpha.700">
                 {item.value}
               </Text>
+
               {item.extra}
             </Flex>
           );
