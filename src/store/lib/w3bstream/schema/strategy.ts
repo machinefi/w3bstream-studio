@@ -7,6 +7,7 @@ import { StrategyType } from '@/server/routers/w3bstream';
 import { hooks } from '@/lib/hooks';
 import { defaultButtonStyle, defaultOutlineButtonStyle } from '@/lib/theme';
 import toast from 'react-hot-toast';
+import InputTagWidget from '@/components/JSONFormWidgets/InputTagWidget';
 
 export const schema = {
   definitions: {
@@ -42,6 +43,17 @@ export default class StrategyModule {
       'ui:submitButtonOptions': {
         norender: false,
         submitText: 'Submit'
+      },
+      handler: {
+        'ui:widget': InputTagWidget,
+        "ui:options": {
+          tags: [
+            {
+              label: 'globalHandler',
+              value: 'globalHandler',
+              tooltip: 'globalHandler'
+            }]
+          }
       }
     },
     afterSubmit: async (e) => {
