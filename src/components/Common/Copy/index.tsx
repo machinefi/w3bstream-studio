@@ -23,7 +23,7 @@ export const Copy = observer(({ value }: IProps) => {
     >
       <CopyButton value={value} timeout={2000}>
         {({ copied, copy }) => (
-          <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
+          <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="top">
             <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy}>
               {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
             </ActionIcon>
