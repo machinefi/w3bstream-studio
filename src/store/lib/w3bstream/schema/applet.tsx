@@ -334,7 +334,7 @@ export default class AppletModule {
                           }
                         ]
                       });
-                      const { appletID, eventType, handler } = formData;
+                      const { appletID, eventType, handler,autoCollectMetric } = formData;
                       if (appletID && eventType && handler) {
                         const applet = this.curApplet;
                         try {
@@ -344,7 +344,8 @@ export default class AppletModule {
                             data: {
                               appletID,
                               eventType,
-                              handler
+                              handler,
+                              autoCollectMetric
                             }
                           });
                           toast.success('Updated successfully');
