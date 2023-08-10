@@ -189,7 +189,8 @@ export const w3bstreamRouter = t.router({
                   f_applet_id: true,
                   f_project_id: true,
                   f_event_type: true,
-                  f_handler: true
+                  f_handler: true,
+                  f_auto_collect_metric: true
                 }
               },
               instances: {
