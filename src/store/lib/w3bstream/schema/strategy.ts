@@ -51,7 +51,7 @@ export default class StrategyModule {
             {
               label: 'globalHandler',
               value: 'globalHandler',
-              tooltip: 'globalHandler'
+              tooltip: 'We will automatically collect geo data from payloads such as (lat, long, latitude longitude), example payload ({lat:"17", long:"113})'
             }]
           }
       }
