@@ -48,11 +48,11 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
     <Popover>
       <PopoverTrigger>
         <Flex alignItems="center" p="5px 14px" bg="#F3F3F3" borderRadius="60px" cursor="pointer">
-          <Avatar mr="8px" w="30px" h="30px" src={god.currentNetwork.chain.current.logoUrl} />
+          <Avatar mr="8px" w="30px" h="30px" src={god.currentNetwork?.chain?.current?.logoUrl} />
           <Flex alignItems="center">
             <Box>
               <Text fontSize="12px" fontWeight={700}>
-                {god.currentChain.Coin.balance.format} {god.currentNetwork.currentChain.Coin.symbol}
+                {god.currentChain?.Coin?.balance.format} {god.currentNetwork.currentChain?.Coin?.symbol}
               </Text>
               <Text fontSize="12px">{helper.string.truncate(god.currentNetwork.account || '0x......', 20, '...')}</Text>
             </Box>
