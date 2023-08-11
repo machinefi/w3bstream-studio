@@ -9,6 +9,7 @@ export class WalletStore {
   isConnect = false;
   isConnecting = false;
   isLogin = false;
+  chainId:number;
   wallet = new MetaMaskWallet(null);
 
   constructor() {
@@ -23,6 +24,7 @@ export class WalletStore {
         this.isConnecting = true;
         console.log({ address, chainId });
         rootStore.god.setChainId(chainId);
+        this.chainId = chainId
         const signer = await this.wallet.getSigner();
         rootStore.god.currentNetwork.set({
           account: address,
@@ -39,6 +41,7 @@ export class WalletStore {
       this.wallet.on('change', ({ address, chainId }) => {
         if (chainId) {
           rootStore.god.setChainId(chainId);
+          this.chainId = chainId
         }
         if (address) {
           rootStore.god.currentNetwork.set({
@@ -61,7 +64,7 @@ export class WalletStore {
     const t = rootStore.lang.t;
     try {
       const address = rootStore.god.currentNetwork.account;
-      const chainId = rootStore.god.currentNetwork.currentChain.chainId;
+      const chainId = this.chainId;
       const message = new SiweMessage({
         address,
         chainId,

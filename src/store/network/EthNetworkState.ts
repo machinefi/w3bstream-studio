@@ -30,10 +30,10 @@ export class EthNetworkState implements NetworkState {
 
   async loadBalance() {
     if (!this.signer || !this.account) {
-      return this.currentChain.Coin.balance.setValue(new BigNumber(0));
+      return this.currentChain?.Coin?.balance.setValue(new BigNumber(0));
     }
     const balance = await this.signer.provider.getBalance(this.account);
-    this.currentChain.Coin.balance.setValue(new BigNumber(balance.toString()));
+    this.currentChain?.Coin?.balance.setValue(new BigNumber(balance.toString()));
   }
 
   async loadBalanceFromAddress(address: string): Promise<BigNumberState> {
