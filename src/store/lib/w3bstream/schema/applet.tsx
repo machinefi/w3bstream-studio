@@ -323,7 +323,8 @@ export default class AppletModule {
                       globalThis.store.w3s.strategy.form.value.set({
                         appletID: item.f_applet_id.toString(),
                         eventType: String(item.f_event_type),
-                        handler: item.f_handler
+                        handler: item.f_handler,
+                        autoCollectMetric:item.f_auto_collect_metric == 1 ? true : false
                       });
                       const formData = await hooks.getFormData({
                         title: 'Edit Strategy',
@@ -334,7 +335,7 @@ export default class AppletModule {
                           }
                         ]
                       });
-                      const { appletID, eventType, handler } = formData;
+                      const { appletID, eventType, handler,autoCollectMetric } = formData;
                       if (appletID && eventType && handler) {
                         const applet = this.curApplet;
                         try {
@@ -344,7 +345,8 @@ export default class AppletModule {
                             data: {
                               appletID,
                               eventType,
-                              handler
+                              handler,
+                              autoCollectMetric
                             }
                           });
                           toast.success('Updated successfully');

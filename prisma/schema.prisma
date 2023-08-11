@@ -121,6 +121,7 @@ model t_strategy {
   f_created_at  BigInt @default(0)
   f_updated_at  BigInt @default(0)
   f_deleted_at  BigInt @default(0)
+  f_auto_collect_metric Int    @default(2)
 
   applet t_applet @relation(fields: [f_applet_id], references: [f_applet_id])
 

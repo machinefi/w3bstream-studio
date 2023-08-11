@@ -19,7 +19,8 @@ export const schema = {
   properties: {
     appletID: { $ref: '#/definitions/applets', title: 'Applet ID' },
     eventType: { type: 'string', title: 'Event Type' },
-    handler: { type: 'string', title: 'Handler' }
+    handler: { type: 'string', title: 'Handler' },
+    autoCollectMetric: { type: 'boolean', title: 'Auto Collect Metric',description:"Checking this option the app collects your uploaded data for statistics and charting purposes." },
   },
   required: ['appletID', 'eventType', 'handler']
 } as const;
@@ -44,17 +45,6 @@ export default class StrategyModule {
         norender: false,
         submitText: 'Submit'
       },
-      handler: {
-        'ui:widget': InputTagWidget,
-        "ui:options": {
-          tags: [
-            {
-              label: 'globalHandler',
-              value: 'globalHandler',
-              tooltip: 'We will automatically collect geo data from payloads such as (lat, long, latitude longitude), example payload ({lat:"17", long:"113})'
-            }]
-          }
-      }
     },
     afterSubmit: async (e) => {
       eventBus.emit('base.formModal.afterSubmit', e.formData);
@@ -64,7 +54,8 @@ export default class StrategyModule {
       default: {
         appletID: '',
         eventType: '',
-        handler: ''
+        handler: '',
+        autoCollectMetric:false
       }
     })
   });
@@ -95,7 +86,8 @@ export default class StrategyModule {
                   this.form.value.set({
                     appletID: item.f_applet_id.toString(),
                     eventType: String(item.f_event_type),
-                    handler: item.f_handler
+                    handler: item.f_handler,
+                    autoCollectMetric:item.f_auto_collect_metric == 1 ? true : false
                   });
                   const formData = await hooks.getFormData({
                     title: 'Edit Strategy',
@@ -106,7 +98,7 @@ export default class StrategyModule {
                       }
                     ]
                   });
-                  const { appletID, eventType, handler } = formData;
+                  const { appletID, eventType, handler,autoCollectMetric } = formData;
                   if (appletID && eventType && handler) {
                     try {
                       await axios.request({
@@ -115,7 +107,8 @@ export default class StrategyModule {
                         data: {
                           appletID,
                           eventType,
-                          handler
+                          handler,
+                          autoCollectMetric
                         }
                       });
                       toast.success('update strategy succeeded');
@@ -183,7 +176,7 @@ export default class StrategyModule {
         }
       ]
     });
-    const { appletID, eventType, handler } = formData;
+    const { appletID, eventType, handler,autoCollectMetric } = formData;
     if (appletID && eventType && handler) {
       try {
         await axios.request({
@@ -192,7 +185,8 @@ export default class StrategyModule {
           data: {
             appletID,
             eventType,
-            handler
+            handler,
+            autoCollectMetric
           }
         });
         toast.success('create strategy succeeded');
