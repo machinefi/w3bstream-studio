@@ -71,6 +71,13 @@ export default class StrategyModule {
         label: 'Handler'
       },
       {
+        key: 'f_auto_collect_metric',
+        label: 'Auto Collect Metric',
+        render: (item) => {
+          return item.f_auto_collect_metric == 1 ? 'Yes' : 'No';
+        }
+      },
+      {
         key: 'actions',
         label: 'Actions',
         actions: (item) => {
