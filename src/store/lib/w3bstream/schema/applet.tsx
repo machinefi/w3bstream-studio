@@ -310,6 +310,7 @@ export default class AppletModule {
             key: 'f_handler',
             label: 'Handler'
           },
+
           {
             key: 'actions',
             label: 'Actions',
@@ -324,7 +325,7 @@ export default class AppletModule {
                         appletID: item.f_applet_id.toString(),
                         eventType: String(item.f_event_type),
                         handler: item.f_handler,
-                        autoCollectMetric:item.f_auto_collect_metric == 1 ? true : false
+                        autoCollectMetric: item.f_auto_collect_metric == 1 ? true : false
                       });
                       const formData = await hooks.getFormData({
                         title: 'Edit Strategy',
@@ -335,7 +336,7 @@ export default class AppletModule {
                           }
                         ]
                       });
-                      const { appletID, eventType, handler,autoCollectMetric } = formData;
+                      const { appletID, eventType, handler, autoCollectMetric } = formData;
                       if (appletID && eventType && handler) {
                         const applet = this.curApplet;
                         try {
