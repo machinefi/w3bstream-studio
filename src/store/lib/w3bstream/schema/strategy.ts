@@ -20,7 +20,7 @@ export const schema = {
     appletID: { $ref: '#/definitions/applets', title: 'Applet ID' },
     eventType: { type: 'string', title: 'Event Type' },
     handler: { type: 'string', title: 'Handler' },
-    autoCollectMetric: { type: 'boolean', title: 'Auto Collect Metric',description:"Checking this option the app collects your uploaded data for statistics and charting purposes." },
+    autoCollectMetric: { type: 'boolean', title: 'Auto Collect Metrics',description:"Checking this option the app collects your uploaded data for statistics and charting purposes." },
   },
   required: ['appletID', 'eventType', 'handler']
 } as const;
@@ -72,7 +72,7 @@ export default class StrategyModule {
       },
       {
         key: 'f_auto_collect_metric',
-        label: 'Auto Collect Metric',
+        label: 'Auto Collect Metrics',
         render: (item) => {
           return item.f_auto_collect_metric == 1 ? 'Yes' : 'No';
         }
