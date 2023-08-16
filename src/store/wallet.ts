@@ -15,7 +15,7 @@ export class WalletStore {
   constructor() {
     makeAutoObservable(this);
     if (typeof window !== 'undefined') {
-      this.wallet.autoConnect();
+      // this.wallet.autoConnect();
 
       this.wallet.removeAllListeners();
 

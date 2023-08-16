@@ -29,12 +29,13 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
     lang: { t },
     wallet
   } = useStore();
+  const { token } = w3s.config.form.formData;
 
   useEffect(() => {
     // wallet.wallet.autoConnect();
   }, []);
 
-  if (!wallet.isConnect) {
+  if (!wallet.isConnect || !token) {
     return (
       <>
         <Button {...defaultOutlineButtonStyle} {...customStyle} onClick={() => wallet.wallet.connect()}>
