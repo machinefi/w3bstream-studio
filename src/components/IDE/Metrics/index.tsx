@@ -26,46 +26,14 @@ const Metrics = () => {
             Metrics aggregated across all custom and workers.dev routes invoking this Worker.
           </Text>
         </Box>
-        {/* <Flex
-          p="6px 20px"
-          alignItems="center"
-          cursor="pointer"
-          color="rgba(15, 15, 15, 0.75)"
-          boxSize="border-box"
-          borderRadius={'8px'}
-          {...getSelectedStyles(metrics.showContent === 'API')}
-          onClick={(e) => {
-            metrics.showContent = 'API';
-          }}
-        >
-          <Icon as={TbApi} boxSize={6} />
-          <Box ml="15px" fontSize="14px">
-            API
-          </Box>
-        </Flex>
-        <Flex
-          ml="10px"
-          p="6px 20px"
-          alignItems="center"
-          cursor="pointer"
-          boxSize="border-box"
-          color="rgba(15, 15, 15, 0.75)"
-          borderRadius={'8px'}
-          {...getSelectedStyles(metrics.showContent === 'DATABASE')}
-          onClick={(e) => {
-            metrics.dbState.call();
-            metrics.showContent = 'DATABASE';
-          }}
-        >
-          <Icon as={HiOutlineDatabase} boxSize={6} />
-          <Box ml="15px" fontSize="14px">
-            Database
-          </Box>
-        </Flex> */}
       </Flex>
-      <Box mb="10px">
+      <IframeResizer></IframeResizer>
+      <iframe
+        src={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}/widget/metrics/eth_0x4f2f741648699c1dc0ad8352e937057cd7e66bd7_pebble_standard_metrics?coin=IOTX`}
+        style={{ width: "100%", height: '113vh' }}></iframe>
+      {/* <Box mb="10px">
         <TimeRangePick {...metrics.timeRangePick.data} />
-      </Box>
+      </Box> */}
       <JSONMetricsView data={metrics.metricsData} />
     </Box>
   );
