@@ -3,16 +3,11 @@ import { Flex, Box, Icon, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { JSONMetricsView } from '@/components/JSONMetricsView';
-import { getSelectedStyles } from '../ToolBar';
-import { HiOutlineDatabase } from 'react-icons/hi';
-import { TbApi } from 'react-icons/tb';
-import { TimeRangePick } from '@/components/JSONMetricsView/TimeRangePick';
 
 const Metrics = () => {
   const {
-    w3s: { metrics }
+    w3s: { metrics, project }
   } = useStore();
-
   metrics.use();
 
   return (
@@ -27,14 +22,14 @@ const Metrics = () => {
           </Text>
         </Box>
       </Flex>
-      <IframeResizer></IframeResizer>
-      <iframe
-        src={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}/widget/metrics/eth_0x4f2f741648699c1dc0ad8352e937057cd7e66bd7_pebble_standard_metrics?coin=IOTX`}
-        style={{ width: "100%", height: '113vh' }}></iframe>
-      {/* <Box mb="10px">
-        <TimeRangePick {...metrics.timeRangePick.data} />
-      </Box> */}
-      <JSONMetricsView data={metrics.metricsData} />
+      <Box mt={2}>
+        <JSONMetricsView data={metrics.metricsData} />
+      </Box>
+      <Box style={{ marginLeft: '-10px', marginRight: "-10px" }}>
+        <iframe
+          src={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}/widget/metrics/${project.curProject.f_name}?coin=IOTX`}
+          style={{ width: "100%", minHeight: '1100px' }}></iframe>
+      </Box>
     </Box>
   );
 };

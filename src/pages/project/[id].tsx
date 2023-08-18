@@ -16,6 +16,9 @@ const Page = observer(() => {
   const router = useRouter();
   useEffect(() => {
     if (router.query.tab) {
+      if (router.query.tab == 'METRICS' && !process.env.NEXT_PUBLIC_DEPIN_SCAN_URL) {
+        router.query.tab = 'CURRENT_PUBLISHERS';
+      }
       //@ts-ignore
       w3s.showContent = router.query.tab;
     }
@@ -31,7 +34,7 @@ const Page = observer(() => {
       } else {
         w3s.project.allProjects.call().then((res) => {
           w3s.project.allProjects.onSelect(res?.findIndex((i) => String(i.f_name) == String(router.query.id)) ?? 0);
-          console.log(w3s.project.allProjects.currentIndex,' w3s.project.allProjects');
+          console.log(w3s.project.allProjects.currentIndex, ' w3s.project.allProjects');
         });
         w3s.project.projectDetail.call(String(router.query.id));
       }
