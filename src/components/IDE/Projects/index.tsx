@@ -149,9 +149,6 @@ const Projects = observer(() => {
                   e.stopPropagation();
                   if (instance) {
                     router.push(`/project/${project.f_name}?tab=METRICS`);
-                    // w3s.showContent = 'METRICS';
-                    // allProjects.onSelect(index);
-                    // projectDetail.call();
                   } else {
                     await w3s.applet.uploadWASM({
                       projectName: project.name,
