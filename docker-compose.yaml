@@ -50,6 +50,7 @@ services:
       NEXT_PUBLIC_EVENT_URL: ${NEXT_PUBLIC_EVENT_URL:-http://w3bapp:8889}
       NEXT_PUBLIC_MQTT_URL: ${NEXT_PUBLIC_MQTT_URL:-mqtt://mqtt_server:1883}
       NEXT_PUBLIC_METRICS_URL: ${NEXT_PUBLIC_METRICS_URL:-http://prometheus:9090}
+      NEXT_PUBLIC_DEPIN_SCAN_URL: ${NEXT_PUBLIC_DEPIN_SCAN_URL:-https://depinscan.io}
       ADMIN_KEY: ${ADMIN_KEY:-iotex.W3B.admin}
       JWT_SIGN_KEY: ${JWT_SIGN_KEY:-xxxx}
 
