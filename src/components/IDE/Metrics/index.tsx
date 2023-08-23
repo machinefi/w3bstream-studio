@@ -19,9 +19,9 @@ const Metrics = () => {
             Summary
           </Text>
           <Text color={'#7A7A7A'} fontSize="14px">
-            Metrics aggregated across all custom and workers.dev routes invoking this Worker.
+            metrics aggregated from  <Link style={{ fontSize: "14px", color: "#855eff" }} href={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}`}>[DePIN scan]</Link>
           </Text>
-          <Link style={{ fontSize: "14px", color: "#855eff" }} href={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}`}>{`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}`}</Link>
+          
         </Box>
       </Flex>
       <Box mt={2}>
