@@ -254,15 +254,13 @@ export default class MetricsModule {
   showContent: 'DATABASE' | 'API' = 'API';
 
   get metricsData() {
-    if (this.showContent === 'DATABASE') {
-      return [this.dataBaseMetrics];
-    }
-
-    if (this.showContent === 'API') {
-      return [this.activeDevicesMetrics, this.dataMessagesMetrics, this.blockchainTransactionMetrics, this.dataBaseMetrics];
-    }
-
-    return [];
+    // if (this.showContent === 'DATABASE') {
+    //   return [this.dataBaseMetrics];
+    // }
+    // if (this.showContent === 'API') {
+    //   return [this.activeDevicesMetrics, this.dataMessagesMetrics, this.blockchainTransactionMetrics, this.dataBaseMetrics];
+    // }
+    return [this.dataBaseMetrics];
   }
 
   constructor() {

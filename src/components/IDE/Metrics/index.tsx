@@ -3,16 +3,12 @@ import { Flex, Box, Icon, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { JSONMetricsView } from '@/components/JSONMetricsView';
-import { getSelectedStyles } from '../ToolBar';
-import { HiOutlineDatabase } from 'react-icons/hi';
-import { TbApi } from 'react-icons/tb';
-import { TimeRangePick } from '@/components/JSONMetricsView/TimeRangePick';
+import Link from 'next/link';
 
 const Metrics = () => {
   const {
-    w3s: { metrics }
+    w3s: { metrics, project }
   } = useStore();
-
   metrics.use();
 
   return (
@@ -23,50 +19,20 @@ const Metrics = () => {
             Summary
           </Text>
           <Text color={'#7A7A7A'} fontSize="14px">
-            Metrics aggregated across all custom and workers.dev routes invoking this Worker.
+            metrics aggregated from  <Link style={{ fontSize: "14px", color: "#855eff" }} href={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}`}>[DePIN scan]</Link>
           </Text>
+          
         </Box>
-        {/* <Flex
-          p="6px 20px"
-          alignItems="center"
-          cursor="pointer"
-          color="rgba(15, 15, 15, 0.75)"
-          boxSize="border-box"
-          borderRadius={'8px'}
-          {...getSelectedStyles(metrics.showContent === 'API')}
-          onClick={(e) => {
-            metrics.showContent = 'API';
-          }}
-        >
-          <Icon as={TbApi} boxSize={6} />
-          <Box ml="15px" fontSize="14px">
-            API
-          </Box>
-        </Flex>
-        <Flex
-          ml="10px"
-          p="6px 20px"
-          alignItems="center"
-          cursor="pointer"
-          boxSize="border-box"
-          color="rgba(15, 15, 15, 0.75)"
-          borderRadius={'8px'}
-          {...getSelectedStyles(metrics.showContent === 'DATABASE')}
-          onClick={(e) => {
-            metrics.dbState.call();
-            metrics.showContent = 'DATABASE';
-          }}
-        >
-          <Icon as={HiOutlineDatabase} boxSize={6} />
-          <Box ml="15px" fontSize="14px">
-            Database
-          </Box>
-        </Flex> */}
       </Flex>
-      <Box mb="10px">
-        <TimeRangePick {...metrics.timeRangePick.data} />
+      <Box mt={2}>
+        <JSONMetricsView data={metrics.metricsData} />
       </Box>
-      <JSONMetricsView data={metrics.metricsData} />
+      <Box style={{ marginLeft: '-10px', marginRight: "-10px" }}>
+
+        <iframe
+          src={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}/widget/metrics/${project.curProject.f_name}?coin=IOTX`}
+          style={{ width: "100%", minHeight: '1100px' }}></iframe>
+      </Box>
     </Box>
   );
 };

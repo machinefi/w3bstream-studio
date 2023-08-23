@@ -10,7 +10,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { INSTANCE_STATUS } from '@/components/JSONTable/FieldRender';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
-interface ToolBar extends BoxProps {}
+interface ToolBar extends BoxProps { }
 
 const ToolBar = (props: ToolBar) => {
   const {
@@ -119,25 +119,27 @@ const ToolBar = (props: ToolBar) => {
             })}
           </PopoverContent>
         </Popover>
-        <Flex
-          w="100%"
-          p="14px 18px"
-          alignItems="center"
-          cursor="pointer"
-          color="rgba(15, 15, 15, 0.75)"
-          borderRadius="8px"
-          {...getSelectedStyles(router.query.tab === 'METRICS')}
-          onClick={(e) => {
-            // w3s.showContent = 'METRICS';
-            console.log(router);
-            jumpTab('METRICS');
-          }}
-        >
-          <Icon as={BiBarChartSquare} boxSize={5} />
-          <Box ml="15px" fontSize="14px">
-            Metrics
-          </Box>
-        </Flex>
+        {
+          process.env.NEXT_PUBLIC_DEPIN_SCAN_URL && <Flex
+            w="100%"
+            p="14px 18px"
+            alignItems="center"
+            cursor="pointer"
+            color="rgba(15, 15, 15, 0.75)"
+            borderRadius="8px"
+            {...getSelectedStyles(router.query.tab === 'METRICS')}
+            onClick={(e) => {
+              // w3s.showContent = 'METRICS';
+              console.log(router);
+              jumpTab('METRICS');
+            }}
+          >
+            <Icon as={BiBarChartSquare} boxSize={5} />
+            <Box ml="15px" fontSize="14px">
+              Metrics
+            </Box>
+          </Flex>
+        }
         <Flex
           w="100%"
           mt="14px"
@@ -241,29 +243,29 @@ const ToolBar = (props: ToolBar) => {
 export function getSelectedStyles(selected: boolean) {
   return selected
     ? {
-        sx: {
-          background: 'rgba(148, 111, 255, 0.1)',
+      sx: {
+        background: 'rgba(148, 111, 255, 0.1)',
+        '& > svg': {
+          color: '#946FFF'
+        },
+        '& > div': {
+          color: '#946FFF'
+        }
+      }
+    }
+    : {
+      sx: {
+        ':hover': {
           '& > svg': {
             color: '#946FFF'
           },
           '& > div': {
             color: '#946FFF'
-          }
+          },
+          background: 'rgba(148, 111, 255, 0.1)'
         }
       }
-    : {
-        sx: {
-          ':hover': {
-            '& > svg': {
-              color: '#946FFF'
-            },
-            '& > div': {
-              color: '#946FFF'
-            },
-            background: 'rgba(148, 111, 255, 0.1)'
-          }
-        }
-      };
+    };
 }
 
 export default observer(ToolBar);
