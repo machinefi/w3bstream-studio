@@ -3,6 +3,7 @@ import { Flex, Box, Icon, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/store/index';
 import { JSONMetricsView } from '@/components/JSONMetricsView';
+import Link from 'next/link';
 
 const Metrics = () => {
   const {
@@ -20,12 +21,14 @@ const Metrics = () => {
           <Text color={'#7A7A7A'} fontSize="14px">
             Metrics aggregated across all custom and workers.dev routes invoking this Worker.
           </Text>
+          <Link style={{ fontSize: "14px", color: "#855eff" }} href={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}`}>{`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}`}</Link>
         </Box>
       </Flex>
       <Box mt={2}>
         <JSONMetricsView data={metrics.metricsData} />
       </Box>
       <Box style={{ marginLeft: '-10px', marginRight: "-10px" }}>
+
         <iframe
           src={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}/widget/metrics/${project.curProject.f_name}?coin=IOTX`}
           style={{ width: "100%", minHeight: '1100px' }}></iframe>
