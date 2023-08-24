@@ -120,7 +120,7 @@ const ToolBar = (props: ToolBar) => {
           </PopoverContent>
         </Popover>
         {
-          process.env.NEXT_PUBLIC_DEPIN_SCAN_URL && <Flex
+          w3s.env.envs?.value?.depinScanURL && <Flex
             w="100%"
             p="14px 18px"
             alignItems="center"
