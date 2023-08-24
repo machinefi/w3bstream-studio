@@ -42,7 +42,8 @@ export const envRouter = t.router({
           w3bstreamVersion,
           studioVersion: 'v' + pkg.version,
           httpURL: process.env.NEXT_PUBLIC_GATEWAY_HTTP_URL || 'https://dev.w3bstream.com/api/w3bapp/event/:projectName',
-          mqttURL: process.env.NEXT_PUBLIC_GATEWAY_MQTT_URL || 'mqtt://dev.w3bstream.com:1883'
+          mqttURL: process.env.NEXT_PUBLIC_GATEWAY_MQTT_URL || 'mqtt://dev.w3bstream.com:1883',
+          depinScanURL: process.env.NEXT_PUBLIC_DEPIN_SCAN_URL || 'https://depinscan.io/',
         };
       },
       1000 * 120

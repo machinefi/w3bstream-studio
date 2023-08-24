@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 const Metrics = () => {
   const {
+    w3s,
     w3s: { metrics, project }
   } = useStore();
   metrics.use();
@@ -19,9 +20,9 @@ const Metrics = () => {
             Summary
           </Text>
           <Text color={'#7A7A7A'} fontSize="14px">
-            metrics aggregated from  <Link style={{ fontSize: "14px", color: "#855eff" }} href={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}`}>[DePIN scan]</Link>
+            metrics aggregated from  <Link style={{ fontSize: "14px", color: "#855eff" }} href={`${w3s.env.envs?.value?.depinScanURL}`}>[DePIN scan]</Link>
           </Text>
-          
+
         </Box>
       </Flex>
       <Box mt={2}>
@@ -30,7 +31,7 @@ const Metrics = () => {
       <Box style={{ marginLeft: '-10px', marginRight: "-10px" }}>
 
         <iframe
-          src={`${process.env.NEXT_PUBLIC_DEPIN_SCAN_URL}/widget/metrics/${project.curProject.f_name}?coin=IOTX`}
+          src={`${w3s.env.envs?.value?.depinScanURL}/widget/metrics/${project.curProject.f_name}?coin=IOTX`}
           style={{ width: "100%", minHeight: '1100px' }}></iframe>
       </Box>
     </Box>
