@@ -16,7 +16,7 @@ const Page = observer(() => {
   const router = useRouter();
   useEffect(() => {
     if (router.query.tab) {
-      if (router.query.tab == 'METRICS' && !process.env.NEXT_PUBLIC_DEPIN_SCAN_URL) {
+      if (router.query.tab == 'METRICS' && !w3s.env.envs?.value?.depinScanURL) {
         router.query.tab = 'CURRENT_PUBLISHERS';
       }
       //@ts-ignore
