@@ -329,7 +329,14 @@ export const helper = {
       } else {
         console.error(response.statusCode);
       }
+    },
+    async getTransactionHash({ chainId, hash }) {
+      if (globalThis.store.god.currentChain.chainId !== chainId) {
+        helper.setChain(globalThis.store.god, chainId);
+      }
+      return await globalThis.store.god.wagmiClient.provider.getTransaction(hash)
     }
+
   },
   download: {
     downloadByBlob(name: string, blob: Blob) {
