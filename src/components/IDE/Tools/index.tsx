@@ -7,7 +7,7 @@ const Tools = () => {
   return (
     <Center w="calc(100vw-40px)" h="calc(100vh - 110px)">
       <Box w="100%" h="100%" flex={1}>
-        <iframe src={'https://zk-proof-demo.onrender.com/'}
+        <iframe src={'https://zk-demo.w3bstream.com/'}
           title="ZK Proof Demo"
           width="100%"
           height="100%"

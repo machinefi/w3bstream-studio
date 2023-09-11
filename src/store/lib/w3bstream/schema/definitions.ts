@@ -51,7 +51,7 @@ export const definitions = {
     },
     get enumNames() {
       const blockChains = globalThis.store.w3s.env.envs.value?.blockChains || [];
-      return blockChains.map((i) => `${i.f_chain_id}`);
+      return blockChains.map((i) => `${i.f_chain_name}`);
     }
   },
   labContracts: {

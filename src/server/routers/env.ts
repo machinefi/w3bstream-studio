@@ -28,9 +28,10 @@ export const envRouter = t.router({
         try {
           const ethClientRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/configuration/chain_config`);
           const chains: { chainID: number, name: string, endpoint: string }[] = JSON.parse(ethClientRes.data.chains);
+          console.log('chains', chains)
           chains.forEach(i => {
             if (i.chainID) {
-              blockChains.push({ f_id: BigInt(i.chainID), f_chain_id: BigInt(i.chainID), f_chain_address: i.endpoint })
+              blockChains.push({ f_id: BigInt(i.chainID), f_chain_id: BigInt(i.chainID), f_chain_address: i.endpoint, f_chain_name: i.name })
             }
           })
         } catch (error) {
@@ -57,4 +58,5 @@ export type BlockchainType = {
   f_id: bigint;
   f_chain_id: bigint;
   f_chain_address: string;
+  f_chain_name: string;
 };
