@@ -161,7 +161,7 @@ export default class ContractLogModule {
         submitText: 'Submit'
       },
       chainID: {
-        'ui:widget': 'select'
+        'ui:widget': 'select',
       },
       event: {
         'ui:placeholder': 'Transfer(address, address, uint256,...)'
