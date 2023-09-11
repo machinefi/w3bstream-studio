@@ -29,6 +29,12 @@ const DynamicSupport = dynamic(() => import('./Support'), {
   ssr: false
 });
 
+
+const DynamicTools = dynamic(() => import('./Tools'), {
+  ssr: false
+});
+
+
 const DynamicUserSettings = dynamic(() => import('./UserSettings'), {
   ssr: false
 });
@@ -39,6 +45,8 @@ const IDE = observer(() => {
     base: { confirm }
   } = useStore();
 
+  console.log('w3s.currentHeaderTab', w3s.currentHeaderTab)
+
   return (
     <Box w="100vw" h="100vh" overflow="auto" bg="#F8F8FA" paddingTop={'70px'} boxSizing="border-box">
       <Header />
@@ -47,6 +55,7 @@ const IDE = observer(() => {
         {w3s.currentHeaderTab === 'LABS' && <DynamicLabs />}
         {w3s.currentHeaderTab === 'FLOW' && <DynamicFlow />}
         {w3s.currentHeaderTab === 'SUPPORT' && <DynamicSupport />}
+        {w3s.currentHeaderTab === 'TOOLS' && <DynamicTools />}
         {w3s.currentHeaderTab === 'SETTING' && <DynamicUserSettings />}
       </Box>
       <ConfirmModal {...confirm.confirmProps} openState={confirm} />

@@ -52,7 +52,7 @@ export class W3bStream {
 
   showContent: 'METRICS' | 'CURRENT_PUBLISHERS' | 'CURRENT_EVENT_LOGS' | 'EDITOR' | 'DOCKER_LOGS' | 'CONTRACT_LOGS' | 'CHAIN_TX' | 'CHAIN_HEIGHT' | 'SETTINGS' | 'DB_TABLE' = 'METRICS';
 
-  currentHeaderTab: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'FLOW' | 'SETTING' = 'PROJECTS';
+  currentHeaderTab: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'TOOLS' | 'FLOW' | 'SETTING' = 'PROJECTS';
 
   isReady = false;
 

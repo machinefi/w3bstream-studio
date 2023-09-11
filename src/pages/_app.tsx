@@ -57,7 +57,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [token, router.pathname]);
 
   const RenderLayout = () => {
-    if (['/', '/labs', '/support', '/setting', '/project/[id]'].includes(router.pathname)) {
+    if (['/', '/labs', '/support', '/tools', '/setting', '/project/[id]'].includes(router.pathname)) {
       return (
         <AppLayout>
           <Component {...pageProps} />
