@@ -23,6 +23,7 @@ import LabModule from './schema/lab';
 import CronJobModule from './schema/cronJob';
 import ENVModule from './schema/envs';
 import ApiKeysModule from './schema/apiKeys';
+import OperatorModule from './schema/operator';
 
 configure({
   enforceActions: 'never'
@@ -42,6 +43,7 @@ export class W3bStream {
   strategy = new StrategyModule();
   contractLogs = new ContractLogModule();
   apiKeys = new ApiKeysModule();
+  operator = new OperatorModule();
   chainTx = new ChainTxModule();
   chainHeight = new ChainHeightModule();
   dbTable = new DBTableModule();
