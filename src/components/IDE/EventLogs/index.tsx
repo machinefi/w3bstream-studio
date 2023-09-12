@@ -11,77 +11,8 @@ import { VscDebugStart } from 'react-icons/vsc';
 import { hooks } from '@/lib/hooks';
 import { AiOutlineClear } from 'react-icons/ai';
 import { ShowRequestTemplatesButton } from '../PublishEventRequestTemplates';
-import { motion, isValidMotionProp } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { helper } from '@/lib/helper';
-
-const ChakraBox = chakra(motion.div, {
-  /**
-   * Allow motion props and non-Chakra props to be forwarded.
-   */
-  shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop)
-});
-
-const LiveIcon = () => {
-  return (
-    <Box w="40px" pos="relative" boxSizing="border-box" transform="scale(0.6)">
-      <ChakraBox
-        w="30px"
-        h="30px"
-        m="0 auto 5px"
-        borderRadius="50%"
-        border="1px solid #946FFF"
-        opacity="0.8"
-        boxSizing="border-box"
-        animate={{
-          scale: [1, 1.5],
-          opacity: [0.8, 0]
-        }}
-        transition={{
-          duration: 2,
-          ease: 'easeInOut',
-          repeatType: 'loop',
-          // @ts-ignore
-          repeat: Infinity
-        }}
-      />
-      <ChakraBox
-        pos="absolute"
-        top="8px"
-        left="13px"
-        w="14px"
-        h="14px"
-        borderRadius="50%"
-        opacity="0.8"
-        boxSizing="border-box"
-        bg="#946FFF"
-        _after={{
-          content: "''",
-          display: 'block',
-          border: '2px solid #946FFF',
-          borderRadius: '50%',
-          width: '20px',
-          height: '20px',
-          top: '-5px',
-          left: '-5px',
-          position: 'absolute',
-          opacity: 0.8
-        }}
-        animate={{
-          scale: [1, 1.5],
-          opacity: [0.8, 0]
-        }}
-        transition={{
-          duration: 2,
-          ease: 'easeInOut',
-          repeatType: 'loop',
-          // @ts-ignore
-          repeat: Infinity
-        }}
-      />
-    </Box>
-  );
-};
 
 type LocalStoreType = {
   loading: boolean;
@@ -366,3 +297,14 @@ const EventLogs = observer(() => {
 });
 
 export default EventLogs;
+
+const LiveIcon = () => {
+  return (
+    <div className="relative ml-2">
+      <span className="absolute -top-2 w-4 h-4">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#946FFF] opacity-75"></span>
+        <span className="absolute inline-flex rounded-full w-4 h-4 bg-[#946FFF]"></span>
+      </span>
+    </div>
+  );
+};
