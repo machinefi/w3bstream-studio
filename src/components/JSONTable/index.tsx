@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Center, Table as ChakraTable, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure,Text } from '@chakra-ui/react';
+import { Button, Center, Table as ChakraTable, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure, Text } from '@chakra-ui/react';
 import SimplePagination from '../Common/SimplePagination';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { ActionButtonType, Column, ExtendedTable, JSONSchemaTableState } from '@/store/standard/JSONSchemaState';
@@ -34,8 +34,10 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
             <Tr bg="#F5F5F5">
               {needExtendedTable && <Th></Th>}
               {columns.map((item) => (
-                <Th key={item.key}  textTransform="none">
-                  <Text fontSize="14px" fontWeight={400} color="blackAlpha.800">{item.label}</Text>
+                <Th key={item.key} textTransform="none">
+                  <Text fontSize="14px" fontWeight={400} color="blackAlpha.800">
+                    {item.label}
+                  </Text>
                 </Th>
               ))}
             </Tr>
@@ -50,19 +52,25 @@ const JSONTable = observer(<T,>(props: JSONTableProps<T>) => {
             )}
           </Tbody>
         </ChakraTable>
-        {pagination.total == 0 && <Center mt="20px" fontSize={"14px"} color="#7a7a7a">No Data</Center>}
+        {pagination.total == 0 && (
+          <Center mt="20px" fontSize={'14px'} color="#7a7a7a">
+            No Data
+          </Center>
+        )}
       </TableContainer>
-      {pagination.total > pagination.limit && <SimplePagination
-        mt="10px"
-        total={pagination.total}
-        limit={pagination.limit}
-        page={pagination.page}
-        onPageChange={(currentPage) => {
-          pagination.setData({
-            page: currentPage
-          });
-        }}
-      />}
+      {pagination.total > pagination.limit && (
+        <SimplePagination
+          mt="10px"
+          total={pagination.total}
+          limit={pagination.limit}
+          page={pagination.page}
+          onPageChange={(currentPage) => {
+            pagination.setData({
+              page: currentPage
+            });
+          }}
+        />
+      )}
     </>
   );
 });
@@ -94,12 +102,12 @@ function Body<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
     <Tr fontSize="14px" color="#0F0F0F">
       {columns.map((column) => {
         return (
-          <Td key={column.key} fontSize={'12px'} border="1px solid #F5F5F5" maxW="200px" overflowX="auto" >
+          <Td key={column.key} fontSize={'12px'} border="1px solid #F5F5F5" maxW="200px" overflowX="auto">
             {column.actions
               ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
               : column.render
-                ? column.render(item)
-                : renderFieldValue(item[column.key])}
+              ? column.render(item)
+              : renderFieldValue(item[column.key])}
           </Td>
         );
       })}
@@ -131,8 +139,8 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
               {column.actions
                 ? column.actions(item).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
                 : column.render
-                  ? column.render(item)
-                  : renderFieldValue(item[column.key])}
+                ? column.render(item)
+                : renderFieldValue(item[column.key])}
             </Td>
           );
         })}
@@ -166,8 +174,8 @@ function CollapseBody<T>({ item, columns, extendedTables }: { item: T; columns: 
                               {exC.actions
                                 ? exC.actions(exItem).map((btn, index) => <ActionButton key={index} props={btn.props} text={btn.text} />)
                                 : exC.render
-                                  ? exC.render(exItem)
-                                  : renderFieldValue(exItem[exC.key])}
+                                ? exC.render(exItem)
+                                : renderFieldValue(exItem[exC.key])}
                             </Td>
                           );
                         })}
