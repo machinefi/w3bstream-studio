@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import { BiLogOut } from 'react-icons/bi';
 import { MdSettings } from 'react-icons/md';
 import Link from 'next/link';
+import { defaultNetworks } from '@/constants/chain';
 
 interface WalletConnectButtonProps {
   name?: string;
@@ -49,7 +50,7 @@ export const WalletConnectButton = observer(({ name, customStyle }: WalletConnec
     <Popover>
       <PopoverTrigger>
         <Flex alignItems="center" p="5px 14px" bg="#F3F3F3" borderRadius="60px" cursor="pointer">
-          <Avatar mr="8px" w="30px" h="30px" src={god.currentNetwork?.chain?.current?.logoUrl} />
+          <Avatar mr="8px" w="30px" h="30px" src={defaultNetworks?.find(i => i.chainId == god.currentNetwork?.chain?.currentId).logoUrl} />
           <Flex alignItems="center">
             <Box>
               <Text fontSize="12px" fontWeight={700}>

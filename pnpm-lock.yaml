@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 overrides:
   graphql: 16.3.0
@@ -106,6 +110,9 @@ dependencies:
   '@tanstack/react-table':
     specifier: 8.2.6
     version: 8.2.6(react-dom@18.2.0)(react@18.2.0)
+  '@thirdweb-dev/chains':
+    specifier: ^0.1.52
+    version: 0.1.52
   '@thirdweb-dev/wallets':
     specifier: ^0.2.26
     version: 0.2.26(@ethersproject/abstract-provider@5.7.0)(@ethersproject/abstract-signer@5.7.0)(@ethersproject/bignumber@5.7.0)(@ethersproject/properties@5.7.0)(@types/node@14.14.31)(ethers@5.7.0)(localforage@1.10.0)(react@18.2.0)(typescript@4.9.5)
@@ -6423,6 +6430,10 @@ packages:
 
   /@thirdweb-dev/chains@0.1.20:
     resolution: {integrity: sha512-NJo082gQIFrlaKWz4ayaHQvhZ5MILVp7U/G8bJWjxqp+YVE5RXy153BkRsd9uwTBMt4JIoxP+dwWbfWbQn9j1A==}
+    dev: false
+
+  /@thirdweb-dev/chains@0.1.52:
+    resolution: {integrity: sha512-8YgiIVSpQpQ6pU1+sxEQ57kALEZPfYGLnAMpCin2rRTOllbNXaiU7vFo4+dAROk5x2v5JojZMJ6iNCfimtIj1w==}
     dev: false
 
   /@thirdweb-dev/contracts-js@1.3.5(ethers@5.7.0):
