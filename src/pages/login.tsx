@@ -30,7 +30,7 @@ const Login = observer(() => {
           Login to W3bstream Devnet
         </Text>
         <Text fontSize={{ base: '14px', lg: '1rem' }}>
-          Your portal to connect smart devices to smart contracts
+          Your portal to connect smart publishers to smart contracts
         </Text>
       </Flex>
     </Box>
