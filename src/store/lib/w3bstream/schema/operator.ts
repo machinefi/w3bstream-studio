@@ -25,7 +25,7 @@ export const schema = {
     name: { type: 'string', title: 'Name' },
     privateKey: { type: 'string', title: 'Private Key' },
     type: { $ref: '#/definitions/types', title: 'Type' },
-    paymasterKey: { type: 'string', title: 'Paymaster Key', description: 'The paymaster key is optional and indicates whether or not the aa Payment in Lieu function is used, and the key issued by the Payment in Lieu service.'}
+    // paymasterKey: { type: 'string', title: 'Paymaster Key', description: 'The paymaster key is optional and indicates whether or not the aa Payment in Lieu function is used, and the key issued by the Payment in Lieu service.'}
   },
   required: ['name', 'privateKey', 'type']
 } as const;
