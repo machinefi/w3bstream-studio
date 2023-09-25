@@ -25,8 +25,8 @@ const Publishers = observer(() => {
     <Box minH="calc(100vh - 158px)">
       <Flex alignItems="center" mb="24px">
         <Box flex="1">
-          <Text fontSize={'1.25rem'} fontWeight={600}>Authorized Devices</Text>
-          <Text color={'#7A7A7A'} fontSize="14px">In this section, you can create and manage unique authentication tokens for your authorized devices. These tokens act as digital keys, ensuring that only trusted devices can send messages to your project and have them accepted.</Text>
+          <Text fontSize={'1.25rem'} fontWeight={600}>Authorized Publisher</Text>
+          <Text color={'#7A7A7A'} fontSize="14px">In this section, you can create and manage unique authentication tokens for your authorized publishers. These tokens act as digital keys, ensuring that only trusted publishers can send messages to your project and have them accepted.</Text>
         </Box>
         <Button
           h="36px"
@@ -44,7 +44,7 @@ const Publishers = observer(() => {
               };
             }
             const formData = await hooks.getFormData({
-              title: 'Add Device',
+              title: 'Add Publisher',
               size: 'lg',
               formList: [
                 {
@@ -63,13 +63,13 @@ const Publishers = observer(() => {
                     name: key
                   }
                 });
-                toast.success('Device successfully added');
+                toast.success('Publisher successfully added');
                 eventBus.emit('publisher.create');
               } catch (error) {}
             }
           }}
         >
-          <Text>Add Device</Text>
+          <Text>Add Publisher</Text>
         </Button>
       </Flex>
       <JSONTable jsonstate={w3s.publisher} />

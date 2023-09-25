@@ -179,7 +179,7 @@ export default class MetricsModule {
     let list = values
       .slice()
       .sort((a, b) => a[0] - b[0])
-      .map((i) => ({ date: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), 'Active Devices': Number(i[1]) }));
+      .map((i) => ({ date: dayjs(i[0] * 1000).format('YYYY-MM-DD HH:mm'), 'Active Publishers': Number(i[1]) }));
     // if (list.length === 1) {
     //   const d = dayjs(list[0][0]);
     //   list = [{ x: d.subtract(8, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, { x: d.subtract(4, 'hour').minute(0).format('YYYY-MM-DD HH:mm'), y: 0 }, ...list];
@@ -187,8 +187,8 @@ export default class MetricsModule {
     return {
       type: 'LineChartCard',
       data: {
-        title: 'Active Devices',
-        description: 'Number of unique devices that sent at least one message to this project',
+        title: 'Active Publishers',
+        description: 'Number of unique publishers that sent at least one message to this project',
         data: list
       }
     };
@@ -208,7 +208,7 @@ export default class MetricsModule {
       type: 'LineChartCard',
       data: {
         title: 'Data Messages',
-        description: 'Total number of messages received from all devices',
+        description: 'Total number of messages received from all publishers',
         data: list
       }
     };

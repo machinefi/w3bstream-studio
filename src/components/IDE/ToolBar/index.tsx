@@ -156,7 +156,7 @@ const ToolBar = (props: ToolBar) => {
         >
           <Icon as={TbDeviceDesktop} boxSize={5} />
           <Box ml="15px" fontSize="14px">
-            Devices
+            Publishers
           </Box>
         </Flex>
         <Flex

@@ -22,7 +22,7 @@ export const createPublisherSchema = {
   type: 'object',
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
-    key: { type: 'string', title: 'Device Name', description: 'Please choose a unique name for this device' }
+    key: { type: 'string', title: 'Publisher Name', description: 'Please choose a unique name for this publisher' }
   },
   required: ['projectName', 'key']
 } as const;
@@ -158,7 +158,7 @@ export default class PublisherModule {
     columns: [
       {
         key: 'f_key',
-        label: 'Device Name'
+        label: 'Publisher Name'
       },
       {
         key: 'f_token',

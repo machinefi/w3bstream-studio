@@ -3,7 +3,7 @@ W3bstream Studio is a web application that can interact with a W3bstream node an
 
 - Managing your W3bstream node
 - Coding and deploying WASM Applets
-- Managing devices
+- Managing publishers
 - Testing events
 - Viewing logs
 
