@@ -54,6 +54,17 @@ export const definitions = {
       return blockChains.map((i) => `${i.f_chain_name}`);
     }
   },
+  blockChainNames: {
+    type: 'string',
+    get enum() {
+      const blockChains = globalThis.store.w3s.env.envs.value?.allBlockChains || [];
+      return blockChains.map((i) => `${i.f_chain_name}`);
+    },
+    get enumNames() {
+      const blockChains = globalThis.store.w3s.env.envs.value?.allBlockChains || [];
+      return blockChains.map((i) => `${i.f_chain_name}`);
+    }
+  },
   labContracts: {
     type: 'string',
     get enum() {
