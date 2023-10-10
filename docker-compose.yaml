@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   w3bapp:
-    image: ${WS_BACKEND_IMAGE:-ghcr.io/machinefi/w3bstream:latest}
+    image: ${WS_BACKEND_IMAGE:-ghcr.io/machinefi/w3bstream:v1.5.9}
     depends_on:
       - 'postgres'
       - 'mqtt_server'
@@ -27,7 +27,7 @@ services:
       SRV_APPLET_MGR__MonitorDB_Master: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?sslmode=disable&application_name=monitor
       SRV_APPLET_MGR__MonitorDB_ConnMaxLifetime: 10m
       SRV_APPLET_MGR__MonitorDB_PoolSize: 5
-      SRV_APPLET_MGR__WasmDB: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432
+      SRV_APPLET_MGR__WasmDBConfig_Endpoint: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432
       SRV_APPLET_MGR__MqttBroker_Server: mqtt://mqtt_server:1883
       SRV_APPLET_MGR__MetricsCenter_Endpoint: http://prometheus:9090
       SRV_APPLET_MGR__MetricsCenter_ClickHouseDSN: ''
@@ -38,7 +38,7 @@ services:
       - ${WS_WORKING_DIR:-.}/asserts:/w3bstream/asserts
 
   w3bstream-studio:
-    image: ${WS_STUDIO_IMAGE:-ghcr.io/machinefi/w3bstream-studio:main}
+    image: ${WS_STUDIO_IMAGE:-ghcr.io/machinefi/w3bstream-studio:v1.5.9}
     container_name: w3bstream-studio
     restart: always
     platform: linux/x86_64
