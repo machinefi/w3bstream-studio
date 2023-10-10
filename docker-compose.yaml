@@ -22,6 +22,8 @@ services:
       SRV_APPLET_MGR__Postgres_Master: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?sslmode=disable&application_name=mgr
       SRV_APPLET_MGR__Postgres_ConnMaxLifetime: 10m
       SRV_APPLET_MGR__Postgres_PoolSize: 5
+      SRV_APPLET_MGR__Redis_Host: redis
+      SRV_APPLET_MGR__Redis_Password: 'w3bredispasS'
       SRV_APPLET_MGR__MonitorDB_Master: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?sslmode=disable&application_name=monitor
       SRV_APPLET_MGR__MonitorDB_ConnMaxLifetime: 10m
       SRV_APPLET_MGR__MonitorDB_PoolSize: 5
@@ -89,6 +91,19 @@ services:
     command: redis-server --requirepass ${REDIS_PASSWORD:-w3bredispasS}
     ports:
       - '6379:6379'
+
+  prometheus:
+    image: prom/prometheus:latest
+    depends_on:
+      - 'w3bapp'
+    user: root
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ${WS_WORKING_DIR:-.}/prometheus:/data
+    ports:
+      - '9090:9090'
 
 volumes:
   mqtt:
