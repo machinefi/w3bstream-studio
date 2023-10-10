@@ -101,7 +101,7 @@ services:
     container_name: prometheus
     restart: always
     volumes:
-      - ${WS_WORKING_DIR:-.}/prometheus:/data
+      - prometheus:/data
     ports:
       - '9090:9090'
 
@@ -110,3 +110,4 @@ volumes:
   postgres:
   w3bstream_assets:
   redis:
+  prometheus:
