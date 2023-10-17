@@ -17,10 +17,10 @@ export const schema = {
   properties: {
     projectName: { $ref: '#/definitions/projects', title: 'Project Name' },
     eventType: { type: 'string', title: 'Event Type', description: 'Please choose a unique name for the W3bstream event that should be triggered' },
-    chainID: { $ref: '#/definitions/blockChains', type: 'string', title: 'Chain ID', description: 'The blockchain network that should be monitored' },
+    chainName: { $ref: '#/definitions/blockChainNames', type: 'string', title: 'Chain Name', description: 'The blockchain network that should be monitored' },
     height: { type: 'number', title: 'Height', description: 'The blockchain height at which the the W3bstream event should be triggered.' }
   },
-  required: ['projectName', 'eventType', 'chainID', 'height']
+  required: ['projectName', 'eventType', 'chainName', 'height']
 } as const;
 
 type SchemaType = FromSchema<typeof schema>;
@@ -28,7 +28,7 @@ type SchemaType = FromSchema<typeof schema>;
 //@ts-ignore
 schema.definitions = {
   projects: definitions.projectName,
-  blockChains: definitions.blockChains
+  blockChainNames: definitions.blockChainNames
 };
 
 export default class ChainHeightModule {
@@ -87,7 +87,18 @@ export default class ChainHeightModule {
       },
       {
         key: 'f_chain_id',
-        label: 'Chain ID'
+        label: 'Chain Name',
+        render: (item) => {
+          if (item.f_chain_name) {
+            return item.f_chain_name
+          } else {
+            try {
+              return globalThis.store.w3s.env.envs.value?.blockChains.find(i => i.f_chain_id == item.f_chain_id)?.f_chain_name || ''
+            } catch (e) {
+              return item.f_chain_id
+            }
+          }
+        }
       },
       {
         key: 'f_height',
@@ -119,7 +130,7 @@ export default class ChainHeightModule {
       default: {
         projectName: '',
         eventType: 'DEFAULT',
-        chainID: '4690',
+        chainName: '',
         height: 0
       }
     })

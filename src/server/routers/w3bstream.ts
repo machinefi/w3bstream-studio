@@ -241,7 +241,8 @@ export const w3bstreamRouter = t.router({
               f_chain_id: true,
               f_height: true,
               f_created_at: true,
-              f_updated_at: true
+              f_updated_at: true,
+              f_chain_name: true
             }
           },
           chainTxs: {

@@ -12,6 +12,8 @@ export const envRouter = t.router({
       async () => {
         let w3bstreamVersion = '';
         let blockChains: BlockchainType[] = [];
+        let allBlockChains: BlockchainType[] = [];
+
 
         try {
           const url = `${process.env.NEXT_PUBLIC_API_URL}/version`;
@@ -33,6 +35,7 @@ export const envRouter = t.router({
             if (i.chainID) {
               blockChains.push({ f_id: BigInt(i.chainID), f_chain_id: BigInt(i.chainID), f_chain_address: i.endpoint, f_chain_name: i.name })
             }
+            allBlockChains.push({  f_chain_address: i.endpoint, f_chain_name: i.name })
           })
         } catch (error) {
           console.error(error);
@@ -40,6 +43,7 @@ export const envRouter = t.router({
 
         return {
           blockChains,
+          allBlockChains,
           w3bstreamVersion,
           studioVersion: 'v' + pkg.version,
           httpURL: process.env.NEXT_PUBLIC_GATEWAY_HTTP_URL || 'https://dev.w3bstream.com/api/w3bapp/event/:projectName',
@@ -55,8 +59,8 @@ export const envRouter = t.router({
 export type EnvRouter = typeof envRouter;
 export type EnvsType = inferProcedureOutput<EnvRouter['envs']>;
 export type BlockchainType = {
-  f_id: bigint;
-  f_chain_id: bigint;
+  f_id?: bigint;
+  f_chain_id?: bigint;
   f_chain_address: string;
   f_chain_name: string;
 };
