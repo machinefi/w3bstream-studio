@@ -50,7 +50,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     if (token) {
       if (['/login'].includes(router.pathname)) {
-        NextRouter.replace('/');
+        console.log('user.login');
+        w3s.actions.goHome();
+        NextRouter.push('/');
       }
       w3s.init();
     }

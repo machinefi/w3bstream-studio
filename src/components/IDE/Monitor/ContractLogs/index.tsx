@@ -34,6 +34,17 @@ export const CreateContractLogButton = observer(() => {
         size="sm"
         {...defaultButtonStyle}
         onClick={async () => {
+          eventBus.emit('contractlog.create');
+        }}
+      >
+        Refresh
+      </Button>
+      <Button
+        mr={2}
+        h="32px"
+        size="sm"
+        {...defaultButtonStyle}
+        onClick={async () => {
           await axios.request({
             method: 'put',
             url: `/api/w3bapp/monitor/x/${projectName}/contract_log/START`,
