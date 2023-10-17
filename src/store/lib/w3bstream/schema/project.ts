@@ -806,10 +806,12 @@ export default class ProjectModule {
           chainID: Number(i.f_chain_id),
           height: Number(i.f_height)
         })),
-        eventRounting: globalThis.store.w3s.strategy.curStrategies.map((i) => ({
-          eventType: i.f_event_type,
-          handler: i.f_handler
-        }))
+        eventRounting: globalThis.store.w3s.strategy.curStrategies
+          .map((i) => ({
+            eventType: i.f_event_type,
+            handler: i.f_handler
+          }))
+          .filter((i) => i.eventType !== 'DEFAULT')
       };
     }
   });
