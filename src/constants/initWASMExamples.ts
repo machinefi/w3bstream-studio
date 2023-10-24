@@ -96,6 +96,12 @@ export const assemblyScriptExample: FilesItemType = {
       key: uuidv4(),
       label: `metrics.as`,
       data: { dataType: 'assemblyscript', code: templatecode['metrics.ts'], language: 'typescript' }
+    },
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `send_eth_tx.as`,
+      data: { dataType: 'assemblyscript', code: templatecode['send_eth_tx.ts'], language: 'typescript' }
     }
   ]
 };

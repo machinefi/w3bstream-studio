@@ -49,12 +49,34 @@ declare function ws_get_env(kaddr: usize, ksize: i32, vaddr: usize, vsize: i32):
 @external("stat", "ws_submit_metrics")
   declare function ws_submit_metrics(ptr:usize,size:i32): i32
 
+@external("env", "ws_api_call")
+  declare function ws_api_call(ptr: usize, size: i32, rAddr: u32, rSize: u32): i32
+
 export function alloc(size: usize): usize {
     return heap.alloc(size);
 }
 
 export function freeResource(rid: i32): void {
     heap.free(rid);
+}
+
+export function ApiCall(request: string): string {
+  let httpRequestJSONStringEncoded = String.UTF8.encode(request, false);
+  let ptr = changetype<usize>(httpRequestJSONStringEncoded);
+  let size = httpRequestJSONStringEncoded.byteLength;
+  let rAddr: usize = heap.alloc(sizeof<u32>());
+  let rSize: usize = heap.alloc(sizeof<u32>());
+  let code = ws_api_call(ptr, size, rAddr as u32, rSize as u32);
+  if (code !== 0) {
+    assert(false, "fail to call api");
+  }
+  let rAddrValue = load<u32>(rAddr);
+  let rAddrSize = load<u32>(rSize);
+  let data = String.UTF8.decodeUnsafe(rAddrValue, rAddrSize, true);
+  heap.free(rAddr);
+  heap.free(rSize);
+  Log(data)
+  return data
 }
 
 export function SubmitMetrics(data:string):i32 {

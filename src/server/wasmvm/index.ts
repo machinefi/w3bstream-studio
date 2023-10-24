@@ -27,6 +27,7 @@ export class WASM {
   wasmModule: WebAssembly.Module;
   memory: WebAssembly.Memory;
   instance: WebAssembly.Instance;
+  asyncApiResultCache: any = null;
   stdout: StdIOType[] = [];
   stderr: StdIOType[] = [];
   rid: number = Math.floor(Math.random() * 1000000);
@@ -151,6 +152,35 @@ export class WASM {
         }
       },
       env: {
+        async ws_api_call(kaddr, ksize, vaddr, vsize) {
+          const k_view = new Uint8Array(_this.memory.buffer, kaddr, ksize);
+          const k = new TextDecoder().decode(k_view); //{statement: string, params: any[]}
+          try {
+            const json_k = JSON.parse(k);
+            switch (json_k.Url) {
+              case "w3bstream://w3bstream.com/system/read_tx":
+                const body = json_k.Body;
+                const json_body = JSON.parse(helper.base64ToUTF8(body));
+                // const res = helper.c.callContractSync({ chainId: json_body.chainID, to: "", data: json_body.hash });
+                helper.c.getTransactionHash({ chainId: json_body.chainID, hash: '0x' + json_body.hash.replace('0x', '') }).then(res => {
+                  _this.asyncApiResultCache = {
+                    blockHash: res.blockHash,
+                    blockNumber: res.blockNumber,
+                    from: res.from,
+                    data: res.data,
+                    nonce: res.nonce,
+                  }
+                  console.log(res)
+                  _this.copyToWasm(JSON.stringify(_this.asyncApiResultCache), vaddr, vsize);
+                })
+            }
+          } catch (err) {
+            _this.writeStderr({
+              message: err
+            });
+          }
+          console.log(k, 'ws_api_call')
+        },
         ws_get_env(kaddr, ksize, vaddr, vsize) {
           const k_view = new Uint8Array(_this.memory.buffer, kaddr, ksize);
           const k = new TextDecoder().decode(k_view); //{statement: string, params: any[]}
@@ -216,8 +246,12 @@ export class WASM {
           }
         },
         ws_get_data(rid: number, data_ptr: number, data_size: number): number {
-          const data = _this.ctxData;
-          console.log(data, 'ctxData', data_ptr, data_size);
+          let data
+          if (_this.asyncApiResultCache) {
+            data = JSON.stringify(_this.asyncApiResultCache)
+          } else {
+            data = _this.ctxData;
+          }
           try {
             _this.copyToWasm(data, data_ptr, data_size);
             return ResultStatusCode.OK;
@@ -348,6 +382,22 @@ export class WASM {
       this.memory = this.instance.exports.memory as WebAssembly.Memory;
       //@ts-ignore
       const res = eval(`this.instance.exports?.${start_func}(this.rid)`);
+      if (this.instance.exports?.handle_result) {
+        await (() => {
+          return new Promise((resolve, reject) => {
+            const asyncInterval = setInterval(() => {
+              console.log(this.asyncApiResultCache)
+              if (this.asyncApiResultCache) {
+                console.log(this.asyncApiResultCache)
+                eval(`this.instance.exports?.handle_result(this.rid)`);
+                this.asyncApiResultCache = null;
+                clearInterval(asyncInterval);
+                resolve(true);
+              }
+            }, 1000);
+          })
+        })()
+      }
       // this.writeStdout({ message: `rid:${res}` });
     } catch (error) {
       console.log(error);
