@@ -100,8 +100,20 @@ export const assemblyScriptExample: FilesItemType = {
     {
       type: 'file',
       key: uuidv4(),
-      label: `send_eth_tx.as`,
-      data: { dataType: 'assemblyscript', code: templatecode['send_eth_tx.ts'], language: 'typescript' }
+      label: `send_tx.as`,
+      data: { dataType: 'assemblyscript', code: templatecode['send_tx.ts'], language: 'typescript' }
+    },
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `read_tx.as`,
+      data: { dataType: 'assemblyscript', code: templatecode['read_tx.ts'], language: 'typescript' }
+    },
+    {
+      type: 'file',
+      key: uuidv4(),
+      label: `gen_zk_proof.as`,
+      data: { dataType: 'assemblyscript', code: templatecode['gen_zk_proof.ts'], language: 'typescript' }
     }
   ]
 };

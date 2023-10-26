@@ -239,7 +239,7 @@ export function start(rid: i32): i32 {
     return 0;
   }
   `,
-  'metrics.ts':`
+  'metrics.ts': `
   /**
    * This file is written in AssemblyScript,
    * which is a subset of TypeScript that compiles to WebAssembly.
@@ -252,8 +252,7 @@ export function start(rid: i32): i32 {
     return 0;
   }
   `,
-  'send_eth_tx.ts':`
-  
+  'send_tx.ts': `
   /**
    * This file is written in AssemblyScript,
    * which is a subset of TypeScript that compiles to WebAssembly.
@@ -262,15 +261,51 @@ export function start(rid: i32): i32 {
    * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
    */
   export function start(rid: i32): i32 {
-    const message = GetDataByRID(rid);
-    ApiCall('{"Method":"GET","Url":"w3bstream://w3bstream.com/system/read_tx","Header":{"Eventtype":["result"]},"Body":"eyJjaGFpbklEIjogNDY5MCwiaGFzaCI6ICJmY2FmMzc3ZmYzY2M3ODVkNjBjNThkZTdlMTIxZDZhMmU3OWUxYzU4YzE4OWVhODY0MWYzZWE2MWY3NjA1Mjg1In0="}')
+    HTTP.sendTx("iotex-testnet", "default", "0x9117f5EF4156709092f79740a97b1638cA399A00", "10000000000000000000", "0x")
     return 0;
   }
-
+  
   export function handle_result(rid: i32): i32 {
     const message = GetDataByRID(rid);
-    Log("handle_result:" + message);
+    Log(HTTP.parseResult(message))
     return 0;
   }
+  `,
+  'read_tx.ts': `
+  /**
+   * This file is written in AssemblyScript,
+   * which is a subset of TypeScript that compiles to WebAssembly.
+   * You can refer to https://www.assemblyscript.org/introduction.html for the specific syntax.
+   * The SDK used in this file is w3bstream's SDK, which provides a w3bstream interface to stream data.
+   * For more information, see https://github.com/machinefi/w3bstream-wasm-assemblyscript-sdk.
+   */
+  export function start(rid: i32): i32 {
+    HTTP.readTx("iotex-testnet", "fcaf377ff3cc785d60c58de7e121d6a2e79e1c58c189ea8641f3ea61f7605285")
+    return 0;
+  }
+  
+  export function handle_result(rid: i32): i32 {
+    const message = GetDataByRID(rid);
+    Log(HTTP.parseResult(message))
+    return 0;
+  }
+  `,
+  'gen_zk_proof.ts': `
+    export function start(rid: i32): i32 {
+      HTTP.genZkProof(
+        "3145991386, 3471678490, 3632776032, 2595288688, 1478438623, 4259749138, 987879707, 1456846509",
+        "16",
+        "4,30",
+        "Stark",
+        'handle_result'
+      )
+      return 0;
+    }
+    
+    export function handle_result(rid: i32): i32 {
+      const message = GetDataByRID(rid);
+      Log(HTTP.parseResult(message))
+      return 0;
+    }
   `
 };

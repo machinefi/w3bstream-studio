@@ -13,12 +13,14 @@
 // }
 
 import { assemblyscriptJSON } from './assemblyscript-json';
+import { base64 } from './base64';
 import { sqlSDK } from './sql-sdk';
 
 // declare function abort(message: usize ,fileName: usize ,lineNumber: u32,columnNumber: u32): void
 export const wasm_vm_sdk = `
 ${assemblyscriptJSON}
 ${sqlSDK}
+${base64}
 @external("env", "ws_get_env")
 declare function ws_get_env(kaddr: usize, ksize: i32, vaddr: usize, vsize: i32): i32
 
@@ -342,4 +344,84 @@ export function ExecSQL(query: string, args: SQLTypes[]): i32 {
 
   return 0;
 }
+
+export class HTTP {
+  static genZkProof(imageID: string, privateInput: string, publicInput: string, receiptType: string, eventType: string = "result"): string {
+    let bodyEncode = new ENCODE.JSONEncoder();
+    bodyEncode.pushObject("");
+    bodyEncode.setString('imageID', imageID);
+    bodyEncode.setString('privateInput', privateInput);
+    bodyEncode.setString('publicInput', publicInput);
+    bodyEncode.setString('receiptType', receiptType);
+    bodyEncode.popObject();
+
+    let encoder = new ENCODE.JSONEncoder();
+    encoder.pushObject("");
+    encoder.setString('Method', 'POST');
+    encoder.setString('Url', '/system/gen_zk_proof');
+    encoder.pushObject("Header");
+    encoder.pushArray("Eventtype");
+    encoder.setString("", eventType);
+    encoder.popArray();
+    encoder.popObject();
+    encoder.setString("Body", encode(bodyEncode.serialize()))
+    encoder.popObject();
+    let data = ApiCall(encoder.toString())
+    return data;
+  }
+
+  static readTx(chainName: string, hash: string, eventType: string = "result"): string {
+    let bodyEncode = new ENCODE.JSONEncoder();
+    bodyEncode.pushObject("");
+    bodyEncode.setString('chainName', chainName);
+    bodyEncode.setString('hash', hash);
+    bodyEncode.popObject();
+
+    let encoder = new ENCODE.JSONEncoder();
+    encoder.pushObject("");
+    encoder.setString('Method', 'GET');
+    encoder.setString('Url', '/system/read_tx');
+    encoder.pushObject("Header");
+    encoder.pushArray("Eventtype");
+    encoder.setString("", eventType);
+    encoder.popArray();
+    encoder.popObject();
+    encoder.setString("Body", encode(bodyEncode.serialize()))
+    encoder.popObject();
+    let data = ApiCall(encoder.toString())
+    return data;
+  }
+
+  static sendTx(chainName: string, operatorName: string, to: string, value: string, data: string, eventType: string = "result"): string {
+    let bodyEncode = new ENCODE.JSONEncoder();
+    bodyEncode.pushObject("");
+    bodyEncode.setString('chainName', chainName);
+    bodyEncode.setString('operatorName', operatorName);
+    bodyEncode.setString('to', to);
+    bodyEncode.setString('value', value);
+    bodyEncode.setString('data', data);
+
+    bodyEncode.popObject();
+
+    let encoder = new ENCODE.JSONEncoder();
+    encoder.pushObject("");
+    encoder.setString('Method', 'POST');
+    encoder.setString('Url', '/system/send_tx');
+    encoder.pushObject("Header");
+    encoder.pushArray("Eventtype");
+    encoder.setString("", eventType);
+    encoder.popArray();
+    encoder.popObject();
+    encoder.setString("Body", encode(bodyEncode.serialize()))
+    encoder.popObject();
+
+    let res = ApiCall(encoder.toString())
+    return res;
+  }
+
+  static parseResult(message: string): string {
+    return message;
+  }
+}
+
 `;

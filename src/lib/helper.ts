@@ -273,6 +273,9 @@ export const helper = {
         if (globalThis.store.god.currentChain.chainId !== chainId) {
           await helper.setChain(globalThis.store.god, chainId);
         }
+        if(!globalThis.store.god.eth.signer) {
+          throw new Error('Please connect to wallet');
+        }
         let sendTransactionParam: ethers.utils.Deferrable<ethers.providers.TransactionRequest> = _.omitBy(
           {
             to: address,
