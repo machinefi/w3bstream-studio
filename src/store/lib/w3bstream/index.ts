@@ -7,7 +7,7 @@ import { hooks } from '@/lib/hooks';
 import { ProjectManager } from './project';
 import W3bstreamConfigModule from './schema/config';
 import UserModule from './schema/user';
-import ProjectModule from './schema/project';
+import ProjectModule, { initializationTemplateSchema } from './schema/project';
 import PublisherModule from './schema/publisher';
 import StrategyModule from './schema/strategy';
 import AppletModule from './schema/applet';
@@ -56,6 +56,8 @@ export class W3bStream {
 
   currentHeaderTab: 'PROJECTS' | 'LABS' | 'SUPPORT' | 'TOOLS' | 'FLOW' | 'SETTING' = 'PROJECTS';
 
+  initTemplateJSON = null;
+
   isReady = false;
 
   actions = {
@@ -71,6 +73,16 @@ export class W3bStream {
     makeAutoObservable(this);
     this.initEvent();
     this.initWatch();
+  }
+
+  getInitTemplateJSON = async () => {
+    if (!this.initTemplateJSON) {
+      const res = await fetch('https://raw.githubusercontent.com/machinefi/w3bstream-studio-template-json/main/index.json');
+      this.initTemplateJSON = await res.json();
+      console.log('initTemplateJSON', this.initTemplateJSON);
+      //@ts-ignore
+      initializationTemplateSchema.properties.template.enum = this.initTemplateJSON.templates.map((i) => i.name);
+    }
   }
 
   initWatch() {
@@ -93,7 +105,7 @@ export class W3bStream {
       .on('user.login', async () => {
         NextRouter.push('/');
       })
-      .on('user.update-pwd', () => {})
+      .on('user.update-pwd', () => { })
       .on('project.create', async () => {
         await this.project.allProjects.call();
         this.projectManager.sync();
@@ -120,7 +132,7 @@ export class W3bStream {
         await this.project.projectDetail.call();
         this.projectManager.sync();
       })
-      .on('applet.publish-event', () => {})
+      .on('applet.publish-event', () => { })
       .on('instance.deploy', async () => {
         await this.project.allProjects.call();
         await this.project.projectDetail.call();
@@ -186,6 +198,7 @@ export class W3bStream {
   }
 
   async init() {
+    this.getInitTemplateJSON()
     hooks.waitLogin().then(async () => {
       await this.project.allProjects.call();
       this.projectManager.sync();

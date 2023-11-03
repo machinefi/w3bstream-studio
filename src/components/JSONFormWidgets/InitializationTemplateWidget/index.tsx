@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { WidgetProps } from '@rjsf/utils';
 import { Text, Flex, Image, chakra, Box, FlexProps } from '@chakra-ui/react';
-import initTemplates from '@/constants/initTemplates.json';
+import { rootStore } from '@/store/index';
+// import initTemplates from '@/constants/initTemplates.json';
 
 type Options = {
   flexProps?: FlexProps;
@@ -19,6 +20,7 @@ export interface InitializationTemplateWidgetUIOptions {
 function InitializationTemplateWidget({ id, options, value, required, label, onChange }: InitializationTemplateWidgetProps) {
   const [templateName, setTemplateName] = useState('');
   const { flexProps = {} } = options;
+  const initTemplates = rootStore.w3s.initTemplateJSON
   useEffect(() => {
     setTemplateName(value);
   }, [value]);
@@ -41,7 +43,7 @@ function InitializationTemplateWidget({ id, options, value, required, label, onC
           }
         }}
       >
-        {initTemplates.templates.map((template) => (
+        {initTemplates?.templates?.map((template) => (
           <Flex
             key={template.name}
             flexDir="column"

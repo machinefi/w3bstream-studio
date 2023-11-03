@@ -12,8 +12,9 @@ import { dataURItoBlob, UiSchema } from '@rjsf/utils';
 import { FromSchema } from 'json-schema-to-ts';
 import { definitions } from './definitions';
 import InitializationTemplateWidget from '@/components/JSONFormWidgets/InitializationTemplateWidget';
-import initTemplates from '@/constants/initTemplates.json';
+// import initTemplates from '@/constants/initTemplates.json';
 import toast from 'react-hot-toast';
+import { rootStore } from '@/store/index';
 
 export const schema = {
   definitions: {
@@ -492,7 +493,8 @@ export default class AppletModule {
     const appletId = this.curApplet?.f_applet_id;
 
     if (formData.template) {
-      const templateData = initTemplates.templates.find((i) => i.name === formData.template);
+      const initTemplates = rootStore.w3s.initTemplateJSON
+      const templateData = initTemplates?.templates?.find((i) => i.name === formData.template);
       const wasmURL = templateData?.project[0]?.applets[0]?.wasmURL;
       if (!wasmURL) {
         toast.error('This template does not exist.');

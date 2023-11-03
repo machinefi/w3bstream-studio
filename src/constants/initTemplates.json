@@ -70,7 +70,38 @@
             ]
           },
           "envs": {
-            "env": [["LOG_LEVEL", "debug"]]
+            "env": [
+              [
+                "LOG_LEVEL",
+                "debug"
+              ]
+            ]
+          },
+          "datas": []
+        }
+      ]
+    },
+    {
+      "name": "DePIN Intergation",
+      "image": "/images/templates/depin.svg",
+      "autoCollectionMetrics": true,
+      "project": [
+        {
+          "name": "hello_world",
+          "description": "",
+          "applets": [
+            {
+              "wasmURL": "https://raw.githubusercontent.com/machinefi/w3bstream-wasm-assemblyscript-sdk/main/examples/wasms/log.wasm",
+              "appletName": "applet_01"
+            }
+          ],
+          "envs": {
+            "env": [
+              [
+                "LOG_LEVEL",
+                "debug"
+              ]
+            ]
           },
           "datas": []
         }
