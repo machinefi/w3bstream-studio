@@ -2,7 +2,7 @@ import { JSONValue, JSONSchemaFormState } from '@/store/standard/JSONSchemaState
 import { FromSchema } from 'json-schema-to-ts';
 import { eventBus } from '@/lib/event';
 import { axios } from '@/lib/axios';
-import initTemplates from '@/constants/initTemplates.json';
+// import initTemplates from '@/constants/initTemplates.json';
 import { makeObservable, observable } from 'mobx';
 import { ProjectEnvsWidget } from '@/components/JSONFormWidgets/ProjectEnvs';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,6 +21,7 @@ import EditorWidget, { EditorWidgetUIOptions } from '@/components/JSONFormWidget
 import * as jsonpatch from 'fast-json-patch';
 import toast from 'react-hot-toast';
 import { definitions } from './definitions';
+import { rootStore } from '@/store/index';
 
 export const defaultSchema = {
   type: 'object',
@@ -31,10 +32,10 @@ export const defaultSchema = {
   required: ['name']
 } as const;
 
-export const initializationTemplateSchema = {
+export let initializationTemplateSchema = {
   type: 'object',
   properties: {
-    template: { type: 'string', title: 'Select a template', enum: initTemplates.templates.map((t) => t.name) }
+    template: { type: 'string', title: 'Select a template', enum: [''] }
   },
   required: ['template']
 } as const;
@@ -524,10 +525,10 @@ export default class ProjectModule {
           eventBus.emit('project.create');
           toast.success('create project succeeded');
         }
-      } catch (error) {}
+      } catch (error) { }
     }
     if (formData.template) {
-      const templateData = initTemplates.templates.find((i) => i.name === formData.template);
+      const templateData = rootStore.w3s.initTemplateJSON.templates.find((i) => i.name === formData.template);
       const data = JSON.parse(JSON.stringify(templateData));
       const templateProjectName = templateData.project[0].name;
       data.project[0].name = `${templateProjectName}_${uuidv4().slice(0, 4)}`;
@@ -672,7 +673,7 @@ export default class ProjectModule {
       }
       const projectName = formData.name;
       if (formData.template) {
-        const templateData = initTemplates.templates.find((i) => i.name === formData.template);
+        const templateData = rootStore.w3s.initTemplateJSON.templates.find((i) => i.name === formData.template);
         const data = JSON.parse(JSON.stringify(templateData));
         data.project[0].name = projectName;
         data.project[0].description = formData.description;
@@ -697,7 +698,7 @@ export default class ProjectModule {
             }
             toast.success('Create project succeeded');
           }
-        } catch (error) {}
+        } catch (error) { }
         eventBus.emit('project.create');
         return;
       }
@@ -896,7 +897,7 @@ export default class ProjectModule {
                       url: getPostUrl(),
                       data: item
                     });
-                  } catch (error) {}
+                  } catch (error) { }
                 }
               };
               if (json.cronJob && Array.isArray(json.cronJob)) {
@@ -932,7 +933,7 @@ export default class ProjectModule {
               toast.success('import project succeeded');
             }
           }
-        } catch (error) {}
+        } catch (error) { }
       }
     }
   });
@@ -954,7 +955,7 @@ export default class ProjectModule {
       ]
     });
     if (formData.code) {
-      const handleTriggers = async <T>({
+      const handleTriggers = async<T>({
         list,
         getPostUrl,
         getDeleteUrl,
@@ -973,196 +974,196 @@ export default class ProjectModule {
         operation: jsonpatch.Operation;
         formFieldMap: {
           [formField: string]: {
-            k: string;
-            type: string;
-          };
-        };
-      }) => {
-        if (operation.op === 'add') {
-          try {
-            await axios.request({
-              method: 'post',
-              url: getPostUrl(),
-              data: operation.value
-            });
-          } catch (error) {}
-        }
-        if (operation.op === 'remove') {
-          try {
-            const index = operation.path.split('/')[2];
-            if (index) {
-              const item = list[Number(index)];
-              if (item) {
-                await axios.request({
-                  method: 'delete',
-                  url: getDeleteUrl(item),
-                  params: getParams ? getParams(item) : undefined
-                });
-              }
-            } else {
-              for (const item of list) {
-                await axios.request({
-                  method: 'delete',
-                  url: getDeleteUrl(item),
-                  params: getParams ? getParams(item) : undefined
-                });
-              }
-            }
-          } catch (error) {}
-        }
-        if (operation.op === 'replace') {
-          try {
-            const [, , index, field] = operation.path.split('/');
-            if (index && field) {
-              const item = list[Number(index)];
-              const data = Object.fromEntries(
-                Object.entries(formFieldMap).map(([formField, tableField]) => {
-                  const fieldValue = tableField.type === 'number' ? Number(item[tableField.k]) : item[tableField.k];
-                  return [formField, fieldValue];
-                })
-              );
-              data[field] = operation.value;
-              if (getUpdateUrl) {
-                await axios.request({
-                  method: 'put',
-                  url: getUpdateUrl(item),
-                  data
-                });
-              } else {
-                await axios.request({
-                  method: 'post',
-                  url: getPostUrl(),
-                  data
-                });
-                await axios.request({
-                  method: 'delete',
-                  url: getDeleteUrl(item)
-                });
-              }
-            }
-          } catch (error) {}
-        }
+        k: string;
+        type: string;
       };
-      const documentB = helper.json.safeParse(formData.code);
-      const diff = jsonpatch.compare(documentA, documentB);
-      for (const item of diff) {
-        if (item.path.includes('envs')) {
-          try {
-            const values = documentB.envs?.env || [];
-            if (values.length > 0) {
-              await axios.post(`/api/w3bapp/project_config/x/${documentA.name}/PROJECT_ENV`, { env: values });
-            }
-          } catch (error) {}
-        }
-        if (item.path.includes('cronJob')) {
-          await handleTriggers<CronJobsType>({
-            list: globalThis.store.w3s.cronJob.list.value,
-            getPostUrl: () => `/api/w3bapp/cronjob/${this.curProject?.f_project_id}`,
-            getDeleteUrl: (v) => `/api/w3bapp/cronjob/data/${v.f_cron_job_id}`,
-            operation: item,
-            formFieldMap: {
-              eventType: {
-                k: 'f_event_type',
-                type: 'string'
-              },
-              cronExpressions: {
-                k: 'f_cron_expressions',
-                type: 'string'
-              }
-            }
+    };
+  }) => {
+  if (operation.op === 'add') {
+    try {
+      await axios.request({
+        method: 'post',
+        url: getPostUrl(),
+        data: operation.value
+      });
+    } catch (error) { }
+  }
+  if (operation.op === 'remove') {
+    try {
+      const index = operation.path.split('/')[2];
+      if (index) {
+        const item = list[Number(index)];
+        if (item) {
+          await axios.request({
+            method: 'delete',
+            url: getDeleteUrl(item),
+            params: getParams ? getParams(item) : undefined
           });
         }
-        if (item.path.includes('contractLog')) {
-          await handleTriggers<ContractLogType>({
-            list: globalThis.store.w3s.contractLogs.curProjectContractLogs,
-            getPostUrl: () => `/api/w3bapp/monitor/x/${this.curProject?.name}/contract_log`,
-            getDeleteUrl: (v) => `/api/w3bapp/monitor/x/${this.curProject?.name}/contract_log/${v.f_contractlog_id}`,
-            operation: item,
-            formFieldMap: {
-              eventType: {
-                k: 'f_event_type',
-                type: 'string'
-              },
-              chainID: {
-                k: 'f_chain_id',
-                type: 'number'
-              },
-              contractAddress: {
-                k: 'f_contract_address',
-                type: 'string'
-              },
-              blockStart: {
-                k: 'f_block_start',
-                type: 'number'
-              },
-              blockEnd: {
-                k: 'f_block_end',
-                type: 'number'
-              },
-              topic0: {
-                k: 'f_topic0',
-                type: 'number'
-              }
-            }
-          });
-        }
-        if (item.path.includes('chainHeight')) {
-          await handleTriggers<ChainHeightType>({
-            list: globalThis.store.w3s.chainHeight.curProjectChainHeight,
-            getPostUrl: () => `/api/w3bapp/monitor/x/${this.curProject?.name}/chain_height`,
-            getDeleteUrl: (v) => `/api/w3bapp/monitor/x/${this.curProject?.name}/chain_height/${v.f_chain_height_id}`,
-            operation: item,
-            formFieldMap: {
-              eventType: {
-                k: 'f_event_type',
-                type: 'string'
-              },
-              chainID: {
-                k: 'f_chain_id',
-                type: 'number'
-              },
-              height: {
-                k: 'f_height',
-                type: 'number'
-              }
-            }
-          });
-        }
-        if (item.path.includes('eventRounting')) {
-          if (item.op === 'add') {
-            const applet = this.curProject?.applets?.[0];
-            item.value = {
-              ...item.value,
-              appletID: applet?.f_applet_id
-            };
-          }
-          await handleTriggers<StrategyType>({
-            list: globalThis.store.w3s.strategy.curStrategies,
-            getPostUrl: () => `/api/w3bapp/strategy/x/${this.curProject?.name}`,
-            getDeleteUrl: (v) => `/api/w3bapp/strategy/x/${this.curProject?.name}`,
-            getUpdateUrl: (v) => `/api/w3bapp/strategy/${v.f_strategy_id}`,
-            getParams: (v) => ({ strategyID: v.f_strategy_id }),
-            operation: item,
-            formFieldMap: {
-              appletID: {
-                k: 'f_applet_id',
-                type: 'string'
-              },
-              eventType: {
-                k: 'f_event_type',
-                type: 'string'
-              },
-              handler: {
-                k: 'f_handler',
-                type: 'string'
-              }
-            }
+      } else {
+        for (const item of list) {
+          await axios.request({
+            method: 'delete',
+            url: getDeleteUrl(item),
+            params: getParams ? getParams(item) : undefined
           });
         }
       }
-      if (diff.length > 0) {
-        eventBus.emit('project.create');
+    } catch (error) { }
+  }
+  if (operation.op === 'replace') {
+    try {
+      const [, , index, field] = operation.path.split('/');
+      if (index && field) {
+        const item = list[Number(index)];
+        const data = Object.fromEntries(
+          Object.entries(formFieldMap).map(([formField, tableField]) => {
+            const fieldValue = tableField.type === 'number' ? Number(item[tableField.k]) : item[tableField.k];
+            return [formField, fieldValue];
+          })
+        );
+        data[field] = operation.value;
+        if (getUpdateUrl) {
+          await axios.request({
+            method: 'put',
+            url: getUpdateUrl(item),
+            data
+          });
+        } else {
+          await axios.request({
+            method: 'post',
+            url: getPostUrl(),
+            data
+          });
+          await axios.request({
+            method: 'delete',
+            url: getDeleteUrl(item)
+          });
+        }
       }
+    } catch (error) { }
+  }
+};
+const documentB = helper.json.safeParse(formData.code);
+const diff = jsonpatch.compare(documentA, documentB);
+for (const item of diff) {
+  if (item.path.includes('envs')) {
+    try {
+      const values = documentB.envs?.env || [];
+      if (values.length > 0) {
+        await axios.post(`/api/w3bapp/project_config/x/${documentA.name}/PROJECT_ENV`, { env: values });
+      }
+    } catch (error) { }
+  }
+  if (item.path.includes('cronJob')) {
+    await handleTriggers<CronJobsType>({
+      list: globalThis.store.w3s.cronJob.list.value,
+      getPostUrl: () => `/api/w3bapp/cronjob/${this.curProject?.f_project_id}`,
+      getDeleteUrl: (v) => `/api/w3bapp/cronjob/data/${v.f_cron_job_id}`,
+      operation: item,
+      formFieldMap: {
+        eventType: {
+          k: 'f_event_type',
+          type: 'string'
+        },
+        cronExpressions: {
+          k: 'f_cron_expressions',
+          type: 'string'
+        }
+      }
+    });
+  }
+  if (item.path.includes('contractLog')) {
+    await handleTriggers<ContractLogType>({
+      list: globalThis.store.w3s.contractLogs.curProjectContractLogs,
+      getPostUrl: () => `/api/w3bapp/monitor/x/${this.curProject?.name}/contract_log`,
+      getDeleteUrl: (v) => `/api/w3bapp/monitor/x/${this.curProject?.name}/contract_log/${v.f_contractlog_id}`,
+      operation: item,
+      formFieldMap: {
+        eventType: {
+          k: 'f_event_type',
+          type: 'string'
+        },
+        chainID: {
+          k: 'f_chain_id',
+          type: 'number'
+        },
+        contractAddress: {
+          k: 'f_contract_address',
+          type: 'string'
+        },
+        blockStart: {
+          k: 'f_block_start',
+          type: 'number'
+        },
+        blockEnd: {
+          k: 'f_block_end',
+          type: 'number'
+        },
+        topic0: {
+          k: 'f_topic0',
+          type: 'number'
+        }
+      }
+    });
+  }
+  if (item.path.includes('chainHeight')) {
+    await handleTriggers<ChainHeightType>({
+      list: globalThis.store.w3s.chainHeight.curProjectChainHeight,
+      getPostUrl: () => `/api/w3bapp/monitor/x/${this.curProject?.name}/chain_height`,
+      getDeleteUrl: (v) => `/api/w3bapp/monitor/x/${this.curProject?.name}/chain_height/${v.f_chain_height_id}`,
+      operation: item,
+      formFieldMap: {
+        eventType: {
+          k: 'f_event_type',
+          type: 'string'
+        },
+        chainID: {
+          k: 'f_chain_id',
+          type: 'number'
+        },
+        height: {
+          k: 'f_height',
+          type: 'number'
+        }
+      }
+    });
+  }
+  if (item.path.includes('eventRounting')) {
+    if (item.op === 'add') {
+      const applet = this.curProject?.applets?.[0];
+      item.value = {
+        ...item.value,
+        appletID: applet?.f_applet_id
+      };
+    }
+    await handleTriggers<StrategyType>({
+      list: globalThis.store.w3s.strategy.curStrategies,
+      getPostUrl: () => `/api/w3bapp/strategy/x/${this.curProject?.name}`,
+      getDeleteUrl: (v) => `/api/w3bapp/strategy/x/${this.curProject?.name}`,
+      getUpdateUrl: (v) => `/api/w3bapp/strategy/${v.f_strategy_id}`,
+      getParams: (v) => ({ strategyID: v.f_strategy_id }),
+      operation: item,
+      formFieldMap: {
+        appletID: {
+          k: 'f_applet_id',
+          type: 'string'
+        },
+        eventType: {
+          k: 'f_event_type',
+          type: 'string'
+        },
+        handler: {
+          k: 'f_handler',
+          type: 'string'
+        }
+      }
+    });
+  }
+}
+if (diff.length > 0) {
+  eventBus.emit('project.create');
+}
     }
   }
 }

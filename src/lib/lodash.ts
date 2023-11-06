@@ -14,6 +14,7 @@ import isEqual from 'lodash/isEqual';
 import uniqWith from 'lodash/uniqWith';
 import findIndex from 'lodash/findIndex';
 import remove from 'lodash/remove';
+import isEmpty from 'lodash/isEmpty';
 
 export const _ = {
   throttle,
@@ -31,5 +32,6 @@ export const _ = {
   isEqual,
   uniqWith,
   findIndex,
-  remove
+  remove,
+  isEmpty
 };

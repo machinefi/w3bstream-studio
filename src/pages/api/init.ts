@@ -2,6 +2,7 @@ import fetch, { FormData, File } from 'node-fetch';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Blob from 'cross-blob';
 import { _ } from '@/lib/lodash';
+import axios from 'axios';
 
 export interface InitProject {
   name: string;
@@ -10,6 +11,7 @@ export interface InitProject {
   envs?: {
     env: [string, string][];
   };
+  autoCollectionMetrics?: boolean;
   datas?: {
     cronJob?: {
       eventType: string;
@@ -75,7 +77,11 @@ const createProject = async (
   }
 };
 
-const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Applet & { projectName: string }, token: string): Promise<string> => {
+const createApplet = async (
+  { projectName, appletName, wasmURL, wasmRaw }: Applet & { projectName: string },
+  token: string,
+  projectID: string,
+  autoCollectionMetrics): Promise<string> => {
   try {
     const formData = new FormData();
     let wasmName = '';
@@ -112,6 +118,23 @@ const createApplet = async ({ projectName, appletName, wasmURL, wasmRaw }: Apple
     }
     const data: any = await res.json();
     if (data.appletID) {
+      if (autoCollectionMetrics) {
+        try {
+          const strategy = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/strategy/x/${projectName}/datalist`, {
+            headers: { Authorization: token }
+          })
+          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/srv-applet-mgr/v0/strategy/${strategy.data.data[0].strategyID}`,
+            {
+              "appletID": data.appletID, "eventType": "DEFAULT", "handler": "start", "autoCollectMetric": true
+            }, {
+            headers: {
+              Authorization: token
+            }
+          })
+        } catch (e) {
+          console.log(e.message)
+        }
+      }
       return data.appletID;
     }
     throw data;
@@ -186,7 +209,7 @@ const createCronJob = async (
       body: JSON.stringify(data),
       headers: { Authorization: token }
     });
-  } catch (error) {}
+  } catch (error) { }
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -205,7 +228,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const { projectID, projectName } = await createProject(p, token);
         createdProjectIds.push(projectID);
         for (const a of p.applets) {
-          await createApplet({ ...a, projectName }, token);
+          await createApplet({ ...a, projectName }, token, projectID, req.body.autoCollectionMetrics);
         }
         for (const d of p.datas) {
           if (d.monitor) {
