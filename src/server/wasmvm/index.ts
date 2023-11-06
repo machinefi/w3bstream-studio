@@ -158,7 +158,7 @@ export class WASM {
           try {
             const json_k = JSON.parse(k);
             switch (json_k.Url) {
-              case "w3bstream://w3bstream.com/system/read_tx":
+              case "/system/read_tx":
                 const body = json_k.Body;
                 const json_body = JSON.parse(helper.base64ToUTF8(body));
                 // const res = helper.c.callContractSync({ chainId: json_body.chainID, to: "", data: json_body.hash });
@@ -173,6 +173,50 @@ export class WASM {
                   console.log(res)
                   _this.copyToWasm(JSON.stringify(_this.asyncApiResultCache), vaddr, vsize);
                 })
+                break;
+              case '/system/send_tx':
+                const body2 = json_k.Body;
+                const json_body2 = JSON.parse(helper.base64ToUTF8(body2));
+                helper.c.sendTx({
+                  chainId: json_body2.chainName == 'iotex-testnet' ? 4690 : 4689,
+                  address: json_body2.to,
+                  data: json_body2.data,
+                  value: json_body2.value,
+                  onSuccess: ({ res }) => {
+                    _this.writeStdout({
+                      message: `call ws_send_tx `,
+                      isAsync: true
+                    });
+                    _this.asyncApiResultCache = {
+                      blockHash: res.blockHash,
+                      blockNumber: res.blockNumber,
+                      from: res.from,
+                    }
+                    _this.copyToWasm(JSON.stringify(_this.asyncApiResultCache), vaddr, vsize);
+                  },
+                  onError: (err) => {
+                    _this.asyncApiResultCache = { err: err.message }
+                    _this.copyToWasm(JSON.stringify(_this.asyncApiResultCache), vaddr, vsize);
+                  }
+                });
+                break;
+              case '/system/gen_zk_proof':
+                const body3 = json_k.Body;
+                const json_body3 = JSON.parse(helper.base64ToUTF8(body3));
+                const socket = new WebSocket('ws://34.146.117.200:3001');
+                socket.onopen = function (event) {
+                  // console.log('WebSocket is open now.');
+                  socket.send(JSON.stringify(
+                    json_body3
+                  ));
+                }
+                socket.addEventListener('message', (event: any) => {
+                  console.log(event)
+                  socket.close();
+                  _this.asyncApiResultCache = event
+                  _this.copyToWasm(JSON.stringify(_this.asyncApiResultCache), vaddr, vsize);
+                });
+                break;
             }
           } catch (err) {
             _this.writeStderr({

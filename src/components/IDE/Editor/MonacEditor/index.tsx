@@ -39,7 +39,7 @@ export const MoEditor = observer((props: any) => {
       language={curFilesListSchema?.curActiveFile.data?.language}
       defaultValue="export function test(): void {}"
       value={curFilesListSchema?.curActiveFile?.data?.code}
-      beforeMount={(monaco) => {}}
+      beforeMount={(monaco) => { }}
       onMount={async (editor, monaco) => {
         monaco.languages.typescript.typescriptDefaults.addExtraLib(
           `
@@ -58,6 +58,13 @@ export const MoEditor = observer((props: any) => {
       declare const hexToInt(hex: string): i32;
       declare const hexToBool(hex: string): bool;
       declare const hexToAddress(hex: string): string;
+      declare class HTTP {
+        constructor();
+        static sendTx(chainName: string, operatorName: string, to: string, value: string, data: string, eventType: string = "result"): string 
+        static genZkProof(imageID: string, privateInput: string, publicInput: string, receiptType: string, eventType: string = "result"): string;
+        static readTx(chainName: string, hash: string, eventType: string = "result"): string;
+        static parseResult(result: string): string;
+      }
       declare class Wallet {
         accountAddress: Address;
         constructor();
