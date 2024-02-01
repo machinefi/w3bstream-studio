@@ -1,22 +1,22 @@
 version: '3.6'
 
 services:
+
   w3bapp:
     image: ${WS_BACKEND_IMAGE:-ghcr.io/machinefi/w3bstream:main}
     depends_on:
-      - "postgres"
-      - "mqtt_server"
-      - "redis"
+      - 'postgres'
+      - 'mqtt_server'
     container_name: w3bstream
+    platform: linux/x86_64
     working_dir: /w3bstream
     restart: always
     ports:
-      - "8888:8888"
-      - "8889:8889"
+      - '8888:8888'
+      - '8889:8889'
     environment:
       SRV_APPLET_MGR__EthClient_Endpoints: '{"4689": "https://babel-api.mainnet.iotex.io", "4690": "https://babel-api.testnet.iotex.io", "1": "https://ethereum.iotex.one/v1/mainnet", "5": "https://ethereum.iotex.one/v1/goerli", "137": "https://polygon-rpc.com", "80001": "https://mumbai.polygonscan.com/"}'
-      SRV_APPLET_MGR__ChainConfig_Configs: '[{"chainID":4689,"name":"iotex-mainnet","endpoint":"https://babel-api.mainnet.iotex.io"},{"chainID":4690,"name":"iotex-testnet","endpoint":"https://babel-api.testnet.iotex.io","aaBundlerEndpoint":"https://bundler.testnet.w3bstream.com","aaPaymasterEndpoint":"https://paymaster.testnet.w3bstream.com/rpc","aaEntryPointContractAddress":"0xc3527348De07d591c9d567ce1998eFA2031B8675","aaAccountFactoryContractAddress":"0xA8e5d5Ca2924f176BD3Bf1049550920969F23450"},{"chainID":1,"name":"ethereum-mainnet","endpoint":"https://ethereum.iotex.one/v1/mainnet"},{"chainID":5,"name":"goerli","endpoint":"https://ethereum.iotex.one/v1/goerli"},{"chainID":137,"name":"polygon-mainnet","endpoint":"https://polygon-rpc.com"},{"chainID":80001,"name":"mumbai","endpoint":"https://polygon-mumbai-bor.publicnode.com"},{"name":"solana-devnet","endpoint":"https://api.devnet.solana.com"},{"name":"solana-testnet","endpoint":"https://api.testnet.solana.com"},{"name":"solana-mainnet-beta","endpoint":"https://api.mainnet-beta.solana.com"},{"chainID":421613,"name":"arbitrum-goerli","endpoint":"https://goerli-rollup.arbitrum.io/rpc"},{"chainID":42161,"name":"arbitrum-one","endpoint":"https://arb1.arbitrum.io/rpc"},{"chainID":420,"name":"op-goerli","endpoint":"https://goerli.optimism.io"},{"chainID":10,"name":"op-mainnet","endpoint":"https://mainnet.optimism.io"},{"chainID":8453,"name":"base-mainnet","endpoint":"https://mainnet.base.org"},{"chainID":84531,"name":"base-goerli","endpoint":"https://goerli.base.org"},{"chainID":324,"name":"zksync-era-mainnet","endpoint":"https://mainnet.era.zksync.io"},{"chainID":280,"name":"zksync-era-testnet","endpoint":"https://testnet.era.zksync.dev"},{"chainID":71,"name":"conflux-espace-testnet","endpoint":"https://evmtestnet.confluxrpc.com"},{"chainID":1030,"name":"conflux-espace-mainnet","endpoint":"https://evm.confluxrpc.com"}]'
-      SRV_APPLET_MGR__ChainConfig_AAUserOpEndpoint: http://aa_service:8080/userop/tx
+      SRV_APPLET_MGR__ChainConfig_Configs: '[{"chainID":4689,"name":"iotex-mainnet","endpoint":"https://babel-api.mainnet.iotex.io"},{"chainID":4690,"name":"iotex-testnet","endpoint":"https://babel-api.testnet.iotex.io"},{"chainID":1,"name":"ethereum-mainnet","endpoint":"https://ethereum.iotex.one/v1/mainnet"},{"chainID":5,"name":"goerli","endpoint":"https://ethereum.iotex.one/v1/goerli"},{"chainID":137,"name":"polygon-mainnet","endpoint":"https://polygon-rpc.com"},{"chainID":80001,"name":"mumbai","endpoint":"https://polygon-mumbai-bor.publicnode.com"},{"name":"solana-devnet","endpoint":"https://api.devnet.solana.com"},{"name":"solana-testnet","endpoint":"https://api.testnet.solana.com"},{"name":"solana-mainnet-beta","endpoint":"https://api.mainnet-beta.solana.com"}]'
       SRV_APPLET_MGR__Jwt_ExpIn: ${JWT_EXPIN:-1h}
       SRV_APPLET_MGR__Jwt_Issuer: ${JWT_ISSUER:-w3bstream}
       SRV_APPLET_MGR__Postgres_Master: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?sslmode=disable&application_name=mgr
@@ -26,14 +26,37 @@ services:
       SRV_APPLET_MGR__MonitorDB_ConnMaxLifetime: 10m
       SRV_APPLET_MGR__MonitorDB_PoolSize: 5
       SRV_APPLET_MGR__WasmDB: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432
+      SRV_APPLET_MGR__WasmDBConfig_Endpoint: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432
+      ## mqtt configurations
+      SRV_APPLET_MGR__MqttBroker_QoS: ONLY_ONCE
       SRV_APPLET_MGR__MqttBroker_Server: mqtt://mqtt_server:1883
+      ## log configuraitons
+      SRV_APPLET_MGR__NewLogger_Format: JSON
+      SRV_APPLET_MGR__NewLogger_Level: debug
+      SRV_APPLET_MGR__NewLogger_Output: ALWAYS
+      SRV_APPLET_MGR__Logger_Format: JSON
+      SRV_APPLET_MGR__Logger_Level: debug
+      SRV_APPLET_MGR__Logger_Output: ALWAYS
+
+
       SRV_APPLET_MGR__MetricsCenter_Endpoint: http://prometheus:9090
-      SRV_APPLET_MGR__MetricsCenter_ClickHouseDSN: ""
       SRV_APPLET_MGR__Server_Port: "8888"
       SRV_APPLET_MGR__ServerEvent_Port: "8889"
       SRV_APPLET_MGR__LocalFS_Root: /w3bstream/asserts
+
+      SRV_APPLET_MGR__UploadConf_DiskReserveBytes: "20971520"
+      SRV_APPLET_MGR__UploadConf_FilesizeLimitBytes: "10971520"
+      SRV_APPLET_MGR__UploadConf_Root: ./asserts
+
+      # redis
+      SRV_APPLET_MGR__Redis_DB: "1"
+      SRV_APPLET_MGR__Redis_Host: redis-server
+      SRV_APPLET_MGR__Redis_Password: "w3bredispasS"
+      SRV_APPLET_MGR__Redis_Port: "6379"
+      SRV_APPLET_MGR__Redis_Prefix: 'dev:srv-applet-mgr:'
+
     volumes:
-      - ${WS_WORKING_DIR:-.}/asserts:/w3bstream/asserts
+      - w3bstream_assets:/w3bstream/asserts
 
   w3bstream-studio:
     image: ${WS_STUDIO_IMAGE:-ghcr.io/machinefi/w3bstream-studio:main}
@@ -48,12 +71,15 @@ services:
     ports:
       - '3000:3000'
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?application_name=studio
+      DATABASE_URL_APPLET_MANAGEMENT: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?schema=applet_management&application_name=studio
+      DATABASE_URL_MONITOR: postgresql://${POSTGRES_USER:-w3badmin}:${POSTGRES_PASSWORD:-PaSsW0Rd}@postgres:5432/${POSTGRES_DB:-w3bstream}?schema=monitor&application_name=studio
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://w3bapp:8888}
-      NEXT_PUBLIC_EVENT_URL: ${NEXT_PUBLIC_EVENT_URL:-http://w3bapp:8889}
+      NEXT_PUBLIC_EVENT_URL: ${NEXT_PUBLIC_API_URL:-http://w3bapp:8889}
       NEXT_PUBLIC_MQTT_URL: ${NEXT_PUBLIC_MQTT_URL:-mqtt://mqtt_server:1883}
       NEXT_PUBLIC_METRICS_URL: ${NEXT_PUBLIC_METRICS_URL:-http://prometheus:9090}
-      NEXT_PUBLIC_DEPIN_SCAN_URL: ${NEXT_PUBLIC_DEPIN_SCAN_URL:-https://depinscan.io}
+      NEXT_PUBLIC_GATEWAY_HTTP_URL: https://dev.w3bstream.com/api/w3bapp/event/:projectName
+      NEXT_PUBLIC_GATEWAY_MQTT_URL: mqtt://dev.w3bstream.com:1883
       ADMIN_KEY: ${ADMIN_KEY:-iotex.W3B.admin}
       JWT_SIGN_KEY: ${JWT_SIGN_KEY:-xxxx}
 
@@ -79,19 +105,25 @@ services:
     ports:
       - '5432:5432'
 
-  redis:
+
+
+  redis-server:
     image: 'redis:6.2'
+    container_name: redis
     restart: always
     volumes:
-      - redis:/data
+      - redisdb:/data
     environment:
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-w3bredispasS}
-    command: redis-server --requirepass ${REDIS_PASSWORD:-w3bredispasS}
+      REDIS_PASSWORD: w3bredispasS
+    command: redis-server --requirepass w3bredispasS
     ports:
       - '6379:6379'
+
+
 
 volumes:
   mqtt:
   postgres:
   w3bstream_assets:
-  redis:
+  redisdb:
+  prometheus:
