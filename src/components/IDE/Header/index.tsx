@@ -46,7 +46,7 @@ const Header = observer(() => {
       <Flex
         alignItems="center"
         onClick={() => {
-          router.push('/')
+          router.push('/');
           w3s.actions.goHome();
         }}
         cursor={'pointer'}
@@ -64,7 +64,7 @@ const Header = observer(() => {
           variant="unstyled"
           index={getTabIndex(w3s.currentHeaderTab)}
           onChange={(number) => {
-            console.log('number', number, getTabIndex(w3s.currentHeaderTab))
+            console.log('number', number, getTabIndex(w3s.currentHeaderTab));
             // if (number === 0) {
             //   w3s.currentHeaderTab = 'PROJECTS';
             //   w3s.project.allProjects.onSelect(-1)
@@ -97,9 +97,6 @@ const Header = observer(() => {
             </Tab>
             <Tab px="0" ml="40px" h="40px" fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
               <Link href={'/support'}>Support</Link>
-            </Tab>
-            <Tab px="0" ml="40px" h="40px" fontSize={'14px'} _selected={{ color: '#855EFF', fontWeight: 700, borderBottom: '2px solid #855EFF' }}>
-              <Link href={'/tools'}>Tools</Link>
             </Tab>
           </TabList>
         </Tabs>
